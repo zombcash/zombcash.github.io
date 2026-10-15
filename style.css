@@ -547,3 +547,113 @@ h1 .alive{color:#9bff45;text-shadow:0 0 40px #9bff452e}
  .mascot-hand{width:200px;height:200px}
  .mascot-orbit{width:240px}
 }
+
+
+/* HERO V7 — cinematic split-screen redesign */
+.hero{
+  min-height:740px;
+  padding:78px 7.2% 86px;
+  align-items:center;
+  background:
+    linear-gradient(90deg,#070a0d 0%,#070a0d 43%,#0a110d 66%,#090c12 100%);
+  isolation:isolate;
+}
+.hero:before{
+  content:"";position:absolute;z-index:1;top:0;bottom:0;left:56%;width:1px;
+  background:linear-gradient(transparent,#9bff454a 18%,#9bff451a 78%,transparent);
+}
+.hero:after{
+  content:"ZC / 001";position:absolute;z-index:2;right:3.1%;top:50%;
+  writing-mode:vertical-rl;transform:translateY(-50%);
+  font:700 10px Orbitron,sans-serif;letter-spacing:5px;color:#7b8d7c;
+}
+.hero-grid{
+  opacity:.32;background-size:38px 38px;
+  mask-image:linear-gradient(90deg,black 0%,#000 34%,transparent 61%);
+}
+.moon{right:6%;top:10%;width:450px;height:450px;opacity:.11;filter:blur(2px);background:radial-gradient(circle,#9bff45 0%,#254c2b 43%,transparent 70%);box-shadow:0 0 100px #6cff3825}
+.city{opacity:.18;width:55%;filter:blur(1px)}
+.city-front{opacity:.12}
+.hero-content{max-width:none;width:54%;z-index:4}
+.eyebrow{
+  display:inline-flex;align-items:center;padding:12px 15px;
+  border:1px solid #354b37;background:#0b130d;
+  font-size:10px;letter-spacing:2.1px;
+}
+h1{
+  font-size:clamp(48px,5.15vw,76px);line-height:.99;letter-spacing:-2.8px;
+  margin:29px 0 24px;max-width:780px;
+}
+h1 .dead{white-space:nowrap;color:#f0f4e9;text-shadow:none}
+h1 .alive{text-shadow:0 0 32px #9bff4540}
+.hero-copy{max-width:455px;font-size:21px;line-height:1.38;color:#aab7ae}
+.hero-actions{margin:28px 0 34px}
+.hero-stats{gap:19px}
+.hero-stats strong{font-size:19px}
+.hero-stats span{font-size:9px;letter-spacing:1.1px}
+.hero-mascot{
+  right:2.5%;top:4%;bottom:7%;width:43%;height:auto;
+  background:linear-gradient(135deg,#101b12a8,#0a0d12b8);
+  clip-path:polygon(12% 0,100% 0,100% 100%,0 100%,0 12%);
+  border-left:1px solid #9bff4520;
+}
+.hero-mascot:before{
+  content:"";position:absolute;inset:7% 6% 9% 7%;
+  border:1px solid #9bff451e;
+  background:linear-gradient(145deg,#9bff4508,transparent 42%,#a855f708);
+  clip-path:polygon(10% 0,100% 0,100% 100%,0 100%,0 10%);
+}
+.mascot-orbit{
+  width:min(31vw,390px);border:1px solid #9bff4560;
+  box-shadow:0 0 0 12px #9bff4508,0 0 0 36px #9bff4504,0 0 75px #7dff3020,inset 0 0 45px #9bff4510;
+}
+.mascot-orbit:before{inset:8%;border:1px dashed #9bff4540}
+.mascot-orbit:after{inset:-19%;border-color:#a855f71c}
+.mascot-hand{
+  width:min(27vw,355px);height:min(27vw,355px);
+  background-color:#050a07;background-position:center 43%;background-size:180% auto;
+  border:1px solid #a3ff456e;box-shadow:0 0 0 7px #9bff4508,0 0 80px #73ff2c25,inset 0 0 40px #9bff4510;
+  filter:drop-shadow(0 0 25px #8aff3550);
+  transform:translateY(-8px);
+}
+.mascot-caption{bottom:9%;right:7%;border-color:#496347;background:#08100bf2}
+.mascot-signal{top:12%;left:4%;background:#08100bf2}
+.hero-bottom{
+  left:7.2%;right:7.2%;bottom:20px;padding-top:13px;
+  border-top:1px solid #26352b;font-size:8px;letter-spacing:1.6px;
+}
+@media(max-width:1050px){
+  .hero{padding-left:5%;padding-right:5%;min-height:680px}
+  .hero-content{width:58%}
+  h1{font-size:clamp(43px,5.3vw,60px);letter-spacing:-2px}
+  h1 .dead{white-space:normal}
+  .hero-mascot{right:0;width:42%}
+  .mascot-hand{width:min(32vw,290px);height:min(32vw,290px)}
+  .mascot-orbit{width:min(37vw,330px)}
+  .hero-bottom{left:5%;right:5%}
+}
+@media(max-width:680px){
+  .hero{min-height:990px;padding:42px 5% 355px;align-items:flex-start;background:linear-gradient(180deg,#070a0d 0%,#090f0b 58%,#090c11 100%)}
+  .hero:before{left:5%;right:5%;top:auto;bottom:330px;width:auto;height:1px}
+  .hero:after{right:4%;top:32%;font-size:8px;letter-spacing:3px}
+  .hero-grid{background-size:28px 28px;mask-image:linear-gradient(180deg,black,transparent 70%)}
+  .hero-content{width:100%;max-width:560px}
+  .eyebrow{font-size:8px;letter-spacing:1.4px;padding:10px 11px}
+  h1{font-size:clamp(40px,10.5vw,62px);line-height:1;letter-spacing:-1.7px;margin:24px 0 17px}
+  h1 .dead{white-space:normal}
+  .hero-copy{font-size:18px;max-width:420px}
+  .hero-actions{gap:9px;margin:22px 0 24px}
+  .btn{padding:13px 12px;font-size:9px}
+  .hero-stats{gap:12px}
+  .hero-stats strong{font-size:16px}
+  .hero-stats span{font-size:8px;letter-spacing:.6px}
+  .hero-mascot{top:auto;bottom:55px;left:0;right:0;width:100%;height:285px;clip-path:polygon(7% 0,100% 0,100% 100%,0 100%,0 9%);border-left:0}
+  .hero-mascot:before{inset:0 3% 0 3%}
+  .mascot-hand{width:195px;height:195px;background-size:180% auto}
+  .mascot-orbit{width:230px}
+  .mascot-caption{right:7%;bottom:0;font-size:7px;padding:8px}
+  .mascot-signal{left:7%;top:0;font-size:7px;padding:8px}
+  .hero-bottom{left:5%;right:5%;bottom:14px;font-size:7px;letter-spacing:.5px}
+  .hero-bottom span:nth-child(2){display:none}
+  .hero-bottom span:last-child{display:none}
+}
