@@ -195,6 +195,11 @@ function resetGame() {
 }
 function beginGame() {
   if (gameActive) return;
+  // A finished run must be reset before starting again; otherwise the snake
+  // remains at the collision point and immediately loses on the next frame.
+  if (gameState?.textContent === 'GAME OVER' || gameState?.textContent === 'SURVIVED') {
+    resetGame();
+  }
   resizeGameCanvas();
   if (!snake.length) resetGame();
   gameActive = true;
