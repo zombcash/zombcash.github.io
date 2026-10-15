@@ -224,9 +224,27 @@ window.addEventListener('keydown', event => {
   }
 });
 action?.addEventListener('click', () => { if (!gameActive) beginGame(); });
+const snakeModal = document.getElementById('snake-modal');
+const snakeClose = document.getElementById('snake-close');
 start?.addEventListener('click', () => {
-  beginGame();
-  screen?.scrollIntoView({behavior:'smooth', block:'center'});
+  if (snakeModal && !snakeModal.open) snakeModal.showModal();
+  requestAnimationFrame(() => {
+    resizeGameCanvas();
+    beginGame();
+  });
+});
+snakeClose?.addEventListener('click', () => {
+  if (gameActive) stopGame(false, 'RUN PAUSED. OPEN THE ARCADE TO PLAY AGAIN.');
+  snakeModal?.close();
+});
+snakeModal?.addEventListener('click', event => {
+  if (event.target === snakeModal) {
+    if (gameActive) stopGame(false, 'RUN PAUSED. OPEN THE ARCADE TO PLAY AGAIN.');
+    snakeModal.close();
+  }
+});
+snakeModal?.addEventListener('close', () => {
+  if (gameActive) stopGame(false, 'RUN PAUSED. OPEN THE ARCADE TO PLAY AGAIN.');
 });
 window.addEventListener('resize', resizeGameCanvas);
 resizeGameCanvas();
