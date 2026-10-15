@@ -118,6 +118,7 @@ function drawGame() {
 }
 function stopGame(won, reason) {
   gameActive = false;
+  screen?.classList.remove('snake-playing');
   cancelAnimationFrame(gameFrame);
   action.disabled = false;
   action.style.opacity = '1';
@@ -137,6 +138,7 @@ function stopGame(won, reason) {
 function resetGame() {
   cancelAnimationFrame(gameFrame);
   gameActive = false;
+  screen?.classList.remove('snake-playing');
   gamePoints = 0;
   const midX = Math.floor(cols / 2), midY = Math.floor(rows / 2);
   snake = [{x: midX, y: midY}, {x: midX - 1, y: midY}, {x: midX - 2, y: midY}];
@@ -161,6 +163,7 @@ function beginGame() {
   resizeGameCanvas();
   resetGame();
   gameActive = true;
+  screen?.classList.add('snake-playing');
   gameDeadline = performance.now() + GAME_SECONDS * 1000;
   lastStep = performance.now();
   action.disabled = true;
@@ -191,7 +194,7 @@ function tickGame(now) {
       scoreEl.textContent = String(gamePoints).padStart(3, '0');
       gameMessage.textContent = 'BRAIN CONSUMED! +10';
       gameMessage.style.color = '#9bff45';
-      gameMessage.style.display = '';
+      gameMessage.style.display = 'none';
       placeFood();
       stepMs = Math.max(75, 125 - Math.floor(gamePoints / 100) * 5);
     } else {
