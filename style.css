@@ -518,3 +518,32 @@ footer p{color:#96a69a}
  .game-fullscreen{padding:7px 8px;font-size:7px}
  .site-visits-inner{padding:26px 5%}
 }
+
+
+/* Hero V4: new composition and stronger visual identity */
+.hero{min-height:min(760px,calc(100svh - 78px));padding:78px clamp(24px,7vw,112px) 88px;background:radial-gradient(ellipse at 76% 46%,rgba(50,190,61,.18),transparent 32%),radial-gradient(ellipse at 95% 78%,rgba(145,57,200,.12),transparent 27%),linear-gradient(115deg,#060a08 0%,#0b1710 53%,#070b09 100%)}
+.hero:after{background:linear-gradient(90deg,#060a08 0%,rgba(6,10,8,.92) 31%,rgba(6,10,8,.24) 66%,transparent 100%),linear-gradient(0deg,#070b09 0%,transparent 24%)}
+.hero-content{max-width:650px}
+.eyebrow{border-color:#466b43;background:#09130be8;padding:11px 15px}
+h1{font-size:clamp(48px,6.1vw,86px);line-height:.99;letter-spacing:-3.8px;margin:28px 0 23px}
+h1 .dead{color:#d8e3d9}
+h1 .alive{color:#9bff45;text-shadow:0 0 40px #9bff452e}
+.hero-copy{font-size:clamp(18px,1.55vw,22px);max-width:475px;color:#c0cdc2}
+.hero-mascot{right:3.5%;width:44%;top:5%;bottom:8%}
+.mascot-orbit{width:min(34vw,440px);border-color:#9bff4555;box-shadow:0 0 0 20px #9bff4507,0 0 0 52px #9bff4504,0 0 100px #9bff4510,inset 0 0 80px #9bff4512}
+.mascot-hand{width:min(29vw,370px);height:min(29vw,370px);background-size:180% auto;filter:drop-shadow(0 0 28px #8aff3555)}
+.mascot-caption{bottom:8%;right:0}
+.mascot-signal{top:13%;left:-2%}
+.hero-stats{margin-top:4px}
+.hero-stats>div{min-width:95px}
+.hero-stats strong{font-size:clamp(18px,2vw,26px)}
+.ticker{background:#0b140e;border-block-color:#2b422e}
+.snake-feature-row span:nth-child(2){content:"ENDLESS RUN"}
+@media(max-width:680px){
+ .hero{min-height:800px;padding:48px 5% 325px}
+ .hero:after{background:linear-gradient(180deg,#060a08 0%,#060a08ed 48%,transparent 80%,#070b09 100%)}
+ h1{font-size:clamp(43px,11vw,60px);letter-spacing:-2px}
+ .hero-mascot{width:100%;height:290px;bottom:55px;top:auto}
+ .mascot-hand{width:200px;height:200px}
+ .mascot-orbit{width:240px}
+}
