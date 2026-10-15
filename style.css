@@ -264,3 +264,9 @@ h1{font-size:clamp(48px,6vw,78px);line-height:1.02;letter-spacing:-2.8px;margin:
  .hero-stats{gap:12px}
  .game-fullscreen{font-size:7px;padding:6px}
 }
+
+
+/* During active play, remove the start overlay completely so it never blocks the snake. */
+.game-screen.snake-playing .game-center{display:none!important}
+.game-screen.snake-playing .zombie-canvas{z-index:2}
+.game-screen.snake-playing .game-score{z-index:4}
