@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=transparent-hand-20261015">
+<link rel="stylesheet" href="style.css?v=survival-arena-20261015">
 </head>
 <body>
 <div class="scanlines"></div>
@@ -118,7 +118,7 @@
       <div class="vote-foot"><span id="vote-total">0 VOTES</span><span id="vote-date">UTC DAILY POLL</span></div>
     </article>
     <article class="crew-card leaderboard-card">
-      <div class="crew-card-head"><div><div class="section-kicker">[ SURVIVAL RECORDS ]</div><h3>FASTEST <span class="green">SURVIVORS</span></h3></div><span id="leaderboard-status" class="crew-status">LOADING…</span></div>
+      <div class="crew-card-head"><div><div class="section-kicker">[ SURVIVAL RECORDS ]</div><h3>TOP <span class="green">ZOMBIE HUNTERS</span></h3></div><span id="leaderboard-status" class="crew-status">LOADING…</span></div>
       <div id="survival-leaderboard" class="survival-leaderboard"><p class="crew-note">No records yet. Be the first survivor.</p></div>
       <p class="crew-note prize-note">Future $ZOMBCASH prizes may be announced for selected competitions. No token rewards are currently enabled or guaranteed.</p>
     </article>
@@ -126,7 +126,7 @@
 </section>
 <section class="section mini-game">
   <div class="game-copy"><div class="section-kicker">[ 03 / FIELD TEST ]</div><h2>HOW LONG<br>CAN YOU <span class="green">SURVIVE?</span></h2><p>Incoming signal detected. The undead are closing in. Test your reflexes in this tiny browser survival challenge.</p><p class="game-note">No wallet. No download. Just you and the outbreak.</p><button class="btn btn-primary" id="start-game">START SURVIVAL TEST</button></div>
-  <div class="game-box"><div class="game-head"><span>SIMULATION.EXE</span><span id="game-state">STANDBY</span></div><div class="game-screen" id="game-screen"><div class="game-grid"></div><div class="game-center"><div class="game-skull">☠</div><p id="game-message">PRESS START TO INITIALIZE</p><button id="game-action" class="game-action">INITIALIZE</button></div><div class="game-score">SCORE <b id="game-score">000</b></div></div><div class="game-foot"><span>REACTION PROTOCOL v0.2</span><span>REACTION TIME LEADERBOARD</span></div><div class="game-submit"><input id="survivor-name" maxlength="18" placeholder="SURVIVOR NAME" aria-label="Survivor name"><button id="submit-survival-score" type="button" disabled>SAVE RECORD</button><span id="score-submit-status" aria-live="polite">Finish a round to submit your reaction time.</span></div></div>
+  <div class="game-box"><div class="game-head"><span>SIMULATION.EXE</span><span id="game-state">STANDBY</span></div><div class="game-screen" id="game-screen"><div class="game-grid"></div><canvas id="zombie-canvas" class="zombie-canvas" aria-label="Click zombies to defend the base"></canvas><div class="game-center"><div class="game-skull">☠</div><p id="game-message">CLICK INITIALIZE TO DEFEND YOUR BASE</p><button id="game-action" class="game-action">INITIALIZE</button></div><div class="game-score">SCORE <b id="game-score">000</b></div></div><div class="game-foot"><span>REACTION PROTOCOL v0.2</span><span>REACTION TIME LEADERBOARD</span></div><div class="game-submit"><input id="survivor-name" maxlength="18" placeholder="SURVIVOR NAME" aria-label="Survivor name"><button id="submit-survival-score" type="button" disabled>SAVE RECORD</button><span id="score-submit-status" aria-live="polite">Finish a round to submit your reaction time.</span></div></div>
 </section>
 <section class="section transmission" id="community">
   <div class="transmission-box"><div class="transmission-glow"></div><div class="section-kicker">[ 04 / JOIN THE RESISTANCE ]</div><h2>DON'T SURVIVE<br><span class="green">ALONE.</span></h2><p>Find the crew. Share a meme. Bring a little life back to the timeline.</p><div class="community-buttons"><a class="btn btn-primary" href="https://t.me/+5aXhFhx2RdFmNWYy" target="_blank" rel="noreferrer">JOIN TELEGRAM GROUP ↗</a><a class="btn btn-ghost" href="https://t.me/ZOMBCASH" target="_blank" rel="noreferrer">OPEN CHANNEL ↗</a><a class="btn btn-ghost" href="https://x.com/i/communities/2013610165069591027" target="_blank" rel="noreferrer">X COMMUNITY ↗</a></div><div class="contract"><span>TOKEN CONTRACT</span><code>6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump</code><button id="copy-ca" title="Copy contract address">COPY</button></div><div class="copy-feedback" id="copy-feedback" aria-live="polite"></div></div>
@@ -141,5 +141,5 @@
   </div>
 </section>
 <footer><a class="brand footer-brand" href="#home"><span class="brand-mark">☣</span><span>ZOMBIE<span class="green">CASH</span><small>THE UNDEAD INTERNET</small></span></a><p>Built for the undead. Powered by community.</p><span class="footer-right">MARKET DIED. ZOMBIECASH DIDN'T. <b>© 2026</b></span></footer>
-<script src="script.js?v=visits-20261015"></script>
+<script src="script.js?v=zombie-survival-20261015"></script>
 </body></html>
