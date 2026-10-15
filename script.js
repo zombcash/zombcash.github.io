@@ -42,6 +42,9 @@ const screen = document.getElementById('game-screen');
 let gameTimer = null, gameStart = 0, score = 0, active = false, ready = false;
 function resetGame() {
   clearTimeout(gameTimer); active = false; ready = false; score = 0;
+  window.lastSurvivalMs = null;
+  const submitScoreButton = document.getElementById('submit-survival-score');
+  if (submitScoreButton) submitScoreButton.disabled = true;
   scoreEl.textContent = '000'; gameState.textContent = 'STANDBY';
   gameMessage.textContent = 'PRESS START TO INITIALIZE'; action.textContent = 'INITIALIZE';
   action.disabled = false; action.style.opacity = '1'; screen.style.background = '';
@@ -70,6 +73,11 @@ action.addEventListener('click', () => {
   score = Math.max(0, 1000 - ms); scoreEl.textContent = String(score).padStart(3, '0');
   gameState.textContent = `${ms} MS`; gameMessage.textContent = ms < 280 ? 'LEGENDARY REFLEXES.' : ms < 420 ? 'NICE SURVIVAL, ZOMBIE.' : 'THE HORDE WAS CLOSE.';
   action.textContent = 'PLAY AGAIN'; active = false; ready = false; screen.style.background = '';
+  window.lastSurvivalMs = ms;
+  const submitScoreButton = document.getElementById('submit-survival-score');
+  const submitScoreStatus = document.getElementById('score-submit-status');
+  if (submitScoreButton) submitScoreButton.disabled = false;
+  if (submitScoreStatus) submitScoreStatus.textContent = 'Reaction time: ' + ms + ' ms. Save your record to the community board.';
 });
 start.addEventListener('click', () => { beginGame(); document.getElementById('game-screen').scrollIntoView({behavior:'smooth',block:'center'}); });
 
@@ -396,4 +404,223 @@ if (zomMarket) {
   loadMarketAlarms();
   setInterval(loadWorldNews, 300000);
   setInterval(loadMarketAlarms, 60000);
+})();
+
+
+// Community features: DexScreener trade counts, shared daily voting and survival leaderboard.
+(() => {
+  const apiBase = 'https://zombcash-bot.fadehost.app';
+  const getEl = (id) => document.getElementById(id);
+  const activityStatus = getEl('activity-status');
+  const activityBuys = getEl('activity-buys');
+  const activitySells = getEl('activity-sells');
+  const activityRatio = getEl('activity-ratio');
+  const activityBar = getEl('activity-buy-bar');
+  const activityNote = getEl('activity-note');
+  const voteOptionsEl = getEl('daily-vote-options');
+  const voteStatus = getEl('vote-status');
+  const voteTotal = getEl('vote-total');
+  const voteDate = getEl('vote-date');
+  const leaderboardEl = getEl('survival-leaderboard');
+  const leaderboardStatus = getEl('leaderboard-status');
+  const submitScoreButton = getEl('submit-survival-score');
+  const submitScoreStatus = getEl('score-submit-status');
+  let activityData = null;
+  let activityPeriod = 'h1';
+  let voteData = null;
+  let chosenVote = null;
+  let voteBusy = false;
+
+  let voterId = '';
+  try {
+    voterId = localStorage.getItem('zombcash-community-id') || '';
+    if (!/^[a-f0-9-]{16,80}$/.test(voterId)) {
+      voterId = (crypto.randomUUID ? crypto.randomUUID() : (Date.now().toString(16) + '-' + Math.random().toString(16).slice(2) + '-' + Math.random().toString(16).slice(2))).toLowerCase();
+      localStorage.setItem('zombcash-community-id', voterId);
+    }
+  } catch (_) {
+    voterId = (Date.now().toString(16) + '-' + Math.random().toString(16).slice(2) + '-' + Math.random().toString(16).slice(2)).toLowerCase();
+  }
+
+  const prettyCount = (n) => Number(n || 0).toLocaleString('en-US');
+  function renderActivity() {
+    if (!activityData) return;
+    const buys = Number(activityData.buys?.[activityPeriod] || 0);
+    const sells = Number(activityData.sells?.[activityPeriod] || 0);
+    const total = buys + sells;
+    if (activityBuys) activityBuys.textContent = prettyCount(buys);
+    if (activitySells) activitySells.textContent = prettyCount(sells);
+    if (activityRatio) activityRatio.textContent = sells ? (buys / sells).toFixed(2) + '×' : (buys ? '∞' : '—');
+    if (activityBar) activityBar.style.width = (total ? Math.round(buys / total * 100) : 0) + '%';
+    if (activityNote) activityNote.textContent = total
+      ? 'DexScreener reports ' + prettyCount(total) + ' transactions in this period. Counts are transactions, not unique buyers or wallets.'
+      : 'No transactions reported for this period in the latest DexScreener snapshot.';
+  }
+  async function loadActivity() {
+    try {
+      const response = await fetch(apiBase + '/api/activity', {cache:'no-store'});
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      activityData = await response.json();
+      renderActivity();
+      if (activityStatus) activityStatus.textContent = 'DEXSCREENER LIVE';
+    } catch (error) {
+      if (activityStatus) activityStatus.textContent = 'SIGNAL OFFLINE';
+      if (activityNote) activityNote.textContent = 'Live trade counts are temporarily unavailable. They will retry automatically.';
+    }
+  }
+  document.querySelectorAll('.activity-tab').forEach(button => button.addEventListener('click', () => {
+    activityPeriod = button.dataset.period || 'h1';
+    document.querySelectorAll('.activity-tab').forEach(tab => tab.classList.toggle('active', tab === button));
+    renderActivity();
+  }));
+
+  const pollLabels = {
+    meme: 'More ZombieCash memes',
+    raid: 'Community raid mission',
+    game: 'New survival game challenge'
+  };
+  function renderVote(data, alreadyVoted = false) {
+    voteData = data;
+    if (!voteOptionsEl || !data) return;
+    const total = Number(data.total || 0);
+    const previousVote = chosenVote || data.yourVote || null;
+    voteOptionsEl.replaceChildren();
+    Object.entries(pollLabels).forEach(([key, label]) => {
+      const count = Number(data.votes?.[key] || 0);
+      const percent = total ? Math.round(count / total * 100) : 0;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'daily-vote-option' + (previousVote === key ? ' selected' : '');
+      button.disabled = alreadyVoted || voteBusy;
+      const bar = document.createElement('span');
+      bar.className = 'vote-result-bar';
+      bar.style.width = percent + '%';
+      const radio = document.createElement('span');
+      radio.className = 'vote-radio';
+      const title = document.createElement('span');
+      title.className = 'vote-option-label';
+      title.textContent = label;
+      const result = document.createElement('span');
+      result.className = 'vote-percent';
+      result.textContent = total ? percent + '% · ' + count : 'VOTE';
+      button.append(bar, radio, title, result);
+      button.addEventListener('click', () => castVote(key));
+      voteOptionsEl.append(button);
+    });
+    if (voteTotal) voteTotal.textContent = prettyCount(total) + (total === 1 ? ' VOTE' : ' VOTES');
+    if (voteDate) voteDate.textContent = 'UTC · ' + (data.date || new Date().toISOString().slice(0,10));
+    if (voteStatus) voteStatus.textContent = alreadyVoted ? 'VOTE RECORDED' : 'OPEN POLL';
+  }
+  async function loadVote() {
+    try {
+      const response = await fetch(apiBase + '/api/vote', {cache:'no-store'});
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      const data = await response.json();
+      let alreadyVoted = false;
+      try { alreadyVoted = localStorage.getItem('zombcash-voted-' + data.date) === 'yes'; } catch (_) {}
+      renderVote(data, alreadyVoted);
+    } catch (error) {
+      if (voteStatus) voteStatus.textContent = 'POLL OFFLINE';
+      if (voteOptionsEl) voteOptionsEl.innerHTML = '<p class="crew-note">The community poll is temporarily unavailable. Please try again shortly.</p>';
+    }
+  }
+  async function castVote(option) {
+    if (voteBusy) return;
+    voteBusy = true;
+    chosenVote = option;
+    if (voteStatus) voteStatus.textContent = 'SENDING VOTE…';
+    try {
+      const response = await fetch(apiBase + '/api/vote', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({option, voter:voterId})
+      });
+      const data = await response.json();
+      if (!response.ok && response.status !== 409) throw new Error(data.error || 'Vote failed');
+      if (data.date) {
+        try { localStorage.setItem('zombcash-voted-' + data.date, 'yes'); } catch (_) {}
+      }
+      renderVote(data, true);
+      if (voteStatus && response.status === 409) voteStatus.textContent = 'ALREADY VOTED';
+    } catch (error) {
+      if (voteStatus) voteStatus.textContent = 'VOTE FAILED';
+      if (voteOptionsEl) {
+        const notice = document.createElement('p');
+        notice.className = 'crew-note';
+        notice.textContent = 'Could not save your vote: ' + error.message;
+        voteOptionsEl.append(notice);
+      }
+    } finally { voteBusy = false; }
+  }
+
+  function renderLeaderboard(data) {
+    if (!leaderboardEl) return;
+    leaderboardEl.replaceChildren();
+    const scores = Array.isArray(data.scores) ? data.scores : [];
+    if (!scores.length) {
+      const empty = document.createElement('p');
+      empty.className = 'crew-note';
+      empty.textContent = 'No records yet. Play the survival test and claim the first spot.';
+      leaderboardEl.append(empty);
+    } else {
+      scores.slice(0,10).forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = 'survivor-row';
+        const rank = document.createElement('span');
+        rank.className = 'survivor-rank';
+        rank.textContent = '#' + (index + 1);
+        const name = document.createElement('span');
+        name.className = 'survivor-name';
+        name.textContent = item.name || 'Survivor';
+        const date = document.createElement('small');
+        date.className = 'survivor-date';
+        date.textContent = item.date ? 'RECORD · ' + item.date : 'COMMUNITY RECORD';
+        name.append(date);
+        const time = document.createElement('strong');
+        time.className = 'survivor-time';
+        time.textContent = Number(item.ms).toLocaleString('en-US') + ' MS';
+        row.append(rank, name, time);
+        leaderboardEl.append(row);
+      });
+    }
+    if (leaderboardStatus) leaderboardStatus.textContent = 'TOP 10';
+  }
+  async function loadLeaderboard() {
+    try {
+      const response = await fetch(apiBase + '/api/scores', {cache:'no-store'});
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      renderLeaderboard(await response.json());
+    } catch (_) {
+      if (leaderboardStatus) leaderboardStatus.textContent = 'OFFLINE';
+      if (leaderboardEl) leaderboardEl.innerHTML = '<p class="crew-note">Leaderboard is temporarily unavailable.</p>';
+    }
+  }
+  submitScoreButton?.addEventListener('click', async () => {
+    const ms = Number(window.lastSurvivalMs);
+    if (!Number.isFinite(ms) || ms < 100 || ms > 5000) {
+      if (submitScoreStatus) submitScoreStatus.textContent = 'Finish a valid round first.';
+      return;
+    }
+    submitScoreButton.disabled = true;
+    if (submitScoreStatus) submitScoreStatus.textContent = 'Submitting your record…';
+    try {
+      const response = await fetch(apiBase + '/api/scores', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({name:getEl('survivor-name')?.value || 'Survivor', ms, voter:voterId})
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Could not save record');
+      if (submitScoreStatus) submitScoreStatus.textContent = 'Record saved! Leaderboard updated.';
+      renderLeaderboard(data);
+    } catch (error) {
+      if (submitScoreStatus) submitScoreStatus.textContent = error.message;
+      submitScoreButton.disabled = false;
+    }
+  });
+
+  loadActivity();
+  loadVote();
+  loadLeaderboard();
+  setInterval(loadActivity, 60000);
+  setInterval(loadVote, 60000);
+  setInterval(loadLeaderboard, 60000);
 })();
