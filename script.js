@@ -140,26 +140,11 @@ async function loadRadar(force = false) {
   if (radarStatus) radarStatus.textContent = 'SCANNING SOLANA';
   if (radarRefresh) { radarRefresh.disabled = true; radarRefresh.textContent = '↻ SCANNING'; }
   try {
-    const response = await fetch('https://api.dexscreener.com/token-boosts/top/v1', {cache:'no-store'});
-    if (!response.ok) throw new Error('Boost feed returned HTTP ' + response.status);
-    const boosted = await response.json();
-    const addresses = [...new Set((Array.isArray(boosted) ? boosted : [])
-      .filter(t => String(t.chainId).toLowerCase() === 'solana' && t.tokenAddress)
-      .map(t => t.tokenAddress))].slice(0,25);
-    if (!addresses.length) throw new Error('No Solana tokens in the boost feed');
-    const detailsResponse = await fetch('https://api.dexscreener.com/tokens/v1/solana/' + addresses.map(encodeURIComponent).join(','), {cache:'no-store'});
-    if (!detailsResponse.ok) throw new Error('Token details returned HTTP ' + detailsResponse.status);
-    const pairs = await detailsResponse.json();
-    const best = new Map();
-    (Array.isArray(pairs) ? pairs : []).filter(p => p.chainId === 'solana' && p.baseToken?.address).forEach(p => {
-      const key = p.baseToken.address;
-      const current = best.get(key);
-      const rank = Number(p.liquidity?.usd || 0) + Number(p.volume?.h24 || 0) * 0.1;
-      const currentRank = current ? Number(current.liquidity?.usd || 0) + Number(current.volume?.h24 || 0) * 0.1 : -1;
-      if (!current || rank > currentRank) best.set(key, p);
-    });
-    const boostedAddresses = new Set((Array.isArray(boosted) ? boosted : []).map(t => t.tokenAddress));
-    radarTokens = [...best.values()].map(p => ({...p, boosts:{...(p.boosts || {}), active:Number(p.boosts?.active || 0), isBoosted:boostedAddresses.has(p.baseToken.address)}}));
+    const response = await fetch('https://zombcash-bot.fadehost.app/api/radar', {cache:'no-store'});
+    if (!response.ok) throw new Error('Radar API returned HTTP ' + response.status);
+    const payload = await response.json();
+    if (!Array.isArray(payload.pairs)) throw new Error(payload.error || 'Radar API returned an invalid response');
+    radarTokens = payload.pairs;
     if (!radarTokens.length) throw new Error('No detailed Solana pairs returned');
     lastRadarSuccess = Date.now();
     renderRadar();
