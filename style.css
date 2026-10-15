@@ -151,3 +151,20 @@
 .hero-zombie:before,.hero-zombie:after{content:none!important;display:none!important}
 @media(max-width:950px){.hero-zombie{right:-2%;width:48%;opacity:.9}}
 @media(max-width:680px){.hero-zombie{width:76%;height:46%;right:-2%;bottom:6%;opacity:.8}}
+
+
+/* Final hero fix: blend the supplied black-background hand into the scene without a square */
+.hero-zombie{
+  right:4%;bottom:2%;width:46%;height:88%;z-index:2;
+  background-image:url("zombcash-hand-original.webp?v=blend-20261015")!important;
+  background-position:center 48%!important;
+  background-size:145% auto!important;
+  background-repeat:no-repeat!important;
+  background-color:transparent!important;
+  mix-blend-mode:screen!important;
+  opacity:1!important;clip-path:none!important;
+  filter:drop-shadow(0 0 28px #72ff2c55)
+}
+.hero-zombie:before,.hero-zombie:after{content:none!important;display:none!important}
+@media(max-width:950px){.hero-zombie{right:-2%;width:49%;opacity:.9;background-size:140% auto!important}}
+@media(max-width:680px){.hero-zombie{width:76%;height:46%;right:-2%;bottom:6%;opacity:.85;background-size:130% auto!important}}
