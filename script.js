@@ -33,53 +33,27 @@ document.getElementById('copy-ca').addEventListener('click', async () => {
   }
 });
 
+// Zombie Survival: real-time click-to-defend mini game.
 const start = document.getElementById('start-game');
 const action = document.getElementById('game-action');
 const gameMessage = document.getElementById('game-message');
 const gameState = document.getElementById('game-state');
 const scoreEl = document.getElementById('game-score');
 const screen = document.getElementById('game-screen');
-let gameTimer = null, gameStart = 0, score = 0, active = false, ready = false;
-function resetGame() {
-  clearTimeout(gameTimer); active = false; ready = false; score = 0;
-  window.lastSurvivalMs = null;
-  const submitScoreButton = document.getElementById('submit-survival-score');
-  if (submitScoreButton) submitScoreButton.disabled = true;
-  scoreEl.textContent = '000'; gameState.textContent = 'STANDBY';
-  gameMessage.textContent = 'PRESS START TO INITIALIZE'; action.textContent = 'INITIALIZE';
-  action.disabled = false; action.style.opacity = '1'; screen.style.background = '';
-}
-function beginGame() {
-  resetGame(); active = true; gameState.textContent = 'WAIT FOR GREEN';
-  gameMessage.textContent = 'WAIT FOR THE SIGNAL...'; action.textContent = 'WAIT...';
-  action.disabled = true; action.style.opacity = '.45';
-  const delay = 1100 + Math.random() * 3000;
-  gameTimer = setTimeout(() => {
-    if (!active) return;
-    ready = true; gameStart = performance.now(); gameState.textContent = 'SIGNAL LIVE';
-    gameMessage.textContent = 'CLICK NOW, SURVIVOR!'; action.textContent = 'STRIKE!';
-    action.disabled = false; action.style.opacity = '1';
-    screen.style.background = 'radial-gradient(ellipse at center,#285c28,#08120d 68%)';
-  }, delay);
-}
-action.addEventListener('click', () => {
-  if (!active) { beginGame(); return; }
-  if (!ready) {
-    clearTimeout(gameTimer); active = false; gameState.textContent = 'TOO EARLY';
-    gameMessage.textContent = 'YOU PANICKED. TRY AGAIN.'; action.textContent = 'RETRY';
-    action.disabled = false; action.style.opacity = '1'; return;
-  }
-  const ms = Math.round(performance.now() - gameStart);
-  score = Math.max(0, 1000 - ms); scoreEl.textContent = String(score).padStart(3, '0');
-  gameState.textContent = `${ms} MS`; gameMessage.textContent = ms < 280 ? 'LEGENDARY REFLEXES.' : ms < 420 ? 'NICE SURVIVAL, ZOMBIE.' : 'THE HORDE WAS CLOSE.';
-  action.textContent = 'PLAY AGAIN'; active = false; ready = false; screen.style.background = '';
-  window.lastSurvivalMs = ms;
-  const submitScoreButton = document.getElementById('submit-survival-score');
-  const submitScoreStatus = document.getElementById('score-submit-status');
-  if (submitScoreButton) submitScoreButton.disabled = false;
-  if (submitScoreStatus) submitScoreStatus.textContent = 'Reaction time: ' + ms + ' ms. Save your record to the community board.';
-});
-start.addEventListener('click', () => { beginGame(); document.getElementById('game-screen').scrollIntoView({behavior:'smooth',block:'center'}); });
+const gameCanvas = document.getElementById('zombie-canvas');
+const gameCtx = gameCanvas?.getContext('2d');
+let gameFrame=0, spawnTimer=0, lastFrame=0, gameDeadline=0, gameActive=false, gamePoints=0, gameLives=3, zombies=[], gameWidth=0, gameHeight=0;
+const GAME_SECONDS=30;
+function resizeGameCanvas(){if(!gameCanvas||!screen||!gameCtx)return;const rect=screen.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);gameWidth=rect.width;gameHeight=rect.height;gameCanvas.width=Math.round(gameWidth*dpr);gameCanvas.height=Math.round(gameHeight*dpr);gameCanvas.style.width=gameWidth+'px';gameCanvas.style.height=gameHeight+'px';gameCtx.setTransform(dpr,0,0,dpr,0,0);drawGame();}
+function drawGame(){if(!gameCtx)return;gameCtx.clearRect(0,0,gameWidth,gameHeight);gameCtx.strokeStyle='rgba(119,255,139,.08)';gameCtx.lineWidth=1;for(let x=0;x<gameWidth;x+=28){gameCtx.beginPath();gameCtx.moveTo(x,0);gameCtx.lineTo(x,gameHeight);gameCtx.stroke();}for(let y=0;y<gameHeight;y+=28){gameCtx.beginPath();gameCtx.moveTo(0,y);gameCtx.lineTo(gameWidth,y);gameCtx.stroke();}zombies.forEach(z=>{gameCtx.save();gameCtx.shadowColor='#9bff45';gameCtx.shadowBlur=16;gameCtx.fillStyle='rgba(10,25,14,.92)';gameCtx.strokeStyle='#9bff45';gameCtx.lineWidth=2;gameCtx.beginPath();gameCtx.arc(z.x,z.y,z.r,0,Math.PI*2);gameCtx.fill();gameCtx.stroke();gameCtx.shadowBlur=0;gameCtx.font=(z.r*1.25)+'px serif';gameCtx.textAlign='center';gameCtx.textBaseline='middle';gameCtx.fillText(z.kind,z.x,z.y+1);gameCtx.restore();});if(gameActive){gameCtx.fillStyle='#9bff45';gameCtx.font='700 10px Orbitron,sans-serif';gameCtx.textAlign='left';gameCtx.fillText('DEFEND THE BASE',14,22);gameCtx.textAlign='right';gameCtx.fillText('LIVES '+'♥'.repeat(gameLives)+'♡'.repeat(3-gameLives),gameWidth-14,22);}}
+function stopGame(won){gameActive=false;cancelAnimationFrame(gameFrame);action.disabled=false;action.style.opacity='1';action.textContent='PLAY AGAIN';document.getElementById('submit-survival-score').disabled=gamePoints<10;gameState.textContent=won?'BASE SURVIVED':'BASE OVERRUN';gameMessage.textContent=won?'YOU SURVIVED THE OUTBREAK!':'THE HORDE GOT THROUGH.';gameMessage.style.display='';gameMessage.style.color=won?'#9bff45':'#ff7777';screen.style.background='';window.lastSurvivalPoints=gamePoints;const status=document.getElementById('score-submit-status');if(status)status.textContent='Final score: '+gamePoints+' points. Save your record to the community board.';drawGame();}
+function resetGame(){cancelAnimationFrame(gameFrame);gameActive=false;zombies=[];gamePoints=0;gameLives=3;spawnTimer=0;lastFrame=0;gameDeadline=0;window.lastSurvivalPoints=null;const submit=document.getElementById('submit-survival-score');if(submit)submit.disabled=true;scoreEl.textContent='000';gameState.textContent='READY';gameMessage.style.display='';gameMessage.style.color='';gameMessage.textContent='CLICK INITIALIZE TO DEFEND YOUR BASE';action.textContent='INITIALIZE';action.disabled=false;action.style.opacity='1';screen.style.background='';drawGame();}
+function spawnZombie(){const side=Math.floor(Math.random()*4),margin=26;let x=Math.random()*gameWidth,y=Math.random()*gameHeight;if(side===0)y=-margin;else if(side===1)x=gameWidth+margin;else if(side===2)y=gameHeight+margin;else x=-margin;zombies.push({x,y,r:20+Math.random()*6,speed:26+Math.random()*25,kind:['🧟','🧟‍♂️','💀'][Math.floor(Math.random()*3)]});}
+function tickGame(now){if(!gameActive)return;const dt=Math.min((now-lastFrame)/1000||0,.05);lastFrame=now;const remaining=Math.max(0,Math.ceil((gameDeadline-now)/1000));gameState.textContent='00:'+String(remaining).padStart(2,'0');spawnTimer+=dt;if(spawnTimer>Math.max(.38,.95-gamePoints/500)){spawnZombie();spawnTimer=0;}const cx=gameWidth/2,cy=gameHeight/2;zombies=zombies.filter(z=>{const dx=cx-z.x,dy=cy-z.y,dist=Math.hypot(dx,dy)||1;z.x+=dx/dist*z.speed*dt;z.y+=dy/dist*z.speed*dt;if(dist<z.r+15){gameLives--;gameMessage.textContent='BREACH DETECTED! DEFEND THE BASE!';gameMessage.style.display='';return false;}return true;});scoreEl.textContent=String(gamePoints).padStart(3,'0');drawGame();if(gameLives<=0){stopGame(false);return;}if(now>=gameDeadline){stopGame(true);return;}gameFrame=requestAnimationFrame(tickGame);}
+function beginGame(){resetGame();resizeGameCanvas();gameActive=true;gamePoints=0;gameLives=3;zombies=[];spawnTimer=0;lastFrame=performance.now();gameDeadline=lastFrame+GAME_SECONDS*1000;action.disabled=true;action.style.opacity='.35';action.textContent='DEFEND!';gameMessage.style.display='none';screen.style.background='radial-gradient(ellipse at center,#173b22,#080d12 72%)';gameState.textContent='00:30';gameFrame=requestAnimationFrame(tickGame);}
+gameCanvas?.addEventListener('pointerdown',event=>{if(!gameActive)return;const rect=gameCanvas.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;let hit=-1;for(let i=zombies.length-1;i>=0;i--)if(Math.hypot(zombies[i].x-x,zombies[i].y-y)<=zombies[i].r+10){hit=i;break;}if(hit>=0){zombies.splice(hit,1);gamePoints+=10;gameMessage.textContent='NICE SHOT! +10';gameMessage.style.color='#9bff45';}else{gameMessage.textContent='MISSED! KEEP WATCHING.';gameMessage.style.color='#b9cbbd';}gameMessage.style.display='';drawGame();});
+action.addEventListener('click',()=>{if(!gameActive)beginGame();});start.addEventListener('click',()=>{beginGame();screen.scrollIntoView({behavior:'smooth',block:'center'});});window.addEventListener('resize',resizeGameCanvas);resizeGameCanvas();
+
 
 // Live Solana Radar: public DexScreener API, no API key required.
 const radarRows = document.getElementById('radar-rows');
@@ -555,67 +529,14 @@ if (zomMarket) {
   function renderLeaderboard(data) {
     if (!leaderboardEl) return;
     leaderboardEl.replaceChildren();
-    const scores = Array.isArray(data.scores) ? data.scores : [];
-    if (!scores.length) {
-      const empty = document.createElement('p');
-      empty.className = 'crew-note';
-      empty.textContent = 'No records yet. Play the survival test and claim the first spot.';
-      leaderboardEl.append(empty);
-    } else {
-      scores.slice(0,10).forEach((item, index) => {
-        const row = document.createElement('div');
-        row.className = 'survivor-row';
-        const rank = document.createElement('span');
-        rank.className = 'survivor-rank';
-        rank.textContent = '#' + (index + 1);
-        const name = document.createElement('span');
-        name.className = 'survivor-name';
-        name.textContent = item.name || 'Survivor';
-        const date = document.createElement('small');
-        date.className = 'survivor-date';
-        date.textContent = item.date ? 'RECORD · ' + item.date : 'COMMUNITY RECORD';
-        name.append(date);
-        const time = document.createElement('strong');
-        time.className = 'survivor-time';
-        time.textContent = Number(item.ms).toLocaleString('en-US') + ' MS';
-        row.append(rank, name, time);
-        leaderboardEl.append(row);
-      });
-    }
-    if (leaderboardStatus) leaderboardStatus.textContent = 'TOP 10';
+    const scores=Array.isArray(data.scores)?data.scores:[];
+    if(!scores.length){const empty=document.createElement('p');empty.className='crew-note';empty.textContent='No records yet. Defend the base and claim the first spot.';leaderboardEl.append(empty);}
+    else scores.slice(0,10).forEach((item,index)=>{const row=document.createElement('div');row.className='survivor-row';const rank=document.createElement('span');rank.className='survivor-rank';rank.textContent='#'+(index+1);const name=document.createElement('span');name.className='survivor-name';name.textContent=item.name||'Survivor';const date=document.createElement('small');date.className='survivor-date';date.textContent=item.date?'RECORD · '+item.date:'COMMUNITY RECORD';name.append(date);const points=document.createElement('strong');points.className='survivor-time';points.textContent=Number(item.points||0).toLocaleString('en-US')+' PTS';row.append(rank,name,points);leaderboardEl.append(row);});
+    if(leaderboardStatus)leaderboardStatus.textContent='TOP 10';
   }
-  async function loadLeaderboard() {
-    try {
-      const response = await fetch(apiBase + '/api/scores', {cache:'no-store'});
-      if (!response.ok) throw new Error('HTTP ' + response.status);
-      renderLeaderboard(await response.json());
-    } catch (_) {
-      if (leaderboardStatus) leaderboardStatus.textContent = 'OFFLINE';
-      if (leaderboardEl) leaderboardEl.innerHTML = '<p class="crew-note">Leaderboard is temporarily unavailable.</p>';
-    }
-  }
-  submitScoreButton?.addEventListener('click', async () => {
-    const ms = Number(window.lastSurvivalMs);
-    if (!Number.isFinite(ms) || ms < 100 || ms > 5000) {
-      if (submitScoreStatus) submitScoreStatus.textContent = 'Finish a valid round first.';
-      return;
-    }
-    submitScoreButton.disabled = true;
-    if (submitScoreStatus) submitScoreStatus.textContent = 'Submitting your record…';
-    try {
-      const response = await fetch(apiBase + '/api/scores', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({name:getEl('survivor-name')?.value || 'Survivor', ms, voter:voterId})
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Could not save record');
-      if (submitScoreStatus) submitScoreStatus.textContent = 'Record saved! Leaderboard updated.';
-      renderLeaderboard(data);
-    } catch (error) {
-      if (submitScoreStatus) submitScoreStatus.textContent = error.message;
-      submitScoreButton.disabled = false;
-    }
-  });
+  async function loadLeaderboard(){try{const response=await fetch(apiBase+'/api/survival-scores',{cache:'no-store'});if(!response.ok)throw new Error('HTTP '+response.status);renderLeaderboard(await response.json());}catch(_){if(leaderboardStatus)leaderboardStatus.textContent='OFFLINE';if(leaderboardEl)leaderboardEl.innerHTML='<p class="crew-note">Leaderboard is temporarily unavailable.</p>';}}
+  submitScoreButton?.addEventListener('click',async()=>{const points=Number(window.lastSurvivalPoints);if(!Number.isFinite(points)||points<10||points>100000){if(submitScoreStatus)submitScoreStatus.textContent='Score at least 10 points before saving.';return;}submitScoreButton.disabled=true;if(submitScoreStatus)submitScoreStatus.textContent='Submitting your record…';try{const response=await fetch(apiBase+'/api/survival-scores',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:getEl('survivor-name')?.value||'Survivor',points,voter:voterId})});const data=await response.json();if(!response.ok)throw new Error(data.error||'Could not save record');if(submitScoreStatus)submitScoreStatus.textContent='Record saved! Survival leaderboard updated.';renderLeaderboard(data);}catch(error){if(submitScoreStatus)submitScoreStatus.textContent=error.message;submitScoreButton.disabled=false;}});
+
 
   loadActivity();
   loadVote();
