@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=undead-hero-v20-20261015">
+<link rel="stylesheet" href="style.css?v=undead-hero-v21-20261015">
 <style id="zombcash-hero-v8-inline">
 /* V8 emergency inline hero override: intentionally distinct from cached external CSS */
 .hero{
@@ -232,6 +232,25 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 @media(min-width:1400px){h1{font-size:clamp(104px,7.3vw,132px)!important;max-width:1400px!important}}
 @media(max-width:760px){.hero{min-height:auto!important;padding:34px 5% 90px!important}h1{font-size:clamp(42px,9.4vw,70px)!important;line-height:.94!important;letter-spacing:-.06em!important}.hero-copy{max-width:100%!important;font-size:16px!important}.hero-stats{gap:14px!important}.hero-bottom{display:none!important}}
 
+
+/* V21: actual right-side zombie claw graphic built into the live homepage */
+.hero{isolation:isolate!important}
+.hero-content{width:65%!important;max-width:1020px!important}
+h1{width:100%!important;max-width:1000px!important;font-size:clamp(46px,6.3vw,98px)!important;line-height:.94!important;letter-spacing:-.063em!important}
+.hero-copy{max-width:690px!important}
+.hero-zombie-sigil{position:absolute;z-index:2;right:3.2%;top:50%;transform:translateY(-51%);width:clamp(280px,33vw,510px);height:min(68vh,650px);display:flex;align-items:center;justify-content:center;pointer-events:none}
+.hero-zombie-sigil:before{content:"";position:absolute;width:76%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#9bff4524 0, #9bff450d 38%,transparent 70%);filter:blur(14px)}
+.sigil-orbit{position:absolute;aspect-ratio:1;border-radius:50%;border:1px solid #a4ff4340}
+.sigil-orbit-a{width:88%;box-shadow:0 0 42px #9bff4518,inset 0 0 42px #9bff450d}
+.sigil-orbit-b{width:70%;border:2px dashed #a855f788;transform:rotate(-18deg)}
+.sigil-crosshair{position:absolute;inset:4%;background:linear-gradient(90deg,transparent 49.8%,#9bff451b 50%,transparent 50.2%),linear-gradient(0deg,transparent 49.8%,#9bff451b 50%,transparent 50.2%);clip-path:circle(48%);opacity:.7}
+.sigil-claw{position:relative;width:92%;height:100%;max-height:610px;object-fit:contain;filter:drop-shadow(0 0 20px #9bff4540)}
+.sigil-label{position:absolute;bottom:1%;left:50%;transform:translateX(-50%);white-space:nowrap;font:700 9px Orbitron,sans-serif;letter-spacing:2px;color:#caff91;border:1px solid #9bff4540;background:#050a07c9;padding:10px 13px}
+.sigil-label span{display:inline-block;width:6px;height:6px;border-radius:50%;background:#a4ff43;box-shadow:0 0 10px #9bff45;margin-right:8px}
+.sigil-label b{color:#a855f7;font-weight:700;margin-left:8px}
+.hero-bottom{z-index:5}
+@media(max-width:760px){.hero-content{width:100%!important;max-width:100%!important}h1{font-size:clamp(40px,9vw,68px)!important}.hero-zombie-sigil{position:relative;top:auto;right:auto;transform:none;width:160px;height:185px;margin:18px 0 0 auto;opacity:.92}.sigil-label{font-size:6px;letter-spacing:1px;padding:7px}.hero-bottom{display:none!important}}
+
 </style>
 </head>
 <body>
@@ -274,6 +293,29 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
       </svg>
       <div class="hero-emblem-code">ZOMBCASH // BIOHAZARD</div>
     </div>
+  </div>
+  <div class="hero-zombie-sigil" aria-hidden="true">
+    <div class="sigil-orbit sigil-orbit-a"></div><div class="sigil-orbit sigil-orbit-b"></div>
+    <div class="sigil-crosshair"></div>
+    <svg class="sigil-claw" viewBox="0 0 440 500" role="img" aria-label="Zombie claw">
+      <defs>
+        <linearGradient id="clawSkin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d8ff8a"/><stop offset=".3" stop-color="#75c83a"/><stop offset=".65" stop-color="#284c27"/><stop offset="1" stop-color="#101d16"/></linearGradient>
+        <linearGradient id="clawBone" x1="0" y1="0" x2="0.8" y2="1"><stop offset="0" stop-color="#f2ffbf"/><stop offset="1" stop-color="#8dbf4b"/></linearGradient>
+        <filter id="clawGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <g filter="url(#clawGlow)" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M118 447 C96 423 85 390 91 361 L108 294 C114 270 130 254 149 246 L170 236 L154 173 C150 157 158 145 171 143 C185 141 193 152 198 166 L217 221 L207 100 C205 80 215 65 231 65 C248 65 256 81 258 100 L270 211 L285 125 C288 107 301 99 314 105 C328 111 331 125 327 143 L309 238 L339 183 C348 166 363 162 375 171 C389 181 385 197 377 214 L341 290 C333 307 329 322 332 342 L342 389 C348 418 334 443 310 455 L224 475 C185 482 143 470 118 447 Z" fill="url(#clawSkin)" stroke="#a4ff43" stroke-width="5"/>
+        <path d="M111 349 L139 307 L174 285 L208 306 L228 348 L211 396 L175 421 L138 408 Z" fill="#17271a" stroke="#7dbb3e" stroke-width="4"/>
+        <path d="M172 147 L185 155 L198 202 L185 218 L174 202 Z M224 71 L241 79 L252 146 L237 161 L227 133 Z M300 111 L315 119 L303 169 L289 180 L290 151 Z M357 177 L370 185 L345 229 L330 237 L338 209 Z" fill="url(#clawBone)" stroke="#edffae" stroke-width="3"/>
+        <path d="M137 315 L171 295 L196 313 L184 336 L157 344 Z" fill="#b8fa61" stroke="#e5ffac" stroke-width="3"/>
+        <path d="M213 355 L238 325 L268 332 L280 362 L261 390 L232 391 Z" fill="#a4e74c" stroke="#e1ff9b" stroke-width="3"/>
+        <path d="M143 369 L160 358 L176 371 L170 389 L151 394 Z M197 425 L215 411 L231 424 L222 441 L203 443 Z" fill="#a6ff4c"/>
+        <path d="M120 284 L146 273 M135 295 L158 286 M267 250 L291 238 M278 267 L300 256 M180 236 L199 248" fill="none" stroke="#e6ffb0" stroke-width="5" opacity=".8"/>
+        <path d="M164 401 L179 395 L187 410 L177 425 Z M284 409 L296 398 L306 410 L298 426 Z" fill="#c3ff70"/>
+      </g>
+      <g fill="#b4ff49"><circle cx="145" cy="255" r="4"/><circle cx="324" cy="270" r="4"/><circle cx="255" cy="293" r="3"/></g>
+    </svg>
+    <div class="sigil-label"><span></span> UNDEAD SIGNAL DETECTED <b>/// 001</b></div>
   </div>
   <div class="hero-bottom"><span>SCANNING FOR SIGNS OF LIFE...</span><span>SYS.STATUS: <b>UNDEAD</b></span><span>COORD: 6C-CB-F9</span></div>
 </section>
