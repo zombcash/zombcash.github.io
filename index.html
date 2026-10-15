@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=undead-hero-v22-20261015">
+<link rel="stylesheet" href="style.css?v=undead-hero-v23-20261015">
 <style id="zombcash-hero-v8-inline">
 /* V8 emergency inline hero override: intentionally distinct from cached external CSS */
 .hero{
@@ -304,6 +304,16 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 @media(max-width:900px){.hero-layout{grid-template-columns:minmax(0,1fr) minmax(250px,.72fr)!important;gap:22px!important}h1{font-size:clamp(44px,6.3vw,70px)!important}.panel-core{height:240px}.panel-core-mark{width:100px}.panel-core-mark strong{font-size:80px}}
 @media(max-width:680px){.hero{padding:32px 5% 92px!important;min-height:auto!important}.hero-layout{grid-template-columns:1fr!important;gap:30px!important}.hero-content{grid-row:1}.outbreak-panel{grid-row:2}.hero-copy{max-width:100%!important}.hero-stats{gap:13px!important}.hero-bottom{display:none!important}.panel-core{height:210px}.panel-core-mark{width:105px}.panel-core-mark strong{font-size:78px}}
 
+
+/* V23: replace the letter mark with a clean tactical targeting reticle */
+.panel-core-mark{width:clamp(145px,16vw,210px)!important;aspect-ratio:1!important;border:1px solid #a4ff4350!important;background:radial-gradient(circle,#a4ff4312,transparent 68%)!important;box-shadow:0 0 55px #a4ff4312,inset 0 0 30px #a4ff430d!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.panel-core-mark:before,.panel-core-mark:after{display:none!important}
+.panel-core-mark strong,.panel-core-mark .mark-slash,.panel-core-mark .mark-dot{display:none!important}
+.panel-reticle{width:100%!important;height:100%!important;overflow:visible!important;filter:drop-shadow(0 0 7px #a4ff4370)!important}
+.panel-core{background:radial-gradient(ellipse at center,#a4ff4307,transparent 65%)}
+@media(max-width:900px){.panel-core-mark{width:130px!important}}
+@media(max-width:680px){.panel-core-mark{width:120px!important}}
+
 </style>
 </head>
 <body>
@@ -329,7 +339,18 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
     <div class="panel-topline"><span class="live-dot"></span> OUTBREAK MONITOR <span class="panel-live">LIVE</span></div>
     <div class="panel-core">
       <div class="panel-orbit orbit-one"></div><div class="panel-orbit orbit-two"></div>
-      <div class="panel-core-mark"><span class="mark-slash"></span><strong>Z</strong><span class="mark-dot"></span></div>
+      <div class="panel-core-mark" aria-label="ZombieCash targeting reticle">
+        <svg class="panel-reticle" viewBox="0 0 240 240" role="img" aria-label="Neon targeting reticle">
+          <circle cx="120" cy="120" r="76" fill="none" stroke="#a4ff43" stroke-width="2"/>
+          <circle cx="120" cy="120" r="57" fill="none" stroke="#a855f7" stroke-width="2" stroke-dasharray="5 8"/>
+          <circle cx="120" cy="120" r="28" fill="none" stroke="#d8ff8a" stroke-width="2"/>
+          <path d="M120 8 V77 M120 163 V232 M8 120 H77 M163 120 H232" fill="none" stroke="#a4ff43" stroke-width="4" stroke-linecap="round"/>
+          <path d="M85 85 L103 103 M155 85 L137 103 M85 155 L103 137 M155 155 L137 137" fill="none" stroke="#a4ff43" stroke-width="2" opacity=".9"/>
+          <circle cx="120" cy="120" r="5" fill="#d8ff8a"/>
+          <circle cx="120" cy="120" r="13" fill="none" stroke="#a4ff43" stroke-width="1" opacity=".8"/>
+          <path d="M120 34 L128 48 L112 48 Z M206 120 L192 128 L192 112 Z M120 206 L112 192 L128 192 Z M34 120 L48 112 L48 128 Z" fill="#a4ff43"/>
+        </svg>
+      </div>
       <div class="panel-coordinate">SECTOR 06 / SOLANA</div>
     </div>
     <div class="panel-status"><span>NETWORK STATUS</span><b><i></i> UNDEAD</b></div>
