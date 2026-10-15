@@ -139,3 +139,9 @@
 .visits-stat strong{font:700 clamp(21px,2.5vw,29px) Orbitron;color:var(--green);font-variant-numeric:tabular-nums}
 .visits-updated{grid-column:2/-1;text-align:right;color:#607366;font:700 8px Orbitron;letter-spacing:.8px}
 @media(max-width:700px){.site-visits-inner{grid-template-columns:1fr 1fr;gap:10px}.visits-heading{grid-column:1/-1;margin-bottom:4px}.visits-stat{padding:13px 12px;gap:10px}.visits-stat small{font-size:7px}.visits-updated{grid-column:1/-1;text-align:left}}
+
+/* Hero uses the exact supplied ZombieCash hand artwork */
+.hero-zombie{right:5%;bottom:2%;width:43%;height:88%;z-index:2;background:url("zombcash-hand-original.webp?v=20261015-2") center center/contain no-repeat!important;opacity:1!important;clip-path:none!important;filter:drop-shadow(0 0 24px #72ff2c45)}
+.hero-zombie:before,.hero-zombie:after{content:none!important;display:none!important}
+@media(max-width:950px){.hero-zombie{right:-2%;width:48%;opacity:.9}}
+@media(max-width:680px){.hero-zombie{width:76%;height:46%;right:-2%;bottom:6%;opacity:.8}}
