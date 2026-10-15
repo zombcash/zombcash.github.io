@@ -270,3 +270,92 @@ h1{font-size:clamp(48px,6vw,78px);line-height:1.02;letter-spacing:-2.8px;margin:
 .game-screen.snake-playing .game-center{display:none!important}
 .game-screen.snake-playing .zombie-canvas{z-index:2}
 .game-screen.snake-playing .game-score{z-index:4}
+
+
+
+/* HOMEPAGE ART DIRECTION v2 — clearer hierarchy, less noise, intentional hero composition */
+:root{--bg:#070b0a;--panel:#0c1410;--line:#263b2d;--green:#9bff45;--green2:#4be878;--purple:#a855f7;--muted:#a3b2a8;--white:#f3f8f2}
+.scanlines{opacity:.025}
+.topbar{height:76px;padding-inline:clamp(22px,5vw,76px);background:rgba(5,9,8,.94);border-bottom-color:#26372a}
+.brand-mark{border-radius:10px 2px 10px 2px;background:linear-gradient(145deg,#102012,#070b08);box-shadow:0 0 24px #9bff4517}
+.topbar nav{gap:clamp(12px,1.8vw,28px)}
+.topbar nav a{font-size:10px;letter-spacing:.8px;transition:color .2s}
+.top-cta{border-color:#527544;background:#0c160d;padding:13px 16px}
+.hero{
+  min-height:650px;
+  padding:74px clamp(24px,7.7vw,118px) 88px;
+  align-items:center;
+  background:
+    radial-gradient(ellipse at 77% 48%,rgba(45,150,54,.15),transparent 32%),
+    radial-gradient(ellipse at 92% 72%,rgba(132,54,192,.10),transparent 26%),
+    linear-gradient(112deg,#070b0a 0%,#0a110d 54%,#080d0b 100%);
+}
+.hero:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#070b0a 0%,transparent 63%),linear-gradient(0deg,#070b0a 0%,transparent 20%);z-index:1}
+.hero-grid{background-size:44px 44px;opacity:.45;mask-image:linear-gradient(90deg,#000 0%,#0008 55%,transparent 100%)}
+.moon{right:9%;top:11%;width:clamp(220px,25vw,350px);height:auto;aspect-ratio:1;opacity:.18;filter:saturate(.75);box-shadow:0 0 90px #57ff471b}
+.city{right:0;width:70%;height:48%;opacity:.45}
+.hero-content{max-width:570px;padding:0;z-index:4}
+.eyebrow{font-size:10px;letter-spacing:1.4px;color:#b9f98b}
+h1{font-size:clamp(43px,5.35vw,73px);line-height:1.04;letter-spacing:-2.9px;margin:24px 0 22px}
+h1 .dead{text-shadow:none;color:#dce5dd}
+h1 .alive{text-shadow:0 0 24px #9bff4528}
+.hero-copy{font-size:clamp(18px,1.55vw,21px);line-height:1.5;color:#b6c3b9;max-width:455px}
+.hero-actions{gap:12px;margin:27px 0 33px}
+.btn{min-height:46px;padding:14px 17px;letter-spacing:.45px}
+.btn-primary{box-shadow:0 5px 24px #9bff4515}
+.hero-stats{gap:clamp(12px,1.7vw,24px)}
+.hero-stats strong{font-size:22px}
+.hero-stats span{font-size:9px;letter-spacing:1px}
+.hero-mascot{
+  right:4%;top:7%;bottom:10%;width:43%;height:auto;z-index:3;
+}
+.mascot-orbit{width:min(31vw,390px);border-color:#a1ff4540;box-shadow:0 0 0 18px #9bff4506,0 0 0 48px #9bff4504,inset 0 0 65px #9bff450b}
+.mascot-orbit:before{inset:10%;border-color:#9bff4530}
+.mascot-hand{
+  width:min(27vw,340px);height:min(27vw,340px);border-radius:50%;
+  background-color:#08100b;
+  background-position:center 43%;background-size:180% auto;
+  border:1px solid #9bff454f;
+  box-shadow:0 0 0 8px #9bff4505,0 0 70px #56ff2918,inset 0 0 36px #9bff4510;
+  filter:drop-shadow(0 0 20px #75ff2e28);
+}
+.mascot-caption,.mascot-signal{font-size:8px;letter-spacing:1.2px;padding:9px 11px;background:#08100bea;border-color:#2d4732}
+.mascot-caption{right:1%;bottom:9%}
+.mascot-signal{top:15%;left:0}
+.hero-bottom{z-index:4;bottom:18px;font-size:8px;opacity:.8}
+.ticker{padding:10px 0;font-size:10px;letter-spacing:1.6px}
+.section{padding-block:86px}
+.section-kicker{color:#a8ef79}
+.section-heading{margin-top:20px}
+.world-panel,.tool-card,.outbreak-panel,.transmission-box{border-color:#273b2e;box-shadow:0 12px 35px #0002}
+.tool-card{border-radius:3px}
+.tool-art{border-color:#273b2e}
+.mini-game{padding-top:82px;padding-bottom:82px;gap:clamp(28px,5vw,70px);background:radial-gradient(ellipse at 75% 46%,#15281b 0%,#0a100c 42%,#070b0a 76%)}
+.game-box{border-radius:4px;overflow:hidden;box-shadow:0 18px 65px #0006,0 0 0 1px #9bff4508}
+.game-head,.game-foot{background:#0a100d}
+@media(max-width:950px){
+ .hero{min-height:620px;padding:65px 5% 80px}
+ .hero-content{max-width:54%}
+ .hero-mascot{right:0;width:47%}
+ .mascot-hand{width:min(36vw,300px);height:min(36vw,300px)}
+ .mascot-orbit{width:min(40vw,340px)}
+ .hero-copy{font-size:18px}
+}
+@media(max-width:680px){
+ .hero{min-height:820px;padding:53px 5% 340px;align-items:flex-start}
+ .hero:after{background:linear-gradient(180deg,#070b0a 0%,#070b0aee 47%,transparent 76%,#070b0a 100%)}
+ .hero-content{max-width:100%;width:100%}
+ h1{font-size:clamp(43px,11.5vw,62px);letter-spacing:-2px;margin:21px 0 17px}
+ .hero-copy{max-width:420px;font-size:17px}
+ .hero-actions{margin:22px 0 25px}
+ .hero-mascot{top:auto;bottom:58px;right:0;width:100%;height:300px}
+ .mascot-hand{width:205px;height:205px;background-size:180% auto}
+ .mascot-orbit{width:245px}
+ .mascot-caption{bottom:0;right:8%}
+ .mascot-signal{top:1%;left:8%}
+ .hero-stats{gap:10px}
+ .hero-stats strong{font-size:17px}
+ .hero-stats span{font-size:7px}
+ .hero-bottom span:last-child{display:none}
+ .section{padding-block:62px}
+}
