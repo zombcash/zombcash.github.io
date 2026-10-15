@@ -183,3 +183,11 @@
 .moon{opacity:.12!important;right:8%!important;width:330px!important;height:330px!important}
 @media(max-width:950px){.hero-zombie{right:-1%;width:47%;height:76%;opacity:.95}}
 @media(max-width:680px){.hero-zombie{width:70%;height:43%;right:-1%;bottom:7%;opacity:.9}}
+
+/* Zombie Survival interactive arena */
+.game-screen{isolation:isolate;touch-action:manipulation}
+.zombie-canvas{position:absolute;inset:0;z-index:1;display:block;cursor:crosshair;touch-action:manipulation}
+.game-center{z-index:2;pointer-events:none}
+.game-center .game-action{pointer-events:auto}
+.game-center .game-skull{pointer-events:none}
+.game-score{z-index:3;pointer-events:none}
