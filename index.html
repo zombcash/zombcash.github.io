@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=undead-hero-v14-20261015">
+<link rel="stylesheet" href="style.css?v=undead-hero-v15-20261015">
 <style id="zombcash-hero-v8-inline">
 /* V8 emergency inline hero override: intentionally distinct from cached external CSS */
 .hero{
@@ -124,6 +124,14 @@ h1{font-size:clamp(48px,4.45vw,66px)!important;line-height:.98!important;letter-
 .hero-mascot-v9 .hero-character-caption{z-index:5!important}
 @media(max-width:680px){.hero-emblem{inset:13% 4% 10%}.hero-emblem-ring{width:64%}.hero-emblem-core{font-size:clamp(140px,45vw,220px)}.hero-emblem-code{bottom:9%;font-size:10px;letter-spacing:4px}}
 
+
+/* V15: use the actual ZombieCash cash-hand coin mark in the hero */
+.hero-emblem-core{display:none!important}
+.hero-hand-logo{position:relative;z-index:2;width:min(70%,390px);height:auto;overflow:visible;filter:drop-shadow(0 0 24px #8cff3b40)}
+.hero-emblem-ring{width:min(72%,420px)!important}
+.hero-emblem-code{bottom:5%!important}
+@media(max-width:680px){.hero-hand-logo{width:min(75%,300px)}.hero-emblem-ring{width:75%!important}.hero-emblem-code{bottom:6%!important}}
+
 </style>
 </head>
 <body>
@@ -148,7 +156,32 @@ h1{font-size:clamp(48px,4.45vw,66px)!important;line-height:.98!important;letter-
     <div class="hero-character-glow"></div>
     <div class="hero-character-grid"></div>
     <div class="hero-character-label"><i></i> SURVIVOR #001 <span>ONLINE</span></div>
-    <div class="hero-emblem" aria-hidden="true"><div class="hero-emblem-ring"></div><div class="hero-emblem-core">☣</div><div class="hero-emblem-code">$ZOMBCASH</div><div class="hero-emblem-scan"></div></div>
+    <div class="hero-emblem" aria-hidden="true"><div class="hero-emblem-ring"></div><svg class="hero-hand-logo" viewBox="0 0 300 300" role="img" aria-label="ZombieCash hand holding cash coin logo">
+  <defs>
+    <linearGradient id="handGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e6ff9a"/><stop offset=".48" stop-color="#a8ff38"/><stop offset="1" stop-color="#4d9b19"/></linearGradient>
+    <filter id="handGlow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <circle cx="150" cy="150" r="126" fill="#070b09" stroke="#a5ff37" stroke-width="5" filter="url(#handGlow)"/>
+  <circle cx="150" cy="150" r="112" fill="none" stroke="#baff58" stroke-opacity=".7" stroke-width="2"/>
+  <circle cx="150" cy="150" r="99" fill="none" stroke="#a855f7" stroke-opacity=".9" stroke-width="3" stroke-dasharray="12 8"/>
+  <g fill="#122012" stroke="url(#handGold)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M95 79 L83 52 Q81 44 89 41 L101 39 Q108 39 111 47 L126 76 L137 43 Q140 35 148 38 L160 42 Q167 44 165 52 L158 82 L174 58 Q179 51 186 56 L196 63 Q202 67 198 75 L182 101 L205 86 Q213 82 218 90 L223 100 Q227 107 220 113 L193 136 L205 157 Q212 169 207 181 L192 218 Q187 231 172 230 L126 225 Q110 222 105 209 L82 162 Q77 151 84 142 L104 117 L88 101 Q82 95 88 87 Z"/>
+    <path d="M103 117 L137 96 Q145 91 151 98 L157 105 L170 91 Q176 85 183 92 L188 100 L198 94 Q206 90 211 98 L215 106 L197 128 L181 145 L169 161 L153 170 L137 160 L123 144 L103 139 Q94 134 98 125 Z" fill="#1b3216"/>
+    <path d="M111 124 L143 104 L151 113 L165 100 L176 109 L188 103 L198 113 L180 132 L166 145 L151 151 L137 142 L121 139 Z" fill="url(#handGold)"/>
+    <path d="M105 151 Q118 141 129 150 L146 167 Q152 174 146 181 Q140 188 132 182 L116 171 L103 167 Q96 162 105 151 Z" fill="#8fdc36"/>
+    <path d="M143 161 L156 145 Q162 139 169 145 L175 151 Q180 157 174 164 L163 177 L176 186 Q182 192 176 199 L170 205 Q164 211 157 204 L138 187 Q132 180 138 172 Z" fill="#baff58"/>
+    <path d="M128 186 L145 199 Q151 205 146 212 L141 218 Q135 223 128 217 L110 202 Q104 196 110 190 L115 185 Q121 181 128 186 Z" fill="#7acb2b"/>
+    <path d="M152 189 L170 175 Q177 170 183 176 L188 183 Q193 190 186 196 L168 211 Q161 216 155 209 L150 203 Q146 196 152 189 Z" fill="#d7ff8b"/>
+    <path d="M91 69 L126 56 L145 76 L124 91 Z" fill="#f3ffca"/>
+    <path d="M119 59 L151 48 L169 68 L139 82 Z" fill="#d6ff8b"/>
+    <path d="M148 65 L180 56 L194 76 L164 89 Z" fill="#f3ffca"/>
+    <path d="M103 81 L132 72 L146 89 L117 100 Z" fill="#b6fa56"/>
+  </g>
+  <g fill="none" stroke="#253d19" stroke-width="3" stroke-linecap="round">
+    <path d="M109 126 L127 116 M128 139 L143 130 M151 152 L165 141 M129 167 L143 158 M146 189 L157 181 M166 196 L177 187"/>
+  </g>
+  <g fill="#a8ff38"><circle cx="72" cy="151" r="3"/><circle cx="226" cy="151" r="3"/><circle cx="150" cy="22" r="3"/><circle cx="150" cy="278" r="3"/></g>
+</svg><div class="hero-emblem-code">$ZOMBCASH</div><div class="hero-emblem-scan"></div></div>
     <div class="hero-character-caption">MARKET DIED.<br><b>WE DIDN'T.</b></div>
   </div>
   <div class="hero-bottom"><span>SCANNING FOR SIGNS OF LIFE...</span><span>SYS.STATUS: <b>UNDEAD</b></span><span>COORD: 6C-CB-F9</span></div>
