@@ -76,3 +76,51 @@
 .world-event a{display:inline-block;margin-top:9px;color:var(--green);font:700 8px Orbitron,sans-serif;letter-spacing:.5px}
 .world-event a:hover{color:#d0ffab}
 @media(max-width:800px){.world-grid{grid-template-columns:1fr}.events-panel{grid-column:auto}.living-world{padding-top:60px;padding-bottom:60px}.world-panel-head{padding:17px}.world-news-list,.world-alert-list,.world-missions{padding-left:17px;padding-right:17px}.world-panel-foot{padding:12px 17px}.world-event{padding:15px 17px}}
+
+
+/* Community operations: trading activity, shared daily vote and survival records */
+.community-console{padding-top:70px;padding-bottom:70px}
+.crew-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.crew-card{min-width:0;border:1px solid #2a4032;background:linear-gradient(145deg,#101a19,#090e13 78%);padding:22px;box-shadow:0 16px 45px #0004}
+.crew-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding-bottom:17px;border-bottom:1px solid #26362c}
+.crew-card-head h3{font-size:clamp(17px,2vw,23px);line-height:1.25;margin:9px 0 0}
+.crew-status{font:700 8px Orbitron,sans-serif;letter-spacing:.6px;color:var(--green);text-align:right;padding-top:4px}
+.activity-period{display:flex;gap:6px;margin:18px 0}
+.activity-tab{border:1px solid #2e4335;background:#0a1110;color:#91a397;padding:8px 15px;font:700 9px Orbitron;cursor:pointer}
+.activity-tab.active,.activity-tab:hover{border-color:var(--green);color:var(--green);background:#16251a}
+.activity-numbers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.activity-numbers>div{border:1px solid #203327;background:#0b120e;padding:14px 12px;min-width:0}
+.activity-numbers small{display:block;color:#829488;font:700 8px Orbitron;letter-spacing:.8px;margin-bottom:9px}
+.activity-numbers strong{font:700 clamp(18px,2vw,26px) Orbitron;color:#eff9ef;overflow-wrap:anywhere}
+#activity-buys{color:var(--green)}#activity-sells{color:#ff8589}
+.activity-bar{height:8px;display:flex;overflow:hidden;background:#45272b;margin:17px 0 12px}
+.activity-bar span{width:50%;background:linear-gradient(90deg,#40c96a,var(--green));transition:width .3s}
+.crew-note{color:#819388;font-size:14px;line-height:1.4;margin:14px 0}
+.crew-link{display:inline-block;color:var(--green);font:700 8px Orbitron;letter-spacing:.7px;margin-top:7px}
+.crew-link:hover{color:#d0ffab}
+.vote-card{grid-column:auto}
+.daily-vote-options{display:grid;gap:9px;margin:16px 0}
+.daily-vote-option{display:grid;grid-template-columns:18px minmax(0,1fr) auto;align-items:center;gap:10px;position:relative;width:100%;text-align:left;padding:13px 12px;border:1px solid #2b3e31;background:#0a1110;color:#dce8dd;font:600 15px Rajdhani;cursor:pointer;overflow:hidden}
+.daily-vote-option:disabled{cursor:default;opacity:1}
+.daily-vote-option:not(:disabled):hover{border-color:var(--green)}
+.daily-vote-option .vote-result-bar{position:absolute;left:0;top:0;bottom:0;background:#9bff4510;pointer-events:none}
+.daily-vote-option .vote-option-label,.daily-vote-option .vote-percent{position:relative;z-index:1}
+.daily-vote-option .vote-radio{width:13px;height:13px;border:1px solid #68806a;border-radius:50%;position:relative;z-index:1}
+.daily-vote-option.selected .vote-radio{border-color:var(--green);background:var(--green);box-shadow:inset 0 0 0 3px #0b150c}
+.vote-percent{font:700 9px Orbitron;color:var(--green)}
+.vote-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid #26362c;padding-top:13px;color:#738579;font:700 8px Orbitron;letter-spacing:.6px}
+.leaderboard-card{grid-column:1/-1}
+.survival-leaderboard{display:grid;gap:0}
+.survivor-row{display:grid;grid-template-columns:36px minmax(0,1fr) auto;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #202d25}
+.survivor-rank{display:grid;place-items:center;width:30px;height:30px;border:1px solid #34533b;color:var(--green);font:700 10px Orbitron}
+.survivor-name{font:700 15px Rajdhani;color:#e0ebe1;overflow:hidden;text-overflow:ellipsis}
+.survivor-date{display:block;color:#718378;font:600 9px Rajdhani;margin-top:2px}
+.survivor-time{font:700 14px Orbitron;color:var(--green);white-space:nowrap}
+.prize-note{border-left:2px solid #486f3c;padding-left:12px;margin-top:18px}
+.game-submit{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;padding:15px;border-top:1px solid #26392e;background:#0a1011}
+.game-submit input{min-width:0;border:1px solid #2c4133;background:#080d10;color:var(--white);padding:11px 12px;font:600 14px Rajdhani;outline:none}
+.game-submit input:focus{border-color:var(--green)}
+.game-submit button{border:1px solid var(--green);background:var(--green);color:#09100a;padding:10px 13px;font:700 8px Orbitron;cursor:pointer}
+.game-submit button:disabled{opacity:.4;cursor:not-allowed}
+.game-submit span{grid-column:1/-1;color:#718378;font-size:12px;line-height:1.35}
+@media(max-width:800px){.crew-grid{grid-template-columns:1fr}.leaderboard-card{grid-column:auto}.community-console{padding-top:55px;padding-bottom:55px}.crew-card{padding:17px}.activity-numbers strong{font-size:20px}}
