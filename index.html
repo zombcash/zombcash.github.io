@@ -99,9 +99,34 @@
     <div class="radar-foot"><span><i></i> DATA SOURCE: DEXSCREENER</span><span>NOT FINANCIAL ADVICE · ALWAYS DO YOUR OWN RESEARCH</span></div>
   </div>
 </section>
+
+<section class="section community-console" id="community-console">
+  <div class="section-heading"><div><div class="section-kicker">[ 05 / COMMUNITY OPERATIONS ]</div><h2>THE CREW<br><span class="green">DECIDES.</span></h2></div><p>Real trading activity, one community vote each day, and a survival leaderboard. No fake counters.</p></div>
+  <div class="crew-grid">
+    <article class="crew-card">
+      <div class="crew-card-head"><div><div class="section-kicker">[ ON-CHAIN MARKET ACTIVITY ]</div><h3>BUY / SELL <span class="green">SIGNAL</span></h3></div><span id="activity-status" class="crew-status">CONNECTING…</span></div>
+      <div class="activity-period"><button class="activity-tab active" data-period="h1">1H</button><button class="activity-tab" data-period="h6">6H</button><button class="activity-tab" data-period="h24">24H</button></div>
+      <div class="activity-numbers"><div><small>BUYS</small><strong id="activity-buys">—</strong></div><div><small>SELLS</small><strong id="activity-sells">—</strong></div><div><small>BUY / SELL</small><strong id="activity-ratio">—</strong></div></div>
+      <div class="activity-bar"><span id="activity-buy-bar"></span></div>
+      <p class="crew-note" id="activity-note">Waiting for the latest DexScreener pair activity.</p>
+      <a class="crew-link" href="https://dexscreener.com/solana/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">VIEW SOURCE ON DEXSCREENER ↗</a>
+    </article>
+    <article class="crew-card vote-card">
+      <div class="crew-card-head"><div><div class="section-kicker">[ DAILY COMMUNITY POLL ]</div><h3>WHAT'S OUR NEXT <span class="green">MISSION?</span></h3></div><span id="vote-status" class="crew-status">LOADING…</span></div>
+      <p class="crew-note">One vote per browser each UTC day. Results are shared with the community.</p>
+      <div id="daily-vote-options" class="daily-vote-options"><p class="crew-note">Loading today's poll…</p></div>
+      <div class="vote-foot"><span id="vote-total">0 VOTES</span><span id="vote-date">UTC DAILY POLL</span></div>
+    </article>
+    <article class="crew-card leaderboard-card">
+      <div class="crew-card-head"><div><div class="section-kicker">[ SURVIVAL RECORDS ]</div><h3>FASTEST <span class="green">SURVIVORS</span></h3></div><span id="leaderboard-status" class="crew-status">LOADING…</span></div>
+      <div id="survival-leaderboard" class="survival-leaderboard"><p class="crew-note">No records yet. Be the first survivor.</p></div>
+      <p class="crew-note prize-note">Future $ZOMBCASH prizes may be announced for selected competitions. No token rewards are currently enabled or guaranteed.</p>
+    </article>
+  </div>
+</section>
 <section class="section mini-game">
   <div class="game-copy"><div class="section-kicker">[ 03 / FIELD TEST ]</div><h2>HOW LONG<br>CAN YOU <span class="green">SURVIVE?</span></h2><p>Incoming signal detected. The undead are closing in. Test your reflexes in this tiny browser survival challenge.</p><p class="game-note">No wallet. No download. Just you and the outbreak.</p><button class="btn btn-primary" id="start-game">START SURVIVAL TEST</button></div>
-  <div class="game-box"><div class="game-head"><span>SIMULATION.EXE</span><span id="game-state">STANDBY</span></div><div class="game-screen" id="game-screen"><div class="game-grid"></div><div class="game-center"><div class="game-skull">☠</div><p id="game-message">PRESS START TO INITIALIZE</p><button id="game-action" class="game-action">INITIALIZE</button></div><div class="game-score">SCORE <b id="game-score">000</b></div></div><div class="game-foot"><span>REACTION PROTOCOL v0.1</span><span>LOCAL SIMULATION</span></div></div>
+  <div class="game-box"><div class="game-head"><span>SIMULATION.EXE</span><span id="game-state">STANDBY</span></div><div class="game-screen" id="game-screen"><div class="game-grid"></div><div class="game-center"><div class="game-skull">☠</div><p id="game-message">PRESS START TO INITIALIZE</p><button id="game-action" class="game-action">INITIALIZE</button></div><div class="game-score">SCORE <b id="game-score">000</b></div></div><div class="game-foot"><span>REACTION PROTOCOL v0.2</span><span>REACTION TIME LEADERBOARD</span></div><div class="game-submit"><input id="survivor-name" maxlength="18" placeholder="SURVIVOR NAME" aria-label="Survivor name"><button id="submit-survival-score" type="button" disabled>SAVE RECORD</button><span id="score-submit-status" aria-live="polite">Finish a round to submit your reaction time.</span></div></div>
 </section>
 <section class="section transmission" id="community">
   <div class="transmission-box"><div class="transmission-glow"></div><div class="section-kicker">[ 04 / JOIN THE RESISTANCE ]</div><h2>DON'T SURVIVE<br><span class="green">ALONE.</span></h2><p>Find the crew. Share a meme. Bring a little life back to the timeline.</p><div class="community-buttons"><a class="btn btn-primary" href="https://t.me/+5aXhFhx2RdFmNWYy" target="_blank" rel="noreferrer">JOIN TELEGRAM GROUP ↗</a><a class="btn btn-ghost" href="https://t.me/ZOMBCASH" target="_blank" rel="noreferrer">OPEN CHANNEL ↗</a><a class="btn btn-ghost" href="https://x.com/i/communities/2013610165069591027" target="_blank" rel="noreferrer">X COMMUNITY ↗</a></div><div class="contract"><span>TOKEN CONTRACT</span><code>6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump</code><button id="copy-ca" title="Copy contract address">COPY</button></div><div class="copy-feedback" id="copy-feedback" aria-live="polite"></div></div>
