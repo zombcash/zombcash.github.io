@@ -26,3 +26,53 @@
 .hero-zombie:before,.hero-zombie:after{content:none!important;display:none!important}
 @media(max-width:950px){.hero-zombie{right:-2%;width:48%;opacity:.9}}
 @media(max-width:680px){.hero-zombie{width:76%;height:46%;right:-2%;bottom:6%;opacity:.8}}
+
+/* Living World: RSS transmissions, market alarms, daily missions, crew events */
+.living-world{padding-top:72px;padding-bottom:80px}
+.world-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin-top:28px}
+.world-panel{min-width:0;border:1px solid #2a4032;background:linear-gradient(145deg,#101a19,#090e13 78%);box-shadow:0 16px 45px #0004;overflow:hidden}
+.world-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:20px 21px 17px;border-bottom:1px solid #26362c}
+.world-panel-head h3{font-size:clamp(15px,1.5vw,19px);margin:9px 0 0;line-height:1.25}
+.world-tag{display:inline-flex;align-items:center;gap:7px;font:700 8px Orbitron,sans-serif;letter-spacing:1.2px;color:#8da197}
+.world-tag i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 9px var(--green);animation:pulse 1.8s infinite}
+.alarm-tag{color:#ffb16e}.alarm-tag i{background:#ff9d5c;box-shadow:0 0 9px #ff9d5c}
+.world-state{flex-shrink:0;color:var(--green);font:700 8px Orbitron,sans-serif;letter-spacing:.6px;text-align:right;padding-top:3px}
+.world-news-list{padding:0 20px;min-height:170px}
+.world-news-item{display:block;padding:15px 0;border-bottom:1px solid #202d25}
+.world-news-item:last-child{border-bottom:0}
+.world-news-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;font:700 8px Orbitron,sans-serif;letter-spacing:.5px;color:#83a18c}
+.world-news-meta time{color:#65786c;font:600 10px Rajdhani,sans-serif;letter-spacing:0}
+.world-news-title{display:block;color:#e1ece3;font-size:16px;line-height:1.3;font-weight:700}
+.world-news-item:hover .world-news-title{color:var(--green)}
+.world-news-summary{color:#8c9d92;font-size:14px;line-height:1.35;margin:6px 0 0}
+.world-empty{color:#809187;padding:28px 0;font-size:15px;line-height:1.4}
+.world-panel-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 20px;border-top:1px solid #26362c;background:#0a1111;color:#718278;font:700 8px Orbitron,sans-serif;letter-spacing:.6px}
+.world-panel-foot a,.world-panel-foot button{color:var(--green);font:700 8px Orbitron,sans-serif;letter-spacing:.5px;background:none;border:0;padding:0;cursor:pointer}
+.world-panel-foot a:hover,.world-panel-foot button:hover{color:#d0ffab}
+.world-alert-list{padding:5px 20px 10px}
+.world-alert{display:grid;grid-template-columns:27px 1fr auto;align-items:start;gap:10px;padding:15px 0;border-bottom:1px solid #202d25}
+.world-alert:last-child{border-bottom:0}
+.alert-icon{color:var(--green);font-size:19px;line-height:1}
+.world-alert.alert-warn .alert-icon,.world-alert.alert-warn strong{color:#ffb16e}
+.world-alert.alert-danger .alert-icon,.world-alert.alert-danger strong{color:#ff737b}
+.world-alert strong,.world-event strong{font:700 9px Orbitron,sans-serif;letter-spacing:.5px;color:#c6d9cb}
+.world-alert p,.world-event p{color:#87988d;font-size:14px;line-height:1.35;margin:5px 0 0}
+.alert-level{font:700 7px Orbitron,sans-serif;letter-spacing:.5px;color:var(--green);border:1px solid #34583a;padding:5px 6px;white-space:nowrap}
+.alert-warn .alert-level{color:#ffb16e;border-color:#70472d}.alert-danger .alert-level{color:#ff737b;border-color:#71333a}
+.world-disclaimer{padding:0 20px 17px;margin:0;color:#586a5e;font-size:12px}
+.world-missions{padding:6px 20px 10px}
+.world-mission{display:flex;align-items:flex-start;gap:11px;padding:13px 0;border-bottom:1px solid #202d25;cursor:pointer}
+.world-mission:last-child{border-bottom:0}
+.world-mission input{appearance:none;flex-shrink:0;width:17px;height:17px;margin:1px 0 0;border:1px solid #4a674e;background:#080f0d;cursor:pointer}
+.world-mission input:checked{background:var(--green);border-color:var(--green);box-shadow:inset 0 0 0 4px #0b150c}
+.world-mission strong{display:block;color:#d8e6da;font-size:15px;line-height:1.25}
+.world-mission p{margin:4px 0 0;color:#819388;font-size:13px;line-height:1.3}
+.world-mission.done strong{text-decoration:line-through;color:#6d8272}
+.events-panel{grid-column:1/-1}
+.events-panel .world-panel-head{align-items:center}
+.world-event{display:flex;gap:14px;padding:17px 21px;border-bottom:1px solid #202d25}
+.world-event:last-child{border-bottom:0}
+.event-icon{display:grid;place-items:center;flex-shrink:0;width:37px;height:37px;border:1px solid #35533b;background:#101e15;color:var(--green);font-size:20px}
+.world-event a{display:inline-block;margin-top:9px;color:var(--green);font:700 8px Orbitron,sans-serif;letter-spacing:.5px}
+.world-event a:hover{color:#d0ffab}
+@media(max-width:800px){.world-grid{grid-template-columns:1fr}.events-panel{grid-column:auto}.living-world{padding-top:60px;padding-bottom:60px}.world-panel-head{padding:17px}.world-news-list,.world-alert-list,.world-missions{padding-left:17px;padding-right:17px}.world-panel-foot{padding:12px 17px}.world-event{padding:15px 17px}}
