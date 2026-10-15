@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 700" role="img" aria-labelledby="title desc">
+<title id="title">ZombieCash undead hand holding cash</title>
+<desc id="desc">A stitched zombie hand gripping dollar bills against a glowing toxic green circle.</desc>
+<defs>
+ <radialGradient id="orb"><stop offset="0" stop-color="#b7ff56"/><stop offset=".65" stop-color="#63f51b"/><stop offset="1" stop-color="#178c35"/></radialGradient>
+ <linearGradient id="bill" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#efffa5"/><stop offset="1" stop-color="#8fcf54"/></linearGradient>
+ <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d7f5a0"/><stop offset=".55" stop-color="#9ecb72"/><stop offset="1" stop-color="#4d7b42"/></linearGradient>
+ <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="20"/></filter>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="8" dy="12" stdDeviation="5" flood-color="#000" flood-opacity=".65"/></filter>
+</defs>
+<circle cx="350" cy="350" r="255" fill="#5cff19" opacity=".38" filter="url(#glow)"/>
+<circle cx="350" cy="350" r="238" fill="url(#orb)"/>
+<g filter="url(#shadow)" stroke="#10190d" stroke-width="13" stroke-linejoin="round">
+ <g transform="rotate(-12 360 285)">
+  <rect x="220" y="158" width="260" height="345" rx="13" fill="#d9f79a"/>
+  <rect x="239" y="177" width="222" height="307" rx="5" fill="url(#bill)" stroke-width="6"/>
+  <path d="M260 200h30m130 0h20M260 460h30m130 0h20" fill="none" stroke="#527a36" stroke-width="6"/>
+  <circle cx="350" cy="330" r="76" fill="#b7e17a" stroke="#638a42" stroke-width="6"/>
+  <path d="M350 274v111m-29-79c0-29 59-29 59 0 0 28-59 22-59 51 0 30 59 30 59 0" fill="none" stroke="#182412" stroke-width="18" stroke-linecap="round"/>
+ </g>
+ <g transform="rotate(8 400 320)">
+  <rect x="300" y="130" width="245" height="335" rx="12" fill="#a9d86f"/>
+  <rect x="317" y="148" width="211" height="299" rx="5" fill="url(#bill)" stroke-width="6"/>
+  <path d="M339 170h30m125 0h20M339 424h30m125 0h20" fill="none" stroke="#527a36" stroke-width="6"/>
+  <circle cx="423" cy="300" r="71" fill="#c5ec86" stroke="#638a42" stroke-width="6"/>
+  <path d="M423 249v102m-26-73c0-26 53-26 53 0 0 25-53 20-53 46 0 27 53 27 53 0" fill="none" stroke="#182412" stroke-width="16" stroke-linecap="round"/>
+ </g>
+ <path d="M275 590c-12-43-28-88-37-124-7-29-1-50 17-61 17-10 34-3 46 18l-18-72c-7-28 5-47 25-50 21-3 35 11 42 37l14 47-7-96c-2-26 12-42 32-41 21 1 32 16 34 43l7 85 5-63c2-25 18-37 36-34 19 3 29 19 27 44l-4 73c20-22 43-21 56-4 12 16 7 36-8 56l-52 68c-16 21-24 43-26 69l-3 47-151-8z" fill="url(#skin)"/>
+ <path d="M257 430c11-12 25-12 35 3l18 33M321 356l18 52m60-65 3 54m59-24-4 41" fill="none" stroke="#426b35" stroke-width="12" stroke-linecap="round"/>
+ <path d="M283 461l28 8m-13 12 28 8m27-89 12 18m45-2 10 17m43 11 14 17" fill="none" stroke="#284522" stroke-width="7" stroke-linecap="round"/>
+ <path d="M278 568l14 6 12-8 12 8 12-8 12 8 12-8 12 8 12-8 12 8" fill="none" stroke="#17220f" stroke-width="8" stroke-linecap="round"/>
+</g>
+<g fill="#b6ff4d"><path d="M115 340l10 22 22 10-22 10-10 22-10-22-22-10 22-10z"/><path d="M570 500l7 16 16 7-16 7-7 16-7-16-16-7 16-7z"/></g>
+</svg>
