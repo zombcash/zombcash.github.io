@@ -178,3 +178,65 @@ if (radarRows) {
   loadRadar(true);
   setInterval(() => loadRadar(true), 45000);
 }
+
+
+// ZombieCash project token market card, served by the shared FadeHost API.
+const zomMarket = document.getElementById('zombcash-market');
+if (zomMarket) {
+  const zomPrice = document.getElementById('zombcash-price');
+  const zomChange = document.getElementById('zombcash-change');
+  const zomVolume = document.getElementById('zombcash-volume');
+  const zomLiquidity = document.getElementById('zombcash-liquidity');
+  const zomCap = document.getElementById('zombcash-cap');
+  const zomStatus = document.getElementById('zombcash-market-status');
+  const zomUpdated = document.getElementById('zombcash-market-updated');
+  const zomRefresh = document.getElementById('zombcash-market-refresh');
+  let zomBusy = false;
+  const zomMoney = value => {
+    const n = Number(value);
+    if (!Number.isFinite(n) || n < 0) return '—';
+    if (n >= 1e9) return '$' + (n / 1e9).toFixed(2) + 'B';
+    if (n >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M';
+    if (n >= 1e3) return '$' + (n / 1e3).toFixed(1) + 'K';
+    return '$' + n.toFixed(2);
+  };
+  const zomPriceText = value => {
+    const n = Number(value);
+    if (!Number.isFinite(n) || n <= 0) return '—';
+    if (n >= 1) return '$' + n.toLocaleString('en-US', {maximumFractionDigits: 5});
+    if (n >= .01) return '$' + n.toFixed(5);
+    if (n >= .0001) return '$' + n.toFixed(7);
+    return '$' + n.toPrecision(4);
+  };
+  async function loadZomMarket() {
+    if (zomBusy) return;
+    zomBusy = true;
+    if (zomStatus) zomStatus.textContent = 'SCANNING TOKEN…';
+    if (zomRefresh) zomRefresh.disabled = true;
+    try {
+      const response = await fetch('https://zombcash-bot.fadehost.app/api/zombcash', {cache:'no-store'});
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      const data = await response.json();
+      zomPrice.textContent = zomPriceText(data.priceUsd);
+      const change = Number(data.priceChange?.h24);
+      zomChange.textContent = Number.isFinite(change) ? (change > 0 ? '+' : '') + change.toFixed(2) + '%' : '—';
+      zomChange.className = Number.isFinite(change) && change > 0 ? 'change-up' : Number.isFinite(change) && change < 0 ? 'change-down' : '';
+      zomVolume.textContent = zomMoney(data.volume?.h24);
+      zomLiquidity.textContent = zomMoney(data.liquidity?.usd);
+      zomCap.textContent = zomMoney(data.marketCap || data.fdv);
+      const sourceTime = Number(data.updatedAt || 0) * 1000;
+      if (zomStatus) zomStatus.textContent = data.stale ? 'LAST KNOWN DATA' : 'TOKEN FEED ONLINE';
+      if (zomUpdated) zomUpdated.textContent = (data.stale ? 'LAST SOURCE UPDATE ' : 'SOURCE UPDATED ') + (sourceTime ? new Date(sourceTime).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) : 'UNKNOWN');
+    } catch (error) {
+      console.warn('ZombieCash token market update failed:', error);
+      if (zomStatus) zomStatus.textContent = 'SIGNAL UNAVAILABLE';
+      if (zomUpdated) zomUpdated.textContent = 'TRY REFRESHING SHORTLY';
+    } finally {
+      zomBusy = false;
+      if (zomRefresh) zomRefresh.disabled = false;
+    }
+  }
+  zomRefresh?.addEventListener('click', loadZomMarket);
+  loadZomMarket();
+  setInterval(loadZomMarket, 45000);
+}
