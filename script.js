@@ -42,11 +42,15 @@ const scoreEl = document.getElementById('game-score');
 const screen = document.getElementById('game-screen');
 const gameCanvas = document.getElementById('zombie-canvas');
 const gameCtx = gameCanvas?.getContext('2d');
-const GAME_SECONDS = 0; // Endless run; collision ends the game.
 const CELL = 20;
-let gameFrame = 0, lastStep = 0, gameDeadline = 0, gameActive = false;
-let gamePoints = 0, snake = [], food = {x: 8, y: 8}, direction = {x: 1, y: 0}, nextDirection = {x: 1, y: 0};
-let gameWidth = 0, gameHeight = 0, cols = 0, rows = 0, stepMs = 125;
+const BASE_STEP_MS = 125;
+const BOOST_MULTIPLIER = 0.62;
+const MAX_BRAINS = 4;
+let gameFrame = 0, lastStep = 0, gameActive = false;
+let gamePoints = 0, snake = [], brains = [], direction = {x: 1, y: 0}, nextDirection = {x: 1, y: 0};
+let gameWidth = 0, gameHeight = 0, cols = 0, rows = 0, stepMs = BASE_STEP_MS;
+const heldMoveKeys = new Set();
+let lastBonusBrainAt = 0;
 
 function resizeGameCanvas() {
   if (!gameCanvas || !screen || !gameCtx) return;
@@ -58,21 +62,47 @@ function resizeGameCanvas() {
   gameCanvas.style.width = gameWidth + 'px';
   gameCanvas.style.height = gameHeight + 'px';
   gameCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const oldCols = cols, oldRows = rows;
   cols = Math.max(8, Math.floor(gameWidth / CELL));
   rows = Math.max(8, Math.floor(gameHeight / CELL));
-  if (!gameActive && snake.length) {
+  if (!gameActive && snake.length && (oldCols !== cols || oldRows !== rows)) {
     snake = snake.map(p => ({x: Math.min(cols - 1, p.x), y: Math.min(rows - 1, p.y)}));
-    food = {x: Math.min(cols - 1, food.x), y: Math.min(rows - 1, food.y)};
+    brains = brains.map(p => ({x: Math.min(cols - 1, p.x), y: Math.min(rows - 1, p.y)}));
   }
   drawGame();
 }
-function placeFood() {
-  let candidate, attempts = 0;
-  do {
-    candidate = {x: Math.floor(Math.random() * cols), y: Math.floor(Math.random() * rows)};
-    attempts++;
-  } while (snake.some(p => p.x === candidate.x && p.y === candidate.y) && attempts < 500);
-  food = candidate;
+function isOccupied(point, includeSnake = true) {
+  return (includeSnake && snake.some(p => p.x === point.x && p.y === point.y)) ||
+    brains.some(p => p.x === point.x && p.y === point.y);
+}
+function randomFreeCell() {
+  const freeCount = cols * rows - snake.length - brains.length;
+  if (freeCount <= 0) return null;
+  for (let attempts = 0; attempts < 600; attempts++) {
+    const point = {x: Math.floor(Math.random() * cols), y: Math.floor(Math.random() * rows)};
+    if (!isOccupied(point)) return point;
+  }
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      const point = {x, y};
+      if (!isOccupied(point)) return point;
+    }
+  }
+  return null;
+}
+function placeBrain() {
+  if (brains.length >= MAX_BRAINS) return false;
+  const point = randomFreeCell();
+  if (!point) return false;
+  brains.push(point);
+  return true;
+}
+function resetBrains() {
+  brains = [];
+  placeBrain();
+  placeBrain();
+  if (brains.length > 1 && Math.random() < 0.6) brains.pop();
+  lastBonusBrainAt = performance.now();
 }
 function drawGame() {
   if (!gameCtx) return;
@@ -100,24 +130,27 @@ function drawGame() {
       }
       gameCtx.restore();
     });
-    gameCtx.save();
-    gameCtx.font = '17px sans-serif';
-    gameCtx.textAlign = 'center'; gameCtx.textBaseline = 'middle';
-    gameCtx.shadowColor = '#9bff45'; gameCtx.shadowBlur = 12;
-    gameCtx.fillText('🧠', food.x * CELL + CELL/2, food.y * CELL + CELL/2);
-    gameCtx.restore();
+    brains.forEach(brain => {
+      gameCtx.save();
+      gameCtx.font = '17px sans-serif';
+      gameCtx.textAlign = 'center'; gameCtx.textBaseline = 'middle';
+      gameCtx.shadowColor = '#9bff45'; gameCtx.shadowBlur = 12;
+      gameCtx.fillText('🧠', brain.x * CELL + CELL/2, brain.y * CELL + CELL/2);
+      gameCtx.restore();
+    });
   }
   if (gameActive) {
     gameCtx.fillStyle = '#9bff45';
     gameCtx.font = '700 10px Orbitron,sans-serif';
     gameCtx.textAlign = 'left';
-    gameCtx.fillText('ARROWS / WASD TO MOVE', 12, 17);
+    gameCtx.fillText('ARROWS / WASD TO MOVE · HOLD TO BOOST', 12, 17);
     gameCtx.textAlign = 'right';
-    gameCtx.fillText('GROW THE HORDE', gameWidth - 12, 17);
+    gameCtx.fillText('BRAINS: ' + brains.length, gameWidth - 12, 17);
   }
 }
 function stopGame(won, reason) {
   gameActive = false;
+  heldMoveKeys.clear();
   screen?.classList.remove('snake-playing');
   cancelAnimationFrame(gameFrame);
   action.disabled = false;
@@ -138,12 +171,13 @@ function stopGame(won, reason) {
 function resetGame() {
   cancelAnimationFrame(gameFrame);
   gameActive = false;
+  heldMoveKeys.clear();
   screen?.classList.remove('snake-playing');
   gamePoints = 0;
   const midX = Math.floor(cols / 2), midY = Math.floor(rows / 2);
   snake = [{x: midX, y: midY}, {x: midX - 1, y: midY}, {x: midX - 2, y: midY}];
   direction = {x: 1, y: 0}; nextDirection = {x: 1, y: 0};
-  lastStep = 0; gameDeadline = 0; stepMs = 125;
+  lastStep = 0; stepMs = BASE_STEP_MS;
   window.lastSurvivalPoints = null;
   const submit = document.getElementById('submit-survival-score');
   if (submit) submit.disabled = true;
@@ -151,20 +185,20 @@ function resetGame() {
   gameState.textContent = 'READY';
   gameMessage.style.display = '';
   gameMessage.style.color = '';
-  gameMessage.textContent = 'USE ARROW KEYS OR WASD TO MOVE';
+  gameMessage.textContent = 'PRESS SPACE OR ENTER TO START · ARROWS / WASD TO MOVE';
   action.textContent = 'START SNAKE';
   action.disabled = false;
   action.style.opacity = '1';
   screen.style.background = '';
-  placeFood();
+  resetBrains();
   drawGame();
 }
 function beginGame() {
+  if (gameActive) return;
   resizeGameCanvas();
-  resetGame();
+  if (!snake.length) resetGame();
   gameActive = true;
   screen?.classList.add('snake-playing');
-  gameDeadline = 0;
   lastStep = performance.now();
   action.disabled = true;
   action.style.opacity = '.35';
@@ -177,11 +211,14 @@ function beginGame() {
 function tickGame(now) {
   if (!gameActive) return;
   gameState.textContent = 'SURVIVE';
-  if (now - lastStep >= stepMs) {
+  const boostHeld = heldMoveKeys.size > 0;
+  const effectiveStepMs = Math.max(48, stepMs * (boostHeld ? BOOST_MULTIPLIER : 1));
+  if (now - lastStep >= effectiveStepMs) {
     lastStep = now;
     direction = nextDirection;
     const head = {x: snake[0].x + direction.x, y: snake[0].y + direction.y};
-    const eating = head.x === food.x && head.y === food.y;
+    const brainIndex = brains.findIndex(brain => head.x === brain.x && head.y === brain.y);
+    const eating = brainIndex >= 0;
     const body = eating ? snake : snake.slice(0, -1);
     if (head.x < 0 || head.y < 0 || head.x >= cols || head.y >= rows || body.some(p => p.x === head.x && p.y === head.y)) {
       stopGame(false, 'CRASHED! PRESS PLAY AGAIN TO RESTART.');
@@ -189,15 +226,21 @@ function tickGame(now) {
     }
     snake.unshift(head);
     if (eating) {
+      brains.splice(brainIndex, 1);
       gamePoints += 10;
       scoreEl.textContent = String(gamePoints).padStart(3, '0');
       gameMessage.textContent = 'BRAIN CONSUMED! +10';
       gameMessage.style.color = '#9bff45';
       gameMessage.style.display = 'none';
-      placeFood();
-      stepMs = Math.max(75, 125 - Math.floor(gamePoints / 100) * 5);
+      if (!brains.length) placeBrain();
+      if (brains.length < MAX_BRAINS && Math.random() < 0.35) placeBrain();
+      stepMs = Math.max(68, BASE_STEP_MS - Math.floor(gamePoints / 100) * 5);
     } else {
       snake.pop();
+    }
+    // Bonus brains occasionally join the hunt, so the board can hold several at once.
+    if (brains.length < MAX_BRAINS && now - lastBonusBrainAt > 6500 && Math.random() < 0.018) {
+      if (placeBrain()) lastBonusBrainAt = now;
     }
     drawGame();
   }
@@ -208,19 +251,30 @@ function setSnakeDirection(x, y) {
   if (x === -direction.x && y === -direction.y) return;
   nextDirection = {x, y};
 }
+const snakeDirectionKeys = {
+  arrowup: [0,-1], w: [0,-1],
+  arrowdown: [0,1], s: [0,1],
+  arrowleft: [-1,0], a: [-1,0],
+  arrowright: [1,0], d: [1,0]
+};
 window.addEventListener('keydown', event => {
   const key = event.key.toLowerCase();
-  const directions = {
-    arrowup: [0,-1], w: [0,-1],
-    arrowdown: [0,1], s: [0,1],
-    arrowleft: [-1,0], a: [-1,0],
-    arrowright: [1,0], d: [1,0]
-  };
-  if (directions[key] && gameActive) {
+  const modalOpen = Boolean(snakeModal?.open);
+  if (modalOpen && !gameActive && (key === ' ' || key === 'enter')) {
     event.preventDefault();
-    setSnakeDirection(directions[key][0], directions[key][1]);
+    beginGame();
+    return;
+  }
+  if (snakeDirectionKeys[key] && modalOpen) {
+    event.preventDefault();
+    heldMoveKeys.add(key);
+    if (gameActive) setSnakeDirection(snakeDirectionKeys[key][0], snakeDirectionKeys[key][1]);
   }
 });
+window.addEventListener('keyup', event => {
+  heldMoveKeys.delete(event.key.toLowerCase());
+});
+window.addEventListener('blur', () => heldMoveKeys.clear());
 action?.addEventListener('click', () => { if (!gameActive) beginGame(); });
 const snakeModal = document.getElementById('snake-modal');
 const snakeClose = document.getElementById('snake-close');
@@ -228,7 +282,7 @@ start?.addEventListener('click', () => {
   if (snakeModal && !snakeModal.open) snakeModal.showModal();
   requestAnimationFrame(() => {
     resizeGameCanvas();
-    beginGame();
+    resetGame();
   });
 });
 snakeClose?.addEventListener('click', () => {
@@ -242,6 +296,7 @@ snakeModal?.addEventListener('click', event => {
   }
 });
 snakeModal?.addEventListener('close', () => {
+  heldMoveKeys.clear();
   if (gameActive) stopGame(false, 'RUN PAUSED. OPEN THE ARCADE TO PLAY AGAIN.');
 });
 window.addEventListener('resize', resizeGameCanvas);
