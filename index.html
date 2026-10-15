@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=undead-hero-v13-20261015">
+<link rel="stylesheet" href="style.css?v=undead-hero-v14-20261015">
 <style id="zombcash-hero-v8-inline">
 /* V8 emergency inline hero override: intentionally distinct from cached external CSS */
 .hero{
@@ -109,6 +109,21 @@ h1{font-size:clamp(48px,4.45vw,66px)!important;line-height:.98!important;letter-
 .hero-mascot-v9 .hero-character-glow{z-index:0!important}
 @media(max-width:680px){.hero-zombie-art{width:100%!important;height:100%!important;object-fit:contain!important;transform:none!important}}
 
+
+/* V14: remove unreliable bitmap artwork; use a crisp native neon emblem */
+.hero-mascot-v9{overflow:hidden!important;isolation:isolate!important;background:radial-gradient(ellipse at 50% 43%,#75ff1828 0,transparent 34%),radial-gradient(ellipse at 68% 65%,#a855f720 0,transparent 42%),linear-gradient(145deg,#080d0b,#0a1110 52%,#090a10)!important}
+.hero-emblem{position:absolute;inset:12% 8% 10%;display:flex;align-items:center;justify-content:center;z-index:2;overflow:hidden}
+.hero-emblem:before{content:"";position:absolute;inset:8%;border:1px solid #9bff4526;transform:rotate(45deg);box-shadow:0 0 55px #9bff4510,inset 0 0 45px #9bff4508}
+.hero-emblem-ring{position:absolute;width:min(65%,360px);aspect-ratio:1;border-radius:50%;border:1px solid #9bff4566;box-shadow:0 0 0 12px #9bff4508,0 0 0 34px #9bff4505,0 0 55px #9bff4518,inset 0 0 45px #9bff4510}
+.hero-emblem-ring:before,.hero-emblem-ring:after{content:"";position:absolute;inset:8%;border:1px dashed #a855f766;border-radius:50%;animation:heroOrbit 28s linear infinite}
+.hero-emblem-ring:after{inset:-12%;border-color:#9bff452b;animation-direction:reverse;animation-duration:42s}
+.hero-emblem-core{position:relative;font:400 clamp(150px,22vw,300px)/1 Arial,sans-serif;color:#a6ff45;text-shadow:0 0 8px #9bff45,0 0 28px #9bff4590,0 0 70px #9bff4538;transform:translateY(-3%);z-index:2}
+.hero-emblem-code{position:absolute;bottom:10%;font:700 clamp(11px,1.2vw,16px) Orbitron,sans-serif;letter-spacing:clamp(4px,1vw,10px);color:#d3ffb3;text-shadow:0 0 18px #9bff4570;z-index:3}
+.hero-emblem-scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 5px,#9bff4508 6px,transparent 7px);pointer-events:none}
+@keyframes heroOrbit{to{transform:rotate(360deg)}}
+.hero-mascot-v9 .hero-character-caption{z-index:5!important}
+@media(max-width:680px){.hero-emblem{inset:13% 4% 10%}.hero-emblem-ring{width:64%}.hero-emblem-core{font-size:clamp(140px,45vw,220px)}.hero-emblem-code{bottom:9%;font-size:10px;letter-spacing:4px}}
+
 </style>
 </head>
 <body>
@@ -133,7 +148,7 @@ h1{font-size:clamp(48px,4.45vw,66px)!important;line-height:.98!important;letter-
     <div class="hero-character-glow"></div>
     <div class="hero-character-grid"></div>
     <div class="hero-character-label"><i></i> SURVIVOR #001 <span>ONLINE</span></div>
-    <img class="hero-zombie hero-zombie-art" src="./assets/zombcash-survivor-v13.jpg?v=hero-art-v13" alt="ZombieCash undead trader in a neon-green cyberpunk trading room">
+    <div class="hero-emblem" aria-hidden="true"><div class="hero-emblem-ring"></div><div class="hero-emblem-core">☣</div><div class="hero-emblem-code">$ZOMBCASH</div><div class="hero-emblem-scan"></div></div>
     <div class="hero-character-caption">MARKET DIED.<br><b>WE DIDN'T.</b></div>
   </div>
   <div class="hero-bottom"><span>SCANNING FOR SIGNS OF LIFE...</span><span>SYS.STATUS: <b>UNDEAD</b></span><span>COORD: 6C-CB-F9</span></div>
