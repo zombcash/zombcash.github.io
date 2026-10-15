@@ -148,8 +148,15 @@ async function loadRadar(force = false) {
     if (!radarTokens.length) throw new Error('No detailed Solana pairs returned');
     lastRadarSuccess = Date.now();
     renderRadar();
-    if (radarStatus) radarStatus.textContent = 'RADAR ONLINE';
-    if (radarUpdated) radarUpdated.textContent = 'UPDATED ' + new Date().toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'});
+    const sourceUpdatedAt = Number(payload.updatedAt || 0) * 1000;
+    const sourceTime = sourceUpdatedAt ? new Date(sourceUpdatedAt).toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'}) : 'UNKNOWN';
+    if (payload.stale) {
+      if (radarStatus) radarStatus.textContent = 'STALE DATA — RETRYING';
+      if (radarUpdated) radarUpdated.textContent = 'LAST SOURCE UPDATE ' + sourceTime;
+    } else {
+      if (radarStatus) radarStatus.textContent = 'RADAR ONLINE';
+      if (radarUpdated) radarUpdated.textContent = 'SOURCE UPDATED ' + sourceTime;
+    }
   } catch (error) {
     console.warn('ZombieCash Radar update failed:', error);
     if (!radarTokens.length && radarRows) radarRows.innerHTML = '<tr><td colspan="6" class="radar-message">RADAR SIGNAL UNAVAILABLE. Check your connection or refresh shortly. <br><small>Data is supplied by DexScreener; temporary API limits or browser restrictions can interrupt the feed.</small></td></tr>';
@@ -169,5 +176,5 @@ radarSearch?.addEventListener('input', renderRadar);
 radarRefresh?.addEventListener('click', () => loadRadar(true));
 if (radarRows) {
   loadRadar(true);
-  setInterval(() => loadRadar(true), 60000);
+  setInterval(() => loadRadar(true), 45000);
 }
