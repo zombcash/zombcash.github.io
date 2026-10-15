@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=undead-hero-v8-20261015">
+<link rel="stylesheet" href="style.css?v=undead-hero-v9-20261015">
 <style id="zombcash-hero-v8-inline">
 /* V8 emergency inline hero override: intentionally distinct from cached external CSS */
 .hero{
@@ -63,6 +63,35 @@ h1 .alive{text-shadow:0 0 35px #9bff4550!important}
  .hero-bottom{left:5%!important;right:5%!important;bottom:12px!important;font-size:7px!important}
  .hero-bottom span:nth-child(2),.hero-bottom span:last-child{display:none!important}
 }
+
+/* V9: tighter cinematic hero, new undead survivor, original hand reduced to coin badge */
+.hero{min-height:650px!important;height:calc(100vh - 112px)!important;max-height:760px!important;padding:36px 7% 54px!important;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr)!important;gap:1.5%!important;overflow:hidden!important}
+.hero:before{inset:0 0 0 51%!important;border-left:1px solid #9bff4520!important;background:linear-gradient(110deg,#9bff4506,transparent 50%,#a855f707)!important}
+.hero:after{display:none!important}
+.hero-content{max-width:610px!important;align-self:center!important;z-index:4!important}
+.eyebrow{font-size:10px!important;padding:9px 12px!important}
+h1{font-size:clamp(48px,4.45vw,66px)!important;line-height:.98!important;letter-spacing:-2.5px!important;margin:21px 0 18px!important}
+.hero-copy{max-width:430px!important;font-size:19px!important;line-height:1.32!important}
+.hero-actions{margin:22px 0 25px!important}
+.hero-stats{gap:14px!important}
+.hero-mascot-v9{height:100%!important;min-height:0!important;max-height:600px!important;clip-path:none!important;border:0!important;background:radial-gradient(ellipse at 55% 43%,#244a2480 0,transparent 47%),linear-gradient(130deg,#0a100c30,#080c10a0)!important;overflow:visible!important}
+.hero-mascot-v9:before{inset:18px 0 18px 16px!important;border:1px solid #9bff4524!important;clip-path:polygon(12% 0,100% 0,100% 88%,88% 100%,0 100%,0 12%)}
+.hero-character-glow{position:absolute;width:65%;aspect-ratio:1;border-radius:50%;background:#79ff2630;filter:blur(75px);top:18%;left:19%;z-index:-1}
+.hero-character-grid{position:absolute;inset:0;background-image:linear-gradient(#9bff450b 1px,transparent 1px),linear-gradient(90deg,#9bff450b 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(transparent,#000 30%,#000 75%,transparent)}
+.hero-character-label{position:absolute;top:5%;left:8%;font:600 9px Orbitron,sans-serif;letter-spacing:2px;color:#c5d4be;border:1px solid #506747;background:#08100bd9;padding:10px 12px;z-index:3}
+.hero-character-label i{display:inline-block;width:6px;height:6px;background:#9bff45;border-radius:50%;margin-right:8px;box-shadow:0 0 10px #9bff45}
+.hero-character-label span{color:#9bff45;margin-left:14px}
+.hero-zombie{position:relative;width:min(100%,500px);height:100%;max-height:560px;align-self:end;z-index:2;filter:drop-shadow(0 0 30px #9bff4510);transform:translate(2%,3%)}
+.hero-coin-badge{position:absolute;right:2%;bottom:7%;width:92px;height:92px;border-radius:50%;background:#080d0b;border:1px solid #9bff4580;box-shadow:0 0 0 8px #9bff4508,0 0 35px #9bff4525;display:flex;align-items:center;justify-content:center;z-index:5}
+.hero-coin-badge .mascot-orbit{width:74px!important;height:74px!important;border:1px solid #9bff4540!important;box-shadow:none!important}
+.hero-coin-badge .mascot-hand{position:absolute!important;width:57px!important;height:57px!important;min-width:0!important;min-height:0!important;border-radius:50%!important;background-size:190% auto!important;border:1px solid #9bff4580!important;box-shadow:0 0 18px #9bff4525!important;transform:none!important}
+.hero-coin-badge span{position:absolute;bottom:-20px;right:-4px;white-space:nowrap;font:600 7px Orbitron,sans-serif;letter-spacing:1px;color:#9bff45}
+.hero-character-caption{position:absolute;left:8%;bottom:8%;font:800 clamp(19px,2vw,29px) Orbitron,sans-serif;line-height:1.08;letter-spacing:-.5px;color:#edf5e5;z-index:4;text-shadow:0 3px 25px #000}
+.hero-character-caption b{color:#9bff45}
+.hero-bottom{bottom:9px!important;left:7%!important;right:7%!important;padding-top:9px!important;font-size:8px!important}
+@media(max-width:950px){.hero{height:auto!important;min-height:650px!important;padding:48px 5% 60px!important;grid-template-columns:minmax(0,1fr) minmax(0,.9fr)!important}.hero-zombie{max-height:490px!important}h1{font-size:clamp(43px,5vw,58px)!important}.hero-character-caption{font-size:21px!important}}
+@media(max-width:680px){.hero{height:auto!important;max-height:none!important;min-height:0!important;padding:40px 5% 0!important;display:flex!important;flex-direction:column!important;gap:12px!important;overflow:hidden!important}.hero-content{max-width:none!important}.hero:before{display:none!important}h1{font-size:clamp(40px,11vw,58px)!important;line-height:1!important;margin:19px 0 15px!important}.hero-copy{font-size:17px!important}.hero-actions{margin:19px 0 20px!important}.hero-stats{margin-bottom:5px!important}.hero-mascot-v9{height:330px!important;min-height:330px!important;width:100%!important;max-height:330px!important;margin-top:0!important}.hero-zombie{height:330px!important;width:min(100%,330px)!important;max-height:330px!important;transform:translateY(12px)!important}.hero-character-label{top:8px!important;left:8px!important;font-size:7px!important;padding:8px!important}.hero-character-caption{left:8px!important;bottom:28px!important;font-size:18px!important}.hero-coin-badge{width:67px!important;height:67px!important;right:5px!important;bottom:23px!important}.hero-coin-badge .mascot-orbit{width:54px!important;height:54px!important}.hero-coin-badge .mascot-hand{width:42px!important;height:42px!important}.hero-coin-badge span{font-size:6px!important;bottom:-15px!important}.hero-bottom{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;width:100%!important;margin-top:0!important;padding:12px 0!important}.hero-bottom span:nth-child(2),.hero-bottom span:last-child{display:none!important}}
+
 </style>
 </head>
 <body>
@@ -83,7 +112,51 @@ h1 .alive{text-shadow:0 0 35px #9bff4550!important}
     <div class="hero-actions"><a class="btn btn-primary" href="#radar">⌁ OPEN THE RADAR</a><a class="btn btn-ghost" href="#lab">☣ ENTER ZOMBIE LAB</a></div>
     <div class="hero-stats"><div><strong>24/7</strong><span>LIVE OUTBREAK</span></div><i></i><div><strong>3</strong><span>SOLANA SECTOR</span></div><i></i><div><strong>0</strong><span>JUST THE CREW</span></div></div>
   </div>
-  <div class="hero-mascot" role="img" aria-label="ZombieCash coin hand icon"><div class="mascot-orbit"></div><div class="mascot-hand"></div><div class="mascot-caption">THE HAND OF THE UNDEAD</div><div class="mascot-signal">☣ LIVE FROM SOLANA</div></div>
+  <div class="hero-mascot hero-mascot-v9" role="img" aria-label="ZombieCash undead survivor character">
+    <div class="hero-character-glow"></div>
+    <div class="hero-character-grid"></div>
+    <div class="hero-character-label"><i></i> SURVIVOR #001 <span>ONLINE</span></div>
+    <svg class="hero-zombie" viewBox="0 0 520 560" aria-hidden="true">
+      <defs>
+        <linearGradient id="zSkin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d4e6b0"/><stop offset=".48" stop-color="#829d66"/><stop offset="1" stop-color="#344b35"/></linearGradient>
+        <linearGradient id="zJacket" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#252b2a"/><stop offset=".55" stop-color="#101514"/><stop offset="1" stop-color="#303a2b"/></linearGradient>
+        <linearGradient id="zHair" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d0ff4f"/><stop offset=".4" stop-color="#72e92b"/><stop offset="1" stop-color="#1b5525"/></linearGradient>
+        <filter id="zGlow"><feGaussianBlur stdDeviation="7"/></filter>
+      </defs>
+      <ellipse cx="265" cy="520" rx="180" ry="22" fill="#9bff45" opacity=".13"/>
+      <path d="M92 530 Q102 420 163 390 L214 366 330 366 387 402 Q434 446 443 530Z" fill="url(#zJacket)" stroke="#5c7b42" stroke-width="3"/>
+      <path d="M214 362 L207 421 260 461 319 418 305 360Z" fill="#536547" stroke="#172018" stroke-width="4"/>
+      <path d="M175 399 L220 384 260 462 205 438Z" fill="#1a211d" stroke="#9bff45" stroke-width="3"/>
+      <path d="M342 397 L305 384 260 462 326 438Z" fill="#1a211d" stroke="#9bff45" stroke-width="3"/>
+      <path d="M221 408 L260 462 299 408 283 500 260 517 236 499Z" fill="#9bff45" opacity=".85"/>
+      <path d="M169 223 Q154 164 191 119 L227 77 235 112 271 63 278 111 326 87 321 131 365 121 345 166 359 208 344 280 324 340 283 370 220 350 187 302Z" fill="url(#zHair)" stroke="#172419" stroke-width="7" stroke-linejoin="round"/>
+      <path d="M182 205 Q185 143 225 137 Q267 120 313 147 Q349 176 343 229 L326 299 Q304 344 260 347 Q212 337 193 296Z" fill="url(#zSkin)" stroke="#18251a" stroke-width="7"/>
+      <path d="M183 203 L226 184 245 211 215 228 188 222Z" fill="#1a261c"/>
+      <path d="M274 201 L318 190 337 209 306 226 279 219Z" fill="#1a261c"/>
+      <ellipse cx="218" cy="211" rx="18" ry="11" fill="#9bff45" filter="url(#zGlow)"/>
+      <ellipse cx="218" cy="211" rx="12" ry="7" fill="#baff63"/><ellipse cx="218" cy="211" rx="3" ry="7" fill="#142016"/>
+      <path d="M280 210 Q303 195 323 211 L315 227 285 227Z" fill="#202b20"/>
+      <ellipse cx="302" cy="213" rx="6" ry="5" fill="#9bff45"/>
+      <path d="M248 220 L233 255 254 259" fill="none" stroke="#52684b" stroke-width="7" stroke-linecap="round"/>
+      <path d="M215 276 Q260 300 314 267 Q300 317 263 319 Q230 312 215 276Z" fill="#1c241c" stroke="#253525" stroke-width="4"/>
+      <path d="M224 282 L242 289 239 301 229 297Z M250 290 L268 292 268 305 253 304Z M279 286 L296 280 300 291 282 299Z" fill="#e4e8c9"/>
+      <path d="M194 247 L211 259 203 280 190 267Z M326 241 L340 250 330 273 320 259Z" fill="#9bff45" opacity=".75"/>
+      <path d="M180 157 L216 126 227 146 246 106 263 135 292 101 296 139 331 127 320 159 285 164 250 151 217 169Z" fill="#18211a" opacity=".92"/>
+      <path d="M197 353 L180 407 217 435 237 386Z M323 353 L350 407 310 435 289 386Z" fill="#111714" stroke="#485a3a" stroke-width="4"/>
+      <path d="M190 413 L215 428 M310 428 L335 413" stroke="#9bff45" stroke-width="5"/>
+      <path d="M359 430 Q396 410 416 435 L445 471 421 492 386 466 363 470Z" fill="url(#zSkin)" stroke="#172419" stroke-width="5"/>
+      <path d="M414 461 L440 451 461 463 451 480 429 481Z" fill="#9bff45" stroke="#1a281b" stroke-width="4"/>
+      <circle cx="393" cy="444" r="8" fill="#9bff45"/>
+      <path d="M167 420 L144 451 158 475 183 455 198 432Z" fill="url(#zSkin)" stroke="#172419" stroke-width="5"/>
+      <path d="M147 449 L125 437 111 450 125 467 153 467Z" fill="#a9bf83" stroke="#172419" stroke-width="4"/>
+      <path d="M177 263 L194 271 M326 287 L312 299" stroke="#40533a" stroke-width="5" stroke-linecap="round"/>
+      <path d="M204 240 L218 247 M302 241 L317 236" stroke="#d8e6b8" stroke-width="4" stroke-linecap="round"/>
+      <path d="M184 300 L200 308 193 319 M334 289 L320 302 329 313" fill="none" stroke="#9bff45" stroke-width="3"/>
+      <path d="M198 352 L208 369 M322 353 L311 369" stroke="#9bff45" stroke-width="4"/>
+    </svg>
+    <div class="hero-coin-badge"><div class="mascot-orbit"></div><div class="mascot-hand"></div><span>THE ORIGINAL</span></div>
+    <div class="hero-character-caption">MARKET DIED.<br><b>WE DIDN'T.</b></div>
+  </div>
   <div class="hero-bottom"><span>SCANNING FOR SIGNS OF LIFE...</span><span>SYS.STATUS: <b>UNDEAD</b></span><span>COORD: 6C-CB-F9</span></div>
 </section>
 <section class="ticker" aria-label="Project motto"><div>MARKET DIED. ZOMBIECASH DIDN'T. <b>☣</b> MARKET DIED. ZOMBIECASH DIDN'T. <b>☣</b> MARKET DIED. ZOMBIECASH DIDN'T. <b>☣</b></div></section>
@@ -199,5 +272,5 @@ h1 .alive{text-shadow:0 0 35px #9bff4550!important}
   </div>
 </section>
 <footer><a class="brand footer-brand" href="#home"><span class="brand-mark">☣</span><span>ZOMBIE<span class="green">CASH</span><small>THE UNDEAD INTERNET</small></span></a><p>Built for the undead. Powered by community.</p><span class="footer-right">MARKET DIED. ZOMBIECASH DIDN'T. <b>© 2026</b></span></footer>
-<script src="script.js?v=undead-hero-v6-20261015"></script>
+<script src="script.js?v=undead-hero-v9-20261015"></script>
 </body></html>
