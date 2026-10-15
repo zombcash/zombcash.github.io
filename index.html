@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=homepage-v2-20261015">
+<link rel="stylesheet" href="style.css?v=arcade-home-v3-20261015">
 </head>
 <body>
 <div class="scanlines"></div>
@@ -124,10 +124,14 @@
     </article>
   </div>
 </section>
-<section class="section mini-game">
-  <div class="game-copy"><div class="section-kicker">[ 03 / ZOMBIE SNAKE ]</div><h2>GROW YOUR<br><span class="green">ZOMBIE SNAKE</span></h2><p>Collect brains, grow your undead snake, and dodge your own tail. How long can you survive?</p><p class="game-note">Use the arrow keys or WASD. Grab 🧠 brains for +10 points. Don’t hit the walls or yourself.</p><button class="btn btn-primary" id="start-game">PLAY ZOMBIE SNAKE</button></div>
-  <div class="game-box"> <div class="game-head"><span>ZOMBIE SNAKE.EXE</span><span id="game-state">STANDBY</span><button class="game-fullscreen" id="game-fullscreen" type="button" aria-label="Open Zombie Snake fullscreen">⛶ FULLSCREEN</button></div><div class="game-screen" id="game-screen"><div class="game-grid"></div><canvas id="zombie-canvas" class="zombie-canvas" aria-label="Keyboard-controlled Zombie Snake. Use arrow keys or WASD to move."></canvas><div class="game-center"><div class="game-skull">☠</div><p id="game-message">USE ARROW KEYS OR WASD TO MOVE</p><button id="game-action" class="game-action">START SNAKE</button></div><div class="game-score">SCORE <b id="game-score">000</b></div></div><div class="game-foot"><span>SNAKE PROTOCOL v1.0</span><span>SURVIVAL SCORE LEADERBOARD</span></div><div class="game-submit"><input id="survivor-name" maxlength="18" placeholder="SURVIVOR NAME" aria-label="Survivor name"><button id="submit-survival-score" type="button" disabled>SAVE RECORD</button><span id="score-submit-status" aria-live="polite">Finish a round to save your snake score.</span></div></div>
+<section class="section mini-game" id="snake-game">
+  <div class="snake-promo-art" aria-hidden="true"><div class="snake-promo-orbit"></div><div class="snake-promo-symbol">☠</div><div class="snake-promo-chip chip-one">+10 BRAIN</div><div class="snake-promo-chip chip-two">ARCADE MODE</div></div>
+  <div class="game-copy"><div class="section-kicker">[ 03 / PLAYABLE ARCADE ]</div><h2>ONE MORE RUN.<br><span class="green">NO HUMANITY.</span></h2><p>Meet the undead classic: guide your Zombie Snake, collect brains, grow longer, and don’t bite your own tail.</p><div class="snake-feature-row"><span>⌨ ARROWS / WASD</span><span>◉ 30-SECOND RUN</span><span>✚ COMMUNITY RECORDS</span></div><button class="btn btn-primary" id="start-game">▶ PLAY ZOMBIE SNAKE</button><span class="snake-hint">OPENS IN ITS OWN ARCADE WINDOW · FULLSCREEN AVAILABLE</span></div>
 </section>
+<dialog class="snake-modal" id="snake-modal" aria-label="Zombie Snake arcade">
+  <div class="snake-modal-head"><div><span class="section-kicker">ZOMBCASH ARCADE / GAME 001</span><h2>ZOMBIE <span class="green">SNAKE</span></h2></div><button class="snake-close" id="snake-close" type="button" aria-label="Close game">✕ CLOSE</button></div>
+  <div class="game-box"><div class="game-head"><span>ZOMBIE SNAKE.EXE</span><span id="game-state">STANDBY</span><button class="game-fullscreen" id="game-fullscreen" type="button" aria-label="Open Zombie Snake fullscreen">⛶ FULLSCREEN</button></div><div class="game-screen" id="game-screen"><div class="game-grid"></div><canvas id="zombie-canvas" class="zombie-canvas" aria-label="Keyboard-controlled Zombie Snake. Use arrow keys or WASD to move."></canvas><div class="game-center"><div class="game-skull">☠</div><p id="game-message">USE ARROW KEYS OR WASD TO MOVE</p><button id="game-action" class="game-action">START SNAKE</button></div><div class="game-score">SCORE <b id="game-score">000</b></div></div><div class="game-foot"><span>SNAKE PROTOCOL v1.0</span><span>SURVIVAL SCORE LEADERBOARD</span></div><div class="game-submit"><input id="survivor-name" maxlength="18" placeholder="SURVIVOR NAME" aria-label="Survivor name"><button id="submit-survival-score" type="button" disabled>SAVE RECORD</button><span id="score-submit-status" aria-live="polite">Finish a round to save your snake score.</span></div></div>
+</dialog>
 <section class="section transmission" id="community">
   <div class="transmission-box"><div class="transmission-glow"></div><div class="section-kicker">[ 04 / JOIN THE RESISTANCE ]</div><h2>DON'T SURVIVE<br><span class="green">ALONE.</span></h2><p>Find the crew. Share a meme. Bring a little life back to the timeline.</p><div class="community-buttons"><a class="btn btn-primary" href="https://t.me/+5aXhFhx2RdFmNWYy" target="_blank" rel="noreferrer">JOIN TELEGRAM GROUP ↗</a><a class="btn btn-ghost" href="https://t.me/ZOMBCASH" target="_blank" rel="noreferrer">OPEN CHANNEL ↗</a><a class="btn btn-ghost" href="https://x.com/i/communities/2013610165069591027" target="_blank" rel="noreferrer">X COMMUNITY ↗</a></div><div class="contract"><span>TOKEN CONTRACT</span><code>6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump</code><button id="copy-ca" title="Copy contract address">COPY</button></div><div class="copy-feedback" id="copy-feedback" aria-live="polite"></div></div>
 </section>
@@ -141,5 +145,5 @@
   </div>
 </section>
 <footer><a class="brand footer-brand" href="#home"><span class="brand-mark">☣</span><span>ZOMBIE<span class="green">CASH</span><small>THE UNDEAD INTERNET</small></span></a><p>Built for the undead. Powered by community.</p><span class="footer-right">MARKET DIED. ZOMBIECASH DIDN'T. <b>© 2026</b></span></footer>
-<script src="script.js?v=zombie-survival-20261015"></script>
+<script src="script.js?v=arcade-home-v3-20261015"></script>
 </body></html>
