@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=undead-hero-v10-20261015">
+<link rel="stylesheet" href="style.css?v=undead-hero-v11-20261015">
 <style id="zombcash-hero-v8-inline">
 /* V8 emergency inline hero override: intentionally distinct from cached external CSS */
 .hero{
@@ -101,6 +101,14 @@ h1{font-size:clamp(48px,4.45vw,66px)!important;line-height:.98!important;letter-
 .hero-coin-badge{background:radial-gradient(circle at 35% 25%,#172619,#070b09 75%)!important;box-shadow:0 0 0 6px #9bff4507,0 0 25px #9bff4520!important}
 .hero-character-caption{text-shadow:0 4px 22px #000,0 0 20px #9bff4510!important}
 
+
+/* V11: actual cinematic artwork replaces the placeholder SVG */
+.hero-zombie-art{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center bottom!important;align-self:end!important;position:relative!important;z-index:2!important;transform:none!important;filter:drop-shadow(0 10px 28px #000c)!important}
+.hero-mascot-v9 .hero-zombie-art{width:100%!important;height:100%!important}
+.hero-mascot-v9 .hero-character-caption{z-index:5!important}
+.hero-mascot-v9 .hero-character-glow{z-index:0!important}
+@media(max-width:680px){.hero-zombie-art{width:100%!important;height:100%!important;object-fit:contain!important;transform:none!important}}
+
 </style>
 </head>
 <body>
@@ -125,68 +133,7 @@ h1{font-size:clamp(48px,4.45vw,66px)!important;line-height:.98!important;letter-
     <div class="hero-character-glow"></div>
     <div class="hero-character-grid"></div>
     <div class="hero-character-label"><i></i> SURVIVOR #001 <span>ONLINE</span></div>
-    <svg class="hero-zombie" viewBox="0 0 520 560" aria-hidden="true">
-      <defs>
-        <linearGradient id="zSkin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d4e6b0"/><stop offset=".48" stop-color="#829d66"/><stop offset="1" stop-color="#344b35"/></linearGradient>
-        <linearGradient id="zJacket" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#252b2a"/><stop offset=".55" stop-color="#101514"/><stop offset="1" stop-color="#303a2b"/></linearGradient>
-        <linearGradient id="zHair" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d0ff4f"/><stop offset=".4" stop-color="#72e92b"/><stop offset="1" stop-color="#1b5525"/></linearGradient>
-        <filter id="zGlow"><feGaussianBlur stdDeviation="7"/></filter>
-      </defs>
-      <ellipse cx="265" cy="520" rx="180" ry="22" fill="#9bff45" opacity=".13"/>
-      <path d="M92 530 Q102 420 163 390 L214 366 330 366 387 402 Q434 446 443 530Z" fill="url(#zJacket)" stroke="#5c7b42" stroke-width="3"/>
-      <path d="M214 362 L207 421 260 461 319 418 305 360Z" fill="#536547" stroke="#172018" stroke-width="4"/>
-      <path d="M175 399 L220 384 260 462 205 438Z" fill="#1a211d" stroke="#9bff45" stroke-width="3"/>
-      <path d="M342 397 L305 384 260 462 326 438Z" fill="#1a211d" stroke="#9bff45" stroke-width="3"/>
-      <path d="M221 408 L260 462 299 408 283 500 260 517 236 499Z" fill="#9bff45" opacity=".85"/>
-      <path d="M169 223 Q154 164 191 119 L227 77 235 112 271 63 278 111 326 87 321 131 365 121 345 166 359 208 344 280 324 340 283 370 220 350 187 302Z" fill="url(#zHair)" stroke="#172419" stroke-width="7" stroke-linejoin="round"/>
-      <path d="M182 205 Q185 143 225 137 Q267 120 313 147 Q349 176 343 229 L326 299 Q304 344 260 347 Q212 337 193 296Z" fill="url(#zSkin)" stroke="#18251a" stroke-width="7"/>
-      <path d="M183 203 L226 184 245 211 215 228 188 222Z" fill="#1a261c"/>
-      <path d="M274 201 L318 190 337 209 306 226 279 219Z" fill="#1a261c"/>
-      <ellipse cx="218" cy="211" rx="18" ry="11" fill="#9bff45" filter="url(#zGlow)"/>
-      <ellipse cx="218" cy="211" rx="12" ry="7" fill="#baff63"/><ellipse cx="218" cy="211" rx="3" ry="7" fill="#142016"/>
-      <path d="M280 210 Q303 195 323 211 L315 227 285 227Z" fill="#202b20"/>
-      <ellipse cx="302" cy="213" rx="6" ry="5" fill="#9bff45"/>
-      <path d="M248 220 L233 255 254 259" fill="none" stroke="#52684b" stroke-width="7" stroke-linecap="round"/>
-      <path d="M215 276 Q260 300 314 267 Q300 317 263 319 Q230 312 215 276Z" fill="#1c241c" stroke="#253525" stroke-width="4"/>
-      <path d="M224 282 L242 289 239 301 229 297Z M250 290 L268 292 268 305 253 304Z M279 286 L296 280 300 291 282 299Z" fill="#e4e8c9"/>
-      <path d="M194 247 L211 259 203 280 190 267Z M326 241 L340 250 330 273 320 259Z" fill="#9bff45" opacity=".75"/>
-      <path d="M180 157 L216 126 227 146 246 106 263 135 292 101 296 139 331 127 320 159 285 164 250 151 217 169Z" fill="#18211a" opacity=".92"/>
-      <path d="M197 353 L180 407 217 435 237 386Z M323 353 L350 407 310 435 289 386Z" fill="#111714" stroke="#485a3a" stroke-width="4"/>
-      <path d="M190 413 L215 428 M310 428 L335 413" stroke="#9bff45" stroke-width="5"/>
-      <path d="M359 430 Q396 410 416 435 L445 471 421 492 386 466 363 470Z" fill="url(#zSkin)" stroke="#172419" stroke-width="5"/>
-      <path d="M414 461 L440 451 461 463 451 480 429 481Z" fill="#9bff45" stroke="#1a281b" stroke-width="4"/>
-      <circle cx="393" cy="444" r="8" fill="#9bff45"/>
-      <path d="M167 420 L144 451 158 475 183 455 198 432Z" fill="url(#zSkin)" stroke="#172419" stroke-width="5"/>
-      <path d="M147 449 L125 437 111 450 125 467 153 467Z" fill="#a9bf83" stroke="#172419" stroke-width="4"/>
-      <path d="M177 263 L194 271 M326 287 L312 299" stroke="#40533a" stroke-width="5" stroke-linecap="round"/>
-      <path d="M204 240 L218 247 M302 241 L317 236" stroke="#d8e6b8" stroke-width="4" stroke-linecap="round"/>
-      <path d="M184 300 L200 308 193 319 M334 289 L320 302 329 313" fill="none" stroke="#9bff45" stroke-width="3"/>
-      <path d="M198 352 L208 369 M322 353 L311 369" stroke="#9bff45" stroke-width="4"/>
-      <!-- gritty comic detailing: cash fan, scar tissue, hair strands, tactical hardware -->
-      <g transform="translate(55 285) rotate(-17 85 70)" stroke-linejoin="round">
-        <path d="M12 28 L90 0 L142 37 L64 68Z" fill="#c6d59a" stroke="#172218" stroke-width="7"/>
-        <path d="M1 43 L80 15 L132 52 L53 80Z" fill="#e0e5b4" stroke="#172218" stroke-width="7"/>
-        <path d="M-8 58 L70 30 L123 67 L45 96Z" fill="#a7c17a" stroke="#172218" stroke-width="7"/>
-        <path d="M6 59 L43 46 L82 72 L45 85Z" fill="#dce8b5" stroke="#526344" stroke-width="2"/>
-        <circle cx="47" cy="66" r="10" fill="#6d8d55" stroke="#293b29" stroke-width="2"/>
-        <path d="M18 61 L30 56 M78 48 L93 58 M50 91 L72 82" stroke="#5d7449" stroke-width="3"/>
-        <path d="M-7 70 Q-28 74 -25 94 L-8 113 19 106 38 91 26 78 11 86Z" fill="url(#zSkin)" stroke="#172419" stroke-width="6"/>
-        <path d="M-15 91 L-2 96 8 90 M1 105 L13 98" stroke="#31472f" stroke-width="3" stroke-linecap="round"/>
-      </g>
-      <path d="M200 184 L218 170 230 180 221 192 M287 176 L301 166 311 175" fill="none" stroke="#c3d5a0" stroke-width="3" opacity=".8"/>
-      <path d="M191 236 L204 232 210 240 199 247 M314 244 L327 237 333 246" fill="none" stroke="#273728" stroke-width="4"/>
-      <path d="M235 269 L246 276 240 286 M291 263 L281 274 288 282" fill="none" stroke="#9bff45" stroke-width="2.5"/>
-      <path d="M230 296 L240 301 M254 306 L266 309 M282 299 L292 293" stroke="#7f9a67" stroke-width="2" stroke-linecap="round"/>
-      <path d="M191 295 L184 315 196 329 M331 281 L340 301 327 316" fill="none" stroke="#9bff45" stroke-width="3"/>
-      <path d="M173 402 L194 386 214 394 206 414 184 422Z M317 389 L341 397 347 415 325 423Z" fill="#343e31" stroke="#101711" stroke-width="4"/>
-      <path d="M181 407 L202 399 M323 403 L340 408" stroke="#9bff45" stroke-width="3"/>
-      <path d="M235 430 L250 445 263 439 278 451" fill="none" stroke="#c0d39b" stroke-width="3"/>
-      <path d="M371 434 L391 425 408 437 400 449 382 451Z" fill="#252d24" stroke="#9bff45" stroke-width="3"/>
-      <path d="M165 159 Q197 117 221 116 M236 127 L251 92 M272 125 L297 104 M310 145 L337 132" fill="none" stroke="#d2ff5c" stroke-width="4" stroke-linecap="round"/>
-      <path d="M183 168 L202 147 M194 179 L214 158 M306 157 L322 145" fill="none" stroke="#b94cff" stroke-width="3" stroke-linecap="round"/>
-      <path d="M236 376 L260 394 286 375" fill="none" stroke="#9bff45" stroke-width="4"/>
-      <circle cx="259" cy="462" r="5" fill="#d5ff70"/><circle cx="202" cy="413" r="4" fill="#b94cff"/><circle cx="324" cy="415" r="4" fill="#b94cff"/>
-    <div class="hero-coin-badge"><div class="mascot-orbit"></div><div class="mascot-hand"></div><span>THE ORIGINAL</span></div>
+    <img class="hero-zombie hero-zombie-art" src="./assets/zombcash-survivor.jpg?v=hero-art-v1" alt="ZombieCash undead trader in a neon-green cyberpunk trading room">
     <div class="hero-character-caption">MARKET DIED.<br><b>WE DIDN'T.</b></div>
   </div>
   <div class="hero-bottom"><span>SCANNING FOR SIGNS OF LIFE...</span><span>SYS.STATUS: <b>UNDEAD</b></span><span>COORD: 6C-CB-F9</span></div>
