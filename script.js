@@ -141,7 +141,7 @@ function resetGame() {
   const midX = Math.floor(cols / 2), midY = Math.floor(rows / 2);
   snake = [{x: midX, y: midY}, {x: midX - 1, y: midY}, {x: midX - 2, y: midY}];
   direction = {x: 1, y: 0}; nextDirection = {x: 1, y: 0};
-  lastStep = 0; gameDeadline = 0;
+  lastStep = 0; gameDeadline = 0; stepMs = 125;
   window.lastSurvivalPoints = null;
   const submit = document.getElementById('submit-survival-score');
   if (submit) submit.disabled = true;
