@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=undead-hero-v9-20261015">
+<link rel="stylesheet" href="style.css?v=undead-hero-v10-20261015">
 <style id="zombcash-hero-v8-inline">
 /* V8 emergency inline hero override: intentionally distinct from cached external CSS */
 .hero{
@@ -92,6 +92,15 @@ h1{font-size:clamp(48px,4.45vw,66px)!important;line-height:.98!important;letter-
 @media(max-width:950px){.hero{height:auto!important;min-height:650px!important;padding:48px 5% 60px!important;grid-template-columns:minmax(0,1fr) minmax(0,.9fr)!important}.hero-zombie{max-height:490px!important}h1{font-size:clamp(43px,5vw,58px)!important}.hero-character-caption{font-size:21px!important}}
 @media(max-width:680px){.hero{height:auto!important;max-height:none!important;min-height:0!important;padding:40px 5% 0!important;display:flex!important;flex-direction:column!important;gap:12px!important;overflow:hidden!important}.hero-content{max-width:none!important}.hero:before{display:none!important}h1{font-size:clamp(40px,11vw,58px)!important;line-height:1!important;margin:19px 0 15px!important}.hero-copy{font-size:17px!important}.hero-actions{margin:19px 0 20px!important}.hero-stats{margin-bottom:5px!important}.hero-mascot-v9{height:330px!important;min-height:330px!important;width:100%!important;max-height:330px!important;margin-top:0!important}.hero-zombie{height:330px!important;width:min(100%,330px)!important;max-height:330px!important;transform:translateY(12px)!important}.hero-character-label{top:8px!important;left:8px!important;font-size:7px!important;padding:8px!important}.hero-character-caption{left:8px!important;bottom:28px!important;font-size:18px!important}.hero-coin-badge{width:67px!important;height:67px!important;right:5px!important;bottom:23px!important}.hero-coin-badge .mascot-orbit{width:54px!important;height:54px!important}.hero-coin-badge .mascot-hand{width:42px!important;height:42px!important}.hero-coin-badge span{font-size:6px!important;bottom:-15px!important}.hero-bottom{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;width:100%!important;margin-top:0!important;padding:12px 0!important}.hero-bottom span:nth-child(2),.hero-bottom span:last-child{display:none!important}}
 
+
+/* V10 polish: add cinematic depth and purple edge-light without changing the layout */
+.hero-mascot-v9{background:radial-gradient(ellipse at 56% 42%,#2b572b85 0,transparent 43%),linear-gradient(125deg,#0a100c20,#080c10a0)!important}
+.hero-mascot-v9:before{border-color:#9bff4520!important;background:linear-gradient(135deg,#9bff4508,transparent 35%,#a855f708)!important}
+.hero-character-glow{background:radial-gradient(circle,#9bff4540 0,#7dff2618 40%,transparent 72%)!important;filter:blur(58px)!important}
+.hero-zombie{filter:drop-shadow(-8px 0 0 #a855f71b) drop-shadow(0 12px 24px #000b) drop-shadow(0 0 22px #9bff451b)!important}
+.hero-coin-badge{background:radial-gradient(circle at 35% 25%,#172619,#070b09 75%)!important;box-shadow:0 0 0 6px #9bff4507,0 0 25px #9bff4520!important}
+.hero-character-caption{text-shadow:0 4px 22px #000,0 0 20px #9bff4510!important}
+
 </style>
 </head>
 <body>
@@ -153,7 +162,30 @@ h1{font-size:clamp(48px,4.45vw,66px)!important;line-height:.98!important;letter-
       <path d="M204 240 L218 247 M302 241 L317 236" stroke="#d8e6b8" stroke-width="4" stroke-linecap="round"/>
       <path d="M184 300 L200 308 193 319 M334 289 L320 302 329 313" fill="none" stroke="#9bff45" stroke-width="3"/>
       <path d="M198 352 L208 369 M322 353 L311 369" stroke="#9bff45" stroke-width="4"/>
-    </svg>
+      <!-- gritty comic detailing: cash fan, scar tissue, hair strands, tactical hardware -->
+      <g transform="translate(55 285) rotate(-17 85 70)" stroke-linejoin="round">
+        <path d="M12 28 L90 0 L142 37 L64 68Z" fill="#c6d59a" stroke="#172218" stroke-width="7"/>
+        <path d="M1 43 L80 15 L132 52 L53 80Z" fill="#e0e5b4" stroke="#172218" stroke-width="7"/>
+        <path d="M-8 58 L70 30 L123 67 L45 96Z" fill="#a7c17a" stroke="#172218" stroke-width="7"/>
+        <path d="M6 59 L43 46 L82 72 L45 85Z" fill="#dce8b5" stroke="#526344" stroke-width="2"/>
+        <circle cx="47" cy="66" r="10" fill="#6d8d55" stroke="#293b29" stroke-width="2"/>
+        <path d="M18 61 L30 56 M78 48 L93 58 M50 91 L72 82" stroke="#5d7449" stroke-width="3"/>
+        <path d="M-7 70 Q-28 74 -25 94 L-8 113 19 106 38 91 26 78 11 86Z" fill="url(#zSkin)" stroke="#172419" stroke-width="6"/>
+        <path d="M-15 91 L-2 96 8 90 M1 105 L13 98" stroke="#31472f" stroke-width="3" stroke-linecap="round"/>
+      </g>
+      <path d="M200 184 L218 170 230 180 221 192 M287 176 L301 166 311 175" fill="none" stroke="#c3d5a0" stroke-width="3" opacity=".8"/>
+      <path d="M191 236 L204 232 210 240 199 247 M314 244 L327 237 333 246" fill="none" stroke="#273728" stroke-width="4"/>
+      <path d="M235 269 L246 276 240 286 M291 263 L281 274 288 282" fill="none" stroke="#9bff45" stroke-width="2.5"/>
+      <path d="M230 296 L240 301 M254 306 L266 309 M282 299 L292 293" stroke="#7f9a67" stroke-width="2" stroke-linecap="round"/>
+      <path d="M191 295 L184 315 196 329 M331 281 L340 301 327 316" fill="none" stroke="#9bff45" stroke-width="3"/>
+      <path d="M173 402 L194 386 214 394 206 414 184 422Z M317 389 L341 397 347 415 325 423Z" fill="#343e31" stroke="#101711" stroke-width="4"/>
+      <path d="M181 407 L202 399 M323 403 L340 408" stroke="#9bff45" stroke-width="3"/>
+      <path d="M235 430 L250 445 263 439 278 451" fill="none" stroke="#c0d39b" stroke-width="3"/>
+      <path d="M371 434 L391 425 408 437 400 449 382 451Z" fill="#252d24" stroke="#9bff45" stroke-width="3"/>
+      <path d="M165 159 Q197 117 221 116 M236 127 L251 92 M272 125 L297 104 M310 145 L337 132" fill="none" stroke="#d2ff5c" stroke-width="4" stroke-linecap="round"/>
+      <path d="M183 168 L202 147 M194 179 L214 158 M306 157 L322 145" fill="none" stroke="#b94cff" stroke-width="3" stroke-linecap="round"/>
+      <path d="M236 376 L260 394 286 375" fill="none" stroke="#9bff45" stroke-width="4"/>
+      <circle cx="259" cy="462" r="5" fill="#d5ff70"/><circle cx="202" cy="413" r="4" fill="#b94cff"/><circle cx="324" cy="415" r="4" fill="#b94cff"/>
     <div class="hero-coin-badge"><div class="mascot-orbit"></div><div class="mascot-hand"></div><span>THE ORIGINAL</span></div>
     <div class="hero-character-caption">MARKET DIED.<br><b>WE DIDN'T.</b></div>
   </div>
