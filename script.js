@@ -242,7 +242,10 @@ function tickGame(now) {
       gameMessage.style.display = 'none';
       if (!brains.length) placeBrain();
       if (brains.length < MAX_BRAINS && Math.random() < 0.35) placeBrain();
-      stepMs = Math.max(68, BASE_STEP_MS - Math.floor(gamePoints / 100) * 5);
+      // Every 100 points increases the base snake speed by 10%, stacking by milestone.
+      // Keep a 48 ms floor so the game remains playable at high scores.
+      const speedLevel = Math.floor(gamePoints / 100);
+      stepMs = Math.max(48, BASE_STEP_MS / Math.pow(1.10, speedLevel));
     } else {
       snake.pop();
     }
