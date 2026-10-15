@@ -42,7 +42,7 @@ const scoreEl = document.getElementById('game-score');
 const screen = document.getElementById('game-screen');
 const gameCanvas = document.getElementById('zombie-canvas');
 const gameCtx = gameCanvas?.getContext('2d');
-const GAME_SECONDS = 30;
+const GAME_SECONDS = 0; // Endless run; collision ends the game.
 const CELL = 20;
 let gameFrame = 0, lastStep = 0, gameDeadline = 0, gameActive = false;
 let gamePoints = 0, snake = [], food = {x: 8, y: 8}, direction = {x: 1, y: 0}, nextDirection = {x: 1, y: 0};
@@ -164,20 +164,19 @@ function beginGame() {
   resetGame();
   gameActive = true;
   screen?.classList.add('snake-playing');
-  gameDeadline = performance.now() + GAME_SECONDS * 1000;
+  gameDeadline = 0;
   lastStep = performance.now();
   action.disabled = true;
   action.style.opacity = '.35';
   action.textContent = 'SNAKE ACTIVE';
   gameMessage.style.display = 'none';
-  gameState.textContent = '00:30';
+  gameState.textContent = 'SURVIVE';
   screen.style.background = '#08120d';
   gameFrame = requestAnimationFrame(tickGame);
 }
 function tickGame(now) {
   if (!gameActive) return;
-  const remaining = Math.max(0, Math.ceil((gameDeadline - now) / 1000));
-  gameState.textContent = '00:' + String(remaining).padStart(2, '0');
+  gameState.textContent = 'SURVIVE';
   if (now - lastStep >= stepMs) {
     lastStep = now;
     direction = nextDirection;
@@ -202,7 +201,6 @@ function tickGame(now) {
     }
     drawGame();
   }
-  if (now >= gameDeadline) { stopGame(true); return; }
   gameFrame = requestAnimationFrame(tickGame);
 }
 function setSnakeDirection(x, y) {
