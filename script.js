@@ -33,7 +33,7 @@ document.getElementById('copy-ca').addEventListener('click', async () => {
   }
 });
 
-// Zombie Survival: real-time click-to-defend mini game.
+// Zombie Snake: classic keyboard-controlled snake with a ZombieCash twist.
 const start = document.getElementById('start-game');
 const action = document.getElementById('game-action');
 const gameMessage = document.getElementById('game-message');
@@ -42,18 +42,192 @@ const scoreEl = document.getElementById('game-score');
 const screen = document.getElementById('game-screen');
 const gameCanvas = document.getElementById('zombie-canvas');
 const gameCtx = gameCanvas?.getContext('2d');
-let gameFrame=0, spawnTimer=0, lastFrame=0, gameDeadline=0, gameActive=false, gamePoints=0, gameLives=3, zombies=[], gameWidth=0, gameHeight=0;
-const GAME_SECONDS=30;
-function resizeGameCanvas(){if(!gameCanvas||!screen||!gameCtx)return;const rect=screen.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);gameWidth=rect.width;gameHeight=rect.height;gameCanvas.width=Math.round(gameWidth*dpr);gameCanvas.height=Math.round(gameHeight*dpr);gameCanvas.style.width=gameWidth+'px';gameCanvas.style.height=gameHeight+'px';gameCtx.setTransform(dpr,0,0,dpr,0,0);drawGame();}
-function drawGame(){if(!gameCtx)return;gameCtx.clearRect(0,0,gameWidth,gameHeight);gameCtx.strokeStyle='rgba(119,255,139,.08)';gameCtx.lineWidth=1;for(let x=0;x<gameWidth;x+=28){gameCtx.beginPath();gameCtx.moveTo(x,0);gameCtx.lineTo(x,gameHeight);gameCtx.stroke();}for(let y=0;y<gameHeight;y+=28){gameCtx.beginPath();gameCtx.moveTo(0,y);gameCtx.lineTo(gameWidth,y);gameCtx.stroke();}zombies.forEach(z=>{gameCtx.save();gameCtx.shadowColor='#9bff45';gameCtx.shadowBlur=16;gameCtx.fillStyle='rgba(10,25,14,.92)';gameCtx.strokeStyle='#9bff45';gameCtx.lineWidth=2;gameCtx.beginPath();gameCtx.arc(z.x,z.y,z.r,0,Math.PI*2);gameCtx.fill();gameCtx.stroke();gameCtx.shadowBlur=0;gameCtx.font=(z.r*1.25)+'px serif';gameCtx.textAlign='center';gameCtx.textBaseline='middle';gameCtx.fillText(z.kind,z.x,z.y+1);gameCtx.restore();});if(gameActive){gameCtx.fillStyle='#9bff45';gameCtx.font='700 10px Orbitron,sans-serif';gameCtx.textAlign='left';gameCtx.fillText('DEFEND THE BASE',14,22);gameCtx.textAlign='right';gameCtx.fillText('LIVES '+'♥'.repeat(gameLives)+'♡'.repeat(3-gameLives),gameWidth-14,22);}}
-function stopGame(won){gameActive=false;cancelAnimationFrame(gameFrame);action.disabled=false;action.style.opacity='1';action.textContent='PLAY AGAIN';document.getElementById('submit-survival-score').disabled=gamePoints<10;gameState.textContent=won?'BASE SURVIVED':'BASE OVERRUN';gameMessage.textContent=won?'YOU SURVIVED THE OUTBREAK!':'THE HORDE GOT THROUGH.';gameMessage.style.display='';gameMessage.style.color=won?'#9bff45':'#ff7777';screen.style.background='';window.lastSurvivalPoints=gamePoints;const status=document.getElementById('score-submit-status');if(status)status.textContent='Final score: '+gamePoints+' points. Save your record to the community board.';drawGame();}
-function resetGame(){cancelAnimationFrame(gameFrame);gameActive=false;zombies=[];gamePoints=0;gameLives=3;spawnTimer=0;lastFrame=0;gameDeadline=0;window.lastSurvivalPoints=null;const submit=document.getElementById('submit-survival-score');if(submit)submit.disabled=true;scoreEl.textContent='000';gameState.textContent='READY';gameMessage.style.display='';gameMessage.style.color='';gameMessage.textContent='CLICK INITIALIZE TO DEFEND YOUR BASE';action.textContent='INITIALIZE';action.disabled=false;action.style.opacity='1';screen.style.background='';drawGame();}
-function spawnZombie(){const side=Math.floor(Math.random()*4),margin=26;let x=Math.random()*gameWidth,y=Math.random()*gameHeight;if(side===0)y=-margin;else if(side===1)x=gameWidth+margin;else if(side===2)y=gameHeight+margin;else x=-margin;zombies.push({x,y,r:20+Math.random()*6,speed:26+Math.random()*25,kind:['🧟','🧟‍♂️','💀'][Math.floor(Math.random()*3)]});}
-function tickGame(now){if(!gameActive)return;const dt=Math.min((now-lastFrame)/1000||0,.05);lastFrame=now;const remaining=Math.max(0,Math.ceil((gameDeadline-now)/1000));gameState.textContent='00:'+String(remaining).padStart(2,'0');spawnTimer+=dt;if(spawnTimer>Math.max(.38,.95-gamePoints/500)){spawnZombie();spawnTimer=0;}const cx=gameWidth/2,cy=gameHeight/2;zombies=zombies.filter(z=>{const dx=cx-z.x,dy=cy-z.y,dist=Math.hypot(dx,dy)||1;z.x+=dx/dist*z.speed*dt;z.y+=dy/dist*z.speed*dt;if(dist<z.r+15){gameLives--;gameMessage.textContent='BREACH DETECTED! DEFEND THE BASE!';gameMessage.style.display='';return false;}return true;});scoreEl.textContent=String(gamePoints).padStart(3,'0');drawGame();if(gameLives<=0){stopGame(false);return;}if(now>=gameDeadline){stopGame(true);return;}gameFrame=requestAnimationFrame(tickGame);}
-function beginGame(){resetGame();resizeGameCanvas();gameActive=true;gamePoints=0;gameLives=3;zombies=[];spawnTimer=0;lastFrame=performance.now();gameDeadline=lastFrame+GAME_SECONDS*1000;action.disabled=true;action.style.opacity='.35';action.textContent='DEFEND!';gameMessage.style.display='none';screen.style.background='radial-gradient(ellipse at center,#173b22,#080d12 72%)';gameState.textContent='00:30';gameFrame=requestAnimationFrame(tickGame);}
-gameCanvas?.addEventListener('pointerdown',event=>{if(!gameActive)return;const rect=gameCanvas.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;let hit=-1;for(let i=zombies.length-1;i>=0;i--)if(Math.hypot(zombies[i].x-x,zombies[i].y-y)<=zombies[i].r+10){hit=i;break;}if(hit>=0){zombies.splice(hit,1);gamePoints+=10;gameMessage.textContent='NICE SHOT! +10';gameMessage.style.color='#9bff45';}else{gameMessage.textContent='MISSED! KEEP WATCHING.';gameMessage.style.color='#b9cbbd';}gameMessage.style.display='';drawGame();});
-action.addEventListener('click',()=>{if(!gameActive)beginGame();});start.addEventListener('click',()=>{beginGame();screen.scrollIntoView({behavior:'smooth',block:'center'});});window.addEventListener('resize',resizeGameCanvas);resizeGameCanvas();
+const GAME_SECONDS = 30;
+const CELL = 20;
+let gameFrame = 0, lastStep = 0, gameDeadline = 0, gameActive = false;
+let gamePoints = 0, snake = [], food = {x: 8, y: 8}, direction = {x: 1, y: 0}, nextDirection = {x: 1, y: 0};
+let gameWidth = 0, gameHeight = 0, cols = 0, rows = 0, stepMs = 125;
 
+function resizeGameCanvas() {
+  if (!gameCanvas || !screen || !gameCtx) return;
+  const rect = screen.getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  gameWidth = rect.width; gameHeight = rect.height;
+  gameCanvas.width = Math.round(gameWidth * dpr);
+  gameCanvas.height = Math.round(gameHeight * dpr);
+  gameCanvas.style.width = gameWidth + 'px';
+  gameCanvas.style.height = gameHeight + 'px';
+  gameCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  cols = Math.max(8, Math.floor(gameWidth / CELL));
+  rows = Math.max(8, Math.floor(gameHeight / CELL));
+  if (!gameActive && snake.length) {
+    snake = snake.map(p => ({x: Math.min(cols - 1, p.x), y: Math.min(rows - 1, p.y)}));
+    food = {x: Math.min(cols - 1, food.x), y: Math.min(rows - 1, food.y)};
+  }
+  drawGame();
+}
+function placeFood() {
+  let candidate, attempts = 0;
+  do {
+    candidate = {x: Math.floor(Math.random() * cols), y: Math.floor(Math.random() * rows)};
+    attempts++;
+  } while (snake.some(p => p.x === candidate.x && p.y === candidate.y) && attempts < 500);
+  food = candidate;
+}
+function drawGame() {
+  if (!gameCtx) return;
+  gameCtx.clearRect(0, 0, gameWidth, gameHeight);
+  gameCtx.fillStyle = '#08120d';
+  gameCtx.fillRect(0, 0, gameWidth, gameHeight);
+  gameCtx.strokeStyle = 'rgba(119,255,139,.09)';
+  gameCtx.lineWidth = 1;
+  for (let x = 0; x <= gameWidth; x += CELL) { gameCtx.beginPath(); gameCtx.moveTo(x,0); gameCtx.lineTo(x,gameHeight); gameCtx.stroke(); }
+  for (let y = 0; y <= gameHeight; y += CELL) { gameCtx.beginPath(); gameCtx.moveTo(0,y); gameCtx.lineTo(gameWidth,y); gameCtx.stroke(); }
+  if (snake.length) {
+    snake.forEach((p, i) => {
+      const inset = 2;
+      gameCtx.save();
+      gameCtx.shadowColor = '#9bff45';
+      gameCtx.shadowBlur = i === 0 ? 13 : 5;
+      gameCtx.fillStyle = i === 0 ? '#d4ff8a' : '#5ce54f';
+      gameCtx.fillRect(p.x * CELL + inset, p.y * CELL + inset, CELL - inset * 2, CELL - inset * 2);
+      if (i === 0) {
+        gameCtx.shadowBlur = 0;
+        gameCtx.fillStyle = '#101810';
+        gameCtx.font = 'bold 13px sans-serif';
+        gameCtx.textAlign = 'center'; gameCtx.textBaseline = 'middle';
+        gameCtx.fillText('☠', p.x * CELL + CELL/2, p.y * CELL + CELL/2 + 1);
+      }
+      gameCtx.restore();
+    });
+    gameCtx.save();
+    gameCtx.font = '17px sans-serif';
+    gameCtx.textAlign = 'center'; gameCtx.textBaseline = 'middle';
+    gameCtx.shadowColor = '#9bff45'; gameCtx.shadowBlur = 12;
+    gameCtx.fillText('🧠', food.x * CELL + CELL/2, food.y * CELL + CELL/2);
+    gameCtx.restore();
+  }
+  if (gameActive) {
+    gameCtx.fillStyle = '#9bff45';
+    gameCtx.font = '700 10px Orbitron,sans-serif';
+    gameCtx.textAlign = 'left';
+    gameCtx.fillText('ARROWS / WASD TO MOVE', 12, 17);
+    gameCtx.textAlign = 'right';
+    gameCtx.fillText('GROW THE HORDE', gameWidth - 12, 17);
+  }
+}
+function stopGame(won, reason) {
+  gameActive = false;
+  cancelAnimationFrame(gameFrame);
+  action.disabled = false;
+  action.style.opacity = '1';
+  action.textContent = 'PLAY AGAIN';
+  const submit = document.getElementById('submit-survival-score');
+  if (submit) submit.disabled = gamePoints < 10;
+  gameState.textContent = won ? 'SURVIVED' : 'GAME OVER';
+  gameMessage.textContent = won ? 'OUTBREAK SURVIVED! NICE SNAKE WORK.' : (reason || 'THE HORDE COLLAPSED. TRY AGAIN!');
+  gameMessage.style.display = '';
+  gameMessage.style.color = won ? '#9bff45' : '#ff7777';
+  screen.style.background = '';
+  window.lastSurvivalPoints = gamePoints;
+  const status = document.getElementById('score-submit-status');
+  if (status) status.textContent = 'Final score: ' + gamePoints + ' points. Save your record to the community board.';
+  drawGame();
+}
+function resetGame() {
+  cancelAnimationFrame(gameFrame);
+  gameActive = false;
+  gamePoints = 0;
+  const midX = Math.floor(cols / 2), midY = Math.floor(rows / 2);
+  snake = [{x: midX, y: midY}, {x: midX - 1, y: midY}, {x: midX - 2, y: midY}];
+  direction = {x: 1, y: 0}; nextDirection = {x: 1, y: 0};
+  lastStep = 0; gameDeadline = 0;
+  window.lastSurvivalPoints = null;
+  const submit = document.getElementById('submit-survival-score');
+  if (submit) submit.disabled = true;
+  scoreEl.textContent = '000';
+  gameState.textContent = 'READY';
+  gameMessage.style.display = '';
+  gameMessage.style.color = '';
+  gameMessage.textContent = 'USE ARROW KEYS OR WASD TO MOVE';
+  action.textContent = 'START SNAKE';
+  action.disabled = false;
+  action.style.opacity = '1';
+  screen.style.background = '';
+  placeFood();
+  drawGame();
+}
+function beginGame() {
+  resizeGameCanvas();
+  resetGame();
+  gameActive = true;
+  gameDeadline = performance.now() + GAME_SECONDS * 1000;
+  lastStep = performance.now();
+  action.disabled = true;
+  action.style.opacity = '.35';
+  action.textContent = 'SNAKE ACTIVE';
+  gameMessage.style.display = 'none';
+  gameState.textContent = '00:30';
+  screen.style.background = '#08120d';
+  gameFrame = requestAnimationFrame(tickGame);
+}
+function tickGame(now) {
+  if (!gameActive) return;
+  const remaining = Math.max(0, Math.ceil((gameDeadline - now) / 1000));
+  gameState.textContent = '00:' + String(remaining).padStart(2, '0');
+  if (now - lastStep >= stepMs) {
+    lastStep = now;
+    direction = nextDirection;
+    const head = {x: snake[0].x + direction.x, y: snake[0].y + direction.y};
+    const eating = head.x === food.x && head.y === food.y;
+    const body = eating ? snake : snake.slice(0, -1);
+    if (head.x < 0 || head.y < 0 || head.x >= cols || head.y >= rows || body.some(p => p.x === head.x && p.y === head.y)) {
+      stopGame(false, 'CRASHED! PRESS PLAY AGAIN TO RESTART.');
+      return;
+    }
+    snake.unshift(head);
+    if (eating) {
+      gamePoints += 10;
+      scoreEl.textContent = String(gamePoints).padStart(3, '0');
+      gameMessage.textContent = 'BRAIN CONSUMED! +10';
+      gameMessage.style.color = '#9bff45';
+      gameMessage.style.display = '';
+      placeFood();
+      stepMs = Math.max(75, 125 - Math.floor(gamePoints / 100) * 5);
+    } else {
+      snake.pop();
+    }
+    drawGame();
+  }
+  if (now >= gameDeadline) { stopGame(true); return; }
+  gameFrame = requestAnimationFrame(tickGame);
+}
+function setSnakeDirection(x, y) {
+  if (!gameActive) return;
+  if (x === -direction.x && y === -direction.y) return;
+  nextDirection = {x, y};
+}
+window.addEventListener('keydown', event => {
+  const key = event.key.toLowerCase();
+  const directions = {
+    arrowup: [0,-1], w: [0,-1],
+    arrowdown: [0,1], s: [0,1],
+    arrowleft: [-1,0], a: [-1,0],
+    arrowright: [1,0], d: [1,0]
+  };
+  if (directions[key] && gameActive) {
+    event.preventDefault();
+    setSnakeDirection(directions[key][0], directions[key][1]);
+  }
+});
+action?.addEventListener('click', () => { if (!gameActive) beginGame(); });
+start?.addEventListener('click', () => {
+  beginGame();
+  screen?.scrollIntoView({behavior:'smooth', block:'center'});
+});
+window.addEventListener('resize', resizeGameCanvas);
+resizeGameCanvas();
+resetGame();
 
 // Live Solana Radar: public DexScreener API, no API key required.
 const radarRows = document.getElementById('radar-rows');
