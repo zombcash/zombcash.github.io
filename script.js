@@ -229,6 +229,30 @@ window.addEventListener('resize', resizeGameCanvas);
 resizeGameCanvas();
 resetGame();
 
+// Fullscreen mode for Zombie Snake.
+const fullscreenButton = document.getElementById('game-fullscreen');
+const gameBox = document.querySelector('.game-box');
+async function toggleSnakeFullscreen() {
+  if (!gameBox) return;
+  try {
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+    } else if (gameBox.requestFullscreen) {
+      await gameBox.requestFullscreen();
+    } else {
+      gameBox.classList.toggle('snake-expanded');
+    }
+  } catch (error) {
+    gameBox.classList.toggle('snake-expanded');
+  }
+}
+fullscreenButton?.addEventListener('click', toggleSnakeFullscreen);
+document.addEventListener('fullscreenchange', () => {
+  if (fullscreenButton) fullscreenButton.textContent = document.fullscreenElement ? '⤢ EXIT FULLSCREEN' : '⛶ FULLSCREEN';
+  resizeGameCanvas();
+  drawGame();
+});
+
 // Live Solana Radar: public DexScreener API, no API key required.
 const radarRows = document.getElementById('radar-rows');
 const radarStatus = document.getElementById('radar-status');
