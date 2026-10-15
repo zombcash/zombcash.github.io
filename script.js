@@ -46,7 +46,7 @@ const CELL = 20;
 const BASE_STEP_MS = 125;
 const BOOST_MULTIPLIER = 0.62;
 const MAX_BRAINS = 4;
-let gameFrame = 0, lastStep = 0, gameActive = false;
+let gameFrame = 0, lastStep = 0, gameActive = false, gameFinished = false;
 let gamePoints = 0, snake = [], brains = [], direction = {x: 1, y: 0}, nextDirection = {x: 1, y: 0};
 let gameWidth = 0, gameHeight = 0, cols = 0, rows = 0, stepMs = BASE_STEP_MS;
 const heldMoveKeys = new Set();
@@ -150,6 +150,7 @@ function drawGame() {
 }
 function stopGame(won, reason) {
   gameActive = false;
+  gameFinished = true;
   heldMoveKeys.clear();
   screen?.classList.remove('snake-playing');
   cancelAnimationFrame(gameFrame);
@@ -170,7 +171,9 @@ function stopGame(won, reason) {
 }
 function resetGame() {
   cancelAnimationFrame(gameFrame);
+  gameFrame = 0;
   gameActive = false;
+  gameFinished = false;
   heldMoveKeys.clear();
   screen?.classList.remove('snake-playing');
   gamePoints = 0;
@@ -195,9 +198,9 @@ function resetGame() {
 }
 function beginGame() {
   if (gameActive) return;
-  // A finished run must be reset before starting again; otherwise the snake
-  // remains at the collision point and immediately loses on the next frame.
-  if (gameState?.textContent === 'GAME OVER' || gameState?.textContent === 'SURVIVED') {
+  // Use an explicit finished flag instead of UI text, which can be changed by
+  // animation/state updates. Always build a fresh round after a collision.
+  if (gameFinished || gameState?.textContent === 'GAME OVER' || gameState?.textContent === 'SURVIVED') {
     resetGame();
   }
   resizeGameCanvas();
@@ -249,7 +252,7 @@ function tickGame(now) {
     }
     drawGame();
   }
-  gameFrame = requestAnimationFrame(tickGame);
+  if (gameActive) gameFrame = requestAnimationFrame(tickGame);
 }
 function setSnakeDirection(x, y) {
   if (!gameActive) return;
