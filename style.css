@@ -191,3 +191,76 @@
 .game-center .game-action{pointer-events:auto}
 .game-center .game-skull{pointer-events:none}
 .game-score{z-index:3;pointer-events:none}
+
+
+
+/* ZombieCash hero refresh: keep the iconic hand as a coin relic, not the whole hero */
+.hero{
+  min-height:650px;
+  padding:70px 7% 82px;
+  background:
+    radial-gradient(ellipse at 75% 46%,rgba(51,255,77,.17),transparent 30%),
+    radial-gradient(ellipse at 87% 75%,rgba(142,43,255,.12),transparent 32%),
+    linear-gradient(110deg,#05090b 0%,#0a1510 55%,#05090b 100%);
+}
+.hero-grid{background-size:38px 38px;opacity:.7;mask-image:linear-gradient(90deg,black,transparent 95%)}
+.moon{right:10%;top:8%;width:300px;height:300px;opacity:.2;background:radial-gradient(circle at 35% 30%,#d6ff9b,#69ef43 48%,#103b25 78%);box-shadow:0 0 75px #57ff4730}
+.city{width:72%;height:58%;opacity:.48}
+.hero-content{max-width:560px;padding:26px 0 10px}
+.eyebrow{display:inline-flex;align-items:center;border:1px solid #34513a;background:#07100bd9;padding:10px 13px;letter-spacing:1.6px}
+h1{font-size:clamp(48px,6vw,78px);line-height:1.02;letter-spacing:-2.8px;margin:26px 0 20px}
+.hero-copy{max-width:440px;font-size:21px;color:#c0ccc4}
+.hero-actions{margin:28px 0 34px}
+.hero-stats{gap:18px}
+.hero-stats strong{font-size:23px}
+.hero-mascot{
+  position:absolute;z-index:2;right:5%;top:7%;bottom:12%;width:42%;
+  display:flex;align-items:center;justify-content:center;isolation:isolate;
+}
+.mascot-orbit{
+  position:absolute;width:min(34vw,360px);aspect-ratio:1;border:1px solid #9bff4545;border-radius:50%;
+  box-shadow:0 0 0 22px #9bff4508,0 0 0 54px #9bff4505,inset 0 0 60px #9bff4510;
+}
+.mascot-orbit:before,.mascot-orbit:after{content:"";position:absolute;inset:12%;border:1px dashed #9bff4533;border-radius:50%;animation:spin 36s linear infinite}
+.mascot-orbit:after{inset:-13%;border-style:solid;border-color:#a855f722;animation-direction:reverse;animation-duration:48s}
+.mascot-hand{
+  position:relative;width:min(31vw,330px);height:min(31vw,330px);border-radius:50%;
+  background:#06100a url("zombcash-hand-original.webp?v=coin-mascot-20261015") center 42%/175% auto no-repeat;
+  mix-blend-mode:screen;filter:drop-shadow(0 0 28px #75ff2e45);
+  border:1px solid #9bff454a;box-shadow:0 0 60px #58ff2518,inset 0 0 40px #9bff4510;
+}
+.mascot-caption,.mascot-signal{
+  position:absolute;z-index:3;font:700 9px Orbitron,sans-serif;letter-spacing:1.5px;color:#a7ff69;
+  background:#07100be8;border:1px solid #34513a;padding:10px 12px;box-shadow:0 0 22px #0008
+}
+.mascot-caption{bottom:7%;right:3%}
+.mascot-signal{top:14%;left:2%;color:#c2d2c7}
+.mascot-signal:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#9bff45;box-shadow:0 0 8px #9bff45;margin-right:8px}
+.hero-bottom{bottom:17px}
+.game-head{align-items:center;gap:12px}
+.game-fullscreen{margin-left:auto;background:transparent;border:1px solid #34533a;color:#9bff45;padding:7px 9px;font:700 8px Orbitron,sans-serif;letter-spacing:.6px;cursor:pointer}
+.game-fullscreen:hover{background:#9bff45;color:#07100a}
+.game-box:fullscreen{width:100vw;height:100vh;padding:20px;background:#070d0b;border:0;display:flex;flex-direction:column;justify-content:center}
+.game-box:fullscreen .game-screen{height:min(70vh,calc(100vh - 180px));flex:1}
+.game-box:fullscreen .game-head,.game-box:fullscreen .game-foot{font-size:12px;padding:18px}
+.game-box:fullscreen .game-submit{max-width:1100px;width:100%;margin:0 auto}
+.game-box:fullscreen .game-fullscreen{font-size:10px;padding:10px 14px}
+@media(max-width:950px){
+ .hero{padding-left:6%;padding-right:6%;min-height:640px}
+ .hero-mascot{right:0;width:43%;opacity:.92}
+ .mascot-hand{width:min(36vw,300px);height:min(36vw,300px)}
+ .mascot-orbit{width:min(39vw,340px)}
+ .mascot-caption{right:0;bottom:9%;font-size:8px}
+}
+@media(max-width:680px){
+ .hero{min-height:790px;padding:55px 5% 75px;align-items:flex-start}
+ .hero-content{max-width:100%;padding-top:10px}
+ .hero-mascot{top:auto;bottom:70px;right:0;width:100%;height:300px;opacity:.95}
+ .mascot-hand{width:210px;height:210px;background-size:175% auto}
+ .mascot-orbit{width:245px}
+ .mascot-caption{bottom:0;right:8%}
+ .mascot-signal{top:4%;left:8%}
+ .hero-copy{max-width:390px}
+ .hero-stats{gap:12px}
+ .game-fullscreen{font-size:7px;padding:6px}
+}
