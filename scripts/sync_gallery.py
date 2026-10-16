@@ -14,7 +14,7 @@ CHANNEL = "ZOMBCASH"
 BASE_URL = f"https://t.me/s/{CHANNEL}"
 OUTPUT = Path("gallery-data.json")
 MAX_PAGES = 5
-MAX_ITEMS = 120
+MAX_ITEMS = 50
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; ZombieCashGalleryBot/1.0)"}
 
 
@@ -47,15 +47,8 @@ def parse_page(html):
         date_node = node.select_one(".tgme_widget_message_date time")
         date = date_node.get("datetime") if date_node else None
         post_link = f"https://t.me/{post_id}" if post_id else f"https://t.me/{CHANNEL}"
-        for image in urls:
-            messages.append({
-                "id": f"{post_id}:{len(messages)}",
-                "image": image,
-                "caption": caption or "ZombieCash AI-generated artwork",
-                "post_url": post_link,
-                "date": date,
-                "post_id": post_id,
-            })
+        for index, image in enumerate(urls):
+            messages.append({"id": f"{post_id}:{index}", "image": image, "caption": caption or "ZombieCash AI-generated artwork", "post_url": post_link, "date": date, "post_id": post_id})
     numeric_ids = []
     for item in messages:
         match = re.search(r"/(\d+)$", item.get("post_id", ""))
@@ -70,29 +63,21 @@ def main():
     all_items = {}
     before = None
     for _ in range(MAX_PAGES):
-        params = {"before": before} if before else None
-        response = session.get(BASE_URL, params=params, timeout=25)
+        response = session.get(BASE_URL, params={"before": before} if before else None, timeout=25)
         response.raise_for_status()
         items, oldest_id = parse_page(response.text)
         for item in items:
             all_items[item["id"]] = item
         if not oldest_id or oldest_id <= 1:
             break
-        next_before = oldest_id
-        if before == next_before:
+        if before == oldest_id:
             break
-        before = next_before
+        before = oldest_id
         time.sleep(0.4)
-
-    # Newest posts first, and cap the static gallery to a reasonable size.
     items = sorted(all_items.values(), key=lambda item: (item.get("date") or "", item.get("post_id") or ""), reverse=True)[:MAX_ITEMS]
-    payload = {
-        "source": f"https://t.me/{CHANNEL}",
-        "updated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "items": items,
-    }
+    payload = {"source": f"https://t.me/{CHANNEL}", "updated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "items": items}
     OUTPUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Synced {len(items)} image entries from @{CHANNEL} into {OUTPUT}")
+    print(f"Synced {len(items)} image entries from @{CHANNEL} into {OUTPUT} (limit: {MAX_ITEMS})")
 
 
 if __name__ == "__main__":
