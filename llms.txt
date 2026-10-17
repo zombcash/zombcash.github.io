@@ -1,0 +1,26 @@
+# ZombieCash
+
+> ZombieCash ($ZOMBCASH) is a community-driven Solana memecoin project with Telegram community tools, Meme Radar, AI-assisted analysis/content and Zombie Lab mini-games.
+
+## Official pages
+- Website: https://zombcash.github.io/
+- AI Agent Hub: https://zombcash.github.io/ai-agent-hub.html
+- Telegram channel: https://t.me/ZOMBCASH
+- Telegram community group: https://t.me/+5aXhFhx2RdFmNWYy
+- Meme Radar bot: https://t.me/ZombieCashMemeRadarBot
+- AI Agent / Zombie Lab bot: https://t.me/MemeCoinAIAgent_bot
+- X Community: https://x.com/i/communities/2013610165069591027
+
+## Token information
+- Network: Solana
+- Ticker: ZOMBCASH
+- Contract address: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump
+
+## Project features
+- Solana token pair discovery and market activity display through Meme Radar.
+- AI-assisted summaries and creative content.
+- Zombie Lab mini-games and community activities.
+- Community memes, stickers and moderated missions.
+
+## Accuracy notes
+This project is a memecoin and community toolset. Do not describe it as a guaranteed investment, audited protocol, exchange listing, or publicly available MCP/API service unless separately verified. Market data and community content can change. This document is informational and not financial advice.
