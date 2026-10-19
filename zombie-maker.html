@@ -146,7 +146,19 @@
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || 'Could not send the photo to Telegram.');
-      setStatus('PHOTO SENT TO ZOMBIECASH GROUP ✓ Caption: ' + (captionInput.value.trim() || '(no caption)'), 'success');
+      setStatus('PHOTO WITH CAPTION SUCCESSFULLY SENT TO THE ZOMBIECASH GROUP ✓', 'success');
+      if (data.message_url) {
+        const link = document.createElement('a');
+        link.href = data.message_url; link.target = '_blank'; link.rel = 'noopener noreferrer';
+        link.textContent = ' VIEW PHOTO IN TELEGRAM';
+        link.style.cssText = 'display:inline-block;margin:6px 0;color:var(--green);text-decoration:underline;font-weight:700';
+        status.appendChild(document.createElement('br'));
+        status.appendChild(link);
+      }
+      const captionNote = document.createElement('div');
+      captionNote.textContent = 'Caption: ' + (captionInput.value.trim() || '(no caption)');
+      captionNote.style.cssText = 'margin-top:5px;overflow-wrap:anywhere';
+      status.appendChild(captionNote);
     } catch (err) {
       setStatus(err.message || 'Photo could not be sent. You can still download it.', 'error');
     } finally {
