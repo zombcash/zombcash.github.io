@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080b11">
+<meta name="description" content="Turn your selfie into a ZombieCash undead legend with AI. Upload, transform, download and share your zombie portrait.">
+<meta property="og:title" content="Zombie Maker // ZombieCash">
+<meta property="og:description" content="Become an undead legend. Transform your photo with the ZombieCash AI Zombie Maker.">
+<meta property="og:url" content="https://zombcash.github.io/zombie-maker.html">
+<meta property="og:type" content="website">
+<title>Zombie Maker // ZombieCash</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080b11;--panel:#10171b;--line:#2b4032;--green:#9bff45;--muted:#9aa9a0;--white:#eff8ef;--purple:#a855f7}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 75% 10%,#18362265,transparent 35%),var(--bg);color:var(--white);font:18px 'Rajdhani',sans-serif;min-height:100vh}a{color:inherit;text-decoration:none}.scan{position:fixed;inset:0;pointer-events:none;z-index:9;opacity:.045;background:repeating-linear-gradient(transparent 0 3px,#b4ffcb 4px,transparent 5px)}header{height:76px;padding:0 6%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #26372d;background:#080b11e8;position:sticky;top:0;z-index:8;backdrop-filter:blur(12px)}.brand{font:800 15px Orbitron;letter-spacing:1px}.brand b{color:var(--green)}.back{font:600 10px Orbitron;letter-spacing:1px;color:#b5c5b8;border:1px solid #344c3b;padding:12px 14px}.back:hover{color:var(--green);border-color:var(--green)}main{max-width:1120px;margin:auto;padding:60px 24px 80px}.eyebrow{font:600 10px Orbitron;letter-spacing:2px;color:var(--green)}h1,h2{font-family:Orbitron,sans-serif}h1{font-size:clamp(38px,6vw,68px);line-height:1.02;letter-spacing:-2px;margin:18px 0}h1 span{color:var(--green)}.lead{color:#a7b7ad;font-size:21px;max-width:650px;line-height:1.45}.layout{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:38px}.panel{background:linear-gradient(145deg,#111a1b,#0b1016);border:1px solid var(--line);padding:24px;min-width:0}.panel h2{font-size:15px;letter-spacing:.7px;margin:0 0 18px}.upload{min-height:330px;border:1px dashed #48634b;background:#0a1110;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;position:relative;overflow:hidden;cursor:pointer}.upload.drag{border-color:var(--green);background:#102014}.upload img{max-width:100%;max-height:360px;object-fit:contain;display:block}.upload-placeholder{max-width:260px}.upload-icon{font-size:42px;color:var(--green);margin-bottom:12px}.upload-placeholder strong{display:block;font:700 11px Orbitron;letter-spacing:1px;margin-bottom:8px}.upload-placeholder span{color:var(--muted);font-size:15px}.upload input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.field-label{display:block;font:600 9px Orbitron;letter-spacing:1.2px;color:#a9b9ae;margin:22px 0 10px}.styles{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.style{background:#0b1114;border:1px solid #2c3c31;color:#d4e0d5;padding:12px;text-align:left;cursor:pointer;font:600 10px Orbitron;letter-spacing:.3px}.style small{display:block;font:500 14px Rajdhani;color:#8fa095;margin-top:5px;letter-spacing:0}.style.active{border-color:var(--green);background:#152318;box-shadow:inset 0 0 0 1px #9bff4520}.btn{display:inline-flex;justify-content:center;align-items:center;gap:9px;padding:15px 18px;border:1px solid transparent;cursor:pointer;font:700 10px Orbitron;letter-spacing:.6px;transition:.2s}.primary{background:var(--green);color:#09100a;width:100%;margin-top:22px}.primary:hover{background:#c6ff91}.primary:disabled{opacity:.45;cursor:not-allowed}.secondary{background:#0a1011;border-color:#405344;color:#edf7ee}.secondary:hover{border-color:var(--green);color:var(--green)}.result{min-height:330px;border:1px solid #26372d;background:radial-gradient(ellipse,#14281a,#090d12 70%);display:grid;place-items:center;overflow:hidden;padding:14px}.result img{display:block;max-width:100%;max-height:390px;object-fit:contain}.empty{text-align:center;padding:20px;color:#77877c}.empty .symbol{font-size:50px;color:#476449}.empty strong{display:block;font:600 10px Orbitron;letter-spacing:1px;margin:12px 0}.empty p{font-size:15px;margin:0}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.status{min-height:26px;margin:14px 0 0;font-size:15px;color:#b7c8bb}.status.error{color:#ff9b9b}.status.success{color:var(--green)}.spinner{width:15px;height:15px;border:2px solid #183018;border-top-color:#081008;border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.fineprint{font-size:14px;color:#78877d;line-height:1.5;margin-top:18px}.privacy{margin-top:22px;border-top:1px solid #26372d;padding-top:18px;color:#85958a;font-size:14px;line-height:1.5}.privacy b{color:#c5d6c8}.bottom{margin-top:35px;text-align:center;font:600 9px Orbitron;letter-spacing:1.5px;color:#617368}.bottom a{color:var(--green)}@media(max-width:760px){header{padding:0 5%;height:68px}.brand{font-size:12px}main{padding:42px 16px 60px}.layout{grid-template-columns:1fr}.panel{padding:17px}.upload,.result{min-height:270px}h1{letter-spacing:-1px}.lead{font-size:18px}.styles{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body><div class="scan"></div>
+<header><a class="brand" href="index.html">☣ ZOMBIE<span><b>CASH</b></span></a><a class="back" href="index.html">← BACK TO BASE</a></header>
+<main>
+  <div class="eyebrow">ZOMBIE LAB // AI IMAGE EXPERIMENT</div>
+  <h1>YOUR FACE.<br><span>THE UNDEAD.</span></h1>
+  <p class="lead">Upload a selfie. Let the outbreak rewrite your look. Download your zombie portrait and share your new undead identity with the world.</p>
+  <div class="layout">
+    <section class="panel">
+      <h2>01 / CHOOSE YOUR HUMAN FORM</h2>
+      <label class="upload" id="dropZone" for="photoInput">
+        <div class="upload-placeholder" id="uploadPlaceholder"><div class="upload-icon">＋</div><strong>DROP YOUR PHOTO HERE</strong><span>or click to browse<br>JPG, PNG or WebP · max 5 MB</span></div>
+        <img id="sourcePreview" alt="Your uploaded photo preview" hidden>
+        <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp">
+      </label>
+      <span class="field-label">SELECT YOUR MUTATION</span>
+      <div class="styles">
+        <button class="style active" data-style="classic" type="button">☣ CLASSIC UNDEAD<small>Green skin · glowing eyes</small></button>
+        <button class="style" data-style="toxic" type="button">☢ TOXIC MUTANT<small>Neon cracks · bio-glow</small></button>
+        <button class="style" data-style="cyber" type="button">⌘ CYBER ZOMBIE<small>Tech · neon circuitry</small></button>
+        <button class="style" data-style="legend" type="button">♛ ZOMBCASH LEGEND<small>Apocalypse hero look</small></button>
+      </div>
+      <button id="createBtn" class="btn primary" type="button" disabled>☣ CREATE MY ZOMBIE</button>
+      <p id="status" class="status" role="status" aria-live="polite">Choose a photo to begin the transformation.</p>
+      <div class="privacy"><b>YOUR PHOTO, YOUR CALL.</b><br>We process the image for this request and do not intentionally save it to ZombieCash storage. The AI provider receives the photo to create the edit. Avoid uploading sensitive or private images.</div>
+    </section>
+    <section class="panel">
+      <h2>02 / YOUR NEW UNDEAD IDENTITY</h2>
+      <div class="result" id="resultBox"><div class="empty"><div class="symbol">☠</div><strong>AWAITING TRANSFORMATION</strong><p>Your creation will appear here.</p></div></div>
+      <div class="actions">
+        <button id="downloadBtn" class="btn secondary" type="button" disabled>↓ DOWNLOAD IMAGE</button>
+        <button id="shareBtn" class="btn secondary" type="button" disabled>↗ SHARE IMAGE</button>
+      </div>
+      <button id="shareXBtn" class="btn secondary" type="button" style="width:100%;margin-top:9px" disabled>𝕏 SHARE YOUR OUTBREAK</button>
+      <p class="fineprint">Sharing options depend on your browser. Download is available once your image is ready. X sharing opens a post draft; attach the downloaded image yourself.</p>
+    </section>
+  </div>
+  <div class="bottom">MARKET DIED. ZOMBIECASH DIDN'T. · <a href="https://t.me/ZOMBCASH" target="_blank" rel="noopener">JOIN THE OUTBREAK</a></div>
+</main>
+<script>
+(() => {
+  const API = 'https://zombcash-bot.fadehost.app';
+  const input = document.getElementById('photoInput');
+  const zone = document.getElementById('dropZone');
+  const preview = document.getElementById('sourcePreview');
+  const placeholder = document.getElementById('uploadPlaceholder');
+  const createBtn = document.getElementById('createBtn');
+  const status = document.getElementById('status');
+  const resultBox = document.getElementById('resultBox');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const shareBtn = document.getElementById('shareBtn');
+  const shareXBtn = document.getElementById('shareXBtn');
+  let selectedFile = null, generatedDataUrl = null, style = 'classic';
+
+  function setStatus(message, kind='') { status.textContent = message; status.className = 'status' + (kind ? ' ' + kind : ''); }
+  function clearResult() {
+    generatedDataUrl = null;
+    resultBox.innerHTML = '<div class="empty"><div class="symbol">☠</div><strong>AWAITING TRANSFORMATION</strong><p>Your creation will appear here.</p></div>';
+    downloadBtn.disabled = shareBtn.disabled = shareXBtn.disabled = true;
+  }
+  function acceptFile(file) {
+    if (!file) return;
+    if (!['image/jpeg','image/png','image/webp'].includes(file.type)) { setStatus('Please choose a JPG, PNG or WebP image.', 'error'); return; }
+    if (file.size > 5 * 1024 * 1024) { setStatus('That file is over 5 MB. Choose a smaller image.', 'error'); return; }
+    selectedFile = file;
+    const url = URL.createObjectURL(file);
+    preview.src = url; preview.hidden = false; placeholder.hidden = true;
+    createBtn.disabled = false; clearResult();
+    setStatus('Photo loaded. Choose your mutation and start the transformation.');
+  }
+  input.addEventListener('change', () => acceptFile(input.files && input.files[0]));
+  ['dragenter','dragover'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.add('drag'); }));
+  ['dragleave','drop'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.remove('drag'); }));
+  zone.addEventListener('drop', e => acceptFile(e.dataTransfer && e.dataTransfer.files[0]));
+  document.querySelectorAll('.style').forEach(btn => btn.addEventListener('click', () => {
+    document.querySelectorAll('.style').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active'); style = btn.dataset.style;
+  }));
+  createBtn.addEventListener('click', async () => {
+    if (!selectedFile || createBtn.disabled) return;
+    const body = new FormData(); body.append('image', selectedFile, selectedFile.name); body.append('style', style);
+    createBtn.disabled = true; createBtn.innerHTML = '<span class="spinner"></span> MUTATING YOUR DNA…';
+    clearResult(); setStatus('Sending your photo for AI transformation. This may take up to a minute.');
+    try {
+      const response = await fetch(API + '/api/zombie-maker', {method:'POST', body, cache:'no-store'});
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || 'The image service is temporarily unavailable.');
+      if (!data.image || !data.image.startsWith('data:image/')) throw new Error('The service returned an invalid image.');
+      generatedDataUrl = data.image;
+      const img = document.createElement('img'); img.alt = 'Your AI-generated ZombieCash zombie portrait'; img.src = generatedDataUrl;
+      resultBox.replaceChildren(img);
+      downloadBtn.disabled = shareBtn.disabled = shareXBtn.disabled = false;
+      setStatus('Transformation complete. Your undead legend is ready!', 'success');
+    } catch (err) {
+      setStatus(err.message || 'Something went wrong. Please try again later.', 'error');
+    } finally {
+      createBtn.disabled = !selectedFile; createBtn.textContent = '☣ CREATE MY ZOMBIE';
+    }
+  });
+  downloadBtn.addEventListener('click', () => {
+    if (!generatedDataUrl) return;
+    const a = document.createElement('a'); a.href = generatedDataUrl; a.download = 'zombcash-zombie.jpg';
+    document.body.appendChild(a); a.click(); a.remove();
+  });
+  shareBtn.addEventListener('click', async () => {
+    if (!generatedDataUrl) return;
+    try {
+      const blob = await (await fetch(generatedDataUrl)).blob();
+      const file = new File([blob], 'zombcash-zombie.jpg', {type:'image/jpeg'});
+      if (navigator.canShare && navigator.canShare({files:[file]}) && navigator.share) {
+        await navigator.share({title:'My ZombieCash transformation', text:'I joined the undead. Create your own ZombieCash zombie!', files:[file]});
+      } else {
+        downloadBtn.click();
+        setStatus('Image downloaded. Attach it in your social app to share it.', 'success');
+      }
+    } catch (e) { if (e.name !== 'AbortError') setStatus('Use Download Image, then attach the image to your social post.', 'error'); }
+  });
+  shareXBtn.addEventListener('click', () => {
+    const text = encodeURIComponent('My human days are over. I have joined the undead. ☣🧟\nMake your own ZombieCash zombie:');
+    const url = encodeURIComponent('https://zombcash.github.io/zombie-maker.html');
+    window.open('https://twitter.com/intent/tweet?text=' + text + '&url=' + url, '_blank', 'noopener,noreferrer');
+    setStatus('X post draft opened. Download your portrait and attach it to the post.', 'success');
+  });
+})();
+</script>
+</body>
+</html>
