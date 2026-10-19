@@ -48,16 +48,16 @@
       <div class="result" id="resultBox"><div class="empty"><div class="symbol">☠</div><strong>AWAITING TRANSFORMATION</strong><p>Your creation will appear here.</p></div></div>
       <div class="actions">
         <button id="downloadBtn" class="btn secondary" type="button" disabled>↓ DOWNLOAD IMAGE</button>
-        <button id="shareBtn" class="btn secondary" type="button" disabled>↗ SHARE IMAGE</button>
+        <button id="shareBtn" class="btn secondary" type="button" disabled>↗ SEND PHOTO TO ZOMBIECASH GROUP</button>
       </div>
       <button id="shareXBtn" class="btn secondary" type="button" style="width:100%;margin-top:9px" disabled>𝕏 SHARE YOUR OUTBREAK</button>
       <div class="caption-editor">
         <label class="field-label" for="captionInput">03 / MESSAGE TO GO WITH YOUR PHOTO</label>
         <textarea id="captionInput" maxlength="500" rows="3" placeholder="Add a message for your friends…">I have joined the undead. ☣🧟 Who's next?</textarea>
         <div class="caption-tools"><span id="captionCount">37 / 500</span><button id="captionAiBtn" class="btn secondary" type="button">✦ LET ZOMBIECASH AI WRITE IT</button></div>
-        <p class="fineprint">Edit the message yourself or ask ZombieCash AI for a fun caption. The caption is included when you share through a compatible app; downloads remain image-only.</p>
+        <p class="fineprint">Edit the message yourself or ask ZombieCash AI for a fun caption. Use the group-send button to post the photo and caption to our Telegram community. Downloads remain image-only.</p>
       </div>
-      <p class="fineprint">X opens a post draft with your caption. Download the portrait and attach it to the post yourself.</p>
+      <p class="fineprint">Group sharing sends the generated photo and your caption to the ZombieCash Telegram group. X opens a separate post draft; attach the downloaded image there yourself.</p>
     </section>
   </div>
   <div class="bottom">MARKET DIED. ZOMBIECASH DIDN'T. · <a href="https://t.me/ZOMBCASH" target="_blank" rel="noopener">JOIN THE OUTBREAK</a></div>
@@ -132,20 +132,29 @@
     if (!generatedDataUrl) return;
     const a = document.createElement('a'); a.href = generatedDataUrl; a.download = 'zombcash-zombie.jpg';
     document.body.appendChild(a); a.click(); a.remove();
+    setStatus('PHOTO DOWNLOADED ✓ Your portrait is saved to your device. Caption: ' + (captionInput.value.trim() || '(no caption)'), 'success');
   });
   shareBtn.addEventListener('click', async () => {
     if (!generatedDataUrl) return;
+    shareBtn.disabled = true;
+    const original = shareBtn.textContent;
+    shareBtn.textContent = 'SENDING TO TELEGRAM…';
     try {
-      const blob = await (await fetch(generatedDataUrl)).blob();
-      const file = new File([blob], 'zombcash-zombie.jpg', {type:'image/jpeg'});
-      if (navigator.canShare && navigator.canShare({files:[file]}) && navigator.share) {
-        await navigator.share({title:'My ZombieCash transformation', text:captionInput.value.trim(), files:[file]});
-      } else {
-        downloadBtn.click();
-        setStatus('Image downloaded. Attach it in your social app to share it.', 'success');
-      }
-    } catch (e) { if (e.name !== 'AbortError') setStatus('Use Download Image, then attach the image to your social post.', 'error'); }
+      const response = await fetch(API + '/api/zombie-share', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({image: generatedDataUrl, caption: captionInput.value.trim()})
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || 'Could not send the photo to Telegram.');
+      setStatus('PHOTO SENT TO ZOMBIECASH GROUP ✓ Caption: ' + (captionInput.value.trim() || '(no caption)'), 'success');
+    } catch (err) {
+      setStatus(err.message || 'Photo could not be sent. You can still download it.', 'error');
+    } finally {
+      shareBtn.disabled = false;
+      shareBtn.textContent = original;
+    }
   });
+
   captionAiBtn.addEventListener('click', async () => {
     captionAiBtn.disabled = true;
     const original = captionAiBtn.textContent;
