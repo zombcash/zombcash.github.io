@@ -15,6 +15,7 @@
 <style>
 :root{--bg:#080b11;--panel:#10171b;--line:#2b4032;--green:#9bff45;--muted:#9aa9a0;--white:#eff8ef;--purple:#a855f7}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 75% 10%,#18362265,transparent 35%),var(--bg);color:var(--white);font:18px 'Rajdhani',sans-serif;min-height:100vh}a{color:inherit;text-decoration:none}.scan{position:fixed;inset:0;pointer-events:none;z-index:9;opacity:.045;background:repeating-linear-gradient(transparent 0 3px,#b4ffcb 4px,transparent 5px)}header{height:76px;padding:0 6%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #26372d;background:#080b11e8;position:sticky;top:0;z-index:8;backdrop-filter:blur(12px)}.brand{font:800 15px Orbitron;letter-spacing:1px}.brand b{color:var(--green)}.back{font:600 10px Orbitron;letter-spacing:1px;color:#b5c5b8;border:1px solid #344c3b;padding:12px 14px}.back:hover{color:var(--green);border-color:var(--green)}main{max-width:1120px;margin:auto;padding:60px 24px 80px}.eyebrow{font:600 10px Orbitron;letter-spacing:2px;color:var(--green)}h1,h2{font-family:Orbitron,sans-serif}h1{font-size:clamp(38px,6vw,68px);line-height:1.02;letter-spacing:-2px;margin:18px 0}h1 span{color:var(--green)}.lead{color:#a7b7ad;font-size:21px;max-width:650px;line-height:1.45}.layout{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:38px}.panel{background:linear-gradient(145deg,#111a1b,#0b1016);border:1px solid var(--line);padding:24px;min-width:0}.panel h2{font-size:15px;letter-spacing:.7px;margin:0 0 18px}.upload{min-height:330px;border:1px dashed #48634b;background:#0a1110;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;position:relative;overflow:hidden;cursor:pointer}.upload.drag{border-color:var(--green);background:#102014}.upload img{max-width:100%;max-height:360px;object-fit:contain;display:block}.upload-placeholder{max-width:260px}.upload-icon{font-size:42px;color:var(--green);margin-bottom:12px}.upload-placeholder strong{display:block;font:700 11px Orbitron;letter-spacing:1px;margin-bottom:8px}.upload-placeholder span{color:var(--muted);font-size:15px}.upload input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.field-label{display:block;font:600 9px Orbitron;letter-spacing:1.2px;color:#a9b9ae;margin:22px 0 10px}.styles{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.style{background:#0b1114;border:1px solid #2c3c31;color:#d4e0d5;padding:12px;text-align:left;cursor:pointer;font:600 10px Orbitron;letter-spacing:.3px}.style small{display:block;font:500 14px Rajdhani;color:#8fa095;margin-top:5px;letter-spacing:0}.style.active{border-color:var(--green);background:#152318;box-shadow:inset 0 0 0 1px #9bff4520}.btn{display:inline-flex;justify-content:center;align-items:center;gap:9px;padding:15px 18px;border:1px solid transparent;cursor:pointer;font:700 10px Orbitron;letter-spacing:.6px;transition:.2s}.primary{background:var(--green);color:#09100a;width:100%;margin-top:22px}.primary:hover{background:#c6ff91}.primary:disabled{opacity:.45;cursor:not-allowed}.secondary{background:#0a1011;border-color:#405344;color:#edf7ee}.secondary:hover{border-color:var(--green);color:var(--green)}.result{min-height:330px;border:1px solid #26372d;background:radial-gradient(ellipse,#14281a,#090d12 70%);display:grid;place-items:center;overflow:hidden;padding:14px}.result img{display:block;max-width:100%;max-height:390px;object-fit:contain}.empty{text-align:center;padding:20px;color:#77877c}.empty .symbol{font-size:50px;color:#476449}.empty strong{display:block;font:600 10px Orbitron;letter-spacing:1px;margin:12px 0}.empty p{font-size:15px;margin:0}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.status{min-height:26px;margin:14px 0 0;font-size:15px;color:#b7c8bb}.status.error{color:#ff9b9b}.status.success{color:var(--green)}.spinner{width:15px;height:15px;border:2px solid #183018;border-top-color:#081008;border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.fineprint{font-size:14px;color:#78877d;line-height:1.5;margin-top:18px}.privacy{margin-top:22px;border-top:1px solid #26372d;padding-top:18px;color:#85958a;font-size:14px;line-height:1.5}.privacy b{color:#c5d6c8}.bottom{margin-top:35px;text-align:center;font:600 9px Orbitron;letter-spacing:1.5px;color:#617368}.bottom a{color:var(--green)}@media(max-width:760px){header{padding:0 5%;height:68px}.brand{font-size:12px}main{padding:42px 16px 60px}.layout{grid-template-columns:1fr}.panel{padding:17px}.upload,.result{min-height:270px}h1{letter-spacing:-1px}.lead{font-size:18px}.styles{grid-template-columns:1fr 1fr}}
+.caption-editor{margin-top:24px;padding-top:18px;border-top:1px solid #26372d}.caption-editor textarea{display:block;width:100%;resize:vertical;min-height:88px;padding:13px;background:#080e0d;border:1px solid #354b38;color:#eaf5e8;font:500 17px/1.4 Rajdhani,sans-serif;outline:none}.caption-editor textarea:focus{border-color:var(--green);box-shadow:0 0 0 2px #9bff4512}.caption-tools{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}.caption-tools span{font-size:12px;color:#829485}.caption-tools button{font-size:9px;padding:11px 12px}.caption-tools button:disabled{opacity:.5;cursor:wait}.caption-editor .fineprint{margin-bottom:0}
 </style>
 </head>
 <body><div class="scan"></div>
@@ -50,7 +51,13 @@
         <button id="shareBtn" class="btn secondary" type="button" disabled>↗ SHARE IMAGE</button>
       </div>
       <button id="shareXBtn" class="btn secondary" type="button" style="width:100%;margin-top:9px" disabled>𝕏 SHARE YOUR OUTBREAK</button>
-      <p class="fineprint">Sharing options depend on your browser. Download is available once your image is ready. X sharing opens a post draft; attach the downloaded image yourself.</p>
+      <div class="caption-editor">
+        <label class="field-label" for="captionInput">03 / MESSAGE TO GO WITH YOUR PHOTO</label>
+        <textarea id="captionInput" maxlength="500" rows="3" placeholder="Add a message for your friends…">I have joined the undead. ☣🧟 Who's next?</textarea>
+        <div class="caption-tools"><span id="captionCount">37 / 500</span><button id="captionAiBtn" class="btn secondary" type="button">✦ LET ZOMBIECASH AI WRITE IT</button></div>
+        <p class="fineprint">Edit the message yourself or ask ZombieCash AI for a fun caption. The caption is included when you share through a compatible app; downloads remain image-only.</p>
+      </div>
+      <p class="fineprint">X opens a post draft with your caption. Download the portrait and attach it to the post yourself.</p>
     </section>
   </div>
   <div class="bottom">MARKET DIED. ZOMBIECASH DIDN'T. · <a href="https://t.me/ZOMBCASH" target="_blank" rel="noopener">JOIN THE OUTBREAK</a></div>
@@ -68,7 +75,13 @@
   const downloadBtn = document.getElementById('downloadBtn');
   const shareBtn = document.getElementById('shareBtn');
   const shareXBtn = document.getElementById('shareXBtn');
+  const captionInput = document.getElementById('captionInput');
+  const captionAiBtn = document.getElementById('captionAiBtn');
+  const captionCount = document.getElementById('captionCount');
   let selectedFile = null, generatedDataUrl = null, style = 'classic';
+  function updateCaptionCount() { captionCount.textContent = captionInput.value.length + ' / 500'; }
+  captionInput.addEventListener('input', updateCaptionCount);
+  updateCaptionCount();
 
   function setStatus(message, kind='') { status.textContent = message; status.className = 'status' + (kind ? ' ' + kind : ''); }
   function clearResult() {
@@ -126,15 +139,31 @@
       const blob = await (await fetch(generatedDataUrl)).blob();
       const file = new File([blob], 'zombcash-zombie.jpg', {type:'image/jpeg'});
       if (navigator.canShare && navigator.canShare({files:[file]}) && navigator.share) {
-        await navigator.share({title:'My ZombieCash transformation', text:'I joined the undead. Create your own ZombieCash zombie!', files:[file]});
+        await navigator.share({title:'My ZombieCash transformation', text:captionInput.value.trim(), files:[file]});
       } else {
         downloadBtn.click();
         setStatus('Image downloaded. Attach it in your social app to share it.', 'success');
       }
     } catch (e) { if (e.name !== 'AbortError') setStatus('Use Download Image, then attach the image to your social post.', 'error'); }
   });
+  captionAiBtn.addEventListener('click', async () => {
+    captionAiBtn.disabled = true;
+    const original = captionAiBtn.textContent;
+    captionAiBtn.textContent = '✦ WRITING YOUR CAPTION…';
+    setStatus('ZombieCash AI is writing a short caption. One moment…');
+    try {
+      const response = await fetch(API + '/api/zombie-caption', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({style, caption:captionInput.value.trim()})});
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || 'AI captions are temporarily unavailable.');
+      if (typeof data.caption !== 'string' || !data.caption.trim()) throw new Error('AI returned an empty caption. Please try again.');
+      captionInput.value = data.caption.trim().slice(0,500); updateCaptionCount();
+      setStatus('Caption ready. You can edit it before sharing.', 'success');
+    } catch(err) { setStatus(err.message || 'Could not create a caption. Please try again.', 'error'); }
+    finally { captionAiBtn.disabled = false; captionAiBtn.textContent = original; }
+  });
   shareXBtn.addEventListener('click', () => {
-    const text = encodeURIComponent('My human days are over. I have joined the undead. ☣🧟\nMake your own ZombieCash zombie:');
+    const caption = captionInput.value.trim() || 'I have joined the undead. ☣🧟';
+    const text = encodeURIComponent(caption + '\\nMake your own ZombieCash zombie:');
     const url = encodeURIComponent('https://zombcash.github.io/zombie-maker.html');
     window.open('https://twitter.com/intent/tweet?text=' + text + '&url=' + url, '_blank', 'noopener,noreferrer');
     setStatus('X post draft opened. Download your portrait and attach it to the post.', 'success');
