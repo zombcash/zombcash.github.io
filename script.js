@@ -967,3 +967,23 @@ if (zomMarket) {
   }, 60000);
 })();
 
+
+
+// Dedicated swap help dialog: keep instructions out of the main layout until requested.
+(() => {
+  const dialog = document.getElementById('swap-help-dialog');
+  const openButton = document.getElementById('swap-help-open');
+  const closeButton = document.getElementById('swap-help-close');
+  if (!dialog || !openButton) return;
+  openButton.addEventListener('click', () => {
+    if (typeof dialog.showModal === 'function') dialog.showModal();
+    else dialog.setAttribute('open', '');
+  });
+  closeButton?.addEventListener('click', () => {
+    if (typeof dialog.close === 'function') dialog.close();
+    else dialog.removeAttribute('open');
+  });
+  dialog.addEventListener('click', event => {
+    if (event.target === dialog && typeof dialog.close === 'function') dialog.close();
+  });
+})();
