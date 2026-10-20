@@ -1215,7 +1215,10 @@ if (zomMarket) {
     const n = Number(value);
     if (!Number.isFinite(n)) return '—';
     if (n === 0) return '$0';
-    if (Math.abs(n) >= 1) return '
+    if (Math.abs(n) >= 1) return '$' + n.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    const digits = Math.min(12, Math.max(6, Math.ceil(-Math.log10(Math.abs(n))) + 3));
+    return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: digits });
+  };
   const item = (icon, title, message, stamp) => {
     const row = node('div', 'ops-transmission');
     row.append(node('span','ops-transmission-icon',icon));
