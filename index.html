@@ -795,187 +795,176 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 
 
 <style id="zombcash-layout-width-fix">
-/* One consistent content grid and vertical rhythm across every main section. */
-section.section:not(.mini-game#snake-game) {
-  width:100%!important;
-  max-width:none!important;
-  margin:0 auto!important;
-  padding:72px max(22px,calc((100vw - 1276px)/2))!important;
-  box-sizing:border-box!important;
+/* Global layout system: full-bleed backgrounds, one centered 1276px content grid. */
+:root { --zc-content-width: 1276px; --zc-section-gap: 72px; }
+.hero {
+  padding-left: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
+  padding-right: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
 }
-section.section:not(.mini-game#snake-game) .section-heading {
-  margin:20px 0 28px!important;
+.hero-layout {
+  width: 100% !important;
+  max-width: var(--zc-content-width) !important;
+  margin-inline: auto !important;
 }
-section.section.living-world,
-section.section.community-console {
-  padding-top:72px!important;
-  padding-bottom:72px!important;
+.hero-bottom {
+  left: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
+  right: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
 }
-.site-visits-inner,
-.campaign-dashboard-inner,
-.campaign-dashboard .dashboard-inner {
-  width:100%;
-  max-width:1276px;
-  margin-inline:auto;
-  box-sizing:border-box;
+section.section {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: var(--zc-section-gap) max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
+  box-sizing: border-box !important;
 }
-section.section.mini-game#snake-game,
-section.section.community-console,
-section.section.living-world {
-  width:100%!important;
-  max-width:1500px!important;
-  margin-inline:auto!important;
-  box-sizing:border-box!important;
+section.section > .section-heading,
+section.section > .intro-row {
+  width: 100% !important;
+  max-width: var(--zc-content-width) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
-section.section.community-console>.crew-grid,
-section.section.living-world>.world-grid,
-section.section.mini-game#snake-game>.arcade-feature,
-section.section.mini-game#snake-game>.leaderboard-card {
-  width:100%!important;
-  max-width:100%!important;
-  min-width:0!important;
-  box-sizing:border-box!important;
+section.section > :not(.section-heading):not(.intro-row) {
+  min-width: 0;
+}
+section.section .world-grid,
+section.section .daily-mission-inner,
+section.section .outbreak-panel,
+section.section .tool-grid,
+section.section .crew-grid,
+section.section .transmission-box,
+section.section .arcade-feature,
+section.section .leaderboard-card {
+  width: 100% !important;
+  max-width: var(--zc-content-width) !important;
+  min-width: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+section.section .section-heading {
+  margin-top: 0 !important;
+  margin-bottom: 28px !important;
+}
+section.section .intro-row {
+  margin-top: 0 !important;
+  margin-bottom: 28px !important;
+}
+section.section .world-grid,
+section.section .tool-grid,
+section.section .crew-grid {
+  gap: 18px !important;
 }
 section.section.community-console .crew-grid {
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:clamp(14px,1.5vw,22px)!important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
 }
 section.section.community-console .crew-card,
 section.section.community-console .zombcash-market,
 section.section.community-console .merged-market,
 section.section.community-console .jupiter-terminal-shell,
 section.section.community-console #jupiter-zombcash-terminal {
-  width:100%!important;
-  max-width:100%!important;
-  min-width:0!important;
-  box-sizing:border-box!important;
-}
-section.section.community-console .crew-card,
-section.section.community-console .zombcash-market {
-  padding:clamp(16px,1.7vw,23px)!important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
 }
 section.section.community-console .zombcash-market-grid {
-  grid-template-columns:repeat(5,minmax(0,1fr))!important;
-  gap:clamp(7px,.9vw,12px)!important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
 }
-section.section.community-console,
-section.section.living-world {
-  padding-top:72px!important;
-  padding-bottom:72px!important;
-}
-section.section.community-console .section-heading,
-section.section.living-world .section-heading {
-  margin:20px 0 28px!important;
-}
-section.section.living-world .world-grid {
-  gap:clamp(14px,1.5vw,22px)!important;
-}
-section.section.living-world .world-panel-head {gap:12px}
-section.section.living-world .world-news-list,
-section.section.living-world .world-alert-list,
-section.section.living-world .world-missions {min-width:0}
-
-/* Arcade: the section background can bleed across the screen, while both content cards
-   share the same centered grid as the rest of the page. */
 section.section.mini-game#snake-game {
-  max-width:none!important;
-  padding:clamp(48px,4.5vw,68px) max(24px,calc((100vw - 1276px)/2))!important;
-  grid-template-columns:minmax(0,1.22fr) minmax(0,.88fr)!important;
-  grid-template-areas:"feature records"!important;
-  align-items:stretch!important;
-  gap:clamp(18px,2vw,30px)!important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.22fr) minmax(0, .88fr) !important;
+  grid-template-areas: "feature records" !important;
+  align-items: stretch !important;
+  gap: 18px !important;
+  background: radial-gradient(ellipse at 75% 46%, #15281b 0%, #0a100c 42%, #070b0a 76%) !important;
 }
-section.section.mini-game#snake-game>.arcade-feature {
-  grid-area:feature!important;
-  display:grid!important;
-  grid-template-columns:minmax(130px,.55fr) minmax(0,1.45fr)!important;
-  align-items:center!important;
-  gap:clamp(14px,1.6vw,24px)!important;
-  padding:clamp(18px,2vw,30px)!important;
-  border:1px solid #263d2d!important;
-  background:linear-gradient(135deg,#0d1711e8,#0a0e13f2)!important;
-  min-width:0!important;
+section.section.mini-game#snake-game > .arcade-feature {
+  grid-area: feature !important;
+  display: grid !important;
+  grid-template-columns: minmax(110px, .55fr) minmax(0, 1.45fr) !important;
+  align-items: center !important;
+  gap: 18px !important;
+  padding: 24px !important;
+  border: 1px solid #263d2d !important;
+  background: linear-gradient(135deg, #0d1711e8, #0a0e13f2) !important;
 }
-section.section.mini-game#snake-game>.arcade-feature>.snake-promo-art {
-  width:100%!important;
-  max-width:250px!important;
-  min-width:0!important;
-  margin-inline:auto!important;
+section.section.mini-game#snake-game > .arcade-feature > .snake-promo-art {
+  width: 100% !important;
+  max-width: 230px !important;
+  min-width: 0 !important;
+  margin-inline: auto !important;
 }
-section.section.mini-game#snake-game>.arcade-feature>.game-copy {min-width:0!important}
+section.section.mini-game#snake-game > .arcade-feature > .game-copy { min-width: 0 !important; }
 section.section.mini-game#snake-game .game-copy h2 {
-  font-size:clamp(30px,2.8vw,43px)!important;
-  line-height:1.08!important;
-  letter-spacing:-.035em!important;
-  overflow-wrap:normal!important;
-  word-break:normal!important;
+  font-size: clamp(28px, 2.6vw, 42px) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -.035em !important;
+  overflow-wrap: anywhere !important;
 }
-section.section.mini-game#snake-game>.leaderboard-card {
-  grid-area:records!important;
-  grid-column:auto!important;
-  align-self:stretch!important;
-  margin:0!important;
-  padding:clamp(18px,2vw,28px)!important;
-  min-width:0!important;
+section.section.mini-game#snake-game > .leaderboard-card {
+  grid-area: records !important;
+  align-self: stretch !important;
+  margin: 0 !important;
+  padding: 24px !important;
+  min-width: 0 !important;
 }
-section.section.mini-game#snake-game .crew-card-head {gap:12px}
-section.section.mini-game#snake-game .leaderboard-head-actions {
-  display:flex;
-  flex-direction:column;
-  align-items:flex-end;
-  gap:10px;
-  min-width:0;
+.site-visits {
+  padding: 28px max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
+  box-sizing: border-box !important;
 }
-section.section.mini-game#snake-game .leaderboard-open {
-  max-width:100%;
-  white-space:normal;
+.site-visits-inner {
+  width: 100% !important;
+  max-width: var(--zc-content-width) !important;
+  padding: 0 !important;
+  margin-inline: auto !important;
+  box-sizing: border-box !important;
 }
-@media(max-width:1050px) {
+.campaign-dashboard {
+  width: 100% !important;
+  padding: var(--zc-section-gap) max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
+  box-sizing: border-box !important;
+}
+.campaign-dashboard-inner {
+  width: 100% !important;
+  max-width: var(--zc-content-width) !important;
+  margin-inline: auto !important;
+  box-sizing: border-box !important;
+}
+footer {
+  padding-left: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
+  padding-right: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
+}
+@media (max-width: 1050px) {
   section.section.mini-game#snake-game {
-    grid-template-columns:minmax(0,1fr)!important;
-    grid-template-areas:"feature" "records"!important;
-    padding:54px 5%!important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas: "feature" "records" !important;
   }
-  section.section.mini-game#snake-game>.arcade-feature {
-    grid-template-columns:minmax(150px,.55fr) minmax(0,1.45fr)!important;
-  }
-  section.section.mini-game#snake-game .game-copy h2 {
-    font-size:clamp(34px,4vw,46px)!important;
+  section.section.mini-game#snake-game > .arcade-feature {
+    grid-template-columns: minmax(130px, .55fr) minmax(0, 1.45fr) !important;
   }
 }
-@media(max-width:800px) {
-  section.section.community-console .crew-grid {grid-template-columns:minmax(0,1fr)!important}
-  section.section.community-console .zombcash-market-grid {grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  section.section.mini-game#snake-game .leaderboard-card {grid-column:auto!important}
+@media (max-width: 800px) {
+  section.section.community-console .crew-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  section.section.community-console .zombcash-market-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  section.section.living-world .world-grid { grid-template-columns: minmax(0, 1fr) !important; }
 }
-@media(max-width:560px) {
-  section.section.mini-game#snake-game {
-    padding:42px 5%!important;
-    gap:22px!important;
-  }
-  section.section.mini-game#snake-game>.arcade-feature {
-    grid-template-columns:minmax(0,1fr)!important;
-    gap:12px!important;
-    padding:18px!important;
+@media (max-width: 560px) {
+  :root { --zc-section-gap: 44px; }
+  section.section.mini-game#snake-game { gap: 18px !important; }
+  section.section.mini-game#snake-game > .arcade-feature {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px !important;
+    padding: 18px !important;
   }
   section.section.mini-game#snake-game .snake-promo-art {
-    width:min(66vw,220px)!important;
-    margin:0 auto!important;
-  }
-  section.section.mini-game#snake-game .game-copy h2 {
-    font-size:clamp(34px,9vw,46px)!important;
+    width: min(66vw, 220px) !important;
+    margin: 0 auto !important;
   }
   section.section.mini-game#snake-game .leaderboard-card .crew-card-head {
-    flex-direction:column;
-    align-items:stretch;
+    flex-direction: column;
+    align-items: stretch;
   }
-  section.section.mini-game#snake-game .leaderboard-head-actions {align-items:flex-start}
-  section.section.community-console,
-  section.section.living-world {
-    padding-top:46px!important;
-    padding-bottom:48px!important;
-  }
-  section.section.living-world .world-grid {grid-template-columns:minmax(0,1fr)!important}
 }
 </style>
 
