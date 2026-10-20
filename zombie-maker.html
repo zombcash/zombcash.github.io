@@ -34,7 +34,22 @@
 @media(max-width:760px){.compare-stage{gap:5px}.creator-row .btn{min-width:100%}}
 </style>
 <link rel="stylesheet" href="site-polish.css?v=20261020-audit1">
-<style id="zombcash-home-return-button">.home-return-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 13px;border:1px solid #42613a;background:#0b120c;color:#b8f992;font:700 9px Orbitron,sans-serif;letter-spacing:.8px;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}.home-return-button:hover{background:#9bff4515;border-color:#9bff45;color:#d4ffc0}.home-return-button .home-arrow{color:#9bff45;font-size:13px}@media(max-width:700px){.home-return-button{padding:9px 10px;font-size:8px;letter-spacing:.4px}}</style></head>
+<style id="zombcash-home-return-button">.home-return-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 13px;border:1px solid #42613a;background:#0b120c;color:#b8f992;font:700 9px Orbitron,sans-serif;letter-spacing:.8px;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}.home-return-button:hover{background:#9bff4515;border-color:#9bff45;color:#d4ffc0}.home-return-button .home-arrow{color:#9bff45;font-size:13px}@media(max-width:700px){.home-return-button{padding:9px 10px;font-size:8px;letter-spacing:.4px}}</style><style id="multilingual-layout-safety">
+/* Multilingual header safety: keep the language picker out of the crowded navigation row. */
+.topbar{position:sticky;isolation:isolate}
+.topbar>.language-switcher{flex:0 0 auto;position:relative;margin-left:0}
+.topbar>.language-switcher .language-trigger{min-width:58px;max-width:100%;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 10px;border:1px solid #426341;background:#0b120c;color:#b8f992;font:700 10px Orbitron,sans-serif;white-space:nowrap;cursor:pointer}
+.topbar>.language-switcher .language-menu{position:absolute;top:calc(100% + 8px);right:0;z-index:10050;width:190px;max-width:calc(100vw - 20px);max-height:min(70vh,430px);overflow:auto;padding:6px;border:1px solid #355136;background:#07100a;box-shadow:0 12px 32px #000b}
+.topbar>.language-switcher .language-option{display:flex;align-items:center;gap:10px;width:100%;min-height:38px;padding:9px 10px;white-space:normal;overflow-wrap:anywhere;text-align:left}
+.topbar nav{min-width:0;flex-wrap:wrap;row-gap:8px}
+.topbar nav a{white-space:normal;line-height:1.35}
+@media(max-width:1100px){.topbar{gap:12px}.topbar nav{gap:10px}.topbar nav a{font-size:9px;letter-spacing:.35px}.topbar>.language-switcher .language-trigger{padding:8px}}
+@media(max-width:760px){.topbar{gap:8px}.topbar nav{align-items:stretch;max-height:70vh;overflow-y:auto}.topbar nav a{padding:9px 4px;line-height:1.4}.topbar>.language-switcher{margin-left:auto}.topbar>.language-switcher .language-trigger{min-width:48px;padding:7px 8px;font-size:9px}.topbar>.language-switcher .language-menu{right:0;top:calc(100% + 7px);width:180px}}
+/* Prevent translated labels from forcing buttons outside their cards. */
+.btn,.top-cta,.home-return-button,.zrai-period,.zrai-toolbar button,.language-trigger{max-width:100%;overflow-wrap:anywhere}
+.hero-actions,.community-buttons,.zrai-toolbar{flex-wrap:wrap}
+.zrai-toolbar>*{min-width:0}
+</style></head>
 <body><div class="scan"></div>
 <header><a class="brand" href="index.html">☣ ZOMBIE<span><b>CASH</b></span></a><a class="back home-return-button" href="index.html" aria-label="Return to ZombieCash homepage"><span class="home-arrow">←</span> BACK TO HOME</a></header>
 <main>
