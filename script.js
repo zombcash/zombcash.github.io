@@ -569,7 +569,7 @@ if (zomMarket) {
     if (zomStatus) zomStatus.textContent = 'SCANNING TOKEN…';
     if (zomRefresh) zomRefresh.disabled = true;
     try {
-      const response = await fetch('https://zombcash-bot.fadehost.app/api/zombcash', {cache:'no-store', signal:AbortSignal.timeout(12000)});
+      const response = await fetch('https://zombcash-bot.fadehost.app/api/zombcash', {cache:'no-store'});
       if (!response.ok) throw new Error('HTTP ' + response.status);
       const data = await response.json();
       zomPrice.textContent = zomPriceText(data.priceUsd);
@@ -584,8 +584,8 @@ if (zomMarket) {
       if (zomUpdated) zomUpdated.textContent = (data.stale ? 'LAST SOURCE UPDATE ' : 'SOURCE UPDATED ') + (sourceTime ? new Date(sourceTime).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) : 'UNKNOWN');
     } catch (error) {
       console.warn('ZombieCash token market update failed:', error);
-      if (zomStatus) zomStatus.textContent = 'API ERROR';
-      if (zomUpdated) zomUpdated.textContent = String(error?.message || 'REQUEST FAILED').slice(0, 70);
+      if (zomStatus) zomStatus.textContent = 'SIGNAL UNAVAILABLE';
+      if (zomUpdated) zomUpdated.textContent = 'TRY REFRESHING SHORTLY';
     } finally {
       zomBusy = false;
       if (zomRefresh) zomRefresh.disabled = false;
@@ -628,7 +628,7 @@ if (zomMarket) {
   async function loadWorldNews() {
     if (newsStatus) newsStatus.textContent = 'SYNCING RSS';
     try {
-      const response = await fetch(apiBase + '/api/news', {cache:'no-store', signal:AbortSignal.timeout(10000)});
+      const response = await fetch(apiBase + '/api/news', {cache:'no-store'});
       if (!response.ok) throw new Error('HTTP ' + response.status);
       const data = await response.json();
       const articles = Array.isArray(data.articles) ? data.articles : [];
@@ -687,7 +687,7 @@ if (zomMarket) {
 
   async function loadMarketAlarms() {
     try {
-      const response = await fetch(apiBase + '/api/zombcash', {cache:'no-store', signal:AbortSignal.timeout(10000)});
+      const response = await fetch(apiBase + '/api/zombcash', {cache:'no-store'});
       if (!response.ok) throw new Error('HTTP ' + response.status);
       renderAlarms(await response.json(), false);
     } catch (error) {
@@ -790,414 +790,6 @@ if (zomMarket) {
   }
 
   const prettyCount = (n) => Number(n || 0).toLocaleString('en-US');
-  const chartEl = getEl('activity-price-chart');
-  const chartStatus = getEl('activity-chart-status');
-  const chartCurrent = getEl('activity-chart-current');
-  const chartStart = getEl('activity-chart-start');
-  const chartEnd = getEl('activity-chart-end');
-  const tradesEl = getEl('recent-trades-list');
-  let chartPeriod = '24h';
-  function money(value) {
-    const n = Number(value || 0);
-    if (!Number.isFinite(n) || n <= 0) return '—';
-    if (n < 0.000001) return '$' + n.toExponential(2);
-    if (n < 0.001) return '$' + n.toFixed(10);
-    if (n < 1) return '$' + n.toFixed(8);
-    if (n < 1000) return '$' + n.toFixed(6);
-    return '$' + n.toLocaleString('en-US', {maximumFractionDigits: 4});
-  }
-  function renderActivity() {
-    if (!activityData) return;
-    const buys = Number(activityData.buys?.[activityPeriod] || 0);
-    const sells = Number(activityData.sells?.[activityPeriod] || 0);
-    const total = buys + sells;
-    if (activityBuys) activityBuys.textContent = prettyCount(buys);
-    if (activitySells) activitySells.textContent = prettyCount(sells);
-    if (activityRatio) activityRatio.textContent = sells ? (buys / sells).toFixed(2) + '×' : (buys ? '∞' : '—');
-    if (activityBar) activityBar.style.width = (total ? Math.round(buys / total * 100) : 0) + '%';
-    if (activityNote) activityNote.textContent = total
-      ? 'DexScreener reports ' + prettyCount(total) + ' transactions in this period. Counts are transactions, not unique buyers or wallets.'
-      : 'No transactions reported for this period in the latest DexScreener snapshot.';
-  }
-  async function loadActivity() {
-    try {
-      const response = await fetch(apiBase + '/api/activity', {cache:'no-store', signal:AbortSignal.timeout(12000)});
-      if (!response.ok) throw new Error('HTTP ' + response.status);
-      activityData = await response.json();
-      renderActivity();
-      if (activityStatus) activityStatus.textContent = 'DEXSCREENER LIVE';
-    } catch (error) {
-      if (activityStatus) activityStatus.textContent = 'SIGNAL OFFLINE';
-      if (activityNote) activityNote.textContent = 'Live trade counts are temporarily unavailable. They will retry automatically.';
-    }
-  }
-  document.querySelectorAll('.activity-tab').forEach(button => button.addEventListener('click', () => {
-    activityPeriod = button.dataset.period || 'h1';
-    document.querySelectorAll('.activity-tab').forEach(tab => tab.classList.toggle('active', tab === button));
-    renderActivity();
-  }));
-
-  const pollLabels = {
-    meme: 'More ZombieCash memes',
-    raid: 'Community raid mission',
-    game: 'New survival game challenge'
-  };
-  function renderVote(data, alreadyVoted = false) {
-    voteData = data;
-    if (!voteOptionsEl || !data) return;
-    const total = Number(data.total || 0);
-    const previousVote = chosenVote || data.yourVote || null;
-    voteOptionsEl.replaceChildren();
-    Object.entries(pollLabels).forEach(([key, label]) => {
-      const count = Number(data.votes?.[key] || 0);
-      const percent = total ? Math.round(count / total * 100) : 0;
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'daily-vote-option' + (previousVote === key ? ' selected' : '');
-      button.disabled = alreadyVoted || voteBusy;
-      const bar = document.createElement('span');
-      bar.className = 'vote-result-bar';
-      bar.style.width = percent + '%';
-      const radio = document.createElement('span');
-      radio.className = 'vote-radio';
-      const title = document.createElement('span');
-      title.className = 'vote-option-label';
-      title.textContent = label;
-      const result = document.createElement('span');
-      result.className = 'vote-percent';
-      result.textContent = total ? percent + '% · ' + count : 'VOTE';
-      button.append(bar, radio, title, result);
-      button.addEventListener('click', () => castVote(key));
-      voteOptionsEl.append(button);
-    });
-    if (voteTotal) voteTotal.textContent = prettyCount(total) + (total === 1 ? ' VOTE' : ' VOTES');
-    if (voteDate) voteDate.textContent = 'UTC · ' + (data.date || new Date().toISOString().slice(0,10));
-    if (voteStatus) voteStatus.textContent = alreadyVoted ? 'VOTE RECORDED' : 'OPEN POLL';
-  }
-  async function loadVote() {
-    try {
-      const response = await fetch(apiBase + '/api/vote', {cache:'no-store'});
-      if (!response.ok) throw new Error('HTTP ' + response.status);
-      const data = await response.json();
-      let alreadyVoted = false;
-      try { alreadyVoted = localStorage.getItem('zombcash-voted-' + data.date) === 'yes'; } catch (_) {}
-      renderVote(data, alreadyVoted);
-    } catch (error) {
-      if (voteStatus) voteStatus.textContent = 'POLL OFFLINE';
-      if (voteOptionsEl) voteOptionsEl.innerHTML = '<p class="crew-note">The community poll is temporarily unavailable. Please try again shortly.</p>';
-    }
-  }
-  async function castVote(option) {
-    if (voteBusy) return;
-    voteBusy = true;
-    chosenVote = option;
-    if (voteStatus) voteStatus.textContent = 'SENDING VOTE…';
-    try {
-      const response = await fetch(apiBase + '/api/vote', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({option, voter:voterId})
-      });
-      const data = await response.json();
-      if (!response.ok && response.status !== 409) throw new Error(data.error || 'Vote failed');
-      if (data.date) {
-        try { localStorage.setItem('zombcash-voted-' + data.date, 'yes'); } catch (_) {}
-      }
-      renderVote(data, true);
-      if (voteStatus && response.status === 409) voteStatus.textContent = 'ALREADY VOTED';
-    } catch (error) {
-      if (voteStatus) voteStatus.textContent = 'VOTE FAILED';
-      if (voteOptionsEl) {
-        const notice = document.createElement('p');
-        notice.className = 'crew-note';
-        notice.textContent = 'Could not save your vote: ' + error.message;
-        voteOptionsEl.append(notice);
-      }
-    } finally { voteBusy = false; }
-  }
-
-  function renderLeaderboard(data) {
-    if (!leaderboardEl) return;
-    leaderboardEl.replaceChildren();
-    const scores=Array.isArray(data.scores)?data.scores:[];
-    if(!scores.length){const empty=document.createElement('p');empty.className='crew-note';empty.textContent='No records yet. Defend the base and claim the first spot.';leaderboardEl.append(empty);}
-    else scores.slice(0,10).forEach((item,index)=>{const row=document.createElement('div');row.className='survivor-row';const rank=document.createElement('span');rank.className='survivor-rank';rank.textContent='#'+(index+1);const name=document.createElement('span');name.className='survivor-name';name.textContent=item.name||'Survivor';const date=document.createElement('small');date.className='survivor-date';date.textContent=item.date?'RECORD · '+item.date:'COMMUNITY RECORD';name.append(date);const points=document.createElement('strong');points.className='survivor-time';points.textContent=Number(item.points||0).toLocaleString('en-US')+' PTS';row.append(rank,name,points);leaderboardEl.append(row);});
-    if(leaderboardStatus)leaderboardStatus.textContent='TOP 10';
-  }
-  async function loadLeaderboard(){try{const response=await fetch(apiBase+'/api/survival-scores',{cache:'no-store'});if(!response.ok)throw new Error('HTTP '+response.status);renderLeaderboard(await response.json());}catch(_){if(leaderboardStatus)leaderboardStatus.textContent='OFFLINE';if(leaderboardEl)leaderboardEl.innerHTML='<p class="crew-note">Leaderboard is temporarily unavailable.</p>';}}
-  submitScoreButton?.addEventListener('click',async()=>{const points=Number(window.lastSurvivalPoints);if(!Number.isFinite(points)||points<10||points>100000){if(submitScoreStatus)submitScoreStatus.textContent='Score at least 10 points before saving.';return;}submitScoreButton.disabled=true;if(submitScoreStatus)submitScoreStatus.textContent='Submitting your record…';try{const response=await fetch(apiBase+'/api/survival-scores',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:getEl('survivor-name')?.value||'Survivor',points,voter:voterId})});const data=await response.json();if(!response.ok)throw new Error(data.error||'Could not save record');if(submitScoreStatus)submitScoreStatus.textContent='Record saved! Survival leaderboard updated.';renderLeaderboard(data);}catch(error){if(submitScoreStatus)submitScoreStatus.textContent=error.message;submitScoreButton.disabled=false;}});
-
-
-  loadActivity();
-  loadPriceChart();
-  loadRecentTrades();
-  loadVote();
-  loadLeaderboard();
-  setInterval(loadActivity, 60000);
-  setInterval(loadPriceChart, 120000);
-  setInterval(loadRecentTrades, 60000);
-  setInterval(loadVote, 60000);
-  setInterval(loadLeaderboard, 60000);
-})();
-
-
-/* Four-game community leaderboard dialog */
-(() => {
- const api='https://zombcash-bot.fadehost.app';
- const dialog=document.getElementById('all-leaderboards-dialog');
- const open=document.getElementById('open-all-leaderboards');
- const close=document.getElementById('close-all-leaderboards');
- const list=document.getElementById('all-leaderboards-list');
- const caption=document.getElementById('all-leaderboards-caption');
- if(!dialog||!open||!close||!list)return;
- const labels={snake:'Zombie Snake',breaker:'Zombie Breaker',maze:'Zombie Maze',wall:'Undead Wall'};
- const esc=(value)=>String(value??'Survivor').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
- async function load(game){
-  document.querySelectorAll('[data-leaderboard-game]').forEach(b=>{const active=b.dataset.leaderboardGame===game;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active));});
-  caption.textContent=labels[game]+' · Top 10 records';list.textContent='Loading records…';
-  try{
-   const url=game==='snake'?api+'/api/survival-scores':api+'/api/arcade-scores?game='+encodeURIComponent(game);
-   const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw new Error('HTTP '+response.status);
-   const data=await response.json();const scores=Array.isArray(data.scores)?data.scores:[];list.replaceChildren();
-   if(!scores.length){list.textContent='No records yet. Play '+labels[game]+' and claim the first spot.';return;}
-   scores.slice(0,10).forEach((item,i)=>{const row=document.createElement('div');row.className='survivor-row';const rank=document.createElement('span');rank.className='survivor-rank';rank.textContent='#'+(i+1);const name=document.createElement('span');name.className='survivor-name';name.textContent=item.name||'Survivor';const date=document.createElement('small');date.className='survivor-date';date.textContent=item.date?'RECORD · '+item.date:'COMMUNITY RECORD';name.append(date);const points=document.createElement('strong');points.className='survivor-points';points.textContent=Number(item.points||0).toLocaleString('en-US')+' PTS';row.append(rank,name,points);list.append(row);});
-  }catch(e){list.textContent='Records are temporarily unavailable. Please try again shortly.';}
- }
- open.addEventListener('click',()=>{if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');load('snake');});
- close.addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});
- document.querySelectorAll('[data-leaderboard-game]').forEach(b=>b.addEventListener('click',()=>load(b.dataset.leaderboardGame)));
-})();
-
-/* Anonymous unique website visitor counter */
-(() => {
-  const apiBase = 'https://zombcash-bot.fadehost.app';
-  const totalEl = document.getElementById('visits-total');
-  const todayEl = document.getElementById('visits-today');
-  const updatedEl = document.getElementById('visits-updated');
-  if (!totalEl || !todayEl || !updatedEl) return;
-  const storageKey = 'zombcash_site_visitor_v1';
-  let visitorId = '';
-  try {
-    visitorId = localStorage.getItem(storageKey) || '';
-    if (!/^[a-f0-9-]{16,80}$/.test(visitorId)) {
-      visitorId = (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-        const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-      })).toLowerCase();
-      localStorage.setItem(storageKey, visitorId);
-    }
-  } catch (_) {
-    visitorId = 'session-' + Math.random().toString(16).slice(2) + '-' + Date.now().toString(16);
-  }
-  const render = data => {
-    if (Number.isFinite(Number(data.total))) totalEl.textContent = Number(data.total).toLocaleString();
-    if (Number.isFinite(Number(data.today))) todayEl.textContent = Number(data.today).toLocaleString();
-    updatedEl.textContent = 'UTC DAY · UPDATED ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-  };
-  const updateVisits = async () => {
-    try {
-      const response = await fetch(apiBase + '/api/visits', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({visitor:visitorId})
-      });
-      if (!response.ok) throw new Error('Visit counter unavailable');
-      render(await response.json());
-    } catch (_) {
-      updatedEl.textContent = 'VISITOR STATS TEMPORARILY OFFLINE';
-      try {
-        const response = await fetch(apiBase + '/api/visits');
-        if (response.ok) render(await response.json());
-      } catch (_) {}
-    }
-  };
-  updateVisits();
-  setInterval(async () => {
-    try { const r = await fetch(apiBase + '/api/visits'); if (r.ok) render(await r.json()); } catch (_) {}
-  }, 60000);
-})();
-
-
-
-// Dedicated swap help dialog: keep instructions out of the main layout until requested.
-(() => {
-  const dialog = document.getElementById('swap-help-dialog');
-  const openButton = document.getElementById('swap-help-open');
-  const closeButton = document.getElementById('swap-help-close');
-  if (!dialog || !openButton) return;
-  openButton.addEventListener('click', () => {
-    if (typeof dialog.showModal === 'function') dialog.showModal();
-    else dialog.setAttribute('open', '');
-  });
-  closeButton?.addEventListener('click', () => {
-    if (typeof dialog.close === 'function') dialog.close();
-    else dialog.removeAttribute('open');
-  });
-  dialog.addEventListener('click', event => {
-    if (event.target === dialog && typeof dialog.close === 'function') dialog.close();
-  });
-})();
-
-/* Live system status: use real API responses and never display fabricated market data. */
-(() => {
-  const apiBase = 'https://zombcash-bot.fadehost.app';
-  const byId = id => document.getElementById(id);
-  const setService = (name, state) => {
-    const label = byId('service-' + name);
-    const dot = byId('service-' + name + '-dot');
-    if (label) label.textContent = state;
-    if (dot) {
-      dot.className = state === 'ONLINE' ? 'is-online' : state === 'OFFLINE' ? 'is-offline' : 'is-unknown';
-      dot.setAttribute('aria-label', state);
-    }
-  };
-  const compact = value => {
-    const n = Number(value);
-    if (!Number.isFinite(n)) return '—';
-    if (n >= 1e6) return '$' + (n / 1e6).toFixed(1) + 'M';
-    if (n >= 1e3) return '$' + (n / 1e3).toFixed(1) + 'K';
-    return '$' + n.toFixed(2);
-  };
-  const setText = (id, value) => {
-    const node = byId(id);
-    if (node) node.textContent = value;
-  };
-  async function refreshStatus() {
-    const checks = await Promise.allSettled([
-      fetch(apiBase + '/health', {cache:'no-store', signal:AbortSignal.timeout(8000)}).then(r => {
-        if (!r.ok) throw new Error('Health HTTP ' + r.status);
-        return r.json();
-      }),
-      fetch(apiBase + '/api/zombcash', {cache:'no-store', signal:AbortSignal.timeout(10000)}).then(r => {
-        if (!r.ok) throw new Error('Market HTTP ' + r.status);
-        return r.json();
-      }),
-      fetch(apiBase + '/api/activity', {cache:'no-store', signal:AbortSignal.timeout(10000)}).then(r => {
-        if (!r.ok) throw new Error('Activity HTTP ' + r.status);
-        return r.json();
-      }),
-      fetch(apiBase + '/api/visits', {cache:'no-store', signal:AbortSignal.timeout(8000)}).then(r => {
-        if (!r.ok) throw new Error('Visits HTTP ' + r.status);
-        return r.json();
-      })
-    ]);
-    const apiOk = checks[0].status === 'fulfilled' && checks[0].value && checks[0].value.ok !== false;
-    const marketOk = checks[1].status === 'fulfilled' && Number(checks[1].value?.priceUsd) > 0;
-    const activityOk = checks[2].status === 'fulfilled';
-    const visitsOk = checks[3].status === 'fulfilled';
-    setService('api', apiOk ? 'ONLINE' : 'OFFLINE');
-    setService('market', marketOk ? 'ONLINE' : 'OFFLINE');
-    setService('community', activityOk || visitsOk ? 'ONLINE' : 'OFFLINE');
-
-    if (marketOk) {
-      const data = checks[1].value;
-      const change = Number(data.priceChange?.h24);
-      const swing = Number.isFinite(change) ? Math.min(100, Math.abs(change)) : null;
-      setText('chaos-value', swing === null ? '—' : (change > 0 ? '+' : '') + change.toFixed(2) + '%');
-      const fill = byId('meter-fill');
-      if (fill) fill.style.width = (swing === null ? 0 : swing) + '%';
-      const meter = fill?.closest('.meter');
-      if (meter) meter.setAttribute('aria-valuenow', String(swing === null ? 0 : Math.round(swing)));
-      setText('outbreak-volume', compact(data.volume?.h24));
-      setText('status-meter-note', data.stale ? 'LAST KNOWN MARKET DATA' : 'LIVE DEXSCREENER MARKET DATA');
-    } else {
-      setText('chaos-value', '—');
-      setText('outbreak-volume', '—');
-      setText('status-meter-note', 'MARKET DATA TEMPORARILY UNAVAILABLE');
-      const fill = byId('meter-fill');
-      if (fill) fill.style.width = '0%';
-    }
-    if (visitsOk) {
-      const visits = checks[3].value || {};
-      const today = visits.today ?? visits.todayVisitors ?? visits.uniqueToday ?? visits.visitsToday;
-      setText('outbreak-visits-today', Number.isFinite(Number(today)) ? Number(today).toLocaleString('en-US') : '—');
-    } else setText('outbreak-visits-today', '—');
-
-    if (apiOk && marketOk) {
-      setText('outbreak-status', 'SYSTEMS OPERATIONAL');
-      setText('outbreak-message', 'Market data is responding. Community services are checked independently below.');
-    } else if (apiOk) {
-      setText('outbreak-status', 'PARTIAL SIGNAL');
-      setText('outbreak-message', 'The API is reachable, but market data is temporarily unavailable.');
-    } else {
-      setText('outbreak-status', 'SIGNAL INTERRUPTED');
-      setText('outbreak-message', 'Live status could not be verified. The page will retry automatically.');
-    }
-  }
-  refreshStatus();
-  setInterval(refreshStatus, 60000);
-  function renderPriceChart(data) {
-    if (!chartEl) return;
-    const points = Array.isArray(data?.points) ? data.points.filter(p => Number(p.time) > 0 && Number(p.price) > 0) : [];
-    chartEl.replaceChildren();
-    if (points.length < 2) {
-      if (chartStatus) chartStatus.textContent = 'PRICE HISTORY UNAVAILABLE';
-      const msg = document.createElementNS('http://www.w3.org/2000/svg','text');
-      msg.setAttribute('x','360'); msg.setAttribute('y','95'); msg.setAttribute('text-anchor','middle'); msg.setAttribute('fill','#91a18d'); msg.setAttribute('font-size','12');
-      msg.textContent = 'Price history is temporarily unavailable';
-      chartEl.append(msg);
-      return;
-    }
-    const W=720,H=190,pad=12;
-    const values=points.map(p=>Number(p.price));
-    const min=Math.min(...values), max=Math.max(...values), span=(max-min)||Math.max(max*0.02,1e-12);
-    const coords=points.map((p,i)=>({x:pad+i*(W-pad*2)/(points.length-1),y:H-pad-((Number(p.price)-min)/span)*(H-pad*2)}));
-    for(let k=1;k<=3;k++){const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.setAttribute('x1','0');line.setAttribute('x2',String(W));line.setAttribute('y1',String(k*H/4));line.setAttribute('y2',String(k*H/4));line.setAttribute('stroke','#9bff45');line.setAttribute('stroke-opacity','.12');chartEl.append(line);}
-    const area=document.createElementNS('http://www.w3.org/2000/svg','path');
-    area.setAttribute('d',`M ${coords[0].x} ${H} L ${coords.map(p=>p.x+' '+p.y).join(' L ')} L ${coords[coords.length-1].x} ${H} Z`);
-    area.setAttribute('fill','#9bff45');area.setAttribute('fill-opacity','.09');chartEl.append(area);
-    const line=document.createElementNS('http://www.w3.org/2000/svg','path');
-    line.setAttribute('d',coords.map((p,i)=>(i?'L':'M')+' '+p.x+' '+p.y).join(' '));line.setAttribute('fill','none');line.setAttribute('stroke','#9bff45');line.setAttribute('stroke-width','2.5');line.setAttribute('stroke-linejoin','round');line.setAttribute('stroke-linecap','round');chartEl.append(line);
-    const last=coords[coords.length-1],dot=document.createElementNS('http://www.w3.org/2000/svg','circle');dot.setAttribute('cx',String(last.x));dot.setAttribute('cy',String(last.y));dot.setAttribute('r','4');dot.setAttribute('fill','#d9ffb0');dot.setAttribute('stroke','#9bff45');dot.setAttribute('stroke-width','2');chartEl.append(dot);
-    if(chartStatus) chartStatus.textContent=(data.source||'PRICE FEED')+(data.stale?' · CACHED':'')+' · '+points.length+' POINTS';
-    if(chartCurrent) chartCurrent.textContent=money(points[points.length-1].price);
-    const fmt=t=>new Date(Number(t)*1000).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:chartPeriod==='24h'?'2-digit':undefined,minute:chartPeriod==='24h'?'2-digit':undefined});
-    if(chartStart) chartStart.textContent=fmt(points[0].time);
-    if(chartEnd) chartEnd.textContent=fmt(points[points.length-1].time);
-  }
-  async function loadPriceChart() {
-    if(!chartEl) return;
-    if(chartStatus) chartStatus.textContent='LOADING PRICE HISTORY…';
-    try {
-      const response=await fetch(apiBase+'/api/price-history?period='+encodeURIComponent(chartPeriod),{cache:'no-store',signal:AbortSignal.timeout(12000)});
-      if(!response.ok) throw new Error('HTTP '+response.status);
-      renderPriceChart(await response.json());
-    } catch(error) {
-      renderPriceChart(null);
-      if(chartStatus) chartStatus.textContent='API ERROR · '+String(error?.message||'REQUEST FAILED').slice(0,45);
-    }
-  }
-  document.querySelectorAll('.activity-chart-tab').forEach(button=>button.addEventListener('click',()=>{
-    chartPeriod=button.dataset.chartPeriod||'24h';
-    document.querySelectorAll('.activity-chart-tab').forEach(tab=>tab.classList.toggle('active',tab===button));
-    loadPriceChart();
-  }));
-  function renderRecentTrades(data) {
-    if(!tradesEl) return;
-    const trades=Array.isArray(data?.trades)?data.trades:[];
-    tradesEl.replaceChildren();
-    if(!trades.length) {
-      const empty=document.createElement('p');empty.className='recent-trade-empty';empty.textContent='No recent transactions are available right now.';tradesEl.append(empty);return;
-    }
-    trades.forEach(trade=>{
-      const row=document.createElement('div');row.className='recent-trade-row';
-      const rawSide=String(trade.type||'trade').toLowerCase();
-      const side=document.createElement('span');side.className='recent-trade-side '+(rawSide==='buy'?'buy':rawSide==='sell'?'sell':'');side.textContent=rawSide==='buy'?'BUY':rawSide==='sell'?'SELL':'TRADE';
-      const main=document.createElement('div');main.className='recent-trade-main';
-      const link=document.createElement('a');link.href='https://solscan.io/tx/'+encodeURIComponent(trade.txHash||'');link.target='_blank';link.rel='noopener noreferrer';link.textContent=(trade.txHash||'Transaction').slice(0,7)+'…'+(trade.txHash||'').slice(-6);link.title='Open transaction on Solscan';
-      const meta=document.createElement('small');const when=Number(trade.timestamp||0);const wallet=String(trade.wallet||'');meta.textContent=(when?new Date(when*1000).toLocaleString():'Time unavailable')+(wallet?' · '+wallet.slice(0,4)+'…'+wallet.slice(-4):'');
-      main.append(link,meta);
-      const value=document.createElement('strong');value.className='recent-trade-value';value.textContent=money(trade.usd);
-      row.append(side,main,value);tradesEl.append(row);
-    });
-  }
-  async function loadRecentTrades() {
-    if(!tradesEl) return;
-    try {
-      const response=await fetch(apiBase+'/api/recent-trades',{cache:'no-store',signal:AbortSignal.timeout(12000)});
-      if(!response.ok) throw new Error('HTTP '+response.status);
-      renderRecentTrades(await response.json());
-    } catch(error) {
-      const empty=document.createElement('p');empty.className='recent-trade-empty';empty.textContent='Transaction API error: '+String(error?.message||'request failed').slice(0,70);tradesEl.replaceChildren(empty);
-    }
-  }
   function renderActivity() {
     if (!activityData) return;
     const buys = Number(activityData.buys?.[activityPeriod] || 0);
@@ -1319,10 +911,90 @@ if (zomMarket) {
   submitScoreButton?.addEventListener('click',async()=>{const points=Number(window.lastSurvivalPoints);if(!Number.isFinite(points)||points<10||points>100000){if(submitScoreStatus)submitScoreStatus.textContent='Score at least 10 points before saving.';return;}submitScoreButton.disabled=true;if(submitScoreStatus)submitScoreStatus.textContent='Submitting your record…';try{const response=await fetch(apiBase+'/api/survival-scores',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:getEl('survivor-name')?.value||'Survivor',points,voter:voterId})});const data=await response.json();if(!response.ok)throw new Error(data.error||'Could not save record');if(submitScoreStatus)submitScoreStatus.textContent='Record saved! Survival leaderboard updated.';renderLeaderboard(data);}catch(error){if(submitScoreStatus)submitScoreStatus.textContent=error.message;submitScoreButton.disabled=false;}});
 
 
+
+  const chartEl = document.getElementById('activity-price-chart');
+  const chartStatus = document.getElementById('activity-chart-status');
+  const chartCurrent = document.getElementById('activity-chart-current');
+  const chartStart = document.getElementById('activity-chart-start');
+  const chartEnd = document.getElementById('activity-chart-end');
+  const tradesEl = document.getElementById('recent-trades-list');
+  let chartPeriod = '24h';
+  function money(value) {
+    const n = Number(value || 0);
+    if (!Number.isFinite(n) || n <= 0) return '—';
+    if (n < 0.000001) return '$' + n.toExponential(2);
+    if (n < 0.001) return '$' + n.toFixed(10);
+    if (n < 1) return '$' + n.toFixed(8);
+    if (n < 1000) return '$' + n.toFixed(6);
+    return '$' + n.toLocaleString('en-US', {maximumFractionDigits: 4});
+  }
+  function chartMessage(message) {
+    if (!chartEl) return;
+    chartEl.replaceChildren();
+    const node = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    node.setAttribute('x','360'); node.setAttribute('y','95');
+    node.setAttribute('text-anchor','middle'); node.setAttribute('fill','#91a18d');
+    node.setAttribute('font-size','12'); node.textContent = message; chartEl.append(node);
+  }
+  function renderPriceChart(data) {
+    if (!chartEl) return;
+    const points = Array.isArray(data && data.points) ? data.points.filter(p => Number(p.time)>0 && Number(p.price)>0) : [];
+    chartEl.replaceChildren();
+    if (points.length < 2) {
+      if (chartStatus) chartStatus.textContent = 'PRICE HISTORY UNAVAILABLE';
+      chartMessage('Price history is temporarily unavailable'); return;
+    }
+    const W=720,H=190,pad=12, vals=points.map(p=>Number(p.price));
+    const min=Math.min(...vals), max=Math.max(...vals), span=(max-min)||Math.max(max*.02,1e-12);
+    const pts=points.map((p,i)=>({x:pad+i*(W-pad*2)/(points.length-1),y:H-pad-((Number(p.price)-min)/span)*(H-pad*2)}));
+    for(let k=1;k<=3;k++){const g=document.createElementNS('http://www.w3.org/2000/svg','line');g.setAttribute('x1','0');g.setAttribute('x2',String(W));g.setAttribute('y1',String(k*H/4));g.setAttribute('y2',String(k*H/4));g.setAttribute('stroke','#9bff45');g.setAttribute('stroke-opacity','.12');chartEl.append(g);}
+    const area=document.createElementNS('http://www.w3.org/2000/svg','path');
+    area.setAttribute('d','M '+pts[0].x+' '+H+' L '+pts.map(p=>p.x+' '+p.y).join(' L ')+' L '+pts[pts.length-1].x+' '+H+' Z');
+    area.setAttribute('fill','#9bff45');area.setAttribute('fill-opacity','.09');chartEl.append(area);
+    const line=document.createElementNS('http://www.w3.org/2000/svg','path');
+    line.setAttribute('d',pts.map((p,i)=>(i?'L':'M')+' '+p.x+' '+p.y).join(' '));line.setAttribute('fill','none');line.setAttribute('stroke','#9bff45');line.setAttribute('stroke-width','2.5');line.setAttribute('stroke-linejoin','round');chartEl.append(line);
+    const last=pts[pts.length-1],dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    dot.setAttribute('cx',String(last.x));dot.setAttribute('cy',String(last.y));dot.setAttribute('r','4');dot.setAttribute('fill','#d9ffb0');dot.setAttribute('stroke','#9bff45');dot.setAttribute('stroke-width','2');chartEl.append(dot);
+    if(chartStatus)chartStatus.textContent=(data.source||'PRICE FEED')+(data.stale?' · CACHED':'')+' · '+points.length+' POINTS';
+    if(chartCurrent)chartCurrent.textContent=money(points[points.length-1].price);
+    const fmt=t=>new Date(Number(t)*1000).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:chartPeriod==='24h'?'2-digit':undefined,minute:chartPeriod==='24h'?'2-digit':undefined});
+    if(chartStart)chartStart.textContent=fmt(points[0].time);if(chartEnd)chartEnd.textContent=fmt(points[points.length-1].time);
+  }
+  async function loadPriceChart() {
+    if(!chartEl)return;if(chartStatus)chartStatus.textContent='LOADING PRICE HISTORY…';
+    try {const response=await fetch(apiBase+'/api/price-history?period='+encodeURIComponent(chartPeriod),{cache:'no-store',signal:AbortSignal.timeout(12000)});if(!response.ok)throw new Error('HTTP '+response.status);renderPriceChart(await response.json());}
+    catch(error){chartMessage('Price history request failed');if(chartStatus)chartStatus.textContent='API ERROR · '+String(error&&error.message||'REQUEST FAILED').slice(0,45);}
+  }
+  document.querySelectorAll('.activity-chart-tab').forEach(button=>button.addEventListener('click',()=>{chartPeriod=button.dataset.chartPeriod||'24h';document.querySelectorAll('.activity-chart-tab').forEach(tab=>tab.classList.toggle('active',tab===button));loadPriceChart();}));
+  async function loadRecentTrades() {
+    if(!tradesEl)return;
+    try {
+      const response=await fetch(apiBase+'/api/recent-trades',{cache:'no-store',signal:AbortSignal.timeout(12000)});
+      if(!response.ok)throw new Error('HTTP '+response.status);
+      const data=await response.json(), trades=Array.isArray(data.trades)?data.trades:[];
+      tradesEl.replaceChildren();
+      if(!trades.length){const empty=document.createElement('p');empty.className='recent-trade-empty';empty.textContent='No recent transactions are available right now.';tradesEl.append(empty);return;}
+      trades.slice(0,8).forEach(trade=>{
+        const row=document.createElement('div');row.className='recent-trade-row';
+        const type=String(trade.type||'trade').toLowerCase(),side=document.createElement('span');
+        side.className='recent-trade-side '+(type==='buy'?'buy':type==='sell'?'sell':'');side.textContent=type==='buy'?'BUY':type==='sell'?'SELL':'TRADE';
+        const main=document.createElement('div');main.className='recent-trade-main';const hash=String(trade.txHash||'');
+        const link=document.createElement('a');link.href='https://solscan.io/tx/'+encodeURIComponent(hash);link.target='_blank';link.rel='noopener noreferrer';link.textContent=hash?hash.slice(0,7)+'…'+hash.slice(-6):'Transaction';
+        const meta=document.createElement('small'),when=Number(trade.timestamp||0),wallet=String(trade.wallet||'');
+        meta.textContent=(when?new Date(when*1000).toLocaleString():'Time unavailable')+(wallet?' · '+wallet.slice(0,4)+'…'+wallet.slice(-4):'');main.append(link,meta);
+        const value=document.createElement('strong');value.className='recent-trade-value';value.textContent=money(trade.usd);row.append(side,main,value);tradesEl.append(row);
+      });
+    } catch(error){const notice=document.createElement('p');notice.className='recent-trade-empty';notice.textContent='Transaction API error: '+String(error&&error.message||'request failed').slice(0,70);tradesEl.replaceChildren(notice);}
+  }
+
   loadActivity();
+  loadPriceChart();
+  loadRecentTrades();
   loadVote();
   loadLeaderboard();
   setInterval(loadActivity, 60000);
+  setInterval(loadPriceChart, 120000);
+  setInterval(loadRecentTrades, 60000);
   setInterval(loadVote, 60000);
   setInterval(loadLeaderboard, 60000);
 })();
