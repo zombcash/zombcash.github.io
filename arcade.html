@@ -81,6 +81,7 @@ document.addEventListener('fullscreenchange',()=>{fullBtn.textContent=document.f
 startBtn.addEventListener('click',()=>{if(mode==='snake')return;reset();launch();track('game_start',mode)});
 reset();
 loadLeaderboard();
+if(query.get('game')==='snake') document.querySelector('[data-game="snake"]')?.click();
 })();
 </script>
 </body></html>
