@@ -1293,7 +1293,7 @@ if (zomMarket) {
       .slice(0, 4);
   }
   function render(payload) {
-    const ranked = rankPairs(payload);
+    const ranked = rankPairs(payload).slice(0, 5);
     list.replaceChildren();
     if (!ranked.length) {
       setMessage('No tokens with enough market data for this period. Refresh or try another horizon.', 'empty');
@@ -1311,10 +1311,29 @@ if (zomMarket) {
       const rank = document.createElement('span');
       rank.className = 'zrai-rank';
       rank.textContent = String(index + 1).padStart(2, '0');
+
       const body = document.createElement('div');
       body.className = 'zrai-pick-body';
       const heading = document.createElement('div');
       heading.className = 'zrai-pick-heading';
+      const identity = document.createElement('div');
+      identity.className = 'zrai-token-identity';
+      const logo = document.createElement('span');
+      logo.className = 'zrai-coin-icon';
+      logo.setAttribute('aria-hidden', 'true');
+      logo.textContent = symbol.replace(/^\$+/, '').slice(0, 2).toUpperCase();
+      const imageUrl = safeHttpUrl(base.imageUrl || base.icon || pair.info && pair.info.imageUrl);
+      if (imageUrl) {
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.alt = '';
+        img.loading = 'lazy';
+        img.referrerPolicy = 'no-referrer';
+        img.onerror = () => { img.remove(); logo.classList.remove('has-image'); };
+        logo.textContent = '';
+        logo.classList.add('has-image');
+        logo.append(img);
+      }
       const nameWrap = document.createElement('div');
       nameWrap.className = 'zrai-token-name';
       const tokenSymbol = document.createElement('strong');
@@ -1323,10 +1342,12 @@ if (zomMarket) {
       tokenName.textContent = name;
       tokenName.title = name;
       nameWrap.append(tokenSymbol, tokenName);
+      identity.append(logo, nameWrap);
       const score = document.createElement('span');
       score.className = 'zrai-score';
       score.textContent = Math.round(metrics.score) + ' SIGNAL';
-      heading.append(nameWrap, score);
+      heading.append(identity, score);
+
       const metricsLine = document.createElement('div');
       metricsLine.className = 'zrai-metrics';
       metricsLine.append(
@@ -1349,6 +1370,7 @@ if (zomMarket) {
       addressLink.textContent = shortAddress(address) + ' ↗';
       addressLink.title = address;
       body.append(heading, metricsLine, signal, addressLink);
+
       const view = document.createElement('a');
       view.className = 'zrai-open';
       view.href = dexUrl;
@@ -1359,6 +1381,21 @@ if (zomMarket) {
       card.append(rank, body, view);
       list.append(card);
     });
+    if (ranked.length < 5) {
+      const filler = document.createElement('div');
+      filler.className = 'zrai-radar-note';
+      const icon = document.createElement('span');
+      icon.className = 'zrai-radar-note-icon';
+      icon.textContent = '✳';
+      const copy = document.createElement('div');
+      const title = document.createElement('strong');
+      title.textContent = ranked.length + ' VERIFIED PICKS';
+      const detail = document.createElement('span');
+      detail.textContent = 'Radar only shows tokens with real data for this time horizon. Try another interval or refresh to discover more.';
+      copy.append(title, detail);
+      filler.append(icon, copy);
+      list.append(filler);
+    }
     setState(payload.stale ? 'STALE FEED' : 'RADAR ONLINE', payload.stale ? 'stale' : 'online');
   }
   async function load(showLoading) {
