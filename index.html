@@ -795,7 +795,30 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 
 
 <style id="zombcash-layout-width-fix">
-/* One consistent content grid for the custom homepage sections. */
+/* One consistent content grid and vertical rhythm across every main section. */
+section.section:not(.mini-game#snake-game) {
+  width:100%!important;
+  max-width:none!important;
+  margin:0 auto!important;
+  padding:72px max(22px,calc((100vw - 1276px)/2))!important;
+  box-sizing:border-box!important;
+}
+section.section:not(.mini-game#snake-game) .section-heading {
+  margin:20px 0 28px!important;
+}
+section.section.living-world,
+section.section.community-console {
+  padding-top:72px!important;
+  padding-bottom:72px!important;
+}
+.site-visits-inner,
+.campaign-dashboard-inner,
+.campaign-dashboard .dashboard-inner {
+  width:100%;
+  max-width:1276px;
+  margin-inline:auto;
+  box-sizing:border-box;
+}
 section.section.mini-game#snake-game,
 section.section.community-console,
 section.section.living-world {
@@ -837,12 +860,12 @@ section.section.community-console .zombcash-market-grid {
 }
 section.section.community-console,
 section.section.living-world {
-  padding-top:clamp(52px,4.5vw,66px)!important;
-  padding-bottom:clamp(54px,4.5vw,68px)!important;
+  padding-top:72px!important;
+  padding-bottom:72px!important;
 }
 section.section.community-console .section-heading,
 section.section.living-world .section-heading {
-  margin-bottom:clamp(22px,2.8vw,34px);
+  margin:20px 0 28px!important;
 }
 section.section.living-world .world-grid {
   gap:clamp(14px,1.5vw,22px)!important;
