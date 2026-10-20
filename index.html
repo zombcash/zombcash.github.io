@@ -376,6 +376,21 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 @keyframes zmOrbit{to{transform:rotate(360deg)}}
 @media(max-width:760px){.zombie-maker-promo{grid-template-columns:1fr;margin:34px 16px 44px;padding:27px 22px;gap:0}.zombie-maker-promo h2{font-size:clamp(30px,8vw,43px);letter-spacing:-1px}.zombie-maker-promo p{font-size:18px}.zm-promo-art{min-height:205px;margin-top:6px}.zm-promo-skull{font-size:145px}.zm-promo-ring{width:175px}.zm-ring-two{width:205px}.zm-promo-stamp{right:5%;bottom:3%}.zm-promo-coord{left:5%;top:4%}.zm-promo-actions{align-items:flex-start;flex-direction:column;gap:12px}.zm-promo-btn{width:100%;padding:16px 10px}.zm-promo-note{font-size:7px}}
 
+
+/* Unified project-token market + on-chain activity card */
+.merged-market{margin:0 0 18px;padding:16px 0 14px;border-top:1px solid var(--line,#31452e);border-bottom:1px solid var(--line,#31452e);background:transparent}
+.merged-market .zombcash-market-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.merged-market .zombcash-market-top h3{margin:6px 0 0}
+.merged-market #zombcash-market-status{font:700 10px Orbitron,sans-serif;color:var(--green,#9bff45);text-align:right}
+.merged-market .zombcash-market-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.merged-market .zombcash-market-grid>div{min-width:0;padding:11px;background:#080e0a;border:1px solid #263a2a}
+.merged-market .zombcash-market-grid small{display:block;font:600 8px Orbitron,sans-serif;color:#91a18d;margin-bottom:8px}
+.merged-market .zombcash-market-grid strong{font:700 clamp(12px,1.2vw,16px) Orbitron,sans-serif;overflow-wrap:anywhere;color:#edf5e5}
+.merged-market .zombcash-market-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
+.merged-market .zombcash-market-bottom>small{font:600 8px Orbitron,sans-serif;color:#91a18d}
+.merged-market .zombcash-market-bottom>div{display:flex;gap:8px;flex-wrap:wrap}
+.merged-market .zombcash-market-bottom a,.merged-market .zombcash-market-bottom button{font:700 9px Orbitron,sans-serif;color:var(--green,#9bff45);background:transparent;border:1px solid #31452e;padding:8px 10px;cursor:pointer;text-decoration:none}
+@media(max-width:700px){.merged-market .zombcash-market-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.merged-market .zombcash-market-grid>div:last-child{grid-column:span 2}.merged-market .zombcash-market-bottom{align-items:flex-start}}
 </style>
 
 <style id="jupiter-buy-widget-styles">
@@ -514,50 +529,6 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
     <article class="tool-card lab-card" id="lab"><div class="card-top"><span class="card-id">TOOL_002</span><span class="status-tag"><i></i> LAB OPEN</span></div><div class="tool-art lab-art"><div class="lab-tube tube-a"></div><div class="lab-tube tube-b"></div><div class="lab-skull">☠</div><div class="lab-spark">✳</div></div><h3>ZOMBIE<br><span>LAB</span></h3><p>Build your undead legend. Create meme ideas, cook up mutant concepts, play survival challenges, and make content for the crew.</p><ul><li>MUTANT & MEME IDEAS</li><li>SURVIVAL CHALLENGES</li><li>CONTENT GENERATOR</li></ul><a class="card-link" href="https://t.me/MemeCoinAIAgent_bot" target="_blank" rel="noreferrer">ENTER THE LAB <span>↗</span></a></article>
     <article class="tool-card network-card"><div class="card-top"><span class="card-id">TOOL_003</span><span class="status-tag"><i></i> CREW WANTED</span></div><div class="tool-art network-art"><div class="network-orb orb-a">☠</div><div class="network-orb orb-b">☣</div><div class="network-orb orb-c">✦</div><div class="network-line line-a"></div><div class="network-line line-b"></div><div class="network-line line-c"></div></div><h3>SURVIVOR<br><span>NETWORK</span></h3><p>Meet the crew, share your memes, follow project updates, and help shape what gets built next.</p><ul><li>COMMUNITY CHAT</li><li>PROJECT UPDATES</li><li>MEME TRANSMISSIONS</li></ul><a class="card-link" href="https://t.me/ZombieCashCTO" target="_blank" rel="noreferrer">JOIN THE CREW <span>↗</span></a></article>
   </div>
-  <div class="zombcash-market" id="zombcash-market">
-    <div class="zombcash-market-top"><div><div class="section-kicker">[ PROJECT TOKEN / LIVE MARKET ]</div><h3>ZOMBCASH <span class="green">$ZOMBCASH</span></h3></div><span id="zombcash-market-status">CONNECTING…</span></div>
-    <div class="zombcash-market-grid">
-      <div><small>PRICE</small><strong id="zombcash-price">—</strong></div>
-      <div><small>24H CHANGE</small><strong id="zombcash-change">—</strong></div>
-      <div><small>24H VOLUME</small><strong id="zombcash-volume">—</strong></div>
-      <div><small>LIQUIDITY</small><strong id="zombcash-liquidity">—</strong></div>
-      <div><small>MARKET CAP / FDV</small><strong id="zombcash-cap">—</strong></div>
-    </div>
-    <div class="zombcash-market-bottom"><small id="zombcash-market-updated">WAITING FOR MARKET DATA</small><div><a href="https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">TRADE ↗</a><a href="https://dexscreener.com/solana/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">CHART ↗</a><button id="zombcash-market-refresh" type="button">↻ REFRESH</button></div></div>
-    <div class="zombcash-market-panels" id="zombcash-market-panels">
-      <section class="zom-market-panel zom-price-panel" aria-labelledby="zom-price-title">
-        <div class="zom-panel-head">
-          <div><small class="zom-panel-kicker">LIVE PRICE HISTORY</small><h4 id="zom-price-title">Price <span>(USD)</span></h4><strong id="zom-chart-current">—</strong></div>
-          <div class="zom-periods" role="group" aria-label="Price chart period">
-            <button type="button" data-zom-period="24h" class="active">24H</button>
-            <button type="button" data-zom-period="7d">7D</button>
-            <button type="button" data-zom-period="30d">30D</button>
-          </div>
-        </div>
-        <div class="zom-chart-wrap"><canvas id="zom-price-chart" aria-label="ZombieCash USD price chart" role="img"></canvas><div id="zom-chart-empty">Waiting for historical price data…</div></div>
-        <div class="zom-panel-foot"><span id="zom-chart-source">SOURCE: GECKOTERMINAL</span><span id="zom-chart-updated">UPDATING…</span></div>
-      </section>
-      <section class="zom-market-panel zom-activity-panel" aria-labelledby="zom-activity-title">
-        <div class="zom-panel-head">
-          <div><small class="zom-panel-kicker">SOLANA TRANSACTION FLOW</small><h4 id="zom-activity-title">24h buys vs sells</h4></div>
-          <span id="zom-activity-status" class="zom-live-state"><i></i> LIVE FEED</span>
-        </div>
-        <div class="zom-activity-totals">
-          <div><small>BUYS</small><strong id="zom-buys">—</strong></div>
-          <div><small>SELLS</small><strong id="zom-sells">—</strong></div>
-          <div><small>TOTAL TXNS</small><strong id="zom-total-txns">—</strong></div>
-        </div>
-        <div class="zom-activity-bar" role="img" aria-label="24 hour buys compared with sells"><span id="zom-buys-bar"></span><span id="zom-sells-bar"></span></div>
-        <div class="zom-activity-legend"><span><i class="buy-dot"></i> BUYS <b id="zom-buy-share">—</b></span><span><i class="sell-dot"></i> SELLS <b id="zom-sell-share">—</b></span></div>
-        <div class="zom-activity-periods">
-          <div><small>5 MIN</small><span><b id="zom-buys-m5">—</b> / <b id="zom-sells-m5">—</b></span></div>
-          <div><small>1 HOUR</small><span><b id="zom-buys-h1">—</b> / <b id="zom-sells-h1">—</b></span></div>
-          <div><small>6 HOURS</small><span><b id="zom-buys-h6">—</b> / <b id="zom-sells-h6">—</b></span></div>
-        </div>
-        <div class="zom-panel-foot"><span>SOURCE: DEXSCREENER</span><span id="zom-activity-updated">WAITING FOR DATA</span></div>
-      </section>
-    </div>
-  </div>
   <section class="section jupiter-buy-section" id="buy-zombcash">
     <div class="section-heading jupiter-buy-heading">
       <div><div class="section-kicker">[ 06 / DIRECT ON-CHAIN ACCESS ]</div><h2>BUY THE<br><span class="green">OUTBREAK.</span></h2></div>
@@ -607,6 +578,17 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
   <div class="crew-grid">
     <article class="crew-card">
       <div class="crew-card-head"><div><div class="section-kicker">[ ON-CHAIN MARKET ACTIVITY ]</div><h3>BUY / SELL <span class="green">SIGNAL</span></h3></div><span id="activity-status" class="crew-status">CONNECTING…</span></div>
+  <div class="zombcash-market merged-market" id="zombcash-market">
+    <div class="zombcash-market-top"><div><div class="section-kicker">[ PROJECT TOKEN / LIVE MARKET ]</div><h3>ZOMBCASH <span class="green">$ZOMBCASH</span></h3></div><span id="zombcash-market-status">CONNECTING…</span></div>
+    <div class="zombcash-market-grid">
+      <div><small>PRICE</small><strong id="zombcash-price">—</strong></div>
+      <div><small>24H CHANGE</small><strong id="zombcash-change">—</strong></div>
+      <div><small>24H VOLUME</small><strong id="zombcash-volume">—</strong></div>
+      <div><small>LIQUIDITY</small><strong id="zombcash-liquidity">—</strong></div>
+      <div><small>MARKET CAP / FDV</small><strong id="zombcash-cap">—</strong></div>
+    </div>
+    <div class="zombcash-market-bottom"><small id="zombcash-market-updated">WAITING FOR MARKET DATA</small><div><a href="https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">TRADE ↗</a><a href="https://dexscreener.com/solana/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">CHART ↗</a><button id="zombcash-market-refresh" type="button">↻ REFRESH</button></div></div>
+  </div>
       <div class="activity-period"><button class="activity-tab active" data-period="h1">1H</button><button class="activity-tab" data-period="h6">6H</button><button class="activity-tab" data-period="h24">24H</button></div>
       <div class="activity-numbers"><div><small>BUYS</small><strong id="activity-buys">—</strong></div><div><small>SELLS</small><strong id="activity-sells">—</strong></div><div><small>BUY / SELL</small><strong id="activity-ratio">—</strong></div></div>
       <div class="activity-bar"><span id="activity-buy-bar"></span></div>
