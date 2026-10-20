@@ -1110,7 +1110,7 @@ footer {
           initialOutputMint: '6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump',
           fixedMint: '6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump'
         },
-        containerStyles: { zIndex: 20 },
+        containerStyles: { zIndex: 10000, width: '100%', maxWidth: '100%' },
         onSwapError: () => { if (status) status.textContent = 'Swap error reported by Jupiter. Review the quote or try again later.'; },
         onSuccess: () => { if (status) status.textContent = 'Swap submitted successfully. Check your wallet or Solscan for confirmation.'; }
       });
@@ -1188,6 +1188,22 @@ section.section.community-console .crew-grid > .recent-trades-panel .recent-trad
     min-height: 560px !important;
     height: auto !important;
   }
+}
+</style>
+
+
+<style id="zombcash-jupiter-wallet-overlay-fix">
+/* Let Jupiter's wallet picker and connect overlays escape the embedded terminal bounds. */
+section.section.community-console .jupiter-swap-card,
+section.section.community-console .jupiter-swap-card .jupiter-terminal-shell {
+  position: relative !important;
+  overflow: visible !important;
+}
+section.section.community-console .jupiter-swap-card #jupiter-zombcash-terminal {
+  position: relative !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 </style>
 
