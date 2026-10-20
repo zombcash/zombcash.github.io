@@ -96,6 +96,35 @@ document.addEventListener('click', event => {
   if (nav?.classList.contains('open') && !event.target.closest('.topbar')) setMenuOpen(false);
 });
 
+// Floating page navigation and footer contract copy (only present on the homepage).
+(() => {
+  const top = document.getElementById('scroll-to-top');
+  const bottom = document.getElementById('scroll-to-bottom');
+  top?.addEventListener('click', () => window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}));
+  bottom?.addEventListener('click', () => window.scrollTo({top:document.documentElement.scrollHeight,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}));
+  const copy = document.getElementById('footer-copy-ca');
+  copy?.addEventListener('click', async () => {
+    const address = '6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump';
+    const label = copy.textContent;
+    try {
+      await navigator.clipboard.writeText(address);
+      copy.textContent = 'COPIED ✓';
+    } catch (_) {
+      const field = document.createElement('textarea');
+      field.value = address;
+      field.setAttribute('readonly', '');
+      field.style.position = 'fixed';
+      field.style.opacity = '0';
+      document.body.appendChild(field);
+      field.select();
+      const ok = document.execCommand('copy');
+      field.remove();
+      copy.textContent = ok ? 'COPIED ✓' : 'COPY FAILED';
+    }
+    window.setTimeout(() => { copy.textContent = label; }, 1800);
+  });
+})();
+
 // Demo-only outbreak indicator. Keep the shared script safe on pages without these elements.
 (() => {
   const chaosValue = document.getElementById('chaos-value');
