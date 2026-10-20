@@ -410,6 +410,14 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 .daily-mission-inner{max-width:900px;margin:0 auto}
 .daily-mission-inner .vote-card{width:100%;min-height:0}
 @media(max-width:850px){.jupiter-swap-card #jupiter-zombcash-terminal{min-height:560px}.swap-help-content{padding:18px}}
+
+/* Unite daily missions and community events in one two-column community block. */
+.world-community-pair{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:stretch;padding:16px;border:1px solid #31452e;background:linear-gradient(135deg,#0a100c,#080c0a)}
+.world-community-pair>.world-panel{min-width:0;height:100%;margin:0}
+.world-community-pair .world-panel-head{min-height:70px}
+.world-community-pair .world-event{margin:10px 12px}
+.world-community-pair .world-panel-foot{margin-top:auto}
+@media(max-width:760px){.world-community-pair{grid-template-columns:minmax(0,1fr);padding:10px;gap:12px}}
 </style>
 
 <style id="jupiter-buy-widget-styles">
@@ -523,6 +531,7 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
       <div id="world-alert-list" class="world-alert-list"><div class="world-alert"><span class="alert-icon">◉</span><div><strong>MARKET FEED</strong><p>Waiting for live $ZOMBCASH market data.</p></div><span class="alert-level">STANDBY</span></div></div>
       <p class="world-disclaimer">Signals are automated observations, not trading advice.</p>
     </article>
+    <div class="world-community-pair">
     <article class="world-panel missions-panel">
       <div class="world-panel-head"><div><span class="world-tag"><i></i> DAILY PROTOCOL</span><h3>MISSIONS OF THE DAY</h3></div><span id="world-mission-count" class="world-state">0 / 3 DONE</span></div>
       <div id="world-missions" class="world-missions"></div>
@@ -534,6 +543,7 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
       <div class="world-event"><span class="event-icon">☠</span><div><strong>CREW CHECK-IN</strong><p>Meet survivors, share ideas, and help shape the next build.</p><a href="https://t.me/ZombieCashCTO" target="_blank" rel="noreferrer">JOIN THE GROUP ↗</a></div></div>
       <div class="world-event"><span class="event-icon">⌁</span><div><strong>RADAR RUN</strong><p>Scan Solana tokens and compare community-rated finds.</p><a href="https://t.me/ZombieCashMemeRadarBot" target="_blank" rel="noreferrer">LAUNCH MEME RADAR ↗</a></div></div>
     </article>
+    </div>
   </div>
 </section>
 <section class="section intro" id="outbreak">
@@ -722,7 +732,7 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 </style>
 
 <script src="runtime-fixes.js?v=20261020-2"></script>
-<script src="script.js?v=swap-help-v7-20261020"></script>
+<script src="script.js?v=world-community-v8-20261020"></script>
 <script id="jupiter-zombcash-init">
 (() => {
   const terminal = document.getElementById('jupiter-zombcash-terminal');
