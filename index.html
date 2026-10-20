@@ -432,6 +432,24 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
  .world-grid>.world-community-pair{grid-template-columns:minmax(0,1fr)!important;padding:10px!important;gap:12px!important}
  .living-world>.daily-mission-section{padding:18px 10px!important}
 }
+
+/* Arcade and records share one section; each game has its own leaderboard view. */
+.mini-game{display:grid;grid-template-columns:minmax(220px,.85fr) minmax(0,1.15fr);align-items:center;column-gap:clamp(24px,4vw,64px);row-gap:24px}
+.mini-game>.leaderboard-card{grid-column:1/-1;width:100%;max-width:none;margin:0;align-self:stretch}
+.leaderboard-head-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap}
+.leaderboard-open{white-space:nowrap;padding:10px 14px;font-size:11px}
+.all-leaderboards-dialog{width:min(760px,calc(100% - 28px));max-width:none;max-height:85vh;overflow:auto;padding:0;border:1px solid #31452e;background:#080d0a;color:#edf4e5}
+.all-leaderboards-dialog::backdrop{background:#020503d9;backdrop-filter:blur(5px)}
+.all-leaderboards-content{padding:clamp(16px,3vw,28px)}
+.leaderboard-game-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:20px 0 14px}
+.leaderboard-game-tabs button{min-width:0;padding:12px 8px;border:1px solid #31452e;background:#0b120d;color:#b8c8b5;font:inherit;font-size:11px;cursor:pointer}
+.leaderboard-game-tabs button.active,.leaderboard-game-tabs button:hover{border-color:#9bff45;color:#9bff45;background:#112015}
+.all-leaderboards-list{min-height:120px;border:1px solid #263b29;padding:12px}
+.all-leaderboards-list .survivor-row,.all-leaderboards-list .leader-row{display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid #263b29}
+.all-leaderboards-list .survivor-row:last-child,.all-leaderboards-list .leader-row:last-child{border-bottom:0}
+.all-leaderboards-list .survivor-name{flex:1}.all-leaderboards-list .survivor-points,.all-leaderboards-list b{margin-left:auto;color:#9bff45}
+.all-leaderboards-play{display:inline-flex;margin-top:16px}
+@media(max-width:760px){.mini-game{grid-template-columns:minmax(0,1fr)}.mini-game>.leaderboard-card{grid-column:auto}.leaderboard-game-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.leaderboard-head-actions{justify-content:flex-start}}
 </style>
 
 <style id="jupiter-buy-widget-styles">
@@ -635,14 +653,19 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
     <p class="jupiter-terminal-note" id="jupiter-terminal-status" aria-live="polite">Loading the official Jupiter interface…</p>
   </div>
 </article>
-<article class="crew-card leaderboard-card">
-      <div class="crew-card-head"><div><div class="section-kicker">[ SURVIVAL RECORDS ]</div><h3>TOP <span class="green">ZOMBIE HUNTERS</span></h3></div><span id="leaderboard-status" class="crew-status">LOADING…</span></div>
-      <div id="survival-leaderboard" class="survival-leaderboard"><p class="crew-note">No records yet. Be the first survivor.</p></div>
-      <p class="crew-note prize-note">Future $ZOMBCASH prizes may be announced for selected competitions. No token rewards are currently enabled or guaranteed.</p>
-    </article>
+
   </div>
 </section>
 
+
+<dialog class="all-leaderboards-dialog" id="all-leaderboards-dialog" aria-labelledby="all-leaderboards-title">
+ <div class="all-leaderboards-content">
+  <div class="crew-card-head"><div><div class="section-kicker">[ SURVIVAL RECORDS / ALL GAMES ]</div><h3 id="all-leaderboards-title">TOP <span class="green">ZOMBIE HUNTERS</span></h3></div><button type="button" class="swap-help-button" id="close-all-leaderboards">✕ CLOSE</button></div>
+  <div class="leaderboard-game-tabs" role="tablist" aria-label="Choose game leaderboard"><button type="button" class="active" data-leaderboard-game="snake">ZOMBIE SNAKE</button><button type="button" data-leaderboard-game="breaker">ZOMBIE BREAKER</button><button type="button" data-leaderboard-game="maze">ZOMBIE MAZE</button><button type="button" data-leaderboard-game="wall">UNDEAD WALL</button></div>
+  <p class="crew-note" id="all-leaderboards-caption">Zombie Snake · Top 10 records</p><div class="all-leaderboards-list" id="all-leaderboards-list" aria-live="polite">Loading records…</div>
+  <a class="btn btn-primary all-leaderboards-play" href="arcade.html">▶ PLAY THE ARCADE</a>
+ </div>
+</dialog>
 <dialog class="swap-help-dialog" id="swap-help-dialog" aria-labelledby="swap-help-title">
   <div class="swap-help-content">
     <div class="crew-card-head"><div><span class="section-kicker">[ JUPITER SWAP INTERFACE ]</span><h3 id="swap-help-title">YOUR WALLET. <span class="green">YOUR CALL.</span></h3></div><button class="swap-help-button" id="swap-help-close" type="button">✕ CLOSE</button></div>
@@ -657,6 +680,11 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 <section class="section mini-game" id="snake-game">
   <div class="snake-promo-art" aria-hidden="true"><div class="snake-promo-orbit"></div><div class="snake-promo-symbol">☠</div><div class="snake-promo-chip chip-one">+10 BRAIN</div><div class="snake-promo-chip chip-two">ARCADE MODE</div></div>
   <div class="game-copy"><div class="section-kicker">[ 03 / PLAYABLE ARCADE ]</div><h2>ONE MORE RUN.<br><span class="green">NO HUMANITY.</span></h2><p>Meet the undead classic: guide your Zombie Snake, collect brains, grow longer, and don’t bite your own tail.</p><div class="snake-feature-row"><span>⌨ ARROWS / WASD</span><span>◉ ENDLESS SURVIVAL</span><span>✚ COMMUNITY RECORDS</span></div><a class="btn btn-primary" href="arcade.html?game=snake">▶ OPEN THE ARCADE</a><span class="snake-hint">FOUR GAMES · COMMUNITY RECORDS · FULLSCREEN AVAILABLE</span></div>
+<article class="crew-card leaderboard-card">
+      <div class="crew-card-head"><div><div class="section-kicker">[ SURVIVAL RECORDS ]</div><h3>TOP <span class="green">ZOMBIE HUNTERS</span></h3></div><div class="leaderboard-head-actions"><span id="leaderboard-status" class="crew-status">LOADING…</span><button type="button" class="btn btn-ghost leaderboard-open" id="open-all-leaderboards">TOP ZOMBIE HUNTERS ↗</button></div></div>
+      <div id="survival-leaderboard" class="survival-leaderboard"><p class="crew-note">No records yet. Be the first survivor.</p></div>
+      <p class="crew-note prize-note">Future $ZOMBCASH prizes may be announced for selected competitions. No token rewards are currently enabled or guaranteed.</p>
+    </article>
 </section>
 <dialog class="snake-modal" id="snake-modal" aria-label="Zombie Snake arcade">
   <div class="snake-modal-head"><div><span class="section-kicker">ZOMBCASH ARCADE / GAME 001</span><h2>ZOMBIE <span class="green">SNAKE</span></h2></div><button class="snake-close" id="snake-close" type="button" aria-label="Close game">✕ CLOSE</button></div>
@@ -749,7 +777,7 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 </style>
 
 <script src="runtime-fixes.js?v=20261020-2"></script>
-<script src="script.js?v=community-layout-v10-20261020"></script>
+<script src="script.js?v=arcade-leaderboards-v11-20261020"></script>
 <script id="jupiter-zombcash-init">
 (() => {
   const terminal = document.getElementById('jupiter-zombcash-terminal');
