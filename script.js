@@ -920,6 +920,33 @@ if (zomMarket) {
 })();
 
 
+/* Four-game community leaderboard dialog */
+(() => {
+ const api='https://zombcash-bot.fadehost.app';
+ const dialog=document.getElementById('all-leaderboards-dialog');
+ const open=document.getElementById('open-all-leaderboards');
+ const close=document.getElementById('close-all-leaderboards');
+ const list=document.getElementById('all-leaderboards-list');
+ const caption=document.getElementById('all-leaderboards-caption');
+ if(!dialog||!open||!close||!list)return;
+ const labels={snake:'Zombie Snake',breaker:'Zombie Breaker',maze:'Zombie Maze',wall:'Undead Wall'};
+ const esc=(value)=>String(value??'Survivor').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+ async function load(game){
+  document.querySelectorAll('[data-leaderboard-game]').forEach(b=>{const active=b.dataset.leaderboardGame===game;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active));});
+  caption.textContent=labels[game]+' · Top 10 records';list.textContent='Loading records…';
+  try{
+   const url=game==='snake'?api+'/api/survival-scores':api+'/api/arcade-scores?game='+encodeURIComponent(game);
+   const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw new Error('HTTP '+response.status);
+   const data=await response.json();const scores=Array.isArray(data.scores)?data.scores:[];list.replaceChildren();
+   if(!scores.length){list.textContent='No records yet. Play '+labels[game]+' and claim the first spot.';return;}
+   scores.slice(0,10).forEach((item,i)=>{const row=document.createElement('div');row.className='survivor-row';const rank=document.createElement('span');rank.className='survivor-rank';rank.textContent='#'+(i+1);const name=document.createElement('span');name.className='survivor-name';name.textContent=item.name||'Survivor';const date=document.createElement('small');date.className='survivor-date';date.textContent=item.date?'RECORD · '+item.date:'COMMUNITY RECORD';name.append(date);const points=document.createElement('strong');points.className='survivor-points';points.textContent=Number(item.points||0).toLocaleString('en-US')+' PTS';row.append(rank,name,points);list.append(row);});
+  }catch(e){list.textContent='Records are temporarily unavailable. Please try again shortly.';}
+ }
+ open.addEventListener('click',()=>{if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');load('snake');});
+ close.addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});
+ document.querySelectorAll('[data-leaderboard-game]').forEach(b=>b.addEventListener('click',()=>load(b.dataset.leaderboardGame)));
+})();
+
 /* Anonymous unique website visitor counter */
 (() => {
   const apiBase = 'https://zombcash-bot.fadehost.app';
