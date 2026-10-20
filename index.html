@@ -637,24 +637,25 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
       <div id="world-news-list" class="world-news-list" aria-live="polite"><p class="world-empty">Tuning into the shared RSS frequencies…</p></div>
       <div class="world-panel-foot"><span id="world-news-updated">WAITING FOR FIRST TRANSMISSION</span><a href="https://t.me/ZOMBCASH" target="_blank" rel="noreferrer">MORE IN TELEGRAM ↗</a></div>
     </article>
-    <article class="world-panel token-intel-panel">
-      <div class="world-panel-head"><div><span class="world-tag alarm-tag"><i></i> TOKEN INTEL</span><h3>ZOMBCASH SNAPSHOT</h3></div><span id="token-intel-state" class="world-state">LOADING</span></div>
-      <div class="token-intel-price-block">
-        <span class="token-intel-label">LIVE TOKEN PRICE</span>
-        <strong id="token-intel-price">$—</strong>
-        <span id="token-intel-change" class="token-intel-change">24H CHANGE —</span>
+    <article class="world-panel zombie-radar-ai-panel" aria-labelledby="zombie-radar-ai-title">
+      <div class="world-panel-head">
+        <div><span class="world-tag"><i></i> AI RADAR PICKS</span><h3 id="zombie-radar-ai-title">ZOMBIE RADAR AI RECOMMENDATIONS</h3></div>
+        <span id="zombie-radar-ai-state" class="world-state" role="status" aria-live="polite">CONNECTING</span>
       </div>
-      <div class="token-intel-stats">
-        <div><small>24H VOLUME</small><strong id="token-intel-volume">—</strong></div>
-        <div><small>LATEST TRADE</small><strong id="token-intel-trade">—</strong></div>
+      <div class="zrai-toolbar">
+        <div class="zrai-periods" role="group" aria-label="Recommendation time horizon">
+          <button type="button" class="zrai-period is-active" data-radar-period="m5" aria-pressed="true">5 MIN</button>
+          <button type="button" class="zrai-period" data-radar-period="h1" aria-pressed="false">1 HOUR</button>
+          <button type="button" class="zrai-period" data-radar-period="h24" aria-pressed="false">24 HOURS</button>
+        </div>
+        <button type="button" id="zombie-radar-ai-refresh" class="zrai-refresh" aria-label="Refresh recommendations">↻ REFRESH</button>
       </div>
-      <div class="token-intel-actions">
-        <a href="https://dexscreener.com/solana/6ccbf9gtyp3c6vmyxuwzetk3yfmxhjvpm15cxicfpump" target="_blank" rel="noreferrer" id="token-intel-chart">VIEW CHART ↗</a>
-        <a href="https://jup.ag/swap/SOL-6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noreferrer">TRADE TOKEN ↗</a>
+      <div class="zrai-period-note" id="zombie-radar-ai-period-note">Momentum and activity · last 5 minutes</div>
+      <div id="zombie-radar-ai-list" class="zrai-list" aria-live="polite">
+        <div class="zrai-message is-loading"><span class="zrai-spinner" aria-hidden="true"></span><span>Scanning real radar signals…</span></div>
       </div>
-      <div class="token-intel-contract"><span><small>CONTRACT ADDRESS</small><code id="token-intel-mint">6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump</code></span><button id="token-intel-copy" type="button">COPY</button></div>
-      <div class="token-intel-foot"><span id="token-intel-updated">WAITING FOR MARKET DATA</span><span>REFRESHES EVERY 60S</span></div>
-      <p class="world-disclaimer">Market data can be delayed or unavailable. Always verify the quote before trading.</p>
+      <div class="zrai-foot"><span id="zombie-radar-ai-updated">WAITING FOR RADAR DATA</span><a href="https://t.me/ZombieCashMemeRadarBot" target="_blank" rel="noopener noreferrer">OPEN TELEGRAM RADAR ↗</a></div>
+      <p class="world-disclaimer zrai-disclaimer">Ranked from live market, liquidity, trade-flow and social-link signals available in the shared radar feed. Informational only — high-risk tokens can move sharply.</p>
     </article>
     <div class="world-community-pair">
     <article class="world-panel missions-panel">
