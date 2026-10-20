@@ -81,10 +81,10 @@
     const href = el.href || '';
     if (id === 'copy-ca' || id === 'footer-copy-ca' || /copy contract|copy ca/.test(label)) send('ca_copy', 'token');
     if (id === 'start-game' || id === 'game-action' || /start game|play now|play again/.test(label)) send('game_start', 'zombie_lab');
-    if (/zombie-maker\\.html/.test(href) || /make your zombie/.test(label)) send('cta_click', 'zombie_maker');
-    if (/t\\.me\\/zombiecashmemeradarbot/i.test(href)) send('radar_open', 'meme_radar');
-    if (/t\\.me\\/zombcash\\/?(?:\\?|$)/i.test(href)) send('telegram_open', 'telegram_channel');
-    if (/pump\\.fun\\/coin|dexscreener\\.com\\/solana/i.test(href)) send('token_info_open', 'token_market');
+    if (/zombie-maker\.html/.test(href) || /make your zombie/.test(label)) send('cta_click', 'zombie_maker');
+    if (/t\.me\/zombiecashmemeradarbot/i.test(href)) send('radar_open', 'meme_radar');
+    if (/t\.me\/zombcash\/?(?:\?|$)/i.test(href)) send('telegram_open', 'telegram_channel');
+    if (/pump\.fun\/coin|dexscreener\.com\/solana/i.test(href)) send('token_info_open', 'token_market');
     try {
       const url = new URL(href, window.location.href);
       if (/^https?:$/i.test(url.protocol) && url.origin !== window.location.origin) send('outbound_click', url.hostname.split('.')[0]);
