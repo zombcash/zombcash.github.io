@@ -1,3 +1,46 @@
+/* Render the public aggregate traffic dashboard from the first-party API. */
+(() => {
+  const root = document.getElementById('campaign-dashboard');
+  if (!root) return;
+  const endpoint = 'https://zombcash-bot.fadehost.app/api/track';
+  const byId = id => document.getElementById(id);
+  const fmt = n => Number(n || 0).toLocaleString();
+  const safe = s => String(s).replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+  const renderList = (node, entries, empty) => {
+    if (!node) return;
+    const rows = Object.entries(entries || {}).sort((a,b) => Number(b[1])-Number(a[1])).slice(0,8);
+    if (!rows.length) { node.innerHTML = '<span>' + empty + '</span>'; return; }
+    const max = Math.max(1, ...rows.map(x => Number(x[1]) || 0));
+    node.innerHTML = rows.map(([label,value]) => {
+      const n = Number(value) || 0;
+      const pct = Math.max(2, Math.round(n / max * 100));
+      return '<div class="campaign-row"><span>' + safe(label) + '</span><div class="campaign-bar"><i style="width:' + pct + '%"></i></div><b class="campaign-count">' + fmt(n) + '</b></div>';
+    }).join('');
+  };
+  const load = async () => {
+    try {
+      const response = await fetch(endpoint, {cache:'no-store'});
+      if (!response.ok) throw new Error('Analytics endpoint returned ' + response.status);
+      const data = await response.json();
+      const events = data.events || {};
+      const sum = names => names.reduce((n,key) => n + (Number(events[key]) || 0), 0);
+      byId('campaign-pageviews').textContent = fmt(events.page_view || 0);
+      byId('campaign-outbound').textContent = fmt(events.outbound_click || 0);
+      byId('campaign-community').textContent = fmt(sum(['telegram_open','radar_open']));
+      byId('campaign-conversions').textContent = fmt(sum(['ca_copy','game_start','game_share','maker_share','cta_click','token_info_open']));
+      renderList(byId('campaign-sources'), data.sources, 'No campaign traffic recorded yet.');
+      renderList(byId('campaign-days'), data.daily, 'No daily events recorded yet.');
+      byId('campaign-updated').textContent = 'UPDATED ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) + ' · ' + (data.retentionDays || 60) + ' DAY RETENTION';
+    } catch (_) {
+      byId('campaign-updated').textContent = 'ANALYTICS TEMPORARILY UNAVAILABLE · CHECK API DEPLOYMENT';
+      byId('campaign-sources').innerHTML = '<span>Analytics API is not responding yet.</span>';
+      byId('campaign-days').innerHTML = '<span>Try again after the API deployment completes.</span>';
+    }
+  };
+  load();
+  setInterval(load, 60000);
+})();
+
 /* ZombieCash first-party campaign tracking. Aggregate-only; no IP or wallet addresses stored. */
 (() => {
   const endpoint = 'https://zombcash-bot.fadehost.app/api/track';
