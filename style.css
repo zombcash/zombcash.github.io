@@ -657,3 +657,41 @@ h1 .alive{text-shadow:0 0 32px #9bff4540}
   .hero-bottom span:nth-child(2){display:none}
   .hero-bottom span:last-child{display:none}
 }
+
+/* Live market detail panels */
+.zombcash-market-panels{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.95fr);gap:14px;margin-top:18px}
+.zom-market-panel{min-width:0;border:1px solid #2a4032;background:linear-gradient(145deg,#101814,#090e12 78%);padding:18px;overflow:hidden}
+.zom-panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;min-height:54px}
+.zom-panel-kicker{display:block;color:#82978a;font:700 8px Orbitron,sans-serif;letter-spacing:1.2px;margin-bottom:8px}
+.zom-panel-head h4{margin:0 0 7px;color:#eaf5eb;font:700 15px Orbitron,sans-serif}
+.zom-panel-head h4 span{color:#91a298;font:600 12px Rajdhani,sans-serif}
+#zom-chart-current{font:700 20px Rajdhani,sans-serif;color:#eff9ef;font-variant-numeric:tabular-nums}
+.zom-periods{display:flex;gap:4px;padding:3px;background:#0a100d;border:1px solid #24362b;flex-shrink:0}
+.zom-periods button{border:0;background:transparent;color:#83968a;padding:8px 9px;font:700 8px Orbitron,sans-serif;cursor:pointer}
+.zom-periods button.active,.zom-periods button:hover{background:#9bff45;color:#09100a}
+.zom-chart-wrap{height:240px;position:relative;margin:10px 0 8px;min-width:0}
+#zom-price-chart{display:block;width:100%;height:100%}
+#zom-chart-empty{display:none;position:absolute;inset:0;align-items:center;justify-content:center;text-align:center;color:#718579;font:600 10px Orbitron,sans-serif}
+#zom-chart-empty.visible{display:flex}
+.zom-panel-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid #203127;padding-top:12px;color:#718579;font:700 7px Orbitron,sans-serif;letter-spacing:.7px}
+.zom-live-state{display:flex;align-items:center;gap:7px;color:#9bff45;font:700 8px Orbitron,sans-serif;white-space:nowrap}
+.zom-live-state i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#9bff45;box-shadow:0 0 9px #9bff45}
+.zom-activity-totals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:20px 0 17px}
+.zom-activity-totals>div{display:flex;flex-direction:column;gap:5px;min-width:0}
+.zom-activity-totals small,.zom-activity-periods small{font:700 7px Orbitron,sans-serif;letter-spacing:.7px;color:#809488}
+.zom-activity-totals strong{font:700 23px Rajdhani,sans-serif;font-variant-numeric:tabular-nums}
+#zom-buys{color:#9bff45}#zom-sells{color:#ff647d}#zom-total-txns{color:#eef8f0}
+.zom-activity-bar{height:9px;display:flex;gap:3px;overflow:hidden;background:#17231b}
+.zom-activity-bar span{height:100%;width:50%;transition:width .35s ease}
+#zom-buys-bar{background:#9bff45}#zom-sells-bar{background:#ff647d}
+.zom-activity-legend{display:flex;justify-content:space-between;gap:10px;margin:11px 0 19px;color:#a9b9ad;font:700 8px Orbitron,sans-serif}
+.zom-activity-legend span{display:flex;align-items:center;gap:6px}
+.zom-activity-legend i{width:6px;height:6px;border-radius:50%;display:inline-block}
+.zom-activity-legend .buy-dot{background:#9bff45}.zom-activity-legend .sell-dot{background:#ff647d}
+.zom-activity-legend b{color:#eef8f0;font-variant-numeric:tabular-nums}
+.zom-activity-periods{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border-top:1px solid #203127;padding:14px 0 16px}
+.zom-activity-periods>div{display:flex;flex-direction:column;gap:7px;min-width:0}
+.zom-activity-periods span{font:600 12px Rajdhani,sans-serif;color:#b7c5ba;font-variant-numeric:tabular-nums}
+.zom-activity-periods span b:first-child{color:#9bff45}.zom-activity-periods span b:last-child{color:#ff8293}
+@media(max-width:850px){.zombcash-market-panels{grid-template-columns:minmax(0,1fr)}.zom-chart-wrap{height:220px}}
+@media(max-width:480px){.zom-market-panel{padding:14px}.zom-panel-head h4{font-size:13px}.zom-periods button{padding:7px 6px;font-size:7px}.zom-chart-wrap{height:190px}.zom-activity-totals strong{font-size:20px}.zom-activity-periods span{font-size:11px}}
