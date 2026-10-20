@@ -825,6 +825,69 @@ section.section.community-console .zombcash-market-grid {grid-template-columns:r
   section.section.mini-game#snake-game {grid-template-columns:minmax(0,1fr)!important}
   section.section.mini-game#snake-game > .arcade-feature {grid-template-columns:minmax(0,1fr)!important}
 }
+
+/* Final spacing and width pass: preserve full-bleed arcade background, align its content to the main grid. */
+section.section.mini-game#snake-game {
+  max-width:none!important;
+  padding:clamp(52px,5vw,76px) max(24px,calc((100vw - 1276px)/2))!important;
+  grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr)!important;
+  grid-template-areas:"feature records"!important;
+  gap:clamp(18px,2.4vw,34px)!important;
+}
+section.section.mini-game#snake-game>.arcade-feature,
+section.section.mini-game#snake-game>.leaderboard-card {
+  width:100%!important;max-width:100%!important;min-width:0!important;
+}
+section.section.mini-game#snake-game .snake-promo-art {max-width:300px}
+section.section.mini-game#snake-game .game-copy h2 {font-size:clamp(34px,3.6vw,52px);overflow-wrap:anywhere}
+section.section.mini-game#snake-game .leaderboard-card {padding:clamp(16px,1.8vw,24px)!important}
+section.section.mini-game#snake-game .crew-card-head {gap:12px}
+section.section.mini-game#snake-game .leaderboard-open {max-width:190px}
+section.section.community-console,
+section.section.living-world {
+  padding-top:clamp(52px,4.5vw,66px)!important;
+  padding-bottom:clamp(54px,4.5vw,68px)!important;
+}
+section.section.community-console .section-heading,
+section.section.living-world .section-heading {
+  margin-bottom:clamp(22px,2.8vw,34px);
+}
+section.section.community-console .crew-grid,
+section.section.living-world .world-grid {
+  gap:clamp(14px,1.5vw,22px)!important;
+}
+section.section.community-console .crew-card {padding:clamp(16px,1.7vw,23px)!important}
+section.section.community-console .zombcash-market {padding:clamp(16px,1.8vw,24px)!important}
+section.section.community-console .zombcash-market-grid {gap:clamp(7px,.9vw,12px)!important}
+section.section.living-world .world-panel-head {gap:12px}
+section.section.living-world .world-news-list,
+section.section.living-world .world-alert-list,
+section.section.living-world .world-missions {min-width:0}
+@media(max-width:900px) {
+  section.section.mini-game#snake-game {
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"feature" "records"!important;
+    padding:56px 5%!important;
+  }
+  section.section.mini-game#snake-game>.arcade-feature {
+    grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr)!important;
+  }
+  section.section.mini-game#snake-game .snake-promo-art {max-width:250px}
+}
+@media(max-width:560px) {
+  section.section.mini-game#snake-game {padding:44px 5%!important;gap:24px!important}
+  section.section.mini-game#snake-game>.arcade-feature {grid-template-columns:minmax(0,1fr)!important;gap:14px!important}
+  section.section.mini-game#snake-game .snake-promo-art {width:min(66vw,230px);margin:0 auto}
+  section.section.mini-game#snake-game .game-copy h2 {font-size:clamp(34px,9vw,46px)}
+  section.section.mini-game#snake-game .leaderboard-card .crew-card-head {flex-direction:column;align-items:stretch}
+  section.section.mini-game#snake-game .leaderboard-head-actions {align-items:flex-start!important}
+  section.section.community-console,
+  section.section.living-world {padding-top:48px!important;padding-bottom:50px!important}
+  section.section.community-console .crew-grid {grid-template-columns:minmax(0,1fr)!important}
+  section.section.community-console .zombcash-market-grid {grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  section.section.living-world .world-grid {grid-template-columns:minmax(0,1fr)!important}
+}
+
 </style>
 
 <script src="runtime-fixes.js?v=20261020-2"></script>
