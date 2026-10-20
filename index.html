@@ -450,6 +450,21 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 .all-leaderboards-list .survivor-name{flex:1}.all-leaderboards-list .survivor-points,.all-leaderboards-list b{margin-left:auto;color:#9bff45}
 .all-leaderboards-play{display:inline-flex;margin-top:16px}
 @media(max-width:760px){.mini-game{grid-template-columns:minmax(0,1fr)}.mini-game>.leaderboard-card{grid-column:auto}.leaderboard-game-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.leaderboard-head-actions{justify-content:flex-start}}
+
+/* Stable two-panel arcade layout: playable arcade on the left, records on the right. */
+section.section.mini-game#snake-game{display:grid!important;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr)!important;grid-template-areas:"feature records"!important;align-items:stretch!important;gap:clamp(18px,3vw,42px)!important}
+section.section.mini-game#snake-game>.arcade-feature{grid-area:feature;display:grid;grid-template-columns:minmax(150px,.75fr) minmax(0,1.25fr);align-items:center;gap:clamp(16px,2vw,30px);min-width:0}
+section.section.mini-game#snake-game>.arcade-feature>.snake-promo-art{width:100%;min-width:0}
+section.section.mini-game#snake-game>.arcade-feature>.game-copy{min-width:0}
+section.section.mini-game#snake-game>.leaderboard-card{grid-area:records;grid-column:auto!important;width:100%;max-width:none!important;min-width:0;margin:0!important;align-self:stretch}
+section.section.mini-game#snake-game .leaderboard-head-actions{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-width:100%}
+@media(max-width:900px){
+ section.section.mini-game#snake-game{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"feature" "records"!important}
+ section.section.mini-game#snake-game>.arcade-feature{grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr)}
+ section.section.mini-game#snake-game>.leaderboard-card{grid-column:auto!important}
+}
+@media(max-width:560px){section.section.mini-game#snake-game>.arcade-feature{grid-template-columns:minmax(0,1fr)}}
 </style>
 
 <style id="jupiter-buy-widget-styles">
@@ -678,8 +693,11 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 
 
 <section class="section mini-game" id="snake-game">
+  <div class="arcade-feature">
   <div class="snake-promo-art" aria-hidden="true"><div class="snake-promo-orbit"></div><div class="snake-promo-symbol">☠</div><div class="snake-promo-chip chip-one">+10 BRAIN</div><div class="snake-promo-chip chip-two">ARCADE MODE</div></div>
   <div class="game-copy"><div class="section-kicker">[ 03 / PLAYABLE ARCADE ]</div><h2>ONE MORE RUN.<br><span class="green">NO HUMANITY.</span></h2><p>Meet the undead classic: guide your Zombie Snake, collect brains, grow longer, and don’t bite your own tail.</p><div class="snake-feature-row"><span>⌨ ARROWS / WASD</span><span>◉ ENDLESS SURVIVAL</span><span>✚ COMMUNITY RECORDS</span></div><a class="btn btn-primary" href="arcade.html?game=snake">▶ OPEN THE ARCADE</a><span class="snake-hint">FOUR GAMES · COMMUNITY RECORDS · FULLSCREEN AVAILABLE</span></div>
+  </div>
+
 <article class="crew-card leaderboard-card">
       <div class="crew-card-head"><div><div class="section-kicker">[ SURVIVAL RECORDS ]</div><h3>TOP <span class="green">ZOMBIE HUNTERS</span></h3></div><div class="leaderboard-head-actions"><span id="leaderboard-status" class="crew-status">LOADING…</span><button type="button" class="btn btn-ghost leaderboard-open" id="open-all-leaderboards">TOP ZOMBIE HUNTERS ↗</button></div></div>
       <div id="survival-leaderboard" class="survival-leaderboard"><p class="crew-note">No records yet. Be the first survivor.</p></div>
@@ -777,7 +795,7 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 </style>
 
 <script src="runtime-fixes.js?v=20261020-2"></script>
-<script src="script.js?v=arcade-leaderboards-v11-20261020"></script>
+<script src="script.js?v=arcade-layout-stable-v12-20261020"></script>
 <script id="jupiter-zombcash-init">
 (() => {
   const terminal = document.getElementById('jupiter-zombcash-terminal');
