@@ -731,7 +731,6 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
     <p class="jupiter-terminal-note" id="jupiter-terminal-status" aria-live="polite">Loading the official Jupiter interface…</p>
   </div>
 </article>
-    <div class="activity-market-panels">
     <section class="crew-card activity-chart-panel" aria-label="ZombieCash price chart">
         <div class="activity-subhead"><div><span class="section-kicker">[ PRICE HISTORY ]</span><h4>MARKET <span class="green">CHART</span></h4></div><div class="activity-chart-tabs" role="group" aria-label="Chart period"><button class="activity-chart-tab active" data-chart-period="24h">24H</button><button class="activity-chart-tab" data-chart-period="7d">7D</button><button class="activity-chart-tab" data-chart-period="30d">30D</button></div></div>
         <div class="activity-chart-meta"><span id="activity-chart-status">LOADING PRICE HISTORY…</span><strong id="activity-chart-current">—</strong></div>
@@ -742,7 +741,6 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
         <div class="activity-subhead"><div><span class="section-kicker">[ ON-CHAIN FEED ]</span><h4>LATEST <span class="green">TRANSACTIONS</span></h4></div><a class="crew-link" href="https://solscan.io/token/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">OPEN SOLSCAN ↗</a></div>
         <div id="recent-trades-list" class="recent-trades-list" aria-live="polite"><p class="crew-note">Connecting to the transaction feed…</p></div>
       </section>
-    </div>
 
 
   </div>
@@ -937,12 +935,12 @@ section.section.community-console .crew-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   grid-template-areas: "market jupiter" "chart feed" !important;
   grid-auto-flow: row !important;
-  align-items: start !important;
+  align-items: stretch !important;
 }
-section.section.community-console .crew-grid > article:first-of-type { grid-area: market !important; align-self:start !important; height:auto !important; }
-section.section.community-console .crew-grid > .jupiter-swap-card { grid-area: jupiter !important; align-self:start !important; height:auto !important; }
-section.section.community-console .crew-grid > .activity-chart-panel { grid-area: chart !important; }
-section.section.community-console .crew-grid > .recent-trades-panel { grid-area: feed !important; }
+section.section.community-console .crew-grid > article:first-of-type { grid-area: market !important; align-self:stretch !important; height:100% !important; }
+section.section.community-console .crew-grid > .jupiter-swap-card { grid-area: jupiter !important; align-self:stretch !important; height:100% !important; }
+section.section.community-console .crew-grid > .activity-chart-panel { grid-area: chart !important; align-self:stretch !important; }
+section.section.community-console .crew-grid > .recent-trades-panel { grid-area: feed !important; align-self:stretch !important; }
 section.section.community-console .crew-grid > .crew-card {
   width: 100% !important;
   min-width: 0 !important;
@@ -955,19 +953,25 @@ section.section.community-console .activity-chart-panel,
 section.section.community-console .recent-trades-panel {
   display:flex !important;
   flex-direction:column !important;
-  align-self:start !important;
-  height:auto !important;
-  min-height:280px !important;
+  align-self:stretch !important;
+  height:100% !important;
+  min-height:300px !important;
 }
 section.section.community-console .activity-chart-panel #activity-price-chart {
   flex:0 0 auto;
   min-height:180px;
 }
 section.section.community-console .recent-trades-panel .recent-trades-list {
-  flex:0 0 auto;
+  flex:1 1 auto;
+  min-height:0;
 }
 @media(max-width:800px) {
-  section.section.community-console .crew-grid { grid-template-columns:minmax(0,1fr) !important; grid-template-areas:"market" "jupiter" "chart" "feed" !important; }
+  section.section.community-console .crew-grid { grid-template-columns:minmax(0,1fr) !important; grid-template-areas:"market" "jupiter" "chart" "feed" !important; align-items:start !important; }
+  section.section.community-console .crew-grid > .crew-card,
+  section.section.community-console .crew-grid > article:first-of-type,
+  section.section.community-console .crew-grid > .jupiter-swap-card { height:auto !important; align-self:start !important; }
+  section.section.community-console .activity-chart-panel,
+  section.section.community-console .recent-trades-panel { height:auto !important; }
   section.section.community-console .activity-chart-panel,
   section.section.community-console .recent-trades-panel { min-height:0 !important; }
 }
