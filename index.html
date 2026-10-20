@@ -518,9 +518,10 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 </style>
 
 <style id="zombcash-activity-chart-trades">
-.activity-market-panels{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start;margin-top:22px}
-.activity-chart-panel,.recent-trades-panel{min-width:0;margin:0;padding:16px 14px;border:1px solid #263a2a;background:linear-gradient(145deg,#09110b,#070b09)}
-@media(max-width:900px){.activity-market-panels{grid-template-columns:minmax(0,1fr)}}
+.activity-market-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:stretch;margin-top:22px}
+.activity-chart-panel,.recent-trades-panel{display:flex;flex-direction:column;min-width:0;min-height:300px;height:100%;align-self:stretch;margin:0;padding:16px 14px;border:1px solid #263a2a;background:linear-gradient(145deg,#09110b,#070b09)}
+.activity-chart-panel #activity-price-chart{flex:0 0 180px;height:180px}.recent-trades-list{flex:1;min-height:0;align-content:start}
+@media(max-width:900px){.activity-market-panels{grid-template-columns:minmax(0,1fr)}.activity-chart-panel,.recent-trades-panel{min-height:0;height:auto}}
 .activity-subhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
 .activity-subhead h4{margin:5px 0 0;font:700 16px Orbitron,sans-serif;color:#eaf2e4}
 .activity-chart-tabs{display:flex;gap:5px;flex-wrap:wrap}.activity-chart-tab{padding:7px 9px;border:1px solid #31452e;background:#080d09;color:#9aac94;font:700 8px Orbitron,sans-serif;cursor:pointer}.activity-chart-tab.active{color:#9bff45;border-color:#9bff45;background:#101c0f}
@@ -730,6 +731,7 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
     <p class="jupiter-terminal-note" id="jupiter-terminal-status" aria-live="polite">Loading the official Jupiter interface…</p>
   </div>
 </article>
+    <div class="activity-market-panels">
     <section class="crew-card activity-chart-panel" aria-label="ZombieCash price chart">
         <div class="activity-subhead"><div><span class="section-kicker">[ PRICE HISTORY ]</span><h4>MARKET <span class="green">CHART</span></h4></div><div class="activity-chart-tabs" role="group" aria-label="Chart period"><button class="activity-chart-tab active" data-chart-period="24h">24H</button><button class="activity-chart-tab" data-chart-period="7d">7D</button><button class="activity-chart-tab" data-chart-period="30d">30D</button></div></div>
         <div class="activity-chart-meta"><span id="activity-chart-status">LOADING PRICE HISTORY…</span><strong id="activity-chart-current">—</strong></div>
@@ -740,6 +742,7 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
         <div class="activity-subhead"><div><span class="section-kicker">[ ON-CHAIN FEED ]</span><h4>LATEST <span class="green">TRANSACTIONS</span></h4></div><a class="crew-link" href="https://solscan.io/token/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">OPEN SOLSCAN ↗</a></div>
         <div id="recent-trades-list" class="recent-trades-list" aria-live="polite"><p class="crew-note">Connecting to the transaction feed…</p></div>
       </section>
+    </div>
 
 
   </div>
@@ -1079,7 +1082,7 @@ footer {
 </style>
 
 <script src="runtime-fixes.js?v=20261020-2"></script>
-<script src="script.js?v=market-card-compact-api-timeouts-20261020-4"></script>
+<script src="script.js?v=market-feed-repair-20261020-5"></script>
 <script src="living-world-recovery.js?v=20261020-2"></script>
 <script id="jupiter-zombcash-init">
 (() => {
