@@ -1,3 +1,41 @@
+/* ZombieCash first-party campaign tracking. Aggregate-only; no IP or wallet addresses stored. */
+(() => {
+  const endpoint = 'https://zombcash-bot.fadehost.app/api/track';
+  const params = new URLSearchParams(window.location.search);
+  const clean = (value, fallback) => String(value || fallback).toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 60) || fallback;
+  const source = clean(params.get('utm_source') || params.get('source') || document.referrer && new URL(document.referrer).hostname.split('.')[0] || 'direct', 'direct');
+  const medium = clean(params.get('utm_medium') || 'unknown', 'unknown');
+  const campaign = clean(params.get('utm_campaign') || 'none', 'none');
+  const page = (window.location.pathname || '/').replace(/[^a-zA-Z0-9_./-]/g, '').slice(0, 120) || '/';
+  const send = (event, target = 'none') => {
+    try {
+      const body = JSON.stringify({event, source, medium, campaign, page, target: clean(target, 'none')});
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(endpoint, new Blob([body], {type:'application/json'}));
+      } else {
+        fetch(endpoint, {method:'POST', headers:{'Content-Type':'application/json'}, body, keepalive:true}).catch(() => {});
+      }
+    } catch (_) {}
+  };
+  send('page_view');
+  document.addEventListener('click', event => {
+    const el = event.target && event.target.closest ? event.target.closest('a,button') : null;
+    if (!el) return;
+    const id = String(el.id || '').toLowerCase();
+    const label = String(el.getAttribute('aria-label') || el.textContent || '').trim().toLowerCase();
+    const href = el.href || '';
+    if (id === 'copy-ca' || /copy contract|copy ca/.test(label)) send('ca_copy', 'token');
+    if (id === 'start-game' || id === 'game-action' || /start game|play now|play again/.test(label)) send('game_start', 'zombie_lab');
+    if (/zombie-maker\.html/.test(href) || /make your zombie/.test(label)) send('cta_click', 'zombie_maker');
+    if (/t\.me\/zombcashmemerad arbot|t\.me\/zombiecashmemeradarbot/i.test(href)) send('radar_open', 'meme_radar');
+    if (/t\.me\/zombcash\/?(?:\?|$)/i.test(href)) send('telegram_open', 'telegram_channel');
+    if (/pump\.fun\/coin|dexscreener\.com\/solana/i.test(href)) send('token_info_open', 'token_market');
+    if (href && /^https?:/i.test(href) && new URL(href, window.location.href).origin !== window.location.origin) {
+      send('outbound_click', new URL(href).hostname.split('.')[0]);
+    }
+  }, {capture:true});
+})();
+
 const menu = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.topbar nav');
 menu?.addEventListener('click', () => nav.classList.toggle('open'));
