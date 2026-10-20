@@ -934,38 +934,34 @@ section.section.community-console .crew-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   grid-template-areas: "market jupiter" "chart feed" !important;
   grid-auto-flow: row !important;
-  align-items: stretch !important;
+  align-items: start !important;
 }
-section.section.community-console .crew-grid > article:first-of-type { grid-area: market !important; }
-section.section.community-console .crew-grid > .jupiter-swap-card { grid-area: jupiter !important; }
+section.section.community-console .crew-grid > article:first-of-type { grid-area: market !important; align-self:start !important; height:auto !important; }
+section.section.community-console .crew-grid > .jupiter-swap-card { grid-area: jupiter !important; align-self:start !important; height:auto !important; }
 section.section.community-console .crew-grid > .activity-chart-panel { grid-area: chart !important; }
 section.section.community-console .crew-grid > .recent-trades-panel { grid-area: feed !important; }
 section.section.community-console .crew-grid > .crew-card {
   width: 100% !important;
   min-width: 0 !important;
   max-width: 100% !important;
+  height: auto !important;
   box-sizing: border-box !important;
-  align-self: stretch !important;
-}
-section.section.community-console .activity-chart-panel,
-section.section.community-console .recent-trades-panel {
-  height: 100% !important;
-  min-height: 340px !important;
+  align-self: start !important;
 }
 section.section.community-console .activity-chart-panel,
 section.section.community-console .recent-trades-panel {
   display:flex !important;
   flex-direction:column !important;
-  align-self:stretch !important;
-  height:100% !important;
-  min-height:330px !important;
+  align-self:start !important;
+  height:auto !important;
+  min-height:280px !important;
 }
 section.section.community-console .activity-chart-panel #activity-price-chart {
-  flex:1 1 auto;
+  flex:0 0 auto;
   min-height:180px;
 }
 section.section.community-console .recent-trades-panel .recent-trades-list {
-  flex:1 1 auto;
+  flex:0 0 auto;
 }
 @media(max-width:800px) {
   section.section.community-console .crew-grid { grid-template-columns:minmax(0,1fr) !important; grid-template-areas:"market" "jupiter" "chart" "feed" !important; }
@@ -1083,7 +1079,7 @@ footer {
 </style>
 
 <script src="runtime-fixes.js?v=20261020-2"></script>
-<script src="script.js?v=market-grid-api-diagnostics-20261020-3"></script>
+<script src="script.js?v=market-card-compact-api-timeouts-20261020-4"></script>
 <script id="jupiter-zombcash-init">
 (() => {
   const terminal = document.getElementById('jupiter-zombcash-terminal');

@@ -628,7 +628,7 @@ if (zomMarket) {
   async function loadWorldNews() {
     if (newsStatus) newsStatus.textContent = 'SYNCING RSS';
     try {
-      const response = await fetch(apiBase + '/api/news', {cache:'no-store'});
+      const response = await fetch(apiBase + '/api/news', {cache:'no-store', signal:AbortSignal.timeout(10000)});
       if (!response.ok) throw new Error('HTTP ' + response.status);
       const data = await response.json();
       const articles = Array.isArray(data.articles) ? data.articles : [];
@@ -687,7 +687,7 @@ if (zomMarket) {
 
   async function loadMarketAlarms() {
     try {
-      const response = await fetch(apiBase + '/api/zombcash', {cache:'no-store'});
+      const response = await fetch(apiBase + '/api/zombcash', {cache:'no-store', signal:AbortSignal.timeout(10000)});
       if (!response.ok) throw new Error('HTTP ' + response.status);
       renderAlarms(await response.json(), false);
     } catch (error) {
@@ -1056,19 +1056,19 @@ if (zomMarket) {
   };
   async function refreshStatus() {
     const checks = await Promise.allSettled([
-      fetch(apiBase + '/health', {cache:'no-store'}).then(r => {
+      fetch(apiBase + '/health', {cache:'no-store', signal:AbortSignal.timeout(8000)}).then(r => {
         if (!r.ok) throw new Error('Health HTTP ' + r.status);
         return r.json();
       }),
-      fetch(apiBase + '/api/zombcash', {cache:'no-store'}).then(r => {
+      fetch(apiBase + '/api/zombcash', {cache:'no-store', signal:AbortSignal.timeout(10000)}).then(r => {
         if (!r.ok) throw new Error('Market HTTP ' + r.status);
         return r.json();
       }),
-      fetch(apiBase + '/api/activity', {cache:'no-store'}).then(r => {
+      fetch(apiBase + '/api/activity', {cache:'no-store', signal:AbortSignal.timeout(10000)}).then(r => {
         if (!r.ok) throw new Error('Activity HTTP ' + r.status);
         return r.json();
       }),
-      fetch(apiBase + '/api/visits', {cache:'no-store'}).then(r => {
+      fetch(apiBase + '/api/visits', {cache:'no-store', signal:AbortSignal.timeout(8000)}).then(r => {
         if (!r.ok) throw new Error('Visits HTTP ' + r.status);
         return r.json();
       })
