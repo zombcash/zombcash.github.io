@@ -67,7 +67,7 @@
     const id = String(el.id || '').toLowerCase();
     const label = String(el.getAttribute('aria-label') || el.textContent || '').trim().toLowerCase();
     const href = el.href || '';
-    if (id === 'copy-ca' || /copy contract|copy ca/.test(label)) send('ca_copy', 'token');
+    if (id === 'copy-ca' || id === 'footer-copy-ca' || /copy contract|copy ca/.test(label)) send('ca_copy', 'token');
     if (id === 'start-game' || id === 'game-action' || /start game|play now|play again/.test(label)) send('game_start', 'zombie_lab');
     if (/zombie-maker\.html/.test(href) || /make your zombie/.test(label)) send('cta_click', 'zombie_maker');
     if (/t\.me\/zombiecashmemeradarbot/i.test(href)) send('radar_open', 'meme_radar');
@@ -101,17 +101,40 @@ setInterval(() => {
 }, 6500);
 
 const ca = '6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump';
-document.getElementById('copy-ca').addEventListener('click', async () => {
-  const feedback = document.getElementById('copy-feedback');
+async function copyContractAddress(button, feedback) {
+  let copied = false;
   try {
     await navigator.clipboard.writeText(ca);
-    feedback.textContent = 'CONTRACT COPIED TO CLIPBOARD.';
-  } catch {
+    copied = true;
+  } catch (_) {
     const input = document.createElement('textarea');
-    input.value = ca; document.body.appendChild(input); input.select();
-    const ok = document.execCommand('copy'); input.remove();
-    feedback.textContent = ok ? 'CONTRACT COPIED TO CLIPBOARD.' : 'SELECT AND COPY THE CONTRACT ADDRESS ABOVE.';
+    input.value = ca;
+    input.setAttribute('readonly', '');
+    input.style.position = 'fixed';
+    input.style.opacity = '0';
+    document.body.appendChild(input);
+    input.select();
+    try { copied = document.execCommand('copy'); } catch (_) {}
+    input.remove();
   }
+  if (feedback) {
+    feedback.textContent = copied ? 'CONTRACT COPIED TO CLIPBOARD.' : 'COPY FAILED — SELECT THE CONTRACT ADDRESS AND COPY IT MANUALLY.';
+  }
+  if (button) {
+    const original = button.dataset.originalLabel || button.textContent;
+    button.dataset.originalLabel = original;
+    button.textContent = copied ? 'COPIED ✓' : 'COPY FAILED';
+    if (copied) setTimeout(() => { button.textContent = original; }, 1800);
+  }
+  return copied;
+}
+document.getElementById('copy-ca')?.addEventListener('click', async () => {
+  await copyContractAddress(document.getElementById('copy-ca'), document.getElementById('copy-feedback'));
+});
+document.getElementById('footer-copy-ca')?.addEventListener('click', async () => {
+  const button = document.getElementById('footer-copy-ca');
+  const feedback = document.getElementById('footer-copy-feedback');
+  await copyContractAddress(button, feedback);
 });
 
 // Zombie Snake: classic keyboard-controlled snake with a ZombieCash twist.
