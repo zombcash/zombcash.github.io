@@ -569,7 +569,7 @@ if (zomMarket) {
     if (zomStatus) zomStatus.textContent = 'SCANNING TOKEN…';
     if (zomRefresh) zomRefresh.disabled = true;
     try {
-      const response = await fetch('https://zombcash-bot.fadehost.app/api/zombcash', {cache:'no-store'});
+      const response = await fetch('https://zombcash-bot.fadehost.app/api/zombcash', {cache:'no-store', signal:AbortSignal.timeout(12000)});
       if (!response.ok) throw new Error('HTTP ' + response.status);
       const data = await response.json();
       zomPrice.textContent = zomPriceText(data.priceUsd);
@@ -584,8 +584,8 @@ if (zomMarket) {
       if (zomUpdated) zomUpdated.textContent = (data.stale ? 'LAST SOURCE UPDATE ' : 'SOURCE UPDATED ') + (sourceTime ? new Date(sourceTime).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) : 'UNKNOWN');
     } catch (error) {
       console.warn('ZombieCash token market update failed:', error);
-      if (zomStatus) zomStatus.textContent = 'SIGNAL UNAVAILABLE';
-      if (zomUpdated) zomUpdated.textContent = 'TRY REFRESHING SHORTLY';
+      if (zomStatus) zomStatus.textContent = 'API ERROR';
+      if (zomUpdated) zomUpdated.textContent = String(error?.message || 'REQUEST FAILED').slice(0, 70);
     } finally {
       zomBusy = false;
       if (zomRefresh) zomRefresh.disabled = false;
@@ -816,7 +816,7 @@ if (zomMarket) {
   }
   async function loadActivity() {
     try {
-      const response = await fetch(apiBase + '/api/activity', {cache:'no-store'});
+      const response = await fetch(apiBase + '/api/activity', {cache:'no-store', signal:AbortSignal.timeout(12000)});
       if (!response.ok) throw new Error('HTTP ' + response.status);
       activityData = await response.json();
       renderActivity();
@@ -2106,12 +2106,12 @@ if (zomMarket) {
     if(!chartEl) return;
     if(chartStatus) chartStatus.textContent='LOADING PRICE HISTORY…';
     try {
-      const response=await fetch(apiBase+'/api/price-history?period='+encodeURIComponent(chartPeriod),{cache:'no-store'});
+      const response=await fetch(apiBase+'/api/price-history?period='+encodeURIComponent(chartPeriod),{cache:'no-store',signal:AbortSignal.timeout(12000)});
       if(!response.ok) throw new Error('HTTP '+response.status);
       renderPriceChart(await response.json());
     } catch(error) {
       renderPriceChart(null);
-      if(chartStatus) chartStatus.textContent='PRICE FEED OFFLINE';
+      if(chartStatus) chartStatus.textContent='API ERROR · '+String(error?.message||'REQUEST FAILED').slice(0,45);
     }
   }
   document.querySelectorAll('.activity-chart-tab').forEach(button=>button.addEventListener('click',()=>{
@@ -2141,11 +2141,11 @@ if (zomMarket) {
   async function loadRecentTrades() {
     if(!tradesEl) return;
     try {
-      const response=await fetch(apiBase+'/api/recent-trades',{cache:'no-store'});
+      const response=await fetch(apiBase+'/api/recent-trades',{cache:'no-store',signal:AbortSignal.timeout(12000)});
       if(!response.ok) throw new Error('HTTP '+response.status);
       renderRecentTrades(await response.json());
     } catch(error) {
-      const empty=document.createElement('p');empty.className='recent-trade-empty';empty.textContent='The live transaction feed is temporarily unavailable.';tradesEl.replaceChildren(empty);
+      const empty=document.createElement('p');empty.className='recent-trade-empty';empty.textContent='Transaction API error: '+String(error?.message||'request failed').slice(0,70);tradesEl.replaceChildren(empty);
     }
   }
   function renderActivity() {
