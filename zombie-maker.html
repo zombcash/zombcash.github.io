@@ -191,5 +191,32 @@
   });
 })();
 </script>
+<script>
+/* ZombieCash campaign analytics for the standalone Zombie Maker page. */
+(() => {
+  const endpoint = 'https://zombcash-bot.fadehost.app/api/track';
+  const q = new URLSearchParams(location.search);
+  const clean = (v, d) => String(v || d).toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 60) || d;
+  const source = clean(q.get('utm_source') || q.get('source') || (document.referrer ? new URL(document.referrer).hostname.split('.')[0] : 'direct'), 'direct');
+  const medium = clean(q.get('utm_medium') || 'unknown', 'unknown');
+  const campaign = clean(q.get('utm_campaign') || 'none', 'none');
+  const send = (event, target) => {
+    const body = JSON.stringify({event, source, medium, campaign, page: '/zombie-maker.html', target: clean(target, 'none')});
+    try { navigator.sendBeacon(endpoint, new Blob([body], {type:'application/json'})); } catch (_) {}
+  };
+  send('page_view', 'zombie_maker');
+  document.addEventListener('click', e => {
+    const el = e.target && e.target.closest ? e.target.closest('button,a') : null;
+    if (!el) return;
+    const id = String(el.id || '').toLowerCase();
+    const label = String(el.textContent || '').toLowerCase();
+    const href = el.href || '';
+    if (id.includes('share') || /send.*telegram|share.*telegram/.test(label)) send('maker_share', 'telegram');
+    if (/twitter\.com\/intent\/tweet|x\.com\/intent\/post/.test(href)) send('game_share', 'x');
+    if (/^https?:/.test(href) && new URL(href, location.href).origin !== location.origin) send('outbound_click', new URL(href).hostname.split('.')[0]);
+  }, true);
+})();
+</script>
+
 </body>
 </html>
