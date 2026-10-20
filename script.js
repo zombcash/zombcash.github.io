@@ -608,7 +608,7 @@ if (zomMarket) {
   const missionList = document.getElementById('world-missions');
   const missionCount = document.getElementById('world-mission-count');
   const missionDate = document.getElementById('world-mission-date');
-  if (!newsList || !alertList || !missionList) return;
+  if (!missionList) return;
 
   const safeDate = value => {
     const parsed = Date.parse(value || '');
@@ -660,6 +660,7 @@ if (zomMarket) {
   }
 
   function renderAlarms(market, error) {
+    if (!alertList) return;
     const alerts = [];
     if (error || !market) {
       alerts.push({level:'warn', icon:'⚠', title:'MARKET CONNECTION', message:'Could not confirm the latest $ZOMBCASH snapshot. The API will retry.', badge:'RETRYING'});
@@ -698,19 +699,19 @@ if (zomMarket) {
 
   const missionSets = [
     [
-      ['Scan the outbreak', 'Open the live Solana radar and inspect a token.'],
-      ['Check the signal', 'Review $ZOMBCASH 24h movement and volume.'],
-      ['Report to the crew', 'Visit the Telegram community and share one useful thought.']
+      ['Scan the outbreak', 'Open the live Solana radar and inspect one token.', '#living-world', 'OPEN RADAR ↗'],
+      ['Check the signal', 'Review $ZOMBCASH movement and market activity.', '#community-console', 'CHECK MARKET ↗'],
+      ['Report to the crew', 'Visit the Telegram community and share one useful thought.', 'https://t.me/ZombieCashCTO', 'JOIN THE CREW ↗']
     ],
     [
-      ['Read a transmission', 'Open one story in the live news feed.'],
-      ['Compare the survivors', 'Compare volume and liquidity for two radar tokens.'],
-      ['Join the resistance', 'Check the latest project discussion in Telegram.']
+      ['Read a transmission', 'Open one story in the live news feed.', '#living-world', 'READ NEWS ↗'],
+      ['Compare survivors', 'Compare volume and liquidity for two radar tokens.', '#living-world', 'COMPARE TOKENS ↗'],
+      ['Join the resistance', 'Check the latest project discussion in Telegram.', 'https://t.me/ZombieCashCTO', 'OPEN COMMUNITY ↗']
     ],
     [
-      ['Inspect the market', 'Refresh the $ZOMBCASH market snapshot.'],
-      ['Explore a new signal', 'Search the radar for a token you have not seen before.'],
-      ['Spread the signal', 'Share the website with another survivor.']
+      ['Inspect the market', 'Review the latest $ZOMBCASH market snapshot.', '#community-console', 'VIEW MARKET ↗'],
+      ['Find a new signal', 'Explore the radar for a token you have not seen before.', '#living-world', 'EXPLORE RADAR ↗'],
+      ['Spread the signal', 'Share the ZombieCash homepage with another survivor.', 'https://t.me/ZOMBCASH', 'OPEN CHANNEL ↗']
     ]
   ];
   const dayKey = new Date().toISOString().slice(0,10);
@@ -732,8 +733,15 @@ if (zomMarket) {
         try { localStorage.setItem(storageKey, JSON.stringify(done)); } catch (_) {}
         renderMissions();
       });
-      const copy = makeNode('span', '');
+      const copy = makeNode('span', 'world-mission-copy');
       copy.append(makeNode('strong', '', mission[0]), makeNode('p', '', mission[1]));
+      if (mission[2]) {
+        const action = makeNode('a', 'world-mission-action', mission[3] || 'OPEN ↗');
+        action.href = mission[2];
+        if (/^https:\/\//i.test(mission[2])) { action.target = '_blank'; action.rel = 'noopener noreferrer'; }
+        action.addEventListener('click', event => event.stopPropagation());
+        copy.append(action);
+      }
       label.append(checkbox, copy);
       missionList.append(label);
     });
