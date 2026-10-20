@@ -2914,7 +2914,9 @@ if (zomMarket) {
       message.textContent = 'Some live data is unavailable or delayed. Check the service indicators before relying on the figures.';
     } else {
       status.textContent = 'LIVE SYSTEMS CHECKED';
-      const txns = Number(activity?.txns?.h24 ?? activity?.transactions?.h24);
+      const buys24 = Number(activity?.buys?.h24);
+      const sells24 = Number(activity?.sells?.h24);
+      const txns = Number.isFinite(buys24) && Number.isFinite(sells24) ? buys24 + sells24 : NaN;
       message.textContent = Number.isFinite(change)
         ? '$ZOMBCASH moved ' + (change > 0 ? '+' : '') + change.toFixed(2) + '% over 24 hours. ' + (Number.isFinite(txns) ? txns.toLocaleString('en-US') + ' trades were reported in the latest activity snapshot.' : 'Market and service indicators refreshed from the connected API.')
         : 'The API is reachable, but a current 24-hour price movement was not supplied.';
