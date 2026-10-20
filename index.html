@@ -377,6 +377,39 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 @media(max-width:760px){.zombie-maker-promo{grid-template-columns:1fr;margin:34px 16px 44px;padding:27px 22px;gap:0}.zombie-maker-promo h2{font-size:clamp(30px,8vw,43px);letter-spacing:-1px}.zombie-maker-promo p{font-size:18px}.zm-promo-art{min-height:205px;margin-top:6px}.zm-promo-skull{font-size:145px}.zm-promo-ring{width:175px}.zm-ring-two{width:205px}.zm-promo-stamp{right:5%;bottom:3%}.zm-promo-coord{left:5%;top:4%}.zm-promo-actions{align-items:flex-start;flex-direction:column;gap:12px}.zm-promo-btn{width:100%;padding:16px 10px}.zm-promo-note{font-size:7px}}
 
 </style>
+
+<style id="jupiter-buy-widget-styles">
+:root{--jupiter-plugin-primary:155,255,69;--jupiter-plugin-background:8,12,10;--jupiter-plugin-primaryText:235,244,229;--jupiter-plugin-warning:255,190,70;--jupiter-plugin-interactive:26,37,28;--jupiter-plugin-module:13,19,15}
+.jupiter-buy-section{border-top:1px solid #9bff4524;background:radial-gradient(ellipse at 75% 35%,#19331d70 0,transparent 48%),linear-gradient(180deg,#090d0b,#080b11);padding-top:76px;padding-bottom:82px}
+.jupiter-buy-heading{align-items:end}
+.jupiter-buy-layout{display:grid;grid-template-columns:minmax(0,.78fr) minmax(380px,1fr);gap:26px;align-items:stretch;margin-top:32px}
+.jupiter-buy-copy,.jupiter-terminal-shell{min-width:0;border:1px solid #344631;background:linear-gradient(145deg,#101710eF,#0a0e11);padding:28px}
+.jupiter-buy-status{display:inline-flex;align-items:center;gap:9px;color:#9bff45;font:700 9px Orbitron,sans-serif;letter-spacing:1.4px}
+.jupiter-buy-status i,.jupiter-terminal-top i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#9bff45;box-shadow:0 0 12px #9bff4580}
+.jupiter-buy-copy h3{font:700 clamp(25px,3vw,38px)/1.12 Orbitron,sans-serif;letter-spacing:-1px;margin:25px 0 16px;color:#edf5e8}
+.jupiter-buy-copy>p{font-size:14px;line-height:1.7;color:#aab7a7}
+.jupiter-buy-copy ol{list-style:none;margin:28px 0;padding:0;display:grid;gap:18px}
+.jupiter-buy-copy li{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:start;color:#dce5d8;font-size:13px;line-height:1.5}
+.jupiter-buy-copy li b{color:#9bff45;font:700 12px Orbitron,sans-serif;padding-top:2px}
+.jupiter-buy-copy .jupiter-buy-warning{border-left:2px solid #a855f7;padding-left:13px;font-size:11px;color:#8f9b8b}
+.jupiter-buy-fallback{display:inline-flex;margin-top:12px;padding:13px 15px;border:1px solid #547143;color:#baff80;text-decoration:none;font:700 9px Orbitron,sans-serif;letter-spacing:.8px;transition:background .2s,border-color .2s}
+.jupiter-buy-fallback:hover{background:#9bff4510;border-color:#9bff45}
+.jupiter-terminal-shell{padding:0;overflow:hidden;box-shadow:0 20px 60px #0005}
+.jupiter-terminal-top{height:48px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 17px;border-bottom:1px solid #28362a;color:#a6b5a1;font:700 8px Orbitron,sans-serif;letter-spacing:.8px}
+.jupiter-terminal-top span:first-child{display:flex;align-items:center;gap:8px}
+.jupiter-terminal-top span:last-child{color:#72826d}
+#jupiter-zombcash-terminal{width:100%;min-height:590px;display:flex;align-items:center;justify-content:center;background:#080c0a}
+.jupiter-terminal-loading{min-height:420px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;color:#b8c6b1;padding:24px}
+.jupiter-terminal-loading strong{font:700 10px Orbitron,sans-serif;letter-spacing:1px}
+.jupiter-terminal-loading small{font-size:12px;color:#82917e}
+.jupiter-loader{width:27px;height:27px;border:2px solid #30402e;border-top-color:#9bff45;border-radius:50%;animation:jupiterSpin .8s linear infinite}
+.jupiter-terminal-note{margin:0;padding:12px 16px;border-top:1px solid #28362a;color:#7f8d7a;font-size:10px;line-height:1.5}
+@keyframes jupiterSpin{to{transform:rotate(360deg)}}
+@media(max-width:850px){.jupiter-buy-layout{grid-template-columns:1fr}.jupiter-buy-copy{padding:23px}.jupiter-terminal-shell{max-width:100%}}
+@media(max-width:560px){.jupiter-buy-section{padding:48px 5%}.jupiter-buy-layout{margin-top:20px;gap:16px}.jupiter-buy-copy{padding:19px}.jupiter-terminal-top{padding:0 11px;font-size:7px}#jupiter-zombcash-terminal{min-height:560px}}
+</style>
+<script src="https://terminal.jup.ag/main-v4.js"></script>
+
 </head>
 <body>
 <div class="scanlines"></div>
@@ -524,6 +557,33 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
       </section>
     </div>
   </div>
+  <section class="section jupiter-buy-section" id="buy-zombcash">
+    <div class="section-heading jupiter-buy-heading">
+      <div><div class="section-kicker">[ 06 / DIRECT ON-CHAIN ACCESS ]</div><h2>BUY THE<br><span class="green">OUTBREAK.</span></h2></div>
+      <p>Swap SOL for $ZOMBCASH right here. Connect your Solana wallet, review the route and fees, then approve the transaction in your wallet.</p>
+    </div>
+    <div class="jupiter-buy-layout">
+      <div class="jupiter-buy-copy">
+        <span class="jupiter-buy-status"><i></i> JUPITER SWAP INTERFACE</span>
+        <h3>YOUR WALLET.<br>YOUR CALL.</h3>
+        <p>Trade through Jupiter's swap interface without leaving ZombieCash. Your wallet stays in your control: the site never asks for your recovery phrase or private key.</p>
+        <ol>
+          <li><b>01</b><span>Connect a compatible Solana wallet.</span></li>
+          <li><b>02</b><span>Choose the SOL amount and review the quote.</span></li>
+          <li><b>03</b><span>Confirm only after checking the token and transaction details.</span></li>
+        </ol>
+        <p class="jupiter-buy-warning">Crypto assets are volatile. Verify the $ZOMBCASH token before swapping; this is not financial advice.</p>
+        <a class="jupiter-buy-fallback" href="https://jup.ag/swap/SOL-6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">OPEN JUPITER IN A NEW TAB ↗</a>
+      </div>
+      <div class="jupiter-terminal-shell">
+        <div class="jupiter-terminal-top"><span><i></i> SWAP TERMINAL</span><span>POWERED BY JUPITER</span></div>
+        <div id="jupiter-zombcash-terminal" aria-label="Jupiter swap interface">
+          <div class="jupiter-terminal-loading"><span class="jupiter-loader"></span><strong>INITIALIZING SWAP TERMINAL</strong><small>Connecting to Jupiter…</small></div>
+        </div>
+        <p class="jupiter-terminal-note" id="jupiter-terminal-status" aria-live="polite">Loading the official Jupiter interface…</p>
+      </div>
+    </div>
+  </section>
   <div class="live-radar">
     <div class="live-radar-head">
       <div><div class="section-kicker">[ LIVE FEED / SOLANA ]</div><h3>THE OUTBREAK <span class="green">RIGHT NOW.</span></h3><p>Live token pairs from DexScreener. Data refreshes automatically.</p></div>
@@ -628,4 +688,47 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 </style>
 
 <script src="script.js?v=live-market-panels-v1-20261020"></script>
+<script id="jupiter-zombcash-init">
+(() => {
+  const terminal = document.getElementById('jupiter-zombcash-terminal');
+  const status = document.getElementById('jupiter-terminal-status');
+  if (!terminal) return;
+  const fallback = () => {
+    terminal.innerHTML = '<div class="jupiter-terminal-loading"><strong>JUPITER WIDGET UNAVAILABLE</strong><small>Use the secure Jupiter link below to continue.</small></div>';
+    if (status) status.textContent = 'The embedded interface did not load. You can open Jupiter in a new tab.';
+  };
+  const init = () => {
+    if (!window.Jupiter || typeof window.Jupiter.init !== 'function') { fallback(); return; }
+    try {
+      window.Jupiter.init({
+        displayMode: 'integrated',
+        integratedTargetId: 'jupiter-zombcash-terminal',
+        endpoint: 'https://api.mainnet-beta.solana.com',
+        defaultExplorer: 'Solscan',
+        formProps: {
+          initialInputMint: 'So11111111111111111111111111111111111111112',
+          initialOutputMint: '6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump',
+          fixedMint: '6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump'
+        },
+        containerStyles: { zIndex: 20 },
+        onSwapError: () => { if (status) status.textContent = 'Swap error reported by Jupiter. Review the quote or try again later.'; },
+        onSuccess: () => { if (status) status.textContent = 'Swap submitted successfully. Check your wallet or Solscan for confirmation.'; }
+      });
+      if (status) status.textContent = 'Official Jupiter interface loaded. Check the token and quote before approving a swap.';
+    } catch (error) {
+      console.warn('Jupiter terminal initialization failed:', error);
+      fallback();
+    }
+  };
+  if (window.Jupiter && typeof window.Jupiter.init === 'function') init();
+  else {
+    const script = document.querySelector('script[src*="terminal.jup.ag/main-v4.js"]');
+    if (script) {
+      script.addEventListener('load', init, {once:true});
+      script.addEventListener('error', fallback, {once:true});
+      setTimeout(() => { if (!window.Jupiter) fallback(); }, 12000);
+    } else fallback();
+  }
+})();
+</script>
 </body></html>
