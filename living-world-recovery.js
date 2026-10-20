@@ -13,12 +13,20 @@
 
   // The legacy script sets this synchronously before its first request.
   // If it already started, don't duplicate its timers or requests.
-  const needsWorldRecovery = !!(
-    (newsStatus && /CONNECTING/i.test(newsStatus.textContent || '')) ||
-    (alertStatus && /SCANNING/i.test(alertStatus.textContent || ''))
-  );
-  const needsMarketRecovery = !!(marketRoot && byId('zombcash-market-status') &&
-    /CONNECTING|LOADING|SCANNING/i.test(byId('zombcash-market-status').textContent || ''));
+  // The legacy script can change status to SYNCING RSS / SIGNAL INTERRUPTED
+  // before this file runs. Recover whenever a panel exists but has no rendered
+  // content, or still shows a transient/loading/error status.
+  const newsLooksUninitialized = !!(newsList && newsStatus &&
+    (!newsList.querySelector('.world-news-item') ||
+     /CONNECTING|SCANNING|SYNCING|INTERRUPTED|ERROR|RETRY/i.test(newsStatus.textContent || '')));
+  const alertsLookUninitialized = !!(alertList && alertStatus &&
+    (!alertList.children.length ||
+     /CONNECTING|SCANNING|MONITORING|CONNECTION|ERROR|RETRY/i.test(alertStatus.textContent || '')));
+  const needsWorldRecovery = newsLooksUninitialized || alertsLookUninitialized;
+  const marketStatusAtStart = byId('zombcash-market-status');
+  const needsMarketRecovery = !!(marketRoot && marketStatusAtStart &&
+    (!byId('zombcash-price')?.textContent?.trim() ||
+     /CONNECTING|LOADING|SCANNING|ERROR|RETRY/i.test(marketStatusAtStart.textContent || '')));
 
   const request = async (path, timeout = 10000) => {
     const response = await fetch(API + path, {
