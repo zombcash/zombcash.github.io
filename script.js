@@ -53,11 +53,10 @@
   const send = (event, target = 'none') => {
     try {
       const body = JSON.stringify({event, source, medium, campaign, page, target: clean(target, 'none')});
-      if (navigator.sendBeacon) {
-        navigator.sendBeacon(endpoint, new Blob([body], {type:'application/json'}));
-      } else {
-        fetch(endpoint, {method:'POST', headers:{'Content-Type':'application/json'}, body, keepalive:true}).catch(() => {});
-      }
+      // Use fetch so the browser performs the required CORS preflight for JSON.
+      // sendBeacon with application/json can fail cross-origin without exposing the error.
+      fetch(endpoint, {method:'POST', mode:'cors', headers:{'Content-Type':'application/json'}, body, keepalive:true})
+        .catch(() => {});
     } catch (_) {}
   };
   send('page_view');
