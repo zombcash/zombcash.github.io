@@ -648,7 +648,12 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
       <div id="ops-transmissions" class="ops-transmissions" aria-live="polite">
         <div class="ops-transmission"><span class="ops-transmission-icon">⌁</span><div><strong>ESTABLISHING UPLINK</strong><p>Checking live services and the latest token activity…</p></div><small>NOW</small></div>
       </div>
-      <p class="world-disclaimer">Live status is based on the latest successful API responses.</p>
+      <div class="ops-monitor-footer" id="ops-monitor-footer">
+        <span class="ops-monitor-pulse"></span>
+        <div><strong>MONITORING ACTIVE</strong><small>Automatic checks every 60 seconds · DexScreener + GeckoTerminal</small></div>
+        <span class="ops-monitor-live">AUTO-SYNC</span>
+      </div>
+      <p class="world-disclaimer">Only verified API responses are shown. Unavailable sources stay marked as unavailable.</p>
       <div hidden aria-hidden="true"><span id="world-alarm-status">PAUSED</span><div id="world-alert-list"></div></div>
     </article>
     <div class="world-community-pair">
@@ -1095,7 +1100,7 @@ footer {
 </style>
 
 <script src="runtime-fixes.js?v=20261020-2"></script>
-<script src="script.js?v=outbreak-ops-transmissions-20261020-1"></script>
+<script src="script.js?v=outbreak-panel-refine-20261020-2"></script>
 <script src="living-world-recovery.js?v=20261020-2"></script>
 <script id="jupiter-zombcash-init">
 (() => {
@@ -1221,30 +1226,36 @@ section.section.community-console .jupiter-swap-card #jupiter-zombcash-terminal 
 
 
 <style id="zombcash-outbreak-live-operations">
-section.section.living-world .outbreak-status-panel{display:flex!important;flex-direction:column!important;min-width:0!important}
+section.section.living-world .outbreak-status-panel{display:flex!important;flex-direction:column!important;min-width:0!important;overflow:hidden!important}
 section.section.living-world .outbreak-status-panel .world-panel-head{align-items:flex-start!important;gap:12px!important}
-section.section.living-world .ops-status-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:9px!important;padding:16px 16px 14px!important}
-section.section.living-world .ops-status-tile{display:flex!important;align-items:center!important;gap:9px!important;min-width:0!important;padding:12px 10px!important;border:1px solid #2c432e!important;background:linear-gradient(125deg,#101a12,#090e0b)!important}
-section.section.living-world .ops-status-tile>span:last-child{display:grid!important;gap:5px!important;min-width:0!important}
-section.section.living-world .ops-status-tile small{font:600 8px Orbitron,sans-serif!important;letter-spacing:.35px!important;color:#8c9e87!important;white-space:nowrap!important}
+section.section.living-world .ops-status-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;padding:16px 16px 18px!important}
+section.section.living-world .ops-status-tile{display:flex!important;align-items:center!important;gap:9px!important;min-width:0!important;padding:12px 9px!important;border:1px solid #2c432e!important;background:linear-gradient(135deg,#101a12,#080d0a)!important}
+section.section.living-world .ops-status-tile>span:last-child{display:grid!important;gap:6px!important;min-width:0!important}
+section.section.living-world .ops-status-tile small{font:600 8px Orbitron,sans-serif!important;letter-spacing:.25px!important;color:#8c9e87!important;white-space:nowrap!important}
 section.section.living-world .ops-status-tile strong{font:700 10px Orbitron,sans-serif!important;color:#9bff45!important;overflow-wrap:anywhere!important}
 section.section.living-world .ops-status-dot{flex:0 0 7px!important;width:7px!important;height:7px!important;border-radius:50%!important;background:#788273!important;box-shadow:0 0 8px currentColor!important;color:#788273!important}
 section.section.living-world .ops-status-dot.is-online{background:#9bff45!important;color:#9bff45!important}
 section.section.living-world .ops-status-dot.is-warning{background:#ffb547!important;color:#ffb547!important}
 section.section.living-world .ops-status-dot.is-offline{background:#ff626d!important;color:#ff626d!important}
-section.section.living-world .ops-transmissions-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;padding:0 16px 10px!important;border-bottom:1px solid #263728!important}
+section.section.living-world .ops-transmissions-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;padding:0 16px 11px!important;border-bottom:1px solid #263728!important}
 section.section.living-world .ops-transmissions-head>span:last-child{font:600 8px Orbitron,sans-serif!important;letter-spacing:.35px!important;color:#81917d!important;text-align:right!important}
-section.section.living-world .ops-transmissions{display:grid!important;gap:0!important;padding:0 16px!important}
-section.section.living-world .ops-transmission{display:grid!important;grid-template-columns:30px minmax(0,1fr) auto!important;align-items:start!important;gap:10px!important;padding:14px 0!important;border-bottom:1px solid #203024!important;min-width:0!important}
+section.section.living-world .ops-transmissions{display:grid!important;gap:0!important;padding:0 16px!important;flex:1 1 auto!important;align-content:start!important}
+section.section.living-world .ops-transmission{display:grid!important;grid-template-columns:34px minmax(0,1fr) auto!important;align-items:center!important;gap:11px!important;padding:15px 0!important;border-bottom:1px solid #203024!important;min-width:0!important}
 section.section.living-world .ops-transmission:last-child{border-bottom:0!important}
-section.section.living-world .ops-transmission-icon{display:grid!important;place-items:center!important;width:28px!important;height:28px!important;border:1px solid #426537!important;color:#9bff45!important;font:700 14px Orbitron,sans-serif!important;background:#0b130c!important}
+section.section.living-world .ops-transmission-icon{display:grid!important;place-items:center!important;width:32px!important;height:32px!important;border:1px solid #426537!important;color:#9bff45!important;font:700 14px Orbitron,sans-serif!important;background:linear-gradient(145deg,#101b11,#080e0a)!important}
 section.section.living-world .ops-transmission-copy{min-width:0!important}
-section.section.living-world .ops-transmission strong{display:block!important;color:#e6f2df!important;font:700 10px Orbitron,sans-serif!important;letter-spacing:.35px!important;line-height:1.5!important}
-section.section.living-world .ops-transmission p{margin:4px 0 0!important;color:#a0b09b!important;font:500 13px/1.35 Rajdhani,sans-serif!important;overflow-wrap:anywhere!important}
-section.section.living-world .ops-transmission>small{color:#7d9077!important;font:600 8px Orbitron,sans-serif!important;white-space:nowrap!important;padding-top:3px!important}
-section.section.living-world .outbreak-status-panel .world-disclaimer{margin:0 16px 16px!important}
+section.section.living-world .ops-transmission strong{display:block!important;color:#e6f2df!important;font:700 10px Orbitron,sans-serif!important;letter-spacing:.4px!important;line-height:1.5!important}
+section.section.living-world .ops-transmission p{margin:5px 0 0!important;color:#a0b09b!important;font:500 14px/1.35 Rajdhani,sans-serif!important;overflow-wrap:anywhere!important}
+section.section.living-world .ops-transmission>small{color:#7d9077!important;font:600 8px Orbitron,sans-serif!important;white-space:nowrap!important;padding-top:2px!important}
+section.section.living-world .ops-monitor-footer{display:flex!important;align-items:center!important;gap:11px!important;margin:12px 16px 10px!important;padding:13px!important;border:1px solid #2d462e!important;background:linear-gradient(100deg,#101a11,#0a100c)!important}
+section.section.living-world .ops-monitor-pulse{flex:0 0 8px!important;width:8px!important;height:8px!important;border-radius:50%!important;background:#9bff45!important;box-shadow:0 0 10px #9bff4580!important}
+section.section.living-world .ops-monitor-footer>div{display:grid!important;gap:5px!important;min-width:0!important;flex:1 1 auto!important}
+section.section.living-world .ops-monitor-footer strong{font:700 9px Orbitron,sans-serif!important;letter-spacing:.5px!important;color:#9bff45!important}
+section.section.living-world .ops-monitor-footer small{font:500 12px/1.3 Rajdhani,sans-serif!important;color:#8d9d88!important}
+section.section.living-world .ops-monitor-live{font:700 8px Orbitron,sans-serif!important;letter-spacing:.4px!important;color:#d9e6d3!important;white-space:nowrap!important}
+section.section.living-world .outbreak-status-panel .world-disclaimer{margin:0 16px 16px!important;font-size:11px!important;line-height:1.4!important}
 @media(max-width:1050px){section.section.living-world .ops-status-grid{grid-template-columns:1fr!important}section.section.living-world .ops-status-tile{padding:10px!important}}
-@media(max-width:760px){section.section.living-world .ops-status-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;padding:12px 12px 10px!important;gap:6px!important}section.section.living-world .ops-status-tile{gap:6px!important;padding:9px 6px!important}section.section.living-world .ops-status-tile small{font-size:7px!important;white-space:normal!important}section.section.living-world .ops-status-tile strong{font-size:8px!important}section.section.living-world .ops-transmissions-head{padding:0 12px 9px!important}section.section.living-world .ops-transmissions{padding:0 12px!important}section.section.living-world .ops-transmission{grid-template-columns:26px minmax(0,1fr) auto!important;gap:8px!important;padding:12px 0!important}section.section.living-world .ops-transmission-icon{width:25px!important;height:25px!important}section.section.living-world .ops-transmission p{font-size:12px!important}section.section.living-world .outbreak-status-panel .world-disclaimer{margin:0 12px 12px!important}}
+@media(max-width:760px){section.section.living-world .ops-status-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;padding:12px 12px 14px!important;gap:6px!important}section.section.living-world .ops-status-tile{gap:6px!important;padding:9px 6px!important}section.section.living-world .ops-status-tile small{font-size:7px!important;white-space:normal!important}section.section.living-world .ops-status-tile strong{font-size:8px!important}section.section.living-world .ops-transmissions-head{padding:0 12px 9px!important}section.section.living-world .ops-transmissions{padding:0 12px!important}section.section.living-world .ops-transmission{grid-template-columns:28px minmax(0,1fr) auto!important;gap:8px!important;padding:12px 0!important}section.section.living-world .ops-transmission-icon{width:27px!important;height:27px!important}section.section.living-world .ops-transmission p{font-size:12px!important}section.section.living-world .ops-monitor-footer{margin:10px 12px!important;padding:10px!important;gap:8px!important}section.section.living-world .ops-monitor-footer small{font-size:11px!important}section.section.living-world .ops-monitor-live{font-size:7px!important}section.section.living-world .outbreak-status-panel .world-disclaimer{margin:0 12px 12px!important}}
 </style>
 
 <style id="zombcash-community-card-bottom-alignment">
