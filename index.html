@@ -500,6 +500,20 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 <script src="https://terminal.jup.ag/main-v4.js"></script>
 
 <link rel="stylesheet" href="site-polish.css?v=20261020-audit1">
+
+<style id="zombcash-hero-art-panel">
+.zc-hero-art-panel{position:relative!important;display:block!important;min-width:0!important;width:100%!important;height:clamp(390px,38vw,520px)!important;max-height:520px!important;overflow:hidden!important;border:1px solid #456b37!important;border-radius:3px!important;background:#050906!important;box-shadow:inset 0 0 50px #9bff4510,0 0 35px #9bff4508!important;isolation:isolate!important}
+.zc-hero-art-panel .zc-radar-art{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;overflow:hidden!important;background:#050906!important}
+.zc-hero-art-panel .zc-radar-scene{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;filter:saturate(.9) contrast(1.08)!important}
+.zc-hero-art-panel .zc-art-scanlines{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,#a4ff4308 4px,transparent 5px);mix-blend-mode:screen}
+.zc-hero-art-panel .zc-art-corner{position:absolute;width:26px;height:26px;border-color:#a4ff43;border-style:solid;opacity:.85;pointer-events:none}
+.zc-hero-art-panel .zc-art-corner-tl{top:12px;left:12px;border-width:1px 0 0 1px}.zc-hero-art-panel .zc-art-corner-br{right:12px;bottom:12px;border-width:0 1px 1px 0}
+.zc-hero-art-panel .zc-art-caption{position:absolute;left:20px;right:20px;bottom:18px;display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid #9bff4538;background:#050a08d9;backdrop-filter:blur(8px);font:600 10px Orbitron,monospace;letter-spacing:1.6px;color:#d8edce}
+.zc-hero-art-panel .zc-art-caption b{margin-left:auto;color:#a4ff43;font-size:9px;white-space:nowrap}
+.zc-hero-art-panel .zc-art-live-dot{width:7px;height:7px;border-radius:50%;background:#a4ff43;box-shadow:0 0 12px #a4ff43;flex:0 0 auto}
+@media(max-width:950px){.zc-hero-art-panel{height:clamp(330px,42vw,450px)!important}}
+@media(max-width:680px){.zc-hero-art-panel{height:300px!important;max-height:300px!important;width:100%!important}.zc-hero-art-panel .zc-art-caption{left:12px;right:12px;bottom:12px;padding:10px;font-size:8px;letter-spacing:1px}.zc-hero-art-panel .zc-art-caption b{font-size:8px}}
+</style>
 </head>
 <body>
 <div class="scanlines"></div>
@@ -520,30 +534,62 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
     <div class="hero-actions"><a class="btn btn-primary" href="#radar">⌁ OPEN THE RADAR</a><a class="btn btn-ghost" href="#lab">☣ ENTER ZOMBIE LAB</a></div>
     <div class="hero-stats"><div><strong>24/7</strong><span>LIVE OUTBREAK</span></div><i></i><div><strong>3</strong><span>SOLANA SECTOR</span></div><i></i><div><strong>0</strong><span>JUST THE CREW</span></div></div>
   </div>
-  <aside class="outbreak-panel" aria-label="ZombieCash live outbreak status">
-    <div class="panel-topline"><span class="live-dot"></span> OUTBREAK MONITOR <span class="panel-live">LIVE</span></div>
-    <div class="panel-core">
-      <div class="panel-orbit orbit-one"></div><div class="panel-orbit orbit-two"></div>
-      <div class="panel-core-mark" aria-label="ZombieCash targeting reticle">
-        <svg class="panel-reticle" viewBox="0 0 240 240" role="img" aria-label="Neon targeting reticle">
-          <circle cx="120" cy="120" r="76" fill="none" stroke="#a4ff43" stroke-width="2"/>
-          <circle cx="120" cy="120" r="57" fill="none" stroke="#a855f7" stroke-width="2" stroke-dasharray="5 8"/>
-          <circle cx="120" cy="120" r="28" fill="none" stroke="#d8ff8a" stroke-width="2"/>
-          <path d="M120 8 V77 M120 163 V232 M8 120 H77 M163 120 H232" fill="none" stroke="#a4ff43" stroke-width="4" stroke-linecap="round"/>
-          <path d="M85 85 L103 103 M155 85 L137 103 M85 155 L103 137 M155 155 L137 137" fill="none" stroke="#a4ff43" stroke-width="2" opacity=".9"/>
-          <circle cx="120" cy="120" r="5" fill="#d8ff8a"/>
-          <circle cx="120" cy="120" r="13" fill="none" stroke="#a4ff43" stroke-width="1" opacity=".8"/>
-          <path d="M120 34 L128 48 L112 48 Z M206 120 L192 128 L192 112 Z M120 206 L112 192 L128 192 Z M34 120 L48 112 L48 128 Z" fill="#a4ff43"/>
-        </svg>
-      </div>
-      <div class="panel-coordinate">SECTOR 06 / SOLANA</div>
+  <aside class="outbreak-panel zc-hero-art-panel" aria-label="ZombieCash cinematic outbreak radar artwork">
+    <div class="zc-radar-art" role="img" aria-label="A neon green biohazard radar scanning a ruined city at night">
+      <svg class="zc-radar-scene" viewBox="0 0 900 650" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="zcSky" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#050907"/><stop offset=".56" stop-color="#0c1b10"/><stop offset="1" stop-color="#070910"/></linearGradient>
+          <radialGradient id="zcGlow"><stop stop-color="#8dff36" stop-opacity=".26"/><stop offset=".6" stop-color="#5aff22" stop-opacity=".07"/><stop offset="1" stop-color="#5aff22" stop-opacity="0"/></radialGradient>
+          <linearGradient id="zcGround" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#18371d" stop-opacity=".55"/><stop offset="1" stop-color="#030605"/></linearGradient>
+          <pattern id="zcGrid" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M36 0H0V36" fill="none" stroke="#9bff45" stroke-opacity=".14" stroke-width=".7"/></pattern>
+          <filter id="zcSoftGlow"><feGaussianBlur stdDeviation="8"/></filter>
+        </defs>
+        <rect width="900" height="650" fill="url(#zcSky)"/>
+        <circle cx="650" cy="215" r="235" fill="url(#zcGlow)"/>
+        <circle cx="720" cy="155" r="66" fill="#8aff54" opacity=".08"/>
+        <circle cx="720" cy="155" r="54" fill="none" stroke="#9bff45" stroke-opacity=".16"/>
+        <g fill="#020504" opacity=".9">
+          <path d="M0 425V355h26v-28h12v46h26V302h15v-35h9v35h17v98h24v-65h19v-48h12v-23h8v23h18v130h34v-82h19v-53h11v-31h8v31h16v139h28v-48h19v-84h14v-37h9v37h14v132h22v-93h17v-42h11v-21h8v21h14v135h35v-76h15v-56h14v-27h8v27h13v132h32v-110h17v-47h13v-22h8v22h14v157h27v-73h17v-41h12v-25h8v25h15v114h30v-87h18v-47h13v-24h8v24h14v134h32v-60h17v-53h14v-29h8v29h17v113h34v-97h16v-38h10v-22h8v22h16v135h30v-68h16v-41h12v-25h8v25h16v109h40v225H0Z"/>
+          <path d="M0 515 72 475l35 20 40-61 33 32 50-70 31 27 35-50 40 42 47-18 41 44 45-59 37 36 45-21 37 29 37-47 35 23 42-56 30 20 39-30 34 31 35-49 35 32 38-19 50 41 40-14v203H0Z" fill="url(#zcGround)"/>
+        </g>
+        <rect width="900" height="650" fill="url(#zcGrid)"/>
+        <g stroke="#9bff45" fill="none" stroke-width="1" opacity=".42">
+          <path d="M0 96H900M0 325H900M0 552H900M90 0V650M450 0V650M810 0V650"/>
+          <path d="M55 50h40m-20-20v40M820 65h28m-14-14v28M72 570h34m-17-17v34"/>
+        </g>
+        <g transform="translate(510 302)" fill="none" stroke="#9bff45">
+          <circle r="195" stroke-opacity=".25" stroke-dasharray="3 8"/>
+          <circle r="163" stroke-opacity=".65" stroke-width="1.5"/>
+          <circle r="135" stroke="#d9ffb0" stroke-opacity=".65" stroke-width="1.2"/>
+          <circle r="102" stroke-opacity=".55" stroke-dasharray="7 7"/>
+          <circle r="68" stroke-opacity=".9" stroke-width="1.5"/>
+          <path d="M0-225V-58M0 58V225M-225 0H-58M58 0H225" stroke-width="2"/>
+          <path d="M-112-112 112 112M112-112-112 112" stroke-opacity=".14"/>
+          <path d="M-165-52A173 173 0 0 1 -90-147" stroke-width="5" stroke-linecap="round" opacity=".9"/>
+          <path d="M145 84l42 22-16 44" stroke-width="2" opacity=".6"/>
+          <circle cx="-110" cy="-116" r="5" fill="#a7ff45" stroke="none"/>
+          <circle cx="85" cy="105" r="4" fill="#a7ff45" stroke="none"/>
+          <circle cx="155" cy="-32" r="3" fill="#a7ff45" stroke="none"/>
+          <circle cx="-80" cy="158" r="3" fill="#a7ff45" stroke="none"/>
+        </g>
+        <circle cx="510" cy="302" r="45" fill="#9bff45" opacity=".08" filter="url(#zcSoftGlow)"/>
+        <g transform="translate(510 302)" stroke="#aaff58" stroke-width="4" stroke-linejoin="round" fill="none">
+          <circle r="26" stroke-opacity=".9"/>
+          <path d="M-8-5 0-20 8-5 24 4 8 13 0 28-8 13-24 4Z" fill="#9bff45" fill-opacity=".12"/>
+          <circle r="5" fill="#cfff9a" stroke="none"/>
+        </g>
+        <g fill="#aaff58"><rect x="330" y="122" width="6" height="6"/><rect x="685" y="426" width="6" height="6"/><rect x="286" y="405" width="4" height="4"/><rect x="753" y="238" width="5" height="5"/></g>
+        <g stroke="#9bff45" stroke-opacity=".8" fill="none"><path d="M510 77v-24h64M705 302h96l28-28"/><path d="M510 526v31h-88M315 302h-76l-20 20"/></g>
+        <g fill="#c7e9b4" font-family="monospace" font-size="11" letter-spacing="2"><text x="45" y="52">ZC // OUTBREAK MONITOR</text><text x="45" y="70" fill="#9bff45">SECTOR 06 · SOLANA</text><text x="705" y="585">SIGNAL: UNDEAD</text><text x="45" y="610" opacity=".65">SCANNING FOR SIGNS OF LIFE...</text></g>
+        <rect width="900" height="650" fill="none" stroke="#9bff45" stroke-opacity=".28"/>
+        <rect width="900" height="650" fill="#000" opacity=".06"/>
+        <path d="M0 8H900M0 642H900" stroke="#aaff58" stroke-opacity=".22"/>
+      </svg>
+      <div class="zc-art-scanlines" aria-hidden="true"></div>
+      <div class="zc-art-corner zc-art-corner-tl"></div><div class="zc-art-corner zc-art-corner-br"></div>
+      <div class="zc-art-caption"><span class="zc-art-live-dot"></span><span>OUTBREAK RADAR</span><b>LIVE / 24·7</b></div>
     </div>
-    <div class="panel-status"><span>NETWORK STATUS</span><b><i></i> UNDEAD</b></div>
-    <div class="panel-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-    <div class="panel-foot"><span>FEED: ACTIVE</span><span>/// ZC-001</span></div>
-    <div class="panel-glitch" aria-hidden="true"></div>
-  </aside>
-  </div>
+  </aside>  </div>
   <div class="hero-bottom"><span>SCANNING FOR SIGNS OF LIFE...</span><span>SYS.STATUS: <b>UNDEAD</b></span><span>COORD: 6C-CB-F9</span></div>
 </section>
 <section class="ticker" aria-label="Project motto"><div>MARKET DIED. ZOMBIECASH DIDN'T. <b>☣</b> MARKET DIED. ZOMBIECASH DIDN'T. <b>☣</b> MARKET DIED. ZOMBIECASH DIDN'T. <b>☣</b></div></section>
