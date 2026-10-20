@@ -147,9 +147,10 @@
 
   function setStatus(message, kind='') { status.textContent = message; status.className = 'status' + (kind ? ' ' + kind : ''); }
   function clearResult() {
-    generatedDataUrl = null;
+    generatedDataUrl = null; currentRarity = null;
     resultBox.innerHTML = '<div class="empty"><div class="symbol">☠</div><strong>AWAITING TRANSFORMATION</strong><p>Your creation will appear here.</p></div>';
-    downloadBtn.disabled = shareBtn.disabled = shareXBtn.disabled = true;
+    downloadBtn.disabled = shareBtn.disabled = shareXBtn.disabled = downloadCardBtn.disabled = copyReferralBtn.disabled = true;
+    rarityBadge.hidden = true; compareBox.hidden = true;
   }
   function acceptFile(file) {
     if (!file) return;
@@ -253,8 +254,8 @@
   document.getElementById('clearHistoryBtn').addEventListener('click',()=>{try{localStorage.removeItem(HISTORY_KEY);renderHistory();trackCreatorEvent('creator_history_clear','local');setStatus('Local creation history cleared.','success')}catch(_){setStatus('Could not clear browser history storage.','error')}});
   shareXBtn.addEventListener('click', () => {
     const caption = captionInput.value.trim() || 'I have joined the undead. ☣🧟';
-    const text = encodeURIComponent(caption + '\\nMake your own ZombieCash zombie:');
-    const url = encodeURIComponent('https://zombcash.github.io/zombie-maker.html');
+    const text = encodeURIComponent(caption + '\nMake your own ZombieCash zombie:');
+    const url = encodeURIComponent(referralUrl.textContent || 'https://zombcash.github.io/zombie-maker.html');
     window.open('https://twitter.com/intent/tweet?text=' + text + '&url=' + url, '_blank', 'noopener,noreferrer');
     setStatus('X post draft opened. Download your portrait and attach it to the post.', 'success');
   });
