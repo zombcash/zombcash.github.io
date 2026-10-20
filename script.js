@@ -80,24 +80,44 @@
 
 const menu = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.topbar nav');
-menu?.addEventListener('click', () => nav.classList.toggle('open'));
-nav?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
+const setMenuOpen = open => {
+  if (!nav || !menu) return;
+  nav.classList.toggle('open', open);
+  menu.setAttribute('aria-expanded', String(open));
+  menu.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+};
+menu?.setAttribute('aria-expanded', 'false');
+menu?.addEventListener('click', () => setMenuOpen(!nav?.classList.contains('open')));
+nav?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenuOpen(false)));
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') setMenuOpen(false);
+});
+document.addEventListener('click', event => {
+  if (nav?.classList.contains('open') && !event.target.closest('.topbar')) setMenuOpen(false);
+});
 
-// Demo-only outbreak indicator. Clearly labelled as simulated, not live market data.
-const chaos = 68;
-document.getElementById('chaos-value').textContent = `${chaos}%`;
-document.getElementById('meter-fill').style.width = `${chaos}%`;
-const phases = [
-  ['THE DEAD ARE WALKING', 'The city is quiet. Your next move doesn’t have to be.'],
-  ['SIGNAL IN THE STATIC', 'A new transmission is somewhere out there. Stay curious.'],
-  ['OUTBREAK LEVEL: UNDEAD', 'The apocalypse is a mood. Keep your head on straight.']
-];
-let phase = 0;
-setInterval(() => {
-  phase = (phase + 1) % phases.length;
-  document.getElementById('outbreak-status').textContent = phases[phase][0];
-  document.getElementById('outbreak-message').textContent = phases[phase][1];
-}, 6500);
+// Demo-only outbreak indicator. Keep the shared script safe on pages without these elements.
+(() => {
+  const chaosValue = document.getElementById('chaos-value');
+  const meterFill = document.getElementById('meter-fill');
+  const status = document.getElementById('outbreak-status');
+  const message = document.getElementById('outbreak-message');
+  if (!chaosValue || !meterFill || !status || !message) return;
+  const chaos = 68;
+  chaosValue.textContent = `${chaos}%`;
+  meterFill.style.width = `${chaos}%`;
+  const phases = [
+    ['THE DEAD ARE WALKING', 'The city is quiet. Your next move doesn’t have to be.'],
+    ['SIGNAL IN THE STATIC', 'A new transmission is somewhere out there. Stay curious.'],
+    ['OUTBREAK LEVEL: UNDEAD', 'The apocalypse is a mood. Keep your head on straight.']
+  ];
+  let phase = 0;
+  setInterval(() => {
+    phase = (phase + 1) % phases.length;
+    status.textContent = phases[phase][0];
+    message.textContent = phases[phase][1];
+  }, 6500);
+})();
 
 const ca = '6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump';
 document.getElementById('copy-ca')?.addEventListener('click', async () => {
