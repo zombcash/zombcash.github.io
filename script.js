@@ -1184,82 +1184,240 @@ if (zomMarket) {
 })();
 
 
-/* Token Intel: market snapshot and direct token actions. */
+/* Zombie Radar Picks: consume the existing shared /api/radar feed.
+   Time controls mirror bot-supported periods m5, h1 and h24. */
 (() => {
   const apiBase = 'https://zombcash-bot.fadehost.app';
-  const mint = '6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump';
-  const byId = id => document.getElementById(id);
-  const money = value => {
+  const panel = document.querySelector('.zombie-radar-ai-panel');
+  const list = document.getElementById('zombie-radar-ai-list');
+  const state = document.getElementById('zombie-radar-ai-state');
+  const updated = document.getElementById('zombie-radar-ai-updated');
+  const periodNote = document.getElementById('zombie-radar-ai-period-note');
+  const refreshButton = document.getElementById('zombie-radar-ai-refresh');
+  if (!panel || !list || !state || !refreshButton) return;
+
+  const periods = {
+    m5: {label:'last 5 minutes'},
+    h1: {label:'last hour'},
+    h24: {label:'last 24 hours'}
+  };
+  let activePeriod = 'm5';
+  let requestId = 0;
+  let lastPayload = null;
+  let lastSuccessAt = 0;
+
+  const setText = (node, value) => { if (node) node.textContent = value; };
+  const number = value => {
+    if (value === null || value === undefined || value === '') return null;
     const n = Number(value);
-    if (!Number.isFinite(n)) return '—';
-    if (n === 0) return '$0';
-    if (Math.abs(n) >= 1) return '$' + n.toLocaleString('en-US', {maximumFractionDigits:2});
-    const digits = Math.min(12, Math.max(6, Math.ceil(-Math.log10(Math.abs(n))) + 3));
-    return '$' + n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:digits});
+    return Number.isFinite(n) ? n : null;
   };
   const compactMoney = value => {
-    const n = Number(value);
-    return Number.isFinite(n) ? '$' + n.toLocaleString('en-US',{notation:'compact',maximumFractionDigits:1}) : '—';
+    const n = number(value);
+    return n === null ? '—' : '$' + n.toLocaleString('en-US', {notation:'compact', maximumFractionDigits:1});
   };
-  async function fetchJson(path) {
-    const response = await fetch(apiBase + path, {cache:'no-store',signal:AbortSignal.timeout(12000)});
-    if (!response.ok) throw new Error('HTTP ' + response.status);
-    return response.json();
-  }
-  async function refresh() {
-    const [marketResult,tradesResult] = await Promise.allSettled([fetchJson('/api/zombcash'),fetchJson('/api/recent-trades')]);
-    const market = marketResult.status === 'fulfilled' ? marketResult.value : null;
-    const marketOk = !!market && !market.error && Number.isFinite(Number(market.priceUsd)) && Number(market.priceUsd) > 0;
-    const price = byId('token-intel-price');
-    const change = byId('token-intel-change');
-    const state = byId('token-intel-state');
-    if (marketOk) {
-      if (price) price.textContent = money(market.priceUsd);
-      const pct = Number(market.priceChange?.h24);
-      if (change) {
-        change.textContent = Number.isFinite(pct) ? ((pct >= 0 ? '+' : '') + pct.toFixed(2) + '% · 24H') : '24H CHANGE UNAVAILABLE';
-        change.classList.toggle('is-negative', Number.isFinite(pct) && pct < 0);
-        change.classList.toggle('is-positive', Number.isFinite(pct) && pct >= 0);
-      }
-      const volume = Number(market.volume?.h24);
-      const volumeEl = byId('token-intel-volume');
-      if (volumeEl) volumeEl.textContent = Number.isFinite(volume) ? compactMoney(volume) : '—';
-      if (state) state.textContent = market.stale ? 'CACHED DATA' : 'MARKET LIVE';
-    } else {
-      if (price) price.textContent = 'UNAVAILABLE';
-      if (change) change.textContent = 'MARKET FEED UNAVAILABLE';
-      if (state) state.textContent = 'NO LIVE DATA';
-      const volumeEl = byId('token-intel-volume');
-      if (volumeEl) volumeEl.textContent = '—';
-    }
-    const tradeEl = byId('token-intel-trade');
-    if (tradeEl && tradesResult.status === 'fulfilled' && Array.isArray(tradesResult.value.trades) && tradesResult.value.trades.length) {
-      const trade = tradesResult.value.trades[0];
-      const kind = String(trade.type || 'TRADE').toUpperCase();
-      tradeEl.textContent = (kind === 'BUY' || kind === 'SELL' ? kind : 'TRADE') + (Number(trade.usd) > 0 ? ' · ' + compactMoney(trade.usd) : '');
-      tradeEl.title = trade.txHash || '';
-    } else if (tradeEl) tradeEl.textContent = 'NO RECENT DATA';
-    const updated = byId('token-intel-updated');
-    if (updated) updated.textContent = 'UPDATED ' + new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-  }
-  const copyButton = byId('token-intel-copy');
-  if (copyButton) copyButton.addEventListener('click', async () => {
+  const percent = value => {
+    const n = number(value);
+    return n === null ? '—' : (n > 0 ? '+' : '') + n.toFixed(2) + '%';
+  };
+  const safeHttpUrl = value => {
     try {
-      await navigator.clipboard.writeText(mint);
-      copyButton.textContent = 'COPIED ✓';
-    } catch (_) {
-      const field = document.createElement('textarea');
-      field.value = mint;
-      field.style.position = 'fixed';
-      field.style.opacity = '0';
-      document.body.appendChild(field);
-      field.select();
-      const copied = document.execCommand('copy');
-      field.remove();
-      copyButton.textContent = copied ? 'COPIED ✓' : 'SELECT ADDRESS';
+      const url = new URL(String(value || ''));
+      return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+    } catch (_) { return ''; }
+  };
+  const shortAddress = value => value ? value.slice(0, 5) + '…' + value.slice(-5) : '';
+  const setState = (label, mode) => {
+    setText(state, label);
+    state.dataset.state = mode || 'neutral';
+  };
+  function setMessage(message, kind) {
+    list.replaceChildren();
+    const box = document.createElement('div');
+    box.className = 'zrai-message' + (kind ? ' is-' + kind : '');
+    box.textContent = message;
+    list.append(box);
+  }
+  function createMetric(label, value, mood) {
+    const item = document.createElement('span');
+    item.className = 'zrai-metric' + (mood ? ' ' + mood : '');
+    const key = document.createElement('small');
+    key.textContent = label;
+    const val = document.createElement('strong');
+    val.textContent = value;
+    item.append(key, val);
+    return item;
+  }
+  function tokenMetrics(pair) {
+    const changes = pair.priceChange || {};
+    const volumes = pair.volume || {};
+    const transactions = pair.txns || {};
+    const change = number(changes[activePeriod]);
+    const volume = number(volumes[activePeriod]);
+    const flow = transactions[activePeriod] || {};
+    const buys = number(flow.buys);
+    const sells = number(flow.sells);
+    const trades = (buys === null ? 0 : buys) + (sells === null ? 0 : sells);
+    const liquidity = number(pair.liquidity && pair.liquidity.usd);
+    const hasTrades = buys !== null || sells !== null;
+    const buyRatio = trades ? (buys || 0) / trades : 0.5;
+    const momentum = change === null ? 0 : (Math.max(-50, Math.min(change, 100)) + 50) / 150;
+    // Transparent signal score from actual API fields; not a private Gemini result.
+    const score = Math.max(0, Math.min(100,
+      42 * Math.min(1, Math.log10(Math.max(volume || 0, 1)) / 6) +
+      28 * Math.min(1, Math.log10(Math.max(liquidity || 0, 1)) / 6) +
+      20 * momentum + 10 * buyRatio
+    ));
+    return {change, volume, buys, sells, trades, liquidity, hasTrades, score};
+  }
+  function rankPairs(payload) {
+    const bestByAddress = new Map();
+    (Array.isArray(payload.pairs) ? payload.pairs : []).forEach(pair => {
+      if (!pair || pair.chainId !== 'solana') return;
+      const address = String((pair.baseToken || {}).address || '').trim();
+      if (!address) return;
+      const liquidity = Number((pair.liquidity || {}).usd || 0);
+      const previous = bestByAddress.get(address);
+      if (!previous || liquidity > Number((previous.liquidity || {}).usd || 0)) bestByAddress.set(address, pair);
+    });
+    return Array.from(bestByAddress.values())
+      .map(pair => ({pair, metrics:tokenMetrics(pair)}))
+      .filter(({pair, metrics}) => {
+        const price = number(pair.priceUsd);
+        return price !== null && price > 0 && metrics.change !== null &&
+          (metrics.volume !== null || metrics.hasTrades);
+      })
+      .sort((a, b) => b.metrics.score - a.metrics.score ||
+        (b.metrics.volume || 0) - (a.metrics.volume || 0) ||
+        b.metrics.trades - a.metrics.trades)
+      .slice(0, 4);
+  }
+  function render(payload) {
+    const ranked = rankPairs(payload);
+    list.replaceChildren();
+    if (!ranked.length) {
+      setMessage('No tokens with enough market data for this period. Refresh or try another horizon.', 'empty');
+      setState('NO PICKS', 'empty');
+      return;
     }
-    setTimeout(() => { copyButton.textContent = 'COPY'; }, 1800);
+    ranked.forEach(({pair, metrics}, index) => {
+      const base = pair.baseToken || {};
+      const address = String(base.address || '');
+      const symbol = String(base.symbol || 'TOKEN').slice(0, 24);
+      const name = String(base.name || symbol).slice(0, 64);
+      const dexUrl = safeHttpUrl(pair.url) || 'https://dexscreener.com/solana/' + encodeURIComponent(address);
+      const card = document.createElement('article');
+      card.className = 'zrai-pick';
+      const rank = document.createElement('span');
+      rank.className = 'zrai-rank';
+      rank.textContent = String(index + 1).padStart(2, '0');
+      const body = document.createElement('div');
+      body.className = 'zrai-pick-body';
+      const heading = document.createElement('div');
+      heading.className = 'zrai-pick-heading';
+      const nameWrap = document.createElement('div');
+      nameWrap.className = 'zrai-token-name';
+      const tokenSymbol = document.createElement('strong');
+      tokenSymbol.textContent = '$' + symbol.replace(/^\$+/, '');
+      const tokenName = document.createElement('span');
+      tokenName.textContent = name;
+      tokenName.title = name;
+      nameWrap.append(tokenSymbol, tokenName);
+      const score = document.createElement('span');
+      score.className = 'zrai-score';
+      score.textContent = Math.round(metrics.score) + ' SIGNAL';
+      heading.append(nameWrap, score);
+      const metricsLine = document.createElement('div');
+      metricsLine.className = 'zrai-metrics';
+      metricsLine.append(
+        createMetric('CHANGE', percent(metrics.change), metrics.change > 0 ? 'positive' : metrics.change < 0 ? 'negative' : ''),
+        createMetric('VOLUME', compactMoney(metrics.volume)),
+        createMetric('LIQUIDITY', compactMoney(metrics.liquidity))
+      );
+      const signal = document.createElement('div');
+      signal.className = 'zrai-signal-line';
+      signal.textContent = metrics.hasTrades
+        ? 'BUY ' + (metrics.buys === null ? '—' : metrics.buys.toLocaleString()) +
+          ' · SELL ' + (metrics.sells === null ? '—' : metrics.sells.toLocaleString()) +
+          ' · ' + (metrics.trades ? 'TRADES ' + metrics.trades.toLocaleString() : 'NO TRADES')
+        : 'TRADE-FLOW SIGNAL UNAVAILABLE';
+      const addressLink = document.createElement('a');
+      addressLink.className = 'zrai-address';
+      addressLink.href = 'https://solscan.io/token/' + encodeURIComponent(address);
+      addressLink.target = '_blank';
+      addressLink.rel = 'noopener noreferrer';
+      addressLink.textContent = shortAddress(address) + ' ↗';
+      addressLink.title = address;
+      body.append(heading, metricsLine, signal, addressLink);
+      const view = document.createElement('a');
+      view.className = 'zrai-open';
+      view.href = dexUrl;
+      view.target = '_blank';
+      view.rel = 'noopener noreferrer';
+      view.textContent = 'VIEW';
+      view.setAttribute('aria-label', 'View ' + symbol + ' on DexScreener');
+      card.append(rank, body, view);
+      list.append(card);
+    });
+    setState(payload.stale ? 'STALE FEED' : 'RADAR ONLINE', payload.stale ? 'stale' : 'online');
+  }
+  async function load(showLoading) {
+    const currentRequest = ++requestId;
+    refreshButton.disabled = true;
+    refreshButton.classList.add('is-loading');
+    setText(refreshButton, '↻ SCANNING');
+    setState('SCANNING', 'loading');
+    if (!lastPayload || showLoading) setMessage('Fetching the shared Zombie Radar feed…', 'loading');
+    try {
+      const response = await fetch(apiBase + '/api/radar', {
+        cache: 'no-store',
+        signal: AbortSignal.timeout(18000)
+      });
+      if (!response.ok) throw new Error('Radar API HTTP ' + response.status);
+      const payload = await response.json();
+      if (currentRequest !== requestId) return;
+      if (!Array.isArray(payload.pairs) || payload.error) throw new Error(payload.error || 'Invalid radar response');
+      lastPayload = payload;
+      lastSuccessAt = Date.now();
+      render(payload);
+      const timestamp = number(payload.updatedAt);
+      setText(updated, 'SOURCE UPDATED ' + (timestamp ? new Date(timestamp * 1000).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) : 'TIME UNKNOWN'));
+      if (payload.stale) setText(updated, 'SOURCE SNAPSHOT IS STALE');
+    } catch (error) {
+      if (currentRequest !== requestId) return;
+      console.warn('Zombie Radar feed request failed:', error);
+      setState(lastPayload ? 'STALE FEED' : 'API ERROR', lastPayload ? 'stale' : 'error');
+      if (!lastPayload) setMessage('Radar feed is unavailable. No recommendations are being shown; retry shortly.', 'error');
+      else setMessage('Refresh failed. Previous radar data is retained and marked stale.', 'error');
+      setText(updated, lastPayload
+        ? 'LAST SUCCESS ' + new Date(lastSuccessAt).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})
+        : 'NO SUCCESSFUL FETCH');
+    } finally {
+      if (currentRequest === requestId) {
+        refreshButton.disabled = false;
+        refreshButton.classList.remove('is-loading');
+        setText(refreshButton, '↻ REFRESH');
+      }
+    }
+  }
+  document.querySelectorAll('[data-radar-period]').forEach(button => {
+    button.addEventListener('click', () => {
+      const period = button.dataset.radarPeriod;
+      if (!periods[period] || period === activePeriod) return;
+      activePeriod = period;
+      document.querySelectorAll('[data-radar-period]').forEach(tab => {
+        const active = tab === button;
+        tab.classList.toggle('is-active', active);
+        tab.setAttribute('aria-pressed', String(active));
+      });
+      setText(periodNote, 'Momentum and activity · ' + periods[period].label);
+      if (lastPayload) {
+        render(lastPayload);
+        if (lastPayload.stale) setState('STALE FEED', 'stale');
+      } else load(true);
+    });
   });
-  refresh();
-  setInterval(refresh,60000);
+  refreshButton.addEventListener('click', () => load(true));
+  load(false);
+  setInterval(() => load(false), 60000);
 })();
