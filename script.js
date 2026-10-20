@@ -442,6 +442,10 @@ snakeModal?.addEventListener('close', () => {
 window.addEventListener('resize', resizeGameCanvas);
 resizeGameCanvas();
 resetGame();
+if (new URLSearchParams(window.location.search).get('arcadeSnake') === '1' && snakeModal) {
+  snakeModal.showModal();
+  requestAnimationFrame(() => { resizeGameCanvas(); resetGame(); });
+}
 
 // Fullscreen mode for Zombie Snake.
 const fullscreenButton = document.getElementById('game-fullscreen');
