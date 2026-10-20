@@ -100,7 +100,7 @@ setInterval(() => {
 }, 6500);
 
 const ca = '6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump';
-document.getElementById('copy-ca').addEventListener('click', async () => {
+document.getElementById('copy-ca')?.addEventListener('click', async () => {
   const feedback = document.getElementById('copy-feedback');
   try {
     await navigator.clipboard.writeText(ca);
