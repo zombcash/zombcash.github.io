@@ -695,3 +695,110 @@ h1 .alive{text-shadow:0 0 32px #9bff4540}
 .zom-activity-periods span b:first-child{color:#9bff45}.zom-activity-periods span b:last-child{color:#ff8293}
 @media(max-width:850px){.zombcash-market-panels{grid-template-columns:minmax(0,1fr)}.zom-chart-wrap{height:220px}}
 @media(max-width:480px){.zom-market-panel{padding:14px}.zom-panel-head h4{font-size:13px}.zom-periods button{padding:7px 6px;font-size:7px}.zom-chart-wrap{height:190px}.zom-activity-totals strong{font-size:20px}.zom-activity-periods span{font-size:11px}}
+
+
+/* 2026-10-20 readability pass: consistent contrast, spacing and live status panel */
+:root{
+  --zc-text-main:#edf4ed;
+  --zc-text-muted:#b0beb3;
+  --zc-border-soft:#2d4033;
+}
+body{font-size:18px;line-height:1.55;color:var(--zc-text-main)}
+p{line-height:1.6}
+button,a,input,select,textarea{font:inherit}
+button,a{ -webkit-tap-highlight-color:transparent }
+:where(a,button,input,select,textarea,[tabindex]):focus-visible{
+  outline:2px solid var(--green);
+  outline-offset:3px;
+}
+.section-kicker,.mini-label{line-height:1.6}
+.intro-row p,.section-heading p,.game-copy p,.transmission p{color:var(--zc-text-muted);line-height:1.65}
+.tool-card,.world-panel,.crew-card,.zom-market-panel,.live-radar,.transmission-box,.outbreak-panel{
+  border-color:var(--zc-border-soft);
+}
+.tool-card p,.world-news-summary,.world-alert p,.world-event p,.crew-note{color:#aebdb2;line-height:1.55}
+.tool-card li{font-size:10px;line-height:1.5}
+.btn,.top-cta,.pair-link,.radar-filter,.radar-refresh,.game-action,.game-fullscreen{min-height:40px}
+.outbreak-panel{
+  grid-template-columns:64px minmax(0,1fr) minmax(260px,34%);
+  gap:clamp(16px,2.2vw,28px);
+  padding:clamp(18px,2.4vw,30px);
+  border-radius:4px;
+  background:linear-gradient(110deg,#0d1711,#0b1110 58%,#101018);
+}
+.outbreak-copy{min-width:0}
+.outbreak-copy h3{font-size:clamp(16px,1.45vw,20px);line-height:1.35;overflow-wrap:anywhere}
+.outbreak-copy p{font-size:16px;line-height:1.55;color:#b0beb3}
+.outbreak-service-list{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:16px}
+.outbreak-service-list>span{display:inline-flex;align-items:center;gap:6px;color:#9eafa2;font:700 8px Orbitron,sans-serif;letter-spacing:.5px}
+.outbreak-service-list b{color:#e1eee2;font-size:8px}
+.outbreak-service-list i{width:6px;height:6px;border-radius:50%;background:#829087;display:inline-block;flex:none}
+.outbreak-service-list i.is-online{background:#9bff45;box-shadow:0 0 9px #9bff4570}
+.outbreak-service-list i.is-offline{background:#ff7b82;box-shadow:0 0 9px #ff7b8240}
+.outbreak-service-list i.is-unknown{background:#d7b45e}
+.status-meter{min-width:0}
+.status-meter small{display:block;line-height:1.5;overflow-wrap:anywhere}
+.outbreak-mini-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.outbreak-mini-stats span{display:flex;flex-direction:column;gap:5px;color:#87988c;font:700 8px Orbitron,sans-serif;letter-spacing:.6px}
+.outbreak-mini-stats b{font-size:15px;color:#eef8f0;font-variant-numeric:tabular-nums}
+.outbreak-disclaimer{margin:12px 0 0;color:#829187;font:500 12px/1.45 Rajdhani,sans-serif}
+.world-news-title{line-height:1.4}
+.world-news-summary{overflow-wrap:anywhere}
+@media(max-width:950px){
+  .outbreak-panel{grid-template-columns:52px minmax(0,1fr)}
+  .outbreak-panel .status-meter{grid-column:2;border-left:0;border-top:1px solid #304136;padding:18px 0 0}
+}
+@media(max-width:680px){
+  .outbreak-panel{grid-template-columns:34px minmax(0,1fr);gap:12px;padding:17px}
+  .outbreak-icon{font-size:30px}
+  .outbreak-copy h3{font-size:14px}
+  .outbreak-copy p{font-size:15px}
+  .outbreak-service-list{gap:9px 12px}
+  .outbreak-panel .status-meter{grid-column:1/-1}
+  .outbreak-mini-stats{gap:10px}
+  .outbreak-disclaimer{font-size:12px}
+  .section-kicker,.mini-label{letter-spacing:1.2px}
+  .tool-card,.crew-card{padding:18px}
+  .world-panel-head{gap:12px}
+  .btn{white-space:normal;text-align:center;line-height:1.35}
+}
+/* Keep printed/PDF pages readable and avoid blank pages caused by screen-sized sections. */
+@media print{
+  @page{size:auto;margin:12mm}
+  html,body{background:#fff!important;color:#172019!important;overflow:visible!important;font-size:11pt!important;line-height:1.4!important}
+  body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .scanlines,.hero-grid,.moon,.city,.city-front,.hero-mascot,.hero-zombie,.mascot-orbit,.mascot-hand,
+  .menu-toggle,.top-cta,.scroll-top,.scroll-bottom,.back-to-top,.back-to-bottom{display:none!important}
+  .topbar{position:static!important;height:auto!important;padding:10px 0!important;background:#fff!important;border-bottom:1px solid #9aa39b!important;backdrop-filter:none!important}
+  .topbar nav{display:none!important}
+  .brand,.brand small,.section-kicker,.mini-label,.card-top,.status-tag,.world-news-meta,.world-panel-head .mini-label{color:#355b37!important}
+  .hero{min-height:0!important;height:auto!important;max-height:none!important;padding:28px 0!important;background:#fff!important;overflow:visible!important}
+  .hero:before,.hero:after{display:none!important}
+  h1,h2,h3,.intro-row h2,.section-heading h2,.game-copy h2,.transmission h2{color:#142018!important;text-shadow:none!important;break-after:avoid-page}
+  h1 .alive,.green{color:#3d7f22!important;text-shadow:none!important}
+  p,.hero-copy,.intro-row p,.section-heading p,.tool-card p,.game-copy p,.world-news-summary,.world-alert p,.world-event p,.crew-note,footer p{color:#354239!important}
+  .section,.tools,.transmission{max-width:none!important;padding:24px 0!important;margin:0!important;break-inside:auto}
+  .intro-row,.section-heading{margin:14px 0 20px!important}
+  .outbreak-panel,.tool-card,.world-panel,.crew-card,.live-radar,.zom-market-panel,.transmission-box,.site-visits,.campaign-dashboard-card{
+    background:#fff!important;color:#172019!important;box-shadow:none!important;border:1px solid #b9c4ba!important;break-inside:avoid-page
+  }
+  .outbreak-panel{padding:14px!important}
+  .outbreak-copy h3,.meter-label,.meter-label b,.outbreak-mini-stats b{color:#172019!important}
+  .outbreak-copy p,.outbreak-disclaimer,.outbreak-mini-stats span,.outbreak-service-list>span,.outbreak-service-list b,.status-meter small{color:#455349!important}
+  .meter{background:#e2e9e2!important}.meter span{background:#75b94a!important;box-shadow:none!important}
+  .tool-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important}
+  .tool-card{padding:12px!important}
+  .tool-card h3,.world-news-title,.crew-card h3{color:#172019!important}
+  .tool-art{background:#f5f8f4!important}
+  .mini-game{min-height:0!important;height:auto!important;padding:24px 0!important;background:#fff!important;border-block:1px solid #b9c4ba!important;break-inside:avoid-page}
+  .game-box,.game-screen{background:#f5f8f4!important;box-shadow:none!important}
+  .ticker{background:#edf4e9!important;color:#233a25!important;animation:none!important}
+  .world-panel,.crew-card{overflow:visible!important}
+  .world-news-item{break-inside:avoid-page}
+  a{color:#244f29!important;text-decoration:none!important}
+  footer{background:#fff!important;color:#172019!important;border-top:1px solid #9aa39b!important;padding:18px 0!important}
+  .footer-right{color:#455349!important}
+  .hero-bottom{position:static!important;margin-top:14px!important;border-top:1px solid #b9c4ba!important;color:#455349!important}
+  .hero-bottom b{color:#3d7f22!important}
+  .all-leaderboards-dialog,.snake-modal{display:none!important}
+}
