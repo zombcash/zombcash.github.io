@@ -1184,93 +1184,82 @@ if (zomMarket) {
 })();
 
 
-/* Outbreak Status: live service health, market snapshot and recent on-chain activity. */
+/* Token Intel: market snapshot and direct token actions. */
 (() => {
   const apiBase = 'https://zombcash-bot.fadehost.app';
-  const root = document.getElementById('ops-transmissions');
-  if (!root) return;
+  const mint = '6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump';
   const byId = id => document.getElementById(id);
-  const setState = (dotId, stateId, state, kind) => {
-    const dot = byId(dotId), label = byId(stateId);
-    if (dot) dot.className = 'ops-status-dot ' + (kind || '');
-    if (label) label.textContent = state;
-  };
-  const node = (tag, cls, value) => {
-    const el = document.createElement(tag);
-    if (cls) el.className = cls;
-    if (value !== undefined) el.textContent = value;
-    return el;
-  };
-  const ago = value => {
-    const sec = Number(value || 0);
-    if (!sec) return 'LATEST';
-    const mins = Math.max(0, Math.floor((Date.now() - sec * 1000) / 60000));
-    if (mins < 1) return 'JUST NOW';
-    if (mins < 60) return mins + 'M AGO';
-    const hrs = Math.floor(mins / 60);
-    if (hrs < 24) return hrs + 'H AGO';
-    return Math.floor(hrs / 24) + 'D AGO';
-  };
   const money = value => {
     const n = Number(value);
     if (!Number.isFinite(n)) return '—';
     if (n === 0) return '$0';
-    if (Math.abs(n) >= 1) return '$' + n.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    if (Math.abs(n) >= 1) return '$' + n.toLocaleString('en-US', {maximumFractionDigits:2});
     const digits = Math.min(12, Math.max(6, Math.ceil(-Math.log10(Math.abs(n))) + 3));
-    return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: digits });
+    return '$' + n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:digits});
   };
-  const item = (icon, title, message, stamp) => {
-    const row = node('div', 'ops-transmission');
-    row.append(node('span','ops-transmission-icon',icon));
-    const copy = node('div','ops-transmission-copy');
-    copy.append(node('strong','',title),node('p','',message));
-    row.append(copy,node('small','',stamp || 'LIVE'));
-    return row;
+  const compactMoney = value => {
+    const n = Number(value);
+    return Number.isFinite(n) ? '$' + n.toLocaleString('en-US',{notation:'compact',maximumFractionDigits:1}) : '—';
   };
   async function fetchJson(path) {
-    const response = await fetch(apiBase + path, {cache:'no-store', signal:AbortSignal.timeout(12000)});
+    const response = await fetch(apiBase + path, {cache:'no-store',signal:AbortSignal.timeout(12000)});
     if (!response.ok) throw new Error('HTTP ' + response.status);
     return response.json();
   }
-  async function refreshStatus() {
-    const [healthResult, marketResult, tradesResult] = await Promise.allSettled([
-      fetchJson('/health'), fetchJson('/api/zombcash'), fetchJson('/api/recent-trades')
-    ]);
-    const health = healthResult.status === 'fulfilled' ? healthResult.value : null;
+  async function refresh() {
+    const [marketResult,tradesResult] = await Promise.allSettled([fetchJson('/api/zombcash'),fetchJson('/api/recent-trades')]);
     const market = marketResult.status === 'fulfilled' ? marketResult.value : null;
-    const tradeData = tradesResult.status === 'fulfilled' ? tradesResult.value : null;
-    const apiOk = !!health && health.ok === true;
-    const marketOk = !!market && !market.error && market.priceUsd !== null && market.priceUsd !== undefined && Number.isFinite(Number(market.priceUsd)) && Number(market.priceUsd) > 0;
-    const tradesOk = !!tradeData && Array.isArray(tradeData.trades);
-    setState('ops-api-dot','ops-api-state',apiOk?'ONLINE':'OFFLINE',apiOk?'is-online':'is-offline');
-    setState('ops-market-dot','ops-market-state',marketOk?(market.stale?'STALE':'LIVE'):'UNAVAILABLE',marketOk?(market.stale?'is-warning':'is-online'):'is-offline');
-    setState('ops-chain-dot','ops-chain-state',tradesOk?'LIVE':'UNAVAILABLE',tradesOk?'is-online':'is-warning');
-    const healthy = apiOk && marketOk && tradesOk;
-    const overall = byId('ops-overall-status');
-    if (overall) overall.textContent = healthy ? 'ALL SYSTEMS LIVE' : (apiOk || marketOk || tradesOk ? 'PARTIAL SIGNAL' : 'RECONNECTING');
-    const rows = [];
-    if (apiOk) rows.push(item('✓','RADAR API ONLINE','Service health check succeeded. Public endpoints are responding.','JUST NOW'));
-    else rows.push(item('!','RADAR API UNAVAILABLE','The service health check failed. The page will retry automatically.','RETRYING'));
+    const marketOk = !!market && !market.error && Number.isFinite(Number(market.priceUsd)) && Number(market.priceUsd) > 0;
+    const price = byId('token-intel-price');
+    const change = byId('token-intel-change');
+    const state = byId('token-intel-state');
     if (marketOk) {
-      const change = Number(market.priceChange?.h24);
-      const changeText = Number.isFinite(change) ? ((change >= 0 ? '+' : '') + change.toFixed(2) + '% over 24h') : '24h change unavailable';
+      if (price) price.textContent = money(market.priceUsd);
+      const pct = Number(market.priceChange?.h24);
+      if (change) {
+        change.textContent = Number.isFinite(pct) ? ((pct >= 0 ? '+' : '') + pct.toFixed(2) + '% · 24H') : '24H CHANGE UNAVAILABLE';
+        change.classList.toggle('is-negative', Number.isFinite(pct) && pct < 0);
+        change.classList.toggle('is-positive', Number.isFinite(pct) && pct >= 0);
+      }
       const volume = Number(market.volume?.h24);
-      const volText = Number.isFinite(volume) ? ' · 24h volume ' + money(volume) : '';
-      rows.push(item('↗',market.stale?'MARKET SNAPSHOT · STALE':'MARKET SNAPSHOT', 'ZOMBCASH ' + money(market.priceUsd) + ' · ' + changeText + volText, market.stale?'CACHED':'LIVE'));
-    } else rows.push(item('!','MARKET FEED UNAVAILABLE','Latest token price could not be verified.','RETRYING'));
-    if (tradesOk) {
-      const trades = tradeData.trades;
-      if (trades.length) {
-        const trade = trades[0];
-        const kind = String(trade.type || 'trade').toUpperCase();
-        const detail = (trade.usd > 0 ? money(trade.usd) : 'Value unavailable') + (trade.txHash ? ' · ' + trade.txHash.slice(0,6) + '…' + trade.txHash.slice(-5) : '');
-        rows.push(item('⌁','LATEST ON-CHAIN ' + kind,detail,ago(trade.timestamp)));
-      } else rows.push(item('⌁','ON-CHAIN FEED READY','The trade endpoint responded; no recent trades were returned.','LIVE'));
-    } else rows.push(item('!','ON-CHAIN FEED DELAYED','Recent trade data is temporarily unavailable.','RETRYING'));
-    root.replaceChildren(...rows);
-    const updated = byId('ops-updated');
-    if (updated) updated.textContent = 'CHECKED ' + new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+      const volumeEl = byId('token-intel-volume');
+      if (volumeEl) volumeEl.textContent = Number.isFinite(volume) ? compactMoney(volume) : '—';
+      if (state) state.textContent = market.stale ? 'CACHED DATA' : 'MARKET LIVE';
+    } else {
+      if (price) price.textContent = 'UNAVAILABLE';
+      if (change) change.textContent = 'MARKET FEED UNAVAILABLE';
+      if (state) state.textContent = 'NO LIVE DATA';
+      const volumeEl = byId('token-intel-volume');
+      if (volumeEl) volumeEl.textContent = '—';
+    }
+    const tradeEl = byId('token-intel-trade');
+    if (tradeEl && tradesResult.status === 'fulfilled' && Array.isArray(tradesResult.value.trades) && tradesResult.value.trades.length) {
+      const trade = tradesResult.value.trades[0];
+      const kind = String(trade.type || 'TRADE').toUpperCase();
+      tradeEl.textContent = (kind === 'BUY' || kind === 'SELL' ? kind : 'TRADE') + (Number(trade.usd) > 0 ? ' · ' + compactMoney(trade.usd) : '');
+      tradeEl.title = trade.txHash || '';
+    } else if (tradeEl) tradeEl.textContent = 'NO RECENT DATA';
+    const updated = byId('token-intel-updated');
+    if (updated) updated.textContent = 'UPDATED ' + new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
   }
-  refreshStatus();
-  setInterval(refreshStatus, 60000);
+  const copyButton = byId('token-intel-copy');
+  if (copyButton) copyButton.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(mint);
+      copyButton.textContent = 'COPIED ✓';
+    } catch (_) {
+      const field = document.createElement('textarea');
+      field.value = mint;
+      field.style.position = 'fixed';
+      field.style.opacity = '0';
+      document.body.appendChild(field);
+      field.select();
+      const copied = document.execCommand('copy');
+      field.remove();
+      copyButton.textContent = copied ? 'COPIED ✓' : 'SELECT ADDRESS';
+    }
+    setTimeout(() => { copyButton.textContent = 'COPY'; }, 1800);
+  });
+  refresh();
+  setInterval(refresh,60000);
 })();
