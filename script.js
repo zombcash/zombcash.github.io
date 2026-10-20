@@ -748,9 +748,7 @@ if (zomMarket) {
 
   renderMissions();
   loadWorldNews();
-  loadMarketAlarms();
   setInterval(loadWorldNews, 300000);
-  setInterval(loadMarketAlarms, 60000);
 })();
 
 
