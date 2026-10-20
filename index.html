@@ -1086,7 +1086,7 @@ footer {
 </style>
 
 <script src="runtime-fixes.js?v=20261020-2"></script>
-<script src="script.js?v=market-feed-repair-20261020-5"></script>
+<script src="script.js?v=market-data-scope-fix-20261020-6"></script>
 <script src="living-world-recovery.js?v=20261020-2"></script>
 <script id="jupiter-zombcash-init">
 (() => {
@@ -1131,4 +1131,47 @@ footer {
   }
 })();
 </script>
+
+<style id="zombcash-market-panels-final-alignment">
+section.section.community-console .crew-grid { align-items: stretch !important; }
+section.section.community-console .crew-grid > .activity-chart-panel,
+section.section.community-console .crew-grid > .recent-trades-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  align-self: stretch !important;
+  height: auto !important;
+  min-height: 300px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+section.section.community-console .crew-grid > .activity-chart-panel #activity-price-chart {
+  display: block !important;
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  height: 180px !important;
+  min-height: 180px !important;
+}
+section.section.community-console .crew-grid > .recent-trades-panel .recent-trades-list {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  align-content: start !important;
+}
+section.section.community-console .crew-grid > .recent-trades-panel .recent-trade-empty {
+  margin: 0 !important;
+  padding: 12px 0 !important;
+}
+@media (max-width: 800px) {
+  section.section.community-console .crew-grid { align-items: start !important; }
+  section.section.community-console .crew-grid > .activity-chart-panel,
+  section.section.community-console .crew-grid > .recent-trades-panel {
+    min-height: 0 !important;
+    height: auto !important;
+    align-self: start !important;
+  }
+  section.section.community-console .crew-grid > .activity-chart-panel #activity-price-chart {
+    flex: 0 0 180px !important;
+  }
+}
+</style>
+
 </body></html>
