@@ -516,6 +516,19 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 @media(max-width:950px){.zc-hero-art-panel{height:clamp(330px,42vw,450px)!important}}
 @media(max-width:680px){.zc-hero-art-panel{height:300px!important;max-height:300px!important;width:100%!important}.zc-hero-art-panel .zc-art-caption{left:12px;right:12px;bottom:12px;padding:10px;font-size:8px;letter-spacing:1px}.zc-hero-art-panel .zc-art-caption b{font-size:8px}}
 </style>
+
+<style id="zombcash-activity-chart-trades">
+.activity-chart-panel,.recent-trades-panel{margin-top:22px;padding:16px 14px;border:1px solid #263a2a;background:linear-gradient(145deg,#09110b,#070b09)}
+.activity-subhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.activity-subhead h4{margin:5px 0 0;font:700 16px Orbitron,sans-serif;color:#eaf2e4}
+.activity-chart-tabs{display:flex;gap:5px;flex-wrap:wrap}.activity-chart-tab{padding:7px 9px;border:1px solid #31452e;background:#080d09;color:#9aac94;font:700 8px Orbitron,sans-serif;cursor:pointer}.activity-chart-tab.active{color:#9bff45;border-color:#9bff45;background:#101c0f}
+.activity-chart-meta,.activity-chart-axis{display:flex;justify-content:space-between;align-items:center;gap:10px;font:600 8px Orbitron,sans-serif;color:#91a18d}.activity-chart-meta{margin-bottom:8px}.activity-chart-meta strong{color:#9bff45;font-size:11px}
+#activity-price-chart{display:block;width:100%;height:180px;overflow:visible;background:repeating-linear-gradient(0deg,transparent 0 44px,#9bff4509 45px),repeating-linear-gradient(90deg,transparent 0 89px,#9bff4509 90px);border-bottom:1px solid #263a2a}
+.activity-chart-axis{padding-top:8px;font-size:7px}
+.recent-trades-list{display:grid;gap:0}.recent-trade-row{display:grid;grid-template-columns:58px minmax(0,1fr) auto;align-items:center;gap:10px;padding:11px 0;border-top:1px solid #202d22;font:500 11px 'Rajdhani',sans-serif;color:#c4d0bf}.recent-trade-side{font:700 8px Orbitron,sans-serif;letter-spacing:.5px}.recent-trade-side.buy{color:#9bff45}.recent-trade-side.sell{color:#ff777d}.recent-trade-main{min-width:0;display:flex;flex-direction:column;gap:3px}.recent-trade-main a{color:#dce8d5;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.recent-trade-main small{font-size:10px;color:#81917c}.recent-trade-value{text-align:right;color:#eaf2e4;font:700 10px Orbitron,sans-serif;white-space:nowrap}.recent-trade-empty{padding:10px 0;color:#91a18d;font:500 12px 'Rajdhani',sans-serif}
+@media(max-width:700px){.activity-chart-panel,.recent-trades-panel{padding:13px 10px}.activity-subhead h4{font-size:13px}.activity-chart-tab{padding:6px}.recent-trade-row{grid-template-columns:48px minmax(0,1fr) auto;gap:7px}.recent-trade-value{font-size:9px}}
+</style>
+
 </head>
 <body>
 <div class="scanlines"></div>
@@ -701,6 +714,16 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
       <div class="activity-period"><button class="activity-tab active" data-period="h1">1H</button><button class="activity-tab" data-period="h6">6H</button><button class="activity-tab" data-period="h24">24H</button></div>
       <div class="activity-numbers"><div><small>BUYS</small><strong id="activity-buys">—</strong></div><div><small>SELLS</small><strong id="activity-sells">—</strong></div><div><small>BUY / SELL</small><strong id="activity-ratio">—</strong></div></div>
       <div class="activity-bar"><span id="activity-buy-bar"></span></div>
+      <section class="activity-chart-panel" aria-label="ZombieCash price chart">
+        <div class="activity-subhead"><div><span class="section-kicker">[ PRICE HISTORY ]</span><h4>MARKET <span class="green">CHART</span></h4></div><div class="activity-chart-tabs" role="group" aria-label="Chart period"><button class="activity-chart-tab active" data-chart-period="24h">24H</button><button class="activity-chart-tab" data-chart-period="7d">7D</button><button class="activity-chart-tab" data-chart-period="30d">30D</button></div></div>
+        <div class="activity-chart-meta"><span id="activity-chart-status">LOADING PRICE HISTORY…</span><strong id="activity-chart-current">—</strong></div>
+        <svg id="activity-price-chart" viewBox="0 0 720 190" role="img" aria-label="ZombieCash price history chart" preserveAspectRatio="none"><text x="360" y="95" text-anchor="middle" fill="#91a18d" font-size="12">Loading price history…</text></svg>
+        <div class="activity-chart-axis"><span id="activity-chart-start">—</span><span id="activity-chart-end">—</span></div>
+      </section>
+      <section class="recent-trades-panel" aria-label="Latest ZombieCash transactions">
+        <div class="activity-subhead"><div><span class="section-kicker">[ ON-CHAIN FEED ]</span><h4>LATEST <span class="green">TRANSACTIONS</span></h4></div><a class="crew-link" href="https://solscan.io/token/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">OPEN SOLSCAN ↗</a></div>
+        <div id="recent-trades-list" class="recent-trades-list" aria-live="polite"><p class="crew-note">Connecting to the transaction feed…</p></div>
+      </section>
       <p class="crew-note" id="activity-note">Waiting for the latest DexScreener pair activity.</p>
       <a class="crew-link" href="https://dexscreener.com/solana/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">VIEW SOURCE ON DEXSCREENER ↗</a>
     </article>
