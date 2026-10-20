@@ -1183,3 +1183,87 @@ if (zomMarket) {
   setInterval(refreshStatus, 60000);
 })();
 
+
+/* Outbreak Status: live service health, market snapshot and recent on-chain activity. */
+(() => {
+  const apiBase = 'https://zombcash-bot.fadehost.app';
+  const root = document.getElementById('ops-transmissions');
+  if (!root) return;
+  const byId = id => document.getElementById(id);
+  const setState = (dotId, stateId, state, kind) => {
+    const dot = byId(dotId), label = byId(stateId);
+    if (dot) dot.className = 'ops-status-dot ' + (kind || '');
+    if (label) label.textContent = state;
+  };
+  const node = (tag, cls, value) => {
+    const el = document.createElement(tag);
+    if (cls) el.className = cls;
+    if (value !== undefined) el.textContent = value;
+    return el;
+  };
+  const ago = value => {
+    const sec = Number(value || 0);
+    if (!sec) return 'LATEST';
+    const mins = Math.max(0, Math.floor((Date.now() - sec * 1000) / 60000));
+    if (mins < 1) return 'JUST NOW';
+    if (mins < 60) return mins + 'M AGO';
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return hrs + 'H AGO';
+    return Math.floor(hrs / 24) + 'D AGO';
+  };
+  const money = value => '$' + Number(value || 0).toLocaleString('en-US', {maximumFractionDigits:2});
+  const item = (icon, title, message, stamp) => {
+    const row = node('div', 'ops-transmission');
+    row.append(node('span','ops-transmission-icon',icon));
+    const copy = node('div','ops-transmission-copy');
+    copy.append(node('strong','',title),node('p','',message));
+    row.append(copy,node('small','',stamp || 'LIVE'));
+    return row;
+  };
+  async function fetchJson(path) {
+    const response = await fetch(apiBase + path, {cache:'no-store', signal:AbortSignal.timeout(12000)});
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    return response.json();
+  }
+  async function refreshStatus() {
+    const [healthResult, marketResult, tradesResult] = await Promise.allSettled([
+      fetchJson('/health'), fetchJson('/api/zombcash'), fetchJson('/api/recent-trades')
+    ]);
+    const health = healthResult.status === 'fulfilled' ? healthResult.value : null;
+    const market = marketResult.status === 'fulfilled' ? marketResult.value : null;
+    const tradeData = tradesResult.status === 'fulfilled' ? tradesResult.value : null;
+    const apiOk = !!health && health.ok === true;
+    const marketOk = !!market && !market.error && Number.isFinite(Number(market.priceUsd));
+    const tradesOk = !!tradeData && Array.isArray(tradeData.trades);
+    setState('ops-api-dot','ops-api-state',apiOk?'ONLINE':'OFFLINE',apiOk?'is-online':'is-offline');
+    setState('ops-market-dot','ops-market-state',marketOk?(market.stale?'STALE':'LIVE'):'UNAVAILABLE',marketOk?(market.stale?'is-warning':'is-online'):'is-offline');
+    setState('ops-chain-dot','ops-chain-state',tradesOk?'LIVE':'UNAVAILABLE',tradesOk?'is-online':'is-warning');
+    const healthy = apiOk && marketOk && tradesOk;
+    const overall = byId('ops-overall-status');
+    if (overall) overall.textContent = healthy ? 'ALL SYSTEMS LIVE' : (apiOk || marketOk || tradesOk ? 'PARTIAL SIGNAL' : 'RECONNECTING');
+    const rows = [];
+    if (apiOk) rows.push(item('✓','RADAR API ONLINE','Service health check succeeded. Public endpoints are responding.','JUST NOW'));
+    else rows.push(item('!','RADAR API UNAVAILABLE','The service health check failed. The page will retry automatically.','RETRYING'));
+    if (marketOk) {
+      const change = Number(market.priceChange?.h24);
+      const changeText = Number.isFinite(change) ? ((change >= 0 ? '+' : '') + change.toFixed(2) + '% over 24h') : '24h change unavailable';
+      const volume = Number(market.volume?.h24);
+      const volText = Number.isFinite(volume) ? ' · 24h volume ' + money(volume) : '';
+      rows.push(item('↗',market.stale?'MARKET SNAPSHOT · STALE':'MARKET SNAPSHOT', 'ZOMBCASH ' + money(market.priceUsd) + ' · ' + changeText + volText, market.stale?'CACHED':'LIVE'));
+    } else rows.push(item('!','MARKET FEED UNAVAILABLE','Latest token price could not be verified.','RETRYING'));
+    if (tradesOk) {
+      const trades = tradeData.trades;
+      if (trades.length) {
+        const trade = trades[0];
+        const kind = String(trade.type || 'trade').toUpperCase();
+        const detail = (trade.usd > 0 ? money(trade.usd) : 'Value unavailable') + (trade.txHash ? ' · ' + trade.txHash.slice(0,6) + '…' + trade.txHash.slice(-5) : '');
+        rows.push(item('⌁','LATEST ON-CHAIN ' + kind,detail,ago(trade.timestamp)));
+      } else rows.push(item('⌁','ON-CHAIN FEED READY','The trade endpoint responded; no recent trades were returned.','LIVE'));
+    } else rows.push(item('!','ON-CHAIN FEED DELAYED','Recent trade data is temporarily unavailable.','RETRYING'));
+    root.replaceChildren(...rows);
+    const updated = byId('ops-updated');
+    if (updated) updated.textContent = 'CHECKED ' + new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  }
+  refreshStatus();
+  setInterval(refreshStatus, 60000);
+})();
