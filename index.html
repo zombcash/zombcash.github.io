@@ -391,6 +391,25 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 .merged-market .zombcash-market-bottom>div{display:flex;gap:8px;flex-wrap:wrap}
 .merged-market .zombcash-market-bottom a,.merged-market .zombcash-market-bottom button{font:700 9px Orbitron,sans-serif;color:var(--green,#9bff45);background:transparent;border:1px solid #31452e;padding:8px 10px;cursor:pointer;text-decoration:none}
 @media(max-width:700px){.merged-market .zombcash-market-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.merged-market .zombcash-market-grid>div:last-child{grid-column:span 2}.merged-market .zombcash-market-bottom{align-items:flex-start}}
+
+/* Dedicated swap terminal beside market activity; help text opens on demand. */
+.jupiter-swap-card .jupiter-terminal-shell{margin-top:14px;padding:0;overflow:hidden;box-shadow:0 20px 60px #0005}
+.jupiter-swap-card .jupiter-terminal-top{padding:0 14px;min-height:46px;font-size:9px}
+.jupiter-swap-card #jupiter-zombcash-terminal{min-height:520px;background:#050807}
+.jupiter-swap-card .jupiter-terminal-note{padding:0 14px 12px}
+.swap-help-button{flex-shrink:0;background:#0b120d;border:1px solid #527b39;color:#9bff45;padding:9px 12px;font:700 9px Orbitron,sans-serif;cursor:pointer}
+.swap-help-button:hover{background:#152313}
+.swap-help-dialog{width:min(620px,calc(100% - 28px));max-height:85vh;overflow:auto;padding:0;border:1px solid #527b39;background:#0a100c;color:#eaf2e4}
+.swap-help-dialog::backdrop{background:#020503d9;backdrop-filter:blur(4px)}
+.swap-help-content{padding:clamp(18px,4vw,30px)}
+.swap-help-content p,.swap-help-content li{font:400 14px/1.7 'Rajdhani',sans-serif;color:#b7c5b2}
+.swap-help-content ol{padding-left:0;list-style:none;display:grid;gap:10px}
+.swap-help-content li b{color:#9bff45;margin-right:12px;font-family:Orbitron,sans-serif}
+.swap-help-content .jupiter-buy-fallback{display:inline-flex;margin-top:12px}
+.daily-mission-section{padding-top:20px}
+.daily-mission-inner{max-width:900px;margin:0 auto}
+.daily-mission-inner .vote-card{width:100%;min-height:0}
+@media(max-width:850px){.jupiter-swap-card #jupiter-zombcash-terminal{min-height:560px}.swap-help-content{padding:18px}}
 </style>
 
 <style id="jupiter-buy-widget-styles">
@@ -529,33 +548,7 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
     <article class="tool-card lab-card" id="lab"><div class="card-top"><span class="card-id">TOOL_002</span><span class="status-tag"><i></i> LAB OPEN</span></div><div class="tool-art lab-art"><div class="lab-tube tube-a"></div><div class="lab-tube tube-b"></div><div class="lab-skull">☠</div><div class="lab-spark">✳</div></div><h3>ZOMBIE<br><span>LAB</span></h3><p>Build your undead legend. Create meme ideas, cook up mutant concepts, play survival challenges, and make content for the crew.</p><ul><li>MUTANT & MEME IDEAS</li><li>SURVIVAL CHALLENGES</li><li>CONTENT GENERATOR</li></ul><a class="card-link" href="https://t.me/MemeCoinAIAgent_bot" target="_blank" rel="noreferrer">ENTER THE LAB <span>↗</span></a></article>
     <article class="tool-card network-card"><div class="card-top"><span class="card-id">TOOL_003</span><span class="status-tag"><i></i> CREW WANTED</span></div><div class="tool-art network-art"><div class="network-orb orb-a">☠</div><div class="network-orb orb-b">☣</div><div class="network-orb orb-c">✦</div><div class="network-line line-a"></div><div class="network-line line-b"></div><div class="network-line line-c"></div></div><h3>SURVIVOR<br><span>NETWORK</span></h3><p>Meet the crew, share your memes, follow project updates, and help shape what gets built next.</p><ul><li>COMMUNITY CHAT</li><li>PROJECT UPDATES</li><li>MEME TRANSMISSIONS</li></ul><a class="card-link" href="https://t.me/ZombieCashCTO" target="_blank" rel="noreferrer">JOIN THE CREW <span>↗</span></a></article>
   </div>
-  <section class="section jupiter-buy-section" id="buy-zombcash">
-    <div class="section-heading jupiter-buy-heading">
-      <div><div class="section-kicker">[ 06 / DIRECT ON-CHAIN ACCESS ]</div><h2>BUY THE<br><span class="green">OUTBREAK.</span></h2></div>
-      <p>Swap SOL for $ZOMBCASH right here. Connect your Solana wallet, review the route and fees, then approve the transaction in your wallet.</p>
-    </div>
-    <div class="jupiter-buy-layout">
-      <div class="jupiter-buy-copy">
-        <span class="jupiter-buy-status"><i></i> JUPITER SWAP INTERFACE</span>
-        <h3>YOUR WALLET.<br>YOUR CALL.</h3>
-        <p>Trade through Jupiter's swap interface without leaving ZombieCash. Your wallet stays in your control: the site never asks for your recovery phrase or private key.</p>
-        <ol>
-          <li><b>01</b><span>Connect a compatible Solana wallet.</span></li>
-          <li><b>02</b><span>Choose the SOL amount and review the quote.</span></li>
-          <li><b>03</b><span>Confirm only after checking the token and transaction details.</span></li>
-        </ol>
-        <p class="jupiter-buy-warning">Crypto assets are volatile. Verify the $ZOMBCASH token before swapping; this is not financial advice.</p>
-        <a class="jupiter-buy-fallback" href="https://jup.ag/swap/SOL-6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">OPEN JUPITER IN A NEW TAB ↗</a>
-      </div>
-      <div class="jupiter-terminal-shell">
-        <div class="jupiter-terminal-top"><span><i></i> SWAP TERMINAL</span><span>POWERED BY JUPITER</span></div>
-        <div id="jupiter-zombcash-terminal" aria-label="Jupiter swap interface">
-          <div class="jupiter-terminal-loading"><span class="jupiter-loader"></span><strong>INITIALIZING SWAP TERMINAL</strong><small>Connecting to Jupiter…</small></div>
-        </div>
-        <p class="jupiter-terminal-note" id="jupiter-terminal-status" aria-live="polite">Loading the official Jupiter interface…</p>
-      </div>
-    </div>
-  </section>
+  
   <div class="live-radar">
     <div class="live-radar-head">
       <div><div class="section-kicker">[ LIVE FEED / SOLANA ]</div><h3>THE OUTBREAK <span class="green">RIGHT NOW.</span></h3><p>Live token pairs from DexScreener. Data refreshes automatically.</p></div>
@@ -595,19 +588,45 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
       <p class="crew-note" id="activity-note">Waiting for the latest DexScreener pair activity.</p>
       <a class="crew-link" href="https://dexscreener.com/solana/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">VIEW SOURCE ON DEXSCREENER ↗</a>
     </article>
-    <article class="crew-card vote-card">
-      <div class="crew-card-head"><div><div class="section-kicker">[ DAILY COMMUNITY POLL ]</div><h3>WHAT'S OUR NEXT <span class="green">MISSION?</span></h3></div><span id="vote-status" class="crew-status">LOADING…</span></div>
-      <p class="crew-note">One vote per browser each UTC day. Results are shared with the community.</p>
-      <div id="daily-vote-options" class="daily-vote-options"><p class="crew-note">Loading today's poll…</p></div>
-      <div class="vote-foot"><span id="vote-total">0 VOTES</span><span id="vote-date">UTC DAILY POLL</span></div>
-    </article>
-    <article class="crew-card leaderboard-card">
+    <article class="crew-card jupiter-swap-card" id="jupiter-swap">
+  <div class="crew-card-head">
+    <div><div class="section-kicker">[ JUPITER SWAP TERMINAL ]</div><h3>TRADE <span class="green">$ZOMBCASH</span></h3></div>
+    <button class="swap-help-button" id="swap-help-open" type="button" aria-haspopup="dialog">? HELP</button>
+  </div>
+  <div class="jupiter-terminal-shell">
+    <div class="jupiter-terminal-top"><span><i></i> SWAP TERMINAL</span><span>POWERED BY JUPITER</span></div>
+    <div id="jupiter-zombcash-terminal" aria-label="Jupiter swap interface"><div class="jupiter-terminal-loading"><span class="jupiter-loader"></span><strong>INITIALIZING SWAP TERMINAL</strong><small>Connecting to Jupiter…</small></div></div>
+    <p class="jupiter-terminal-note" id="jupiter-terminal-status" aria-live="polite">Loading the official Jupiter interface…</p>
+  </div>
+</article>
+<article class="crew-card leaderboard-card">
       <div class="crew-card-head"><div><div class="section-kicker">[ SURVIVAL RECORDS ]</div><h3>TOP <span class="green">ZOMBIE HUNTERS</span></h3></div><span id="leaderboard-status" class="crew-status">LOADING…</span></div>
       <div id="survival-leaderboard" class="survival-leaderboard"><p class="crew-note">No records yet. Be the first survivor.</p></div>
       <p class="crew-note prize-note">Future $ZOMBCASH prizes may be announced for selected competitions. No token rewards are currently enabled or guaranteed.</p>
     </article>
   </div>
 </section>
+<section class="section daily-mission-section" id="daily-mission">
+  <div class="section-heading"><div><div class="section-kicker">[ COMMUNITY OPERATIONS / DAILY ]</div><h2>THE CREW <span class="green">VOTES.</span></h2><p>Choose the next mission. This standalone block can grow with future community features.</p></div></div>
+  <div class="daily-mission-inner"><article class="crew-card vote-card">
+      <div class="crew-card-head"><div><div class="section-kicker">[ DAILY COMMUNITY POLL ]</div><h3>WHAT'S OUR NEXT <span class="green">MISSION?</span></h3></div><span id="vote-status" class="crew-status">LOADING…</span></div>
+      <p class="crew-note">One vote per browser each UTC day. Results are shared with the community.</p>
+      <div id="daily-vote-options" class="daily-vote-options"><p class="crew-note">Loading today's poll…</p></div>
+      <div class="vote-foot"><span id="vote-total">0 VOTES</span><span id="vote-date">UTC DAILY POLL</span></div>
+    </article>
+    </div>
+</section>
+<dialog class="swap-help-dialog" id="swap-help-dialog" aria-labelledby="swap-help-title">
+  <div class="swap-help-content">
+    <div class="crew-card-head"><div><span class="section-kicker">[ JUPITER SWAP INTERFACE ]</span><h3 id="swap-help-title">YOUR WALLET. <span class="green">YOUR CALL.</span></h3></div><button class="swap-help-button" id="swap-help-close" type="button">✕ CLOSE</button></div>
+    <p>Trade through Jupiter's swap interface without leaving ZombieCash. Your wallet stays in your control: the site never asks for your recovery phrase or private key.</p>
+    <ol><li><b>01</b> Connect a compatible Solana wallet.</li><li><b>02</b> Choose the SOL amount and review the route and fees.</li><li><b>03</b> Confirm only after checking the token and transaction details.</li></ol>
+    <p class="jupiter-buy-warning">Crypto assets are volatile. Verify the $ZOMBCASH token before swapping; this is not financial advice.</p>
+    <a class="jupiter-buy-fallback" href="https://jup.ag/swap/SOL-6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">OPEN JUPITER IN A NEW TAB ↗</a>
+  </div>
+</dialog>
+
+
 <section class="section mini-game" id="snake-game">
   <div class="snake-promo-art" aria-hidden="true"><div class="snake-promo-orbit"></div><div class="snake-promo-symbol">☠</div><div class="snake-promo-chip chip-one">+10 BRAIN</div><div class="snake-promo-chip chip-two">ARCADE MODE</div></div>
   <div class="game-copy"><div class="section-kicker">[ 03 / PLAYABLE ARCADE ]</div><h2>ONE MORE RUN.<br><span class="green">NO HUMANITY.</span></h2><p>Meet the undead classic: guide your Zombie Snake, collect brains, grow longer, and don’t bite your own tail.</p><div class="snake-feature-row"><span>⌨ ARROWS / WASD</span><span>◉ ENDLESS SURVIVAL</span><span>✚ COMMUNITY RECORDS</span></div><a class="btn btn-primary" href="arcade.html?game=snake">▶ OPEN THE ARCADE</a><span class="snake-hint">FOUR GAMES · COMMUNITY RECORDS · FULLSCREEN AVAILABLE</span></div>
@@ -703,7 +722,7 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 </style>
 
 <script src="runtime-fixes.js?v=20261020-2"></script>
-<script src="script.js?v=market-merge-v5-20261020"></script>
+<script src="script.js?v=swap-layout-v6-20261020"></script>
 <script id="jupiter-zombcash-init">
 (() => {
   const terminal = document.getElementById('jupiter-zombcash-terminal');
