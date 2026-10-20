@@ -64,6 +64,20 @@ const hiFull={
 };
 Object.assign(langs.tr.map,trFull);Object.assign(langs.hi.map,hiFull);
 
+
+const sharedUi={
+"Analytics API is not responding yet.":{de:"Die Analytics-API antwortet noch nicht.",fr:"L’API d’analyse ne répond pas encore.",it:"L’API di analisi non risponde ancora.",ja:"分析APIはまだ応答していません。","zh-CN":"分析 API 暂无响应。",tr:"Analitik API henüz yanıt vermiyor.",hi:"Analytics API अभी जवाब नहीं दे रही है।"},
+"Try again after the API deployment completes.":{de:"Versuche es erneut, sobald das API-Deployment abgeschlossen ist.",fr:"Réessayez une fois le déploiement de l’API terminé.",it:"Riprova al termine della distribuzione dell’API.",ja:"APIのデプロイ完了後にもう一度お試しください。","zh-CN":"API 部署完成后请重试。",tr:"API dağıtımı tamamlandıktan sonra tekrar dene.",hi:"API डिप्लॉयमेंट पूरा होने के बाद फिर कोशिश करें।"},
+"The community poll is temporarily unavailable. Please try again shortly.":{de:"Die Community-Abstimmung ist vorübergehend nicht verfügbar. Bitte versuche es gleich erneut.",fr:"Le vote communautaire est temporairement indisponible. Réessayez dans un instant.",it:"Il sondaggio della community non è temporaneamente disponibile. Riprova tra poco.",ja:"コミュニティ投票は一時的に利用できません。少ししてから再試行してください。","zh-CN":"社区投票暂时不可用，请稍后重试。",tr:"Topluluk oylaması geçici olarak kullanılamıyor. Lütfen biraz sonra tekrar dene.",hi:"कम्युनिटी पोल अस्थायी रूप से उपलब्ध नहीं है। कृपया थोड़ी देर बाद फिर कोशिश करें।"},
+"Leaderboard is temporarily unavailable.":{de:"Die Rangliste ist vorübergehend nicht verfügbar.",fr:"Le classement est temporairement indisponible.",it:"La classifica non è temporaneamente disponibile.",ja:"ランキングは一時的に利用できません。","zh-CN":"排行榜暂时不可用。",tr:"Liderlik tablosu geçici olarak kullanılamıyor.",hi:"लीडरबोर्ड अस्थायी रूप से उपलब्ध नहीं है।"},
+"RADAR SIGNAL UNAVAILABLE. Check your connection or refresh shortly.":{de:"RADARSIGNAL NICHT VERFÜGBAR. Prüfe deine Verbindung oder aktualisiere die Seite in Kürze.",fr:"SIGNAL RADAR INDISPONIBLE. Vérifiez votre connexion ou actualisez la page dans un instant.",it:"SEGNALE RADAR NON DISPONIBILE. Controlla la connessione o aggiorna tra poco.",ja:"レーダー信号を利用できません。接続を確認するか、少ししてから更新してください。","zh-CN":"雷达信号不可用。请检查网络连接或稍后刷新。",tr:"RADAR SİNYALİ KULLANILAMIYOR. Bağlantını kontrol et veya biraz sonra yenile.",hi:"रडार सिग्नल उपलब्ध नहीं है। कनेक्शन जाँचें या थोड़ी देर बाद रीफ़्रेश करें。"},
+"Waiting for radar data…":{de:"Warten auf Radardaten…",fr:"En attente des données du radar…",it:"In attesa dei dati radar…",ja:"レーダーデータを待っています…","zh-CN":"正在等待雷达数据…",tr:"Radar verileri bekleniyor…",hi:"रडार डेटा का इंतज़ार है…"},
+"NO SIGNAL":"KEIN SIGNAL","NO SIGNAL":{de:"KEIN SIGNAL",fr:"AUCUN SIGNAL",it:"NESSUN SEGNALE",ja:"信号なし","zh-CN":"无信号",tr:"SİNYAL YOK",hi:"कोई सिग्नल नहीं"},
+"LOADING RADAR DATA…":{de:"RADARDATEN WERDEN GELADEN…",fr:"CHARGEMENT DES DONNÉES RADAR…",it:"CARICAMENTO DATI RADAR…",ja:"レーダーデータを読み込み中…","zh-CN":"正在加载雷达数据…",tr:"RADAR VERİLERİ YÜKLENİYOR…",hi:"रडार डेटा लोड हो रहा है…"},
+"NO DATA YET":"NOCH KEINE DATEN","RETRY ↻":"ERNEUT VERSUCHEN ↻"
+};
+Object.entries(sharedUi).forEach(([source, translations])=>{if(typeof translations==="string")return;Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;});});
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 let current='en';const originals=new WeakMap();
 function translate(root=document.body){const map=langs[current].map,walk=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),nodes=[];while(walk.nextNode())nodes.push(walk.currentNode);nodes.forEach(n=>{if(!n.parentElement||n.parentElement.closest('script,style,textarea,code,pre,.language-switcher,[data-no-translate]'))return;if(!originals.has(n))originals.set(n,n.nodeValue);const o=originals.get(n),v=map[norm(o)];if(v){const a=(o.match(/^\s*/)||[''])[0],b=(o.match(/\s*$/)||[''])[0];n.nodeValue=a+v+b}else n.nodeValue=o;});}
