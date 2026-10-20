@@ -490,6 +490,39 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
       <div><small>MARKET CAP / FDV</small><strong id="zombcash-cap">—</strong></div>
     </div>
     <div class="zombcash-market-bottom"><small id="zombcash-market-updated">WAITING FOR MARKET DATA</small><div><a href="https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">TRADE ↗</a><a href="https://dexscreener.com/solana/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">CHART ↗</a><button id="zombcash-market-refresh" type="button">↻ REFRESH</button></div></div>
+    <div class="zombcash-market-panels">
+      <section class="zom-market-panel zom-price-panel" aria-labelledby="zom-price-title">
+        <div class="zom-panel-head">
+          <div><small class="zom-panel-kicker">LIVE PRICE HISTORY</small><h4 id="zom-price-title">Price <span>(USD)</span></h4><strong id="zom-chart-current">—</strong></div>
+          <div class="zom-periods" role="group" aria-label="Price chart period">
+            <button type="button" data-zom-period="24h" class="active">24H</button>
+            <button type="button" data-zom-period="7d">7D</button>
+            <button type="button" data-zom-period="30d">30D</button>
+          </div>
+        </div>
+        <div class="zom-chart-wrap"><canvas id="zom-price-chart" aria-label="ZombieCash USD price chart" role="img"></canvas><div id="zom-chart-empty">Waiting for historical price data…</div></div>
+        <div class="zom-panel-foot"><span id="zom-chart-source">SOURCE: GECKOTERMINAL</span><span id="zom-chart-updated">UPDATING…</span></div>
+      </section>
+      <section class="zom-market-panel zom-activity-panel" aria-labelledby="zom-activity-title">
+        <div class="zom-panel-head">
+          <div><small class="zom-panel-kicker">SOLANA TRANSACTION FLOW</small><h4 id="zom-activity-title">24h buys vs sells</h4></div>
+          <span id="zom-activity-status" class="zom-live-state"><i></i> LIVE FEED</span>
+        </div>
+        <div class="zom-activity-totals">
+          <div><small>BUYS</small><strong id="zom-buys">—</strong></div>
+          <div><small>SELLS</small><strong id="zom-sells">—</strong></div>
+          <div><small>TOTAL TXNS</small><strong id="zom-total-txns">—</strong></div>
+        </div>
+        <div class="zom-activity-bar" role="img" aria-label="24 hour buys compared with sells"><span id="zom-buys-bar"></span><span id="zom-sells-bar"></span></div>
+        <div class="zom-activity-legend"><span><i class="buy-dot"></i> BUYS <b id="zom-buy-share">—</b></span><span><i class="sell-dot"></i> SELLS <b id="zom-sell-share">—</b></span></div>
+        <div class="zom-activity-periods">
+          <div><small>5 MIN</small><span><b id="zom-buys-m5">—</b> / <b id="zom-sells-m5">—</b></span></div>
+          <div><small>1 HOUR</small><span><b id="zom-buys-h1">—</b> / <b id="zom-sells-h1">—</b></span></div>
+          <div><small>6 HOURS</small><span><b id="zom-buys-h6">—</b> / <b id="zom-sells-h6">—</b></span></div>
+        </div>
+        <div class="zom-panel-foot"><span>SOURCE: DEXSCREENER</span><span id="zom-activity-updated">WAITING FOR DATA</span></div>
+      </section>
+    </div>
   </div>
   <div class="live-radar">
     <div class="live-radar-head">
