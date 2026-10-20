@@ -505,6 +505,8 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 .zc-hero-art-panel{position:relative!important;display:block!important;min-width:0!important;width:100%!important;height:clamp(390px,38vw,520px)!important;max-height:520px!important;overflow:hidden!important;border:1px solid #456b37!important;border-radius:3px!important;background:#050906!important;box-shadow:inset 0 0 50px #9bff4510,0 0 35px #9bff4508!important;isolation:isolate!important}
 .zc-hero-art-panel .zc-radar-art{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;overflow:hidden!important;background:#050906!important}
 .zc-hero-art-panel .zc-radar-scene{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;filter:saturate(.9) contrast(1.08)!important}
+/* Prevent edge labels from being cropped when the artwork fills the portrait-ish panel */
+.zc-hero-art-panel .zc-radar-scene text{display:none!important}
 .zc-hero-art-panel .zc-art-scanlines{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,#a4ff4308 4px,transparent 5px);mix-blend-mode:screen}
 .zc-hero-art-panel .zc-art-corner{position:absolute;width:26px;height:26px;border-color:#a4ff43;border-style:solid;opacity:.85;pointer-events:none}
 .zc-hero-art-panel .zc-art-corner-tl{top:12px;left:12px;border-width:1px 0 0 1px}.zc-hero-art-panel .zc-art-corner-br{right:12px;bottom:12px;border-width:0 1px 1px 0}
