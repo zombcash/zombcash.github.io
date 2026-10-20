@@ -418,6 +418,20 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 .world-community-pair .world-event{margin:10px 12px}
 .world-community-pair .world-panel-foot{margin-top:auto}
 @media(max-width:760px){.world-community-pair{grid-template-columns:minmax(0,1fr);padding:10px;gap:12px}}
+
+/* Community operations: two equal columns, with daily poll closing the same outer frame. */
+.world-grid>.world-community-pair{grid-column:1/-1!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important;align-items:stretch!important;padding:16px!important;border:1px solid #31452e!important;background:linear-gradient(135deg,#0a100c,#080c0a)!important}
+.world-grid>.world-community-pair>.world-panel{grid-column:auto!important;display:flex!important;flex-direction:column!important;width:auto!important;min-width:0!important;height:100%!important;margin:0!important}
+.world-community-pair .world-event{margin:10px 12px}
+.world-community-pair .world-panel-foot{margin-top:auto}
+.living-world>.daily-mission-section{margin:0!important;padding:22px 16px 18px!important;border:1px solid #31452e!important;border-top:0!important;background:linear-gradient(180deg,#0a100c,#080c0a)!important}
+.living-world>.daily-mission-section .section-heading{margin:0 auto 18px!important;max-width:none!important}
+.living-world>.daily-mission-section .daily-mission-inner{max-width:none!important;margin:0!important}
+.living-world>.daily-mission-section .vote-card{width:100%!important;max-width:none!important;margin:0!important}
+@media(max-width:760px){
+ .world-grid>.world-community-pair{grid-template-columns:minmax(0,1fr)!important;padding:10px!important;gap:12px!important}
+ .living-world>.daily-mission-section{padding:18px 10px!important}
+}
 </style>
 
 <style id="jupiter-buy-widget-styles">
@@ -545,7 +559,6 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
     </article>
     </div>
   </div>
-</section>
 <section class="section daily-mission-section" id="daily-mission">
   <div class="section-heading"><div><div class="section-kicker">[ COMMUNITY OPERATIONS / DAILY ]</div><h2>THE CREW <span class="green">VOTES.</span></h2><p>Choose the next mission. This standalone block can grow with future community features.</p></div></div>
   <div class="daily-mission-inner"><article class="crew-card vote-card">
@@ -556,6 +569,8 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
     </article>
     </div>
 </section>
+</section>
+
 
 <section class="section intro" id="outbreak">
   <div class="section-kicker">[ 01 / THE WORLD AFTER ]</div>
@@ -734,7 +749,7 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 </style>
 
 <script src="runtime-fixes.js?v=20261020-2"></script>
-<script src="script.js?v=crew-poll-order-v9-20261020"></script>
+<script src="script.js?v=community-layout-v10-20261020"></script>
 <script id="jupiter-zombcash-init">
 (() => {
   const terminal = document.getElementById('jupiter-zombcash-terminal');
