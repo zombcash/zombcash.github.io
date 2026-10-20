@@ -16,6 +16,22 @@
 :root{--bg:#080b11;--panel:#10171b;--line:#2b4032;--green:#9bff45;--muted:#9aa9a0;--white:#eff8ef;--purple:#a855f7}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 75% 10%,#18362265,transparent 35%),var(--bg);color:var(--white);font:18px 'Rajdhani',sans-serif;min-height:100vh}a{color:inherit;text-decoration:none}.scan{position:fixed;inset:0;pointer-events:none;z-index:9;opacity:.045;background:repeating-linear-gradient(transparent 0 3px,#b4ffcb 4px,transparent 5px)}header{height:76px;padding:0 6%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #26372d;background:#080b11e8;position:sticky;top:0;z-index:8;backdrop-filter:blur(12px)}.brand{font:800 15px Orbitron;letter-spacing:1px}.brand b{color:var(--green)}.back{font:600 10px Orbitron;letter-spacing:1px;color:#b5c5b8;border:1px solid #344c3b;padding:12px 14px}.back:hover{color:var(--green);border-color:var(--green)}main{max-width:1120px;margin:auto;padding:60px 24px 80px}.eyebrow{font:600 10px Orbitron;letter-spacing:2px;color:var(--green)}h1,h2{font-family:Orbitron,sans-serif}h1{font-size:clamp(38px,6vw,68px);line-height:1.02;letter-spacing:-2px;margin:18px 0}h1 span{color:var(--green)}.lead{color:#a7b7ad;font-size:21px;max-width:650px;line-height:1.45}.layout{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:38px}.panel{background:linear-gradient(145deg,#111a1b,#0b1016);border:1px solid var(--line);padding:24px;min-width:0}.panel h2{font-size:15px;letter-spacing:.7px;margin:0 0 18px}.upload{min-height:330px;border:1px dashed #48634b;background:#0a1110;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;position:relative;overflow:hidden;cursor:pointer}.upload.drag{border-color:var(--green);background:#102014}.upload img{max-width:100%;max-height:360px;object-fit:contain;display:block}.upload-placeholder{max-width:260px}.upload-icon{font-size:42px;color:var(--green);margin-bottom:12px}.upload-placeholder strong{display:block;font:700 11px Orbitron;letter-spacing:1px;margin-bottom:8px}.upload-placeholder span{color:var(--muted);font-size:15px}.upload input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.field-label{display:block;font:600 9px Orbitron;letter-spacing:1.2px;color:#a9b9ae;margin:22px 0 10px}.styles{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.style{background:#0b1114;border:1px solid #2c3c31;color:#d4e0d5;padding:12px;text-align:left;cursor:pointer;font:600 10px Orbitron;letter-spacing:.3px}.style small{display:block;font:500 14px Rajdhani;color:#8fa095;margin-top:5px;letter-spacing:0}.style.active{border-color:var(--green);background:#152318;box-shadow:inset 0 0 0 1px #9bff4520}.btn{display:inline-flex;justify-content:center;align-items:center;gap:9px;padding:15px 18px;border:1px solid transparent;cursor:pointer;font:700 10px Orbitron;letter-spacing:.6px;transition:.2s}.primary{background:var(--green);color:#09100a;width:100%;margin-top:22px}.primary:hover{background:#c6ff91}.primary:disabled{opacity:.45;cursor:not-allowed}.secondary{background:#0a1011;border-color:#405344;color:#edf7ee}.secondary:hover{border-color:var(--green);color:var(--green)}.result{min-height:330px;border:1px solid #26372d;background:radial-gradient(ellipse,#14281a,#090d12 70%);display:grid;place-items:center;overflow:hidden;padding:14px}.result img{display:block;max-width:100%;max-height:390px;object-fit:contain}.empty{text-align:center;padding:20px;color:#77877c}.empty .symbol{font-size:50px;color:#476449}.empty strong{display:block;font:600 10px Orbitron;letter-spacing:1px;margin:12px 0}.empty p{font-size:15px;margin:0}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.status{min-height:26px;margin:14px 0 0;font-size:15px;color:#b7c8bb}.status.error{color:#ff9b9b}.status.success{color:var(--green)}.spinner{width:15px;height:15px;border:2px solid #183018;border-top-color:#081008;border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.fineprint{font-size:14px;color:#78877d;line-height:1.5;margin-top:18px}.privacy{margin-top:22px;border-top:1px solid #26372d;padding-top:18px;color:#85958a;font-size:14px;line-height:1.5}.privacy b{color:#c5d6c8}.bottom{margin-top:35px;text-align:center;font:600 9px Orbitron;letter-spacing:1.5px;color:#617368}.bottom a{color:var(--green)}@media(max-width:760px){header{padding:0 5%;height:68px}.brand{font-size:12px}main{padding:42px 16px 60px}.layout{grid-template-columns:1fr}.panel{padding:17px}.upload,.result{min-height:270px}h1{letter-spacing:-1px}.lead{font-size:18px}.styles{grid-template-columns:1fr 1fr}}
 .caption-editor{margin-top:24px;padding-top:18px;border-top:1px solid #26372d}.caption-editor textarea{display:block;width:100%;resize:vertical;min-height:88px;padding:13px;background:#080e0d;border:1px solid #354b38;color:#eaf5e8;font:500 17px/1.4 Rajdhani,sans-serif;outline:none}.caption-editor textarea:focus{border-color:var(--green);box-shadow:0 0 0 2px #9bff4512}.caption-tools{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}.caption-tools span{font-size:12px;color:#829485}.caption-tools button{font-size:9px;padding:11px 12px}.caption-tools button:disabled{opacity:.5;cursor:wait}.caption-editor .fineprint{margin-bottom:0}
+.extra-tools{margin-top:18px;padding-top:18px;border-top:1px solid #26372d}
+.extra-tools h3{font:600 10px Orbitron;letter-spacing:1px;margin:0 0 12px;color:#cce2ce}
+.rarity{display:inline-flex;align-items:center;gap:8px;border:1px solid #52624a;padding:9px 12px;font:700 10px Orbitron;letter-spacing:.8px;color:var(--green);margin-top:12px}
+.rarity.epic{color:#c4a1ff;border-color:#7c55aa}.rarity.legendary{color:#ffd780;border-color:#98763a}
+.creator-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.creator-row .btn{flex:1;min-width:135px}
+.compare{margin-top:14px;border:1px solid #26372d;padding:12px;background:#090f0d}
+.compare-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:9px;font:600 9px Orbitron;letter-spacing:.7px;color:#a9b9ae}
+.compare-stage{display:grid;grid-template-columns:1fr 1fr;gap:8px}.compare-stage figure{margin:0;min-width:0}
+.compare-stage img{width:100%;aspect-ratio:1;object-fit:contain;background:#080b11;display:block}
+.compare-stage figcaption{font-size:12px;color:#a7b7ad;text-align:center;padding-top:5px}
+.history-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.history-item{background:#080e0d;border:1px solid #354b38;color:#dce9dd;padding:6px;cursor:pointer;min-width:0}
+.history-item img{width:100%;aspect-ratio:1;object-fit:cover;display:block}.history-item span{display:block;font:600 8px Orbitron;margin-top:5px;overflow-wrap:anywhere}
+.referral-box{margin-top:16px;padding:15px;border:1px solid #2c4932;background:#0b130e}.referral-box p{font-size:14px;color:#a7b7ad;margin:6px 0 12px}
+.referral-url{font-size:13px;overflow-wrap:anywhere;color:var(--green);padding:10px;background:#080b11;border:1px solid #26372d}
+@media(max-width:760px){.compare-stage{gap:5px}.creator-row .btn{min-width:100%}}
 </style>
 </head>
 <body><div class="scan"></div>
@@ -38,6 +54,10 @@
         <button class="style" data-style="toxic" type="button">☢ TOXIC MUTANT<small>Neon cracks · bio-glow</small></button>
         <button class="style" data-style="cyber" type="button">⌘ CYBER ZOMBIE<small>Tech · neon circuitry</small></button>
         <button class="style" data-style="legend" type="button">♛ ZOMBCASH LEGEND<small>Apocalypse hero look</small></button>
+        <button class="style" data-style="ceo" type="button">▣ ZOMBIE CEO<small>Corporate apocalypse</small></button>
+        <button class="style" data-style="survivor" type="button">◎ SOLANA SURVIVOR<small>Last one standing</small></button>
+        <button class="style" data-style="cyberpunk" type="button">⌘ CYBERPUNK UNDEAD<small>Neon city mutation</small></button>
+        <button class="style" data-style="boss" type="button">☣ TOXIC BOSS<small>Elite biohazard mutant</small></button>
       </div>
       <button id="createBtn" class="btn primary" type="button" disabled>☣ CREATE MY ZOMBIE</button>
       <p id="status" class="status" role="status" aria-live="polite">Choose a photo to begin the transformation.</p>
@@ -46,6 +66,20 @@
     <section class="panel">
       <h2>02 / YOUR NEW UNDEAD IDENTITY</h2>
       <div class="result" id="resultBox"><div class="empty"><div class="symbol">☠</div><strong>AWAITING TRANSFORMATION</strong><p>Your creation will appear here.</p></div></div>
+      <div id="rarityBadge" class="rarity" hidden>☣ COMMON SURVIVOR</div>
+      <div id="compareBox" class="compare" hidden>
+        <div class="compare-head"><span>BEFORE / AFTER</span><button id="toggleCompareBtn" class="btn secondary" type="button">SWAP VIEWS</button></div>
+        <div class="compare-stage">
+          <figure><img id="compareBefore" alt="Original uploaded photo"><figcaption>HUMAN FORM</figcaption></figure>
+          <figure><img id="compareAfter" alt="AI zombie transformation"><figcaption>UNDEAD FORM</figcaption></figure>
+        </div>
+      </div>
+      <div class="extra-tools">
+        <h3>04 / SHARE YOUR UNDEAD IDENTITY</h3>
+        <div class="creator-row"><button id="downloadCardBtn" class="btn secondary" type="button" disabled>▣ DOWNLOAD SHARE CARD</button><button id="challengeBtn" class="btn secondary" type="button">↗ CHALLENGE A FRIEND</button></div>
+        <div class="referral-box"><strong style="font:600 9px Orbitron;letter-spacing:.8px">YOUR OUTBREAK INVITE</strong><p>Invite a friend to create their own zombie. We count visits and successful transformations in aggregate.</p><div id="referralUrl" class="referral-url">Create a zombie to unlock your invite link.</div><div class="creator-row"><button id="copyReferralBtn" class="btn secondary" type="button" disabled>⧉ COPY INVITE LINK</button></div></div>
+      </div>
+      <div class="extra-tools"><h3>05 / RECENT MUTATIONS — THIS BROWSER ONLY</h3><div id="historyList" class="history-list"><p class="fineprint">Your recent creations can appear here after you generate them.</p></div><div class="creator-row"><button id="clearHistoryBtn" class="btn secondary" type="button">CLEAR LOCAL HISTORY</button></div><p class="fineprint">History is stored locally in this browser when space allows. It is not uploaded to ZombieCash.</p></div>
       <div class="actions">
         <button id="downloadBtn" class="btn secondary" type="button" disabled>↓ DOWNLOAD IMAGE</button>
         <button id="shareBtn" class="btn secondary" type="button" disabled>↗ SEND PHOTO TO ZOMBIECASH GROUP</button>
@@ -78,7 +112,35 @@
   const captionInput = document.getElementById('captionInput');
   const captionAiBtn = document.getElementById('captionAiBtn');
   const captionCount = document.getElementById('captionCount');
-  let selectedFile = null, generatedDataUrl = null, style = 'classic';
+  let selectedFile = null, generatedDataUrl = null, style = 'classic', currentRarity = null, compareSwapped = false;
+  const rarityBadge=document.getElementById('rarityBadge'), compareBox=document.getElementById('compareBox');
+  const compareBefore=document.getElementById('compareBefore'), compareAfter=document.getElementById('compareAfter');
+  const downloadCardBtn=document.getElementById('downloadCardBtn'), challengeBtn=document.getElementById('challengeBtn');
+  const referralUrl=document.getElementById('referralUrl'), copyReferralBtn=document.getElementById('copyReferralBtn'), historyList=document.getElementById('historyList');
+  const HISTORY_KEY='zombcash_zombie_creator_history_v1', REF_KEY='zombcash_creator_referral_v1';
+  const params=new URLSearchParams(location.search);
+  const cleanId=value=>String(value||'').toLowerCase().replace(/[^a-z0-9_-]/g,'').slice(0,32);
+  let referralId=cleanId(params.get('ref'));
+  if(referralId){try{localStorage.setItem(REF_KEY,referralId)}catch(_){}}
+  else {try{referralId=cleanId(localStorage.getItem(REF_KEY))}catch(_){}}
+  const inviteId=(()=>{try{let id=cleanId(localStorage.getItem('zombcash_creator_invite_id'));if(!id){id='survivor-'+Math.random().toString(36).slice(2,10);localStorage.setItem('zombcash_creator_invite_id',id)}return id}catch(_){return 'survivor-'+Math.random().toString(36).slice(2,10)}})();
+  function getHistory(){try{const rows=JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]');return Array.isArray(rows)?rows.slice(0,3):[]}catch(_){return []}}
+  function renderHistory(){
+    const rows=getHistory(); if(!rows.length){historyList.innerHTML='<p class="fineprint">No saved creations yet. History stays in this browser only.</p>';return}
+    historyList.replaceChildren();
+    rows.forEach((item,index)=>{const b=document.createElement('button');b.type='button';b.className='history-item';const im=document.createElement('img');im.src=item.image;im.alt='Saved zombie creation '+(index+1);const label=document.createElement('span');label.textContent=(item.rarity||'SURVIVOR')+' · '+(item.style||'classic').toUpperCase();b.append(im,label);b.addEventListener('click',()=>{generatedDataUrl=item.image;style=item.style||'classic';currentRarity={name:item.rarity||'COMMON',cls:(item.rarity||'common').toLowerCase(),title:'☣ '+(item.rarity||'COMMON')+' MUTATION'};const image=document.createElement('img');image.alt='Restored zombie portrait';image.src=generatedDataUrl;resultBox.replaceChildren(image);updateResultControls();captionInput.value=item.caption||captionInput.value;updateCaptionCount();setStatus('Restored a recent creation from this browser.','success')});historyList.appendChild(b)})
+  }
+  function saveHistory(){if(!generatedDataUrl)return;try{const rows=getHistory().filter(item=>item.image!==generatedDataUrl);rows.unshift({image:generatedDataUrl,style,rarity:currentRarity?.name||'COMMON',caption:captionInput.value.trim().slice(0,180),time:Date.now()});localStorage.setItem(HISTORY_KEY,JSON.stringify(rows.slice(0,3)));renderHistory()}catch(_){historyList.innerHTML='<p class="fineprint">Browser storage is full. Your current image remains available until you leave this page.</p>'}}
+  function rarityForImage(){const roll=Math.random();if(roll>.97)return{name:'LEGENDARY',cls:'legendary',title:'☣ LEGENDARY ZOMBIECASH ICON'};if(roll>.82)return{name:'EPIC',cls:'epic',title:'☣ EPIC MUTANT'};if(roll>.55)return{name:'RARE',cls:'rare',title:'☣ RARE SURVIVOR'};return{name:'COMMON',cls:'common',title:'☣ COMMON SURVIVOR'}}
+  function updateResultControls(){
+    const ready=!!generatedDataUrl;downloadBtn.disabled=shareBtn.disabled=shareXBtn.disabled=downloadCardBtn.disabled=!ready;
+    rarityBadge.hidden=!ready;compareBox.hidden=!ready||!selectedFile;
+    if(ready&&currentRarity){rarityBadge.className='rarity '+currentRarity.cls;rarityBadge.textContent=currentRarity.title}
+    if(ready&&selectedFile){compareBefore.src=URL.createObjectURL(selectedFile);compareAfter.src=generatedDataUrl}
+    const url=new URL('https://zombcash.github.io/zombie-maker.html');url.searchParams.set('ref',inviteId);url.searchParams.set('utm_source','creator_invite');url.searchParams.set('utm_medium','share');url.searchParams.set('utm_campaign','zombie_creator');referralUrl.textContent=url.toString();copyReferralBtn.disabled=!ready;
+  }
+  function trackCreatorEvent(event,target){if(typeof window.zcTrack==='function')window.zcTrack(event,target)}
+  renderHistory();
   function updateCaptionCount() { captionCount.textContent = captionInput.value.length + ' / 500'; }
   captionInput.addEventListener('input', updateCaptionCount);
   updateCaptionCount();
@@ -118,9 +180,10 @@
       if (!response.ok) throw new Error(data.error || 'The image service is temporarily unavailable.');
       if (!data.image || !data.image.startsWith('data:image/')) throw new Error('The service returned an invalid image.');
       generatedDataUrl = data.image;
+      currentRarity = rarityForImage();
       const img = document.createElement('img'); img.alt = 'Your AI-generated ZombieCash zombie portrait'; img.src = generatedDataUrl;
       resultBox.replaceChildren(img);
-      downloadBtn.disabled = shareBtn.disabled = shareXBtn.disabled = false;
+      updateResultControls(); saveHistory(); trackCreatorEvent('zombie_created', style);
       setStatus('Transformation complete. Your undead legend is ready!', 'success');
     } catch (err) {
       setStatus(err.message || 'Something went wrong. Please try again later.', 'error');
@@ -131,7 +194,7 @@
   downloadBtn.addEventListener('click', () => {
     if (!generatedDataUrl) return;
     const a = document.createElement('a'); a.href = generatedDataUrl; a.download = 'zombcash-zombie.jpg';
-    document.body.appendChild(a); a.click(); a.remove();
+    document.body.appendChild(a); a.click(); a.remove(); trackCreatorEvent('creator_portrait_download', style);
     setStatus('PHOTO DOWNLOADED ✓ Your portrait is saved to your device. Caption: ' + (captionInput.value.trim() || '(no caption)'), 'success');
   });
   shareBtn.addEventListener('click', async () => {
@@ -182,6 +245,12 @@
     } catch(err) { setStatus(err.message || 'Could not create a caption. Please try again.', 'error'); }
     finally { captionAiBtn.disabled = false; captionAiBtn.textContent = original; }
   });
+  document.getElementById('toggleCompareBtn').addEventListener('click',()=>{compareSwapped=!compareSwapped;if(!generatedDataUrl||!selectedFile)return;if(compareSwapped){compareBefore.src=generatedDataUrl;compareAfter.src=URL.createObjectURL(selectedFile)}else{compareBefore.src=URL.createObjectURL(selectedFile);compareAfter.src=generatedDataUrl}});
+  function wrapCanvasText(ctx,text,x,y,maxWidth,lineHeight,maxLines){const words=text.split(/\s+/);let line='',lines=0;for(const word of words){const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxWidth&&line){ctx.fillText(line,x,y);y+=lineHeight;line=word;lines++;if(lines>=maxLines-1)break}else line=test}if(line)ctx.fillText(line,x,y)}
+  downloadCardBtn.addEventListener('click',async()=>{if(!generatedDataUrl)return;downloadCardBtn.disabled=true;const old=downloadCardBtn.textContent;downloadCardBtn.textContent='BUILDING CARD…';try{const base=new Image();base.src=generatedDataUrl;await base.decode();const canvas=document.createElement('canvas');canvas.width=1200;canvas.height=1500;const ctx=canvas.getContext('2d');const grad=ctx.createLinearGradient(0,0,1200,1500);grad.addColorStop(0,'#101d13');grad.addColorStop(1,'#080b11');ctx.fillStyle=grad;ctx.fillRect(0,0,1200,1500);ctx.strokeStyle='#9bff45';ctx.lineWidth=5;ctx.strokeRect(30,30,1140,1440);ctx.fillStyle='#9bff45';ctx.font='bold 42px Arial';ctx.fillText('☣ ZOMBIECASH',70,100);ctx.fillStyle='#eff8ef';ctx.font='bold 30px Arial';ctx.fillText((currentRarity?.name||'UNDEAD')+' SURVIVOR',70,155);const scale=Math.min(1060/base.width,1000/base.height),w=base.width*scale,h=base.height*scale;ctx.drawImage(base,(1200-w)/2,190+(1000-h)/2,w,h);const msg=(captionInput.value.trim()||'I survived the outbreak. Who is next?').replace(/[\r\n]+/g,' ').slice(0,100);ctx.fillStyle='#eff8ef';ctx.font='28px Arial';wrapCanvasText(ctx,msg,70,1260,1060,38,3);ctx.fillStyle='#9bff45';ctx.font='bold 24px Arial';ctx.fillText('MAKE YOUR OWN ZOMBIE',70,1400);ctx.fillStyle='#a7b7ad';ctx.font='20px Arial';ctx.fillText('zombcash.github.io/zombie-maker.html',70,1440);const a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download='zombcash-share-card.png';a.click();trackCreatorEvent('creator_card_download',style);setStatus('Branded share card downloaded. Share it with your invite link!','success')}catch(_){setStatus('Could not build the share card. Try downloading the portrait instead.','error')}finally{downloadCardBtn.disabled=!generatedDataUrl;downloadCardBtn.textContent=old}});
+  copyReferralBtn.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(referralUrl.textContent);trackCreatorEvent('creator_referral_copy',inviteId);setStatus('Invite link copied. Send it to a friend!','success')}catch(_){setStatus('Copy is blocked by this browser. Select the invite link and copy it manually.','error')}});
+  challengeBtn.addEventListener('click',async()=>{try{const value=referralUrl.textContent;if(navigator.share)await navigator.share({title:'Join the ZombieCash outbreak',text:'Create your own zombie portrait and challenge me!',url:value});else{await navigator.clipboard.writeText(value);setStatus('Invite link copied. Challenge a friend to create their zombie!','success')}trackCreatorEvent('creator_challenge_share',inviteId)}catch(_){/* User cancelled the share sheet. */}});
+  document.getElementById('clearHistoryBtn').addEventListener('click',()=>{try{localStorage.removeItem(HISTORY_KEY);renderHistory();trackCreatorEvent('creator_history_clear','local');setStatus('Local creation history cleared.','success')}catch(_){setStatus('Could not clear browser history storage.','error')}});
   shareXBtn.addEventListener('click', () => {
     const caption = captionInput.value.trim() || 'I have joined the undead. ☣🧟';
     const text = encodeURIComponent(caption + '\\nMake your own ZombieCash zombie:');
@@ -204,6 +273,8 @@
     const body = JSON.stringify({event, source, medium, campaign, page: '/zombie-maker.html', target: clean(target, 'none')});
     try { navigator.sendBeacon(endpoint, new Blob([body], {type:'application/json'})); } catch (_) {}
   };
+  window.zcTrack = send;
+  if (q.get('ref')) send('creator_referral_visit', clean(q.get('ref'), 'unknown'));
   send('page_view', 'zombie_maker');
   document.addEventListener('click', e => {
     const el = e.target && e.target.closest ? e.target.closest('button,a') : null;
