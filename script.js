@@ -27,7 +27,7 @@
       byId('campaign-pageviews').textContent = fmt(events.page_view || 0);
       byId('campaign-outbound').textContent = fmt(events.outbound_click || 0);
       byId('campaign-community').textContent = fmt(sum(['telegram_open','radar_open']));
-      byId('campaign-conversions').textContent = fmt(sum(['ca_copy','game_start','game_share','maker_share','cta_click','token_info_open']));
+      byId('campaign-conversions').textContent = fmt(sum(['ca_copy','game_start','game_complete','game_score','arcade_open','game_share','maker_share','cta_click','token_info_open']));
       renderList(byId('campaign-sources'), data.sources, 'No campaign traffic recorded yet.');
       renderList(byId('campaign-days'), data.daily, 'No daily events recorded yet.');
       byId('campaign-updated').textContent = 'UPDATED ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) + ' · ' + (data.retentionDays || 60) + ' DAY RETENTION';
