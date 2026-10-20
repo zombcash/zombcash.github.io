@@ -1247,4 +1247,35 @@ section.section.living-world .outbreak-status-panel .world-disclaimer{margin:0 1
 @media(max-width:760px){section.section.living-world .ops-status-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;padding:12px 12px 10px!important;gap:6px!important}section.section.living-world .ops-status-tile{gap:6px!important;padding:9px 6px!important}section.section.living-world .ops-status-tile small{font-size:7px!important;white-space:normal!important}section.section.living-world .ops-status-tile strong{font-size:8px!important}section.section.living-world .ops-transmissions-head{padding:0 12px 9px!important}section.section.living-world .ops-transmissions{padding:0 12px!important}section.section.living-world .ops-transmission{grid-template-columns:26px minmax(0,1fr) auto!important;gap:8px!important;padding:12px 0!important}section.section.living-world .ops-transmission-icon{width:25px!important;height:25px!important}section.section.living-world .ops-transmission p{font-size:12px!important}section.section.living-world .outbreak-status-panel .world-disclaimer{margin:0 12px 12px!important}}
 </style>
 
+<style id="zombcash-community-card-bottom-alignment">
+/* Pixel-level alignment: make both cards in each crew-grid row share the same bottom edge. */
+section.section.community-console .crew-grid {
+  align-items: stretch !important;
+}
+section.section.community-console .crew-grid > .crew-card,
+section.section.community-console .crew-grid > .activity-chart-panel,
+section.section.community-console .crew-grid > .recent-trades-panel {
+  align-self: stretch !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+section.section.community-console .crew-grid > .crew-card {
+  display: flex !important;
+  flex-direction: column !important;
+}
+section.section.community-console .crew-grid > .crew-card.jupiter-swap-card .jupiter-terminal-shell {
+  flex: 1 1 auto !important;
+}
+@media (max-width: 800px) {
+  section.section.community-console .crew-grid {
+    align-items: stretch !important;
+  }
+  section.section.community-console .crew-grid > .crew-card,
+  section.section.community-console .crew-grid > .activity-chart-panel,
+  section.section.community-console .crew-grid > .recent-trades-panel {
+    height: auto !important;
+  }
+}
+</style>
 </body></html>
