@@ -1313,4 +1313,21 @@ section.section.living-world .token-intel-price-block{display:grid!important;gap
 @media(max-width:760px){.token-intel-stats{padding:12px!important}.token-intel-actions{padding-left:12px!important;padding-right:12px!important}.token-intel-contract{margin-left:12px!important;margin-right:12px!important}.token-intel-foot{padding-left:12px!important;padding-right:12px!important}}
 
 </style>
+
+<style id="daily-missions-panel-fix">
+/* The missions widget must render independently of the removed legacy alert list. */
+section.section.living-world .missions-panel{display:flex!important;flex-direction:column!important;min-height:100%!important}
+section.section.living-world #world-missions.world-missions{display:grid!important;grid-template-columns:minmax(0,1fr)!important;align-content:start!important;gap:0!important;flex:1 1 auto!important;min-height:220px!important;padding:8px 20px 14px!important;visibility:visible!important;opacity:1!important}
+section.section.living-world #world-missions .world-mission{display:flex!important;align-items:flex-start!important;gap:12px!important;padding:15px 0!important;margin:0!important;border-bottom:1px solid #203024!important;cursor:pointer!important;min-width:0!important}
+section.section.living-world #world-missions .world-mission:last-child{border-bottom:0!important}
+section.section.living-world #world-missions .world-mission input{display:block!important;appearance:none!important;flex:0 0 17px!important;width:17px!important;height:17px!important;margin:2px 0 0!important;border:1px solid #587b48!important;background:#080f0d!important;cursor:pointer!important}
+section.section.living-world #world-missions .world-mission input:checked{background:#9bff45!important;border-color:#9bff45!important;box-shadow:inset 0 0 0 4px #0b150c!important}
+section.section.living-world #world-missions .world-mission-copy{display:block!important;min-width:0!important;flex:1 1 auto!important}
+section.section.living-world #world-missions .world-mission strong{display:block!important;color:#e2f0dc!important;font:700 10px Orbitron,sans-serif!important;line-height:1.5!important;letter-spacing:.3px!important}
+section.section.living-world #world-missions .world-mission p{margin:5px 0 0!important;color:#91a18e!important;font:500 14px/1.35 Rajdhani,sans-serif!important}
+section.section.living-world #world-missions .world-mission-action{display:inline-flex!important;margin-top:8px!important;color:#9bff45!important;font:700 8px Orbitron,sans-serif!important;letter-spacing:.45px!important;text-decoration:none!important}
+section.section.living-world #world-missions .world-mission-action:hover{color:#d0ffab!important;text-decoration:underline!important}
+section.section.living-world #world-missions .world-mission.done .world-mission-copy>strong{text-decoration:line-through!important;color:#6d8272!important}
+@media(max-width:760px){section.section.living-world #world-missions.world-missions{padding-left:13px!important;padding-right:13px!important;min-height:0!important}section.section.living-world #world-missions .world-mission{padding:13px 0!important}}
+</style>
 </body></html>
