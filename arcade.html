@@ -14,12 +14,14 @@
 <main>
 <div class="kicker">ZOMBCASH ARCADE // FREE TO PLAY</div><h1>THE UNDEAD <span class="green">GAMES.</span></h1><p class="intro">Three quick arcade challenges. Survive, score, and come back stronger.</p>
 <div class="game-tabs" role="tablist" aria-label="Choose a game">
-<button class="tab" role="tab" aria-selected="true" data-game="breaker">01 / ZOMBIE BREAKER<span>Smash the infected blocks</span></button>
-<button class="tab" role="tab" aria-selected="false" data-game="maze">02 / ZOMBIE MAZE<span>Collect brains. Escape.</span></button>
-<button class="tab" role="tab" aria-selected="false" data-game="wall">03 / UNDEAD WALL<span>Hold the line</span></button>
+<button class="tab" role="tab" aria-selected="false" data-game="snake">01 / ZOMBIE SNAKE<span>Collect brains. Survive.</span></button>
+<button class="tab" role="tab" aria-selected="true" data-game="breaker">02 / ZOMBIE BREAKER<span>Smash the infected blocks</span></button>
+<button class="tab" role="tab" aria-selected="false" data-game="maze">03 / ZOMBIE MAZE<span>Collect brains. Escape.</span></button>
+<button class="tab" role="tab" aria-selected="false" data-game="wall">04 / UNDEAD WALL<span>Hold the line</span></button>
 </div>
 <section class="panel">
-<div class="hud"><span>SCORE <strong id="score">0</strong></span><span>LIVES <strong id="lives">3</strong></span><span>LEVEL <strong id="level">1</strong></span><span class="spacer"></span><button class="btn" id="start">START / RESTART</button></div>
+<div class="hud"><span>SCORE <strong id="score">0</strong></span><span>LIVES <strong id="lives">3</strong></span><span>LEVEL <strong id="level">1</strong></span><span class="spacer"></span><button class="btn secondary" id="fullscreen" type="button">⛶ FULLSCREEN</button><button class="btn" id="start">START / RESTART</button></div>
+<iframe id="snake-frame" title="Zombie Snake arcade game" src="index.html?arcadeSnake=1#snake-game" loading="lazy" allow="fullscreen" style="display:none;width:100%;height:760px;border:1px solid #263628;background:#080b11"></iframe>
 <canvas id="game" width="960" height="540" tabindex="0" aria-label="ZombieCash arcade game area"></canvas>
 <div class="touch-controls" id="touch-controls" aria-label="Touch game controls"><button data-key="left" aria-label="Move left">◀</button><button data-key="action" aria-label="Action">●</button><button data-key="right" aria-label="Move right">▶</button><button data-key="up" aria-label="Move up">▲</button><button data-key="down" aria-label="Move down">▼</button><button data-key="fire" aria-label="Fire">✦</button></div>
 <p class="instructions" id="instructions">Move the paddle with mouse, touch, or ← →. Press SPACE or tap the canvas to launch the ball.</p>
@@ -27,7 +29,7 @@
 </main><footer class="footer">BUILT FOR THE UNDEAD · POWERED BY COMMUNITY · © 2026 ZOMBIECASH</footer>
 <script>
 (() => {
-const canvas=document.getElementById('game'),ctx=canvas.getContext('2d'),scoreEl=document.getElementById('score'),livesEl=document.getElementById('lives'),levelEl=document.getElementById('level'),startBtn=document.getElementById('start'),instructions=document.getElementById('instructions'),tabs=[...document.querySelectorAll('.tab')];
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d'),snakeFrame=document.getElementById('snake-frame'),gamePanel=document.querySelector('.panel'),fullBtn=document.getElementById('fullscreen'),touchControls=document.getElementById('touch-controls'),scoreEl=document.getElementById('score'),livesEl=document.getElementById('lives'),levelEl=document.getElementById('level'),startBtn=document.getElementById('start'),instructions=document.getElementById('instructions'),tabs=[...document.querySelectorAll('.tab')];
 const W=960,H=540,keys=new Set();let mode='breaker',score=0,lives=3,level=1,running=false,over=false,last=0,raf=0;
 let paddle,ball,bricks,maze,player,ghosts,brains,shots,blocks,spawn=0,fireCd=0;
 const rnd=(a,b)=>a+Math.random()*(b-a);
@@ -63,8 +65,10 @@ canvas.addEventListener('pointerdown',e=>{e.preventDefault();canvas.setPointerCa
 window.addEventListener('keydown',e=>{const k=e.key===' '?' ':e.key;if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(k))e.preventDefault();keys.add(k);if(k===' '){if(mode==='breaker'&&(!running||ball.stuck))launch();else if(mode==='wall')shoot()}if(mode==='maze'&&running){if(k==='ArrowLeft'||k.toLowerCase()==='a')moveMaze(-1,0);if(k==='ArrowRight'||k.toLowerCase()==='d')moveMaze(1,0);if(k==='ArrowUp'||k.toLowerCase()==='w')moveMaze(0,-1);if(k==='ArrowDown'||k.toLowerCase()==='s')moveMaze(0,1)}});
 window.addEventListener('keyup',e=>keys.delete(e.key===' '?' ':e.key));
 document.querySelectorAll('[data-key]').forEach(b=>{const key=b.dataset.key;const act=()=>{if(mode==='maze'){if(!running)launch();if(key==='left')moveMaze(-1,0);if(key==='right')moveMaze(1,0);if(key==='up')moveMaze(0,-1);if(key==='down')moveMaze(0,1)}else if(key==='action'||key==='fire'){if(mode==='breaker'){if(!running||ball.stuck)launch()}else shoot()}else keys.add(key==='left'?'ArrowLeft':'ArrowRight')};b.addEventListener('pointerdown',e=>{e.preventDefault();act()});['pointerup','pointercancel','pointerleave'].forEach(ev=>b.addEventListener(ev,()=>{keys.delete('ArrowLeft');keys.delete('ArrowRight')}))});
-tabs.forEach(t=>t.addEventListener('click',()=>{mode=t.dataset.game;tabs.forEach(b=>b.setAttribute('aria-selected',String(b===t)));last=0;reset()}));
-startBtn.addEventListener('click',()=>{reset();launch()});
+tabs.forEach(t=>t.addEventListener('click',()=>{mode=t.dataset.game;tabs.forEach(b=>b.setAttribute('aria-selected',String(b===t)));last=0;const isSnake=mode==='snake';snakeFrame.style.display=isSnake?'block':'none';canvas.style.display=isSnake?'none':'block';touchControls.style.display=isSnake?'none':'';document.getElementById('start').style.display=isSnake?'none':'';if(!isSnake)reset();else{cancelAnimationFrame(raf);drawBg();}}));
+fullBtn.addEventListener('click',async()=>{try{if(document.fullscreenElement){await document.exitFullscreen()}else{await gamePanel.requestFullscreen()}}catch(_){gamePanel.classList.toggle('expanded')}});
+document.addEventListener('fullscreenchange',()=>{fullBtn.textContent=document.fullscreenElement?'⤢ EXIT FULLSCREEN':'⛶ FULLSCREEN'});
+startBtn.addEventListener('click',()=>{if(mode==='snake')return;reset();launch()});
 reset();
 })();
 </script>
