@@ -637,24 +637,24 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
       <div id="world-news-list" class="world-news-list" aria-live="polite"><p class="world-empty">Tuning into the shared RSS frequencies…</p></div>
       <div class="world-panel-foot"><span id="world-news-updated">WAITING FOR FIRST TRANSMISSION</span><a href="https://t.me/ZOMBCASH" target="_blank" rel="noreferrer">MORE IN TELEGRAM ↗</a></div>
     </article>
-    <article class="world-panel alarm-panel outbreak-status-panel">
-      <div class="world-panel-head"><div><span class="world-tag alarm-tag"><i></i> OUTBREAK STATUS</span><h3>LIVE OPERATIONS</h3></div><span id="ops-overall-status" class="world-state">CONNECTING</span></div>
-      <div class="ops-status-grid" aria-label="Live service status">
-        <div class="ops-status-tile"><span class="ops-status-dot" id="ops-api-dot"></span><span><small>RADAR API</small><strong id="ops-api-state">CHECKING</strong></span></div>
-        <div class="ops-status-tile"><span class="ops-status-dot" id="ops-market-dot"></span><span><small>TOKEN MARKET</small><strong id="ops-market-state">CHECKING</strong></span></div>
-        <div class="ops-status-tile"><span class="ops-status-dot" id="ops-chain-dot"></span><span><small>ON-CHAIN FEED</small><strong id="ops-chain-state">CHECKING</strong></span></div>
+    <article class="world-panel token-intel-panel">
+      <div class="world-panel-head"><div><span class="world-tag alarm-tag"><i></i> TOKEN INTEL</span><h3>ZOMBCASH SNAPSHOT</h3></div><span id="token-intel-state" class="world-state">LOADING</span></div>
+      <div class="token-intel-price-block">
+        <span class="token-intel-label">LIVE TOKEN PRICE</span>
+        <strong id="token-intel-price">$—</strong>
+        <span id="token-intel-change" class="token-intel-change">24H CHANGE —</span>
       </div>
-      <div class="ops-transmissions-head"><span class="world-tag"><i></i> LIVE TRANSMISSIONS</span><span id="ops-updated">SYNCING…</span></div>
-      <div id="ops-transmissions" class="ops-transmissions" aria-live="polite">
-        <div class="ops-transmission"><span class="ops-transmission-icon">⌁</span><div><strong>ESTABLISHING UPLINK</strong><p>Checking live services and the latest token activity…</p></div><small>NOW</small></div>
+      <div class="token-intel-stats">
+        <div><small>24H VOLUME</small><strong id="token-intel-volume">—</strong></div>
+        <div><small>LATEST TRADE</small><strong id="token-intel-trade">—</strong></div>
       </div>
-      <div class="ops-monitor-footer" id="ops-monitor-footer">
-        <span class="ops-monitor-pulse"></span>
-        <div><strong>MONITORING ACTIVE</strong><small>Automatic checks every 60 seconds · DexScreener + GeckoTerminal</small></div>
-        <span class="ops-monitor-live">AUTO-SYNC</span>
+      <div class="token-intel-actions">
+        <a href="https://dexscreener.com/solana/6ccbf9gtyp3c6vmyxuwzetk3yfmxhjvpm15cxicfpump" target="_blank" rel="noreferrer" id="token-intel-chart">VIEW CHART ↗</a>
+        <a href="https://jup.ag/swap/SOL-6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noreferrer">TRADE TOKEN ↗</a>
       </div>
-      <p class="world-disclaimer">Only verified API responses are shown. Unavailable sources stay marked as unavailable.</p>
-      <div hidden aria-hidden="true"><span id="world-alarm-status">PAUSED</span><div id="world-alert-list"></div></div>
+      <div class="token-intel-contract"><span><small>CONTRACT ADDRESS</small><code id="token-intel-mint">6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump</code></span><button id="token-intel-copy" type="button">COPY</button></div>
+      <div class="token-intel-foot"><span id="token-intel-updated">WAITING FOR MARKET DATA</span><span>REFRESHES EVERY 60S</span></div>
+      <p class="world-disclaimer">Market data can be delayed or unavailable. Always verify the quote before trading.</p>
     </article>
     <div class="world-community-pair">
     <article class="world-panel missions-panel">
@@ -1100,7 +1100,7 @@ footer {
 </style>
 
 <script src="runtime-fixes.js?v=20261020-2"></script>
-<script src="script.js?v=outbreak-panel-refine-20261020-2"></script>
+<script src="script.js?v=token-intel-snapshot-20261020-1"></script>
 <script src="living-world-recovery.js?v=20261020-2"></script>
 <script id="jupiter-zombcash-init">
 (() => {
@@ -1288,5 +1288,28 @@ section.section.community-console .crew-grid > .crew-card.jupiter-swap-card .jup
     height: auto !important;
   }
 }
+
+/* Token Intel panel: replaces duplicate service telemetry with useful token data and actions. */
+section.section.living-world .token-intel-panel{display:flex!important;flex-direction:column!important;min-width:0!important;overflow:hidden!important}
+section.section.living-world .token-intel-price-block{display:grid!important;gap:9px!important;padding:22px 18px 18px!important;border-bottom:1px solid #263728!important;background:radial-gradient(ellipse at 80% 0%,#20351b55,transparent 65%),linear-gradient(135deg,#101a12,#090e0b)!important}
+.token-intel-label,.token-intel-stats small,.token-intel-contract small{color:#849780!important;font:700 8px Orbitron,sans-serif!important;letter-spacing:1px!important}
+#token-intel-price{display:block!important;color:#eff8e8!important;font:700 clamp(26px,3vw,38px)/1.15 Orbitron,sans-serif!important;letter-spacing:-1px!important;overflow-wrap:anywhere!important}
+.token-intel-change{font:700 10px Orbitron,sans-serif!important;color:#9ba997!important}
+.token-intel-change.is-positive{color:#9bff45!important}.token-intel-change.is-negative{color:#ff8585!important}
+.token-intel-stats{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;padding:14px 16px!important}
+.token-intel-stats>div{display:grid!important;gap:8px!important;min-width:0!important;padding:13px 11px!important;border:1px solid #2a3e2c!important;background:#0b120d!important}
+.token-intel-stats strong{color:#e8f2e3!important;font:700 12px Orbitron,sans-serif!important;overflow-wrap:anywhere!important}
+.token-intel-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:9px!important;padding:2px 16px 15px!important}
+.token-intel-actions a{display:flex!important;align-items:center!important;justify-content:center!important;min-height:42px!important;padding:10px 8px!important;border:1px solid #47643b!important;color:#b9f58e!important;text-align:center!important;text-decoration:none!important;font:700 8px Orbitron,sans-serif!important;letter-spacing:.45px!important}
+.token-intel-actions a:last-child{background:#9bff4510!important;border-color:#9bff45!important;color:#9bff45!important}
+.token-intel-actions a:hover{background:#9bff4518!important;border-color:#9bff45!important}
+.token-intel-contract{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;margin:0 16px!important;padding:13px 11px!important;border:1px solid #293a2b!important;background:#080d0a!important}
+.token-intel-contract>span{display:grid!important;gap:7px!important;min-width:0!important}
+.token-intel-contract code{color:#b5c5af!important;font:500 10px/1.5 monospace!important;overflow-wrap:anywhere!important}
+.token-intel-contract button{flex:none!important;padding:9px 10px!important;border:1px solid #4b6b3d!important;background:#101a11!important;color:#aaff6e!important;font:700 8px Orbitron,sans-serif!important;cursor:pointer!important}
+.token-intel-foot{display:flex!important;justify-content:space-between!important;gap:8px!important;flex-wrap:wrap!important;padding:14px 16px 0!important;color:#738570!important;font:600 7px Orbitron,sans-serif!important;letter-spacing:.4px!important}
+.token-intel-panel .world-disclaimer{margin:12px 16px 16px!important;font-size:11px!important;line-height:1.45!important}
+@media(max-width:760px){.token-intel-stats{padding:12px!important}.token-intel-actions{padding-left:12px!important;padding-right:12px!important}.token-intel-contract{margin-left:12px!important;margin-right:12px!important}.token-intel-foot{padding-left:12px!important;padding-right:12px!important}}
+
 </style>
 </body></html>
