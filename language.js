@@ -72,9 +72,9 @@ const sharedUi={
 "Leaderboard is temporarily unavailable.":{de:"Die Rangliste ist vorübergehend nicht verfügbar.",fr:"Le classement est temporairement indisponible.",it:"La classifica non è temporaneamente disponibile.",ja:"ランキングは一時的に利用できません。","zh-CN":"排行榜暂时不可用。",tr:"Liderlik tablosu geçici olarak kullanılamıyor.",hi:"लीडरबोर्ड अस्थायी रूप से उपलब्ध नहीं है।"},
 "RADAR SIGNAL UNAVAILABLE. Check your connection or refresh shortly.":{de:"RADARSIGNAL NICHT VERFÜGBAR. Prüfe deine Verbindung oder aktualisiere die Seite in Kürze.",fr:"SIGNAL RADAR INDISPONIBLE. Vérifiez votre connexion ou actualisez la page dans un instant.",it:"SEGNALE RADAR NON DISPONIBILE. Controlla la connessione o aggiorna tra poco.",ja:"レーダー信号を利用できません。接続を確認するか、少ししてから更新してください。","zh-CN":"雷达信号不可用。请检查网络连接或稍后刷新。",tr:"RADAR SİNYALİ KULLANILAMIYOR. Bağlantını kontrol et veya biraz sonra yenile.",hi:"रडार सिग्नल उपलब्ध नहीं है। कनेक्शन जाँचें या थोड़ी देर बाद रीफ़्रेश करें。"},
 "Waiting for radar data…":{de:"Warten auf Radardaten…",fr:"En attente des données du radar…",it:"In attesa dei dati radar…",ja:"レーダーデータを待っています…","zh-CN":"正在等待雷达数据…",tr:"Radar verileri bekleniyor…",hi:"रडार डेटा का इंतज़ार है…"},
-"NO SIGNAL":"KEIN SIGNAL","NO SIGNAL":{de:"KEIN SIGNAL",fr:"AUCUN SIGNAL",it:"NESSUN SEGNALE",ja:"信号なし","zh-CN":"无信号",tr:"SİNYAL YOK",hi:"कोई सिग्नल नहीं"},
+"NO SIGNAL":{de:"KEIN SIGNAL",fr:"AUCUN SIGNAL",it:"NESSUN SEGNALE",ja:"信号なし","zh-CN":"无信号",tr:"SİNYAL YOK",hi:"कोई सिग्नल नहीं"},
 "LOADING RADAR DATA…":{de:"RADARDATEN WERDEN GELADEN…",fr:"CHARGEMENT DES DONNÉES RADAR…",it:"CARICAMENTO DATI RADAR…",ja:"レーダーデータを読み込み中…","zh-CN":"正在加载雷达数据…",tr:"RADAR VERİLERİ YÜKLENİYOR…",hi:"रडार डेटा लोड हो रहा है…"},
-"NO DATA YET":"NOCH KEINE DATEN","RETRY ↻":"ERNEUT VERSUCHEN ↻"
+"NO DATA YET":{de:"NOCH KEINE DATEN",fr:"PAS ENCORE DE DONNÉES",it:"ANCORA NESSUN DATO",ja:"データはまだありません","zh-CN":"暂无数据",tr:"HENÜZ VERİ YOK",hi:"अभी कोई डेटा नहीं"},"RETRY ↻":{de:"ERNEUT VERSUCHEN ↻",fr:"RÉESSAYER ↻",it:"RIPROVA ↻",ja:"再試行 ↻","zh-CN":"重试 ↻",tr:"YENİDEN DENE ↻",hi:"फिर कोशिश करें ↻"}
 };
 Object.entries(sharedUi).forEach(([source, translations])=>{if(typeof translations==="string")return;Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;});});
 
