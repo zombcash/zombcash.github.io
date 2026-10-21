@@ -1350,7 +1350,7 @@ if (zomMarket) {
       .sort((a, b) => b.metrics.score - a.metrics.score ||
         (b.metrics.volume || 0) - (a.metrics.volume || 0) ||
         b.metrics.trades - a.metrics.trades)
-      .slice(0, 4);
+      .slice(0, 5);
   }
   function render(payload) {
     const ranked = rankPairs(payload).slice(0, 5);
