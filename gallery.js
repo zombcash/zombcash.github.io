@@ -72,7 +72,10 @@
     }),
     timeout
   ]).then(data => {
-    const items = Array.isArray(data.items) ? data.items.filter(item => item.image && item.caption) : [];
+    const allowedGalleryCaption = caption => /\bNIGHTMARE\s+DROP\b/i.test(String(caption ?? "")) || /\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b/i.test(String(caption ?? ""));
+    const items = Array.isArray(data.items)
+      ? data.items.filter(item => item.image && item.caption && allowedGalleryCaption(item.caption))
+      : [];
     if (count) count.textContent = items.length + " IMAGES";
     if (updated) updated.textContent = data.updated_at
       ? "UPDATED " + new Date(data.updated_at).toLocaleString(undefined, { month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit" })
