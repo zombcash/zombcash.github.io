@@ -875,3 +875,25 @@ button,a{ -webkit-tap-highlight-color:transparent }
 .zrai-radar-note strong{color:#baff8b;font:700 8px Orbitron,sans-serif;letter-spacing:.5px;}
 .zrai-radar-note span{font-size:11px;line-height:1.45;}
 @media(max-width:480px){.zrai-coin-icon{width:26px;height:26px;flex-basis:26px}.zrai-token-identity{gap:7px}.zrai-metrics{padding-left:33px}.zrai-signal-line,.zrai-address{margin-left:33px}.zrai-token-name span{max-width:115px}}
+
+
+/* Fix: keep desktop news scrolling inside its panel after commentary expands cards. */
+@media (min-width: 801px) {
+  .world-grid {
+    align-items: stretch;
+  }
+  .news-panel {
+    height: min(760px, calc(100vh - 170px));
+    min-height: 360px;
+    min-width: 0;
+  }
+  .news-panel .world-news-list {
+    flex: 1 1 0;
+    min-height: 0;
+    max-height: none;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #547b39 #09110c;
+  }
+}
