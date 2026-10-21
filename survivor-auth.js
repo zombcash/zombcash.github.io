@@ -18,7 +18,7 @@
     hi:{login:'TELEGRAM से लॉग इन करें',profile:'सर्वाइवर प्रोफ़ाइल',intro:'आउटब्रेक में शामिल हों। गतिविधि और भविष्य के पुरस्कारों को ट्रैक करें।',connect:'TELEGRAM के साथ जारी रखें',loading:'TELEGRAM पहचान सत्यापित हो रही है…',points:'सर्वाइवल पॉइंट्स',joined:'जुड़ने की तारीख',logout:'लॉग आउट',close:'बंद करें',setup:'पंजीकरण सेटअप अभी पूरा नहीं हुआ है। कृपया बाद में फिर प्रयास करें।',error:'Telegram साइन-इन विफल हुआ। कृपया फिर प्रयास करें।',privacy:'आपकी Telegram ID प्रोफ़ाइल पहचानने के लिए उपयोग होती है और सार्वजनिक नहीं की जाती।'}
   };
   const lang = () => {
-    try { const code = localStorage.getItem('zombcash-language') || 'en'; return translations[code] ? code : 'en'; }
+    try { const code = localStorage.getItem('zombcash-language') || document.documentElement.lang || 'en'; return translations[code] ? code : 'en'; }
     catch (_) { return 'en'; }
   };
   const t = key => translations[lang()][key] || translations.en[key] || key;
@@ -27,7 +27,7 @@
   const readProfile = () => { try { return JSON.parse(localStorage.getItem(STORAGE_PROFILE) || 'null'); } catch (_) { return null; } };
   const token = () => { try { return localStorage.getItem(STORAGE_TOKEN) || ''; } catch (_) { return ''; } };
   function updateCta() {
-    const cta = document.querySelector('.top-cta');
+    const cta = document.querySelector('.top-cta, .survivor-entry-button');
     if (!cta) return;
     const p = readProfile();
     cta.textContent = p ? '☣ ' + (p.username ? '@' + p.username : p.firstName || 'SURVIVOR') : t('login');
@@ -37,7 +37,7 @@
   function ensureModal() {
     if (overlay) return;
     const style = document.createElement('style');
-    style.textContent = '.survivor-overlay{position:fixed;inset:0;z-index:20000;display:grid;place-items:center;padding:18px;background:#020603df;backdrop-filter:blur(7px)}.survivor-modal{position:relative;width:min(440px,100%);padding:26px;border:1px solid #6a9d42;background:linear-gradient(145deg,#101b12,#070b09);color:#edf5e5;box-shadow:0 22px 80px #000b;font-family:Rajdhani,system-ui,sans-serif}.survivor-modal h2{margin:0 0 10px;color:#9bff45;font:700 19px Orbitron,system-ui,sans-serif}.survivor-modal p{color:#b8c8b6;line-height:1.5}.survivor-modal .survivor-status{min-height:24px;color:#9bff45;font-size:14px}.survivor-modal .survivor-widget{display:flex;justify-content:center;min-height:46px;margin:20px 0}.survivor-modal .survivor-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.survivor-modal button{border:1px solid #426341;background:#0b120c;color:#b8f992;padding:10px 14px;cursor:pointer;font:700 11px Orbitron,system-ui,sans-serif}.survivor-modal .survivor-stats{border:1px solid #2b4930;padding:14px;margin-top:16px}.survivor-modal .survivor-points{font:700 26px Orbitron,system-ui,sans-serif;color:#9bff45}.survivor-modal .survivor-privacy{font-size:12px;color:#8e9c8d}.survivor-modal [hidden]{display:none!important}';
+    style.textContent = '.survivor-overlay{position:fixed;inset:0;z-index:20000;display:grid;place-items:center;padding:18px;background:#020603df;backdrop-filter:blur(7px)}.survivor-modal{position:relative;width:min(440px,100%);padding:26px;border:1px solid #6a9d42;background:linear-gradient(145deg,#101b12,#070b09);color:#edf5e5;box-shadow:0 22px 80px #000b;font-family:Rajdhani,system-ui,sans-serif}.survivor-modal h2{margin:0 0 10px;color:#9bff45;font:700 19px Orbitron,system-ui,sans-serif}.survivor-modal p{color:#b8c8b6;line-height:1.5}.survivor-modal .survivor-status{min-height:24px;color:#9bff45;font-size:14px}.survivor-modal .survivor-widget{display:flex;justify-content:center;min-height:46px;margin:20px 0}.survivor-modal .survivor-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.survivor-modal button{border:1px solid #426341;background:#0b120c;color:#b8f992;padding:10px 14px;cursor:pointer;font:700 11px Orbitron,system-ui,sans-serif}.survivor-modal .survivor-stats{border:1px solid #2b4930;padding:14px;margin-top:16px}.survivor-modal .survivor-points{font:700 26px Orbitron,system-ui,sans-serif;color:#9bff45}.survivor-modal .survivor-privacy{font-size:12px;color:#8e9c8d}.survivor-modal [hidden]{display:none!important}.survivor-entry-button{display:inline-flex;align-items:center;justify-content:center;margin:10px 0 0;padding:10px 12px;border:1px solid #426341;background:#0b120c;color:#b8f992;font:700 10px Orbitron,system-ui,sans-serif;cursor:pointer;white-space:normal}';
     document.head.append(style);
     overlay = document.createElement('div');
     overlay.className = 'survivor-overlay';
@@ -116,7 +116,14 @@
   }
   function init() {
     ensureModal();
-    const cta = document.querySelector('.top-cta');
+    let cta = document.querySelector('.top-cta');
+    if (!cta) {
+      cta = document.createElement('button');
+      cta.type = 'button';
+      cta.className = 'survivor-entry-button';
+      const nav = document.querySelector('.nav, header nav') || document.querySelector('header') || document.querySelector('main');
+      if (nav) nav.append(cta);
+    }
     if (cta) cta.addEventListener('click', e => { e.preventDefault(); overlay.hidden = false; renderModal(); });
     document.addEventListener('zombcash:languagechange', () => { updateCta(); if (overlay && !overlay.hidden) renderModal(); });
     refreshProfile().finally(updateCta);
