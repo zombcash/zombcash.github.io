@@ -674,12 +674,12 @@ if (zomMarket) {
       articles.slice(0, 7).forEach(article => {
         const link = document.createElement('a');
         link.className = 'world-news-item' + (article.enriched ? ' is-enriched' : '');
-        link.href = /^https?:\\/\\//i.test(article.link || '') ? article.link : '#living-world';
+        link.href = /^https?:\/\//i.test(article.link || '') ? article.link : '#living-world';
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
         if (article.enriched && article.imageUrl) {
           const image = makeNode('img', 'world-news-image');
-          image.src = /^https?:\\/\\//i.test(article.imageUrl) ? article.imageUrl : apiBase + article.imageUrl;
+          image.src = /^https?:\/\//i.test(article.imageUrl) ? article.imageUrl : apiBase + article.imageUrl;
           image.alt = 'ZombieCash editorial illustration for ' + (article.title || 'news');
           image.loading = 'lazy';
           image.referrerPolicy = 'no-referrer';
@@ -701,7 +701,7 @@ if (zomMarket) {
           link.append(makeNode('span', 'world-news-telegram', 'ALSO ON TELEGRAM ↗'));
         }
         newsList.append(link);
-      ;
+      });
       if (newsStatus) newsStatus.textContent = data.stale ? 'LAST KNOWN FEED' : (Number(data.enrichedCount || 0) > 0 ? 'ZOMBIECASH NEWS ONLINE' : 'RSS FEED ONLINE');
       if (newsUpdated) newsUpdated.textContent = 'UPDATED ' + new Date(Number(data.updatedAt || Date.now()/1000)*1000).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
     } catch (error) {
