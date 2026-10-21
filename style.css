@@ -924,3 +924,39 @@ button,a{ -webkit-tap-highlight-color:transparent }
     overflow-y: auto !important;
   }
 }
+
+
+/* Keep both upper panels the same height and scroll their own content independently. */
+@media (min-width: 801px) {
+  .world-grid > article.news-panel,
+  .world-grid > article.zombie-radar-ai-panel {
+    height: clamp(420px, calc(100vh - 210px), 760px) !important;
+    min-height: 420px !important;
+    max-height: calc(100vh - 210px);
+    display: flex !important;
+    flex-direction: column !important;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .world-grid > article.news-panel > #world-news-list,
+  .world-grid > article.zombie-radar-ai-panel > .zrai-list {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #547b39 #09110c;
+  }
+  .world-grid > article.zombie-radar-ai-panel > .zrai-toolbar,
+  .world-grid > article.zombie-radar-ai-panel > .world-panel-head,
+  .world-grid > article.zombie-radar-ai-panel > .zrai-foot,
+  .world-grid > article.zombie-radar-ai-panel > .zrai-disclaimer {
+    flex-shrink: 0;
+  }
+  .world-grid > article.news-panel > .world-panel-head,
+  .world-grid > article.news-panel > .world-panel-foot {
+    flex-shrink: 0;
+  }
+}
