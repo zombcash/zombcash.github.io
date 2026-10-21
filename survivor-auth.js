@@ -75,34 +75,60 @@
     const label = document.createElement('p'); label.textContent = t('connect'); bodyNode.append(label, widgetNode);
     statusNode.textContent = '';
     widgetNode.innerHTML = '';
-    const script = document.createElement('script');
-    script.src = 'https://telegram.org/js/telegram-widget.js?22';
-    script.async = true;
-    script.setAttribute('data-telegram-login', BOT_USERNAME);
-    script.setAttribute('data-size', 'large');
-    script.setAttribute('data-userpic', 'false');
-    script.setAttribute('data-lang', ({'zh-CN':'zh-hans',ja:'ja',ru:'ru',de:'de',fr:'fr',it:'it',tr:'tr',hi:'en',en:'en'})[lang()] || 'en');
-    script.setAttribute('data-onauth', 'window.zombcashTelegramAuth(user)');
-    widgetNode.append(script);
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = t('connect');
+    button.addEventListener('click', beginBotLogin);
+    widgetNode.append(button);
   }
-  window.zombcashTelegramAuth = async user => {
-    if (isBusy || !user) return;
-    isBusy = true; statusNode.textContent = t('loading');
+  async function beginBotLogin() {
+    if (isBusy) return;
+    isBusy = true;
+    statusNode.textContent = t('loading');
     try {
-      const response = await fetch(API + '/api/auth/telegram', {
-        method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(user), cache:'no-store'
+      const response = await fetch(API + '/api/auth/telegram/start', {
+        method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}', cache: 'no-store'
       });
       const data = await response.json();
-      if (!response.ok || !data.ok) {
-        statusNode.textContent = response.status === 503 ? t('setup') : (data.error || t('error'));
+      if (!response.ok || !data.ok || !data.nonce || !data.botUrl) {
+        statusNode.textContent = response.status === 503 ? t('setup') : t('error');
+        isBusy = false;
         return;
       }
-      localStorage.setItem(STORAGE_TOKEN, data.token);
-      localStorage.setItem(STORAGE_PROFILE, JSON.stringify(data.profile));
-      updateCta(); renderModal();
-    } catch (_) { statusNode.textContent = t('error'); }
-    finally { isBusy = false; }
-  };
+      widgetNode.innerHTML = '';
+      const link = document.createElement('a');
+      link.href = data.botUrl;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = t('connect');
+      link.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;padding:12px 16px;border:1px solid #6a9d42;background:#9bff45;color:#071007;text-decoration:none;font:700 11px Orbitron,system-ui,sans-serif;';
+      widgetNode.append(link);
+      statusNode.textContent = 'Open Telegram and press Start. This page will finish login automatically.';
+      const expiresAt = Date.now() + 175000;
+      while (Date.now() < expiresAt) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        const statusResponse = await fetch(API + '/api/auth/telegram/status?nonce=' + encodeURIComponent(data.nonce), {cache:'no-store'});
+        const statusData = await statusResponse.json().catch(() => ({}));
+        if (statusResponse.status === 410) {
+          statusNode.textContent = t('error');
+          return;
+        }
+        if (statusResponse.ok && statusData.status === 'complete' && statusData.token && statusData.profile) {
+          localStorage.setItem(STORAGE_TOKEN, statusData.token);
+          localStorage.setItem(STORAGE_PROFILE, JSON.stringify(statusData.profile));
+          updateCta();
+          renderModal();
+          statusNode.textContent = '';
+          return;
+        }
+      }
+      statusNode.textContent = t('error');
+    } catch (_) {
+      statusNode.textContent = t('error');
+    } finally {
+      isBusy = false;
+    }
+  }
   async function refreshProfile() {
     if (!token()) return;
     try {
