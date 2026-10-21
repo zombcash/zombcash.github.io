@@ -648,6 +648,20 @@ if (zomMarket) {
     return node;
   };
 
+  if (!document.getElementById('zombcash-enriched-news-styles')) {
+    const style = document.createElement('style');
+    style.id = 'zombcash-enriched-news-styles';
+    style.textContent = `
+      .world-news-item.is-enriched{display:flex;flex-direction:column;gap:9px}
+      .world-news-image{display:block;width:100%;max-height:210px;object-fit:cover;border:1px solid #344b2d;background:#080d0a}
+      .world-news-kind{display:inline-flex;align-self:flex-start;border:1px solid #567d36;padding:4px 7px;color:#a4ff43;font:700 8px Orbitron,sans-serif;letter-spacing:1px}
+      .world-news-commentary{display:block;margin:2px 0 0;padding:10px 12px;border-left:2px solid #9bff45;background:linear-gradient(90deg,#9bff450d,transparent);color:#c9d7c2;font:500 13px/1.55 Rajdhani,sans-serif}
+      .world-news-commentary b{display:block;margin-bottom:5px;color:#a4ff43;font:700 8px Orbitron,sans-serif;letter-spacing:1px}
+      .world-news-telegram{display:inline-block;margin-top:2px;color:#9bff45;font:700 8px Orbitron,sans-serif;letter-spacing:.7px}
+    `;
+    document.head.append(style);
+  }
+
   async function loadWorldNews() {
     if (newsStatus) newsStatus.textContent = 'SYNCING RSS';
     try {
@@ -659,18 +673,36 @@ if (zomMarket) {
       newsList.replaceChildren();
       articles.slice(0, 7).forEach(article => {
         const link = document.createElement('a');
-        link.className = 'world-news-item';
-        link.href = /^https?:\/\//i.test(article.link || '') ? article.link : '#living-world';
+        link.className = 'world-news-item' + (article.enriched ? ' is-enriched' : '');
+        link.href = /^https?:\\/\\//i.test(article.link || '') ? article.link : '#living-world';
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
+        if (article.enriched && article.imageUrl) {
+          const image = makeNode('img', 'world-news-image');
+          image.src = /^https?:\\/\\//i.test(article.imageUrl) ? article.imageUrl : apiBase + article.imageUrl;
+          image.alt = 'ZombieCash editorial illustration for ' + (article.title || 'news');
+          image.loading = 'lazy';
+          image.referrerPolicy = 'no-referrer';
+          link.append(image);
+        }
+        if (article.enriched) link.append(makeNode('span', 'world-news-kind', '☣ ZOMBIECASH ORIGINAL'));
         const meta = makeNode('span', 'world-news-meta');
-        meta.append(makeNode('span', '', article.source || 'RSS TRANSMISSION'));
+        meta.append(makeNode('span', '', article.enriched ? 'ZOMBIECASH NEWS' : (article.source || 'RSS TRANSMISSION')));
         meta.append(makeNode('time', '', safeDate(article.published)));
         link.append(meta, makeNode('strong', 'world-news-title', article.title || 'Untitled transmission'));
         if (article.summary) link.append(makeNode('p', 'world-news-summary', article.summary));
+        if (article.enriched && article.commentary) {
+          const commentary = makeNode('div', 'world-news-commentary');
+          commentary.append(makeNode('b', '', '🧟 ZOMBIE COMMENTARY'));
+          commentary.append(makeNode('span', '', article.commentary));
+          link.append(commentary);
+        }
+        if (article.enriched && /^https:\/\/t\.me\//i.test(article.telegramUrl || '')) {
+          link.append(makeNode('span', 'world-news-telegram', 'ALSO ON TELEGRAM ↗'));
+        }
         newsList.append(link);
-      });
-      if (newsStatus) newsStatus.textContent = data.stale ? 'LAST KNOWN FEED' : 'RSS FEED ONLINE';
+      ;
+      if (newsStatus) newsStatus.textContent = data.stale ? 'LAST KNOWN FEED' : (Number(data.enrichedCount || 0) > 0 ? 'ZOMBIECASH NEWS ONLINE' : 'RSS FEED ONLINE');
       if (newsUpdated) newsUpdated.textContent = 'UPDATED ' + new Date(Number(data.updatedAt || Date.now()/1000)*1000).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
     } catch (error) {
       console.warn('Living World RSS unavailable:', error);
