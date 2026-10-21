@@ -22,6 +22,8 @@
     catch (_) { return 'en'; }
   };
   const t = key => translations[lang()][key] || translations.en[key] || key;
+  const loginWaiting = {"en":"Open Telegram and press Start. This page will finish login automatically.","de":"Öffne Telegram und tippe auf Start. Diese Seite schließt die Anmeldung automatisch ab.","fr":"Ouvrez Telegram et appuyez sur Démarrer. La connexion se terminera automatiquement ici.","it":"Apri Telegram e premi Avvia. L’accesso verrà completato automaticamente su questa pagina.","ja":"Telegramを開いて「Start」を押してください。このページで自動的にログインが完了します。","zh-CN":"打开 Telegram 并点击 Start。此页面将自动完成登录。","ru":"Откройте Telegram и нажмите «Запустить». Вход на этой странице завершится автоматически.","tr":"Telegram'ı açıp Başlat'a dokunun. Giriş bu sayfada otomatik tamamlanacak.","hi":"Telegram खोलें और Start दबाएँ। इस पेज पर लॉगिन अपने आप पूरा हो जाएगा。"};
+
   const safe = value => String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   let overlay, statusNode, bodyNode, widgetNode, isBusy = false;
   const readProfile = () => { try { return JSON.parse(localStorage.getItem(STORAGE_PROFILE) || 'null'); } catch (_) { return null; } };
@@ -103,7 +105,7 @@
       link.textContent = t('connect');
       link.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;padding:12px 16px;border:1px solid #6a9d42;background:#9bff45;color:#071007;text-decoration:none;font:700 11px Orbitron,system-ui,sans-serif;';
       widgetNode.append(link);
-      statusNode.textContent = 'Open Telegram and press Start. This page will finish login automatically.';
+      statusNode.textContent = loginWaiting[lang()] || loginWaiting.en;
       const expiresAt = Date.now() + 175000;
       while (Date.now() < expiresAt) {
         await new Promise(resolve => setTimeout(resolve, 2000));
