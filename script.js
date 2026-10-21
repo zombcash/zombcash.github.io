@@ -697,9 +697,6 @@ if (zomMarket) {
           commentary.append(makeNode('span', '', article.commentary));
           link.append(commentary);
         }
-        if (article.enriched && /^https:\/\/t\.me\//i.test(article.telegramUrl || '')) {
-          link.append(makeNode('span', 'world-news-telegram', 'ALSO ON TELEGRAM ↗'));
-        }
         newsList.append(link);
       });
       if (newsStatus) newsStatus.textContent = data.stale ? 'LAST KNOWN FEED' : (Number(data.enrichedCount || 0) > 0 ? 'ZOMBIECASH NEWS ONLINE' : 'RSS FEED ONLINE');
