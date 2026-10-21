@@ -897,3 +897,30 @@ button,a{ -webkit-tap-highlight-color:transparent }
     scrollbar-color: #547b39 #09110c;
   }
 }
+
+
+/* Final layout correction: news and AI radar must occupy the same grid-row height. */
+@media (min-width: 801px) {
+  .world-grid {
+    grid-template-rows: minmax(420px, auto);
+    align-items: stretch;
+  }
+  .world-grid > article.news-panel,
+  .world-grid > article.zombie-radar-ai-panel {
+    height: clamp(420px, calc(100vh - 170px), 760px) !important;
+    min-height: 420px !important;
+    align-self: stretch;
+  }
+  .world-grid > article.news-panel {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .world-grid > article.news-panel > #world-news-list {
+    flex: 1 1 0;
+    min-height: 0 !important;
+    height: auto;
+    max-height: none;
+    overflow-y: auto !important;
+  }
+}
