@@ -42,6 +42,18 @@
     if (value != null) el.textContent = value;
     return el;
   };
+  if (!document.getElementById('zombcash-enriched-news-styles')) {
+    const style = document.createElement('style');
+    style.id = 'zombcash-enriched-news-styles';
+    style.textContent = `
+      .world-news-item.is-enriched{display:flex;flex-direction:column;gap:9px}
+      .world-news-image{display:block;width:100%;max-height:210px;object-fit:cover;border:1px solid #344b2d;background:#080d0a}
+      .world-news-kind{display:inline-flex;align-self:flex-start;border:1px solid #567d36;padding:4px 7px;color:#a4ff43;font:700 8px Orbitron,sans-serif;letter-spacing:1px}
+      .world-news-commentary{display:block;margin:2px 0 0;padding:10px 12px;border-left:2px solid #9bff45;background:linear-gradient(90deg,#9bff450d,transparent);color:#c9d7c2;font:500 13px/1.55 Rajdhani,sans-serif}
+      .world-news-commentary b{display:block;margin-bottom:5px;color:#a4ff43;font:700 8px Orbitron,sans-serif;letter-spacing:1px}
+    `;
+    document.head.append(style);
+  }
   const priceText = value => {
     const n = Number(value);
     if (!Number.isFinite(n) || n <= 0) return '—';
@@ -68,22 +80,37 @@
       if (!articles.length) throw new Error('API returned no articles');
       newsList.replaceChildren();
       articles.slice(0, 7).forEach(article => {
-        const item = node('article', 'world-news-item');
+        const item = node('article', 'world-news-item' + (article.enriched ? ' is-enriched' : ''));
+        if (article.enriched && article.imageUrl) {
+          const image = node('img', 'world-news-image');
+          image.src = /^https?:\/\//i.test(article.imageUrl) ? article.imageUrl : API + article.imageUrl;
+          image.alt = 'ZombieCash editorial illustration for ' + (article.title || 'news');
+          image.loading = 'lazy';
+          image.referrerPolicy = 'no-referrer';
+          item.append(image);
+        }
+        if (article.enriched) item.append(node('span', 'world-news-kind', '☣ ZOMBIECASH ORIGINAL'));
         const meta = node('div', 'world-news-meta');
-        meta.append(node('span', 'world-news-source', article.source || 'OUTBREAK WIRE'));
+        meta.append(node('span', 'world-news-source', article.enriched ? 'ZOMBIECASH NEWS' : (article.source || 'OUTBREAK WIRE')));
         const published = article.published ? new Date(article.published) : null;
         meta.append(node('span', 'world-news-age', published && !Number.isNaN(published.getTime())
           ? published.toLocaleString('en-US', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'})
           : 'LATEST'));
         const link = node('a', 'world-news-title', article.title || 'Untitled transmission');
-        link.href = article.link || '#';
+        link.href = /^https?:\/\//i.test(article.link || '') ? article.link : '#';
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
         item.append(meta, link);
         if (article.summary) item.append(node('p', 'world-news-summary', article.summary));
+        if (article.enriched && article.commentary) {
+          const commentary = node('div', 'world-news-commentary');
+          commentary.append(node('b', '', '🧟 ZOMBIE COMMENTARY'));
+          commentary.append(node('span', '', article.commentary));
+          item.append(commentary);
+        }
         newsList.append(item);
-      });
-      newsStatus.textContent = data.stale ? 'LAST KNOWN FEED' : 'RSS FEED ONLINE';
+      ;
+      newsStatus.textContent = data.stale ? 'LAST KNOWN FEED' : (Number(data.enrichedCount || 0) > 0 ? 'ZOMBIECASH NEWS ONLINE' : 'RSS FEED ONLINE');
       if (newsUpdated) newsUpdated.textContent = 'UPDATED ' + new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
     } catch (error) {
       console.warn('Living World recovery: news feed failed', error);
