@@ -691,7 +691,7 @@ if (zomMarket) {
         meta.append(makeNode('time', '', safeDate(article.published)));
         link.append(meta, makeNode('strong', 'world-news-title', article.title || 'Untitled transmission'));
         if (article.summary) link.append(makeNode('p', 'world-news-summary', article.summary));
-        if (article.enriched && article.commentary) {
+        if (article.commentary) {
           const commentary = makeNode('div', 'world-news-commentary');
           commentary.append(makeNode('b', '', '🧟 ZOMBIE COMMENTARY'));
           commentary.append(makeNode('span', '', article.commentary));
