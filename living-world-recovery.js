@@ -109,7 +109,7 @@
           item.append(commentary);
         }
         newsList.append(item);
-      ;
+      });
       newsStatus.textContent = data.stale ? 'LAST KNOWN FEED' : (Number(data.enrichedCount || 0) > 0 ? 'ZOMBIECASH NEWS ONLINE' : 'RSS FEED ONLINE');
       if (newsUpdated) newsUpdated.textContent = 'UPDATED ' + new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
     } catch (error) {
