@@ -37,7 +37,7 @@
 .world-tag i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 9px var(--green);animation:pulse 1.8s infinite}
 .alarm-tag{color:#ffb16e}.alarm-tag i{background:#ff9d5c;box-shadow:0 0 9px #ff9d5c}
 .world-state{flex-shrink:0;color:var(--green);font:700 8px Orbitron,sans-serif;letter-spacing:.6px;text-align:right;padding-top:3px}
-.world-news-list{padding:0 20px;min-height:170px}
+.world-news-list{padding:0 20px;min-height:170px;max-height:min(62vh,560px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#547b39 #09110c}.world-news-list::-webkit-scrollbar{width:7px}.world-news-list::-webkit-scrollbar-track{background:#09110c}.world-news-list::-webkit-scrollbar-thumb{background:#547b39;border:1px solid #09110c}.world-news-list::-webkit-scrollbar-thumb:hover{background:#9bff45}
 .world-news-item{display:block;padding:15px 0;border-bottom:1px solid #202d25}
 .world-news-item:last-child{border-bottom:0}
 .world-news-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;font:700 8px Orbitron,sans-serif;letter-spacing:.5px;color:#83a18c}
