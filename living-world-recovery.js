@@ -102,7 +102,7 @@
         link.rel = 'noopener noreferrer';
         item.append(meta, link);
         if (article.summary) item.append(node('p', 'world-news-summary', article.summary));
-        if (article.enriched && article.commentary) {
+        if (article.commentary) {
           const commentary = node('div', 'world-news-commentary');
           commentary.append(node('b', '', '🧟 ZOMBIE COMMENTARY'));
           commentary.append(node('span', '', article.commentary));
