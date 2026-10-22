@@ -154,6 +154,30 @@
       font:700 8px/1.2 Orbitron,system-ui,sans-serif!important;white-space:nowrap!important;cursor:pointer;
     }
     header.zombcash-shared-header .zsh-login-slot{display:flex!important;align-items:center!important}
+    /* One shared control system: back, language and account buttons always align. */
+    header.zombcash-shared-header .zsh-actions>.zsh-home,
+    header.zombcash-shared-header .zsh-actions .language-trigger,
+    header.zombcash-shared-header .zsh-actions .survivor-entry-button,
+    header.zombcash-shared-header .zsh-actions .top-cta,
+    header.zombcash-shared-header .zsh-actions .zsh-login-button{
+      display:inline-flex!important;align-items:center!important;justify-content:center!important;
+      box-sizing:border-box!important;height:36px!important;min-height:36px!important;
+      margin:0!important;padding:0 12px!important;border:1px solid #42613a!important;
+      border-radius:2px!important;background:#0b120c!important;color:#b8f992!important;
+      font:700 8px/1 Orbitron,system-ui,sans-serif!important;letter-spacing:.1px!important;
+      white-space:nowrap!important;vertical-align:middle!important;
+    }
+    header.zombcash-shared-header .zsh-actions>.zsh-home,
+    header.zombcash-shared-header .zsh-actions .survivor-entry-button,
+    header.zombcash-shared-header .zsh-actions .top-cta,
+    header.zombcash-shared-header .zsh-actions .zsh-login-button{cursor:pointer;text-decoration:none!important}
+    header.zombcash-shared-header .zsh-actions>.zsh-home:hover,
+    header.zombcash-shared-header .zsh-actions .language-trigger:hover,
+    header.zombcash-shared-header .zsh-actions .survivor-entry-button:hover,
+    header.zombcash-shared-header .zsh-actions .top-cta:hover,
+    header.zombcash-shared-header .zsh-actions .zsh-login-button:hover{
+      border-color:#9bff45!important;color:#d4ffc0!important;background:#101b12!important;
+    }
     header.zombcash-shared-header .zsh-menu-label{font:700 8px Orbitron,system-ui,sans-serif;letter-spacing:1px}
     @media(max-width:1450px){
       header.zombcash-shared-header{grid-template-columns:minmax(0,1fr) auto!important;gap:10px!important;padding:10px 18px!important}
@@ -189,6 +213,13 @@
       header.zombcash-shared-header .zsh-nav{gap:4px 13px!important;max-height:70vh!important;overflow-y:auto!important}
       header.zombcash-shared-header .zsh-nav>a{font-size:8px!important}
       header.zombcash-shared-header .language-trigger{min-width:44px!important;min-height:32px!important;font-size:8px!important}
+      header.zombcash-shared-header .zsh-actions>.zsh-home,
+      header.zombcash-shared-header .zsh-actions .language-trigger,
+      header.zombcash-shared-header .zsh-actions .survivor-entry-button,
+      header.zombcash-shared-header .zsh-actions .top-cta,
+      header.zombcash-shared-header .zsh-actions .zsh-login-button{
+        height:36px!important;min-height:36px!important;padding:0 9px!important;font-size:8px!important;
+      }
       header.zombcash-shared-header .language-menu{width:180px!important;max-width:calc(100vw - 20px)!important}
     }
     @media(max-width:390px){
