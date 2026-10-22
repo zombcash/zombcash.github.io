@@ -78,6 +78,39 @@ const sharedUi={
 };
 Object.entries(sharedUi).forEach(([source, translations])=>{if(typeof translations==="string")return;Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;});});
 
+
+// Additional concise UI translations for the live home page.
+const sharedHome={
+"Fresh transmissions, live market alerts, and daily survival objectives. New signals arrive while you’re away.":{
+de:"Neue Meldungen, Live-Marktsignale und tägliche Überlebensmissionen. Neue Signale warten auf dich.",
+fr:"Nouvelles transmissions, alertes du marché en direct et objectifs quotidiens. De nouveaux signaux vous attendent.",
+it:"Nuovi messaggi, avvisi di mercato in tempo reale e obiettivi quotidiani. Nuovi segnali ti aspettano.",
+ja:"最新ニュース、リアルタイムの市場アラート、毎日のサバイバル目標。新しいシグナルが届きます。",
+"zh-CN":"最新资讯、实时市场提醒和每日生存目标。新信号不断到来。",
+ru:"Свежие сообщения, рыночные сигналы и ежедневные задания на выживание. Новые сигналы появляются постоянно.",
+tr:"Yeni iletiler, canlı piyasa uyarıları ve günlük hayatta kalma hedefleri. Yeni sinyaller gelmeye devam eder.",
+hi:"नई खबरें, लाइव बाज़ार अलर्ट और रोज़ाना के सर्वाइवल लक्ष्य। नए सिग्नल आते रहते हैं।"},
+"Live token pairs from DexScreener. Data refreshes automatically.":{
+de:"Live-Token-Handelspaare von DexScreener. Die Daten werden automatisch aktualisiert.",
+fr:"Paires de jetons en direct depuis DexScreener. Les données s’actualisent automatiquement.",
+it:"Coppie di token in tempo reale da DexScreener. I dati si aggiornano automaticamente.",
+ja:"DexScreenerのトークンペアをリアルタイム表示。データは自動更新されます。",
+"zh-CN":"来自 DexScreener 的实时代币交易对。数据会自动刷新。",
+ru:"Торговые пары токенов из DexScreener. Данные обновляются автоматически.",
+tr:"DexScreener'dan canlı token çiftleri. Veriler otomatik yenilenir.",
+hi:"DexScreener से लाइव टोकन पेयर। डेटा अपने आप अपडेट होता है。"},
+"One vote per browser each UTC day. Results are shared with the community.":{
+de:"Eine Stimme pro Browser und UTC-Tag. Die Ergebnisse werden mit der Community geteilt.",
+fr:"Un vote par navigateur et par jour UTC. Les résultats sont partagés avec la communauté.",
+it:"Un voto per browser al giorno UTC. I risultati sono condivisi con la community.",
+ja:"UTCの1日につきブラウザーごとに1票。結果はコミュニティと共有されます。",
+"zh-CN":"每个浏览器每天（UTC）可投一票。结果将与社区共享。",
+ru:"Один голос с браузера в сутки по UTC. Результаты доступны сообществу.",
+tr:"UTC gününde tarayıcı başına bir oy. Sonuçlar toplulukla paylaşılır.",
+hi:"UTC के प्रत्येक दिन हर ब्राउज़र से एक वोट। परिणाम समुदाय के साथ साझा किए जाते हैं。"}
+};
+Object.entries(sharedHome).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 let current='en';const originals=new WeakMap();
 function translate(root=document.body){const map=langs[current].map,walk=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),nodes=[];while(walk.nextNode())nodes.push(walk.currentNode);nodes.forEach(n=>{if(!n.parentElement||n.parentElement.closest('script,style,textarea,code,pre,.language-switcher,[data-no-translate]'))return;if(!originals.has(n))originals.set(n,n.nodeValue);const o=originals.get(n),v=map[norm(o)];if(v){const a=(o.match(/^\s*/)||[''])[0],b=(o.match(/\s*$/)||[''])[0];n.nodeValue=a+v+b}else n.nodeValue=o;});}
