@@ -165,14 +165,19 @@ async function beginSnakeSurvivalSession(){
     .then(async response=>{const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'Session unavailable');return data.receipt||null})
     .catch(()=>null);
 }
-async function completeSnakeSurvivalSession(){
+async function completeSnakeSurvivalSession(points){
   if(snakeSurvivalReceiptUsed)return;
   snakeSurvivalReceiptUsed=true;
+  const score=Math.max(0,Math.min(100000,Number(points)||0));
   const token=snakeSurvivorToken(), pending=snakeSurvivalReceiptPromise;
-  if(!token||!pending)return;
+  if(!token||!pending){if(window.parent!==window)window.parent.postMessage({type:'zombcash-arcade-snake-result',points:score,accountSaved:false},location.origin);return}
   const receipt=await pending;
-  if(!receipt)return;
-  try{await fetch('https://zombcash-bot.fadehost.app/api/survival/game-complete',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({receipt}),cache:'no-store'})}catch(_){}
+  if(!receipt){if(window.parent!==window)window.parent.postMessage({type:'zombcash-arcade-snake-result',points:score,accountSaved:false,error:'Could not verify this game session.'},location.origin);return}
+  try{
+    const response=await fetch('https://zombcash-bot.fadehost.app/api/survival/game-complete',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({receipt,points:score}),cache:'no-store'});
+    const data=await response.json().catch(()=>({}));
+    if(window.parent!==window)window.parent.postMessage({type:'zombcash-arcade-snake-result',points:score,accountSaved:response.ok,arcadeScore:data.arcadeScore||null,error:response.ok?'':(data.error||'Could not save to profile.')},location.origin);
+  }catch(_){if(window.parent!==window)window.parent.postMessage({type:'zombcash-arcade-snake-result',points:score,accountSaved:false,error:'Network error while saving score.'},location.origin)}
 }
 let lastBonusBrainAt = 0;
 
@@ -274,7 +279,7 @@ function drawGame() {
 }
 function stopGame(won, reason) {
   gameActive = false;
-  completeSnakeSurvivalSession();
+  completeSnakeSurvivalSession(gamePoints);
   gameFinished = true;
   heldMoveKeys.clear();
   screen?.classList.remove('snake-playing');
