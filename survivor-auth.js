@@ -25,21 +25,22 @@
   const loginWaiting = {"en":"Open Telegram and press Start. This page will finish login automatically.","de":"Öffne Telegram und tippe auf Start. Diese Seite schließt die Anmeldung automatisch ab.","fr":"Ouvrez Telegram et appuyez sur Démarrer. La connexion se terminera automatiquement ici.","it":"Apri Telegram e premi Avvia. L’accesso verrà completato automaticamente su questa pagina.","ja":"Telegramを開いて「Start」を押してください。このページで自動的にログインが完了します。","zh-CN":"打开 Telegram 并点击 Start。此页面将自动完成登录。","ru":"Откройте Telegram и нажмите «Запустить». Вход на этой странице завершится автоматически.","tr":"Telegram'ı açıp Başlat'a dokunun. Giriş bu sayfada otomatik tamamlanacak.","hi":"Telegram खोलें और Start दबाएँ। इस पेज पर लॉगिन अपने आप पूरा हो जाएगा。"};
 
   const safe = value => String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  let overlay, statusNode, bodyNode, widgetNode, isBusy = false;
+  let overlay, statusNode, bodyNode, widgetNode, isBusy = false, presenceOnline = false, presenceTimer = 0;
   const readProfile = () => { try { return JSON.parse(localStorage.getItem(STORAGE_PROFILE) || 'null'); } catch (_) { return null; } };
   const token = () => { try { return localStorage.getItem(STORAGE_TOKEN) || ''; } catch (_) { return ''; } };
   function updateCta() {
     const cta = document.querySelector('.zsh-actions .survivor-entry-button, .top-cta, .survivor-entry-button');
     if (!cta) return;
     const p = readProfile();
-    cta.textContent = p ? '☣ ' + (p.username ? '@' + p.username : p.firstName || 'SURVIVOR') : t('login');
-    cta.setAttribute('aria-label', p ? t('profile') : t('login'));
+    cta.textContent = p ? '☣ ' + (p.publicDisplayName || p.firstName || 'SURVIVOR') : t('login');
+    cta.classList.toggle('survivor-online', Boolean(p && presenceOnline && p.presenceVisible !== false));
+    cta.setAttribute('aria-label', p ? t('profile') + (presenceOnline ? ' · ONLINE' : '') : t('login'));
     cta.href = '#survivor-profile';
   }
   function ensureModal() {
     if (overlay) return;
     const style = document.createElement('style');
-    style.textContent = '.survivor-overlay[hidden]{display:none!important}.survivor-overlay{position:fixed;inset:0;z-index:20000;display:grid;place-items:center;padding:18px;background:#020603df;backdrop-filter:blur(7px)}.survivor-modal{position:relative;width:min(440px,100%);max-height:calc(100vh - 36px);max-height:calc(100dvh - 36px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#426341 #07100a;padding:26px;border:1px solid #6a9d42;background:linear-gradient(145deg,#101b12,#070b09);color:#edf5e5;box-shadow:0 22px 80px #000b;font-family:Rajdhani,system-ui,sans-serif}.survivor-modal h2{margin:0 0 10px;color:#9bff45;font:700 19px Orbitron,system-ui,sans-serif}.survivor-modal p{color:#b8c8b6;line-height:1.5}.survivor-modal .survivor-status{min-height:24px;color:#9bff45;font-size:14px}.survivor-modal .survivor-widget{display:flex;justify-content:center;min-height:46px;margin:20px 0}.survivor-modal .survivor-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.survivor-modal button{border:1px solid #426341;background:#0b120c;color:#b8f992;padding:10px 14px;cursor:pointer;font:700 11px Orbitron,system-ui,sans-serif}.survivor-modal .survivor-stats{border:1px solid #2b4930;padding:14px;margin-top:16px}.survivor-modal .survivor-points{font:700 26px Orbitron,system-ui,sans-serif;color:#9bff45}.survivor-modal .survivor-dashboard{display:grid;gap:12px}.survivor-modal .survivor-stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.survivor-modal .survivor-stat-tile{border:1px solid #263b29;background:#080f0a;padding:12px;min-width:0}.survivor-modal .survivor-stat-tile span{display:block;color:#9aa996;font:600 9px Orbitron,system-ui,sans-serif;letter-spacing:.5px}.survivor-modal .survivor-stat-tile b{display:block;color:#9bff45;font:700 22px Orbitron,system-ui,sans-serif;margin:8px 0}.survivor-modal .survivor-stat-tile small{color:#9aa996}.survivor-modal .survivor-activity{border-top:1px solid #29402b;padding-top:10px}.survivor-modal .survivor-activity h3{font:700 10px Orbitron,system-ui,sans-serif;color:#9bff45}.survivor-modal .survivor-activity-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid #17251a;color:#b9c8b5;font-size:13px}.survivor-modal .survivor-activity-row b{color:#9bff45;white-space:nowrap}@media(max-width:420px){.survivor-modal{padding:18px}.survivor-modal .survivor-stat-grid{grid-template-columns:1fr 1fr}}.survivor-modal .survivor-privacy{font-size:12px;color:#8e9c8d}.survivor-modal [hidden]{display:none!important}.survivor-entry-button{display:inline-flex;align-items:center;justify-content:center;margin:10px 0 0;padding:10px 12px;border:1px solid #426341;background:#0b120c;color:#b8f992;font:700 10px Orbitron,system-ui,sans-serif;cursor:pointer;white-space:normal}';
+    style.textContent = '.survivor-overlay[hidden]{display:none!important}.survivor-overlay{position:fixed;inset:0;z-index:20000;display:grid;place-items:center;padding:18px;background:#020603df;backdrop-filter:blur(7px)}.survivor-modal{position:relative;width:min(440px,100%);max-height:calc(100vh - 36px);max-height:calc(100dvh - 36px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#426341 #07100a;padding:26px;border:1px solid #6a9d42;background:linear-gradient(145deg,#101b12,#070b09);color:#edf5e5;box-shadow:0 22px 80px #000b;font-family:Rajdhani,system-ui,sans-serif}.survivor-modal h2{margin:0 0 10px;color:#9bff45;font:700 19px Orbitron,system-ui,sans-serif}.survivor-modal p{color:#b8c8b6;line-height:1.5}.survivor-modal .survivor-status{min-height:24px;color:#9bff45;font-size:14px}.survivor-modal .survivor-widget{display:flex;justify-content:center;min-height:46px;margin:20px 0}.survivor-modal .survivor-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.survivor-modal button{border:1px solid #426341;background:#0b120c;color:#b8f992;padding:10px 14px;cursor:pointer;font:700 11px Orbitron,system-ui,sans-serif}.survivor-modal .survivor-stats{border:1px solid #2b4930;padding:14px;margin-top:16px}.survivor-modal .survivor-points{font:700 26px Orbitron,system-ui,sans-serif;color:#9bff45}.survivor-modal .survivor-dashboard{display:grid;gap:12px}.survivor-modal .survivor-stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.survivor-modal .survivor-stat-tile{border:1px solid #263b29;background:#080f0a;padding:12px;min-width:0}.survivor-modal .survivor-stat-tile span{display:block;color:#9aa996;font:600 9px Orbitron,system-ui,sans-serif;letter-spacing:.5px}.survivor-modal .survivor-stat-tile b{display:block;color:#9bff45;font:700 22px Orbitron,system-ui,sans-serif;margin:8px 0}.survivor-modal .survivor-stat-tile small{color:#9aa996}.survivor-modal .survivor-activity{border-top:1px solid #29402b;padding-top:10px}.survivor-modal .survivor-activity h3{font:700 10px Orbitron,system-ui,sans-serif;color:#9bff45}.survivor-modal .survivor-activity-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid #17251a;color:#b9c8b5;font-size:13px}.survivor-modal .survivor-activity-row b{color:#9bff45;white-space:nowrap}@media(max-width:420px){.survivor-modal{padding:18px}.survivor-modal .survivor-stat-grid{grid-template-columns:1fr 1fr}}.survivor-modal .survivor-privacy{font-size:12px;color:#8e9c8d}.survivor-modal [hidden]{display:none!important}.survivor-entry-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;margin:10px 0 0;padding:10px 12px;border:1px solid #426341;background:#0b120c;color:#b8f992;font:700 10px Orbitron,system-ui,sans-serif;cursor:pointer;white-space:normal}.survivor-entry-button.survivor-online:after{content:"";display:inline-block;width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:#9bff45;box-shadow:0 0 8px #9bff45}';
     document.head.append(style);
     overlay = document.createElement('div');
     overlay.className = 'survivor-overlay';
@@ -62,7 +63,7 @@
     ensureModal();
     const profile = readProfile();
     overlay.querySelector('#survivor-title').textContent = profile ? t('profile') : t('login');
-    overlay.querySelector('#survivor-intro').textContent = profile ? ('WELCOME BACK, ' + (profile.username ? '@' + profile.username : (profile.firstName || 'SURVIVOR'))) : t('intro');
+    overlay.querySelector('#survivor-intro').textContent = profile ? ('WELCOME BACK, ' + (profile.publicDisplayName || profile.firstName || 'SURVIVOR')) : t('intro');
     overlay.querySelector('#survivor-close').textContent = t('close');
     overlay.querySelector('#survivor-logout').textContent = t('logout');
     overlay.querySelector('#survivor-logout').hidden = !profile;
@@ -77,8 +78,24 @@
         '<div class="survivor-stat-tile"><span>SITE VISITS</span><b id="survivor-visits">—</b></div>' +
         '<div class="survivor-stat-tile"><span>MAKER SAVES</span><b id="survivor-maker-saves">—</b></div>' +
         '<div class="survivor-stat-tile"><span>GAMES COMPLETED</span><b id="survivor-games">—</b></div></div>' +
+        '<section class="survivor-stats"><h3 style="margin:0 0 12px;color:#9bff45;font:700 11px Orbitron,system-ui,sans-serif">SURVIVOR IDENTITY</h3>' +
+        '<label for="survivor-display-name" style="display:block;color:#b8c8b6;font-size:12px;margin-bottom:6px">PUBLIC DISPLAY NAME</label>' +
+        '<input id="survivor-display-name" maxlength="24" autocomplete="nickname" placeholder="e.g. GraveWalker" style="box-sizing:border-box;width:100%;padding:11px;border:1px solid #426341;background:#07100a;color:#edf5e5;font:600 14px Rajdhani,system-ui,sans-serif">' +
+        '<p class="survivor-privacy">This name is shown in game leaderboards instead of your Telegram username. 3–24 characters.</p>' +
+        '<label style="display:flex;align-items:center;gap:9px;margin:12px 0;color:#dcebd6;font-size:13px"><input type="checkbox" id="survivor-leaderboard-visible" style="accent-color:#9bff45"> Show my profile in public leaderboards</label>' +
+        '<label style="display:flex;align-items:center;gap:9px;margin:10px 0;color:#dcebd6;font-size:13px"><input type="checkbox" id="survivor-presence-visible" style="accent-color:#9bff45"> Show my ONLINE status</label>' +
+        '<button type="button" id="survivor-save-settings" style="margin-top:8px;width:100%;background:#9bff45;color:#071007;border-color:#9bff45">SAVE PROFILE SETTINGS</button>' +
+        '<p class="survivor-privacy">ONLINE is shown while you are active on the site. If disabled, your presence is not shown publicly.</p></section>' +
         '<p class="survivor-privacy">Points have no monetary value and provide no benefits. Activity tracking only.</p></div>';
       statusNode.textContent = '';
+      const nameInput = bodyNode.querySelector('#survivor-display-name');
+      const leaderboardToggle = bodyNode.querySelector('#survivor-leaderboard-visible');
+      const presenceToggle = bodyNode.querySelector('#survivor-presence-visible');
+      if (nameInput) nameInput.value = profile.publicDisplayName || '';
+      if (leaderboardToggle) leaderboardToggle.checked = profile.leaderboardVisible !== false;
+      if (presenceToggle) presenceToggle.checked = profile.presenceVisible !== false;
+      const saveSettings = bodyNode.querySelector('#survivor-save-settings');
+      if (saveSettings) saveSettings.addEventListener('click', saveSurvivorSettings);
       loadSurvivorDashboard();
       return;
     }
@@ -156,6 +173,12 @@
         if (data.profile) {
           localStorage.setItem(STORAGE_PROFILE, JSON.stringify(data.profile));
           set('survivor-live-points', Number(data.profile.points || 0).toLocaleString() + ' SP');
+          const nameInput = bodyNode.querySelector('#survivor-display-name');
+          const leaderboardToggle = bodyNode.querySelector('#survivor-leaderboard-visible');
+          const presenceToggle = bodyNode.querySelector('#survivor-presence-visible');
+          if (nameInput && document.activeElement !== nameInput) nameInput.value = data.profile.publicDisplayName || '';
+          if (leaderboardToggle) leaderboardToggle.checked = data.profile.leaderboardVisible !== false;
+          if (presenceToggle) presenceToggle.checked = data.profile.presenceVisible !== false;
         }
       }
       let activity = [];
@@ -193,6 +216,67 @@
       const list = bodyNode.querySelector('#survivor-activity-list');
       if (list) list.textContent = 'Activity temporarily unavailable.';
     }
+  }
+  async function saveSurvivorSettings() {
+    const nameInput = bodyNode.querySelector('#survivor-display-name');
+    const leaderboardToggle = bodyNode.querySelector('#survivor-leaderboard-visible');
+    const presenceToggle = bodyNode.querySelector('#survivor-presence-visible');
+    const button = bodyNode.querySelector('#survivor-save-settings');
+    const name = nameInput ? nameInput.value.trim().replace(/\\s+/g, ' ') : '';
+    if (!name || name.length < 3 || name.length > 24) {
+      statusNode.textContent = 'Display name must contain 3–24 characters.';
+      return;
+    }
+    button.disabled = true;
+    statusNode.textContent = 'SAVING PROFILE…';
+    try {
+      const response = await fetch(API + '/api/profile/settings', {
+        method: 'POST',
+        headers: {'Authorization':'Bearer ' + token(), 'Content-Type':'application/json'},
+        body: JSON.stringify({
+          publicDisplayName: name,
+          leaderboardVisible: Boolean(leaderboardToggle && leaderboardToggle.checked),
+          presenceVisible: Boolean(presenceToggle && presenceToggle.checked)
+        }),
+        cache: 'no-store'
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.ok) throw new Error(data.error || 'Could not save profile settings.');
+      const current = readProfile() || {};
+      const next = Object.assign({}, current, data.profile);
+      localStorage.setItem(STORAGE_PROFILE, JSON.stringify(next));
+      presenceOnline = false;
+      updateCta();
+      statusNode.textContent = 'PROFILE SAVED';
+      document.dispatchEvent(new CustomEvent('zombcash:survivorprofileupdated'));
+      if (presenceToggle && presenceToggle.checked) sendPresenceHeartbeat();
+    } catch (error) {
+      statusNode.textContent = error.message || 'Could not save profile settings.';
+    } finally {
+      button.disabled = false;
+    }
+  }
+  async function sendPresenceHeartbeat() {
+    if (!token() || document.visibilityState === 'hidden') return;
+    try {
+      const page = (location.pathname.split('/').pop() || 'site').replace(/[^a-z0-9_-]/gi, '').slice(0, 32) || 'site';
+      const response = await fetch(API + '/api/presence/heartbeat?page=' + encodeURIComponent(page), {
+        method: 'POST',
+        headers: {'Authorization':'Bearer ' + token(), 'Content-Type':'application/json'},
+        body: '{}',
+        cache: 'no-store'
+      });
+      const data = await response.json().catch(() => ({}));
+      presenceOnline = Boolean(response.ok && data.online);
+    } catch (_) {
+      presenceOnline = false;
+    }
+    updateCta();
+  }
+  function startPresenceHeartbeat() {
+    if (presenceTimer) clearInterval(presenceTimer);
+    sendPresenceHeartbeat();
+    presenceTimer = setInterval(sendPresenceHeartbeat, 30000);
   }
   async function recordDailyVisit() {
     const day = new Date().toISOString().slice(0, 10);
@@ -238,7 +322,12 @@
     }
     if (cta) cta.addEventListener('click', e => { e.preventDefault(); overlay.hidden = false; renderModal(); });
     document.addEventListener('zombcash:languagechange', () => { updateCta(); if (overlay && !overlay.hidden) renderModal(); });
-    refreshProfile().finally(updateCta);
+    refreshProfile().finally(() => { updateCta(); startPresenceHeartbeat(); });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') sendPresenceHeartbeat();
+      else { presenceOnline = false; updateCta(); }
+    });
+    window.addEventListener('pagehide', () => { presenceOnline = false; updateCta(); });
     updateCta();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once:true}); else init();
