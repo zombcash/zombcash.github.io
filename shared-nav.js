@@ -99,8 +99,9 @@
       font:600 7px/1.3 Orbitron,system-ui,sans-serif!important;letter-spacing:1.6px!important;white-space:nowrap!important;
     }
     header.zombcash-shared-header .zsh-nav{
+      position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;
       display:flex!important;align-items:center!important;justify-content:center!important;
-      gap:clamp(6px,.7vw,12px)!important;min-width:0!important;max-width:100%!important;
+      gap:clamp(6px,.7vw,12px)!important;min-width:0!important;max-width:calc(100% - 470px)!important;
       margin:0!important;padding:0!important;border:0!important;background:transparent!important;
       flex-wrap:nowrap!important;overflow:visible!important;max-height:none!important;
     }
@@ -183,9 +184,10 @@
       header.zombcash-shared-header{grid-template-columns:minmax(0,1fr) auto!important;gap:10px!important;padding:10px 18px!important}
       header.zombcash-shared-header .zsh-actions{grid-column:2;grid-row:1}
       header.zombcash-shared-header .zsh-nav{
+        position:static!important;left:auto!important;top:auto!important;transform:none!important;
         display:none!important;grid-column:1/-1;grid-row:2;justify-content:flex-start!important;
         align-items:stretch!important;flex-wrap:wrap!important;gap:4px 16px!important;
-        padding:10px 0 3px!important;border-top:1px solid #9bff4520!important;
+        max-width:100%!important;padding:10px 0 3px!important;border-top:1px solid #9bff4520!important;
       }
       header.zombcash-shared-header .zsh-nav.zsh-open{display:flex!important}
       header.zombcash-shared-header .zsh-menu-toggle{
