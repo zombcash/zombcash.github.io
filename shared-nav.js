@@ -44,18 +44,18 @@
         return '<a href="' + destination + '"' + (active ? ' aria-current="page"' : '') + '>' + label + '</a>';
       }).join('') +
       (!isHome ? '<a class="zsh-home home-return-button" href="index.html"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
-      (loginButton ? '<span class="zsh-login-slot"></span>' : '') +
     '</nav>' +
     '<div class="zsh-actions">' +
       '<div class="zsh-language-slot"></div>' +
+      (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '') +
     '</div>';
 
-  const loginSlot = header.querySelector('.zsh-login-slot');
+  const loginSlot = header.querySelector('.zsh-preserved-login-slot');
   if (loginButton && loginSlot) {
     loginButton.classList.add('zsh-login-button');
     loginButton.removeAttribute('data-i18n');
     loginButton.textContent = 'LOGIN WITH TELEGRAM';
-    loginSlot.append(loginButton);
+    loginSlot.replaceWith(loginButton);
   }
 
   const style = document.createElement('style');
