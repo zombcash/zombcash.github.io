@@ -132,6 +132,20 @@
       isBusy = false;
     }
   }
+  async function recordDailyVisit() {
+    const day = new Date().toISOString().slice(0, 10);
+    const key = 'zombcash-survivor-visit:' + day;
+    try { if (localStorage.getItem(key) === '1') return; } catch (_) {}
+    try {
+      const response = await fetch(API + '/api/survival/visit', {
+        method: 'POST',
+        headers: {'Authorization':'Bearer ' + token(), 'Content-Type':'application/json'},
+        body: '{}',
+        cache: 'no-store'
+      });
+      if (response.ok) { try { localStorage.setItem(key, '1'); } catch (_) {} }
+    } catch (_) {}
+  }
   async function refreshProfile() {
     if (!token()) return;
     try {
@@ -140,6 +154,7 @@
       if (response.ok) {
         const data = await response.json();
         if (data.profile) localStorage.setItem(STORAGE_PROFILE, JSON.stringify(data.profile));
+        await recordDailyVisit();
       }
     } catch (_) {}
   }
