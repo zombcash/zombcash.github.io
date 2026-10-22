@@ -120,6 +120,7 @@
           localStorage.setItem(STORAGE_PROFILE, JSON.stringify(statusData.profile));
           document.dispatchEvent(new CustomEvent('zombcash:survivorlogin'));
           updateCta();
+          refreshProfile();
           renderModal();
           statusNode.textContent = '';
           return;
