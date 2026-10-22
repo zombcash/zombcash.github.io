@@ -130,6 +130,8 @@
   const captionAiBtn = document.getElementById('captionAiBtn');
   const captionCount = document.getElementById('captionCount');
   let selectedFile = null, generatedDataUrl = null, style = 'classic', currentRarity = null, compareSwapped = false;
+  let generatedSaveReceipt = null;
+  const survivorToken = () => { try { return localStorage.getItem('zombcash-survivor-token') || ''; } catch (_) { return ''; } };
   const rarityBadge=document.getElementById('rarityBadge'), compareBox=document.getElementById('compareBox');
   const compareBefore=document.getElementById('compareBefore'), compareAfter=document.getElementById('compareAfter');
   const downloadCardBtn=document.getElementById('downloadCardBtn'), challengeBtn=document.getElementById('challengeBtn');
@@ -193,11 +195,13 @@
     createBtn.disabled = true; createBtn.innerHTML = '<span class="spinner"></span> MUTATING YOUR DNA…';
     clearResult(); setStatus('Sending your photo for AI transformation. This may take up to a minute.');
     try {
-      const response = await fetch(API + '/api/zombie-maker', {method:'POST', body, cache:'no-store'});
+      const token = survivorToken();
+      const response = await fetch(API + '/api/zombie-maker', {method:'POST', body, cache:'no-store', headers: token ? {Authorization:'Bearer ' + token} : {}});
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || 'The image service is temporarily unavailable.');
       if (!data.image || !data.image.startsWith('data:image/')) throw new Error('The service returned an invalid image.');
       generatedDataUrl = data.image;
+      generatedSaveReceipt = typeof data.saveReceipt === 'string' ? data.saveReceipt : null;
       currentRarity = rarityForImage();
       const img = document.createElement('img'); img.alt = 'Your AI-generated ZombieCash zombie portrait'; img.src = generatedDataUrl;
       resultBox.replaceChildren(img);
@@ -213,6 +217,16 @@
     if (!generatedDataUrl) return;
     const a = document.createElement('a'); a.href = generatedDataUrl; a.download = 'zombcash-zombie.jpg';
     document.body.appendChild(a); a.click(); a.remove(); trackCreatorEvent('creator_portrait_download', style + (referralId ? '_ref_' + referralId : 'direct'));
+    const token = survivorToken();
+    if (token && generatedSaveReceipt) {
+      fetch(API + '/api/survival/maker-saved', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json', 'Authorization':'Bearer ' + token},
+        body: JSON.stringify({receipt: generatedSaveReceipt}),
+        keepalive: true
+      }).catch(() => {});
+      generatedSaveReceipt = null;
+    }
     setStatus('PHOTO DOWNLOADED ✓ Your portrait is saved to your device. Caption: ' + (captionInput.value.trim() || '(no caption)'), 'success');
   });
   shareBtn.addEventListener('click', async () => {
