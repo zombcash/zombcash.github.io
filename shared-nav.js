@@ -45,8 +45,8 @@
       }).join('') +
     '</nav>' +
     '<div class="zsh-actions">' +
-      '<div class="zsh-language-slot"></div>' +
       (!isHome ? '<a class="zsh-home home-return-button" href="index.html"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
+      '<div class="zsh-language-slot"></div>' +
       (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '') +
     '</div>';
 
