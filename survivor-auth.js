@@ -62,7 +62,7 @@
     ensureModal();
     const profile = readProfile();
     overlay.querySelector('#survivor-title').textContent = profile ? t('profile') : t('login');
-    overlay.querySelector('#survivor-intro').textContent = profile ? (profile.firstName || 'Survivor') : t('intro');
+    overlay.querySelector('#survivor-intro').textContent = profile ? ('WELCOME BACK, ' + (profile.username ? '@' + profile.username : (profile.firstName || 'SURVIVOR'))) : t('intro');
     overlay.querySelector('#survivor-close').textContent = t('close');
     overlay.querySelector('#survivor-logout').textContent = t('logout');
     overlay.querySelector('#survivor-logout').hidden = !profile;
@@ -180,10 +180,12 @@
           const line = document.createElement('div'); line.className = 'survivor-activity-row';
           const label = document.createElement('span');
           const labels = {login:'Telegram login',daily_visit:'Site visit',maker_saved:'Zombie Maker save',game_completed:'Game completed',referral_claimed:'Referral linked'};
-          label.textContent = labels[row.event_type] || String(row.event_type || 'Activity').replace(/_/g, ' ');
+          const details = row.details && typeof row.details === 'object' ? row.details : {};
+          const game = details.game ? ' · ' + String(details.game).toUpperCase() : '';
+          label.textContent = (labels[row.event_type] || String(row.event_type || 'Activity').replace(/_/g, ' ')) + game;
           const value = document.createElement('b');
           const delta = Number(row.points_delta || 0);
-          value.textContent = (delta > 0 ? '+' : '') + delta + ' SP';
+          value.textContent = delta > 0 ? ('+' + delta + ' SP') : 'Tracked';
           line.append(label, value); list.append(line);
         });
       }
