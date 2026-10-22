@@ -10,7 +10,7 @@
     ['LIVE WORLD', '#living-world', 'home'],
     ['RADAR', '#radar', 'home'],
     ['CREW VOTE', 'crew-vote.html', 'vote'],
-    ['ZOMBIE LAB', '#lab', 'home'],
+    ['SURVIVOR HUB', 'survivor-hub.html', 'hub'],
     ['ARCADE', 'arcade.html', 'arcade'],
     ['ZOMBIE GALLERY', 'gallery.html', 'gallery'],
     ['ZOMBIE MAKER', 'zombie-maker.html', 'maker'],
@@ -40,7 +40,8 @@
         const active = (id === 'vote' && file === 'crew-vote.html') ||
           (id === 'arcade' && file === 'arcade.html') ||
           (id === 'gallery' && file === 'gallery.html') ||
-          (id === 'maker' && file === 'zombie-maker.html');
+          (id === 'maker' && file === 'zombie-maker.html') ||
+          (id === 'hub' && file === 'survivor-hub.html');
         return '<a href="' + destination + '"' + (active ? ' aria-current="page"' : '') + '>' + label + '</a>';
       }).join('') +
     '</nav>' +
