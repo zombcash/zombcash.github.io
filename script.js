@@ -414,10 +414,27 @@ window.addEventListener('keyup', event => {
 window.addEventListener('blur', () => heldMoveKeys.clear());
 action?.addEventListener('click', () => { if (!gameActive) beginGame(); });
 window.addEventListener('message', event => {
-  if (event.origin !== window.location.origin || event.data?.type !== 'zombcash-arcade-snake-start') return;
-  resetGame();
-  resizeGameCanvas();
-  beginGame();
+  if (event.origin !== window.location.origin || !event.data?.type?.startsWith('zombcash-arcade-snake-')) return;
+  const message = event.data;
+  if (message.type === 'zombcash-arcade-snake-start') {
+    resetGame();
+    requestAnimationFrame(() => { resizeGameCanvas(); beginGame(); });
+    return;
+  }
+  if (message.type === 'zombcash-arcade-snake-fullscreen') {
+    document.documentElement.classList.toggle('arcade-snake-fullscreen', !!message.active);
+    requestAnimationFrame(() => { resizeGameCanvas(); drawGame(); });
+    return;
+  }
+  if (message.type === 'zombcash-arcade-snake-clear-keys') { heldMoveKeys.clear(); return; }
+  if (message.type === 'zombcash-arcade-snake-key') {
+    const key = String(message.key || '').toLowerCase();
+    const directions = {arrowup:[0,-1],w:[0,-1],arrowdown:[0,1],s:[0,1],arrowleft:[-1,0],a:[-1,0],arrowright:[1,0],d:[1,0]};
+    if (message.down) {
+      if (directions[key]) setSnakeDirection(directions[key][0], directions[key][1]);
+      if (['arrowup','arrowdown','arrowleft','arrowright','w','a','s','d',' '].includes(key)) heldMoveKeys.add(key);
+    } else heldMoveKeys.delete(key);
+  }
 });
 const snakeModal = document.getElementById('snake-modal');
 const snakeClose = document.getElementById('snake-close');
