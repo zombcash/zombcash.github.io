@@ -413,6 +413,12 @@ window.addEventListener('keyup', event => {
 });
 window.addEventListener('blur', () => heldMoveKeys.clear());
 action?.addEventListener('click', () => { if (!gameActive) beginGame(); });
+window.addEventListener('message', event => {
+  if (event.origin !== window.location.origin || event.data?.type !== 'zombcash-arcade-snake-start') return;
+  resetGame();
+  resizeGameCanvas();
+  beginGame();
+});
 const snakeModal = document.getElementById('snake-modal');
 const snakeClose = document.getElementById('snake-close');
 start?.addEventListener('click', () => {
