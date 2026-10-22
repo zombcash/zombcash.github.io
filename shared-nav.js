@@ -1,48 +1,219 @@
-/* Shared ZombieCash navigation. Keep this file common to every public page. */
+/* ZombieCash shared navigation — one source of truth for every public page.
+ * Keep page-specific styling below the header; header layout is owned here.
+ */
 (() => {
   'use strict';
-  const path = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-  const isHome = path === '' || path === 'index.html';
+  const file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  const isHome = file === 'index.html';
   const home = 'index.html';
-  const items = [
-    ['LIVE WORLD', '#living-world'], ['RADAR', '#radar'],
-    ['CREW VOTE', 'crew-vote.html'], ['ZOMBIE LAB', '#lab'],
-    ['ARCADE', 'arcade.html'], ['ZOMBIE GALLERY', 'gallery.html'],
-    ['ZOMBIE MAKER', 'zombie-maker.html'], ['OUTBREAK', '#outbreak'],
-    ['COMMUNITY', '#community'], ['BUY $ZOMBCASH', '#community-console']
+  const labels = [
+    ['LIVE WORLD', '#living-world', 'home'],
+    ['RADAR', '#radar', 'home'],
+    ['CREW VOTE', 'crew-vote.html', 'vote'],
+    ['ZOMBIE LAB', '#lab', 'home'],
+    ['ARCADE', 'arcade.html', 'arcade'],
+    ['ZOMBIE GALLERY', 'gallery.html', 'gallery'],
+    ['ZOMBIE MAKER', 'zombie-maker.html', 'maker'],
+    ['OUTBREAK', '#outbreak', 'home'],
+    ['COMMUNITY', '#community', 'home'],
+    ['BUY $ZOMBCASH', '#community-console', 'home']
   ];
-  const hrefFor = href => isHome ? href : (href.startsWith('#') ? home + href : href);
   const header = document.querySelector('body > header, body header');
   if (!header) return;
+
+  // Preserve the Survivor Hub's working Telegram login control before rebuilding its common shell.
+  const loginButton = file === 'survivor-hub.html'
+    ? header.querySelector('button[data-i18n="login"], button.top-cta')
+    : null;
+  const headerCtaHref = file === 'gallery.html' ? 'https://t.me/ZOMBCASH'
+    : isHome ? '#community' : 'index.html#community';
+  const brandHref = isHome ? '#home' : 'index.html';
+  const target = (href) => href.startsWith('#') && !isHome ? home + href : href;
+
   header.classList.add('zombcash-shared-header');
-  header.innerHTML = '<a class="zsh-brand" href="' + (isHome ? '#home' : home) + '" aria-label="ZombieCash home"><span class="zsh-mark">☣</span><span class="zsh-brand-copy">ZOMBIE<span class="zsh-green">CASH</span><small>THE UNDEAD INTERNET</small></span></a>' +
-    '<nav class="zsh-nav" aria-label="Main navigation">' +
-    items.map(([label, href]) => '<a href="' + hrefFor(href) + '">' + label + '</a>').join('') +
-    (!isHome ? '<a class="zsh-home home-return-button" href="' + home + '"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
-    '</nav><a class="top-cta zsh-cta" href="' + (isHome ? '#community' : home + '#community') + '">JOIN THE SURVIVORS <span>↗</span></a>' +
-    '<button class="zsh-menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button>';
+  header.innerHTML =
+    '<a class="zsh-brand" href="' + brandHref + '" aria-label="ZombieCash home">' +
+      '<span class="zsh-mark" aria-hidden="true">☣</span>' +
+      '<span class="zsh-brand-copy">ZOMBIE<span class="zsh-green">CASH</span><small>THE UNDEAD INTERNET</small></span>' +
+    '</a>' +
+    '<button class="zsh-menu-toggle" type="button" aria-label="Open navigation" aria-controls="zsh-navigation" aria-expanded="false"><span aria-hidden="true">☰</span><span class="zsh-menu-label">MENU</span></button>' +
+    '<nav id="zsh-navigation" class="zsh-nav" aria-label="Main navigation">' +
+      labels.map(([label, href, id]) => {
+        const destination = id === 'home' ? target(href) : href;
+        const active = (id === 'vote' && file === 'crew-vote.html') ||
+          (id === 'arcade' && file === 'arcade.html') ||
+          (id === 'gallery' && file === 'gallery.html') ||
+          (id === 'maker' && file === 'zombie-maker.html');
+        return '<a href="' + destination + '"' + (active ? ' aria-current="page"' : '') + '>' + label + '</a>';
+      }).join('') +
+      (!isHome ? '<a class="zsh-home home-return-button" href="index.html"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
+      (loginButton ? '<span class="zsh-login-slot"></span>' : '') +
+    '</nav>' +
+    '<div class="zsh-actions">' +
+      '<a class="zsh-cta' + (file === 'gallery.html' ? ' zsh-cta-telegram' : '') + '" href="' + headerCtaHref + '"' +
+        (file === 'gallery.html' ? ' target="_blank" rel="noreferrer"' : '') + '>' +
+        (file === 'gallery.html' ? 'OPEN TELEGRAM' : 'JOIN THE SURVIVORS') + ' <span aria-hidden="true">↗</span>' +
+      '</a>' +
+      '<div class="zsh-language-slot"></div>' +
+    '</div>';
+
+  const loginSlot = header.querySelector('.zsh-login-slot');
+  if (loginButton && loginSlot) {
+    loginButton.classList.add('zsh-login-button');
+    loginButton.removeAttribute('data-i18n');
+    loginButton.textContent = 'LOGIN WITH TELEGRAM';
+    loginSlot.append(loginButton);
+  }
+
   const style = document.createElement('style');
+  style.id = 'zombcash-shared-navigation-style';
   style.textContent = `
-    .zombcash-shared-header{position:sticky!important;top:0!important;z-index:10000!important;display:flex!important;align-items:center!important;gap:12px!important;justify-content:space-between!important;flex-wrap:nowrap!important;min-height:76px!important;height:auto!important;padding:12px clamp(16px,3vw,48px)!important;border-bottom:1px solid #9bff4533!important;background:#050907f5!important;backdrop-filter:blur(12px)!important;box-sizing:border-box!important}
-    .zsh-brand{display:flex;align-items:center;gap:12px;flex:0 0 auto;color:#edf5e5;text-decoration:none!important}
-    .zsh-mark{display:grid;place-items:center;width:46px;height:46px;border:1px solid #9bff45;border-radius:8px;color:#9bff45;font-size:25px;box-shadow:inset 0 0 18px #9bff4518}
-    .zsh-brand-copy{font:800 17px Orbitron,system-ui,sans-serif;letter-spacing:-.5px;white-space:nowrap}.zsh-green{color:#9bff45}
-    .zsh-brand-copy small{display:block;margin-top:4px;color:#9aa797;font:600 8px Orbitron,system-ui,sans-serif;letter-spacing:2.5px}
-    .zsh-nav{display:flex;align-items:center;justify-content:center;gap:clamp(5px,.62vw,10px);flex:1 1 auto;min-width:0;flex-wrap:nowrap}
-    .zsh-nav a{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:30px!important;flex:0 0 auto!important;color:#c5d0c3!important;text-decoration:none!important;font:600 8px/1.3 Orbitron,system-ui,sans-serif!important;letter-spacing:0!important;white-space:nowrap!important;overflow-wrap:normal!important}
-    .zsh-nav a:hover,.zsh-nav a[aria-current=page]{color:#9bff45}
-    .zsh-nav .zsh-home{border:1px solid #42613a!important;padding:7px 8px!important;color:#b8f992!important;font-size:7px!important}
-    .zsh-cta{display:inline-flex;align-items:center;justify-content:center;gap:7px;flex:0 0 auto;max-width:100%;padding:10px 12px;border:1px solid #42613a;background:#0b120c;color:#b8f992;text-decoration:none!important;font:700 9px Orbitron,system-ui,sans-serif;white-space:normal}
-    .zombcash-shared-header>.language-switcher{flex:0 0 auto;margin-left:0!important}
-    .zsh-menu-toggle{display:none;border:1px solid #42613a;background:#0b120c;color:#9bff45;padding:9px 11px;font-size:18px}
-    @media(max-width:1250px){.zombcash-shared-header{gap:9px!important;padding:10px 16px!important}.zsh-brand{gap:8px}.zsh-mark{width:38px;height:38px;font-size:21px}.zsh-brand-copy{font-size:14px}.zsh-brand-copy small{font-size:7px;letter-spacing:1.5px}.zsh-nav{order:4;flex-basis:100%;justify-content:flex-start;gap:8px 14px;flex-wrap:wrap}.zsh-nav a{font-size:8px!important}.zombcash-shared-header{flex-wrap:wrap!important}.zombcash-shared-header>.language-switcher{margin-left:auto!important}}
-    @media(max-width:600px){.zombcash-shared-header{gap:8px!important}.zsh-cta{font-size:8px;padding:8px}.zsh-menu-toggle{display:block}.zsh-nav{display:none!important;order:10;flex-basis:100%;padding:8px 0 4px;flex-wrap:wrap}.zsh-nav.zsh-open{display:flex!important}.zsh-nav a{width:calc(50% - 8px);justify-content:flex-start!important;padding:7px 0}.zombcash-shared-header>.language-switcher{order:3}.zsh-home{width:100%!important}}
+    header.zombcash-shared-header{
+      position:sticky!important;top:0!important;z-index:10000!important;
+      display:grid!important;grid-template-columns:auto minmax(0,1fr) auto!important;
+      align-items:center!important;gap:clamp(10px,1.25vw,20px)!important;
+      width:100%!important;min-width:0!important;min-height:76px!important;height:auto!important;
+      margin:0!important;padding:12px clamp(16px,3vw,48px)!important;
+      border:0!important;border-bottom:1px solid #9bff4533!important;
+      background:#050907f5!important;backdrop-filter:blur(12px)!important;
+      box-sizing:border-box!important;isolation:isolate;
+    }
+    header.zombcash-shared-header *{box-sizing:border-box}
+    header.zombcash-shared-header .zsh-brand{
+      display:flex!important;align-items:center!important;gap:10px!important;min-width:0!important;
+      flex:0 0 auto!important;color:#edf5e5!important;text-decoration:none!important;
+    }
+    header.zombcash-shared-header .zsh-mark{
+      display:grid!important;place-items:center!important;flex:0 0 42px!important;
+      width:42px!important;height:42px!important;border:1px solid #9bff45!important;border-radius:8px!important;
+      color:#9bff45!important;font:400 24px/1 system-ui,sans-serif!important;
+      box-shadow:inset 0 0 18px #9bff4518;
+    }
+    header.zombcash-shared-header .zsh-brand-copy{
+      display:block!important;color:#edf5e5!important;font:800 15px/1.2 Orbitron,system-ui,sans-serif!important;
+      letter-spacing:-.35px!important;white-space:nowrap!important;
+    }
+    header.zombcash-shared-header .zsh-green{color:#9bff45!important}
+    header.zombcash-shared-header .zsh-brand-copy small{
+      display:block!important;margin-top:4px!important;color:#9aa797!important;
+      font:600 7px/1.3 Orbitron,system-ui,sans-serif!important;letter-spacing:1.6px!important;white-space:nowrap!important;
+    }
+    header.zombcash-shared-header .zsh-nav{
+      display:flex!important;align-items:center!important;justify-content:center!important;
+      gap:clamp(6px,.7vw,12px)!important;min-width:0!important;max-width:100%!important;
+      margin:0!important;padding:0!important;border:0!important;background:transparent!important;
+      flex-wrap:nowrap!important;overflow:visible!important;max-height:none!important;
+    }
+    header.zombcash-shared-header .zsh-nav>a{
+      display:inline-flex!important;align-items:center!important;justify-content:center!important;
+      flex:0 1 auto!important;min-width:0!important;min-height:32px!important;width:auto!important;
+      margin:0!important;padding:6px 0!important;border:0!important;background:transparent!important;
+      color:#c5d0c3!important;text-decoration:none!important;
+      font:600 clamp(7px,.58vw,9px)/1.25 Orbitron,system-ui,sans-serif!important;
+      letter-spacing:0!important;white-space:nowrap!important;overflow-wrap:normal!important;word-break:normal!important;
+    }
+    header.zombcash-shared-header .zsh-nav>a:hover,
+    header.zombcash-shared-header .zsh-nav>a[aria-current="page"]{color:#9bff45!important}
+    header.zombcash-shared-header .zsh-nav>.zsh-home{
+      flex:0 0 auto!important;min-height:30px!important;padding:7px 9px!important;
+      border:1px solid #42613a!important;color:#b8f992!important;font-size:7px!important;
+    }
+    header.zombcash-shared-header .zsh-actions{
+      display:flex!important;align-items:center!important;justify-content:flex-end!important;
+      gap:8px!important;min-width:0!important;flex:0 0 auto!important;
+    }
+    header.zombcash-shared-header .zsh-cta{
+      display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:6px!important;
+      flex:0 0 auto!important;min-height:34px!important;max-width:none!important;margin:0!important;padding:9px 10px!important;
+      border:1px solid #42613a!important;border-radius:0!important;background:#0b120c!important;
+      color:#b8f992!important;text-decoration:none!important;
+      font:700 8px/1.2 Orbitron,system-ui,sans-serif!important;white-space:nowrap!important;overflow-wrap:normal!important;
+    }
+    header.zombcash-shared-header .zsh-cta:hover{border-color:#9bff45!important;color:#d4ffc0!important}
+    header.zombcash-shared-header .zsh-language-slot{display:flex!important;align-items:center!important;flex:0 0 auto!important}
+    header.zombcash-shared-header .language-switcher{position:relative!important;display:inline-flex!important;flex:0 0 auto!important;margin:0!important;z-index:10002!important}
+    header.zombcash-shared-header .language-trigger{
+      display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;
+      min-width:58px!important;min-height:34px!important;margin:0!important;padding:8px 9px!important;
+      border:1px solid #426341!important;border-radius:0!important;background:#0b120c!important;
+      color:#b8f992!important;font:700 9px/1.2 Orbitron,system-ui,sans-serif!important;white-space:nowrap!important;cursor:pointer;
+    }
+    header.zombcash-shared-header .language-menu{top:calc(100% + 8px)!important;right:0!important;z-index:10050!important}
+    header.zombcash-shared-header .zsh-menu-toggle{display:none!important}
+    header.zombcash-shared-header .zsh-login-button{
+      display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:32px!important;
+      padding:7px 9px!important;border:1px solid #42613a!important;background:#0b120c!important;color:#b8f992!important;
+      font:700 8px/1.2 Orbitron,system-ui,sans-serif!important;white-space:nowrap!important;cursor:pointer;
+    }
+    header.zombcash-shared-header .zsh-login-slot{display:flex!important;align-items:center!important}
+    header.zombcash-shared-header .zsh-menu-label{font:700 8px Orbitron,system-ui,sans-serif;letter-spacing:1px}
+    @media(max-width:1450px){
+      header.zombcash-shared-header{grid-template-columns:minmax(0,1fr) auto!important;gap:10px!important;padding:10px 18px!important}
+      header.zombcash-shared-header .zsh-actions{grid-column:2;grid-row:1}
+      header.zombcash-shared-header .zsh-nav{
+        display:none!important;grid-column:1/-1;grid-row:2;justify-content:flex-start!important;
+        align-items:stretch!important;flex-wrap:wrap!important;gap:4px 16px!important;
+        padding:10px 0 3px!important;border-top:1px solid #9bff4520!important;
+      }
+      header.zombcash-shared-header .zsh-nav.zsh-open{display:flex!important}
+      header.zombcash-shared-header .zsh-menu-toggle{
+        display:inline-flex!important;grid-column:1;grid-row:1;align-items:center!important;justify-content:center!important;
+        gap:8px!important;min-width:42px!important;min-height:36px!important;margin:0!important;padding:7px 10px!important;
+        border:1px solid #42613a!important;border-radius:0!important;background:#0b120c!important;color:#9bff45!important;
+        font-size:17px!important;cursor:pointer;
+      }
+      header.zombcash-shared-header .zsh-brand{grid-column:1;grid-row:1;justify-self:start;margin-left:54px!important}
+      header.zombcash-shared-header .zsh-nav>a{flex:0 0 auto!important;min-height:34px!important;padding:8px 0!important;font-size:8px!important}
+      header.zombcash-shared-header .zsh-home{flex-basis:auto!important;width:auto!important}
+      header.zombcash-shared-header .zsh-cta{font-size:7px!important;padding:8px!important}
+      header.zombcash-shared-header .language-trigger{min-width:50px!important;padding:7px!important;font-size:8px!important}
+      header.zombcash-shared-header .zsh-login-slot{width:100%}
+    }
+    @media(max-width:650px){
+      header.zombcash-shared-header{min-height:68px!important;padding:9px 12px!important;gap:8px!important}
+      header.zombcash-shared-header .zsh-brand{gap:7px!important;margin-left:44px!important}
+      header.zombcash-shared-header .zsh-mark{flex-basis:34px!important;width:34px!important;height:34px!important;font-size:20px!important}
+      header.zombcash-shared-header .zsh-brand-copy{font-size:12px!important}
+      header.zombcash-shared-header .zsh-brand-copy small{font-size:6px!important;letter-spacing:1px!important}
+      header.zombcash-shared-header .zsh-actions{gap:5px!important}
+      header.zombcash-shared-header .zsh-cta{display:none!important}
+      header.zombcash-shared-header .zsh-menu-toggle{min-height:34px!important;padding:7px 8px!important}
+      header.zombcash-shared-header .zsh-nav{gap:4px 13px!important;max-height:70vh!important;overflow-y:auto!important}
+      header.zombcash-shared-header .zsh-nav>a{font-size:8px!important}
+      header.zombcash-shared-header .language-trigger{min-width:44px!important;min-height:32px!important;font-size:8px!important}
+      header.zombcash-shared-header .language-menu{width:180px!important;max-width:calc(100vw - 20px)!important}
+    }
+    @media(max-width:390px){
+      header.zombcash-shared-header{grid-template-columns:minmax(0,1fr) auto!important;padding:8px!important}
+      header.zombcash-shared-header .zsh-brand{margin-left:40px!important}
+      header.zombcash-shared-header .zsh-brand-copy{font-size:11px!important}
+      header.zombcash-shared-header .zsh-brand-copy small{letter-spacing:.5px!important}
+    }
   `;
+  document.head.querySelector('#zombcash-shared-navigation-style')?.remove();
   document.head.append(style);
+
   const toggle = header.querySelector('.zsh-menu-toggle');
+  const nav = header.querySelector('.zsh-nav');
   toggle.addEventListener('click', () => {
-    const nav = header.querySelector('.zsh-nav');
     const open = nav.classList.toggle('zsh-open');
     toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
   });
+  nav.addEventListener('click', (event) => {
+    if (event.target.closest('a')) {
+      nav.classList.remove('zsh-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open navigation');
+    }
+  });
+
+  // language.js creates the switcher after DOMContentLoaded; place it in the same fixed slot.
+  const moveLanguage = () => {
+    const language = document.querySelector('.language-switcher');
+    const slot = header.querySelector('.zsh-language-slot');
+    if (language && slot && language.parentElement !== slot) slot.append(language);
+  };
+  moveLanguage();
+  new MutationObserver(moveLanguage).observe(document.body, {childList:true,subtree:true});
 })();
