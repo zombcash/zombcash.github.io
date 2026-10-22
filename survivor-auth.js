@@ -39,7 +39,7 @@
   function ensureModal() {
     if (overlay) return;
     const style = document.createElement('style');
-    style.textContent = '.survivor-overlay[hidden]{display:none!important}.survivor-overlay{position:fixed;inset:0;z-index:20000;display:grid;place-items:center;padding:18px;background:#020603df;backdrop-filter:blur(7px)}.survivor-modal{position:relative;width:min(440px,100%);padding:26px;border:1px solid #6a9d42;background:linear-gradient(145deg,#101b12,#070b09);color:#edf5e5;box-shadow:0 22px 80px #000b;font-family:Rajdhani,system-ui,sans-serif}.survivor-modal h2{margin:0 0 10px;color:#9bff45;font:700 19px Orbitron,system-ui,sans-serif}.survivor-modal p{color:#b8c8b6;line-height:1.5}.survivor-modal .survivor-status{min-height:24px;color:#9bff45;font-size:14px}.survivor-modal .survivor-widget{display:flex;justify-content:center;min-height:46px;margin:20px 0}.survivor-modal .survivor-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.survivor-modal button{border:1px solid #426341;background:#0b120c;color:#b8f992;padding:10px 14px;cursor:pointer;font:700 11px Orbitron,system-ui,sans-serif}.survivor-modal .survivor-stats{border:1px solid #2b4930;padding:14px;margin-top:16px}.survivor-modal .survivor-points{font:700 26px Orbitron,system-ui,sans-serif;color:#9bff45}.survivor-modal .survivor-privacy{font-size:12px;color:#8e9c8d}.survivor-modal [hidden]{display:none!important}.survivor-entry-button{display:inline-flex;align-items:center;justify-content:center;margin:10px 0 0;padding:10px 12px;border:1px solid #426341;background:#0b120c;color:#b8f992;font:700 10px Orbitron,system-ui,sans-serif;cursor:pointer;white-space:normal}';
+    style.textContent = '.survivor-overlay[hidden]{display:none!important}.survivor-overlay{position:fixed;inset:0;z-index:20000;display:grid;place-items:center;padding:18px;background:#020603df;backdrop-filter:blur(7px)}.survivor-modal{position:relative;width:min(440px,100%);padding:26px;border:1px solid #6a9d42;background:linear-gradient(145deg,#101b12,#070b09);color:#edf5e5;box-shadow:0 22px 80px #000b;font-family:Rajdhani,system-ui,sans-serif}.survivor-modal h2{margin:0 0 10px;color:#9bff45;font:700 19px Orbitron,system-ui,sans-serif}.survivor-modal p{color:#b8c8b6;line-height:1.5}.survivor-modal .survivor-status{min-height:24px;color:#9bff45;font-size:14px}.survivor-modal .survivor-widget{display:flex;justify-content:center;min-height:46px;margin:20px 0}.survivor-modal .survivor-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.survivor-modal button{border:1px solid #426341;background:#0b120c;color:#b8f992;padding:10px 14px;cursor:pointer;font:700 11px Orbitron,system-ui,sans-serif}.survivor-modal .survivor-stats{border:1px solid #2b4930;padding:14px;margin-top:16px}.survivor-modal .survivor-points{font:700 26px Orbitron,system-ui,sans-serif;color:#9bff45}.survivor-modal .survivor-dashboard{display:grid;gap:12px}.survivor-modal .survivor-stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.survivor-modal .survivor-stat-tile{border:1px solid #263b29;background:#080f0a;padding:12px;min-width:0}.survivor-modal .survivor-stat-tile span{display:block;color:#9aa996;font:600 9px Orbitron,system-ui,sans-serif;letter-spacing:.5px}.survivor-modal .survivor-stat-tile b{display:block;color:#9bff45;font:700 22px Orbitron,system-ui,sans-serif;margin:8px 0}.survivor-modal .survivor-stat-tile small{color:#9aa996}.survivor-modal .survivor-activity{border-top:1px solid #29402b;padding-top:10px}.survivor-modal .survivor-activity h3{font:700 10px Orbitron,system-ui,sans-serif;color:#9bff45}.survivor-modal .survivor-activity-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid #17251a;color:#b9c8b5;font-size:13px}.survivor-modal .survivor-activity-row b{color:#9bff45;white-space:nowrap}@media(max-width:420px){.survivor-modal{padding:18px}.survivor-modal .survivor-stat-grid{grid-template-columns:1fr 1fr}}.survivor-modal .survivor-privacy{font-size:12px;color:#8e9c8d}.survivor-modal [hidden]{display:none!important}.survivor-entry-button{display:inline-flex;align-items:center;justify-content:center;margin:10px 0 0;padding:10px 12px;border:1px solid #426341;background:#0b120c;color:#b8f992;font:700 10px Orbitron,system-ui,sans-serif;cursor:pointer;white-space:normal}';
     document.head.append(style);
     overlay = document.createElement('div');
     overlay.className = 'survivor-overlay';
@@ -70,8 +70,17 @@
     bodyNode.innerHTML = '';
     if (profile) {
       const joined = profile.createdAt ? new Date(profile.createdAt).toLocaleDateString() : '—';
-      bodyNode.innerHTML = '<div class="survivor-stats"><div>' + safe(t('points')) + '</div><div class="survivor-points">' + safe(profile.points || 0) + '</div><p>' + safe(t('joined')) + ': ' + safe(joined) + '</p></div>';
+      bodyNode.innerHTML = '<div class="survivor-dashboard">' +
+        '<div class="survivor-stats"><div>' + safe(t('points')) + '</div><div class="survivor-points" id="survivor-live-points">' + safe(profile.points || 0) + ' SP</div><p>' + safe(t('joined')) + ': ' + safe(joined) + '</p></div>' +
+        '<div class="survivor-stat-grid">' +
+        '<div class="survivor-stat-tile"><span>REFERRALS</span><b id="survivor-referrals">—</b><small>verified survivors</small></div>' +
+        '<div class="survivor-stat-tile"><span>SITE VISITS</span><b id="survivor-visits">—</b></div>' +
+        '<div class="survivor-stat-tile"><span>MAKER SAVES</span><b id="survivor-maker-saves">—</b></div>' +
+        '<div class="survivor-stat-tile"><span>GAMES COMPLETED</span><b id="survivor-games">—</b></div></div>' +
+        '<div class="survivor-activity"><h3>RECENT ACTIVITY</h3><div id="survivor-activity-list">Loading activity…</div></div>' +
+        '<p class="survivor-privacy">Points have no monetary value and provide no benefits. Activity tracking only.</p></div>';
       statusNode.textContent = '';
+      loadSurvivorDashboard();
       return;
     }
     const label = document.createElement('p'); label.textContent = t('connect'); bodyNode.append(label, widgetNode);
@@ -131,6 +140,57 @@
       statusNode.textContent = t('error');
     } finally {
       isBusy = false;
+    }
+  }
+  async function loadSurvivorDashboard() {
+    const auth = token();
+    if (!auth || !bodyNode) return;
+    const set = (id, value) => { const node = bodyNode.querySelector('#' + id); if (node) node.textContent = String(value); };
+    try {
+      const [profileResponse, activityResponse, referralResponse] = await Promise.all([
+        fetch(API + '/api/profile', {headers:{'Authorization':'Bearer ' + auth}, cache:'no-store'}),
+        fetch(API + '/api/profile/activity', {headers:{'Authorization':'Bearer ' + auth}, cache:'no-store'}),
+        fetch(API + '/api/referrals/me', {headers:{'Authorization':'Bearer ' + auth}, cache:'no-store'})
+      ]);
+      if (profileResponse.ok) {
+        const data = await profileResponse.json();
+        if (data.profile) {
+          localStorage.setItem(STORAGE_PROFILE, JSON.stringify(data.profile));
+          set('survivor-live-points', Number(data.profile.points || 0).toLocaleString() + ' SP');
+        }
+      }
+      let activity = [];
+      if (activityResponse.ok) {
+        const data = await activityResponse.json();
+        activity = Array.isArray(data.activity) ? data.activity : [];
+      }
+      const count = type => activity.filter(row => row.event_type === type).length;
+      set('survivor-visits', count('daily_visit'));
+      set('survivor-maker-saves', count('maker_saved'));
+      set('survivor-games', count('game_completed'));
+      if (referralResponse.ok) {
+        const data = await referralResponse.json();
+        set('survivor-referrals', Number(data.verifiedReferrals || 0));
+      } else set('survivor-referrals', '—');
+      const list = bodyNode.querySelector('#survivor-activity-list');
+      if (list) {
+        list.innerHTML = '';
+        if (!activity.length) list.textContent = 'No activity recorded yet.';
+        activity.slice(0, 8).forEach(row => {
+          const line = document.createElement('div'); line.className = 'survivor-activity-row';
+          const label = document.createElement('span');
+          const labels = {login:'Telegram login',daily_visit:'Site visit',maker_saved:'Zombie Maker save',game_completed:'Game completed',referral_claimed:'Referral linked'};
+          label.textContent = labels[row.event_type] || String(row.event_type || 'Activity').replace(/_/g, ' ');
+          const value = document.createElement('b');
+          const delta = Number(row.points_delta || 0);
+          value.textContent = (delta > 0 ? '+' : '') + delta + ' SP';
+          line.append(label, value); list.append(line);
+        });
+      }
+      updateCta();
+    } catch (_) {
+      const list = bodyNode.querySelector('#survivor-activity-list');
+      if (list) list.textContent = 'Activity temporarily unavailable.';
     }
   }
   async function recordDailyVisit() {
