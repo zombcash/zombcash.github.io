@@ -111,6 +111,24 @@ hi:"UTC के प्रत्येक दिन हर ब्राउज़�
 };
 Object.entries(sharedHome).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
+
+/* Legal footer and shared labels found still English in the supplied locale PDFs. */
+const sharedLegal={
+"$ZOMBCASH is a community memecoin.":{
+de:"$ZOMBCASH ist ein Community-Memecoin.",fr:"$ZOMBCASH est un memecoin communautaire.",it:"$ZOMBCASH è una memecoin della community.",ja:"$ZOMBCASHはコミュニティ主導のミームコインです。","zh-CN":"$ZOMBCASH 是一款社区迷因币。",ru:"$ZOMBCASH — мемкоин сообщества.",tr:"$ZOMBCASH topluluk odaklı bir memecoin'dir.",hi:"$ZOMBCASH एक कम्युनिटी मीमकॉइन है。"},
+"Crypto assets are volatile.":{
+de:"Krypto-Assets sind volatil.",fr:"Les crypto-actifs sont volatils.",it:"Le cripto-attività sono volatili.",ja:"暗号資産の価格は大きく変動します。","zh-CN":"加密资产价格波动较大。",ru:"Криптоактивы отличаются высокой волатильностью.",tr:"Kripto varlıklar yüksek oynaklığa sahiptir.",hi:"क्रिप्टो परिसंपत्तियों की कीमतों में तेज़ उतार-चढ़ाव होता है。"},
+"Always verify the contract and do your own research.":{
+de:"Prüfe immer die Contract-Adresse und recherchiere selbst.",fr:"Vérifiez toujours l’adresse du contrat et faites vos propres recherches.",it:"Verifica sempre l’indirizzo del contratto e fai le tue ricerche.",ja:"必ずコントラクトアドレスを確認し、自分で調査してください。","zh-CN":"请务必核实合约地址并自行研究。",ru:"Всегда проверяйте адрес контракта и проводите собственное исследование.",tr:"Sözleşme adresini mutlaka doğrula ve kendi araştırmanı yap.",hi:"कॉन्ट्रैक्ट एड्रेस हमेशा जाँचें और अपना शोध स्वयं करें。"},
+"This website is informational and is not financial advice.":{
+de:"Diese Website dient nur der Information und stellt keine Finanzberatung dar.",fr:"Ce site est fourni à titre informatif et ne constitue pas un conseil financier.",it:"Questo sito ha solo scopo informativo e non costituisce consulenza finanziaria.",ja:"このウェブサイトは情報提供を目的としており、金融アドバイスではありません。","zh-CN":"本网站仅供信息参考，不构成财务建议。",ru:"Этот сайт носит информационный характер и не является финансовой рекомендацией.",tr:"Bu web sitesi yalnızca bilgilendirme amaçlıdır ve finansal tavsiye niteliği taşımaz.",hi:"यह वेबसाइट केवल जानकारी के लिए है और वित्तीय सलाह नहीं है。"},
+"OFFICIAL SOLANA CONTRACT":{
+de:"OFFIZIELLER SOLANA-CONTRACT",fr:"CONTRAT SOLANA OFFICIEL",it:"CONTRATTO SOLANA UFFICIALE",ja:"Solana公式コントラクト","zh-CN":"Solana 官方合约",ru:"ОФИЦИАЛЬНЫЙ КОНТРАКТ SOLANA",tr:"RESMÎ SOLANA SÖZLEŞMESİ",hi:"आधिकारिक SOLANA कॉन्ट्रैक्ट"},
+"NOT FINANCIAL ADVICE · ALWAYS DO YOUR OWN RESEARCH":{
+de:"KEINE FINANZBERATUNG · RECHERCHIERE IMMER SELBST",fr:"PAS UN CONSEIL FINANCIER · FAITES TOUJOURS VOS PROPRES RECHERCHES",it:"NON È CONSULENZA FINANZIARIA · FAI SEMPRE LE TUE RICERCHE",ja:"金融アドバイスではありません · 必ずご自身で調査してください","zh-CN":"非财务建议 · 请务必自行研究",ru:"НЕ ФИНАНСОВАЯ РЕКОМЕНДАЦИЯ · ВСЕГДА ПРОВОДИТЕ СОБСТВЕННОЕ ИССЛЕДОВАНИЕ",tr:"FİNANSAL TAVSİYE DEĞİLDİR · DAİMA KENDİN ARAŞTIR",hi:"वित्तीय सलाह नहीं · हमेशा अपना शोध स्वयं करें"}
+};
+Object.entries(sharedLegal).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 let current='en';const originals=new WeakMap();
 function translate(root=document.body){const map=langs[current].map,walk=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),nodes=[];while(walk.nextNode())nodes.push(walk.currentNode);nodes.forEach(n=>{if(!n.parentElement||n.parentElement.closest('script,style,textarea,code,pre,.language-switcher,[data-no-translate]'))return;if(!originals.has(n))originals.set(n,n.nodeValue);const o=originals.get(n),v=map[norm(o)];if(v){const a=(o.match(/^\s*/)||[''])[0],b=(o.match(/\s*$/)||[''])[0];n.nodeValue=a+v+b}else n.nodeValue=o;});}
