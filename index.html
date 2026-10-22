@@ -621,6 +621,54 @@ html.arcade-snake-embed.arcade-snake-fullscreen .game-screen{flex:1 1 auto!impor
 html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute!important;inset:0!important;width:100%!important;height:100%!important}
 @media(max-width:560px){html.arcade-snake-embed .game-screen{aspect-ratio:4/3!important}}
 </style>
+
+<style id="zc-multilingual-hero-layout-fix">
+/* Multilingual hero: translated headlines must grow naturally instead of being cropped. */
+@media (min-width:681px){
+  .hero{
+    height:auto!important;
+    min-height:calc(100vh - 92px)!important;
+    max-height:none!important;
+    overflow:visible!important;
+    align-items:center!important;
+    padding-top:clamp(30px,4vh,52px)!important;
+    padding-bottom:76px!important;
+  }
+  .hero-layout{
+    grid-template-columns:minmax(0,1.08fr) minmax(300px,.92fr)!important;
+    gap:clamp(22px,3vw,48px)!important;
+    align-items:center!important;
+  }
+  .hero-content{min-width:0!important;max-width:100%!important}
+  .hero h1{
+    font-size:clamp(40px,3.75vw,58px)!important;
+    line-height:1.04!important;
+    letter-spacing:-1.7px!important;
+    overflow-wrap:normal!important;
+    word-break:normal!important;
+    hyphens:auto!important;
+  }
+  .hero-copy{max-width:500px!important}
+  html[lang="de"] .hero h1,
+  html[lang="it"] .hero h1,
+  html[lang="ru"] .hero h1,
+  html[lang="fr"] .hero h1,
+  html[lang="tr"] .hero h1{font-size:clamp(36px,3.05vw,48px)!important;letter-spacing:-1.2px!important}
+  html[lang="hi"] .hero h1,
+  html[lang="ja"] .hero h1,
+  html[lang="zh-CN"] .hero h1{font-size:clamp(38px,3.25vw,52px)!important;letter-spacing:-.5px!important;line-height:1.12!important}
+  .hero .outbreak-panel,.hero .zc-hero-art-panel{min-width:0!important;max-width:100%!important}
+}
+@media(max-width:680px){
+  .hero{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;padding-bottom:28px!important}
+  .hero-layout{min-width:0!important;grid-template-columns:minmax(0,1fr)!important}
+  .hero-content{min-width:0!important;width:100%!important}
+  .hero h1{font-size:clamp(34px,9vw,52px)!important;line-height:1.04!important;letter-spacing:-1px!important;overflow-wrap:anywhere!important;word-break:normal!important;hyphens:auto!important}
+  html[lang="de"] .hero h1,html[lang="it"] .hero h1,html[lang="ru"] .hero h1,html[lang="fr"] .hero h1,html[lang="tr"] .hero h1{font-size:clamp(32px,8vw,44px)!important}
+  html[lang="ja"] .hero h1,html[lang="zh-CN"] .hero h1,html[lang="hi"] .hero h1{font-size:clamp(32px,8.5vw,46px)!important;line-height:1.12!important}
+  .hero-bottom{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;margin-top:18px!important}
+}
+</style>
 </head>
 <body>
 <div class="scanlines"></div>
