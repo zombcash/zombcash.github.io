@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050907">
+<title>Crew Vote | ZombieCash</title>
+<meta name="description" content="Vote on the next ZombieCash community mission and see the live results.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--green:#9bff45;--bg:#050907;--panel:#0b120d;--line:#263728;--muted:#91a18e}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 0%,#152316 0,transparent 55%),var(--bg);color:#e8f2e3;font-family:Rajdhani,system-ui,sans-serif;min-height:100vh}
+main{width:min(920px,calc(100% - 32px));margin:clamp(32px,7vh,80px) auto 80px}
+.kicker{color:var(--green);font:700 10px Orbitron,sans-serif;letter-spacing:2px}
+h1{font:800 clamp(32px,6vw,66px)/1.1 Orbitron,sans-serif;letter-spacing:-2px;margin:14px 0 16px}h1 span{color:var(--green)}
+.intro{max-width:650px;color:#aab8a5;font-size:19px;line-height:1.5;margin:0 0 30px}
+.vote-card{border:1px solid #355034;background:linear-gradient(145deg,#101a12,#080d0a);box-shadow:0 18px 70px #0008;padding:clamp(18px,4vw,34px);border-radius:10px}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.card-head h2{font:700 clamp(17px,3vw,24px)/1.3 Orbitron,sans-serif;margin:8px 0 0}.green{color:var(--green)}
+.status{color:var(--green);font:700 9px Orbitron,sans-serif;letter-spacing:1px;border:1px solid #42613a;padding:8px 10px;white-space:nowrap}
+.note{color:var(--muted);font-size:16px;line-height:1.45;margin:18px 0}
+#daily-vote-options{display:grid;gap:10px}
+.daily-vote-option{position:relative;display:grid;grid-template-columns:16px minmax(0,1fr) auto;align-items:center;gap:12px;overflow:hidden;text-align:left;min-height:64px;padding:14px 16px;border:1px solid #2c422d;background:#080e09;color:#e8f2e3;cursor:pointer;font:700 14px Rajdhani,sans-serif}
+.daily-vote-option:hover:not(:disabled),.daily-vote-option.selected{border-color:var(--green);background:#132012}
+.daily-vote-option:disabled{cursor:default;opacity:.88}.vote-result-bar{position:absolute;inset:0 auto 0 0;background:#9bff4514;pointer-events:none;transition:width .3s}.vote-radio{width:13px;height:13px;border:1px solid #77916c;border-radius:50%;z-index:1}.selected .vote-radio{border:4px solid var(--green)}
+.vote-option-label,.vote-percent{position:relative;z-index:1}.vote-percent{color:var(--green);font:700 10px Orbitron,sans-serif;white-space:nowrap}
+.vote-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:22px;padding-top:16px;color:#b6c6b0;font:700 9px Orbitron,sans-serif;letter-spacing:.7px}
+.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}.rule{padding:15px;border:1px solid #233325;background:#080d0a}.rule strong{display:block;color:var(--green);font:700 9px Orbitron,sans-serif;margin-bottom:7px}.rule p{margin:0;color:#93a38e;font-size:14px;line-height:1.35}
+@media(max-width:600px){.rules{grid-template-columns:1fr}.card-head{flex-direction:column}.status{align-self:flex-start}.daily-vote-option{grid-template-columns:14px minmax(0,1fr);}.vote-percent{grid-column:2}.vote-foot{font-size:8px}}
+</style>
+</head>
+<body>
+<header></header>
+<main>
+<div class="kicker">[ COMMUNITY OPERATIONS / DAILY ]</div>
+<h1>THE CREW <span>VOTES.</span></h1>
+<p class="intro">Your vote helps choose what the ZombieCash crew builds and does next. This page is the dedicated home for community polls and future voting features.</p>
+<section class="vote-card" aria-labelledby="poll-title">
+<div class="card-head"><div><div class="kicker">[ DAILY COMMUNITY POLL ]</div><h2 id="poll-title">WHAT'S OUR NEXT <span class="green">MISSION?</span></h2></div><span id="vote-status" class="status" aria-live="polite">LOADING…</span></div>
+<p class="note">One vote per browser each UTC day. Results are shared with the community.</p>
+<div id="daily-vote-options" aria-live="polite"><p class="note">Loading today's poll…</p></div>
+<div class="vote-foot"><span id="vote-total">0 VOTES</span><span id="vote-date">UTC DAILY POLL</span></div>
+</section>
+<div class="rules">
+<div class="rule"><strong>01 / ONE DAILY VOTE</strong><p>Vote once per browser per UTC day. The poll resets on the next UTC date.</p></div>
+<div class="rule"><strong>02 / LIVE RESULTS</strong><p>Vote totals and percentages are loaded from the ZombieCash community API.</p></div>
+<div class="rule"><strong>03 / MORE TO COME</strong><p>This page is designed to expand with proposals, mission history, and additional community decisions.</p></div>
+</div>
+</main>
+<script>
+(()=>{'use strict';
+const api='https://zombcash-bot.fadehost.app', options={meme:'More ZombieCash memes',raid:'Community raid mission',game:'New survival game challenge'};
+const el=id=>document.getElementById(id), box=el('daily-vote-options'),status=el('vote-status'),totalEl=el('vote-total'),dateEl=el('vote-date');
+let voter='',chosen=null,busy=false;
+try{voter=localStorage.getItem('zombcash-community-id')||'';if(!/^[a-f0-9-]{16,80}$/.test(voter)){voter=(crypto.randomUUID?crypto.randomUUID():(Date.now().toString(16)+'-'+Math.random().toString(16).slice(2)+'-'+Math.random().toString(16).slice(2))).toLowerCase();localStorage.setItem('zombcash-community-id',voter)}}catch(_){voter=(Date.now().toString(16)+'-'+Math.random().toString(16).slice(2)).toLowerCase()}
+function render(data,already=false){if(!data)return;box.replaceChildren();const total=Number(data.total||0),previous=chosen||data.yourVote||null;
+Object.entries(options).forEach(([key,label])=>{const count=Number(data.votes?.[key]||0),pct=total?Math.round(count/total*100):0,b=document.createElement('button');b.type='button';b.className='daily-vote-option'+(previous===key?' selected':'');b.disabled=already||busy;
+const bar=document.createElement('span');bar.className='vote-result-bar';bar.style.width=pct+'%';const radio=document.createElement('span');radio.className='vote-radio';const title=document.createElement('span');title.className='vote-option-label';title.textContent=label;const result=document.createElement('span');result.className='vote-percent';result.textContent=total?pct+'% · '+count:'VOTE';b.append(bar,radio,title,result);b.addEventListener('click',()=>cast(key));box.append(b)});
+totalEl.textContent=total.toLocaleString('en-US')+(total===1?' VOTE':' VOTES');dateEl.textContent='UTC · '+(data.date||new Date().toISOString().slice(0,10));status.textContent=already?'VOTE RECORDED':'OPEN POLL'}
+async function load(){try{const r=await fetch(api+'/api/vote',{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);const d=await r.json();let voted=false;try{voted=localStorage.getItem('zombcash-voted-'+d.date)==='yes'}catch(_){}render(d,voted)}catch(_){status.textContent='POLL OFFLINE';box.innerHTML='<p class="note">The community poll is temporarily unavailable. Please try again shortly.</p>'}}
+async function cast(option){if(busy)return;busy=true;chosen=option;status.textContent='SENDING VOTE…';try{const r=await fetch(api+'/api/vote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({option,voter})});const d=await r.json();if(!r.ok&&r.status!==409)throw Error(d.error||'Vote failed');if(d.date)try{localStorage.setItem('zombcash-voted-'+d.date,'yes')}catch(_){}render(d,true);if(r.status===409)status.textContent='ALREADY VOTED'}catch(e){status.textContent='VOTE FAILED';const p=document.createElement('p');p.className='note';p.textContent='Could not save your vote: '+e.message;box.append(p)}finally{busy=false}}
+load();setInterval(load,60000);
+})();
+</script>
+<script src="shared-nav.js?v=shared-navigation-20261022-2" defer></script>
+<script src="language.js?v=localization-20261022-15" defer></script>
+</body></html>
