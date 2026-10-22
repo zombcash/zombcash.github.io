@@ -63,7 +63,7 @@ window.addEventListener('keyup',e=>{if(mode!=='snake'||!snakeKeys.has(e.key))ret
 window.addEventListener('blur',()=>{if(mode==='snake')try{snakeFrame.contentWindow.postMessage({type:'zombcash-arcade-snake-clear-keys'},location.origin)}catch(_){}});
 
 snakeFrame.addEventListener('load',()=>{snakeFrame.dataset.ready='1';if(snakePendingStart)sendSnakeStart();syncSnakeHud()});
-function startSnake(){snakePendingStart=true;if(snakeFrame.dataset.ready==='1')sendSnakeStart();else snakeFrame.src='index.html?arcadeSnake=1&embedVersion=3#snake-game'}
+function startSnake(){snakePendingStart=true;if(snakeFrame.dataset.ready==='1')sendSnakeStart();else snakeFrame.src='index.html?arcadeSnake=1&embedVersion=5#snake-game'}
 const W=960,H=540,keys=new Set();let mode='breaker',score=0,lives=3,level=1,running=false,over=false,last=0,raf=0;
 let paddle,ball,bricks,maze,player,ghosts,brains,shots,blocks,spawn=0,fireCd=0;
 let survivalGameReceipt=null,survivalGameReceiptPromise=null,survivalGameReceiptUsed=false;
