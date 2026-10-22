@@ -595,7 +595,24 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 .btn,.top-cta,.home-return-button,.zrai-period,.zrai-toolbar button,.language-trigger{max-width:100%;overflow-wrap:anywhere}
 .hero-actions,.community-buttons,.zrai-toolbar{flex-wrap:wrap}
 .zrai-toolbar>*{min-width:0}
-</style></head>
+</style><script>if(new URLSearchParams(location.search).get('arcadeSnake')==='1')document.documentElement.classList.add('arcade-snake-embed');</script>
+<style id="arcade-snake-embed-style">
+html.arcade-snake-embed,html.arcade-snake-embed body{margin:0!important;padding:0!important;width:100%!important;min-width:0!important;min-height:0!important;height:auto!important;overflow:hidden!important;background:#080b11!important}
+html.arcade-snake-embed body>*:not(#snake-modal){display:none!important}
+html.arcade-snake-embed #snake-modal[open]{display:block!important;position:relative!important;inset:auto!important;transform:none!important;width:100%!important;max-width:none!important;height:auto!important;max-height:none!important;margin:0!important;padding:0!important;overflow:visible!important;border:0!important;border-radius:0!important;background:transparent!important;color:#edf5e5!important;box-shadow:none!important}
+html.arcade-snake-embed #snake-modal::backdrop{background:transparent!important}
+html.arcade-snake-embed .snake-modal-head,html.arcade-snake-embed .game-head,html.arcade-snake-embed .game-foot,html.arcade-snake-embed .game-submit{display:none!important}
+html.arcade-snake-embed .game-box{width:100%!important;max-width:none!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+html.arcade-snake-embed .game-screen{position:relative!important;width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:16/9!important;overflow:hidden!important;border:1px solid #263628!important;background:#050807!important}
+html.arcade-snake-embed #zombie-canvas{display:block!important;width:100%!important;height:100%!important;min-height:0!important;touch-action:none!important}
+html.arcade-snake-embed .game-center{padding:12px!important}
+html.arcade-snake-embed .game-center .game-skull{font-size:clamp(24px,4vw,42px)!important}
+html.arcade-snake-embed .game-center #game-action{display:none!important}
+html.arcade-snake-embed .game-score{right:12px!important;bottom:10px!important;font-size:10px!important}
+html.arcade-snake-embed .game-grid{inset:0!important}
+@media(max-width:560px){html.arcade-snake-embed .game-screen{aspect-ratio:4/3!important}}
+</style>
+</head>
 <body>
 <div class="scanlines"></div>
 <header class="topbar">
