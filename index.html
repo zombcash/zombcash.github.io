@@ -918,6 +918,7 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
       <a href="https://dexscreener.com/solana/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">DexScreener ↗</a>
       <a href="https://jup.ag/swap/SOL-6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">Swap on Jupiter ↗</a>
     </nav>
+    <div class="footer-support-grid">
     <div class="site-footer-column site-feedback" aria-label="Website feedback">
       <h2>HELP SHAPE THE SITE</h2>
       <p>Have an idea or found something to improve? Share your suggestions in our community channels.</p>
@@ -938,9 +939,27 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
       <button class="footer-copy-wallet" type="button" id="footer-copy-wallet">COPY DONATION ADDRESS</button>
       <span id="footer-donation-feedback" class="footer-donation-feedback" aria-live="polite"></span>
     </section>
+    </div>
   </div>
   <div class="site-footer-bottom"><span class="footer-right">MARKET DIED. ZOMBIECASH DIDN'T. <b>© 2026</b></span><p>$ZOMBCASH is a community memecoin. Crypto assets are volatile. Always verify the contract and do your own research. This website is informational and is not financial advice.</p></div>
-<style id="footer-growth-donation">.site-footer-main{grid-template-columns:minmax(0,1.35fr) minmax(145px,.7fr) minmax(220px,1fr);gap:clamp(26px,5vw,78px)}.footer-growth,.footer-donate{padding:18px;border:1px solid #2c4932;background:linear-gradient(155deg,#0d1910,#080d0a);min-height:230px}.footer-growth p,.footer-donate p{margin:0 0 12px;color:#a5b5a7;font:500 14px/1.55 Rajdhani,sans-serif}.footer-growth .footer-action,.footer-donate .footer-action{display:inline-flex;align-items:center;justify-content:center;margin-top:auto;padding:10px 11px;border:1px solid #527b45;background:#122315;color:#b8ff8b;font:700 9px/1.5 Orbitron,sans-serif;letter-spacing:.35px;text-decoration:none;overflow-wrap:anywhere}.footer-growth .footer-action:hover,.footer-donate .footer-action:hover{background:#1b321c;border-color:#9bff45}.footer-donation-address{display:block;margin:0 0 10px;padding:9px;border:1px solid #2b4430;background:#07100a;color:#d4e6d1;font:500 10px/1.5 monospace;overflow-wrap:anywhere;user-select:all}.footer-copy-wallet{padding:9px 10px;border:1px solid #354c37;background:transparent;color:#b8c8b7;font:700 8px/1.5 Orbitron,sans-serif;cursor:pointer}.footer-donation-feedback{min-height:14px;color:#9bff45;font:500 12px Rajdhani,sans-serif}@media(max-width:1200px){.site-footer-main{grid-template-columns:repeat(2,minmax(0,1fr))}.site-footer-brand{grid-column:1/-1}.footer-growth,.footer-donate{min-height:0}}@media(max-width:560px){.site-footer-main{grid-template-columns:minmax(0,1fr);gap:24px}.site-footer-brand{grid-column:auto}.footer-growth,.footer-donate{padding:16px}.site-footer-bottom{flex-direction:column;gap:10px}}</style>
+<style id="footer-growth-donation">
+.site-footer-main{grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,2.4vw,36px);align-items:stretch}
+.site-footer-main>.site-footer-brand,.site-footer-main>nav.site-footer-column{display:none}
+.footer-support-grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2vw,28px);align-items:stretch}
+.footer-support-grid>.site-feedback,.footer-support-grid>.footer-growth,.footer-support-grid>.footer-donate{box-sizing:border-box;min-width:0;min-height:300px;padding:22px;display:flex;flex-direction:column;align-items:stretch;gap:10px;border:1px solid #2c4932;border-radius:2px;background:linear-gradient(155deg,rgba(13,25,16,.98),rgba(8,13,10,.98));box-shadow:inset 0 1px 0 rgba(155,255,69,.04)}
+.footer-support-grid h2{margin:0 0 6px;color:#b8ff8b;font:700 11px/1.5 Orbitron,sans-serif;letter-spacing:.65px;text-transform:uppercase}
+.footer-support-grid p{max-width:none;margin:0 0 10px;color:#a5b5a7;font:500 15px/1.55 Rajdhani,sans-serif}
+.footer-support-grid .site-feedback>a,.footer-support-grid .footer-action,.footer-support-grid .footer-copy-wallet{box-sizing:border-box;width:100%;min-height:42px;margin:0;padding:11px 12px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #527b45;border-radius:2px;background:#122315;color:#b8ff8b;font:700 9px/1.45 Orbitron,sans-serif;letter-spacing:.35px;text-align:center;text-decoration:none;overflow-wrap:anywhere;cursor:pointer;transition:background .18s ease,border-color .18s ease,color .18s ease}
+.footer-support-grid .site-feedback>a{margin-top:2px}
+.footer-support-grid .site-feedback>a:first-of-type{margin-top:auto}
+.footer-support-grid .site-feedback>a:hover,.footer-support-grid .footer-action:hover,.footer-support-grid .footer-copy-wallet:hover{background:#1b321c;border-color:#9bff45;color:#d8ffbd;text-decoration:none}
+.footer-support-grid .footer-growth .footer-action{margin-top:auto}
+.footer-support-grid .footer-donation-address{display:block;box-sizing:border-box;width:100%;margin:0 0 4px;padding:11px;border:1px solid #2b4430;border-radius:2px;background:#07100a;color:#d4e6d1;font:500 11px/1.55 monospace;overflow-wrap:anywhere;user-select:all}
+.footer-support-grid .footer-donate .footer-phantom{margin-top:auto}
+.footer-support-grid .footer-donation-feedback{min-height:14px;color:#9bff45;font:500 12px Rajdhani,sans-serif}
+@media(max-width:900px){.footer-support-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.footer-support-grid>.site-feedback{grid-column:1/-1;min-height:220px}}
+@media(max-width:560px){.footer-support-grid{grid-template-columns:minmax(0,1fr);gap:16px}.footer-support-grid>.site-feedback{grid-column:auto}.footer-support-grid>.site-feedback,.footer-support-grid>.footer-growth,.footer-support-grid>.footer-donate{min-height:0;padding:18px}.footer-support-grid .site-feedback>a:first-of-type{margin-top:4px}.site-footer-bottom{flex-direction:column;gap:10px}}
+</style>
 </footer>
 <div class="page-scroll-controls" aria-label="Page navigation">
   <button type="button" id="scroll-to-top" aria-label="Scroll to top" title="Back to top"><span aria-hidden="true">↑</span></button>
