@@ -208,6 +208,41 @@
     }
   });
 
+  // Keep the generated navigation labels in sync with the existing nine-language selector.
+  const navDictionary = {
+    de:['LEBENDIGE WELT','RADAR','CREW-ABSTIMMUNG','ZOMBIE-LABOR','ARCADE','ZOMBIE-GALERIE','ZOMBIE-MAKER','AUSBRUCH','COMMUNITY','$ZOMBCASH KAUFEN','ZURÜCK ZUR STARTSEITE','ÜBERLEBENDEN BEITRETEN','TELEGRAM ÖFFNEN','MENÜ'],
+    fr:['MONDE VIVANT','RADAR','VOTE DE L’ÉQUIPE','LABO ZOMBIE','ARCADE','GALERIE ZOMBIE','CRÉATEUR DE ZOMBIES','ÉPIDÉMIE','COMMUNAUTÉ','ACHETER $ZOMBCASH','RETOUR À L’ACCUEIL','REJOINDRE LES SURVIVANTS','OUVRIR TELEGRAM','MENU'],
+    it:['MONDO VIVO','RADAR','VOTO DELLA CREW','LABORATORIO ZOMBIE','ARCADE','GALLERIA ZOMBIE','CREA ZOMBIE','FOCOLAIO','COMMUNITY','COMPRA $ZOMBCASH','TORNA ALLA HOME','UNISCITI AI SOPRAVVISSUTI','APRI TELEGRAM','MENU'],
+    ja:['ライブワールド','レーダー','クルー投票','ゾンビラボ','アーケード','ゾンビギャラリー','ゾンビメーカー','アウトブレイク','コミュニティ','$ZOMBCASHを購入','ホームに戻る','サバイバーに参加','Telegramを開く','メニュー'],
+    'zh-CN':['实时世界','雷达','团队投票','僵尸实验室','街机','僵尸画廊','僵尸制作器','爆发','社区','购买 $ZOMBCASH','返回首页','加入幸存者','打开 Telegram','菜单'],
+    ru:['ЖИВОЙ МИР','РАДАР','ГОЛОСОВАНИЕ КОМАНДЫ','ЗОМБИ-ЛАБОРАТОРИЯ','АРКАДА','ГАЛЕРЕЯ ЗОМБИ','СОЗДАТЕЛЬ ЗОМБИ','ВСПЫШКА','СООБЩЕСТВО','КУПИТЬ $ZOMBCASH','НА ГЛАВНУЮ','ПРИСОЕДИНИТЬСЯ К ВЫЖИВШИМ','ОТКРЫТЬ TELEGRAM','МЕНЮ'],
+    tr:['CANLI DÜNYA','RADAR','EKİP OYLAMASI','ZOMBİ LABORATUVARI','ARCADE','ZOMBİ GALERİSİ','ZOMBİ OLUŞTURUCU','SALGIN','TOPLULUK','$ZOMBCASH SATIN AL','ANA SAYFAYA DÖN','HAYATTA KALANLARA KATIL','TELEGRAM’I AÇ','MENÜ'],
+    hi:['लाइव दुनिया','रडार','टीम वोट','ज़ॉम्बी लैब','आर्केड','ज़ॉम्बी गैलरी','ज़ॉम्बी मेकर','प्रकोप','समुदाय','$ZOMBCASH खरीदें','होम पर लौटें','सर्वाइवर्स से जुड़ें','TELEGRAM खोलें','मेन्यू']
+  };
+  function localizeNav(language) {
+    const translated = navDictionary[language];
+    const links = [...nav.querySelectorAll(':scope > a')];
+    labels.forEach((item, index) => { if (links[index]) links[index].textContent = translated ? translated[index] : item[0]; });
+    const back = nav.querySelector('.zsh-home');
+    if (back) back.innerHTML = '<span aria-hidden="true">←</span> ' + (translated ? translated[10] : 'BACK TO HOME');
+    const cta = header.querySelector('.zsh-cta');
+    if (cta) cta.innerHTML = (file === 'gallery.html' ? (translated ? translated[12] : 'OPEN TELEGRAM') : (translated ? translated[11] : 'JOIN THE SURVIVORS')) + ' <span aria-hidden="true">↗</span>';
+    const menuLabel = header.querySelector('.zsh-menu-label');
+    if (menuLabel) menuLabel.textContent = translated ? translated[13] : 'MENU';
+    const brandSmall = header.querySelector('.zsh-brand-copy small');
+    if (brandSmall) brandSmall.textContent = language === 'ru' ? 'ИНТЕРНЕТ НЕЖИТИ' : 'THE UNDEAD INTERNET';
+    if (loginButton) {
+      const loginLabels = {de:'MIT TELEGRAM ANMELDEN',fr:'SE CONNECTER AVEC TELEGRAM',it:'ACCEDI CON TELEGRAM',ja:'TELEGRAMでログイン','zh-CN':'使用 TELEGRAM 登录',ru:'ВОЙТИ ЧЕРЕЗ TELEGRAM',tr:'TELEGRAM İLE GİRİŞ',hi:'TELEGRAM से लॉग इन करें'};
+      loginButton.textContent = language === 'en' ? 'LOGIN WITH TELEGRAM' : (loginLabels[language] || 'LOGIN WITH TELEGRAM');
+    }
+  }
+  const readLanguage = () => {
+    let language = 'en';
+    try { language = localStorage.getItem('zombcash-language') || 'en'; } catch (_) {}
+    localizeNav(language);
+  };
+  document.addEventListener('zombcash:languagechange', event => localizeNav(event.detail && event.detail.language || 'en'));
+
   // language.js creates the switcher after DOMContentLoaded; place it in the same fixed slot.
   const moveLanguage = () => {
     const language = document.querySelector('.language-switcher');
