@@ -225,6 +225,14 @@
       }
       header.zombcash-shared-header .language-menu{width:180px!important;max-width:calc(100vw - 20px)!important}
     }
+    /* Desktop repair: the shared header must escape page-specific max-width wrappers. */
+    @media(min-width:1451px){
+      header.zombcash-shared-header{position:sticky!important;left:auto!important;transform:none!important;width:100vw!important;max-width:100vw!important;margin-left:calc(50% - 50vw)!important;margin-right:0!important;grid-template-columns:auto minmax(0,1fr) auto!important;gap:clamp(12px,1.2vw,20px)!important}
+      header.zombcash-shared-header .zsh-nav{position:static!important;left:auto!important;top:auto!important;transform:none!important;grid-column:2!important;grid-row:1!important;justify-content:center!important;flex-wrap:wrap!important;gap:4px clamp(8px,.75vw,13px)!important;width:100%!important;max-width:none!important;overflow:visible!important}
+      header.zombcash-shared-header .zsh-nav>a{font-size:clamp(8px,.58vw,9px)!important;flex:0 0 auto!important}
+      header.zombcash-shared-header .zsh-brand{grid-column:1!important;grid-row:1!important}
+      header.zombcash-shared-header .zsh-actions{grid-column:3!important;grid-row:1!important}
+    }
     @media(max-width:390px){
       header.zombcash-shared-header{grid-template-columns:minmax(0,1fr) auto!important;padding:8px!important}
       header.zombcash-shared-header .zsh-brand{margin-left:40px!important}
