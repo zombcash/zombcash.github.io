@@ -43,10 +43,10 @@
           (id === 'maker' && file === 'zombie-maker.html');
         return '<a href="' + destination + '"' + (active ? ' aria-current="page"' : '') + '>' + label + '</a>';
       }).join('') +
-      (!isHome ? '<a class="zsh-home home-return-button" href="index.html"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
     '</nav>' +
     '<div class="zsh-actions">' +
       '<div class="zsh-language-slot"></div>' +
+      (!isHome ? '<a class="zsh-home home-return-button" href="index.html"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
       (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '') +
     '</div>';
 
@@ -108,7 +108,7 @@
     header.zombcash-shared-header .zsh-nav>a:hover,
     header.zombcash-shared-header .zsh-nav>a[aria-current="page"]{color:#9bff45!important}
     header.zombcash-shared-header .zsh-nav>a[aria-current="page"]{border-bottom:1px solid #9bff45!important}
-    header.zombcash-shared-header .zsh-nav>.zsh-home{
+    header.zombcash-shared-header .zsh-actions>.zsh-home{
       flex:0 0 auto!important;min-height:30px!important;padding:7px 9px!important;
       border:1px solid #42613a!important;color:#b8f992!important;font-size:7px!important;
     }
@@ -224,7 +224,7 @@
     const translated = navDictionary[language];
     const links = [...nav.querySelectorAll(':scope > a')].filter(link => !link.classList.contains('zsh-home'));
     labels.forEach((item, index) => { if (links[index]) links[index].textContent = translated ? translated[index] : item[0]; });
-    const back = nav.querySelector('.zsh-home');
+    const back = header.querySelector('.zsh-actions > .zsh-home');
     if (back) back.innerHTML = '<span aria-hidden="true">←</span> ' + (translated ? translated[9] : 'BACK TO HOME');
     const menuLabel = header.querySelector('.zsh-menu-label');
     if (menuLabel) menuLabel.textContent = translated ? translated[12] : 'MENU';
