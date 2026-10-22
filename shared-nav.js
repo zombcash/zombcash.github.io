@@ -102,7 +102,7 @@
     header.zombcash-shared-header .zsh-nav{
       position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;
       display:flex!important;align-items:center!important;justify-content:center!important;
-      gap:clamp(6px,.7vw,12px)!important;min-width:0!important;max-width:calc(100% - 470px)!important;
+      gap:clamp(8px,.85vw,15px)!important;min-width:0!important;max-width:calc(100% - 600px)!important;
       margin:0!important;padding:0!important;border:0!important;background:transparent!important;
       flex-wrap:nowrap!important;overflow:visible!important;max-height:none!important;
     }
@@ -252,14 +252,14 @@
 
   // Keep the generated navigation labels in sync with the existing nine-language selector.
   const navDictionary = {
-    de:['LEBENDIGE WELT','RADAR','CREW-ABSTIMMUNG','ZOMBIE-LABOR','ARCADE','ZOMBIE-GALERIE','ZOMBIE-MAKER','COMMUNITY','$ZOMBCASH KAUFEN','ZURÜCK ZUR STARTSEITE','ÜBERLEBENDEN BEITRETEN','TELEGRAM ÖFFNEN','MENÜ'],
-    fr:['MONDE VIVANT','RADAR','VOTE DE L’ÉQUIPE','LABO ZOMBIE','ARCADE','GALERIE ZOMBIE','CRÉATEUR DE ZOMBIES','COMMUNAUTÉ','ACHETER $ZOMBCASH','RETOUR À L’ACCUEIL','REJOINDRE LES SURVIVANTS','OUVRIR TELEGRAM','MENU'],
-    it:['MONDO VIVO','RADAR','VOTO DELLA CREW','LABORATORIO ZOMBIE','ARCADE','GALLERIA ZOMBIE','CREA ZOMBIE','COMMUNITY','COMPRA $ZOMBCASH','TORNA ALLA HOME','UNISCITI AI SOPRAVVISSUTI','APRI TELEGRAM','MENU'],
-    ja:['ライブワールド','レーダー','クルー投票','ゾンビラボ','アーケード','ゾンビギャラリー','ゾンビメーカー','コミュニティ','$ZOMBCASHを購入','ホームに戻る','サバイバーに参加','Telegramを開く','メニュー'],
-    'zh-CN':['实时世界','雷达','团队投票','僵尸实验室','街机','僵尸画廊','僵尸制作器','社区','购买 $ZOMBCASH','返回首页','加入幸存者','打开 Telegram','菜单'],
-    ru:['ЖИВОЙ МИР','РАДАР','ГОЛОСОВАНИЕ КОМАНДЫ','ЗОМБИ-ЛАБОРАТОРИЯ','АРКАДА','ГАЛЕРЕЯ ЗОМБИ','СОЗДАТЕЛЬ ЗОМБИ','СООБЩЕСТВО','КУПИТЬ $ZOMBCASH','НА ГЛАВНУЮ','ПРИСОЕДИНИТЬСЯ К ВЫЖИВШИМ','ОТКРЫТЬ TELEGRAM','МЕНЮ'],
-    tr:['CANLI DÜNYA','RADAR','EKİP OYLAMASI','ZOMBİ LABORATUVARI','ARCADE','ZOMBİ GALERİSİ','ZOMBİ OLUŞTURUCU','TOPLULUK','$ZOMBCASH SATIN AL','ANA SAYFAYA DÖN','HAYATTA KALANLARA KATIL','TELEGRAM’I AÇ','MENÜ'],
-    hi:['लाइव दुनिया','रडार','टीम वोट','ज़ॉम्बी लैब','आर्केड','ज़ॉम्बी गैलरी','ज़ॉम्बी मेकर','समुदाय','$ZOMBCASH खरीदें','होम पर लौटें','सर्वाइवर्स से जुड़ें','TELEGRAM खोलें','मेन्यू']
+    de:['LEBENDIGE WELT','RADAR','CREW-ABSTIMMUNG','SURVIVOR HUB','ARCADE','ZOMBIE-GALERIE','ZOMBIE-MAKER','COMMUNITY','$ZOMBCASH KAUFEN','ZURÜCK ZUR STARTSEITE','ÜBERLEBENDEN BEITRETEN','TELEGRAM ÖFFNEN','MENÜ'],
+    fr:['MONDE VIVANT','RADAR','VOTE DE L’ÉQUIPE','SURVIVOR HUB','ARCADE','GALERIE ZOMBIE','CRÉATEUR DE ZOMBIES','COMMUNAUTÉ','ACHETER $ZOMBCASH','RETOUR À L’ACCUEIL','REJOINDRE LES SURVIVANTS','OUVRIR TELEGRAM','MENU'],
+    it:['MONDO VIVO','RADAR','VOTO DELLA CREW','SURVIVOR HUB','ARCADE','GALLERIA ZOMBIE','CREA ZOMBIE','COMMUNITY','COMPRA $ZOMBCASH','TORNA ALLA HOME','UNISCITI AI SOPRAVVISSUTI','APRI TELEGRAM','MENU'],
+    ja:['ライブワールド','レーダー','クルー投票','サバイバーハブ','アーケード','ゾンビギャラリー','ゾンビメーカー','コミュニティ','$ZOMBCASHを購入','ホームに戻る','サバイバーに参加','Telegramを開く','メニュー'],
+    'zh-CN':['实时世界','雷达','团队投票','幸存者中心','街机','僵尸画廊','僵尸制作器','社区','购买 $ZOMBCASH','返回首页','加入幸存者','打开 Telegram','菜单'],
+    ru:['ЖИВОЙ МИР','РАДАР','ГОЛОСОВАНИЕ КОМАНДЫ','РЕФЕРАЛЫ / SURVIVOR HUB','АРКАДА','ГАЛЕРЕЯ ЗОМБИ','СОЗДАТЕЛЬ ЗОМБИ','СООБЩЕСТВО','КУПИТЬ $ZOMBCASH','НА ГЛАВНУЮ','ПРИСОЕДИНИТЬСЯ К ВЫЖИВШИМ','ОТКРЫТЬ TELEGRAM','МЕНЮ'],
+    tr:['CANLI DÜNYA','RADAR','EKİP OYLAMASI','SURVIVOR MERKEZİ','ARCADE','ZOMBİ GALERİSİ','ZOMBİ OLUŞTURUCU','TOPLULUK','$ZOMBCASH SATIN AL','ANA SAYFAYA DÖN','HAYATTA KALANLARA KATIL','TELEGRAM’I AÇ','MENÜ'],
+    hi:['लाइव दुनिया','रडार','टीम वोट','सर्वाइवर हब','आर्केड','ज़ॉम्बी गैलरी','ज़ॉम्बी मेकर','समुदाय','$ZOMBCASH खरीदें','होम पर लौटें','सर्वाइवर्स से जुड़ें','TELEGRAM खोलें','मेन्यू']
   };
   function localizeNav(language) {
     const translated = navDictionary[language];
