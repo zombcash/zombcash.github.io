@@ -219,13 +219,15 @@
     document.body.appendChild(a); a.click(); a.remove(); trackCreatorEvent('creator_portrait_download', style + (referralId ? '_ref_' + referralId : 'direct'));
     const token = survivorToken();
     if (token && generatedSaveReceipt) {
+      const receiptToRecord = generatedSaveReceipt;
       fetch(API + '/api/survival/maker-saved', {
         method: 'POST',
         headers: {'Content-Type':'application/json', 'Authorization':'Bearer ' + token},
-        body: JSON.stringify({receipt: generatedSaveReceipt}),
+        body: JSON.stringify({receipt: receiptToRecord}),
         keepalive: true
+      }).then(response => {
+        if (response.ok && generatedSaveReceipt === receiptToRecord) generatedSaveReceipt = null;
       }).catch(() => {});
-      generatedSaveReceipt = null;
     }
     setStatus('PHOTO DOWNLOADED ✓ Your portrait is saved to your device. Caption: ' + (captionInput.value.trim() || '(no caption)'), 'success');
   });
