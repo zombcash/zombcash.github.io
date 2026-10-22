@@ -613,6 +613,12 @@ html.arcade-snake-embed .game-center .game-skull{font-size:clamp(24px,4vw,42px)!
 html.arcade-snake-embed .game-center #game-action{display:none!important}
 html.arcade-snake-embed .game-score{right:12px!important;bottom:10px!important;font-size:10px!important}
 html.arcade-snake-embed .game-grid{inset:0!important}
+html.arcade-snake-embed.arcade-snake-fullscreen,
+html.arcade-snake-embed.arcade-snake-fullscreen body{height:100%!important;min-height:0!important;overflow:hidden!important}
+html.arcade-snake-embed.arcade-snake-fullscreen #snake-modal[open],
+html.arcade-snake-embed.arcade-snake-fullscreen .game-box{height:100%!important;min-height:0!important;display:flex!important;flex-direction:column!important}
+html.arcade-snake-embed.arcade-snake-fullscreen .game-screen{flex:1 1 auto!important;width:100%!important;height:100%!important;min-height:0!important;aspect-ratio:auto!important}
+html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute!important;inset:0!important;width:100%!important;height:100%!important}
 @media(max-width:560px){html.arcade-snake-embed .game-screen{aspect-ratio:4/3!important}}
 </style>
 </head>
