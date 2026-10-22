@@ -121,6 +121,7 @@ startBtn.addEventListener('click',()=>{if(mode==='snake'){startSnake();return}re
 reset();
 loadLeaderboard();
 loadPlayerProgress();
+document.addEventListener('zombcash:survivorlogin',()=>{loadPlayerProgress();loadLeaderboard()});
 if(query.get('game')==='snake') document.querySelector('[data-game="snake"]')?.click();
 })();
 </script>
