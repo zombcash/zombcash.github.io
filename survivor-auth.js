@@ -134,7 +134,9 @@
   }
   async function recordDailyVisit() {
     const day = new Date().toISOString().slice(0, 10);
-    const key = 'zombcash-survivor-visit:' + day;
+    const profile = readProfile();
+    if (!profile || !profile.telegramId) return;
+    const key = 'zombcash-survivor-visit:' + String(profile.telegramId) + ':' + day;
     try { if (localStorage.getItem(key) === '1') return; } catch (_) {}
     try {
       const response = await fetch(API + '/api/survival/visit', {
