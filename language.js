@@ -98,7 +98,7 @@ ja:"DexScreenerのトークンペアをリアルタイム表示。データは�
 "zh-CN":"来自 DexScreener 的实时代币交易对。数据会自动刷新。",
 ru:"Торговые пары токенов из DexScreener. Данные обновляются автоматически.",
 tr:"DexScreener'dan canlı token çiftleri. Veriler otomatik yenilenir.",
-hi:"DexScreener से लाइव टोकन पेयर। डेटा अपने आप अपडेट होता है。"},
+hi:"DexScreener से लाइव टोकन पेयर। डेटा अपने आप अपडेट होता है।"},
 "One vote per browser each UTC day. Results are shared with the community.":{
 de:"Eine Stimme pro Browser und UTC-Tag. Die Ergebnisse werden mit der Community geteilt.",
 fr:"Un vote par navigateur et par jour UTC. Les résultats sont partagés avec la communauté.",
@@ -107,7 +107,7 @@ ja:"UTCの1日につきブラウザーごとに1票。結果はコミュニテ�
 "zh-CN":"每个浏览器每天（UTC）可投一票。结果将与社区共享。",
 ru:"Один голос с браузера в сутки по UTC. Результаты доступны сообществу.",
 tr:"UTC gününde tarayıcı başına bir oy. Sonuçlar toplulukla paylaşılır.",
-hi:"UTC के प्रत्येक दिन हर ब्राउज़र से एक वोट। परिणाम समुदाय के साथ साझा किए जाते हैं。"}
+hi:"UTC के प्रत्येक दिन हर ब्राउज़र से एक वोट। परिणाम समुदाय के साथ साझा किए जाते हैं।"}
 };
 Object.entries(sharedHome).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
