@@ -114,6 +114,7 @@
     }
     header.zombcash-shared-header .zsh-nav>a:hover,
     header.zombcash-shared-header .zsh-nav>a[aria-current="page"]{color:#9bff45!important}
+    header.zombcash-shared-header .zsh-nav>a[aria-current="page"]{border-bottom:1px solid #9bff45!important}
     header.zombcash-shared-header .zsh-nav>.zsh-home{
       flex:0 0 auto!important;min-height:30px!important;padding:7px 9px!important;
       border:1px solid #42613a!important;color:#b8f992!important;font-size:7px!important;
@@ -162,7 +163,9 @@
         border:1px solid #42613a!important;border-radius:0!important;background:#0b120c!important;color:#9bff45!important;
         font-size:17px!important;cursor:pointer;
       }
-      header.zombcash-shared-header .zsh-brand{grid-column:1;grid-row:1;justify-self:start;margin-left:54px!important}
+      header.zombcash-shared-header .zsh-brand{grid-column:1;grid-row:1;justify-self:start;margin-left:0!important}
+      header.zombcash-shared-header .zsh-menu-toggle{position:absolute;left:18px;top:50%;transform:translateY(-50%);z-index:2}
+      header.zombcash-shared-header .zsh-brand{margin-left:54px!important}
       header.zombcash-shared-header .zsh-nav>a{flex:0 0 auto!important;min-height:34px!important;padding:8px 0!important;font-size:8px!important}
       header.zombcash-shared-header .zsh-home{flex-basis:auto!important;width:auto!important}
       header.zombcash-shared-header .zsh-cta{font-size:7px!important;padding:8px!important}
@@ -221,7 +224,7 @@
   };
   function localizeNav(language) {
     const translated = navDictionary[language];
-    const links = [...nav.querySelectorAll(':scope > a')];
+    const links = [...nav.querySelectorAll(':scope > a')].filter(link => !link.classList.contains('zsh-home'));
     labels.forEach((item, index) => { if (links[index]) links[index].textContent = translated ? translated[index] : item[0]; });
     const back = nav.querySelector('.zsh-home');
     if (back) back.innerHTML = '<span aria-hidden="true">←</span> ' + (translated ? translated[10] : 'BACK TO HOME');
