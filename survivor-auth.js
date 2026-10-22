@@ -29,7 +29,7 @@
   const readProfile = () => { try { return JSON.parse(localStorage.getItem(STORAGE_PROFILE) || 'null'); } catch (_) { return null; } };
   const token = () => { try { return localStorage.getItem(STORAGE_TOKEN) || ''; } catch (_) { return ''; } };
   function updateCta() {
-    const cta = document.querySelector('.top-cta, .survivor-entry-button');
+    const cta = document.querySelector('.zsh-actions .survivor-entry-button, .top-cta, .survivor-entry-button');
     if (!cta) return;
     const p = readProfile();
     cta.textContent = p ? '☣ ' + (p.username ? '@' + p.username : p.firstName || 'SURVIVOR') : t('login');
@@ -229,8 +229,12 @@
       cta = document.createElement('button');
       cta.type = 'button';
       cta.className = 'survivor-entry-button';
+      const actions = document.querySelector('header.zombcash-shared-header .zsh-actions');
       const nav = document.querySelector('.nav, header nav') || document.querySelector('header') || document.querySelector('main');
-      if (nav) nav.append(cta);
+      if (actions) {
+        const languageSlot = actions.querySelector('.zsh-language-slot');
+        actions.insertBefore(cta, languageSlot || null);
+      } else if (nav) nav.append(cta);
     }
     if (cta) cta.addEventListener('click', e => { e.preventDefault(); overlay.hidden = false; renderModal(); });
     document.addEventListener('zombcash:languagechange', () => { updateCta(); if (overlay && !overlay.hidden) renderModal(); });
