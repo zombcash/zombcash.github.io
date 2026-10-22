@@ -289,6 +289,25 @@ const sharedAccessibleLabels={
 };
 Object.entries(sharedAccessibleLabels).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
+
+const sharedArcadeRuntime={
+"Return to ZombieCash homepage":{de:"Zurück zur ZombieCash-Startseite",fr:"Retour à l’accueil de ZombieCash",it:"Torna alla home di ZombieCash",ja:"ZombieCashホームに戻る","zh-CN":"返回 ZombieCash 首页",ru:"На главную ZombieCash",tr:"ZombieCash ana sayfasına dön",hi:"ZombieCash होमपेज पर लौटें"},
+"Choose a game":{de:"Spiel auswählen",fr:"Choisir un jeu",it:"Scegli un gioco",ja:"ゲームを選択","zh-CN":"选择游戏",ru:"Выбрать игру",tr:"Oyun seç",hi:"गेम चुनें"},
+"Zombie Snake records are shown in the Snake game panel.":{de:"Zombie-Snake-Rekorde werden im Snake-Spielbereich angezeigt.",fr:"Les records de Zombie Snake apparaissent dans le panneau du jeu Snake.",it:"I record di Zombie Snake sono mostrati nel pannello del gioco Snake.",ja:"Zombie Snakeの記録はSnakeゲームパネルに表示されます。","zh-CN":"Zombie Snake 记录显示在贪吃蛇游戏面板中。",ru:"Рекорды Zombie Snake отображаются в панели игры «Змейка».",tr:"Zombie Snake rekorları Snake oyun panelinde gösterilir.",hi:"Zombie Snake के रिकॉर्ड Snake गेम पैनल में दिखते हैं。"},
+"No records yet. Score 10+ points and be the first.":{de:"Noch keine Rekorde. Erreiche mindestens 10 Punkte und werde der Erste.",fr:"Aucun record pour le moment. Atteignez au moins 10 points pour être le premier.",it:"Nessun record per ora. Fai almeno 10 punti per essere il primo.",ja:"まだ記録はありません。10点以上を獲得して最初の記録を作ろう。","zh-CN":"暂无纪录。获得至少 10 分，成为第一个上榜的人。",ru:"Рекордов пока нет. Набери 10 очков и стань первым.",tr:"Henüz rekor yok. En az 10 puan al ve ilk sıraya yerleş.",hi:"अभी कोई रिकॉर्ड नहीं है। 10 या अधिक अंक बनाकर पहले बनें。"},
+"Records temporarily unavailable; try again shortly.":{de:"Rekorde sind vorübergehend nicht verfügbar. Versuche es gleich erneut.",fr:"Les records sont temporairement indisponibles ; réessayez bientôt.",it:"I record non sono disponibili al momento; riprova tra poco.",ja:"記録は一時的に利用できません。少ししてから再試行してください。","zh-CN":"纪录暂时不可用，请稍后重试。",ru:"Рекорды временно недоступны. Попробуй позже.",tr:"Rekorlar geçici olarak kullanılamıyor; biraz sonra tekrar dene.",hi:"रिकॉर्ड अभी उपलब्ध नहीं हैं; थोड़ी देर बाद फिर कोशिश करें。"},
+"Saving…":{de:"Wird gespeichert…",fr:"Enregistrement…",it:"Salvataggio…",ja:"保存中…","zh-CN":"正在保存…",ru:"Сохранение…",tr:"Kaydediliyor…",hi:"सहेजा जा रहा है…"},
+"Record saved!":{de:"Rekord gespeichert!",fr:"Record enregistré !",it:"Record salvato!",ja:"記録を保存しました！","zh-CN":"纪录已保存！",ru:"Рекорд сохранён!",tr:"Rekor kaydedildi!",hi:"रिकॉर्ड सहेज लिया गया!"},
+"Final score: ":{de:"Endpunktzahl: ",fr:"Score final : ",it:"Punteggio finale: ",ja:"最終スコア：","zh-CN":"最终得分：",ru:"Итоговый счёт: ",tr:"Son puan: ",hi:"अंतिम स्कोर: "},
+"Move left":{de:"Nach links bewegen",fr:"Aller à gauche",it:"Sposta a sinistra",ja:"左へ移動","zh-CN":"向左移动",ru:"Двигаться влево",tr:"Sola git",hi:"बाएँ जाएँ"},
+"Move right":{de:"Nach rechts bewegen",fr:"Aller à droite",it:"Sposta a destra",ja:"右へ移動","zh-CN":"向右移动",ru:"Двигаться вправо",tr:"Sağa git",hi:"दाएँ जाएँ"},
+"Move up":{de:"Nach oben bewegen",fr:"Aller en haut",it:"Sposta in alto",ja:"上へ移動","zh-CN":"向上移动",ru:"Двигаться вверх",tr:"Yukarı git",hi:"ऊपर जाएँ"},
+"Move down":{de:"Nach unten bewegen",fr:"Aller en bas",it:"Sposta in basso",ja:"下へ移動","zh-CN":"向下移动",ru:"Двигаться вниз",tr:"Aşağı git",hi:"नीचे जाएँ"},
+"Action":{de:"Aktion",fr:"Action",it:"Azione",ja:"アクション","zh-CN":"操作",ru:"Действие",tr:"Eylem",hi:"एक्शन"},
+"Fire":{de:"Feuer",fr:"Tirer",it:"Fuoco",ja:"発射","zh-CN":"开火",ru:"Огонь",tr:"Ateş",hi:"फ़ायर"}
+};
+Object.entries(sharedArcadeRuntime).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 let current='en';const originals=new WeakMap(),translatedValues=new WeakMap(),attributeOriginals=new WeakMap(),translatedAttributes=new WeakMap();
 function translateAttributes(root=document.body){const map=langs[current].map,attrs=['placeholder','title','aria-label','alt'],nodes=[];if(root&&root.nodeType===1)nodes.push(root);if(root&&root.querySelectorAll)root.querySelectorAll('*').forEach(el=>nodes.push(el));nodes.forEach(el=>attrs.forEach(attr=>{if(!el.hasAttribute(attr))return;let originalsFor=attributeOriginals.get(el);if(!originalsFor){originalsFor={};attributeOriginals.set(el,originalsFor);}let translatedFor=translatedAttributes.get(el);if(!translatedFor){translatedFor={};translatedAttributes.set(el,translatedFor);}const live=el.getAttribute(attr);if(Object.prototype.hasOwnProperty.call(originalsFor,attr)&&Object.prototype.hasOwnProperty.call(translatedFor,attr)&&live!==translatedFor[attr])originalsFor[attr]=live;else if(!Object.prototype.hasOwnProperty.call(originalsFor,attr))originalsFor[attr]=live;const original=originalsFor[attr],next=map[norm(original)]||original;if(live!==next)el.setAttribute(attr,next);translatedFor[attr]=next;}));}
