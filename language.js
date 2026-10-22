@@ -129,6 +129,30 @@ de:"KEINE FINANZBERATUNG · RECHERCHIERE IMMER SELBST",fr:"PAS UN CONSEIL FINANC
 };
 Object.entries(sharedLegal).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
+
+/* Dynamic Zombie Radar labels and API states; text is inserted after initial page translation. */
+const sharedRadar={
+"last 5 minutes":{de:"letzte 5 Minuten",fr:"5 dernières minutes",it:"ultimi 5 minuti",ja:"直近5分","zh-CN":"最近 5 分钟",ru:"последние 5 минут",tr:"son 5 dakika",hi:"पिछले 5 मिनट"},
+"last hour":{de:"letzte Stunde",fr:"der dernière heure",it:"ultima ora",ja:"直近1時間","zh-CN":"最近 1 小时",ru:"последний час",tr:"son 1 saat",hi:"पिछला 1 घंटा"},
+"last 24 hours":{de:"letzte 24 Stunden",fr:"der dernières 24 heures",it:"ultime 24 ore",ja:"直近24時間","zh-CN":"最近 24 小时",ru:"последние 24 часа",tr:"son 24 saat",hi:"पिछले 24 घंटे"},
+"CHANGE":{de:"ÄNDERUNG",fr:"VARIATION",it:"VARIAZIONE",ja:"変動","zh-CN":"涨跌幅",ru:"ИЗМЕНЕНИЕ",tr:"DEĞİŞİM",hi:"बदलाव"},
+"VOLUME":{de:"VOLUMEN",fr:"VOLUME",it:"VOLUME",ja:"取引量","zh-CN":"交易量",ru:"ОБЪЁМ",tr:"HACİM",hi:"वॉल्यूम"},
+"LIQUIDITY":{de:"LIQUIDITÄT",fr:"LIQUIDITÉ",it:"LIQUIDITÀ",ja:"流動性","zh-CN":"流动性",ru:"ЛИКВИДНОСТЬ",tr:"LİKİDİTE",hi:"लिक्विडिटी"},
+"SIGNAL":{de:"SIGNAL",fr:"SIGNAL",it:"SEGNALE",ja:"シグナル","zh-CN":"信号",ru:"СИГНАЛ",tr:"SİNYAL",hi:"सिग्नल"},
+"BUY":{de:"KÄUFE",fr:"ACHATS",it:"ACQUISTI",ja:"買い","zh-CN":"买入",ru:"ПОКУПКИ",tr:"ALIŞ",hi:"खरीद"},
+"SELL":{de:"VERKÄUFE",fr:"VENTES",it:"VENDITE",ja:"売り","zh-CN":"卖出",ru:"ПРОДАЖИ",tr:"SATIŞ",hi:"बिक्री"},
+"TRADES":{de:"TRADES",fr:"ÉCHANGES",it:"SCAMBI",ja:"取引","zh-CN":"交易",ru:"СДЕЛКИ",tr:"İŞLEM",hi:"ट्रेड"},
+"NO TRADES":{de:"KEINE TRADES",fr:"AUCUN ÉCHANGE",it:"NESSUNO SCAMBIO",ja:"取引なし","zh-CN":"暂无交易",ru:"НЕТ СДЕЛОК",tr:"İŞLEM YOK",hi:"कोई ट्रेड नहीं"},
+"TRADE-FLOW SIGNAL UNAVAILABLE":{de:"HANDELSFLUSSSIGNAL NICHT VERFÜGBAR",fr:"SIGNAL DE FLUX DE TRANSACTIONS INDISPONIBLE",it:"SEGNALE DEL FLUSSO DI SCAMBI NON DISPONIBILE",ja:"取引フローシグナルを利用できません","zh-CN":"交易流信号不可用",ru:"СИГНАЛ ПОТОКА СДЕЛОК НЕДОСТУПЕН",tr:"İŞLEM AKIŞI SİNYALİ KULLANILAMIYOR",hi:"ट्रेड-फ़्लो सिग्नल उपलब्ध नहीं है"},
+"VIEW":{de:"ANSEHEN",fr:"VOIR",it:"VEDI",ja:"表示","zh-CN":"查看",ru:"СМОТРЕТЬ",tr:"GÖRÜNTÜLE",hi:"देखें"},
+"VERIFIED PICKS":{de:"GEPRÜFTE TREFFER",fr:"SÉLECTIONS VÉRIFIÉES",it:"SCELTE VERIFICATE",ja:"検証済み候補","zh-CN":"已验证推荐",ru:"ПРОВЕРЕННЫЕ ВАРИАНТЫ",tr:"DOĞRULANMIŞ SEÇİMLER",hi:"सत्यापित विकल्प"},
+"Radar only shows tokens with real data for this time horizon. Try another interval or refresh to discover more.":{de:"Der Radar zeigt nur Token mit echten Daten für diesen Zeitraum. Wähle einen anderen Zeitraum oder aktualisiere die Anzeige.",fr:"Le radar affiche uniquement les jetons disposant de données réelles pour cette période. Essayez un autre intervalle ou actualisez.",it:"Il radar mostra solo token con dati reali per questo intervallo. Prova un altro periodo o aggiorna.",ja:"レーダーはこの期間の実データがあるトークンのみ表示します。別の期間を選ぶか更新してください。","zh-CN":"雷达仅显示此时间范围内具有真实数据的代币。请尝试其他时间范围或刷新。",ru:"Радар показывает только токены с реальными данными за выбранный период. Попробуйте другой интервал или обновите данные.",tr:"Radar yalnızca bu zaman aralığında gerçek verisi olan tokenları gösterir. Başka bir aralık deneyin veya yenileyin.",hi:"रडार इस समयावधि के वास्तविक डेटा वाले टोकन ही दिखाता है। दूसरा अंतराल आज़माएँ या रीफ़्रेश करें।"},
+"Fetching the shared Zombie Radar feed…":{de:"Gemeinsamen Zombie-Radar-Feed wird abgerufen…",fr:"Récupération du flux partagé Zombie Radar…",it:"Recupero del feed condiviso di Zombie Radar…",ja:"共有 Zombie Radar フィードを取得中…","zh-CN":"正在获取共享 Zombie Radar 数据流…",ru:"Загружаем общую ленту Zombie Radar…",tr:"Paylaşılan Zombie Radar akışı alınıyor…",hi:"साझा Zombie Radar फ़ीड प्राप्त हो रही है…"},
+"Radar feed is unavailable. No recommendations are being shown; retry shortly.":{de:"Der Radar-Feed ist nicht verfügbar. Es werden keine Empfehlungen angezeigt. Bitte gleich erneut versuchen.",fr:"Le flux radar est indisponible. Aucune recommandation n’est affichée ; réessayez bientôt.",it:"Il feed radar non è disponibile. Nessuna raccomandazione viene mostrata; riprova tra poco.",ja:"レーダーフィードを利用できません。おすすめは表示されていません。少ししてから再試行してください。","zh-CN":"雷达数据流不可用，暂不显示推荐；请稍后重试。",ru:"Лента радара недоступна. Рекомендации не отображаются; попробуйте позже.",tr:"Radar akışı kullanılamıyor. Öneriler gösterilmiyor; biraz sonra tekrar deneyin.",hi:"रडार फ़ीड उपलब्ध नहीं है। कोई सुझाव नहीं दिखाया जा रहा; थोड़ी देर बाद फिर कोशिश करें।"},
+"Refresh failed. Previous radar data is retained and marked stale.":{de:"Aktualisierung fehlgeschlagen. Vorherige Radardaten bleiben erhalten und sind als veraltet markiert.",fr:"Échec de l’actualisation. Les anciennes données radar sont conservées et signalées comme obsolètes.",it:"Aggiornamento non riuscito. I dati radar precedenti sono conservati e contrassegnati come obsoleti.",ja:"更新に失敗しました。以前のレーダーデータを保持し、古いデータとして表示します。","zh-CN":"刷新失败。已保留之前的雷达数据，并标记为过期。",ru:"Не удалось обновить данные. Предыдущие данные радара сохранены и помечены как устаревшие.",tr:"Yenileme başarısız. Önceki radar verileri korunuyor ve eski olarak işaretleniyor.",hi:"रीफ़्रेश विफल हुआ। पिछला रडार डेटा रखा गया है और पुराना चिह्नित किया गया है।"}
+};
+Object.entries(sharedRadar).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 let current='en';const originals=new WeakMap();
 function translate(root=document.body){const map=langs[current].map,walk=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),nodes=[];while(walk.nextNode())nodes.push(walk.currentNode);nodes.forEach(n=>{if(!n.parentElement||n.parentElement.closest('script,style,textarea,code,pre,.language-switcher,[data-no-translate]'))return;if(!originals.has(n))originals.set(n,n.nodeValue);const o=originals.get(n),v=map[norm(o)];if(v){const a=(o.match(/^\s*/)||[''])[0],b=(o.match(/\s*$/)||[''])[0];n.nodeValue=a+v+b}else n.nodeValue=o;});}
