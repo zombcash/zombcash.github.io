@@ -598,7 +598,9 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 </style><script>if(new URLSearchParams(location.search).get('arcadeSnake')==='1')document.documentElement.classList.add('arcade-snake-embed');</script>
 <style id="arcade-snake-embed-style">
 html.arcade-snake-embed,html.arcade-snake-embed body{margin:0!important;padding:0!important;width:100%!important;min-width:0!important;min-height:0!important;height:auto!important;overflow:hidden!important;background:#080b11!important}
-html.arcade-snake-embed body>*:not(#snake-modal){display:none!important}
+html.arcade-snake-embed body>*:not(:has(#snake-modal)){display:none!important}
+html.arcade-snake-embed body>*:has(#snake-modal){display:contents!important}
+html.arcade-snake-embed body>*:has(#snake-modal)>*:not(#snake-modal):not(:has(#snake-modal)){display:none!important}
 html.arcade-snake-embed #snake-modal[open]{display:block!important;position:relative!important;inset:auto!important;transform:none!important;width:100%!important;max-width:none!important;height:auto!important;max-height:none!important;margin:0!important;padding:0!important;overflow:visible!important;border:0!important;border-radius:0!important;background:transparent!important;color:#edf5e5!important;box-shadow:none!important}
 html.arcade-snake-embed #snake-modal::backdrop{background:transparent!important}
 html.arcade-snake-embed .snake-modal-head,html.arcade-snake-embed .game-head,html.arcade-snake-embed .game-foot,html.arcade-snake-embed .game-submit{display:none!important}
