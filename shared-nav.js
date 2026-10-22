@@ -50,6 +50,13 @@
       (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '') +
     '</div>';
 
+  const actions = header.querySelector('.zsh-actions');
+  const languageSlot = header.querySelector('.zsh-language-slot');
+  const homeButton = header.querySelector('.zsh-home.home-return-button');
+  if (homeButton && actions && languageSlot && homeButton.parentElement !== actions) {
+    actions.insertBefore(homeButton, languageSlot);
+  }
+
   const loginSlot = header.querySelector('.zsh-preserved-login-slot');
   if (loginButton && loginSlot) {
     loginButton.classList.add('zsh-login-button');
