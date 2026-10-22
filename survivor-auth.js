@@ -118,6 +118,7 @@
         if (statusResponse.ok && statusData.status === 'complete' && statusData.token && statusData.profile) {
           localStorage.setItem(STORAGE_TOKEN, statusData.token);
           localStorage.setItem(STORAGE_PROFILE, JSON.stringify(statusData.profile));
+          document.dispatchEvent(new CustomEvent('zombcash:survivorlogin'));
           updateCta();
           renderModal();
           statusNode.textContent = '';
