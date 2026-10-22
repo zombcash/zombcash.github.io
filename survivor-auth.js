@@ -17,6 +17,19 @@
     tr:{login:'TELEGRAM İLE GİRİŞ',profile:'HAYATTA KALAN PROFİLİ',intro:'Salgına katıl. Etkinliğini ve gelecekteki ödüllerini takip et.',connect:'TELEGRAM İLE DEVAM ET',loading:'TELEGRAM KİMLİĞİ DOĞRULANIYOR…',points:'HAYATTA KALMA PUANLARI',joined:'KATILMA TARİHİ',logout:'ÇIKIŞ YAP',close:'KAPAT',setup:'Kayıt ayarları henüz tamamlanmadı. Lütfen sonra tekrar dene.',error:'Telegram girişi başarısız. Tekrar dene.',privacy:'Telegram kimliğin profilini tanımak için kullanılır ve herkese açık gösterilmez.'},
     hi:{login:'TELEGRAM से लॉग इन करें',profile:'सर्वाइवर प्रोफ़ाइल',intro:'आउटब्रेक में शामिल हों। गतिविधि और भविष्य के पुरस्कारों को ट्रैक करें।',connect:'TELEGRAM के साथ जारी रखें',loading:'TELEGRAM पहचान सत्यापित हो रही है…',points:'सर्वाइवल पॉइंट्स',joined:'जुड़ने की तारीख',logout:'लॉग आउट',close:'बंद करें',setup:'पंजीकरण सेटअप अभी पूरा नहीं हुआ है। कृपया बाद में फिर प्रयास करें।',error:'Telegram साइन-इन विफल हुआ। कृपया फिर प्रयास करें।',privacy:'आपकी Telegram ID प्रोफ़ाइल पहचानने के लिए उपयोग होती है और सार्वजनिक नहीं की जाती।'}
   };
+  const identityTranslations = {
+    en:{identity:"SURVIVOR IDENTITY",displayName:"PUBLIC DISPLAY NAME",displayHint:"This name appears in game leaderboards instead of your Telegram username. 3–24 characters.",showLeaderboard:"Show my profile in public leaderboards",showPresence:"Show my ONLINE status",saveSettings:"SAVE PROFILE SETTINGS",presenceHint:"ONLINE is shown while this site tab is open and visible.",saving:"SAVING PROFILE…",saved:"PROFILE SAVED",invalidName:"Display name must contain 3–24 characters."},
+    de:{identity:"SURVIVOR-IDENTITÄT",displayName:"ÖFFENTLICHER ANZEIGENAME",displayHint:"Dieser Name erscheint in Ranglisten statt deines Telegram-Nutzernamens. 3–24 Zeichen.",showLeaderboard:"Mein Profil in öffentlichen Ranglisten zeigen",showPresence:"Meinen ONLINE-Status zeigen",saveSettings:"PROFIL SPEICHERN",presenceHint:"ONLINE wird angezeigt, solange dieser Tab geöffnet und sichtbar ist.",saving:"PROFIL WIRD GESPEICHERT…",saved:"PROFIL GESPEICHERT",invalidName:"Der Anzeigename muss 3–24 Zeichen lang sein."},
+    fr:{identity:"IDENTITÉ DU SURVIVANT",displayName:"NOM PUBLIC",displayHint:"Ce nom apparaît dans les classements à la place de votre nom Telegram. 3 à 24 caractères.",showLeaderboard:"Afficher mon profil dans les classements publics",showPresence:"Afficher mon statut EN LIGNE",saveSettings:"ENREGISTRER LE PROFIL",presenceHint:"EN LIGNE s’affiche tant que cet onglet est ouvert et visible.",saving:"ENREGISTREMENT…",saved:"PROFIL ENREGISTRÉ",invalidName:"Le nom doit contenir de 3 à 24 caractères."},
+    it:{identity:"IDENTITÀ DEL SOPRAVVISSUTO",displayName:"NOME PUBBLICO",displayHint:"Questo nome appare nelle classifiche al posto del nome Telegram. Da 3 a 24 caratteri.",showLeaderboard:"Mostra il profilo nelle classifiche pubbliche",showPresence:"Mostra il mio stato ONLINE",saveSettings:"SALVA PROFILO",presenceHint:"ONLINE viene mostrato finché questa scheda è aperta e visibile.",saving:"SALVATAGGIO…",saved:"PROFILO SALVATO",invalidName:"Il nome deve contenere da 3 a 24 caratteri."},
+    ja:{identity:"サバイバーID",displayName:"公開表示名",displayHint:"Telegram名の代わりにゲームランキングに表示されます。3〜24文字。",showLeaderboard:"公開ランキングにプロフィールを表示",showPresence:"オンライン状態を表示",saveSettings:"プロフィールを保存",presenceHint:"このタブが開いて表示されている間、オンラインとして表示されます。",saving:"プロフィールを保存中…",saved:"プロフィールを保存しました",invalidName:"表示名は3〜24文字にしてください。"},
+    "zh-CN":{identity:"幸存者身份",displayName:"公开显示名称",displayHint:"游戏排行榜将显示此名称，而不是 Telegram 用户名。3–24 个字符。",showLeaderboard:"在公开排行榜中显示我的档案",showPresence:"显示我的在线状态",saveSettings:"保存档案设置",presenceHint:"此标签页打开且可见时会显示在线。",saving:"正在保存档案…",saved:"档案已保存",invalidName:"显示名称必须为 3–24 个字符。"},
+    ru:{identity:"ЛИЧНОСТЬ ВЫЖИВШЕГО",displayName:"ОТОБРАЖАЕМОЕ ИМЯ",displayHint:"Это имя будет показываться в игровых рейтингах вместо ника Telegram. От 3 до 24 символов.",showLeaderboard:"Показывать меня в общих таблицах лидеров",showPresence:"Показывать мой статус «ОНЛАЙН»",saveSettings:"СОХРАНИТЬ НАСТРОЙКИ",presenceHint:"Статус «ОНЛАЙН» отображается, пока вкладка сайта открыта и видима.",saving:"СОХРАНЯЕМ ПРОФИЛЬ…",saved:"ПРОФИЛЬ СОХРАНЁН",invalidName:"Имя должно содержать от 3 до 24 символов."},
+    tr:{identity:"HAYATTA KALAN KİMLİĞİ",displayName:"GÖRÜNEN AD",displayHint:"Bu ad, oyun sıralamalarında Telegram kullanıcı adınızın yerine görünür. 3–24 karakter.",showLeaderboard:"Profilimi herkese açık sıralamalarda göster",showPresence:"ÇEVRİM İÇİ durumumu göster",saveSettings:"PROFİLİ KAYDET",presenceHint:"Bu sekme açık ve görünürken çevrim içi görünürsünüz.",saving:"PROFİL KAYDEDİLİYOR…",saved:"PROFİL KAYDEDİLDİ",invalidName:"Görünen ad 3–24 karakter olmalıdır."},
+    hi:{identity:"सर्वाइवर पहचान",displayName:"दिखने वाला नाम",displayHint:"गेम लीडरबोर्ड में Telegram नाम की जगह यह नाम दिखेगा। 3–24 अक्षर।",showLeaderboard:"सार्वजनिक लीडरबोर्ड में मेरी प्रोफ़ाइल दिखाएँ",showPresence:"मेरा ऑनलाइन स्टेटस दिखाएँ",saveSettings:"प्रोफ़ाइल सेटिंग सेव करें",presenceHint:"यह टैब खुला और दिखाई देने पर आप ऑनलाइन दिखेंगे।",saving:"प्रोफ़ाइल सेव हो रही है…",saved:"प्रोफ़ाइल सेव हो गई",invalidName:"नाम 3–24 अक्षरों का होना चाहिए।"}
+  };
+  const it = key => (identityTranslations[lang()] || identityTranslations.en)[key] || identityTranslations.en[key] || key;
+
   const lang = () => {
     try { const code = localStorage.getItem('zombcash-language') || document.documentElement.lang || 'en'; return translations[code] ? code : 'en'; }
     catch (_) { return 'en'; }
@@ -78,14 +91,14 @@
         '<div class="survivor-stat-tile"><span>SITE VISITS</span><b id="survivor-visits">—</b></div>' +
         '<div class="survivor-stat-tile"><span>MAKER SAVES</span><b id="survivor-maker-saves">—</b></div>' +
         '<div class="survivor-stat-tile"><span>GAMES COMPLETED</span><b id="survivor-games">—</b></div></div>' +
-        '<section class="survivor-stats"><h3 style="margin:0 0 12px;color:#9bff45;font:700 11px Orbitron,system-ui,sans-serif">SURVIVOR IDENTITY</h3>' +
-        '<label for="survivor-display-name" style="display:block;color:#b8c8b6;font-size:12px;margin-bottom:6px">PUBLIC DISPLAY NAME</label>' +
+        '<section class="survivor-stats"><h3 style="margin:0 0 12px;color:#9bff45;font:700 11px Orbitron,system-ui,sans-serif">' + safe(it('identity')) + '</h3>' +
+        '<label for="survivor-display-name" style="display:block;color:#b8c8b6;font-size:12px;margin-bottom:6px">' + safe(it('displayName')) + '</label>' +
         '<input id="survivor-display-name" maxlength="24" autocomplete="nickname" placeholder="e.g. GraveWalker" style="box-sizing:border-box;width:100%;padding:11px;border:1px solid #426341;background:#07100a;color:#edf5e5;font:600 14px Rajdhani,system-ui,sans-serif">' +
-        '<p class="survivor-privacy">This name is shown in game leaderboards instead of your Telegram username. 3–24 characters.</p>' +
-        '<label style="display:flex;align-items:center;gap:9px;margin:12px 0;color:#dcebd6;font-size:13px"><input type="checkbox" id="survivor-leaderboard-visible" style="accent-color:#9bff45"> Show my profile in public leaderboards</label>' +
-        '<label style="display:flex;align-items:center;gap:9px;margin:10px 0;color:#dcebd6;font-size:13px"><input type="checkbox" id="survivor-presence-visible" style="accent-color:#9bff45"> Show my ONLINE status</label>' +
-        '<button type="button" id="survivor-save-settings" style="margin-top:8px;width:100%;background:#9bff45;color:#071007;border-color:#9bff45">SAVE PROFILE SETTINGS</button>' +
-        '<p class="survivor-privacy">ONLINE is shown while you are active on the site. If disabled, your presence is not shown publicly.</p></section>' +
+        '<p class="survivor-privacy">' + safe(it('displayHint')) + '</p>' +
+        '<label style="display:flex;align-items:center;gap:9px;margin:12px 0;color:#dcebd6;font-size:13px"><input type="checkbox" id="survivor-leaderboard-visible" style="accent-color:#9bff45"> ' + safe(it('showLeaderboard')) + '</label>' +
+        '<label style="display:flex;align-items:center;gap:9px;margin:10px 0;color:#dcebd6;font-size:13px"><input type="checkbox" id="survivor-presence-visible" style="accent-color:#9bff45"> ' + safe(it('showPresence')) + '</label>' +
+        '<button type="button" id="survivor-save-settings" style="margin-top:8px;width:100%;background:#9bff45;color:#071007;border-color:#9bff45">' + safe(it('saveSettings')) + '</button>' +
+        '<p class="survivor-privacy">' + safe(it('presenceHint')) + '</p></section>' +
         '<p class="survivor-privacy">Points have no monetary value and provide no benefits. Activity tracking only.</p></div>';
       statusNode.textContent = '';
       const nameInput = bodyNode.querySelector('#survivor-display-name');
@@ -224,11 +237,11 @@
     const button = bodyNode.querySelector('#survivor-save-settings');
     const name = nameInput ? nameInput.value.trim().replace(/\\s+/g, ' ') : '';
     if (!name || name.length < 3 || name.length > 24) {
-      statusNode.textContent = 'Display name must contain 3–24 characters.';
+      statusNode.textContent = it('invalidName');
       return;
     }
     button.disabled = true;
-    statusNode.textContent = 'SAVING PROFILE…';
+    statusNode.textContent = it('saving');
     try {
       const response = await fetch(API + '/api/profile/settings', {
         method: 'POST',
@@ -247,7 +260,7 @@
       localStorage.setItem(STORAGE_PROFILE, JSON.stringify(next));
       presenceOnline = false;
       updateCta();
-      statusNode.textContent = 'PROFILE SAVED';
+      statusNode.textContent = it('saved');
       document.dispatchEvent(new CustomEvent('zombcash:survivorprofileupdated'));
       if (presenceToggle && presenceToggle.checked) sendPresenceHeartbeat();
     } catch (error) {
