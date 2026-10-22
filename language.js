@@ -274,6 +274,21 @@ const sharedFooterSupport={
 };
 Object.entries(sharedFooterSupport).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
+
+const sharedAccessibleLabels={
+"Search token name or ticker...":{de:"Tokenname oder Ticker suchen...",fr:"Rechercher un nom de token ou un ticker...",it:"Cerca il nome o il ticker del token...",ja:"トークン名またはティッカーを検索...","zh-CN":"搜索代币名称或代码...",ru:"Поиск по названию токена или тикеру...",tr:"Token adı veya sembolünü ara...",hi:"टोकन का नाम या टिकर खोजें..."},
+"Filter tokens":{de:"Token filtern",fr:"Filtrer les tokens",it:"Filtra i token",ja:"トークンを絞り込む","zh-CN":"筛选代币",ru:"Фильтровать токены",tr:"Tokenleri filtrele",hi:"टोकन फ़िल्टर करें"},
+"Choose game leaderboard":{de:"Spiel-Rangliste auswählen",fr:"Choisir le classement du jeu",it:"Scegli la classifica del gioco",ja:"ゲームランキングを選択","zh-CN":"选择游戏排行榜",ru:"Выбрать таблицу рекордов игры",tr:"Oyun liderlik tablosunu seç",hi:"गेम लीडरबोर्ड चुनें"},
+"SURVIVOR NAME":{de:"NAME DES ÜBERLEBENDEN",fr:"NOM DU SURVIVANT",it:"NOME DEL SOPRAVVISSUTO",ja:"サバイバー名","zh-CN":"幸存者名称",ru:"ИМЯ ВЫЖИВШЕГО",tr:"HAYATTA KALANIN ADI",hi:"सर्वाइवर का नाम"},
+"Survivor name":{de:"Name des Überlebenden",fr:"Nom du survivant",it:"Nome del sopravvissuto",ja:"サバイバー名","zh-CN":"幸存者名称",ru:"Имя выжившего",tr:"Hayatta kalan adı",hi:"सर्वाइवर का नाम"},
+"Copy official token contract":{de:"Offizielle Token-Adresse kopieren",fr:"Copier l’adresse officielle du token",it:"Copia l’indirizzo ufficiale del token",ja:"公式トークンアドレスをコピー","zh-CN":"复制官方代币合约地址",ru:"Копировать официальный адрес токена",tr:"Resmî token adresini kopyala",hi:"आधिकारिक टोकन कॉन्ट्रैक्ट कॉपी करें"},
+"Open menu":{de:"Menü öffnen",fr:"Ouvrir le menu",it:"Apri il menu",ja:"メニューを開く","zh-CN":"打开菜单",ru:"Открыть меню",tr:"Menüyü aç",hi:"मेनू खोलें"},
+"Close game":{de:"Spiel schließen",fr:"Fermer le jeu",it:"Chiudi il gioco",ja:"ゲームを閉じる","zh-CN":"关闭游戏",ru:"Закрыть игру",tr:"Oyunu kapat",hi:"गेम बंद करें"},
+"Open Zombie Snake fullscreen":{de:"Zombie Snake im Vollbild öffnen",fr:"Ouvrir Zombie Snake en plein écran",it:"Apri Zombie Snake a schermo intero",ja:"Zombie Snakeを全画面で開く","zh-CN":"全屏打开僵尸贪吃蛇",ru:"Открыть «Зомби-змейку» на весь экран",tr:"Zombie Snake'i tam ekranda aç",hi:"Zombie Snake को फ़ुलस्क्रीन में खोलें"},
+"Keyboard-controlled Zombie Snake. Use arrow keys or WASD to move.":{de:"Zombie Snake per Tastatur steuern. Nutze Pfeiltasten oder WASD.",fr:"Zombie Snake au clavier. Utilisez les flèches ou WASD pour vous déplacer.",it:"Zombie Snake con tastiera. Usa le frecce o WASD per muoverti.",ja:"キーボード操作のZombie Snake。矢印キーまたはWASDで移動。","zh-CN":"键盘控制僵尸贪吃蛇。使用方向键或 WASD 移动。",ru:"Управление «Зомби-змейкой» с клавиатуры. Используй стрелки или WASD.",tr:"Klavye kontrollü Zombie Snake. Hareket için ok tuşlarını veya WASD kullan.",hi:"कीबोर्ड से Zombie Snake नियंत्रित करें। चलने के लिए तीर कुंजियाँ या WASD उपयोग करें。"}
+};
+Object.entries(sharedAccessibleLabels).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 let current='en';const originals=new WeakMap(),translatedValues=new WeakMap(),attributeOriginals=new WeakMap(),translatedAttributes=new WeakMap();
 function translateAttributes(root=document.body){const map=langs[current].map,attrs=['placeholder','title','aria-label','alt'],nodes=[];if(root&&root.nodeType===1)nodes.push(root);if(root&&root.querySelectorAll)root.querySelectorAll('*').forEach(el=>nodes.push(el));nodes.forEach(el=>attrs.forEach(attr=>{if(!el.hasAttribute(attr))return;let originalsFor=attributeOriginals.get(el);if(!originalsFor){originalsFor={};attributeOriginals.set(el,originalsFor);}let translatedFor=translatedAttributes.get(el);if(!translatedFor){translatedFor={};translatedAttributes.set(el,translatedFor);}const live=el.getAttribute(attr);if(Object.prototype.hasOwnProperty.call(originalsFor,attr)&&Object.prototype.hasOwnProperty.call(translatedFor,attr)&&live!==translatedFor[attr])originalsFor[attr]=live;else if(!Object.prototype.hasOwnProperty.call(originalsFor,attr))originalsFor[attr]=live;const original=originalsFor[attr],next=map[norm(original)]||original;if(live!==next)el.setAttribute(attr,next);translatedFor[attr]=next;}));}
