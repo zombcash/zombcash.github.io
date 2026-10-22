@@ -14,7 +14,6 @@
     ['ARCADE', 'arcade.html', 'arcade'],
     ['ZOMBIE GALLERY', 'gallery.html', 'gallery'],
     ['ZOMBIE MAKER', 'zombie-maker.html', 'maker'],
-    ['OUTBREAK', '#outbreak', 'home'],
     ['COMMUNITY', '#community', 'home'],
     ['BUY $ZOMBCASH', '#community-console', 'home']
   ];
@@ -25,8 +24,6 @@
   const loginButton = file === 'survivor-hub.html'
     ? header.querySelector('button[data-i18n="login"], button.top-cta')
     : null;
-  const headerCtaHref = file === 'gallery.html' ? 'https://t.me/ZOMBCASH'
-    : isHome ? '#community' : 'index.html#community';
   const brandHref = isHome ? '#home' : 'index.html';
   const target = (href) => href.startsWith('#') && !isHome ? home + href : href;
 
@@ -50,10 +47,6 @@
       (loginButton ? '<span class="zsh-login-slot"></span>' : '') +
     '</nav>' +
     '<div class="zsh-actions">' +
-      '<a class="zsh-cta' + (file === 'gallery.html' ? ' zsh-cta-telegram' : '') + '" href="' + headerCtaHref + '"' +
-        (file === 'gallery.html' ? ' target="_blank" rel="noreferrer"' : '') + '>' +
-        (file === 'gallery.html' ? 'OPEN TELEGRAM' : 'JOIN THE SURVIVORS') + ' <span aria-hidden="true">↗</span>' +
-      '</a>' +
       '<div class="zsh-language-slot"></div>' +
     '</div>';
 
@@ -123,6 +116,13 @@
       display:flex!important;align-items:center!important;justify-content:flex-end!important;
       gap:8px!important;min-width:0!important;flex:0 0 auto!important;
     }
+    header.zombcash-shared-header .zsh-actions .survivor-entry-button,
+    header.zombcash-shared-header .zsh-actions .top-cta{
+      display:inline-flex!important;align-items:center!important;justify-content:center!important;
+      flex:0 0 auto!important;min-height:36px!important;margin:0!important;padding:9px 12px!important;
+      border:1px solid #42613a!important;background:#0b120c!important;color:#b8f992!important;
+      font:700 9px/1.2 Orbitron,system-ui,sans-serif!important;white-space:nowrap!important;
+    }
     header.zombcash-shared-header .zsh-cta{
       display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:6px!important;
       flex:0 0 auto!important;min-height:34px!important;max-width:none!important;margin:0!important;padding:9px 10px!important;
@@ -168,7 +168,6 @@
       header.zombcash-shared-header .zsh-brand{margin-left:54px!important}
       header.zombcash-shared-header .zsh-nav>a{flex:0 0 auto!important;min-height:34px!important;padding:8px 0!important;font-size:8px!important}
       header.zombcash-shared-header .zsh-home{flex-basis:auto!important;width:auto!important}
-      header.zombcash-shared-header .zsh-cta{font-size:7px!important;padding:8px!important}
       header.zombcash-shared-header .language-trigger{min-width:50px!important;padding:7px!important;font-size:8px!important}
       header.zombcash-shared-header .zsh-login-slot{width:100%}
     }
@@ -179,7 +178,6 @@
       header.zombcash-shared-header .zsh-brand-copy{font-size:12px!important}
       header.zombcash-shared-header .zsh-brand-copy small{font-size:6px!important;letter-spacing:1px!important}
       header.zombcash-shared-header .zsh-actions{gap:5px!important}
-      header.zombcash-shared-header .zsh-cta{display:none!important}
       header.zombcash-shared-header .zsh-menu-toggle{min-height:34px!important;padding:7px 8px!important}
       header.zombcash-shared-header .zsh-nav{gap:4px 13px!important;max-height:70vh!important;overflow-y:auto!important}
       header.zombcash-shared-header .zsh-nav>a{font-size:8px!important}
@@ -213,25 +211,23 @@
 
   // Keep the generated navigation labels in sync with the existing nine-language selector.
   const navDictionary = {
-    de:['LEBENDIGE WELT','RADAR','CREW-ABSTIMMUNG','ZOMBIE-LABOR','ARCADE','ZOMBIE-GALERIE','ZOMBIE-MAKER','AUSBRUCH','COMMUNITY','$ZOMBCASH KAUFEN','ZURÜCK ZUR STARTSEITE','ÜBERLEBENDEN BEITRETEN','TELEGRAM ÖFFNEN','MENÜ'],
-    fr:['MONDE VIVANT','RADAR','VOTE DE L’ÉQUIPE','LABO ZOMBIE','ARCADE','GALERIE ZOMBIE','CRÉATEUR DE ZOMBIES','ÉPIDÉMIE','COMMUNAUTÉ','ACHETER $ZOMBCASH','RETOUR À L’ACCUEIL','REJOINDRE LES SURVIVANTS','OUVRIR TELEGRAM','MENU'],
-    it:['MONDO VIVO','RADAR','VOTO DELLA CREW','LABORATORIO ZOMBIE','ARCADE','GALLERIA ZOMBIE','CREA ZOMBIE','FOCOLAIO','COMMUNITY','COMPRA $ZOMBCASH','TORNA ALLA HOME','UNISCITI AI SOPRAVVISSUTI','APRI TELEGRAM','MENU'],
-    ja:['ライブワールド','レーダー','クルー投票','ゾンビラボ','アーケード','ゾンビギャラリー','ゾンビメーカー','アウトブレイク','コミュニティ','$ZOMBCASHを購入','ホームに戻る','サバイバーに参加','Telegramを開く','メニュー'],
-    'zh-CN':['实时世界','雷达','团队投票','僵尸实验室','街机','僵尸画廊','僵尸制作器','爆发','社区','购买 $ZOMBCASH','返回首页','加入幸存者','打开 Telegram','菜单'],
-    ru:['ЖИВОЙ МИР','РАДАР','ГОЛОСОВАНИЕ КОМАНДЫ','ЗОМБИ-ЛАБОРАТОРИЯ','АРКАДА','ГАЛЕРЕЯ ЗОМБИ','СОЗДАТЕЛЬ ЗОМБИ','ВСПЫШКА','СООБЩЕСТВО','КУПИТЬ $ZOMBCASH','НА ГЛАВНУЮ','ПРИСОЕДИНИТЬСЯ К ВЫЖИВШИМ','ОТКРЫТЬ TELEGRAM','МЕНЮ'],
-    tr:['CANLI DÜNYA','RADAR','EKİP OYLAMASI','ZOMBİ LABORATUVARI','ARCADE','ZOMBİ GALERİSİ','ZOMBİ OLUŞTURUCU','SALGIN','TOPLULUK','$ZOMBCASH SATIN AL','ANA SAYFAYA DÖN','HAYATTA KALANLARA KATIL','TELEGRAM’I AÇ','MENÜ'],
-    hi:['लाइव दुनिया','रडार','टीम वोट','ज़ॉम्बी लैब','आर्केड','ज़ॉम्बी गैलरी','ज़ॉम्बी मेकर','प्रकोप','समुदाय','$ZOMBCASH खरीदें','होम पर लौटें','सर्वाइवर्स से जुड़ें','TELEGRAM खोलें','मेन्यू']
+    de:['LEBENDIGE WELT','RADAR','CREW-ABSTIMMUNG','ZOMBIE-LABOR','ARCADE','ZOMBIE-GALERIE','ZOMBIE-MAKER','COMMUNITY','$ZOMBCASH KAUFEN','ZURÜCK ZUR STARTSEITE','ÜBERLEBENDEN BEITRETEN','TELEGRAM ÖFFNEN','MENÜ'],
+    fr:['MONDE VIVANT','RADAR','VOTE DE L’ÉQUIPE','LABO ZOMBIE','ARCADE','GALERIE ZOMBIE','CRÉATEUR DE ZOMBIES','COMMUNAUTÉ','ACHETER $ZOMBCASH','RETOUR À L’ACCUEIL','REJOINDRE LES SURVIVANTS','OUVRIR TELEGRAM','MENU'],
+    it:['MONDO VIVO','RADAR','VOTO DELLA CREW','LABORATORIO ZOMBIE','ARCADE','GALLERIA ZOMBIE','CREA ZOMBIE','COMMUNITY','COMPRA $ZOMBCASH','TORNA ALLA HOME','UNISCITI AI SOPRAVVISSUTI','APRI TELEGRAM','MENU'],
+    ja:['ライブワールド','レーダー','クルー投票','ゾンビラボ','アーケード','ゾンビギャラリー','ゾンビメーカー','コミュニティ','$ZOMBCASHを購入','ホームに戻る','サバイバーに参加','Telegramを開く','メニュー'],
+    'zh-CN':['实时世界','雷达','团队投票','僵尸实验室','街机','僵尸画廊','僵尸制作器','社区','购买 $ZOMBCASH','返回首页','加入幸存者','打开 Telegram','菜单'],
+    ru:['ЖИВОЙ МИР','РАДАР','ГОЛОСОВАНИЕ КОМАНДЫ','ЗОМБИ-ЛАБОРАТОРИЯ','АРКАДА','ГАЛЕРЕЯ ЗОМБИ','СОЗДАТЕЛЬ ЗОМБИ','СООБЩЕСТВО','КУПИТЬ $ZOMBCASH','НА ГЛАВНУЮ','ПРИСОЕДИНИТЬСЯ К ВЫЖИВШИМ','ОТКРЫТЬ TELEGRAM','МЕНЮ'],
+    tr:['CANLI DÜNYA','RADAR','EKİP OYLAMASI','ZOMBİ LABORATUVARI','ARCADE','ZOMBİ GALERİSİ','ZOMBİ OLUŞTURUCU','TOPLULUK','$ZOMBCASH SATIN AL','ANA SAYFAYA DÖN','HAYATTA KALANLARA KATIL','TELEGRAM’I AÇ','MENÜ'],
+    hi:['लाइव दुनिया','रडार','टीम वोट','ज़ॉम्बी लैब','आर्केड','ज़ॉम्बी गैलरी','ज़ॉम्बी मेकर','समुदाय','$ZOMBCASH खरीदें','होम पर लौटें','सर्वाइवर्स से जुड़ें','TELEGRAM खोलें','मेन्यू']
   };
   function localizeNav(language) {
     const translated = navDictionary[language];
     const links = [...nav.querySelectorAll(':scope > a')].filter(link => !link.classList.contains('zsh-home'));
     labels.forEach((item, index) => { if (links[index]) links[index].textContent = translated ? translated[index] : item[0]; });
     const back = nav.querySelector('.zsh-home');
-    if (back) back.innerHTML = '<span aria-hidden="true">←</span> ' + (translated ? translated[10] : 'BACK TO HOME');
-    const cta = header.querySelector('.zsh-cta');
-    if (cta) cta.innerHTML = (file === 'gallery.html' ? (translated ? translated[12] : 'OPEN TELEGRAM') : (translated ? translated[11] : 'JOIN THE SURVIVORS')) + ' <span aria-hidden="true">↗</span>';
+    if (back) back.innerHTML = '<span aria-hidden="true">←</span> ' + (translated ? translated[9] : 'BACK TO HOME');
     const menuLabel = header.querySelector('.zsh-menu-label');
-    if (menuLabel) menuLabel.textContent = translated ? translated[13] : 'MENU';
+    if (menuLabel) menuLabel.textContent = translated ? translated[12] : 'MENU';
     const brandSmall = header.querySelector('.zsh-brand-copy small');
     if (brandSmall) brandSmall.textContent = language === 'ru' ? 'ИНТЕРНЕТ НЕЖИТИ' : 'THE UNDEAD INTERNET';
     if (loginButton) {
