@@ -6,7 +6,7 @@
   const home = 'index.html';
   const items = [
     ['LIVE WORLD', '#living-world'], ['RADAR', '#radar'],
-    ['CREW VOTE', '#community-console'], ['ZOMBIE LAB', '#lab'],
+    ['CREW VOTE', 'crew-vote.html'], ['ZOMBIE LAB', '#lab'],
     ['ARCADE', 'arcade.html'], ['ZOMBIE GALLERY', 'gallery.html'],
     ['ZOMBIE MAKER', 'zombie-maker.html'], ['OUTBREAK', '#outbreak'],
     ['COMMUNITY', '#community'], ['BUY $ZOMBCASH', '#community-console']
