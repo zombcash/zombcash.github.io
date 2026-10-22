@@ -232,8 +232,8 @@
       const actions = document.querySelector('header.zombcash-shared-header .zsh-actions');
       const nav = document.querySelector('.nav, header nav') || document.querySelector('header') || document.querySelector('main');
       if (actions) {
-        const languageSlot = actions.querySelector('.zsh-language-slot');
-        actions.insertBefore(cta, languageSlot || null);
+        // Keep the language selector before the account control so registration is the far-right item.
+        actions.append(cta);
       } else if (nav) nav.append(cta);
     }
     if (cta) cta.addEventListener('click', e => { e.preventDefault(); overlay.hidden = false; renderModal(); });
