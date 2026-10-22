@@ -154,6 +154,26 @@ let gameFrame = 0, lastStep = 0, gameActive = false, gameFinished = false;
 let gamePoints = 0, snake = [], brains = [], direction = {x: 1, y: 0}, nextDirection = {x: 1, y: 0};
 let gameWidth = 0, gameHeight = 0, cols = 0, rows = 0, stepMs = BASE_STEP_MS;
 const heldMoveKeys = new Set();
+let snakeSurvivalReceiptPromise = null;
+let snakeSurvivalReceiptUsed = false;
+function snakeSurvivorToken(){try{return localStorage.getItem('zombcash-survivor-token')||''}catch(_){return ''}}
+async function beginSnakeSurvivalSession(){
+  snakeSurvivalReceiptUsed=false;
+  const token=snakeSurvivorToken();
+  if(!token){snakeSurvivalReceiptPromise=null;return}
+  snakeSurvivalReceiptPromise=fetch('https://zombcash-bot.fadehost.app/api/survival/game-start',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({game:'snake'}),cache:'no-store'})
+    .then(async response=>{const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'Session unavailable');return data.receipt||null})
+    .catch(()=>null);
+}
+async function completeSnakeSurvivalSession(){
+  if(snakeSurvivalReceiptUsed)return;
+  snakeSurvivalReceiptUsed=true;
+  const token=snakeSurvivorToken(), pending=snakeSurvivalReceiptPromise;
+  if(!token||!pending)return;
+  const receipt=await pending;
+  if(!receipt)return;
+  try{await fetch('https://zombcash-bot.fadehost.app/api/survival/game-complete',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({receipt}),cache:'no-store'})}catch(_){}
+}
 let lastBonusBrainAt = 0;
 
 function resizeGameCanvas() {
@@ -254,6 +274,7 @@ function drawGame() {
 }
 function stopGame(won, reason) {
   gameActive = false;
+  completeSnakeSurvivalSession();
   gameFinished = true;
   heldMoveKeys.clear();
   screen?.classList.remove('snake-playing');
@@ -309,6 +330,7 @@ function beginGame() {
   }
   resizeGameCanvas();
   if (!snake.length) resetGame();
+  beginSnakeSurvivalSession();
   gameActive = true;
   screen?.classList.add('snake-playing');
   lastStep = performance.now();
