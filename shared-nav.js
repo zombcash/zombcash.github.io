@@ -242,6 +242,7 @@
     localizeNav(language);
   };
   document.addEventListener('zombcash:languagechange', event => localizeNav(event.detail && event.detail.language || 'en'));
+  readLanguage();
 
   // language.js creates the switcher after DOMContentLoaded; place it in the same fixed slot.
   const moveLanguage = () => {
