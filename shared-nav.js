@@ -269,6 +269,12 @@
     body.zsh-inner-page main .eyebrow,
     body.zsh-inner-page main .kicker{font-family:Orbitron,Arial,sans-serif!important;font-size:11px!important;font-weight:700!important;letter-spacing:.16em!important;line-height:1.5!important}
     body.zsh-inner-page main .lead{font-family:Rajdhani,Arial,sans-serif!important;font-size:clamp(18px,1.55vw,21px)!important;line-height:1.55!important;max-width:820px!important;margin:0 0 22px!important}
+    @media(max-width:1450px){
+      header.zombcash-shared-header .zsh-nav{display:none!important}
+      header.zombcash-shared-header .zsh-nav.zsh-open{display:flex!important}
+      header.zombcash-shared-header .zsh-menu-toggle{display:inline-flex!important;position:absolute!important;left:18px!important;top:50%!important;transform:translateY(-50%)!important;z-index:2!important}
+      header.zombcash-shared-header .zsh-brand{margin-left:54px!important}
+    }
     @media(max-width:650px){
       body.zsh-inner-page h1{font-size:clamp(32px,8vw,44px)!important;line-height:1.08!important}
       body main .eyebrow{margin-top:18px!important}
@@ -280,20 +286,20 @@
       header.zombcash-shared-header .zsh-actions{grid-column:2;grid-row:1}
       header.zombcash-shared-header .zsh-nav{
         position:static!important;left:auto!important;top:auto!important;transform:none!important;
-        display:none!important;grid-column:1/-1;grid-row:2;justify-content:flex-start!important;
+        display:flex!important;grid-column:1/-1;grid-row:2;justify-content:flex-start!important;
         align-items:stretch!important;flex-wrap:wrap!important;gap:4px 16px!important;
         max-width:100%!important;padding:10px 0 3px!important;border-top:1px solid #9bff4520!important;
       }
       header.zombcash-shared-header .zsh-nav.zsh-open{display:flex!important}
       header.zombcash-shared-header .zsh-menu-toggle{
-        display:inline-flex!important;grid-column:1;grid-row:1;align-items:center!important;justify-content:center!important;
+        display:none!important;grid-column:1;grid-row:1;align-items:center!important;justify-content:center!important;
         gap:8px!important;min-width:42px!important;min-height:36px!important;margin:0!important;padding:7px 10px!important;
         border:1px solid #42613a!important;border-radius:0!important;background:#0b120c!important;color:#9bff45!important;
         font-size:17px!important;cursor:pointer;
       }
       header.zombcash-shared-header .zsh-brand{grid-column:1;grid-row:1;justify-self:start;margin-left:0!important}
       header.zombcash-shared-header .zsh-menu-toggle{position:absolute;left:18px;top:50%;transform:translateY(-50%);z-index:2}
-      header.zombcash-shared-header .zsh-brand{margin-left:54px!important}
+      header.zombcash-shared-header .zsh-brand{margin-left:0!important}
       header.zombcash-shared-header .zsh-nav>a{flex:0 0 auto!important;min-height:34px!important;padding:8px 0!important;font-size:8px!important}
       header.zombcash-shared-header .zsh-home{flex-basis:auto!important;width:auto!important}
       header.zombcash-shared-header .language-trigger{min-width:50px!important;padding:7px!important;font-size:8px!important}
