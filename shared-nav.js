@@ -272,13 +272,13 @@
     body.zsh-inner-page main li{font-family:Rajdhani,Arial,sans-serif!important;font-size:18px;line-height:1.6}
     body.zsh-inner-page main .wrap,
     body.zsh-inner-page main .container,
-    body.zsh-inner-page main .page-wrap{box-sizing:border-box;max-width:min(1080px,calc(100% - 40px));margin-left:auto;margin-right:auto}
+    body.zsh-inner-page main .page-wrap{box-sizing:border-box;max-width:min(1240px,calc(100% - 48px));margin-left:auto;margin-right:auto}
     /* Normalize legacy page-level wrappers to the same content width. */
     body.zsh-inner-page>.wrap,
     body.zsh-inner-page>.container,
     body.zsh-inner-page>.page-wrap{
-      box-sizing:border-box!important;width:min(1080px,calc(100% - 40px))!important;
-      max-width:1080px!important;margin-left:auto!important;margin-right:auto!important;
+      box-sizing:border-box!important;width:min(1240px,calc(100% - 48px))!important;
+      max-width:1240px!important;margin-left:auto!important;margin-right:auto!important;
     }
     body.zsh-inner-page main .eyebrow,
     body.zsh-inner-page main .kicker{font-family:Orbitron,Arial,sans-serif!important;font-size:11px!important;font-weight:700!important;letter-spacing:.16em!important;line-height:1.5!important}
@@ -409,7 +409,7 @@
     body.zsh-inner-page>main>.container,
     body.zsh-inner-page>main>.page-wrap{
       box-sizing:border-box!important;
-      width:min(1080px,calc(100% - 40px))!important;
+      width:min(1240px,calc(100% - 48px))!important;
       max-width:1080px!important;
       margin-left:auto!important;margin-right:auto!important;
     }
@@ -453,6 +453,24 @@
       body.zsh-inner-page>main>.page-wrap{
         width:calc(100% - 24px)!important;
       }
+    }
+
+    /* One centered page canvas across all inner pages. */
+    body.zsh-inner-page>main{
+      box-sizing:border-box!important;width:min(1240px,calc(100% - 48px))!important;
+      max-width:1240px!important;margin-left:auto!important;margin-right:auto!important;
+    }
+    body.zsh-inner-page>main>.wrap,body.zsh-inner-page>main>.container,body.zsh-inner-page>main>.page-wrap,
+    body.zsh-inner-page>.wrap,body.zsh-inner-page>.container,body.zsh-inner-page>.page-wrap{
+      box-sizing:border-box!important;width:min(1240px,calc(100% - 48px))!important;
+      max-width:1240px!important;margin-left:auto!important;margin-right:auto!important;
+    }
+    body.zsh-inner-page main .wrap,body.zsh-inner-page main .container,body.zsh-inner-page main .page-wrap{
+      box-sizing:border-box!important;max-width:1240px!important;margin-left:auto!important;margin-right:auto!important;
+    }
+    @media(max-width:560px){
+      body.zsh-inner-page>main,body.zsh-inner-page>main>.wrap,body.zsh-inner-page>main>.container,body.zsh-inner-page>main>.page-wrap,
+      body.zsh-inner-page>.wrap,body.zsh-inner-page>.container,body.zsh-inner-page>.page-wrap{width:calc(100% - 24px)!important}
     }
   `;
   document.head.querySelector('#zombcash-shared-navigation-style')?.remove();
