@@ -70,6 +70,15 @@
     loginSlot.replaceWith(loginButton);
   }
 
+  // Load the same two typefaces on pages whose legacy templates did not import them.
+  if (!document.querySelector('link[data-zsh-fonts]')) {
+    const fonts = document.createElement('link');
+    fonts.rel = 'stylesheet';
+    fonts.href = 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap';
+    fonts.setAttribute('data-zsh-fonts', 'true');
+    document.head.append(fonts);
+  }
+
   const style = document.createElement('style');
   style.id = 'zombcash-shared-navigation-style';
   style.textContent = `
@@ -190,8 +199,8 @@
 
     /* Shared page typography: consistent hierarchy beneath the common header.
        Keep the home hero and interactive game canvases untouched. */
-    body.zsh-inner-page main h1,
-    body.zsh-inner-page main h1{
+    body.zsh-inner-page h1{
+      font-family:Orbitron,Arial,sans-serif!important;font-weight:800!important;
       font-size:clamp(38px,4.6vw,64px)!important;
       line-height:1.06!important;letter-spacing:-.035em!important;
       margin:12px 0 18px!important;max-width:100%!important;
@@ -207,11 +216,32 @@
       line-height:1.55!important;max-width:820px!important;
       margin:0 0 22px!important;
     }
-    body.zsh-inner-page main{min-width:0}
-    body.zsh-inner-page main h2{line-height:1.22}
+    body.zsh-inner-page main{
+      min-width:0!important;
+      font-family:Rajdhani,Arial,sans-serif!important;
+      font-size:18px;
+      line-height:1.6;
+    }
+    body.zsh-inner-page main h1,
+    body.zsh-inner-page h2,
+    body.zsh-inner-page h3,
+    body.zsh-inner-page h4{
+      font-family:Orbitron,Arial,sans-serif!important;
+      font-weight:700!important;
+      letter-spacing:-.025em;
+    }
+    body.zsh-inner-page h2{font-size:clamp(22px,2.2vw,30px)!important;line-height:1.25!important}
+    body.zsh-inner-page h3{font-size:clamp(16px,1.5vw,20px)!important;line-height:1.3!important}
+    body.zsh-inner-page main p,
+    body.zsh-inner-page main li{font-family:Rajdhani,Arial,sans-serif!important;font-size:18px;line-height:1.6}
+    body.zsh-inner-page main .wrap,
+    body.zsh-inner-page main .container,
+    body.zsh-inner-page main .page-wrap{box-sizing:border-box;max-width:min(1080px,calc(100% - 40px));margin-left:auto;margin-right:auto}
+    body.zsh-inner-page main .eyebrow,
+    body.zsh-inner-page main .kicker{font-family:Orbitron,Arial,sans-serif!important;font-size:11px!important;font-weight:700!important;letter-spacing:.16em!important;line-height:1.5!important}
+    body.zsh-inner-page main .lead{font-family:Rajdhani,Arial,sans-serif!important;font-size:clamp(18px,1.55vw,21px)!important;line-height:1.55!important;max-width:820px!important;margin:0 0 22px!important}
     @media(max-width:650px){
-      body.zsh-inner-page main h1,
-      body.zsh-inner-page main h1{font-size:clamp(32px,8vw,44px)!important;line-height:1.08!important}
+      body.zsh-inner-page h1{font-size:clamp(32px,8vw,44px)!important;line-height:1.08!important}
       body main .eyebrow{margin-top:18px!important}
       body main .lead{font-size:18px!important}
     }
@@ -295,23 +325,23 @@
 
   // Keep the generated navigation labels in sync with the existing nine-language selector.
   const navDictionary = {
-    de:['LEBENDIGE WELT','FELDHANDBUCH','CREW-ABSTIMMUNG','SURVIVOR HUB','ARCADE','ZOMBIE-GALERIE','ZOMBIE-MAKER','COMMUNITY','$ZOMBCASH KAUFEN','ZURÜCK ZUR STARTSEITE','ÜBERLEBENDEN BEITRETEN','TELEGRAM ÖFFNEN','MENÜ'],
-    fr:['MONDE VIVANT','GUIDE DE SURVIE','VOTE DE L’ÉQUIPE','SURVIVOR HUB','ARCADE','GALERIE ZOMBIE','CRÉATEUR DE ZOMBIES','COMMUNAUTÉ','ACHETER $ZOMBCASH','RETOUR À L’ACCUEIL','REJOINDRE LES SURVIVANTS','OUVRIR TELEGRAM','MENU'],
-    it:['MONDO VIVO','MANUALE DI SOPRAVVIVENZA','VOTO DELLA CREW','SURVIVOR HUB','ARCADE','GALLERIA ZOMBIE','CREA ZOMBIE','COMMUNITY','COMPRA $ZOMBCASH','TORNA ALLA HOME','UNISCITI AI SOPRAVVISSUTI','APRI TELEGRAM','MENU'],
-    ja:['ライブワールド','サバイバルガイド','クルー投票','サバイバーハブ','アーケード','ゾンビギャラリー','ゾンビメーカー','コミュニティ','$ZOMBCASHを購入','ホームに戻る','サバイバーに参加','Telegramを開く','メニュー'],
-    'zh-CN':['实时世界','生存指南','团队投票','幸存者中心','街机','僵尸画廊','僵尸制作器','社区','购买 $ZOMBCASH','返回首页','加入幸存者','打开 Telegram','菜单'],
-    ru:['ЖИВОЙ МИР','СПРАВОЧНИК ВЫЖИВШЕГО','ГОЛОСОВАНИЕ КОМАНДЫ','РЕФЕРАЛЫ / SURVIVOR HUB','АРКАДА','ГАЛЕРЕЯ ЗОМБИ','СОЗДАТЕЛЬ ЗОМБИ','СООБЩЕСТВО','КУПИТЬ $ZOMBCASH','НА ГЛАВНУЮ','ПРИСОЕДИНИТЬСЯ К ВЫЖИВШИМ','ОТКРЫТЬ TELEGRAM','МЕНЮ'],
-    tr:['CANLI DÜNYA','HAYATTA KALMA REHBERİ','EKİP OYLAMASI','SURVIVOR MERKEZİ','ARCADE','ZOMBİ GALERİSİ','ZOMBİ OLUŞTURUCU','TOPLULUK','$ZOMBCASH SATIN AL','ANA SAYFAYA DÖN','HAYATTA KALANLARA KATIL','TELEGRAM’I AÇ','MENÜ'],
-    hi:['लाइव दुनिया','सर्वाइवल गाइड','टीम वोट','सर्वाइवर हब','आर्केड','ज़ॉम्बी गैलरी','ज़ॉम्बी मेकर','समुदाय','$ZOMBCASH खरीदें','होम पर लौटें','सर्वाइवर्स से जुड़ें','TELEGRAM खोलें','मेन्यू']
+    de:['LEBENDIGE WELT','FELDHANDBUCH','ÜBERTRAGUNG','CREW-ABSTIMMUNG','SURVIVOR HUB','ARCADE','ZOMBIE-GALERIE','ZOMBIE-MAKER','COMMUNITY','$ZOMBCASH KAUFEN','ZURÜCK ZUR STARTSEITE','ÜBERLEBENDEN BEITRETEN','TELEGRAM ÖFFNEN','MENÜ'],
+    fr:['MONDE VIVANT','GUIDE DE SURVIE','TRANSMISSION','VOTE DE L’ÉQUIPE','SURVIVOR HUB','ARCADE','GALERIE ZOMBIE','CRÉATEUR DE ZOMBIES','COMMUNAUTÉ','ACHETER $ZOMBCASH','RETOUR À L’ACCUEIL','REJOINDRE LES SURVIVANTS','OUVRIR TELEGRAM','MENU'],
+    it:['MONDO VIVO','MANUALE DI SOPRAVVIVENZA','TRASMISSIONE','VOTO DELLA CREW','SURVIVOR HUB','ARCADE','GALLERIA ZOMBIE','CREA ZOMBIE','COMMUNITY','COMPRA $ZOMBCASH','TORNA ALLA HOME','UNISCITI AI SOPRAVVISSUTI','APRI TELEGRAM','MENU'],
+    ja:['ライブワールド','サバイバルガイド','アウトブレイク通信','クルー投票','サバイバーハブ','アーケード','ゾンビギャラリー','ゾンビメーカー','コミュニティ','$ZOMBCASHを購入','ホームに戻る','サバイバーに参加','Telegramを開く','メニュー'],
+    'zh-CN':['实时世界','生存指南','疫情广播','团队投票','幸存者中心','街机','僵尸画廊','僵尸制作器','社区','购买 $ZOMBCASH','返回首页','加入幸存者','打开 Telegram','菜单'],
+    ru:['ЖИВОЙ МИР','СПРАВОЧНИК ВЫЖИВШЕГО','ТРАНСЛЯЦИЯ','ГОЛОСОВАНИЕ КОМАНДЫ','РЕФЕРАЛЫ / SURVIVOR HUB','АРКАДА','ГАЛЕРЕЯ ЗОМБИ','СОЗДАТЕЛЬ ЗОМБИ','СООБЩЕСТВО','КУПИТЬ $ZOMBCASH','НА ГЛАВНУЮ','ПРИСОЕДИНИТЬСЯ К ВЫЖИВШИМ','ОТКРЫТЬ TELEGRAM','МЕНЮ'],
+    tr:['CANLI DÜNYA','HAYATTA KALMA REHBERİ','YAYINLAR','EKİP OYLAMASI','SURVIVOR MERKEZİ','ARCADE','ZOMBİ GALERİSİ','ZOMBİ OLUŞTURUCU','TOPLULUK','$ZOMBCASH SATIN AL','ANA SAYFAYA DÖN','HAYATTA KALANLARA KATIL','TELEGRAM’I AÇ','MENÜ'],
+    hi:['लाइव दुनिया','सर्वाइवल गाइड','प्रसारण','टीम वोट','सर्वाइवर हब','आर्केड','ज़ॉम्बी गैलरी','ज़ॉम्बी मेकर','समुदाय','$ZOMBCASH खरीदें','होम पर लौटें','सर्वाइवर्स से जुड़ें','TELEGRAM खोलें','मेन्यू']
   };
   function localizeNav(language) {
     const translated = navDictionary[language];
     const links = [...nav.querySelectorAll(':scope > a')].filter(link => !link.classList.contains('zsh-home'));
     labels.forEach((item, index) => { if (links[index]) links[index].textContent = translated ? translated[index] : item[0]; });
     const back = header.querySelector('.zsh-actions > .zsh-home');
-    if (back) back.innerHTML = '<span aria-hidden="true">←</span> ' + (translated ? translated[9] : 'BACK TO HOME');
+    if (back) back.innerHTML = '<span aria-hidden="true">←</span> ' + (translated ? translated[10] : 'BACK TO HOME');
     const menuLabel = header.querySelector('.zsh-menu-label');
-    if (menuLabel) menuLabel.textContent = translated ? translated[12] : 'MENU';
+    if (menuLabel) menuLabel.textContent = translated ? translated[13] : 'MENU';
     const brandSmall = header.querySelector('.zsh-brand-copy small');
     if (brandSmall) brandSmall.textContent = language === 'ru' ? 'ИНТЕРНЕТ НЕЖИТИ' : 'THE UNDEAD INTERNET';
     if (loginButton) {
