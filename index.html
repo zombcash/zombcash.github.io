@@ -670,6 +670,18 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 }
 </style>
 <style id="field-manual-spotlight-style">.field-manual-spotlight{display:flex;align-items:center;justify-content:space-between;gap:28px;margin:28px 0 10px;padding:clamp(20px,3vw,34px);border:1px solid #385039;border-left:4px solid #9bff45;border-radius:14px;background:radial-gradient(ellipse at 90% 0,rgba(72,133,45,.2),transparent 55%),linear-gradient(135deg,#0e1712,#090e13);box-shadow:0 12px 34px rgba(0,0,0,.22)}.field-manual-copy{min-width:0}.field-manual-kicker{font:700 10px Orbitron,sans-serif;letter-spacing:.14em;color:#9bff45}.field-manual-spotlight h2{font-size:clamp(22px,3vw,34px);line-height:1.15;margin:9px 0}.field-manual-spotlight p{max-width:700px;color:#c1cec3;line-height:1.6;margin:8px 0 18px}.field-manual-link{display:inline-flex;gap:12px;align-items:center;padding:12px 16px;background:#9bff45;color:#091007;text-decoration:none;font:800 11px Orbitron,sans-serif;letter-spacing:.05em;border-radius:5px}.field-manual-link:hover{background:#c5ff9b;color:#091007}.field-manual-status{display:flex;flex:0 0 180px;flex-direction:column;gap:8px;padding:16px;border:1px solid #2b4030;background:#080e0a;border-radius:9px;font:700 10px Orbitron,sans-serif;letter-spacing:.08em;color:#a6b5a5}.field-manual-status strong{color:#edf5eb;font-size:12px}.field-manual-status small{color:#72836f;font-size:9px}.field-manual-dot{width:8px;height:8px;border-radius:50%;background:#9bff45;box-shadow:0 0 12px #9bff45}@media(max-width:650px){.field-manual-spotlight{flex-direction:column;align-items:stretch}.field-manual-status{flex-basis:auto}}</style>
+<style id="mobile-overflow-guard-20261023">
+/* Keep the mobile canvas within the viewport; wide data tables retain their own scrolling. */
+@media (max-width: 600px) {
+  html, body { max-width: 100%; overflow-x: clip; }
+  body { width: 100%; }
+  body > main, body > section, body > footer, body > header,
+  body > .site-shell, body > .page-shell {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+}
+</style>
 </head>
 <body>
 <div class="scanlines"></div>
