@@ -193,6 +193,17 @@
       font:700 8px/1 Orbitron,system-ui,sans-serif!important;letter-spacing:.1px!important;
       white-space:nowrap!important;vertical-align:middle!important;
     }
+    /* Back-to-home uses the same arrow, spacing, sizing and alignment on every page. */
+    header.zombcash-shared-header .zsh-actions>.zsh-home{
+      display:inline-flex!important;align-items:center!important;justify-content:center!important;
+      gap:6px!important;white-space:nowrap!important;text-indent:0!important;
+    }
+    header.zombcash-shared-header .zsh-actions>.zsh-home>span[aria-hidden="true"]{
+      display:inline-block!important;position:static!important;flex:0 0 auto!important;
+      width:auto!important;height:auto!important;margin:0!important;padding:0!important;
+      font:700 12px/1 Arial,sans-serif!important;line-height:1!important;
+      opacity:1!important;visibility:visible!important;transform:none!important;
+    }
     header.zombcash-shared-header .zsh-actions>.zsh-home,
     header.zombcash-shared-header .zsh-actions .survivor-entry-button,
     header.zombcash-shared-header .zsh-actions .top-cta,
