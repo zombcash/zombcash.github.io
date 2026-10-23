@@ -5,6 +5,7 @@
   'use strict';
   const file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   const isHome = file === 'index.html';
+  if (!isHome) document.body.classList.add('zsh-inner-page');
   const home = 'index.html';
   const labels = [
     ['LIVE WORLD', '#living-world', 'home'],
@@ -189,8 +190,8 @@
 
     /* Shared page typography: consistent hierarchy beneath the common header.
        Keep the home hero and interactive game canvases untouched. */
-    body:not(.home-page) main h1,
-    body:not(.gallery-page) main h1{
+    body.zsh-inner-page main h1,
+    body.zsh-inner-page main h1{
       font-size:clamp(38px,4.6vw,64px)!important;
       line-height:1.06!important;letter-spacing:-.035em!important;
       margin:12px 0 18px!important;max-width:100%!important;
@@ -206,11 +207,11 @@
       line-height:1.55!important;max-width:820px!important;
       margin:0 0 22px!important;
     }
-    body:not(.home-page) main{min-width:0}
-    body:not(.home-page) main h2{line-height:1.22}
+    body.zsh-inner-page main{min-width:0}
+    body.zsh-inner-page main h2{line-height:1.22}
     @media(max-width:650px){
-      body:not(.home-page) main h1,
-      body:not(.gallery-page) main h1{font-size:clamp(32px,8vw,44px)!important;line-height:1.08!important}
+      body.zsh-inner-page main h1,
+      body.zsh-inner-page main h1{font-size:clamp(32px,8vw,44px)!important;line-height:1.08!important}
       body main .eyebrow{margin-top:18px!important}
       body main .lead{font-size:18px!important}
     }
