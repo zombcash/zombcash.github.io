@@ -40,7 +40,7 @@
 
   header.classList.add('zombcash-shared-header');
   header.innerHTML =
-    '<a class="zsh-brand" href="' + brandHref + '" aria-label="ZombieCash home">' +
+    '<a class="zsh-brand notranslate" translate="no" href="' + brandHref + '" aria-label="ZombieCash home">' +
       '<span class="zsh-mark" aria-hidden="true">☣</span>' +
       '<span class="zsh-brand-copy">ZOMBIE<span class="zsh-green">CASH</span><small>THE UNDEAD INTERNET</small></span>' +
     '</a>' +
