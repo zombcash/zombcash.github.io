@@ -10,39 +10,39 @@ permissions:
 
 jobs:
   pagespeed:
-    name: PageSpeed ${{ matrix.strategy }} — ${{ matrix.page }}
+    name: PageSpeed ${{ matrix.strategy }} — ${{ matrix.page.name }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         strategy: [mobile, desktop]
-        include:
-          - page: homepage
+        page:
+          - name: homepage
             url: https://zombcash.github.io/
-          - page: crew-vote
+          - name: crew-vote
             url: https://zombcash.github.io/crew-vote.html
-          - page: survivor-hub
+          - name: survivor-hub
             url: https://zombcash.github.io/survivor-hub.html
-          - page: outbreak-transmission
+          - name: outbreak-transmission
             url: https://zombcash.github.io/outbreak-transmission.html
-          - page: german-homepage
+          - name: german-homepage
             url: https://zombcash.github.io/de/
-          - page: japanese-homepage
+          - name: japanese-homepage
             url: https://zombcash.github.io/ja/
     steps:
       - name: Run Google PageSpeed Insights
         env:
-          PAGE_URL: ${{ matrix.url }}
+          PAGE_URL: ${{ matrix.page.url }}
           STRATEGY: ${{ matrix.strategy }}
           PSI_API_KEY: ${{ secrets.PAGESPEED_API_KEY }}
         run: |
           set -euo pipefail
-          if [ -n "${PSI_API_KEY:-}" ]; then
-            KEY_PARAM="&key=${PSI_API_KEY}"
-          else
-            KEY_PARAM=""
+          if [ -z "${PSI_API_KEY:-}" ]; then
+            echo "::error::Missing PAGESPEED_API_KEY secret. Add it in GitHub Settings > Secrets and variables > Actions."
+            echo "Create a Google Cloud API key and enable PageSpeed Insights API first."
+            exit 1
           fi
-          API_URL="https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${PAGE_URL}&strategy=${STRATEGY}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO${KEY_PARAM}"
+          API_URL="https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${PAGE_URL}&strategy=${STRATEGY}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO&key=${PSI_API_KEY}"
           HTTP_CODE=$(curl -sS -o psi.json -w '%{http_code}' --retry 2 --retry-delay 3 "$API_URL")
           if [ "$HTTP_CODE" != "200" ]; then
             echo "PageSpeed API failed with HTTP $HTTP_CODE for $PAGE_URL ($STRATEGY)"
