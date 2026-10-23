@@ -190,7 +190,6 @@
 
     /* Shared page typography: consistent hierarchy beneath the common header.
        Keep the home hero and interactive game canvases untouched. */
-    body.zsh-inner-page main h1,
     body.zsh-inner-page main h1{
       font-size:clamp(38px,4.6vw,64px)!important;
       line-height:1.06!important;letter-spacing:-.035em!important;
@@ -207,10 +206,31 @@
       line-height:1.55!important;max-width:820px!important;
       margin:0 0 22px!important;
     }
-    body.zsh-inner-page main{min-width:0}
-    body.zsh-inner-page main h2{line-height:1.22}
+    body.zsh-inner-page main{
+      min-width:0!important;
+      font-family:Rajdhani,Arial,sans-serif!important;
+      font-size:18px;
+      line-height:1.6;
+    }
+    body.zsh-inner-page main h1,
+    body.zsh-inner-page main h2,
+    body.zsh-inner-page main h3,
+    body.zsh-inner-page main h4{
+      font-family:Orbitron,Arial,sans-serif!important;
+      font-weight:700!important;
+      letter-spacing:-.025em;
+    }
+    body.zsh-inner-page main h2{font-size:clamp(22px,2.2vw,30px)!important;line-height:1.25!important}
+    body.zsh-inner-page main h3{font-size:clamp(16px,1.5vw,20px)!important;line-height:1.3!important}
+    body.zsh-inner-page main p,
+    body.zsh-inner-page main li{font-family:Rajdhani,Arial,sans-serif!important;font-size:18px;line-height:1.6}
+    body.zsh-inner-page main .wrap,
+    body.zsh-inner-page main .container,
+    body.zsh-inner-page main .page-wrap{box-sizing:border-box;max-width:min(1080px,calc(100% - 40px));margin-left:auto;margin-right:auto}
+    body.zsh-inner-page main .eyebrow,
+    body.zsh-inner-page main .kicker{font-family:Orbitron,Arial,sans-serif!important;font-size:11px!important;font-weight:700!important;letter-spacing:.16em!important;line-height:1.5!important}
+    body.zsh-inner-page main .lead{font-family:Rajdhani,Arial,sans-serif!important;font-size:clamp(18px,1.55vw,21px)!important;line-height:1.55!important;max-width:820px!important;margin:0 0 22px!important}
     @media(max-width:650px){
-      body.zsh-inner-page main h1,
       body.zsh-inner-page main h1{font-size:clamp(32px,8vw,44px)!important;line-height:1.08!important}
       body main .eyebrow{margin-top:18px!important}
       body main .lead{font-size:18px!important}
