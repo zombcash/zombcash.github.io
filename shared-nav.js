@@ -886,6 +886,39 @@
     }
 
 
+
+    /* 2026-10-23 layout repair: keep actions and nav in separate rows at common desktop widths. */
+    header.zombcash-shared-header {
+      width:100%!important;max-width:100%!important;
+      margin-left:0!important;margin-right:0!important;
+    }
+    header.zombcash-shared-header .zsh-actions>.zsh-home{order:1!important}
+    header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:2!important}
+    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:3!important}
+    @media (min-width:1200px) and (max-width:1699px) {
+      header.zombcash-shared-header {
+        grid-template-columns:minmax(0,1fr) auto!important;
+        grid-template-rows:auto auto!important;
+        align-items:center!important;gap:8px 16px!important;
+        padding:12px clamp(16px,2.5vw,36px)!important;
+      }
+      header.zombcash-shared-header .zsh-brand{grid-column:1!important;grid-row:1!important}
+      header.zombcash-shared-header .zsh-actions{
+        grid-column:2!important;grid-row:1!important;flex-wrap:nowrap!important;
+        width:auto!important;max-width:100%!important;justify-content:flex-end!important;
+      }
+      header.zombcash-shared-header .zsh-nav,
+      header.zombcash-shared-header .zsh-nav.zsh-open {
+        position:static!important;grid-column:1/-1!important;grid-row:2!important;
+        display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;
+        justify-content:flex-start!important;align-items:center!important;
+        gap:4px 18px!important;width:100%!important;max-width:100%!important;
+        margin:0!important;padding:10px 0 2px!important;
+        border-top:1px solid #9bff4520!important;transform:none!important;
+      }
+      header.zombcash-shared-header .zsh-menu-toggle{display:none!important}
+    }
+
     /* LAST-WINS desktop override: primary nav items are text links, not boxed buttons. */
     @media (min-width: 1200px) {
       header.zombcash-shared-header .zsh-nav > a,
