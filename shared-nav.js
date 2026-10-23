@@ -21,8 +21,14 @@
     ['COMMUNITY', '/index.html#community', 'home'],
     ['BUY $ZOMBCASH', '/index.html#community-console', 'home']
   ];
-  const header = document.querySelector('body > header, body header');
-  if (!header) return;
+  // Do not mistake a translated landing-page hero (<header class="hero">) for the shared site header.
+  // Some locale pages have a hero header but no separate site header; create the shared shell without
+  // replacing the hero, heading, or its localized content.
+  let header = document.querySelector('body > header:not(.hero), body header:not(.hero)');
+  if (!header) {
+    header = document.createElement('header');
+    document.body.insertBefore(header, document.body.firstChild);
+  }
 
   // Legacy pages often wrap their header in a centered .wrap (for example,
   // Outbreak Transmission uses a 1000px content wrapper). Move the shared
