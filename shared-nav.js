@@ -8,7 +8,7 @@
   const home = 'index.html';
   const labels = [
     ['LIVE WORLD', '#living-world', 'home'],
-    ['RADAR', '#radar', 'home'],
+    ['FIELD MANUAL', 'survivor-field-manual.html', 'manual'],
     ['CREW VOTE', 'crew-vote.html', 'vote'],
     ['SURVIVOR HUB', 'survivor-hub.html', 'hub'],
     ['ARCADE', 'arcade.html', 'arcade'],
@@ -37,7 +37,8 @@
     '<nav id="zsh-navigation" class="zsh-nav" aria-label="Main navigation">' +
       labels.map(([label, href, id]) => {
         const destination = id === 'home' ? target(href) : href;
-        const active = (id === 'vote' && file === 'crew-vote.html') ||
+        const active = (id === 'manual' && file === 'survivor-field-manual.html') ||
+          (id === 'vote' && file === 'crew-vote.html') ||
           (id === 'arcade' && file === 'arcade.html') ||
           (id === 'gallery' && file === 'gallery.html') ||
           (id === 'maker' && file === 'zombie-maker.html') ||
@@ -260,14 +261,14 @@
 
   // Keep the generated navigation labels in sync with the existing nine-language selector.
   const navDictionary = {
-    de:['LEBENDIGE WELT','RADAR','CREW-ABSTIMMUNG','SURVIVOR HUB','ARCADE','ZOMBIE-GALERIE','ZOMBIE-MAKER','COMMUNITY','$ZOMBCASH KAUFEN','ZURÜCK ZUR STARTSEITE','ÜBERLEBENDEN BEITRETEN','TELEGRAM ÖFFNEN','MENÜ'],
-    fr:['MONDE VIVANT','RADAR','VOTE DE L’ÉQUIPE','SURVIVOR HUB','ARCADE','GALERIE ZOMBIE','CRÉATEUR DE ZOMBIES','COMMUNAUTÉ','ACHETER $ZOMBCASH','RETOUR À L’ACCUEIL','REJOINDRE LES SURVIVANTS','OUVRIR TELEGRAM','MENU'],
-    it:['MONDO VIVO','RADAR','VOTO DELLA CREW','SURVIVOR HUB','ARCADE','GALLERIA ZOMBIE','CREA ZOMBIE','COMMUNITY','COMPRA $ZOMBCASH','TORNA ALLA HOME','UNISCITI AI SOPRAVVISSUTI','APRI TELEGRAM','MENU'],
-    ja:['ライブワールド','レーダー','クルー投票','サバイバーハブ','アーケード','ゾンビギャラリー','ゾンビメーカー','コミュニティ','$ZOMBCASHを購入','ホームに戻る','サバイバーに参加','Telegramを開く','メニュー'],
-    'zh-CN':['实时世界','雷达','团队投票','幸存者中心','街机','僵尸画廊','僵尸制作器','社区','购买 $ZOMBCASH','返回首页','加入幸存者','打开 Telegram','菜单'],
-    ru:['ЖИВОЙ МИР','РАДАР','ГОЛОСОВАНИЕ КОМАНДЫ','РЕФЕРАЛЫ / SURVIVOR HUB','АРКАДА','ГАЛЕРЕЯ ЗОМБИ','СОЗДАТЕЛЬ ЗОМБИ','СООБЩЕСТВО','КУПИТЬ $ZOMBCASH','НА ГЛАВНУЮ','ПРИСОЕДИНИТЬСЯ К ВЫЖИВШИМ','ОТКРЫТЬ TELEGRAM','МЕНЮ'],
-    tr:['CANLI DÜNYA','RADAR','EKİP OYLAMASI','SURVIVOR MERKEZİ','ARCADE','ZOMBİ GALERİSİ','ZOMBİ OLUŞTURUCU','TOPLULUK','$ZOMBCASH SATIN AL','ANA SAYFAYA DÖN','HAYATTA KALANLARA KATIL','TELEGRAM’I AÇ','MENÜ'],
-    hi:['लाइव दुनिया','रडार','टीम वोट','सर्वाइवर हब','आर्केड','ज़ॉम्बी गैलरी','ज़ॉम्बी मेकर','समुदाय','$ZOMBCASH खरीदें','होम पर लौटें','सर्वाइवर्स से जुड़ें','TELEGRAM खोलें','मेन्यू']
+    de:['LEBENDIGE WELT','FELDHANDBUCH','CREW-ABSTIMMUNG','SURVIVOR HUB','ARCADE','ZOMBIE-GALERIE','ZOMBIE-MAKER','COMMUNITY','$ZOMBCASH KAUFEN','ZURÜCK ZUR STARTSEITE','ÜBERLEBENDEN BEITRETEN','TELEGRAM ÖFFNEN','MENÜ'],
+    fr:['MONDE VIVANT','GUIDE DE SURVIE','VOTE DE L’ÉQUIPE','SURVIVOR HUB','ARCADE','GALERIE ZOMBIE','CRÉATEUR DE ZOMBIES','COMMUNAUTÉ','ACHETER $ZOMBCASH','RETOUR À L’ACCUEIL','REJOINDRE LES SURVIVANTS','OUVRIR TELEGRAM','MENU'],
+    it:['MONDO VIVO','MANUALE DI SOPRAVVIVENZA','VOTO DELLA CREW','SURVIVOR HUB','ARCADE','GALLERIA ZOMBIE','CREA ZOMBIE','COMMUNITY','COMPRA $ZOMBCASH','TORNA ALLA HOME','UNISCITI AI SOPRAVVISSUTI','APRI TELEGRAM','MENU'],
+    ja:['ライブワールド','サバイバルガイド','クルー投票','サバイバーハブ','アーケード','ゾンビギャラリー','ゾンビメーカー','コミュニティ','$ZOMBCASHを購入','ホームに戻る','サバイバーに参加','Telegramを開く','メニュー'],
+    'zh-CN':['实时世界','生存指南','团队投票','幸存者中心','街机','僵尸画廊','僵尸制作器','社区','购买 $ZOMBCASH','返回首页','加入幸存者','打开 Telegram','菜单'],
+    ru:['ЖИВОЙ МИР','СПРАВОЧНИК ВЫЖИВШЕГО','ГОЛОСОВАНИЕ КОМАНДЫ','РЕФЕРАЛЫ / SURVIVOR HUB','АРКАДА','ГАЛЕРЕЯ ЗОМБИ','СОЗДАТЕЛЬ ЗОМБИ','СООБЩЕСТВО','КУПИТЬ $ZOMBCASH','НА ГЛАВНУЮ','ПРИСОЕДИНИТЬСЯ К ВЫЖИВШИМ','ОТКРЫТЬ TELEGRAM','МЕНЮ'],
+    tr:['CANLI DÜNYA','HAYATTA KALMA REHBERİ','EKİP OYLAMASI','SURVIVOR MERKEZİ','ARCADE','ZOMBİ GALERİSİ','ZOMBİ OLUŞTURUCU','TOPLULUK','$ZOMBCASH SATIN AL','ANA SAYFAYA DÖN','HAYATTA KALANLARA KATIL','TELEGRAM’I AÇ','MENÜ'],
+    hi:['लाइव दुनिया','सर्वाइवल गाइड','टीम वोट','सर्वाइवर हब','आर्केड','ज़ॉम्बी गैलरी','ज़ॉम्बी मेकर','समुदाय','$ZOMBCASH खरीदें','होम पर लौटें','सर्वाइवर्स से जुड़ें','TELEGRAM खोलें','मेन्यू']
   };
   function localizeNav(language) {
     const translated = navDictionary[language];
