@@ -468,21 +468,22 @@
     }
 
     /* One centered page canvas across all inner pages. */
+    /* Reduce oversized side gutters while keeping every page on one shared canvas. */
     body.zsh-inner-page>main{
-      box-sizing:border-box!important;width:min(1240px,calc(100% - 48px))!important;
-      max-width:1240px!important;margin-left:auto!important;margin-right:auto!important;
+      box-sizing:border-box!important;width:min(1440px,calc(100% - 32px))!important;
+      max-width:1440px!important;margin-left:auto!important;margin-right:auto!important;
     }
     body.zsh-inner-page>main>.wrap,body.zsh-inner-page>main>.container,body.zsh-inner-page>main>.page-wrap,
     body.zsh-inner-page>.wrap,body.zsh-inner-page>.container,body.zsh-inner-page>.page-wrap{
-      box-sizing:border-box!important;width:min(1240px,calc(100% - 48px))!important;
-      max-width:1240px!important;margin-left:auto!important;margin-right:auto!important;
+      box-sizing:border-box!important;width:min(1440px,calc(100% - 32px))!important;
+      max-width:1440px!important;margin-left:auto!important;margin-right:auto!important;
     }
     body.zsh-inner-page main .wrap,body.zsh-inner-page main .container,body.zsh-inner-page main .page-wrap{
-      box-sizing:border-box!important;max-width:1240px!important;margin-left:auto!important;margin-right:auto!important;
+      box-sizing:border-box!important;max-width:1440px!important;margin-left:auto!important;margin-right:auto!important;
     }
     @media(max-width:560px){
       body.zsh-inner-page>main,body.zsh-inner-page>main>.wrap,body.zsh-inner-page>main>.container,body.zsh-inner-page>main>.page-wrap,
-      body.zsh-inner-page>.wrap,body.zsh-inner-page>.container,body.zsh-inner-page>.page-wrap{width:calc(100% - 24px)!important}
+      body.zsh-inner-page>.wrap,body.zsh-inner-page>.container,body.zsh-inner-page>.page-wrap{width:calc(100% - 20px)!important}
     }
   `;
   document.head.querySelector('#zombcash-shared-navigation-style')?.remove();
