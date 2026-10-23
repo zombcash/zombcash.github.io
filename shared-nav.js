@@ -752,6 +752,40 @@
       }
     }
 
+
+    /* Desktop primary navigation: clean text links, not a row of boxed buttons. */
+    @media (min-width: 1200px) {
+      header.zombcash-shared-header .zsh-nav > a {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-height: 28px !important;
+        margin: 0 !important;
+        padding: 5px 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        color: #c5d0c3 !important;
+        font-size: clamp(8px, .58vw, 10px) !important;
+        font-weight: 600 !important;
+        letter-spacing: 0 !important;
+        text-decoration: none !important;
+      }
+      header.zombcash-shared-header .zsh-nav > a:hover {
+        color: #9bff45 !important;
+        background: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
+      }
+      header.zombcash-shared-header .zsh-nav > a[aria-current="page"] {
+        color: #9bff45 !important;
+        background: transparent !important;
+        border: 0 !important;
+        box-shadow: inset 0 -1px 0 #9bff45 !important;
+      }
+    }
+
     /* Mobile-only layout overrides. Desktop navigation remains unchanged. */
     @media (max-width: 760px) {
       header.zombcash-shared-header {
