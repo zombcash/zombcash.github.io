@@ -454,6 +454,7 @@
       header.zombcash-shared-header .zsh-nav{gap:14px!important;margin-top:8px!important;padding:8px 0!important}
     }
     @media(max-width:560px){
+      /* Mobile navigation must stay inside the header and remain collapsed until MENU is tapped. */
       header.zombcash-shared-header{
         grid-template-columns:minmax(0,1fr)!important;
         grid-template-rows:auto auto auto!important;
@@ -464,9 +465,27 @@
         grid-column:1!important;grid-row:2!important;justify-self:start!important;
         flex-wrap:wrap!important;justify-content:flex-start!important;margin-top:9px!important;
       }
-      header.zombcash-shared-header .zsh-nav{
-        grid-column:1!important;grid-row:3!important;margin-top:8px!important;
+      header.zombcash-shared-header .zsh-menu-toggle{
+        display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;
+        position:absolute!important;right:12px!important;top:12px!important;min-height:36px!important;
+        padding:8px 10px!important;border:1px solid #42613a!important;border-radius:2px!important;
+        background:#0b120c!important;color:#b8f992!important;cursor:pointer!important;z-index:10003!important;
       }
+      header.zombcash-shared-header .zsh-nav{
+        position:static!important;left:auto!important;top:auto!important;transform:none!important;
+        grid-column:1!important;grid-row:3!important;display:none!important;
+        width:100%!important;max-width:none!important;min-width:0!important;
+        flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;
+        flex-wrap:nowrap!important;gap:0!important;margin:10px 0 12px!important;padding:6px!important;
+        border:1px solid #263a2a!important;background:#080d09!important;overflow:visible!important;
+      }
+      header.zombcash-shared-header .zsh-nav.zsh-open{display:flex!important}
+      header.zombcash-shared-header .zsh-nav>a{
+        display:flex!important;width:100%!important;min-height:40px!important;padding:10px 12px!important;
+        justify-content:flex-start!important;border-bottom:1px solid #1b2a1d!important;
+        font-size:10px!important;white-space:normal!important;
+      }
+      header.zombcash-shared-header .zsh-nav>a:last-child{border-bottom:0!important}
       header.zombcash-shared-header .zsh-brand-copy{font-size:12px!important}
       body.zsh-inner-page main h1{font-size:clamp(30px,8vw,42px)!important}
       body.zsh-inner-page>.wrap,
