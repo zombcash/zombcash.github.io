@@ -24,6 +24,13 @@
   const header = document.querySelector('body > header, body header');
   if (!header) return;
 
+  // Legacy pages often wrap their header in a centered .wrap (for example,
+  // Outbreak Transmission uses a 1000px content wrapper). Move the shared
+  // header to the body so it can span the viewport consistently on every page.
+  if (header.parentElement !== document.body) {
+    document.body.insertBefore(header, document.body.firstChild);
+  }
+
   // Preserve the Survivor Hub's working Telegram login control before rebuilding its common shell.
   const loginButton = file === 'survivor-hub.html'
     ? header.querySelector('button[data-i18n="login"], button.top-cta')
@@ -190,9 +197,9 @@
     header.zombcash-shared-header .zsh-actions .survivor-entry-button,
     header.zombcash-shared-header .zsh-actions .top-cta,
     header.zombcash-shared-header .zsh-actions .zsh-login-button{cursor:pointer;text-decoration:none!important}
-    header.zombcash-shared-header .zsh-actions>.zsh-home{order:1!important}
+    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:1!important}
     header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:2!important}
-    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:3!important}
+    header.zombcash-shared-header .zsh-actions>.zsh-home{order:3!important}
     header.zombcash-shared-header .zsh-actions>.zsh-home:hover,
     header.zombcash-shared-header .zsh-actions .language-trigger:hover,
     header.zombcash-shared-header .zsh-actions .survivor-entry-button:hover,
