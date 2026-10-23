@@ -639,6 +639,119 @@
       header.zombcash-shared-header .zsh-brand-copy{font-size:12px!important}
     }
 
+
+    /* FINAL DESKTOP REPAIR: one predictable row on wide screens; no wrapped last link. */
+    @media (min-width: 1200px) {
+      header.zombcash-shared-header {
+        display: grid !important;
+        grid-template-columns: 220px minmax(0, 1fr) 205px !important;
+        grid-template-rows: auto !important;
+        align-items: center !important;
+        gap: 12px !important;
+        min-height: 76px !important;
+        padding: 12px clamp(16px, 3vw, 48px) !important;
+      }
+      header.zombcash-shared-header .zsh-brand {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+        margin: 0 !important;
+        justify-self: start !important;
+      }
+      header.zombcash-shared-header .zsh-nav,
+      header.zombcash-shared-header .zsh-nav.zsh-open {
+        position: static !important;
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: clamp(5px, .55vw, 9px) !important;
+        width: 100% !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        overflow: visible !important;
+        transform: none !important;
+      }
+      header.zombcash-shared-header .zsh-nav > a {
+        flex: 0 1 auto !important;
+        min-width: 0 !important;
+        padding: 6px 0 !important;
+        font-size: clamp(7px, .48vw, 8px) !important;
+        letter-spacing: 0 !important;
+        white-space: nowrap !important;
+      }
+      header.zombcash-shared-header .zsh-actions {
+        grid-column: 3 !important;
+        grid-row: 1 !important;
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        justify-content: flex-end !important;
+        gap: 6px !important;
+        width: auto !important;
+        margin: 0 !important;
+      }
+      header.zombcash-shared-header .zsh-menu-toggle {
+        display: none !important;
+      }
+    }
+    /* Tablet landscape: use a menu instead of crushing the desktop navigation. */
+    @media (min-width: 761px) and (max-width: 1199px) {
+      header.zombcash-shared-header {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        grid-template-rows: auto auto !important;
+        gap: 8px 12px !important;
+        padding: 12px 20px !important;
+      }
+      header.zombcash-shared-header .zsh-brand {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+        margin: 0 !important;
+      }
+      header.zombcash-shared-header .zsh-menu-toggle {
+        display: inline-flex !important;
+        position: static !important;
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+        transform: none !important;
+      }
+      header.zombcash-shared-header .zsh-actions {
+        grid-column: 1 / -1 !important;
+        grid-row: 2 !important;
+        justify-content: flex-start !important;
+        margin: 0 !important;
+      }
+      header.zombcash-shared-header .zsh-nav,
+      header.zombcash-shared-header .zsh-nav.zsh-open {
+        position: static !important;
+        grid-column: 1 / -1 !important;
+        grid-row: 3 !important;
+        display: none !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 6px !important;
+        border: 1px solid #263a2a !important;
+        background: #080d09 !important;
+        transform: none !important;
+      }
+      header.zombcash-shared-header .zsh-nav.zsh-open { display: flex !important; }
+      header.zombcash-shared-header .zsh-nav > a {
+        width: 100% !important;
+        min-height: 38px !important;
+        padding: 9px 12px !important;
+        font-size: 10px !important;
+        white-space: normal !important;
+      }
+    }
+
     /* Mobile-only layout overrides. Desktop navigation remains unchanged. */
     @media (max-width: 760px) {
       header.zombcash-shared-header {
