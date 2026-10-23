@@ -885,6 +885,35 @@
       }
     }
 
+
+    /* LAST-WINS desktop override: primary nav items are text links, not boxed buttons. */
+    @media (min-width: 1200px) {
+      header.zombcash-shared-header .zsh-nav > a,
+      header.zombcash-shared-header .zsh-nav > a::before,
+      header.zombcash-shared-header .zsh-nav > a::after {
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        background-image: none !important;
+        box-shadow: none !important;
+        outline: 0 !important;
+        text-decoration: none !important;
+      }
+      header.zombcash-shared-header .zsh-nav > a {
+        min-height: 28px !important;
+        padding: 5px 0 !important;
+        color: #c5d0c3 !important;
+        font-size: clamp(8px, .58vw, 10px) !important;
+      }
+      header.zombcash-shared-header .zsh-nav > a:hover {
+        color: #9bff45 !important;
+      }
+      header.zombcash-shared-header .zsh-nav > a[aria-current="page"] {
+        color: #9bff45 !important;
+        box-shadow: inset 0 -1px 0 #9bff45 !important;
+      }
+    }
+
   `;
   document.head.querySelector('#zombcash-shared-navigation-style')?.remove();
   document.head.append(style);
