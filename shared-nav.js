@@ -117,7 +117,9 @@
     }
     header.zombcash-shared-header .zsh-nav>a:hover,
     header.zombcash-shared-header .zsh-nav>a[aria-current="page"]{color:#9bff45!important}
-    header.zombcash-shared-header .zsh-nav>a[aria-current="page"]{border-bottom:1px solid #9bff45!important}
+    header.zombcash-shared-header .zsh-nav>a[aria-current="page"]{border-bottom:1px solid #9bff45!important;text-decoration:none!important;box-shadow:none!important;background-image:none!important}
+    header.zombcash-shared-header .zsh-nav>a,header.zombcash-shared-header .zsh-nav>a::before,header.zombcash-shared-header .zsh-nav>a::after{box-shadow:none!important;text-decoration:none!important;background-image:none!important}
+    header.zombcash-shared-header .zsh-nav>a::before,header.zombcash-shared-header .zsh-nav>a::after{content:none!important}
     header.zombcash-shared-header .zsh-actions>.zsh-home{
       flex:0 0 auto!important;min-height:30px!important;padding:7px 9px!important;
       border:1px solid #42613a!important;color:#b8f992!important;font-size:7px!important;
