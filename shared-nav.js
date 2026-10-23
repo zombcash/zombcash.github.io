@@ -52,9 +52,9 @@
       }).join('') +
     '</nav>' +
     '<div class="zsh-actions">' +
-      (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<a class="zsh-login-button top-cta" href="survivor-hub.html" data-zsh-login>LOGIN WITH TELEGRAM</a>') +
+      (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<a class="zsh-login-button top-cta" href="/survivor-hub.html" data-zsh-login>LOGIN WITH TELEGRAM</a>') +
       '<div class="zsh-language-slot"></div>' +
-      (!isHome ? '<a class="zsh-home home-return-button" href="index.html"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
+      (!isHome ? '<a class="zsh-home home-return-button" href="/index.html"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
     '</div>';
 
   const actions = header.querySelector('.zsh-actions');
