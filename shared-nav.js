@@ -275,7 +275,7 @@
       body main .lead{font-size:18px!important}
     }
 
-    @media(max-width:1450px){
+    @media(max-width:1700px){
       header.zombcash-shared-header{grid-template-columns:minmax(0,1fr) auto!important;gap:10px!important;padding:10px 18px!important}
       header.zombcash-shared-header .zsh-actions{grid-column:2;grid-row:1}
       header.zombcash-shared-header .zsh-nav{
@@ -321,7 +321,7 @@
     }
     /* Desktop: reserve separate grid columns for brand, navigation and actions.
        Avoid absolute centering, which let long navigation labels overlap the buttons. */
-    @media(min-width:1451px){
+    @media(min-width:1701px){
       header.zombcash-shared-header{position:sticky!important;left:auto!important;transform:none!important;width:100vw!important;max-width:100vw!important;margin-left:calc(50% - 50vw)!important;margin-right:0!important;grid-template-columns:auto minmax(0,1fr) auto!important;gap:clamp(8px,.7vw,12px)!important}
       header.zombcash-shared-header .zsh-nav{position:static!important;left:auto!important;top:auto!important;transform:none!important;display:flex!important;grid-column:2!important;grid-row:1!important;justify-self:center!important;justify-content:center!important;flex-wrap:nowrap!important;gap:clamp(5px,.45vw,8px)!important;width:auto!important;max-width:100%!important;min-width:0!important;overflow:visible!important}
       header.zombcash-shared-header .zsh-nav>a{font-size:clamp(7px,.48vw,8px)!important;flex:0 1 auto!important}
