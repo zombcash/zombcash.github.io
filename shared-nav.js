@@ -188,9 +188,9 @@
     header.zombcash-shared-header .zsh-actions .survivor-entry-button,
     header.zombcash-shared-header .zsh-actions .top-cta,
     header.zombcash-shared-header .zsh-actions .zsh-login-button{cursor:pointer;text-decoration:none!important}
-    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:1!important}
+    header.zombcash-shared-header .zsh-actions>.zsh-home{order:1!important}
     header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:2!important}
-    header.zombcash-shared-header .zsh-actions>.zsh-home{order:3!important}
+    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:3!important}
     header.zombcash-shared-header .zsh-actions>.zsh-home:hover,
     header.zombcash-shared-header .zsh-actions .language-trigger:hover,
     header.zombcash-shared-header .zsh-actions .survivor-entry-button:hover,
@@ -317,13 +317,17 @@
       }
       header.zombcash-shared-header .language-menu{width:180px!important;max-width:calc(100vw - 20px)!important}
     }
-    /* Desktop: anchor the navigation to the viewport center on every page. */
+    /* Desktop: reserve separate grid columns for brand, navigation and actions.
+       Avoid absolute centering, which let long navigation labels overlap the buttons. */
     @media(min-width:1451px){
-      header.zombcash-shared-header{position:sticky!important;left:auto!important;transform:none!important;width:100vw!important;max-width:100vw!important;margin-left:calc(50% - 50vw)!important;margin-right:0!important;grid-template-columns:auto minmax(0,1fr) auto!important;gap:clamp(12px,1.2vw,20px)!important}
-      header.zombcash-shared-header .zsh-nav{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;display:flex!important;grid-column:auto!important;grid-row:auto!important;justify-content:center!important;flex-wrap:nowrap!important;gap:clamp(8px,.75vw,13px)!important;width:max-content!important;max-width:calc(100% - 600px)!important;overflow:visible!important}
-      header.zombcash-shared-header .zsh-nav>a{font-size:clamp(8px,.58vw,9px)!important;flex:0 0 auto!important}
+      header.zombcash-shared-header{position:sticky!important;left:auto!important;transform:none!important;width:100vw!important;max-width:100vw!important;margin-left:calc(50% - 50vw)!important;margin-right:0!important;grid-template-columns:auto minmax(0,1fr) auto!important;gap:clamp(8px,.7vw,12px)!important}
+      header.zombcash-shared-header .zsh-nav{position:static!important;left:auto!important;top:auto!important;transform:none!important;display:flex!important;grid-column:2!important;grid-row:1!important;justify-self:center!important;justify-content:center!important;flex-wrap:nowrap!important;gap:clamp(5px,.45vw,8px)!important;width:auto!important;max-width:100%!important;min-width:0!important;overflow:visible!important}
+      header.zombcash-shared-header .zsh-nav>a{font-size:clamp(7px,.48vw,8px)!important;flex:0 1 auto!important}
       header.zombcash-shared-header .zsh-brand{grid-column:1!important;grid-row:1!important}
-      header.zombcash-shared-header .zsh-actions{grid-column:3!important;grid-row:1!important}
+      header.zombcash-shared-header .zsh-actions{grid-column:3!important;grid-row:1!important;gap:5px!important}
+      header.zombcash-shared-header .zsh-actions>.zsh-home,
+      header.zombcash-shared-header .zsh-actions .language-trigger,
+      header.zombcash-shared-header .zsh-actions .zsh-login-button{padding-left:8px!important;padding-right:8px!important;font-size:7px!important}
     }
     @media(max-width:390px){
       header.zombcash-shared-header{grid-template-columns:minmax(0,1fr) auto!important;padding:8px!important}
