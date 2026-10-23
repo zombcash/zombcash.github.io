@@ -24,6 +24,13 @@
   const header = document.querySelector('body > header, body header');
   if (!header) return;
 
+  // Legacy pages often wrap their header in a centered .wrap (for example,
+  // Outbreak Transmission uses a 1000px content wrapper). Move the shared
+  // header to the body so it can span the viewport consistently on every page.
+  if (header.parentElement !== document.body) {
+    document.body.insertBefore(header, document.body.firstChild);
+  }
+
   // Preserve the Survivor Hub's working Telegram login control before rebuilding its common shell.
   const loginButton = file === 'survivor-hub.html'
     ? header.querySelector('button[data-i18n="login"], button.top-cta')
@@ -190,9 +197,9 @@
     header.zombcash-shared-header .zsh-actions .survivor-entry-button,
     header.zombcash-shared-header .zsh-actions .top-cta,
     header.zombcash-shared-header .zsh-actions .zsh-login-button{cursor:pointer;text-decoration:none!important}
-    header.zombcash-shared-header .zsh-actions>.zsh-home{order:1!important}
+    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:1!important}
     header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:2!important}
-    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:3!important}
+    header.zombcash-shared-header .zsh-actions>.zsh-home{order:3!important}
     header.zombcash-shared-header .zsh-actions>.zsh-home:hover,
     header.zombcash-shared-header .zsh-actions .language-trigger:hover,
     header.zombcash-shared-header .zsh-actions .survivor-entry-button:hover,
@@ -266,6 +273,13 @@
     body.zsh-inner-page main .wrap,
     body.zsh-inner-page main .container,
     body.zsh-inner-page main .page-wrap{box-sizing:border-box;max-width:min(1080px,calc(100% - 40px));margin-left:auto;margin-right:auto}
+    /* Normalize legacy page-level wrappers to the same content width. */
+    body.zsh-inner-page>.wrap,
+    body.zsh-inner-page>.container,
+    body.zsh-inner-page>.page-wrap{
+      box-sizing:border-box!important;width:min(1080px,calc(100% - 40px))!important;
+      max-width:1080px!important;margin-left:auto!important;margin-right:auto!important;
+    }
     body.zsh-inner-page main .eyebrow,
     body.zsh-inner-page main .kicker{font-family:Orbitron,Arial,sans-serif!important;font-size:11px!important;font-weight:700!important;letter-spacing:.16em!important;line-height:1.5!important}
     body.zsh-inner-page main .lead{font-family:Rajdhani,Arial,sans-serif!important;font-size:clamp(18px,1.55vw,21px)!important;line-height:1.55!important;max-width:820px!important;margin:0 0 22px!important}
