@@ -9,6 +9,7 @@
   const labels = [
     ['LIVE WORLD', '#living-world', 'home'],
     ['FIELD MANUAL', 'survivor-field-manual.html', 'manual'],
+    ['TRANSMISSION', 'outbreak-transmission.html', 'transmission'],
     ['CREW VOTE', 'crew-vote.html', 'vote'],
     ['SURVIVOR HUB', 'survivor-hub.html', 'hub'],
     ['ARCADE', 'arcade.html', 'arcade'],
@@ -42,7 +43,8 @@
           (id === 'arcade' && file === 'arcade.html') ||
           (id === 'gallery' && file === 'gallery.html') ||
           (id === 'maker' && file === 'zombie-maker.html') ||
-          (id === 'hub' && file === 'survivor-hub.html');
+          (id === 'hub' && file === 'survivor-hub.html') ||
+          (id === 'transmission' && file === 'outbreak-transmission.html');
         return '<a href="' + destination + '"' + (active ? ' aria-current="page"' : '') + '>' + label + '</a>';
       }).join('') +
     '</nav>' +
