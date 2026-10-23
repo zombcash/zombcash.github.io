@@ -478,6 +478,44 @@
       }
     }
 
+    /* FINAL EDGE-TO-EDGE CANVAS RULE: every page uses the same 24px desktop gutters.
+       The main site uses the full viewport; only content is constrained to the shared width. */
+    html, body { max-width:100%!important; }
+    body.zsh-inner-page > main,
+    body.zsh-inner-page > .wrap,
+    body.zsh-inner-page > .container,
+    body.zsh-inner-page > .page-wrap {
+      box-sizing:border-box!important;
+      width:calc(100% - 48px)!important;
+      max-width:1440px!important;
+      margin-left:auto!important;
+      margin-right:auto!important;
+    }
+    body.zsh-inner-page > main > .wrap,
+    body.zsh-inner-page > main > .container,
+    body.zsh-inner-page > main > .page-wrap {
+      box-sizing:border-box!important;
+      width:100%!important;
+      max-width:none!important;
+      margin-left:auto!important;
+      margin-right:auto!important;
+    }
+    body.zsh-inner-page > main > section,
+    body.zsh-inner-page > main > article {
+      box-sizing:border-box!important;
+      width:100%!important;
+      max-width:none!important;
+      margin-left:auto!important;
+      margin-right:auto!important;
+    }
+    @media(max-width:700px) {
+      body.zsh-inner-page > main,
+      body.zsh-inner-page > .wrap,
+      body.zsh-inner-page > .container,
+      body.zsh-inner-page > .page-wrap {
+        width:calc(100% - 24px)!important;
+      }
+    }
     /* One centered page canvas across all inner pages. */
     /* SINGLE SITE-WIDE CONTENT GRID: identical left/right gutters on every page. */
     body.zsh-inner-page > main,
