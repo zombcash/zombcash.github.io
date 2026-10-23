@@ -88,8 +88,8 @@
       position:sticky!important;top:0!important;z-index:10000!important;
       display:grid!important;grid-template-columns:auto minmax(0,1fr) auto!important;
       align-items:center!important;gap:clamp(10px,1.25vw,20px)!important;
-      width:100%!important;min-width:0!important;min-height:76px!important;height:auto!important;
-      margin:0!important;padding:12px clamp(16px,3vw,48px)!important;
+      width:100%!important;max-width:none!important;min-width:0!important;min-height:76px!important;height:auto!important;
+      margin:0!important;margin-inline:0!important;padding:12px clamp(16px,3vw,48px)!important;
       border:0!important;border-bottom:1px solid #9bff4533!important;
       background:#050907f5!important;backdrop-filter:blur(12px)!important;
       box-sizing:border-box!important;isolation:isolate;
