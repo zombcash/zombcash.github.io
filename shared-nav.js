@@ -273,6 +273,13 @@
     body.zsh-inner-page main .wrap,
     body.zsh-inner-page main .container,
     body.zsh-inner-page main .page-wrap{box-sizing:border-box;max-width:min(1080px,calc(100% - 40px));margin-left:auto;margin-right:auto}
+    /* Normalize legacy page-level wrappers to the same content width. */
+    body.zsh-inner-page>.wrap,
+    body.zsh-inner-page>.container,
+    body.zsh-inner-page>.page-wrap{
+      box-sizing:border-box!important;width:min(1080px,calc(100% - 40px))!important;
+      max-width:1080px!important;margin-left:auto!important;margin-right:auto!important;
+    }
     body.zsh-inner-page main .eyebrow,
     body.zsh-inner-page main .kicker{font-family:Orbitron,Arial,sans-serif!important;font-size:11px!important;font-weight:700!important;letter-spacing:.16em!important;line-height:1.5!important}
     body.zsh-inner-page main .lead{font-family:Rajdhani,Arial,sans-serif!important;font-size:clamp(18px,1.55vw,21px)!important;line-height:1.55!important;max-width:820px!important;margin:0 0 22px!important}
