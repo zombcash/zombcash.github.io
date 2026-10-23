@@ -199,12 +199,36 @@
 
     /* Shared page typography: consistent hierarchy beneath the common header.
        Keep the home hero and interactive game canvases untouched. */
-    body.zsh-inner-page h1{
+    /* Strong shared heading rules intentionally outrank legacy per-page IDs. */
+    body.zsh-inner-page h1:not(#zsh-never-h1){
       font-family:Orbitron,Arial,sans-serif!important;font-weight:800!important;
-      font-size:clamp(38px,4.6vw,64px)!important;
-      line-height:1.06!important;letter-spacing:-.035em!important;
+      font-size:clamp(38px,4.2vw,58px)!important;
+      line-height:1.08!important;letter-spacing:-.035em!important;
       margin:12px 0 18px!important;max-width:100%!important;
       overflow-wrap:anywhere;
+    }
+    body.zsh-inner-page h2:not(#zsh-never-h2){
+      font-family:Orbitron,Arial,sans-serif!important;font-weight:700!important;
+      font-size:clamp(21px,2vw,28px)!important;line-height:1.25!important;
+      letter-spacing:-.025em!important;
+    }
+    body.zsh-inner-page h3:not(#zsh-never-h3){
+      font-family:Orbitron,Arial,sans-serif!important;font-weight:700!important;
+      font-size:clamp(15px,1.35vw,19px)!important;line-height:1.3!important;
+    }
+    body.zsh-inner-page p:not(.keep-compact),
+    body.zsh-inner-page li{
+      font-family:Rajdhani,Arial,sans-serif!important;font-size:18px!important;line-height:1.55!important;
+    }
+    body.zsh-inner-page .eyebrow,
+    body.zsh-inner-page .kicker{
+      font-family:Orbitron,Arial,sans-serif!important;font-size:11px!important;
+      font-weight:700!important;letter-spacing:.16em!important;line-height:1.5!important;
+      margin-top:24px!important;margin-bottom:10px!important;
+    }
+    body.zsh-inner-page .lead{
+      font-family:Rajdhani,Arial,sans-serif!important;font-size:clamp(18px,1.55vw,21px)!important;
+      line-height:1.55!important;max-width:820px!important;margin:0 0 22px!important;
     }
     body main .eyebrow{
       margin-top:24px!important;margin-bottom:10px!important;
