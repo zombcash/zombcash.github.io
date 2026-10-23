@@ -70,6 +70,15 @@
     loginSlot.replaceWith(loginButton);
   }
 
+  // Load the same two typefaces on pages whose legacy templates did not import them.
+  if (!document.querySelector('link[data-zsh-fonts]')) {
+    const fonts = document.createElement('link');
+    fonts.rel = 'stylesheet';
+    fonts.href = 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap';
+    fonts.setAttribute('data-zsh-fonts', 'true');
+    document.head.append(fonts);
+  }
+
   const style = document.createElement('style');
   style.id = 'zombcash-shared-navigation-style';
   style.textContent = `
