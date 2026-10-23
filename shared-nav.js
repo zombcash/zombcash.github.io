@@ -89,6 +89,64 @@
   }
 
   const style = document.createElement('style');
+    /* MOBILE REPAIR 2026-10-23: keep the shared header stable on every phone width.
+       Several earlier media queries conflicted; these final rules deliberately win. */
+    @media(max-width:760px){
+      header.zombcash-shared-header{
+        display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;
+        grid-template-rows:auto auto auto!important;gap:0 10px!important;
+        padding:10px 12px 0!important;min-height:0!important;height:auto!important;
+      }
+      header.zombcash-shared-header .zsh-brand{
+        grid-column:1!important;grid-row:1!important;margin:0!important;
+        min-width:0!important;justify-self:start!important;
+      }
+      header.zombcash-shared-header .zsh-actions{
+        grid-column:1/-1!important;grid-row:2!important;justify-self:start!important;
+        display:flex!important;flex-wrap:wrap!important;justify-content:flex-start!important;
+        gap:6px!important;margin:9px 0 0!important;min-width:0!important;
+      }
+      header.zombcash-shared-header .zsh-menu-toggle{
+        display:inline-flex!important;align-items:center!important;justify-content:center!important;
+        position:absolute!important;right:12px!important;left:auto!important;top:12px!important;
+        transform:none!important;min-height:36px!important;padding:8px 10px!important;
+        border:1px solid #42613a!important;background:#0b120c!important;color:#b8f992!important;
+        z-index:10003!important;
+      }
+      header.zombcash-shared-header .zsh-nav{
+        position:static!important;left:auto!important;top:auto!important;transform:none!important;
+        grid-column:1/-1!important;grid-row:3!important;display:none!important;
+        width:100%!important;max-width:none!important;min-width:0!important;
+        flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;
+        flex-wrap:nowrap!important;gap:0!important;margin:10px 0 12px!important;padding:6px!important;
+        border:1px solid #263a2a!important;background:#080d09!important;
+        overflow-y:auto!important;max-height:65vh!important;
+      }
+      header.zombcash-shared-header .zsh-nav.zsh-open{display:flex!important}
+      header.zombcash-shared-header .zsh-nav>a{
+        display:flex!important;width:100%!important;min-height:40px!important;padding:10px 12px!important;
+        justify-content:flex-start!important;border:0!important;border-bottom:1px solid #1b2a1d!important;
+        font-size:10px!important;white-space:normal!important;
+      }
+      header.zombcash-shared-header .zsh-nav>a:last-child{border-bottom:0!important}
+      header.zombcash-shared-header .zsh-brand-copy{font-size:12px!important}
+      header.zombcash-shared-header .zsh-brand-copy small{font-size:6px!important;letter-spacing:1px!important}
+      header.zombcash-shared-header .zsh-actions>.zsh-home,
+      header.zombcash-shared-header .zsh-actions .language-trigger,
+      header.zombcash-shared-header .zsh-actions .zsh-login-button{
+        height:34px!important;min-height:34px!important;padding:0 8px!important;font-size:7px!important;
+      }
+    }
+    @media(max-width:390px){
+      header.zombcash-shared-header{padding:9px 8px 0!important}
+      header.zombcash-shared-header .zsh-brand{gap:6px!important}
+      header.zombcash-shared-header .zsh-brand-copy{font-size:11px!important}
+      header.zombcash-shared-header .zsh-actions{gap:4px!important}
+      header.zombcash-shared-header .zsh-actions>.zsh-home,
+      header.zombcash-shared-header .zsh-actions .language-trigger,
+      header.zombcash-shared-header .zsh-actions .zsh-login-button{padding:0 6px!important;font-size:6px!important}
+    }
+
   style.id = 'zombcash-shared-navigation-style';
   style.textContent = `
     header.zombcash-shared-header{
