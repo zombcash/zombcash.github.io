@@ -186,6 +186,35 @@
       border-color:#9bff45!important;color:#d4ffc0!important;background:#101b12!important;
     }
     header.zombcash-shared-header .zsh-menu-label{font:700 8px Orbitron,system-ui,sans-serif;letter-spacing:1px}
+
+    /* Shared page typography: consistent hierarchy beneath the common header.
+       Keep the home hero and interactive game canvases untouched. */
+    body:not(.home-page) main h1,
+    body:not(.gallery-page) main h1{
+      font-size:clamp(38px,4.6vw,64px)!important;
+      line-height:1.06!important;letter-spacing:-.035em!important;
+      margin:12px 0 18px!important;max-width:100%!important;
+      overflow-wrap:anywhere;
+    }
+    body main .eyebrow{
+      margin-top:24px!important;margin-bottom:10px!important;
+      font-size:clamp(10px,.82vw,12px)!important;line-height:1.5!important;
+      letter-spacing:.16em!important;
+    }
+    body main .lead{
+      font-size:clamp(18px,1.55vw,21px)!important;
+      line-height:1.55!important;max-width:820px!important;
+      margin:0 0 22px!important;
+    }
+    body:not(.home-page) main{min-width:0}
+    body:not(.home-page) main h2{line-height:1.22}
+    @media(max-width:650px){
+      body:not(.home-page) main h1,
+      body:not(.gallery-page) main h1{font-size:clamp(32px,8vw,44px)!important;line-height:1.08!important}
+      body main .eyebrow{margin-top:18px!important}
+      body main .lead{font-size:18px!important}
+    }
+
     @media(max-width:1450px){
       header.zombcash-shared-header{grid-template-columns:minmax(0,1fr) auto!important;gap:10px!important;padding:10px 18px!important}
       header.zombcash-shared-header .zsh-actions{grid-column:2;grid-row:1}
