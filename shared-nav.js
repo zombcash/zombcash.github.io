@@ -6,18 +6,20 @@
   const file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   const isHome = file === 'index.html';
   if (!isHome) document.body.classList.add('zsh-inner-page');
-  const home = 'index.html';
+  // All shared navigation destinations are rooted at the site root. Relative links
+  // incorrectly sent visitors from /ru/, /de/, etc. to nonexistent translated copies.
+  const home = '/index.html';
   const labels = [
-    ['LIVE WORLD', '#living-world', 'home'],
-    ['FIELD MANUAL', 'survivor-field-manual.html', 'manual'],
-    ['TRANSMISSION', 'outbreak-transmission.html', 'transmission'],
-    ['CREW VOTE', 'crew-vote.html', 'vote'],
-    ['SURVIVOR HUB', 'survivor-hub.html', 'hub'],
-    ['ARCADE', 'arcade.html', 'arcade'],
-    ['ZOMBIE GALLERY', 'gallery.html', 'gallery'],
-    ['ZOMBIE MAKER', 'zombie-maker.html', 'maker'],
-    ['COMMUNITY', '#community', 'home'],
-    ['BUY $ZOMBCASH', '#community-console', 'home']
+    ['LIVE WORLD', '/index.html#living-world', 'home'],
+    ['FIELD MANUAL', '/survivor-field-manual.html', 'manual'],
+    ['TRANSMISSION', '/outbreak-transmission.html', 'transmission'],
+    ['CREW VOTE', '/crew-vote.html', 'vote'],
+    ['SURVIVOR HUB', '/survivor-hub.html', 'hub'],
+    ['ARCADE', '/arcade.html', 'arcade'],
+    ['ZOMBIE GALLERY', '/gallery.html', 'gallery'],
+    ['ZOMBIE MAKER', '/zombie-maker.html', 'maker'],
+    ['COMMUNITY', '/index.html#community', 'home'],
+    ['BUY $ZOMBCASH', '/index.html#community-console', 'home']
   ];
   const header = document.querySelector('body > header, body header');
   if (!header) return;
@@ -26,8 +28,8 @@
   const loginButton = file === 'survivor-hub.html'
     ? header.querySelector('button[data-i18n="login"], button.top-cta')
     : null;
-  const brandHref = isHome ? '#home' : 'index.html';
-  const target = (href) => href.startsWith('#') && !isHome ? home + href : href;
+  const brandHref = isHome ? '/index.html#home' : '/index.html';
+  const target = (href) => href;
 
   header.classList.add('zombcash-shared-header');
   header.innerHTML =
@@ -50,9 +52,9 @@
       }).join('') +
     '</nav>' +
     '<div class="zsh-actions">' +
-      (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<a class="zsh-login-button top-cta" href="survivor-hub.html" data-zsh-login>LOGIN WITH TELEGRAM</a>') +
+      (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<a class="zsh-login-button top-cta" href="/survivor-hub.html" data-zsh-login>LOGIN WITH TELEGRAM</a>') +
       '<div class="zsh-language-slot"></div>' +
-      (!isHome ? '<a class="zsh-home home-return-button" href="index.html"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
+      (!isHome ? '<a class="zsh-home home-return-button" href="/index.html"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
     '</div>';
 
   const actions = header.querySelector('.zsh-actions');
