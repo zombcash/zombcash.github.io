@@ -23,11 +23,10 @@
   if (!header) return;
 
   // Preserve the Survivor Hub's working Telegram login control before rebuilding its common shell.
+  // Preserve the Survivor Hub's working Telegram login control before rebuilding its common shell.
   const loginButton = file === 'survivor-hub.html'
     ? header.querySelector('button[data-i18n="login"], button.top-cta')
     : null;
-  // Give the three utility pages a clear path to the existing Telegram registration/login flow.
-  const showSurvivorEntry = ['survivor-field-manual.html', 'outbreak-transmission.html', 'arcade.html'].includes(file);
   const brandHref = isHome ? '#home' : 'index.html';
   const target = (href) => href.startsWith('#') && !isHome ? home + href : href;
 
@@ -52,10 +51,9 @@
       }).join('') +
     '</nav>' +
     '<div class="zsh-actions">' +
-      (!isHome ? '<a class="zsh-home home-return-button" href="index.html"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
-      (showSurvivorEntry ? '<a class="survivor-entry-button zsh-cta" href="survivor-hub.html" data-zsh-register>JOIN THE SURVIVORS ↗</a>' : '') +
+      (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<a class="zsh-login-button" href="survivor-hub.html" data-zsh-login>LOGIN WITH TELEGRAM</a>') +
       '<div class="zsh-language-slot"></div>' +
-      (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '') +
+      (!isHome ? '<a class="zsh-home home-return-button" href="index.html"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
     '</div>';
 
   const actions = header.querySelector('.zsh-actions');
@@ -373,9 +371,10 @@
     if (menuLabel) menuLabel.textContent = translated ? translated[13] : 'MENU';
     const brandSmall = header.querySelector('.zsh-brand-copy small');
     if (brandSmall) brandSmall.textContent = language === 'ru' ? 'ИНТЕРНЕТ НЕЖИТИ' : 'THE UNDEAD INTERNET';
-    if (loginButton) {
+    const loginControl = header.querySelector('.zsh-login-button');
+    if (loginControl) {
       const loginLabels = {de:'MIT TELEGRAM ANMELDEN',fr:'SE CONNECTER AVEC TELEGRAM',it:'ACCEDI CON TELEGRAM',ja:'TELEGRAMでログイン','zh-CN':'使用 TELEGRAM 登录',ru:'ВОЙТИ ЧЕРЕЗ TELEGRAM',tr:'TELEGRAM İLE GİRİŞ',hi:'TELEGRAM से लॉग इन करें'};
-      loginButton.textContent = language === 'en' ? 'LOGIN WITH TELEGRAM' : (loginLabels[language] || 'LOGIN WITH TELEGRAM');
+      loginControl.textContent = language === 'en' ? 'LOGIN WITH TELEGRAM' : (loginLabels[language] || 'LOGIN WITH TELEGRAM');
     }
   }
   const readLanguage = () => {
