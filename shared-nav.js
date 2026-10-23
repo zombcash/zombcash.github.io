@@ -208,9 +208,10 @@
     header.zombcash-shared-header .zsh-actions .survivor-entry-button,
     header.zombcash-shared-header .zsh-actions .top-cta,
     header.zombcash-shared-header .zsh-actions .zsh-login-button{cursor:pointer;text-decoration:none!important}
-    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:1!important}
-    header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:2!important}
-    header.zombcash-shared-header .zsh-actions>.zsh-home{order:3!important}
+    /* Keep language control first, Back to Home before registration, registration at far right. */
+    header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:1!important}
+    header.zombcash-shared-header .zsh-actions>.zsh-home{order:2!important}
+    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:3!important}
     header.zombcash-shared-header .zsh-actions>.zsh-home:hover,
     header.zombcash-shared-header .zsh-actions .language-trigger:hover,
     header.zombcash-shared-header .zsh-actions .survivor-entry-button:hover,
