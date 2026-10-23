@@ -23,7 +23,6 @@
   if (!header) return;
 
   // Preserve the Survivor Hub's working Telegram login control before rebuilding its common shell.
-  // Preserve the Survivor Hub's working Telegram login control before rebuilding its common shell.
   const loginButton = file === 'survivor-hub.html'
     ? header.querySelector('button[data-i18n="login"], button.top-cta')
     : null;
@@ -156,7 +155,7 @@
       font:700 8px/1.2 Orbitron,system-ui,sans-serif!important;white-space:nowrap!important;overflow-wrap:normal!important;
     }
     header.zombcash-shared-header .zsh-cta:hover{border-color:#9bff45!important;color:#d4ffc0!important}
-    header.zombcash-shared-header .zsh-language-slot{display:flex!important;align-items:center!important;flex:0 0 auto!important}
+    header.zombcash-shared-header .zsh-language-slot{order:2!important;display:flex!important;align-items:center!important;flex:0 0 auto!important}
     header.zombcash-shared-header .language-switcher{position:relative!important;display:inline-flex!important;flex:0 0 auto!important;margin:0!important;z-index:10002!important}
     header.zombcash-shared-header .language-trigger{
       display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;
@@ -189,6 +188,9 @@
     header.zombcash-shared-header .zsh-actions .survivor-entry-button,
     header.zombcash-shared-header .zsh-actions .top-cta,
     header.zombcash-shared-header .zsh-actions .zsh-login-button{cursor:pointer;text-decoration:none!important}
+    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:1!important}
+    header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:2!important}
+    header.zombcash-shared-header .zsh-actions>.zsh-home{order:3!important}
     header.zombcash-shared-header .zsh-actions>.zsh-home:hover,
     header.zombcash-shared-header .zsh-actions .language-trigger:hover,
     header.zombcash-shared-header .zsh-actions .survivor-entry-button:hover,
@@ -365,8 +367,7 @@
     labels.forEach((item, index) => { if (links[index]) links[index].textContent = translated ? translated[index] : item[0]; });
     const back = header.querySelector('.zsh-actions > .zsh-home');
     if (back) back.innerHTML = '<span aria-hidden="true">←</span> ' + (translated ? translated[10] : 'BACK TO HOME');
-    const survivorEntry = header.querySelector('[data-zsh-register]');
-    if (survivorEntry) survivorEntry.textContent = (translated ? translated[11] : 'JOIN THE SURVIVORS') + ' ↗';
+    /* The global header now uses LOGIN WITH TELEGRAM, not a registration CTA. */
     const menuLabel = header.querySelector('.zsh-menu-label');
     if (menuLabel) menuLabel.textContent = translated ? translated[13] : 'MENU';
     const brandSmall = header.querySelector('.zsh-brand-copy small');
