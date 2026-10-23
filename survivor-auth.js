@@ -42,7 +42,7 @@
   const readProfile = () => { try { return JSON.parse(localStorage.getItem(STORAGE_PROFILE) || 'null'); } catch (_) { return null; } };
   const token = () => { try { return localStorage.getItem(STORAGE_TOKEN) || ''; } catch (_) { return ''; } };
   function updateCta() {
-    const cta = document.querySelector('.zsh-actions .survivor-entry-button, .top-cta, .survivor-entry-button');
+    const cta = document.querySelector('header.zombcash-shared-header .zsh-actions .zsh-login-button, header.zombcash-shared-header .zsh-actions .survivor-entry-button, .top-cta, .survivor-entry-button');
     if (!cta) return;
     const p = readProfile();
     cta.textContent = p ? '☣ ' + (p.publicDisplayName || p.firstName || 'SURVIVOR') : t('login');
@@ -321,17 +321,16 @@
   }
   function init() {
     ensureModal();
-    let cta = document.querySelector('.top-cta');
+    // Reuse the shared header's existing Telegram login control; never create a duplicate CTA.
+    let cta = document.querySelector('header.zombcash-shared-header .zsh-actions .zsh-login-button, header.zombcash-shared-header .zsh-actions .survivor-entry-button, .top-cta, .survivor-entry-button');
     if (!cta) {
       cta = document.createElement('button');
       cta.type = 'button';
       cta.className = 'survivor-entry-button';
       const actions = document.querySelector('header.zombcash-shared-header .zsh-actions');
       const nav = document.querySelector('.nav, header nav') || document.querySelector('header') || document.querySelector('main');
-      if (actions) {
-        // Keep the language selector before the account control so registration is the far-right item.
-        actions.append(cta);
-      } else if (nav) nav.append(cta);
+      if (actions) actions.append(cta);
+      else if (nav) nav.append(cta);
     }
     if (cta) cta.addEventListener('click', e => { e.preventDefault(); overlay.hidden = false; renderModal(); });
     document.addEventListener('zombcash:languagechange', () => { updateCta(); if (overlay && !overlay.hidden) renderModal(); });
