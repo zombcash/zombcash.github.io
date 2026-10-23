@@ -468,6 +468,45 @@
     }
 
     /* One centered page canvas across all inner pages. */
+    /* SINGLE SITE-WIDE CONTENT GRID: identical left/right gutters on every page. */
+    body.zsh-inner-page > main,
+    body.zsh-inner-page > .wrap,
+    body.zsh-inner-page > .container,
+    body.zsh-inner-page > .page-wrap,
+    body.zsh-inner-page > main > .wrap,
+    body.zsh-inner-page > main > .container,
+    body.zsh-inner-page > main > .page-wrap {
+      box-sizing:border-box!important;
+      width:calc(100% - 64px)!important;
+      max-width:1440px!important;
+      margin-left:auto!important;
+      margin-right:auto!important;
+    }
+    body.zsh-inner-page main .wrap,
+    body.zsh-inner-page main .container,
+    body.zsh-inner-page main .page-wrap {
+      box-sizing:border-box!important;
+      width:100%!important;
+      max-width:1440px!important;
+      margin-left:auto!important;
+      margin-right:auto!important;
+    }
+    body.zsh-inner-page main > section,
+    body.zsh-inner-page main > article {
+      box-sizing:border-box!important;
+      max-width:100%!important;
+    }
+    @media(max-width:700px) {
+      body.zsh-inner-page > main,
+      body.zsh-inner-page > .wrap,
+      body.zsh-inner-page > .container,
+      body.zsh-inner-page > .page-wrap,
+      body.zsh-inner-page > main > .wrap,
+      body.zsh-inner-page > main > .container,
+      body.zsh-inner-page > main > .page-wrap {
+        width:calc(100% - 32px)!important;
+      }
+    }
     /* Reduce oversized side gutters while keeping every page on one shared canvas. */
     body.zsh-inner-page>main{
       box-sizing:border-box!important;width:min(1440px,calc(100% - 32px))!important;
