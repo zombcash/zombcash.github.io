@@ -1103,8 +1103,15 @@
     }
   }
   const readLanguage = () => {
-    let language = 'en';
-    try { language = localStorage.getItem('zombcash-language') || 'en'; } catch (_) {}
+    // A localized URL is authoritative. Do not render English navigation first
+    // just because localStorage contains a language selected on another page.
+    const pathParts = location.pathname.split('/').filter(Boolean);
+    const routeLanguage = pathParts.length > 1 && navDictionary[pathParts[0]] ? pathParts[0] : 'en';
+    let language = routeLanguage;
+    try {
+      const saved = localStorage.getItem('zombcash-language');
+      if (routeLanguage === 'en' && saved && navDictionary[saved]) language = saved;
+    } catch (_) {}
     localizeNav(language);
   };
   document.addEventListener('zombcash:languagechange', event => localizeNav(event.detail && event.detail.language || 'en'));
