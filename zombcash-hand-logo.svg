@@ -1,12 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
-<title id="title">ZombieCash coin logo</title><desc id="desc">A toxic-green zombie hand gripping dollar bills, based on the ZombieCash coin emblem.</desc>
-<defs><radialGradient id="orb" cx="50%" cy="42%" r="65%"><stop offset="0" stop-color="#b5ff28"/><stop offset=".68" stop-color="#39e600"/><stop offset="1" stop-color="#062408"/></radialGradient><linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b3dc72"/><stop offset="1" stop-color="#4d853f"/></linearGradient><linearGradient id="bill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#efff8a"/><stop offset="1" stop-color="#75b92a"/></linearGradient></defs>
-<circle cx="256" cy="256" r="244" fill="#050905" stroke="#39ff00" stroke-width="12"/><circle cx="256" cy="256" r="224" fill="url(#orb)"/>
-<!-- cash fan -->
-<g stroke="#071307" stroke-width="12" stroke-linejoin="round"><path fill="#72a927" d="M112 151 339 100 393 312 164 354Z"/><path fill="#92c936" d="M135 126 359 93 410 304 184 343Z"/><path fill="url(#bill)" d="M159 105 372 78 416 288 202 322Z"/></g>
-<path d="M187 126 353 105 390 271 219 295Z" fill="none" stroke="#2c531b" stroke-width="7"/><circle cx="294" cy="204" r="63" fill="#214c16" stroke="#d9ff64" stroke-width="7"/><text x="294" y="229" font-family="Arial,sans-serif" font-weight="900" font-size="94" text-anchor="middle" fill="#dfff65">$</text>
-<!-- single bold undead fist silhouette, simplified for tiny favicon -->
-<path d="M173 450 174 389 151 357 123 305 113 263 Q109 236 132 226 Q152 220 169 247 L185 276 177 203 Q174 176 196 171 Q219 168 225 195 L236 246 236 166 Q237 139 260 140 Q283 142 284 169 L286 242 302 187 Q310 164 331 171 Q350 178 344 201 L329 260 353 228 Q370 209 388 225 Q403 240 389 262 L363 311 350 354 Q339 384 315 400 L310 450Z" fill="url(#skin)" stroke="#061006" stroke-width="15" stroke-linejoin="round"/>
-<path d="M190 281 216 294 M245 255 267 265 M300 259 319 269 M152 314 174 325 M211 366 Q254 389 304 363" fill="none" stroke="#355a2b" stroke-width="12" stroke-linecap="round"/>
-<path d="M176 449 171 476 194 467 207 486 224 467 244 484 259 464 280 479 299 459 312 469 311 449" fill="#d5d88c" stroke="#061006" stroke-width="10" stroke-linejoin="round"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><title>ZombieCash coin logo</title><image href="zombcash-coin-logo.png" width="512" height="512" preserveAspectRatio="xMidYMid meet"/></svg>
