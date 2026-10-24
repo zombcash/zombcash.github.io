@@ -46,6 +46,8 @@ jobs:
               "rank_and_traffic": "GetRankAndTrafficStats",
               "query_stats": "GetQueryStats",
               "crawl_stats": "GetCrawlStats",
+              "crawl_issues": "GetCrawlIssues",
+              "sitemaps": "GetFeeds",
           }
           report = {
               "site": site,
