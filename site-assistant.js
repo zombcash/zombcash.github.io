@@ -33,10 +33,10 @@
     </section>`;
   const style = document.createElement('style');
   style.textContent = `
-  #zombcash-floating-assistant{--zfa-green:#a6ff54;--zfa-bg:#07100b;position:fixed;right:max(18px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));z-index:2147483000;font:500 14px/1.4 Rajdhani,system-ui,sans-serif;color:#eef8e9}
+  #zombcash-floating-assistant{--zfa-green:#a6ff54;--zfa-bg:#07100b;position:fixed;right:max(18px,env(safe-area-inset-right));bottom:max(110px,calc(env(safe-area-inset-bottom) + 96px));z-index:2147483000;touch-action:none;font:500 14px/1.4 Rajdhani,system-ui,sans-serif;color:#eef8e9}
   #zombcash-floating-assistant *{box-sizing:border-box}
-  #zombcash-floating-assistant .zfa-launch{position:relative;display:flex;align-items:center;gap:10px;min-height:56px;padding:0 18px;border:1px solid #b2ff72;border-radius:999px;background:linear-gradient(135deg,#172b18,#07100b 72%);color:#c6ff9a;box-shadow:0 8px 30px #0009,0 0 22px #9bff4528;cursor:pointer;font:800 11px/1 Orbitron,system-ui,sans-serif;letter-spacing:1px;transition:transform .2s,box-shadow .2s}
-  #zombcash-floating-assistant .zfa-launch:hover{transform:translateY(-3px);box-shadow:0 12px 35px #000b,0 0 30px #9bff4544}
+  #zombcash-floating-assistant .zfa-launch{position:relative;display:flex;align-items:center;gap:10px;min-height:56px;padding:0 18px;border:1px solid #b2ff72;border-radius:999px;background:linear-gradient(135deg,#172b18,#07100b 72%);color:#c6ff9a;box-shadow:0 8px 30px #0009,0 0 22px #9bff4528;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;font:800 11px/1 Orbitron,system-ui,sans-serif;letter-spacing:1px;transition:transform .2s,box-shadow .2s}
+  #zombcash-floating-assistant .zfa-launch:hover{transform:translateY(-2px);box-shadow:0 12px 35px #000b,0 0 30px #9bff4544}
   #zombcash-floating-assistant .zfa-orb{display:grid;place-items:center;width:31px;height:31px;border-radius:50%;background:#9bff4518;border:1px solid #9bff4570;font-size:19px}
   #zombcash-floating-assistant .zfa-pulse{width:7px;height:7px;border-radius:50%;background:#9bff45;box-shadow:0 0 10px #9bff45}
   #zombcash-floating-assistant .zfa-panel{position:absolute;right:0;bottom:70px;width:min(380px,calc(100vw - 24px));height:min(560px,calc(100dvh - 112px));min-height:340px;overflow:hidden;display:flex;flex-direction:column;border:1px solid #43613b;border-radius:18px;background:radial-gradient(ellipse at 100% 0,#1a3520 0,transparent 42%),#080e0a;box-shadow:0 24px 80px #000c,0 0 34px #9bff4518}
@@ -58,7 +58,7 @@
   #zombcash-floating-assistant .zfa-form button:disabled{opacity:.5;cursor:wait}
   #zombcash-floating-assistant .zfa-hint{margin:0;padding:0 14px 11px;background:#080e09;color:#72866e;font:500 11px/1.35 Rajdhani,system-ui,sans-serif}
   html:has(:fullscreen) #zombcash-floating-assistant,body.zfa-hide-assistant #zombcash-floating-assistant{display:none!important}
-  @media(max-width:480px){#zombcash-floating-assistant{right:12px;bottom:max(12px,env(safe-area-inset-bottom))}#zombcash-floating-assistant .zfa-launch{min-height:50px;padding:0 13px;gap:8px;font-size:10px}#zombcash-floating-assistant .zfa-panel{bottom:62px;width:calc(100vw - 24px);height:min(70dvh,560px);min-height:320px;border-radius:15px}}
+  @media(max-width:480px){#zombcash-floating-assistant{right:12px;bottom:max(96px,calc(env(safe-area-inset-bottom) + 84px))}#zombcash-floating-assistant .zfa-launch{min-height:50px;padding:0 13px;gap:8px;font-size:10px}#zombcash-floating-assistant .zfa-panel{bottom:62px;width:calc(100vw - 24px);height:min(70dvh,560px);min-height:320px;border-radius:15px}}
   @media(prefers-reduced-motion:reduce){#zombcash-floating-assistant *{transition:none!important;scroll-behavior:auto!important}}
   `;
   document.head.append(style);
@@ -80,6 +80,69 @@
   };
   let history = [];
   let busy = false;
+
+  // Draggable on desktop and touch screens. Position persists in this browser.
+  const POSITION_KEY = 'zombcash-ai-assistant-position-v1';
+  let dragged = false;
+  let dragStart = null;
+  let suppressNextClick = false;
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), Math.max(min, max));
+  function applySavedPosition() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(POSITION_KEY) || 'null');
+      if (!saved || !Number.isFinite(saved.x) || !Number.isFinite(saved.y)) return;
+      const rect = host.getBoundingClientRect();
+      const x = clamp(saved.x, 8, window.innerWidth - rect.width - 8);
+      const y = clamp(saved.y, 8, window.innerHeight - rect.height - 8);
+      host.style.left = x + 'px';
+      host.style.top = y + 'px';
+      host.style.right = 'auto';
+      host.style.bottom = 'auto';
+    } catch (_) {}
+  }
+  function savePosition() {
+    const rect = host.getBoundingClientRect();
+    try { localStorage.setItem(POSITION_KEY, JSON.stringify({x:Math.round(rect.left), y:Math.round(rect.top)})); } catch (_) {}
+  }
+  launch.addEventListener('pointerdown', event => {
+    if (event.button !== undefined && event.button !== 0) return;
+    dragStart = {pointerId:event.pointerId, x:event.clientX, y:event.clientY, left:host.getBoundingClientRect().left, top:host.getBoundingClientRect().top};
+    dragged = false;
+    launch.style.cursor = 'grabbing';
+    try { launch.setPointerCapture(event.pointerId); } catch (_) {}
+  });
+  launch.addEventListener('pointermove', event => {
+    if (!dragStart || event.pointerId !== dragStart.pointerId) return;
+    const dx = event.clientX - dragStart.x;
+    const dy = event.clientY - dragStart.y;
+    if (!dragged && Math.hypot(dx, dy) < 7) return;
+    dragged = true;
+    event.preventDefault();
+    const rect = host.getBoundingClientRect();
+    const x = clamp(dragStart.left + dx, 8, window.innerWidth - rect.width - 8);
+    const y = clamp(dragStart.top + dy, 8, window.innerHeight - rect.height - 8);
+    host.style.left = x + 'px';
+    host.style.top = y + 'px';
+    host.style.right = 'auto';
+    host.style.bottom = 'auto';
+  });
+  const finishDrag = event => {
+    if (!dragStart || event.pointerId !== dragStart.pointerId) return;
+    if (dragged) {
+      savePosition();
+      suppressNextClick = true;
+      window.setTimeout(() => { suppressNextClick = false; }, 0);
+    }
+    dragStart = null;
+    launch.style.cursor = 'grab';
+  };
+  launch.addEventListener('pointerup', finishDrag);
+  launch.addEventListener('pointercancel', finishDrag);
+  launch.addEventListener('click', event => {
+    if (suppressNextClick) { event.preventDefault(); event.stopImmediatePropagation(); suppressNextClick = false; }
+  }, true);
+  window.addEventListener('resize', applySavedPosition);
+  applySavedPosition();
   function localize() {
     const t = copy[getLang()];
     launch.querySelector('.zfa-launch-label').textContent = t.button;
