@@ -117,7 +117,7 @@ fs.mkdirSync(outDir, { recursive: true });
     const localePage = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
     await localePage.addInitScript(() => localStorage.setItem('zombcash-language', 'de'));
     await localePage.goto(new URL('ru/', BASE_URL).href, { waitUntil: 'domcontentloaded', timeout: 60000 });
-    await localePage.waitForFunction(() => document.documentElement.lang === 'ru', { timeout: 20000 });
+    await localePage.waitForFunction(() => document.documentElement.lang === 'ru' && document.querySelector('.language-trigger')?.textContent.includes('RU'), { timeout: 20000 });
     const localeResult = await localePage.evaluate(() => ({ path: location.pathname, lang: document.documentElement.lang }));
     const localeIssues = [];
     if (localeResult.lang !== 'ru') localeIssues.push('localized root URL did not override saved language preference');
