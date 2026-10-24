@@ -1105,7 +1105,7 @@
 
   // Load the shared site assistant.
   const assistantScript = document.createElement('script');
-  assistantScript.src = '/site-assistant.js?v=account-sync-20261024-3';
+  assistantScript.src = '/site-assistant.js?v=assistant-compact-20261024-1';
   assistantScript.defer = true;
   document.head.append(assistantScript);
 
