@@ -144,20 +144,28 @@ fs.mkdirSync(outDir, { recursive: true });
       const trades = document.querySelector('#recent-trades-list')?.textContent || '';
       return !!trades && !/Connecting to the transaction feed/i.test(trades);
     }, { timeout: 20000 }).catch(() => {});
+    // Exercise the period that previously failed in the live browser audit.
+    await liveDataPage.locator('.activity-chart-tab[data-chart-period="30d"]').click();
+    await liveDataPage.waitForFunction(() => {
+      const status = document.querySelector('#activity-chart-status')?.textContent || '';
+      return /POINTS|UNAVAILABLE|API ERROR/i.test(status);
+    }, { timeout: 20000 }).catch(() => {});
     const liveDataResult = await liveDataPage.evaluate(() => ({
       newsItems: document.querySelectorAll('#world-news-list .world-news-item').length,
       newsStatus: document.querySelector('#world-news-status')?.textContent?.trim() || '',
       marketPrice: document.querySelector('#zombcash-price')?.textContent?.trim() || '',
       marketStatus: document.querySelector('#zombcash-market-status')?.textContent?.trim() || '',
       chartStatus: document.querySelector('#activity-chart-status')?.textContent?.trim() || '',
-      chartPoints: document.querySelectorAll('#activity-price-chart circle').length,
+      chartPathCount: document.querySelectorAll('#activity-price-chart path').length,
+      chart30dSelected: document.querySelector('.activity-chart-tab[data-chart-period="30d"]')?.classList.contains('active') || false,
       recentTradesText: document.querySelector('#recent-trades-list')?.textContent?.trim().slice(0, 180) || '',
     }));
     const liveDataIssues = [];
     if (liveDataResult.newsItems < 1) liveDataIssues.push('news feed did not render any articles');
     if (!liveDataResult.marketPrice || liveDataResult.marketPrice === '—') liveDataIssues.push('market price did not load');
     if (/API ERROR|HTTP 5\d\d/i.test(liveDataResult.chartStatus)) liveDataIssues.push('price chart returned an API error');
-    if (/Transaction API error: HTTP 5\d\d/i.test(liveDataResult.recentTradesText)) liveDataIssues.push('recent-trades endpoint returned a server error');
+    if (!liveDataResult.chart30dSelected || liveDataResult.chartPathCount < 2 || !/POINTS/i.test(liveDataResult.chartStatus)) liveDataIssues.push('30-day chart did not render a real price series');
+    if (/Transaction API error:/i.test(liveDataResult.recentTradesText)) liveDataIssues.push('recent-trades request failed in the browser');
     if (liveDataErrors.length) liveDataIssues.push('browser JavaScript errors: ' + liveDataErrors.join(' | '));
     fs.writeFileSync(path.join(outDir, 'live-data-panels.json'), JSON.stringify({ result: liveDataResult, issues: liveDataIssues, pageErrors: liveDataErrors }, null, 2));
     await liveDataPage.screenshot({ path: path.join(outDir, 'live-data-panels.png'), fullPage: false });
