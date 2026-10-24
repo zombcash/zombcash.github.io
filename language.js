@@ -425,10 +425,19 @@ Object.entries(sharedArcadeGalleryHubRuntime).forEach(([source,translations])=>O
 const manualNavLabels={
 "THE UNDEAD INTERNET":{de:"DAS INTERNET DER UNTOTEN",fr:"L’INTERNET DES MORTS-VIVANTS",it:"INTERNET DEI NON MORTI",ja:"アンデッド・インターネット","zh-CN":"不死者互联网",tr:"YAŞAYAN ÖLÜLERİN İNTERNETİ",hi:"मरे हुओं का इंटरनेट",ru:"ИНТЕРНЕТ НЕЖИТИ"},
 "SURVIVOR HUB":{de:"ÜBERLEBENDEN-ZENTRUM",fr:"CENTRE DES SURVIVANTS",it:"CENTRO DEI SOPRAVVISSUTI",ja:"サバイバー拠点","zh-CN":"幸存者中心",tr:"HAYATTA KALANLAR MERKEZİ",hi:"सर्वाइवर केंद्र",ru:"ЦЕНТР ВЫЖИВШИХ"},
+"FIELD MANUAL":{de:"FELDHANDBUCH",fr:"MANUEL DE TERRAIN",it:"MANUALE DA CAMPO",ja:"フィールドマニュアル","zh-CN":"实用手册",tr:"SAHA REHBERİ",hi:"फील्ड मैनुअल",ru:"ПОЛЕВОЕ РУКОВОДСТВО"},
+"TRANSMISSION":{de:"ÜBERTRAGUNG",fr:"TRANSMISSION",it:"TRASMISSIONE",ja:"通信","zh-CN":"传讯",tr:"İLETİ",hi:"प्रसारण",ru:"ТРАНСЛЯЦИЯ"},
 "ARCADE":{de:"SPIELHALLE",fr:"ARCADE",it:"SALA GIOCHI",ja:"アーケード","zh-CN":"街机",tr:"ARCADE",hi:"आर्केड",ru:"АРКАДА"},
 "COMMUNITY":{de:"COMMUNITY",fr:"COMMUNAUTÉ",it:"COMMUNITY",ja:"コミュニティ","zh-CN":"社区",tr:"TOPLULUK",hi:"समुदाय",ru:"СООБЩЕСТВО"},
-"TRANSMISSION":{fr:"TRANSMISSION"}
-};
+"CREW VOTE":{de:"CREW-ABSTIMMUNG",fr:"VOTE DE L’ÉQUIPE",it:"VOTO DELLA CREW",ja:"クルー投票","zh-CN":"团队投票",tr:"EKİP OYLAMASI",hi:"टीम वोट",ru:"ГОЛОСОВАНИЕ КОМАНДЫ"},
+"LIVE WORLD":{de:"LEBENDIGE WELT",fr:"MONDE VIVANT",it:"MONDO VIVO",ja:"ライブワールド","zh-CN":"实时世界",tr:"CANLI DÜNYA",hi:"लाइव दुनिया",ru:"ЖИВОЙ МИР"},
+"ZOMBIE GALLERY":{de:"ZOMBIE-GALERIE",fr:"GALERIE ZOMBIE",it:"GALLERIA ZOMBIE",ja:"ゾンビギャラリー","zh-CN":"僵尸画廊",tr:"ZOMBİ GALERİSİ",hi:"ज़ॉम्बी गैलरी",ru:"ГАЛЕРЕЯ ЗОМБИ"},
+"ZOMBIE MAKER":{de:"ZOMBIE-MAKER",fr:"CRÉATEUR DE ZOMBIES",it:"CREA ZOMBIE",ja:"ゾンビメーカー","zh-CN":"僵尸制作器",tr:"ZOMBİ OLUŞTURUCU",hi:"ज़ॉम्बी मेकर",ru:"СОЗДАТЕЛЬ ЗОМБИ"},
+"BUY $ZOMBCASH":{de:"$ZOMBCASH KAUFEN",fr:"ACHETER $ZOMBCASH",it:"COMPRA $ZOMBCASH",ja:"$ZOMBCASHを購入","zh-CN":"购买 $ZOMBCASH",tr:"$ZOMBCASH SATIN AL",hi:"$ZOMBCASH खरीदें",ru:"КУПИТЬ $ZOMBCASH"},
+"BACK TO HOME":{de:"ZURÜCK ZUR STARTSEITE",fr:"RETOUR À L’ACCUEIL",it:"TORNA ALLA HOME",ja:"ホームに戻る","zh-CN":"返回首页",tr:"ANA SAYFAYA DÖN",hi:"होम पर लौटें",ru:"НА ГЛАВНУЮ"},
+"LOGIN WITH TELEGRAM":{de:"MIT TELEGRAM ANMELDEN",fr:"SE CONNECTER AVEC TELEGRAM",it:"ACCEDI CON TELEGRAM",ja:"Telegramでログイン","zh-CN":"使用 Telegram 登录",tr:"TELEGRAM İLE GİRİŞ",hi:"TELEGRAM से लॉगिन",ru:"ВОЙТИ ЧЕРЕЗ TELEGRAM"},
+"MENU":{de:"MENÜ",fr:"MENU",it:"MENU",ja:"メニュー","zh-CN":"菜单",tr:"MENÜ",hi:"मेनू",ru:"МЕНЮ"}
+}
 Object.entries(manualNavLabels).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 let current='en';const originals=new WeakMap(),translatedValues=new WeakMap(),attributeOriginals=new WeakMap(),translatedAttributes=new WeakMap();
