@@ -1,0 +1,42 @@
+name: Mobile viewport smoke test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'shared-nav.js'
+      - 'language.js'
+      - 'index.html'
+      - '.github/workflows/mobile-viewport-test.yml'
+      - 'tests/mobile-viewport-smoke.cjs'
+
+permissions:
+  contents: read
+
+jobs:
+  responsive-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out site
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Test live mobile layouts
+        run: node tests/mobile-viewport-smoke.cjs
+      - name: Upload screenshots and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-viewport-evidence
+          path: mobile-test-results/
+          if-no-files-found: ignore
+          retention-days: 14
