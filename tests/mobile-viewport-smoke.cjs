@@ -76,6 +76,55 @@ fs.mkdirSync(outDir, { recursive: true });
       if (issues.length) failures.push({ width, issues });
       await page.close();
     }
+
+    // Chrome mobile "Desktop site" uses a wide viewport but still has touch input.
+    // Keep a regression check for the homepage hero in that mode.
+    const desktopTouch = await browser.newPage({
+      viewport: { width: 980, height: 844 },
+      deviceScaleFactor: 1,
+      isMobile: false,
+      hasTouch: true,
+    });
+    const desktopTouchErrors = [];
+    desktopTouch.on('pageerror', error => desktopTouchErrors.push(error.message));
+    await desktopTouch.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await desktopTouch.waitForSelector('.hero-layout', { timeout: 20000 });
+    const desktopTouchResult = await desktopTouch.evaluate(() => {
+      const layout = document.querySelector('.hero-layout');
+      const hero = document.querySelector('.hero');
+      const grid = layout ? getComputedStyle(layout).gridTemplateColumns : '';
+      return {
+        viewportWidth: window.innerWidth,
+        documentWidth: document.documentElement.scrollWidth,
+        pointerCoarse: matchMedia('(pointer: coarse)').matches,
+        gridColumns: grid ? grid.trim().split(/\s+/).length : 0,
+        gridTemplateColumns: grid,
+        heroHeight: hero ? Math.round(hero.getBoundingClientRect().height) : null,
+      };
+    });
+    const desktopTouchIssues = [];
+    if (desktopTouchResult.documentWidth > 981) desktopTouchIssues.push('desktop-site touch layout has horizontal overflow');
+    if (!desktopTouchResult.pointerCoarse) desktopTouchIssues.push('test browser did not emulate a coarse touch pointer');
+    if (desktopTouchResult.pointerCoarse && desktopTouchResult.gridColumns !== 1) desktopTouchIssues.push('desktop-site touch hero is not stacked into one column');
+    if (desktopTouchErrors.length) desktopTouchIssues.push('browser JavaScript errors: ' + desktopTouchErrors.join(' | '));
+    fs.writeFileSync(path.join(outDir, 'desktop-touch-980.json'), JSON.stringify({ result: desktopTouchResult, issues: desktopTouchIssues, pageErrors: desktopTouchErrors }, null, 2));
+    await desktopTouch.screenshot({ path: path.join(outDir, 'desktop-touch-980.png'), fullPage: false });
+    console.log(JSON.stringify({ desktopTouchResult, desktopTouchIssues }, null, 2));
+    if (desktopTouchIssues.length) failures.push({ width: 980, mode: 'desktop-touch', issues: desktopTouchIssues });
+    await desktopTouch.close();
+
+    // A saved browser preference must not override an explicit localized root URL.
+    const localePage = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+    await localePage.addInitScript(() => localStorage.setItem('zombcash-language', 'de'));
+    await localePage.goto(new URL('ru/', BASE_URL).href, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await localePage.waitForFunction(() => document.documentElement.lang === 'ru' && document.querySelector('.language-trigger')?.textContent.includes('RU'), { timeout: 20000 });
+    const localeResult = await localePage.evaluate(() => ({ path: location.pathname, lang: document.documentElement.lang }));
+    const localeIssues = [];
+    if (localeResult.lang !== 'ru') localeIssues.push('localized root URL did not override saved language preference');
+    fs.writeFileSync(path.join(outDir, 'localized-root-ru.json'), JSON.stringify({ result: localeResult, issues: localeIssues }, null, 2));
+    console.log(JSON.stringify({ localeResult, localeIssues }, null, 2));
+    if (localeIssues.length) failures.push({ mode: 'localized-root', issues: localeIssues });
+    await localePage.close();
   } finally {
     await browser.close();
   }
