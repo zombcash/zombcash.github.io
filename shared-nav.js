@@ -992,7 +992,6 @@
       header.zombcash-shared-header .zsh-menu-toggle {display:none!important}
     }
 
-  `;
 
     /* Mobile hotfix 2026-10-24: keep language and account actions on the right. */
     @media (max-width: 760px) {
@@ -1049,7 +1048,7 @@
         padding-left:6px!important;padding-right:6px!important;font-size:6px!important;
       }
     }
-
+  `;
   document.head.querySelector('#zombcash-shared-navigation-style')?.remove();
   document.head.append(style);
 
