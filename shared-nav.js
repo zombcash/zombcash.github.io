@@ -3,6 +3,21 @@
  */
 (() => {
   'use strict';
+
+  // ZombieCash GA4: centralized measurement tag for pages loading shared-nav.js.
+  // Keep the measurement ID in one place to avoid duplicate tags across HTML pages.
+  if (!window.__zombcashGa4Loaded) {
+    window.__zombcashGa4Loaded = true;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', 'G-2FZH07QTR7');
+
+    const gaScript = document.createElement('script');
+    gaScript.async = true;
+    gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-2FZH07QTR7';
+    document.head.appendChild(gaScript);
+  }
   const file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   const isHome = file === 'index.html';
   if (!isHome) document.body.classList.add('zsh-inner-page');
