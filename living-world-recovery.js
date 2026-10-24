@@ -126,7 +126,8 @@
     if (!alertList || !alertStatus) return;
     try {
       const data = await request('/api/zombcash');
-      const change = Number(data.priceChange && data.priceChange.h24);
+      const changeValue = data.priceChange && data.priceChange.h24;
+      const change = changeValue == null ? NaN : Number(changeValue);
       const changeText = Number.isFinite(change) ? ((change > 0 ? '+' : '') + change.toFixed(2) + '% in 24h') : '24h change unavailable';
       const volume = data.volume && data.volume.h24 != null ? money(data.volume.h24) : 'volume unavailable';
       alertList.replaceChildren();
@@ -153,7 +154,8 @@
     try {
       const data = await request('/api/zombcash', 12000);
       if (byId('zombcash-price')) byId('zombcash-price').textContent = priceText(data.priceUsd);
-      const change = Number(data.priceChange && data.priceChange.h24);
+      const changeValue = data.priceChange && data.priceChange.h24;
+      const change = changeValue == null ? NaN : Number(changeValue);
       if (byId('zombcash-change')) {
         byId('zombcash-change').textContent = Number.isFinite(change) ? ((change > 0 ? '+' : '') + change.toFixed(2) + '%') : '—';
         byId('zombcash-change').className = change > 0 ? 'change-up' : change < 0 ? 'change-down' : '';
