@@ -1539,6 +1539,32 @@ section.section.living-world #world-missions .world-mission.done .world-mission-
 @media(max-width:760px){.site-footer .site-feedback{min-width:0}.site-feedback p{max-width:100%}}
 </style>
 <script src="shared-nav.js?v=mobile-language-actions-20261024-2" defer></script><script src="language.js?v=localization-20261023-17" defer></script><script src="survivor-auth.js?v=survivor-identity-online-20261023-3" defer></script><script id="footer-donation-actions">(()=>{const b=document.getElementById("footer-copy-wallet"),o=document.getElementById("footer-donation-feedback"),a="6jsHhJk2vFGmRW5L12UQqBK9zgjewH8KRtqB7rogwX7u";if(!b||!o)return;b.addEventListener("click",async()=>{try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(a)}else{const t=document.createElement("textarea");t.value=a;t.style.position="fixed";t.style.opacity="0";document.body.appendChild(t);t.select();const ok=document.execCommand("copy");t.remove();if(!ok)throw Error("copy blocked")}o.textContent="Donation address copied."}catch(_){o.textContent="Copy blocked — select the wallet address above and copy it manually."}})})();</script>
+
+<style id="zombcash-jupiter-mobile-width-fix">
+/* Jupiter injects its app beside the initial loading placeholder; prevent that stale flex item from shrinking the app on narrow screens. */
+section.section.community-console #jupiter-zombcash-terminal:has(#jupiter-terminal-instance) {
+  display: block !important;
+  min-width: 0 !important;
+}
+section.section.community-console #jupiter-zombcash-terminal:has(#jupiter-terminal-instance) > .jupiter-terminal-loading {
+  display: none !important;
+}
+section.section.community-console #jupiter-zombcash-terminal #jupiter-terminal-instance {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  flex: 1 1 100% !important;
+  box-sizing: border-box !important;
+}
+section.section.community-console #jupiter-zombcash-terminal #jupiter-terminal-instance > div {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+</style>
+
 <!-- Keep the sticky site navigation above the embedded Jupiter terminal while scrolling. -->
 <style id="zombcash-sticky-header-jupiter-layer-fix">
   header.topbar {
