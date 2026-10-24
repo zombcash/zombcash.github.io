@@ -669,6 +669,22 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
   .hero-bottom{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;margin-top:18px!important}
 }
 </style>
+<style id="desktop-mode-touch-layout-fix">
+
+/* Desktop-site mode on phones: Chrome widens the CSS viewport, so width-only
+   breakpoints miss the real device. Coarse pointer keeps touch phones stacked. */
+@media (max-width: 1100px) and (pointer: coarse) {
+  .hero { height:auto!important; min-height:0!important; max-height:none!important; overflow:visible!important; padding:32px 5% 30px!important; align-items:stretch!important; }
+  .hero-layout { width:100%!important; min-width:0!important; grid-template-columns:minmax(0,1fr)!important; grid-template-areas:"content" "radar"!important; gap:26px!important; align-items:start!important; }
+  .hero-content { grid-area:content!important; width:100%!important; max-width:100%!important; min-width:0!important; }
+  .hero-layout > .outbreak-panel, .hero-layout > .zc-hero-art-panel { grid-area:radar!important; width:100%!important; min-width:0!important; max-width:100%!important; height:300px!important; max-height:300px!important; }
+  .hero h1 { width:100%!important; max-width:100%!important; font-size:clamp(38px,8vw,64px)!important; line-height:1.02!important; letter-spacing:-1px!important; overflow-wrap:normal!important; }
+  .hero-copy { max-width:100%!important; font-size:16px!important; }
+  .field-manual-spotlight { width:100%!important; max-width:100%!important; box-sizing:border-box!important; }
+  .hero-stats { gap:14px!important; }
+  .hero-bottom { display:none!important; }
+}
+</style>
 <style id="field-manual-spotlight-style">.field-manual-spotlight{display:flex;align-items:center;justify-content:space-between;gap:28px;margin:28px 0 10px;padding:clamp(20px,3vw,34px);border:1px solid #385039;border-left:4px solid #9bff45;border-radius:14px;background:radial-gradient(ellipse at 90% 0,rgba(72,133,45,.2),transparent 55%),linear-gradient(135deg,#0e1712,#090e13);box-shadow:0 12px 34px rgba(0,0,0,.22)}.field-manual-copy{min-width:0}.field-manual-kicker{font:700 10px Orbitron,sans-serif;letter-spacing:.14em;color:#9bff45}.field-manual-spotlight h2{font-size:clamp(22px,3vw,34px);line-height:1.15;margin:9px 0}.field-manual-spotlight p{max-width:700px;color:#c1cec3;line-height:1.6;margin:8px 0 18px}.field-manual-link{display:inline-flex;gap:12px;align-items:center;padding:12px 16px;background:#9bff45;color:#091007;text-decoration:none;font:800 11px Orbitron,sans-serif;letter-spacing:.05em;border-radius:5px}.field-manual-link:hover{background:#c5ff9b;color:#091007}.field-manual-status{display:flex;flex:0 0 180px;flex-direction:column;gap:8px;padding:16px;border:1px solid #2b4030;background:#080e0a;border-radius:9px;font:700 10px Orbitron,sans-serif;letter-spacing:.08em;color:#a6b5a5}.field-manual-status strong{color:#edf5eb;font-size:12px}.field-manual-status small{color:#72836f;font-size:9px}.field-manual-dot{width:8px;height:8px;border-radius:50%;background:#9bff45;box-shadow:0 0 12px #9bff45}@media(max-width:650px){.field-manual-spotlight{flex-direction:column;align-items:stretch}.field-manual-status{flex-basis:auto}}</style>
 <style id="mobile-overflow-guard-20261023">
 /* Keep the mobile canvas within the viewport; wide data tables retain their own scrolling. */
