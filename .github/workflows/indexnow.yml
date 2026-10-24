@@ -1,0 +1,93 @@
+name: IndexNow URL Submission
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  submit-changed-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Wait for the public IndexNow key
+        env:
+          INDEXNOW_KEY: ${{ vars.INDEXNOW_KEY }}
+        run: |
+          # The key is public by protocol design. Keep the fallback aligned with the
+          # public key file in the repository so no repository secret is required.
+          KEY="${INDEXNOW_KEY:-zomcash-indexnow-2026-10-24-a7f93c12}"
+          KEY_URL="https://zombcash.github.io/${KEY}.txt"
+          for attempt in $(seq 1 18); do
+            BODY="$(curl -fsSL "$KEY_URL" 2>/dev/null || true)"
+            if [ "$BODY" = "$KEY" ]; then
+              echo "IndexNow key file is publicly reachable and valid."
+              exit 0
+            fi
+            echo "Waiting for GitHub Pages to publish the key file (attempt $attempt/18)..."
+            sleep 10
+          done
+          echo "::error::IndexNow key file was not verified on the live site."
+          exit 1
+
+      - name: Submit changed HTML pages to IndexNow
+        env:
+          INDEXNOW_KEY: ${{ vars.INDEXNOW_KEY }}
+        run: |
+          KEY="${INDEXNOW_KEY:-zomcash-indexnow-2026-10-24-a7f93c12}"
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.sha }}"
+          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            echo "No previous commit to compare; skipping URL submission."
+            exit 0
+          fi
+
+          URLS_FILE="$(mktemp)"
+          while IFS= read -r path; do
+            case "$path" in
+              *.html|*/index.html)
+                if [ "$path" = "index.html" ]; then
+                  printf '%s\n' "https://zombcash.github.io/" >> "$URLS_FILE"
+                else
+                  printf '%s\n' "https://zombcash.github.io/$path" >> "$URLS_FILE"
+                fi
+                ;;
+            esac
+          done < <(git diff --name-only --diff-filter=AMDR "$BEFORE" "$AFTER")
+
+          sort -u "$URLS_FILE" -o "$URLS_FILE"
+          if [ ! -s "$URLS_FILE" ]; then
+            echo "No changed HTML pages in this push; nothing to submit."
+            exit 0
+          fi
+
+          python3 - "$URLS_FILE" "$KEY" <<'PY'
+          import json, pathlib, sys, urllib.request, urllib.error
+          urls = pathlib.Path(sys.argv[1]).read_text(encoding="utf-8").splitlines()
+          key = sys.argv[2]
+          payload = {
+              "host": "zombcash.github.io",
+              "key": key,
+              "keyLocation": f"https://zombcash.github.io/{key}.txt",
+              "urlList": urls,
+          }
+          req = urllib.request.Request(
+              "https://api.indexnow.org/indexnow",
+              data=json.dumps(payload).encode("utf-8"),
+              headers={"Content-Type": "application/json; charset=utf-8"},
+              method="POST",
+          )
+          try:
+              with urllib.request.urlopen(req, timeout=30) as response:
+                  print(f"IndexNow HTTP {response.status}: submitted {len(urls)} changed page URL(s).")
+          except urllib.error.HTTPError as error:
+              print(f"IndexNow HTTP {error.code}: {error.read().decode('utf-8', 'replace')}")
+              raise
+          PY
