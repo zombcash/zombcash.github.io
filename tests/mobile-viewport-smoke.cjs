@@ -21,7 +21,9 @@ fs.mkdirSync(outDir, { recursive: true });
       const pageErrors = [];
       page.on('pageerror', error => pageErrors.push(error.message));
 
-      await page.goto(BASE_URL, { waitUntil: 'networkidle', timeout: 60000 });
+      await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+      // The live site may keep analytics/API requests open; do not wait for networkidle.
+      await page.waitForLoadState('load', { timeout: 20000 }).catch(() => {});
       await page.waitForSelector('header.zombcash-shared-header', { timeout: 20000 });
 
       const result = await page.evaluate(() => {
