@@ -2,13 +2,28 @@ name: Search Console Sitemap Check
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "sitemap.xml"
+      - "robots.txt"
+      - "*.html"
+      - "ru/**"
+      - "de/**"
+      - "fr/**"
+      - "it/**"
+      - "ja/**"
+      - "zh-CN/**"
+      - "tr/**"
+      - "hi/**"
+      - ".github/workflows/search-console-sitemap.yml"
 
 permissions:
   contents: read
 
 jobs:
   sitemap:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
       - name: Check public sitemap XML
