@@ -698,6 +698,37 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
   }
 }
 </style>
+
+<style id="zombcash-promo-video-library">
+.zc-promo-video{padding:clamp(34px,5vw,68px) 5.5%;border-top:1px solid #9bff4520;border-bottom:1px solid #9bff4518;background:radial-gradient(ellipse at 18% 10%,#19351d80,transparent 48%),linear-gradient(120deg,#080d0a,#0a0d12 72%,#100b16)}
+.zc-promo-video-shell{width:100%;max-width:1440px;margin:0 auto;display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:clamp(22px,4vw,56px);align-items:center}
+.zc-promo-video-copy{min-width:0}
+.zc-promo-video-kicker{display:inline-flex;align-items:center;gap:9px;color:#a9ef85;font:700 9px/1.5 Orbitron,sans-serif;letter-spacing:1.3px}
+.zc-promo-video-kicker i,.zc-promo-player-top i{display:inline-block;width:7px;height:7px;flex:0 0 auto;border-radius:50%;background:#9bff45;box-shadow:0 0 12px #9bff4580}
+.zc-promo-video-copy h2{margin:20px 0 14px;color:#edf5e8;font:800 clamp(28px,3.2vw,46px)/1.12 Orbitron,sans-serif;letter-spacing:-1.5px}
+.zc-promo-video-copy h2 span{color:#9bff45}
+.zc-promo-video-copy>p{max-width:440px;color:#a6b5a1;font:500 17px/1.55 Rajdhani,sans-serif}
+.zc-promo-video-controls{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:24px}
+.zc-promo-video-controls button{min-height:39px;padding:10px 12px;border:1px solid #405c38;background:#0a120c;color:#c7e5ba;font:700 8px Orbitron,sans-serif;letter-spacing:.45px;cursor:pointer}
+.zc-promo-video-controls button:hover:not(:disabled){border-color:#9bff45;color:#9bff45}
+.zc-promo-video-controls button:disabled{opacity:.38;cursor:not-allowed}
+#zc-promo-count{color:#9bff45;font:700 8px Orbitron,sans-serif;letter-spacing:.5px}
+.zc-promo-video-note{min-height:18px;margin:12px 0!important;color:#81947b!important;font-size:12px!important}
+.zc-promo-video-release{display:inline-flex;margin-top:8px;color:#b9f58e;text-decoration:none;font:700 9px/1.5 Orbitron,sans-serif;letter-spacing:.6px}
+.zc-promo-video-release:hover{color:#9bff45;text-decoration:underline}
+.zc-promo-player-wrap{min-width:0;border:1px solid #47633a;background:#050806;box-shadow:0 20px 60px #0007,0 0 35px #9bff450a}
+.zc-promo-player-top,.zc-promo-player-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 15px;color:#8da287;font:700 8px Orbitron,sans-serif;letter-spacing:.6px}
+.zc-promo-player-top{border-bottom:1px solid #293b28}
+.zc-promo-player-top span:first-child{display:flex;align-items:center;gap:8px}
+#zc-promo-version{color:#9bff45;white-space:nowrap}
+#zc-promo-player{display:block;width:100%;aspect-ratio:16/9;max-height:68vh;background:#020403;object-fit:contain}
+.zc-promo-player-foot{border-top:1px solid #293b28;font-size:7px}
+.zc-promo-player-foot a{color:#b9f58e;text-decoration:none;white-space:nowrap}
+.zc-promo-player-foot a:hover{color:#9bff45}
+@media(max-width:850px){.zc-promo-video-shell{grid-template-columns:minmax(0,1fr);gap:22px}.zc-promo-video-copy h2{font-size:clamp(28px,5vw,40px)}.zc-promo-video-copy>p{max-width:620px}.zc-promo-player-wrap{width:100%}}
+@media(max-width:520px){.zc-promo-video{padding:34px 4%}.zc-promo-video-controls{gap:6px}.zc-promo-video-controls button{padding:9px 8px;font-size:7px}.zc-promo-player-top,.zc-promo-player-foot{padding:10px 9px;font-size:7px;letter-spacing:.2px}.zc-promo-video-kicker{font-size:8px;letter-spacing:.7px}.zc-promo-video-copy h2{letter-spacing:-.8px}}
+</style>
+
 </head>
 <body>
 <div class="scanlines"></div>
@@ -776,6 +807,31 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
   </aside>  </div>
   <div class="hero-bottom"><span>SCANNING FOR SIGNS OF LIFE...</span><span>SYS.STATUS: <b>UNDEAD</b></span><span>COORD: 6C-CB-F9</span></div>
 </section>
+<!-- ZombieCash promo video library: each new video is added to promo-videos.json; previous releases remain available. -->
+<section class="zc-promo-video section" id="promo-video" aria-labelledby="zc-promo-title">
+  <div class="zc-promo-video-shell">
+    <div class="zc-promo-video-copy">
+      <span class="zc-promo-video-kicker"><i></i> [ WELCOME TRANSMISSION / OFFICIAL VIDEO ]</span>
+      <h2 id="zc-promo-title">ENTER THE <span>UNDEAD INTERNET.</span></h2>
+      <p>See the ZombieCash world, explore the tools, and join the survivors.</p>
+      <div class="zc-promo-video-controls" aria-label="Promo video navigation">
+        <button type="button" id="zc-promo-prev" disabled aria-label="Previous promo video">← PREVIOUS</button>
+        <span id="zc-promo-count" aria-live="polite">LOADING VIDEO LIBRARY…</span>
+        <button type="button" id="zc-promo-next" disabled aria-label="Next promo video">NEXT →</button>
+      </div>
+      <p class="zc-promo-video-note" id="zc-promo-status" role="status">Loading the latest transmission…</p>
+      <a class="zc-promo-video-release" id="zc-promo-release" href="https://github.com/zombcash/zombcash.github.io/releases" target="_blank" rel="noopener noreferrer">VIEW ALL VIDEO RELEASES ↗</a>
+    </div>
+    <div class="zc-promo-player-wrap">
+      <div class="zc-promo-player-top"><span><i></i> ZC // PROMO TRANSMISSION</span><span id="zc-promo-version">ARCHIVE</span></div>
+      <video id="zc-promo-player" controls playsinline preload="metadata" aria-label="ZombieCash promotional video">
+        <p>Your browser cannot play this video. <a href="https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10">Open the video release instead.</a></p>
+      </video>
+      <div class="zc-promo-player-foot"><span>PLAY ON DEMAND · SOUND ON</span><a id="zc-promo-download" href="https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10" target="_blank" rel="noopener noreferrer">OPEN / DOWNLOAD ↗</a></div>
+    </div>
+  </div>
+</section>
+
 <!-- ZombieCash advertising slot: AADS -->
 <section class="aads-ad-section" aria-label="Advertisement" style="width:100%;box-sizing:border-box;padding:18px 5%;background:#080b11;">
   <div class="aads-ad-inner" style="width:100%;max-width:1120px;margin:0 auto;min-width:0;text-align:center;">
@@ -1590,4 +1646,42 @@ section.section.community-console #jupiter-zombcash-terminal #jupiter-terminal-i
     isolation: isolate !important;
   }
 </style>
+
+<script id="zombcash-promo-video-library-script">
+(()=> {
+  const player=document.getElementById('zc-promo-player');
+  const prev=document.getElementById('zc-promo-prev');
+  const next=document.getElementById('zc-promo-next');
+  const count=document.getElementById('zc-promo-count');
+  const status=document.getElementById('zc-promo-status');
+  const version=document.getElementById('zc-promo-version');
+  const download=document.getElementById('zc-promo-download');
+  const release=document.getElementById('zc-promo-release');
+  if(!player||!prev||!next||!count||!status)return;
+  let videos=[],index=0;
+  const fallback={title:'ZombieCash Promo Video',tag:'zombiecash-promo-2026-10',date:'2026-10-24',src:'https://github.com/zombcash/zombcash.github.io/releases/download/zombiecash-promo-2026-10/zombiecash_final_real_screens.mp4-1080p-.ANONMP4.TO.mp4',releaseUrl:'https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10'};
+  const safeUrl=value=>{try{const u=new URL(value,location.href);return u.protocol==='https:'?u.href:''}catch(_){return ''}};
+  function render(){
+    if(!videos.length){status.textContent='The video library is temporarily unavailable.';count.textContent='NO VIDEOS';return}
+    const item=videos[index];
+    player.pause();player.src=safeUrl(item.src);player.load();
+    count.textContent=String(index+1).padStart(2,'0')+' / '+String(videos.length).padStart(2,'0');
+    version.textContent=item.tag||'ARCHIVE';
+    status.textContent=item.date?'TRANSMISSION DATE: '+item.date:'OFFICIAL ZOMBIECASH VIDEO';
+    const releaseUrl=safeUrl(item.releaseUrl)||'https://github.com/zombcash/zombcash.github.io/releases';
+    download.href=releaseUrl;release.href='https://github.com/zombcash/zombcash.github.io/releases';
+    prev.disabled=index===0;next.disabled=index===videos.length-1;
+    player.setAttribute('aria-label',item.title||'ZombieCash promotional video');
+  }
+  prev.addEventListener('click',()=>{if(index>0){index--;render()}});
+  next.addEventListener('click',()=>{if(index<videos.length-1){index++;render()}});
+  fetch('promo-videos.json?v=20261024-1',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('manifest');return r.json()}).then(data=>{
+    if(!Array.isArray(data.videos)||!data.videos.length)throw Error('empty');
+    videos=data.videos.filter(v=>v&&safeUrl(v.src));
+    if(!videos.length)throw Error('invalid');
+    render();
+  }).catch(()=>{videos=[fallback];render();status.textContent='LATEST PROMO · PLAY WHEN READY';});
+})();
+</script>
+
 </body></html>
