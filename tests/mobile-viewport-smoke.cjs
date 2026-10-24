@@ -97,7 +97,7 @@ fs.mkdirSync(outDir, { recursive: true });
         viewportWidth: window.innerWidth,
         documentWidth: document.documentElement.scrollWidth,
         pointerCoarse: matchMedia('(pointer: coarse)').matches,
-        gridColumns: grid ? grid.trim().split(/\\s+/).length : 0,
+        gridColumns: grid ? grid.trim().split(/\s+/).length : 0,
         gridTemplateColumns: grid,
         heroHeight: hero ? Math.round(hero.getBoundingClientRect().height) : null,
       };
