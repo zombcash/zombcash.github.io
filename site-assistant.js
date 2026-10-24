@@ -201,7 +201,7 @@
   launch.addEventListener('click', event => {
     if (suppressNextClick) { event.preventDefault(); event.stopImmediatePropagation(); suppressNextClick = false; }
   }, true);
-  window.addEventListener('resize', () => { applySavedPosition(); });
+  window.addEventListener('resize', () => { if (sessionToken()) syncPositionFromAccount(); else applySavedPosition(); });
   applySavedPosition();
   syncPositionFromAccount();
   document.addEventListener('zombcash:survivorlogin', syncPositionFromAccount);
