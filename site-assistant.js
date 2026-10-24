@@ -4,6 +4,8 @@
   window.__zombcashAssistantLoaded = true;
 
   const API = 'https://zombcash-bot.fadehost.app/api/assistant/chat';
+  const POSITION_API = 'https://zombcash-bot.fadehost.app/api/profile/assistant-position';
+  const SESSION_KEY = 'zombcash-survivor-token';
   const copy = {
     en:{button:'ASK AI',title:'ZOMBIECASH AI',sub:'The same community brain',welcome:'Hey survivor! Ask me about ZombieCash, the tools, Zombie Lab, Meme Radar, or anything else.',placeholder:'Ask the ZombieCash AI…',send:'SEND',close:'Close assistant',thinking:'Thinking…',error:'The assistant is temporarily unavailable. Please try again or join us on Telegram.',hint:'AI can make mistakes. Never treat token commentary as financial advice.'},
     ru:{button:'СПРОСИТЬ ИИ',title:'ИИ ZOMBIECASH',sub:'Тот же помощник сообщества',welcome:'Привет, выживший! Спрашивай о ZombieCash, наших инструментах, Zombie Lab, Meme Radar или о чём угодно.',placeholder:'Задай вопрос ИИ ZombieCash…',send:'ОТПРАВИТЬ',close:'Закрыть помощника',thinking:'Думаю…',error:'ИИ временно недоступен. Попробуй позже или напиши нам в Telegram.',hint:'ИИ может ошибаться. Комментарии о токенах — не финансовый совет.'},
@@ -100,9 +102,67 @@
       host.style.bottom = 'auto';
     } catch (_) {}
   }
-  function savePosition() {
+  function currentPositionRatio() {
     const rect = host.getBoundingClientRect();
-    try { localStorage.setItem(POSITION_KEY, JSON.stringify({x:Math.round(rect.left), y:Math.round(rect.top)})); } catch (_) {}
+    const maxX = Math.max(1, window.innerWidth - rect.width);
+    const maxY = Math.max(1, window.innerHeight - rect.height);
+    return {xRatio:clamp(rect.left / maxX, 0, 1), yRatio:clamp(rect.top / maxY, 0, 1)};
+  }
+  function sessionToken() {
+    try { return localStorage.getItem(SESSION_KEY) || ''; } catch (_) { return ''; }
+  }
+  async function savePosition() {
+    const rect = host.getBoundingClientRect();
+    const local = {x:Math.round(rect.left), y:Math.round(rect.top)};
+    try { localStorage.setItem(POSITION_KEY, JSON.stringify(local)); } catch (_) {}
+    const token = sessionToken();
+    if (!token) return;
+    try {
+      await fetch(POSITION_API, {
+        method:'POST',
+        headers:{'Authorization':'Bearer ' + token, 'Content-Type':'application/json'},
+        body:JSON.stringify(currentPositionRatio()),
+        cache:'no-store'
+      });
+    } catch (_) { /* local position remains available if sync is temporarily offline */ }
+  }
+  function applyPositionRatio(position) {
+    if (!position || !Number.isFinite(position.xRatio) || !Number.isFinite(position.yRatio)) return false;
+    const rect = host.getBoundingClientRect();
+    const maxX = Math.max(0, window.innerWidth - rect.width);
+    const maxY = Math.max(0, window.innerHeight - rect.height);
+    const x = clamp(position.xRatio, 0, 1) * maxX;
+    const y = clamp(position.yRatio, 0, 1) * maxY;
+    host.style.left = Math.round(x) + 'px';
+    host.style.top = Math.round(y) + 'px';
+    host.style.right = 'auto';
+    host.style.bottom = 'auto';
+    try { localStorage.setItem(POSITION_KEY, JSON.stringify({x:Math.round(x), y:Math.round(y)})); } catch (_) {}
+    return true;
+  }
+  async function syncPositionFromAccount() {
+    const token = sessionToken();
+    if (!token) return;
+    try {
+      const response = await fetch(POSITION_API, {headers:{'Authorization':'Bearer ' + token}, cache:'no-store'});
+      if (response.status === 401) return;
+      if (!response.ok) return;
+      const data = await response.json();
+      if (data.position && applyPositionRatio(data.position)) return;
+      // First signed-in visit: migrate the current browser's chosen location to the account.
+      const local = JSON.parse(localStorage.getItem(POSITION_KEY) || 'null');
+      if (local && Number.isFinite(local.x) && Number.isFinite(local.y)) {
+        const rect = host.getBoundingClientRect();
+        const maxX = Math.max(1, window.innerWidth - rect.width);
+        const maxY = Math.max(1, window.innerHeight - rect.height);
+        await fetch(POSITION_API, {
+          method:'POST',
+          headers:{'Authorization':'Bearer ' + token, 'Content-Type':'application/json'},
+          body:JSON.stringify({xRatio:clamp(local.x / maxX, 0, 1), yRatio:clamp(local.y / maxY, 0, 1)}),
+          cache:'no-store'
+        });
+      }
+    } catch (_) { /* do not block or break the assistant when account sync is offline */ }
   }
   launch.addEventListener('pointerdown', event => {
     if (event.button !== undefined && event.button !== 0) return;
@@ -141,8 +201,10 @@
   launch.addEventListener('click', event => {
     if (suppressNextClick) { event.preventDefault(); event.stopImmediatePropagation(); suppressNextClick = false; }
   }, true);
-  window.addEventListener('resize', applySavedPosition);
+  window.addEventListener('resize', () => { if (sessionToken()) syncPositionFromAccount(); else applySavedPosition(); });
   applySavedPosition();
+  syncPositionFromAccount();
+  document.addEventListener('zombcash:survivorlogin', syncPositionFromAccount);
   function localize() {
     const t = copy[getLang()];
     launch.querySelector('.zfa-launch-label').textContent = t.button;
