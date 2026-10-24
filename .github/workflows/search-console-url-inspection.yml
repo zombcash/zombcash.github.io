@@ -1,0 +1,82 @@
+name: Search Console URL Inspection
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Install Google API client
+        run: python -m pip install --disable-pip-version-check google-api-python-client google-auth
+
+      - name: Inspect important URLs in Google Search
+        env:
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import sys
+          from google.oauth2 import service_account
+          from googleapiclient.discovery import build
+          from googleapiclient.errors import HttpError
+
+          site_url = "https://zombcash.github.io/"
+          urls = [
+              "https://zombcash.github.io/",
+              "https://zombcash.github.io/ru/",
+              "https://zombcash.github.io/outbreak-transmission.html",
+              "https://zombcash.github.io/ru/outbreak-transmission.html",
+          ]
+          raw = os.environ.get("GSC_SERVICE_ACCOUNT_JSON", "")
+          if not raw.strip():
+              raise SystemExit("ERROR: GitHub Secret GSC_SERVICE_ACCOUNT_JSON is missing or empty.")
+
+          try:
+              info = json.loads(raw)
+              credentials = service_account.Credentials.from_service_account_info(
+                  info, scopes=["https://www.googleapis.com/auth/webmasters"]
+              )
+              service = build("searchconsole", "v1", credentials=credentials, cache_discovery=False)
+          except Exception as exc:
+              raise SystemExit(f"ERROR initializing credentials/client: {type(exc).__name__}: {exc}")
+
+          print(f"Service account: {info.get('client_email', '(email missing)')}")
+          print(f"Property: {site_url}")
+          failed = False
+          for url in urls:
+              print("\\n" + "=" * 78)
+              print(f"URL: {url}")
+              try:
+                  response = service.urlInspection().index().inspect(
+                      body={"inspectionUrl": url, "siteUrl": site_url, "languageCode": "en-US"}
+                  ).execute()
+                  result = response.get("inspectionResult", {})
+                  index = result.get("indexStatusResult", {})
+                  print(f"Verdict: {index.get('verdict', 'NOT_RETURNED')}")
+                  print(f"Coverage state: {index.get('coverageState', 'NOT_RETURNED')}")
+                  print(f"Indexing state: {index.get('indexingState', 'NOT_RETURNED')}")
+                  print(f"Last crawl: {index.get('lastCrawlTime', 'NOT_RETURNED')}")
+                  print(f"Page fetch: {index.get('pageFetchState', 'NOT_RETURNED')}")
+                  print(f"Robots.txt state: {index.get('robotsTxtState', 'NOT_RETURNED')}")
+                  print(f"Google canonical: {index.get('googleCanonical', 'NOT_RETURNED')}")
+                  print(f"User canonical: {index.get('userCanonical', 'NOT_RETURNED')}")
+                  print(f"Referring sitemap: {', '.join(index.get('sitemap', [])) or 'NOT_RETURNED'}")
+                  print(f"Referring URLs: {', '.join(index.get('referringUrls', [])) or 'NOT_RETURNED'}")
+              except HttpError as exc:
+                  failed = True
+                  print(f"API ERROR HTTP {exc.resp.status}: {exc.content.decode('utf-8', errors='replace')[:2000]}")
+                  if exc.resp.status == 403:
+                      print("Check Search Console property permissions and URL Inspection API availability/quota.")
+              except Exception as exc:
+                  failed = True
+                  print(f"ERROR: {type(exc).__name__}: {exc}")
+          if failed:
+              sys.exit(1)
+          print("\\nInspection requests completed. Results reflect Google's available inspection data, not a guarantee of indexing.")
+          PY
