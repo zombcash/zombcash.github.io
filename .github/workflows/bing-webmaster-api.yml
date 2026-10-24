@@ -40,6 +40,7 @@ jobs:
           calls = {
               "rank_and_traffic": "GetRankAndTrafficStats",
               "query_stats": "GetQueryStats",
+              "crawl_stats": "GetCrawlStats",
           }
           report = {
               "site": site,
