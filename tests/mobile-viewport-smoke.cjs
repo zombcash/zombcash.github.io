@@ -125,6 +125,45 @@ fs.mkdirSync(outDir, { recursive: true });
     console.log(JSON.stringify({ localeResult, localeIssues }, null, 2));
     if (localeIssues.length) failures.push({ mode: 'localized-root', issues: localeIssues });
     await localePage.close();
+
+    // Verify that the main live-data panels recover from their initial loading states.
+    const liveDataPage = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+    const liveDataErrors = [];
+    liveDataPage.on('pageerror', error => liveDataErrors.push(error.message));
+    await liveDataPage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await liveDataPage.waitForFunction(() => {
+      const news = document.querySelector('#world-news-list');
+      const price = document.querySelector('#zombcash-price')?.textContent?.trim();
+      return !!news?.querySelector('.world-news-item') && !!price && price !== '—';
+    }, { timeout: 25000 }).catch(() => {});
+    await liveDataPage.waitForFunction(() => {
+      const chart = document.querySelector('#activity-chart-status')?.textContent || '';
+      return !/LOADING PRICE HISTORY/i.test(chart);
+    }, { timeout: 20000 }).catch(() => {});
+    await liveDataPage.waitForFunction(() => {
+      const trades = document.querySelector('#recent-trades-list')?.textContent || '';
+      return !!trades && !/Connecting to the transaction feed/i.test(trades);
+    }, { timeout: 20000 }).catch(() => {});
+    const liveDataResult = await liveDataPage.evaluate(() => ({
+      newsItems: document.querySelectorAll('#world-news-list .world-news-item').length,
+      newsStatus: document.querySelector('#world-news-status')?.textContent?.trim() || '',
+      marketPrice: document.querySelector('#zombcash-price')?.textContent?.trim() || '',
+      marketStatus: document.querySelector('#zombcash-market-status')?.textContent?.trim() || '',
+      chartStatus: document.querySelector('#activity-chart-status')?.textContent?.trim() || '',
+      chartPoints: document.querySelectorAll('#activity-price-chart circle').length,
+      recentTradesText: document.querySelector('#recent-trades-list')?.textContent?.trim().slice(0, 180) || '',
+    }));
+    const liveDataIssues = [];
+    if (liveDataResult.newsItems < 1) liveDataIssues.push('news feed did not render any articles');
+    if (!liveDataResult.marketPrice || liveDataResult.marketPrice === '—') liveDataIssues.push('market price did not load');
+    if (/API ERROR|HTTP 5\d\d/i.test(liveDataResult.chartStatus)) liveDataIssues.push('price chart returned an API error');
+    if (/Transaction API error: HTTP 5\d\d/i.test(liveDataResult.recentTradesText)) liveDataIssues.push('recent-trades endpoint returned a server error');
+    if (liveDataErrors.length) liveDataIssues.push('browser JavaScript errors: ' + liveDataErrors.join(' | '));
+    fs.writeFileSync(path.join(outDir, 'live-data-panels.json'), JSON.stringify({ result: liveDataResult, issues: liveDataIssues, pageErrors: liveDataErrors }, null, 2));
+    await liveDataPage.screenshot({ path: path.join(outDir, 'live-data-panels.png'), fullPage: false });
+    console.log(JSON.stringify({ liveDataResult, liveDataIssues }, null, 2));
+    if (liveDataIssues.length) failures.push({ mode: 'live-data-panels', issues: liveDataIssues });
+    await liveDataPage.close();
   } finally {
     await browser.close();
   }
