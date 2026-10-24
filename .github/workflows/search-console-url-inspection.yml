@@ -9,12 +9,12 @@ permissions:
 jobs:
   inspect:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 15
     steps:
       - name: Install Google API client
-        run: python -m pip install --disable-pip-version-check google-api-python-client google-auth
+        run: python -m pip install --disable-pip-version-check requests google-api-python-client google-auth
 
-      - name: Inspect important URLs in Google Search
+      - name: Inspect every sitemap URL in Google Search
         env:
           GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
         run: |
@@ -23,73 +23,89 @@ jobs:
           import os
           import sys
           import time
+          import requests
+          import xml.etree.ElementTree as ET
           from google.oauth2 import service_account
           from googleapiclient.discovery import build
           from googleapiclient.errors import HttpError
 
           site_url = "https://zombcash.github.io/"
-          urls = [
-              "https://zombcash.github.io/",
-              "https://zombcash.github.io/ru/",
-              "https://zombcash.github.io/outbreak-transmission.html",
-              "https://zombcash.github.io/ru/outbreak-transmission.html",
-          ]
+          sitemap_url = "https://zombcash.github.io/sitemap.xml"
           raw = os.environ.get("GSC_SERVICE_ACCOUNT_JSON", "")
           if not raw.strip():
               raise SystemExit("ERROR: GitHub Secret GSC_SERVICE_ACCOUNT_JSON is missing or empty.")
 
-          try:
-              info = json.loads(raw)
-              credentials = service_account.Credentials.from_service_account_info(
-                  info, scopes=["https://www.googleapis.com/auth/webmasters"]
-              )
-              service = build("searchconsole", "v1", credentials=credentials, cache_discovery=False)
-          except Exception as exc:
-              raise SystemExit(f"ERROR initializing credentials/client: {type(exc).__name__}: {exc}")
+          response = requests.get(sitemap_url, timeout=30)
+          print(f"Sitemap HTTP: {response.status_code}")
+          response.raise_for_status()
+          root = ET.fromstring(response.content)
+          ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+          urls = list(dict.fromkeys((node.text or "").strip() for node in root.findall("sm:url/sm:loc", ns) if (node.text or "").strip()))
+          if not urls:
+              raise SystemExit("ERROR: No URL entries found in sitemap.")
+          print(f"Unique URLs discovered in sitemap: {len(urls)}")
 
+          info = json.loads(raw)
+          credentials = service_account.Credentials.from_service_account_info(
+              info, scopes=["https://www.googleapis.com/auth/webmasters"]
+          )
+          service = build("searchconsole", "v1", credentials=credentials, cache_discovery=False)
           print(f"Service account: {info.get('client_email', '(email missing)')}")
           print(f"Property: {site_url}")
-          failed = False
-          for url in urls:
+
+          counts = {}
+          errors = []
+          for number, url in enumerate(urls, start=1):
               print("\\n" + "=" * 78)
-              print(f"URL: {url}")
-              response = None
+              print(f"[{number}/{len(urls)}] URL: {url}")
+              data = None
               for attempt in range(1, 4):
                   try:
-                      response = service.urlInspection().index().inspect(
+                      data = service.urlInspection().index().inspect(
                           body={"inspectionUrl": url, "siteUrl": site_url, "languageCode": "en-US"}
                       ).execute()
                       break
                   except HttpError as exc:
                       if exc.resp.status in (429, 500, 502, 503, 504) and attempt < 3:
-                          print(f"Temporary API HTTP {exc.resp.status}; retry {attempt}/3 after {attempt * 3}s.")
+                          print(f"Temporary HTTP {exc.resp.status}; retry {attempt}/3 after {attempt * 3}s.")
                           time.sleep(attempt * 3)
                           continue
-                      failed = True
-                      print(f"API ERROR HTTP {exc.resp.status}: {exc.content.decode('utf-8', errors='replace')[:2000]}")
-                      if exc.resp.status == 403:
-                          print("Check Search Console property permissions and URL Inspection API availability/quota.")
+                      msg = f"HTTP {exc.resp.status}: {exc.content.decode('utf-8', errors='replace')[:500]}"
+                      print(f"API ERROR: {msg}")
+                      errors.append((url, msg))
                       break
                   except Exception as exc:
-                      failed = True
-                      print(f"ERROR: {type(exc).__name__}: {exc}")
+                      msg = f"{type(exc).__name__}: {exc}"
+                      print(f"ERROR: {msg}")
+                      errors.append((url, msg))
                       break
-              if response is None:
-                  print("No inspection data returned for this URL after retries.")
+              if data is None:
+                  counts["API_ERROR"] = counts.get("API_ERROR", 0) + 1
                   continue
-              result = response.get("inspectionResult", {})
-              index = result.get("indexStatusResult", {})
-              print(f"Verdict: {index.get('verdict', 'NOT_RETURNED')}")
-              print(f"Coverage state: {index.get('coverageState', 'NOT_RETURNED')}")
+              index = data.get("inspectionResult", {}).get("indexStatusResult", {})
+              verdict = index.get("verdict", "NOT_RETURNED")
+              state = index.get("coverageState", "NOT_RETURNED")
+              counts[state] = counts.get(state, 0) + 1
+              print(f"Verdict: {verdict}")
+              print(f"Coverage state: {state}")
               print(f"Indexing state: {index.get('indexingState', 'NOT_RETURNED')}")
               print(f"Last crawl: {index.get('lastCrawlTime', 'NOT_RETURNED')}")
               print(f"Page fetch: {index.get('pageFetchState', 'NOT_RETURNED')}")
               print(f"Robots.txt state: {index.get('robotsTxtState', 'NOT_RETURNED')}")
               print(f"Google canonical: {index.get('googleCanonical', 'NOT_RETURNED')}")
               print(f"User canonical: {index.get('userCanonical', 'NOT_RETURNED')}")
-              print(f"Referring sitemap: {', '.join(index.get('sitemap', [])) or 'NOT_RETURNED'}")
-              print(f"Referring URLs: {', '.join(index.get('referringUrls', [])) or 'NOT_RETURNED'}")
-          if failed:
-              sys.exit(1)
-          print("\\nInspection requests completed. Results reflect Google's available inspection data, not a guarantee of indexing.")
+              # Respect service quota; URL Inspection has per-site daily limits.
+              time.sleep(1)
+
+          print("\\n" + "=" * 78)
+          print("SUMMARY")
+          print(f"Total unique sitemap URLs: {len(urls)}")
+          for state, count in sorted(counts.items()):
+              print(f"{state}: {count}")
+          print(f"API errors: {len(errors)}")
+          if errors:
+              print("URLS WITH API ERRORS:")
+              for url, error in errors:
+                  print(f"- {url}: {error}")
+          print("Inspection is a snapshot of Google's available data; it does not itself request indexing.")
           PY
