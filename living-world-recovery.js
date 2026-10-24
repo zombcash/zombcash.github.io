@@ -63,7 +63,7 @@
     return '$' + n.toPrecision(4);
   };
   const money = value => {
-    const n = Number(value);
+    const n = value == null || value === '' ? NaN : Number(value);
     if (!Number.isFinite(n) || n < 0) return '—';
     if (n >= 1e9) return '$' + (n / 1e9).toFixed(2) + 'B';
     if (n >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M';
@@ -163,7 +163,7 @@
       if (byId('zombcash-volume')) byId('zombcash-volume').textContent = money(data.volume && data.volume.h24);
       if (byId('zombcash-liquidity')) byId('zombcash-liquidity').textContent = money(data.liquidity && data.liquidity.usd);
       if (byId('zombcash-cap')) byId('zombcash-cap').textContent = money(data.marketCap || data.fdv);
-      if (status) status.textContent = data.stale ? 'LAST KNOWN DATA' : 'TOKEN FEED ONLINE';
+      if (status) status.textContent = data.stale ? 'LAST KNOWN DATA' : (data.activityAvailable === false ? 'PRICE AVAILABLE · ACTIVITY UNAVAILABLE' : 'TOKEN FEED ONLINE');
       const updated = byId('zombcash-market-updated');
       if (updated) updated.textContent = 'SOURCE UPDATED ' + new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
     } catch (error) {
