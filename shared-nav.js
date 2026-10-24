@@ -953,6 +953,45 @@
       }
     }
 
+
+    /* Unified desktop header: brand and actions on row 1, centered navigation on row 2.
+       Use the same layout at every desktop width and on every page using shared-nav.js. */
+    @media (min-width: 1200px) {
+      header.zombcash-shared-header {
+        display:grid!important;
+        grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;
+        grid-template-rows:auto auto!important;
+        align-items:center!important;
+        gap:8px 16px!important;
+        min-height:0!important;
+        padding:12px clamp(16px,2.5vw,36px) 10px!important;
+      }
+      header.zombcash-shared-header .zsh-brand {
+        grid-column:1!important;grid-row:1!important;justify-self:start!important;
+      }
+      header.zombcash-shared-header .zsh-actions {
+        grid-column:3!important;grid-row:1!important;justify-self:end!important;
+        display:flex!important;flex-wrap:nowrap!important;justify-content:flex-end!important;
+      }
+      header.zombcash-shared-header .zsh-nav,
+      header.zombcash-shared-header .zsh-nav.zsh-open {
+        position:static!important;left:auto!important;top:auto!important;transform:none!important;
+        grid-column:1 / -1!important;grid-row:2!important;
+        display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+        justify-content:center!important;align-items:center!important;
+        gap:clamp(8px,.9vw,16px)!important;width:100%!important;max-width:none!important;
+        min-width:0!important;margin:0!important;padding:8px 0 0!important;
+        border:0!important;border-top:1px solid #9bff4520!important;
+        background:transparent!important;overflow:visible!important;
+      }
+      header.zombcash-shared-header .zsh-nav>a {
+        flex:0 1 auto!important;width:auto!important;min-width:0!important;
+        min-height:28px!important;padding:5px 0!important;
+        font-size:clamp(8px,.58vw,10px)!important;white-space:nowrap!important;
+      }
+      header.zombcash-shared-header .zsh-menu-toggle {display:none!important}
+    }
+
   `;
   document.head.querySelector('#zombcash-shared-navigation-style')?.remove();
   document.head.append(style);
