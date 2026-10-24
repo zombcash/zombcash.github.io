@@ -428,10 +428,10 @@
     header.zombcash-shared-header .zsh-nav>a[aria-current="page"]{
       box-shadow:inset 0 -2px 0 #9bff45!important;
     }
-    header.zombcash-shared-header .zsh-menu-toggle{display:none!important}
-    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:1!important}
-    header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:2!important}
-    header.zombcash-shared-header .zsh-actions>.zsh-home{order:3!important}
+    /* Consistent action order on every page: language, Back to Home, registration at far right. */
+    header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:1!important}
+    header.zombcash-shared-header .zsh-actions>.zsh-home{order:2!important}
+    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:3!important}
     body.zsh-inner-page>.wrap,
     body.zsh-inner-page>.container,
     body.zsh-inner-page>.page-wrap,
