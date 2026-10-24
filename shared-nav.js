@@ -993,6 +993,63 @@
     }
 
   `;
+
+    /* Mobile hotfix 2026-10-24: keep language and account actions on the right. */
+    @media (max-width: 760px) {
+      header.zombcash-shared-header {
+        grid-template-columns:minmax(0,1fr) auto!important;
+        overflow:visible!important;
+      }
+      header.zombcash-shared-header .zsh-menu-toggle {
+        position:static!important;
+        grid-column:2!important;
+        grid-row:1!important;
+        justify-self:end!important;
+        align-self:center!important;
+        margin:0!important;
+      }
+      header.zombcash-shared-header .zsh-actions {
+        grid-column:1 / -1!important;
+        grid-row:2!important;
+        width:100%!important;
+        display:flex!important;
+        flex-wrap:nowrap!important;
+        align-items:center!important;
+        justify-content:flex-end!important;
+        gap:6px!important;
+        margin:9px 0 0!important;
+        min-width:0!important;
+      }
+      header.zombcash-shared-header .zsh-language-slot {
+        order:1!important;display:flex!important;align-items:center!important;flex:0 0 auto!important;
+      }
+      header.zombcash-shared-header .zsh-actions>.zsh-home { order:2!important; }
+      header.zombcash-shared-header .zsh-actions .zsh-login-button { order:3!important; }
+      header.zombcash-shared-header .language-switcher {
+        position:relative!important;flex:0 0 auto!important;max-width:none!important;
+      }
+      header.zombcash-shared-header .language-menu {
+        position:absolute!important;top:calc(100% + 6px)!important;right:0!important;left:auto!important;
+        width:min(220px, calc(100vw - 24px))!important;max-width:calc(100vw - 24px)!important;
+        max-height:min(60vh, 360px)!important;overflow-y:auto!important;z-index:10050!important;
+      }
+      header.zombcash-shared-header .zsh-nav {
+        position:static!important;left:auto!important;top:auto!important;transform:none!important;
+        grid-column:1 / -1!important;grid-row:3!important;display:none!important;
+        width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
+      }
+      header.zombcash-shared-header .zsh-nav.zsh-open { display:flex!important; }
+      html, body { max-width:100%; overflow-x:clip; }
+    }
+    @media (max-width: 390px) {
+      header.zombcash-shared-header .zsh-actions { gap:4px!important; }
+      header.zombcash-shared-header .zsh-actions>.zsh-home,
+      header.zombcash-shared-header .zsh-actions .language-trigger,
+      header.zombcash-shared-header .zsh-actions .zsh-login-button {
+        padding-left:6px!important;padding-right:6px!important;font-size:6px!important;
+      }
+    }
+
   document.head.querySelector('#zombcash-shared-navigation-style')?.remove();
   document.head.append(style);
 
