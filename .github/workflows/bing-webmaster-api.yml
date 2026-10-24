@@ -1,0 +1,89 @@
+name: Bing Webmaster API Report
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 6 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  bing-webmaster-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Query Bing Webmaster API
+        env:
+          BING_WEBMASTER_API_KEY: ${{ secrets.BING_WEBMASTER_API_KEY }}
+          BING_SITE_URL: https://zombcash.github.io/
+        run: |
+          set -euo pipefail
+          if [ -z "${BING_WEBMASTER_API_KEY:-}" ]; then
+            echo "::error::Missing repository secret BING_WEBMASTER_API_KEY."
+            exit 1
+          fi
+
+          python3 <<'PY'
+          import datetime
+          import json
+          import os
+          import sys
+          import urllib.error
+          import urllib.parse
+          import urllib.request
+          from pathlib import Path
+
+          key = os.environ["BING_WEBMASTER_API_KEY"]
+          site = os.environ["BING_SITE_URL"]
+          base = "https://ssl.bing.com/webmaster/api.svc/json/"
+          calls = {
+              "rank_and_traffic": "GetRankAndTrafficStats",
+              "query_stats": "GetQueryStats",
+          }
+          report = {
+              "site": site,
+              "generated_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              "source": "Bing Webmaster API",
+              "results": {},
+          }
+
+          for name, method in calls.items():
+              params = urllib.parse.urlencode({"siteUrl": site, "apikey": key})
+              request = urllib.request.Request(
+                  base + method + "?" + params,
+                  headers={"Accept": "application/json", "User-Agent": "ZombieCash-Bing-Webmaster-Report/1.0"},
+              )
+              try:
+                  with urllib.request.urlopen(request, timeout=25) as response:
+                      status = response.status
+                      payload = json.loads(response.read().decode("utf-8"))
+                  data = payload.get("d", payload) if isinstance(payload, dict) else payload
+                  report["results"][name] = {
+                      "http_status": status,
+                      "record_count": len(data) if isinstance(data, list) else None,
+                      "data": data,
+                  }
+                  print(f"{method}: HTTP {status}; response received.")
+              except urllib.error.HTTPError as exc:
+                  # Never print the request URL: it contains the API key.
+                  body = exc.read().decode("utf-8", "replace")[:1000]
+                  print(f"::error::{method} returned HTTP {exc.code}. Response: {body}")
+                  sys.exit(1)
+              except Exception as exc:
+                  print(f"::error::{method} failed ({type(exc).__name__}). Details omitted to protect credentials.")
+                  sys.exit(1)
+
+          Path("bing-webmaster-report.json").write_text(
+              json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
+          )
+          print("Bing Webmaster API authentication and report retrieval succeeded.")
+          PY
+
+      - name: Upload private-run report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bing-webmaster-report
+          path: bing-webmaster-report.json
+          if-no-files-found: error
+          retention-days: 14
