@@ -1103,6 +1103,12 @@
   document.addEventListener('zombcash:languagechange', event => localizeNav(event.detail && event.detail.language || 'en'));
   readLanguage();
 
+  // Load the shared site assistant.
+  const assistantScript = document.createElement('script');
+  assistantScript.src = '/site-assistant.js?v=floating-ai-20261024-1';
+  assistantScript.defer = true;
+  document.head.append(assistantScript);
+
   // language.js creates the switcher after DOMContentLoaded; place it in the same fixed slot.
   const moveLanguage = () => {
     const language = document.querySelector('.language-switcher');
