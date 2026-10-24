@@ -1,0 +1,126 @@
+name: Search Console Sitemap Check
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sitemap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check public sitemap XML
+        run: |
+          python - <<'PY'
+          import requests
+          import xml.etree.ElementTree as ET
+
+          url = "https://zombcash.github.io/sitemap.xml"
+          response = requests.get(url, timeout=30)
+          print(f"Sitemap URL: {url}")
+          print(f"HTTP status: {response.status_code}")
+          print(f"Content-Type: {response.headers.get('content-type', '(missing)')}")
+          response.raise_for_status()
+          root = ET.fromstring(response.content)
+          namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+          urls = root.findall("sm:url", namespace)
+          sitemaps = root.findall("sm:sitemap", namespace)
+          print(f"XML root: {root.tag}")
+          print(f"URL entries: {len(urls)}")
+          print(f"Nested sitemap entries: {len(sitemaps)}")
+          if root.tag.endswith("urlset") and not urls:
+              raise SystemExit("ERROR: urlset has no URL entries")
+          if not (root.tag.endswith("urlset") or root.tag.endswith("sitemapindex")):
+              raise SystemExit("ERROR: unexpected sitemap XML root")
+          PY
+
+      - name: Install Google API client
+        run: python -m pip install --disable-pip-version-check google-api-python-client google-auth
+
+      - name: Check and submit sitemap through Search Console API
+        env:
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import sys
+          from google.oauth2 import service_account
+          from googleapiclient.discovery import build
+          from googleapiclient.errors import HttpError
+
+          site_url = "https://zombcash.github.io/"
+          sitemap_url = "https://zombcash.github.io/sitemap.xml"
+          raw_credentials = os.environ.get("GSC_SERVICE_ACCOUNT_JSON", "")
+          if not raw_credentials.strip():
+              raise SystemExit(
+                  "ERROR: GitHub Secret GSC_SERVICE_ACCOUNT_JSON is missing or empty. "
+                  "Add the service-account JSON as a repository Actions secret."
+              )
+
+          try:
+              info = json.loads(raw_credentials)
+              credentials = service_account.Credentials.from_service_account_info(
+                  info,
+                  scopes=["https://www.googleapis.com/auth/webmasters"],
+              )
+              service = build(
+                  "searchconsole", "v1",
+                  credentials=credentials,
+                  cache_discovery=False,
+              )
+          except Exception as exc:
+              raise SystemExit(
+                  f"ERROR: Could not initialize Search Console credentials/client: "
+                  f"{type(exc).__name__}: {exc}"
+              )
+
+          print(f"Service account: {info.get('client_email', '(email not found)')}")
+          print(f"Search Console property: {site_url}")
+          try:
+              before = service.sitemaps().list(siteUrl=site_url).execute()
+              existing = [
+                  item for item in before.get("sitemap", [])
+                  if item.get("path") == sitemap_url
+              ]
+              print(f"Sitemaps listed before submission: {len(before.get('sitemap', []))}")
+              if existing:
+                  print("Existing sitemap entry found; submitting the same sitemap again.")
+                  print("Existing sitemap API fields:")
+                  for key in ("path", "lastSubmitted", "lastDownloaded", "isPending",
+                              "isSitemapsIndex", "type", "warnings", "errors"):
+                      if key in existing[0]:
+                          print(f"  {key}: {existing[0][key]}")
+              else:
+                  print("No matching sitemap entry returned by the API before submission.")
+
+              service.sitemaps().submit(
+                  siteUrl=site_url,
+                  feedpath=sitemap_url,
+              ).execute()
+              print("SUBMIT REQUEST: accepted by the Search Console API (HTTP success).")
+
+              after = service.sitemaps().list(siteUrl=site_url).execute()
+              submitted = [
+                  item for item in after.get("sitemap", [])
+                  if item.get("path") == sitemap_url
+              ]
+              if not submitted:
+                  print("WARNING: submission returned success, but sitemap was not present in the immediate list response.")
+                  print("Google processing/indexing is not yet confirmed.")
+              else:
+                  item = submitted[0]
+                  print("SITEMAP ENTRY AFTER SUBMISSION:")
+                  for key in ("path", "lastSubmitted", "lastDownloaded", "isPending",
+                              "isSitemapsIndex", "type", "warnings", "errors"):
+                      if key in item:
+                          print(f"  {key}: {item[key]}")
+                  print("Note: API acceptance confirms submission only, not successful processing or page indexing.")
+          except HttpError as exc:
+              print(f"Search Console API HTTP error: {exc.resp.status}")
+              print(exc.content.decode("utf-8", errors="replace")[:4000])
+              print("Check that the service-account email is added to this exact Search Console property with Full permission, and that Search Console API is enabled in this Cloud project.")
+              sys.exit(1)
+          PY
