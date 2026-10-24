@@ -1,62 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 700" role="img" aria-labelledby="title desc">
-<title id="title">ZombieCash undead hand holding cash</title>
-<desc id="desc">A stitched zombie hand gripping dollar bills against a glowing toxic green circle.</desc>
-<defs>
- <radialGradient id="orb"><stop offset="0" stop-color="#b7ff56"/><stop offset=".65" stop-color="#63f51b"/><stop offset="1" stop-color="#178c35"/></radialGradient>
- <linearGradient id="bill" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#efffa5"/><stop offset="1" stop-color="#8fcf54"/></linearGradient>
- <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d7f5a0"/><stop offset=".55" stop-color="#9ecb72"/><stop offset="1" stop-color="#4d7b42"/></linearGradient>
- <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="20"/></filter>
- <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="8" dy="12" stdDeviation="5" flood-color="#000" flood-opacity=".65"/></filter>
-</defs>
-<circle cx="350" cy="350" r="255" fill="#5cff19" opacity=".38" filter="url(#glow)"/>
-<circle cx="350" cy="350" r="238" fill="url(#orb)"/>
-<g filter="url(#shadow)" stroke="#10190d" stroke-width="13" stroke-linejoin="round">
- <g transform="rotate(-12 360 285)">
-  <rect x="220" y="158" width="260" height="345" rx="13" fill="#d9f79a"/>
-  <rect x="239" y="177" width="222" height="307" rx="5" fill="url(#bill)" stroke-width="6"/>
-  <path d="M260 200h30m130 0h20M260 460h30m130 0h20" fill="none" stroke="#527a36" stroke-width="6"/>
-  <circle cx="350" cy="330" r="76" fill="#b7e17a" stroke="#638a42" stroke-width="6"/>
-  <path d="M350 274v111m-29-79c0-29 59-29 59 0 0 28-59 22-59 51 0 30 59 30 59 0" fill="none" stroke="#182412" stroke-width="18" stroke-linecap="round"/>
- </g>
- <g transform="rotate(8 400 320)">
-  <rect x="300" y="130" width="245" height="335" rx="12" fill="#a9d86f"/>
-  <rect x="317" y="148" width="211" height="299" rx="5" fill="url(#bill)" stroke-width="6"/>
-  <path d="M339 170h30m125 0h20M339 424h30m125 0h20" fill="none" stroke="#527a36" stroke-width="6"/>
-  <circle cx="423" cy="300" r="71" fill="#c5ec86" stroke="#638a42" stroke-width="6"/>
-  <path d="M423 249v102m-26-73c0-26 53-26 53 0 0 25-53 20-53 46 0 27 53 27 53 0" fill="none" stroke="#182412" stroke-width="16" stroke-linecap="round"/>
- </g>
- <path d="M278 594
- C270 562 257 525 250 492
- C244 466 253 449 270 444
- C284 440 296 449 304 466
- L295 409
- C291 386 302 370 320 368
- C338 366 349 380 352 400
- L362 339
- C365 317 380 305 397 308
- C415 311 423 326 420 346
- L414 402
- L430 361
- C438 341 453 334 469 340
- C486 346 491 362 485 381
- L467 438
- C482 421 500 422 511 435
- C523 449 516 467 505 483
- L465 538
- C450 558 445 578 443 600
- Z" fill="url(#skin)"/>
- <path d="M271 459 C281 456 289 463 295 477
- M320 389 C322 410 326 429 332 447
- M383 331 C381 353 380 375 382 395
- M453 355 C447 376 441 395 435 415
- M298 492 C309 504 319 516 327 530
- M345 466 l8 13 M389 451 l8 13 M430 462 l8 13"
- fill="none" stroke="#426b35" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
- <path d="M281 536 C290 541 299 545 307 546
- M294 555 C303 560 311 563 320 564
- M350 520 l10 13 M392 509 l9 12 M433 520 l9 11
- M286 574 l12 4 10-5 11 5 10-5 11 5 10-5 11 5"
- fill="none" stroke="#284522" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-</g>
-<g fill="#b6ff4d"><path d="M115 340l10 22 22 10-22 10-10 22-10-22-22-10 22-10z"/><path d="M570 500l7 16 16 7-16 7-7 16-7-16-16-7 16-7z"/></g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+<title id="title">ZombieCash coin logo</title><desc id="desc">A toxic-green zombie hand gripping dollar bills, based on the ZombieCash coin emblem.</desc>
+<defs><radialGradient id="orb" cx="50%" cy="42%" r="65%"><stop offset="0" stop-color="#b5ff28"/><stop offset=".68" stop-color="#39e600"/><stop offset="1" stop-color="#062408"/></radialGradient><linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b3dc72"/><stop offset="1" stop-color="#4d853f"/></linearGradient><linearGradient id="bill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#efff8a"/><stop offset="1" stop-color="#75b92a"/></linearGradient></defs>
+<circle cx="256" cy="256" r="244" fill="#050905" stroke="#39ff00" stroke-width="12"/><circle cx="256" cy="256" r="224" fill="url(#orb)"/>
+<!-- cash fan -->
+<g stroke="#071307" stroke-width="12" stroke-linejoin="round"><path fill="#72a927" d="M112 151 339 100 393 312 164 354Z"/><path fill="#92c936" d="M135 126 359 93 410 304 184 343Z"/><path fill="url(#bill)" d="M159 105 372 78 416 288 202 322Z"/></g>
+<path d="M187 126 353 105 390 271 219 295Z" fill="none" stroke="#2c531b" stroke-width="7"/><circle cx="294" cy="204" r="63" fill="#214c16" stroke="#d9ff64" stroke-width="7"/><text x="294" y="229" font-family="Arial,sans-serif" font-weight="900" font-size="94" text-anchor="middle" fill="#dfff65">$</text>
+<!-- single bold undead fist silhouette, simplified for tiny favicon -->
+<path d="M173 450 174 389 151 357 123 305 113 263 Q109 236 132 226 Q152 220 169 247 L185 276 177 203 Q174 176 196 171 Q219 168 225 195 L236 246 236 166 Q237 139 260 140 Q283 142 284 169 L286 242 302 187 Q310 164 331 171 Q350 178 344 201 L329 260 353 228 Q370 209 388 225 Q403 240 389 262 L363 311 350 354 Q339 384 315 400 L310 450Z" fill="url(#skin)" stroke="#061006" stroke-width="15" stroke-linejoin="round"/>
+<path d="M190 281 216 294 M245 255 267 265 M300 259 319 269 M152 314 174 325 M211 366 Q254 389 304 363" fill="none" stroke="#355a2b" stroke-width="12" stroke-linecap="round"/>
+<path d="M176 449 171 476 194 467 207 486 224 467 244 484 259 464 280 479 299 459 312 469 311 449" fill="#d5d88c" stroke="#061006" stroke-width="10" stroke-linejoin="round"/>
 </svg>
