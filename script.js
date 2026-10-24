@@ -646,14 +646,15 @@ if (zomMarket) {
       if (!response.ok) throw new Error('HTTP ' + response.status);
       const data = await response.json();
       zomPrice.textContent = zomPriceText(data.priceUsd);
-      const change = Number(data.priceChange?.h24);
+      const changeValue = data.priceChange?.h24;
+      const change = changeValue == null ? NaN : Number(changeValue);
       zomChange.textContent = Number.isFinite(change) ? (change > 0 ? '+' : '') + change.toFixed(2) + '%' : '—';
       zomChange.className = Number.isFinite(change) && change > 0 ? 'change-up' : Number.isFinite(change) && change < 0 ? 'change-down' : '';
-      zomVolume.textContent = zomMoney(data.volume?.h24);
+      zomVolume.textContent = data.volume?.h24 == null ? '—' : zomMoney(data.volume.h24);
       zomLiquidity.textContent = zomMoney(data.liquidity?.usd);
       zomCap.textContent = zomMoney(data.marketCap || data.fdv);
       const sourceTime = Number(data.updatedAt || 0) * 1000;
-      if (zomStatus) zomStatus.textContent = data.stale ? 'LAST KNOWN DATA' : 'TOKEN FEED ONLINE';
+      if (zomStatus) zomStatus.textContent = data.stale ? 'LAST KNOWN DATA' : (data.activityAvailable === false ? 'PRICE AVAILABLE · ACTIVITY UNAVAILABLE' : 'TOKEN FEED ONLINE');
       if (zomUpdated) zomUpdated.textContent = (data.stale ? 'LAST SOURCE UPDATE ' : 'SOURCE UPDATED ') + (sourceTime ? new Date(sourceTime).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) : 'UNKNOWN');
     } catch (error) {
       console.warn('ZombieCash token market update failed:', error);
