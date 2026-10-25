@@ -1396,7 +1396,7 @@ footer {
       window.Jupiter.init({
         displayMode: 'integrated',
         integratedTargetId: 'jupiter-zombcash-terminal',
-        endpoint: 'https://api.mainnet-beta.solana.com',
+        // Let Jupiter manage RPC/routing instead of forcing a public Solana RPC that may be unavailable.
         defaultExplorer: 'Solscan',
         formProps: {
           initialInputMint: 'So11111111111111111111111111111111111111112',
