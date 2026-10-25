@@ -60,24 +60,19 @@
   const brandHref = isGermanPage ? '/de/' : (isHome ? '/index.html#home' : '/index.html');
   const target = (href) => {
     const parts = location.pathname.split('/').filter(Boolean);
-    const locale = parts.length > 1 ? parts[0] : (isGermanPage ? 'de' : 'en');
+    const candidate = parts.length > 1 ? parts[0] : 'en';
+    const locale = ['de','fr','it','ja','zh-CN','ru','tr','hi'].includes(candidate) ? candidate : 'en';
     if (locale === 'en') return href;
     const key = href.split('#')[0].split('/').pop() || 'index.html';
-    const localized = {
-      de:['index.html','survivor-field-manual.html','outbreak-transmission.html','crew-vote.html','survivor-hub.html','arcade.html','gallery.html','zombie-maker.html'],
-      fr:['index.html','survivor-field-manual.html','outbreak-transmission.html'],
-      it:['index.html','survivor-field-manual.html','outbreak-transmission.html'],
-      ja:['index.html','survivor-field-manual.html','outbreak-transmission.html'],
-      'zh-CN':['index.html','survivor-field-manual.html','outbreak-transmission.html'],
-      ru:['index.html','survivor-field-manual.html','outbreak-transmission.html'],
-      tr:['index.html','survivor-field-manual.html','outbreak-transmission.html'],
-      hi:['index.html','survivor-field-manual.html','outbreak-transmission.html']
+    const suffix = href.includes('#') ? '#' + href.split('#').slice(1).join('#') : '';
+    const localizedCore = ['index.html','survivor-field-manual.html','outbreak-transmission.html'];
+    if (localizedCore.includes(key)) return '/' + locale + '/' + key + suffix;
+    const featurePages = {
+      de:['crew-vote.html','survivor-hub.html','arcade.html','gallery.html','zombie-maker.html'],
+      fr:[], it:[], ja:[], 'zh-CN':[], ru:[], tr:[], hi:[]
     };
-    if (localized[locale] && localized[locale].includes(key)) {
-      const suffix = href.includes('#') ? '#' + href.split('#').slice(1).join('#') : '';
-      return '/' + locale + '/' + key + suffix;
-    }
-    // Features without a localized page are intentionally left at their existing URL.
+    if (featurePages[locale] && featurePages[locale].includes(key)) return '/' + locale + '/' + key + suffix;
+    // No localized counterpart exists; leave the English destination explicit.
     return href;
   };
 
