@@ -65,14 +65,10 @@
     if (locale === 'en') return href;
     const key = href.split('#')[0].split('/').pop() || 'index.html';
     const suffix = href.includes('#') ? '#' + href.split('#').slice(1).join('#') : '';
+    // Only route to localized files confirmed to exist in every locale tree.
     const localizedCore = ['index.html','survivor-field-manual.html','outbreak-transmission.html'];
     if (localizedCore.includes(key)) return '/' + locale + '/' + key + suffix;
-    const featurePages = {
-      de:['crew-vote.html','survivor-hub.html','arcade.html','gallery.html','zombie-maker.html'],
-      fr:[], it:[], ja:[], 'zh-CN':[], ru:[], tr:[], hi:[]
-    };
-    if (featurePages[locale] && featurePages[locale].includes(key)) return '/' + locale + '/' + key + suffix;
-    // No localized counterpart exists; leave the English destination explicit.
+    // Features without a localized counterpart remain explicit English destinations.
     return href;
   };
 
