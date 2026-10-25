@@ -1142,6 +1142,35 @@
   document.addEventListener('zombcash:languagechange', event => localizeNav(event.detail && event.detail.language || 'en'));
   readLanguage();
 
+  // Shared fixed page-scroll controls: identical size and position on every page.
+  const ensurePageScrollControls = () => {
+    let controls = document.querySelector('.page-scroll-controls');
+    if (!controls) {
+      controls = document.createElement('div');
+      controls.className = 'page-scroll-controls';
+      controls.setAttribute('aria-label', 'Page navigation');
+      controls.innerHTML = '<button type="button" id="scroll-to-top" aria-label="Scroll to top" title="Back to top"><span aria-hidden="true">↑</span></button><button type="button" id="scroll-to-bottom" aria-label="Scroll to bottom" title="Go to bottom"><span aria-hidden="true">↓</span></button>';
+      document.body.appendChild(controls);
+    }
+    const topButton = controls.querySelector('#scroll-to-top');
+    const bottomButton = controls.querySelector('#scroll-to-bottom');
+    if (topButton && !topButton.dataset.zshBound) {
+      topButton.dataset.zshBound = '1';
+      topButton.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+    }
+    if (bottomButton && !bottomButton.dataset.zshBound) {
+      bottomButton.dataset.zshBound = '1';
+      bottomButton.addEventListener('click', () => window.scrollTo({top:Math.max(document.documentElement.scrollHeight, document.body.scrollHeight), behavior:'smooth'}));
+    }
+    if (!document.getElementById('zsh-shared-scroll-controls-style')) {
+      const style = document.createElement('style');
+      style.id = 'zsh-shared-scroll-controls-style';
+      style.textContent = '.page-scroll-controls{position:fixed!important;z-index:1000!important;right:clamp(12px,2vw,26px)!important;bottom:clamp(18px,4vh,34px)!important;display:flex!important;flex-direction:column!important;gap:8px!important;margin:0!important;padding:0!important}.page-scroll-controls button{box-sizing:border-box!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;max-width:42px!important;max-height:42px!important;display:grid!important;place-items:center!important;padding:0!important;border:1px solid #4a7044!important;border-radius:0!important;background:#0a140eef!important;color:#9bff45!important;font:700 24px/1 Rajdhani,sans-serif!important;box-shadow:0 5px 22px #0007!important;cursor:pointer!important;backdrop-filter:blur(10px);transition:background .18s,border-color .18s,color .18s,transform .18s}.page-scroll-controls button:hover{background:#9bff45!important;color:#071007!important;border-color:#9bff45!important;transform:translateY(-2px)}.page-scroll-controls button:focus-visible{outline:2px solid #9bff45!important;outline-offset:3px}@media(max-width:760px){.page-scroll-controls{right:10px!important;bottom:14px!important}.page-scroll-controls button{width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;max-width:38px!important;max-height:38px!important;font-size:22px!important}}';
+      document.head.appendChild(style);
+    }
+  };
+  ensurePageScrollControls();
+
   // Load the shared site assistant.
   const assistantScript = document.createElement('script');
   assistantScript.src = '/site-assistant.js?v=assistant-controls-clear-20261024-2';
