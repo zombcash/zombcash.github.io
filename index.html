@@ -409,7 +409,7 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 /* Dedicated swap terminal beside market activity; help text opens on demand. */
 .jupiter-swap-card .jupiter-terminal-shell{margin-top:14px;padding:0;overflow:hidden;box-shadow:0 20px 60px #0005}
 .jupiter-swap-card .jupiter-terminal-top{padding:0 14px;min-height:46px;font-size:9px}
-.jupiter-swap-card #jupiter-zombcash-terminal{min-height:520px;background:#050807}
+.jupiter-swap-card #jupiter-zombcash-terminal{height:568px;min-height:0;max-height:568px;overflow-y:auto;overflow-x:hidden;box-sizing:border-box;background:#050807;overscroll-behavior:contain}
 .jupiter-swap-card .jupiter-terminal-note{padding:0 14px 12px}
 .swap-help-button{flex-shrink:0;background:#0b120d;border:1px solid #527b39;color:#9bff45;padding:9px 12px;font:700 9px Orbitron,sans-serif;cursor:pointer}
 .swap-help-button:hover{background:#152313}
@@ -423,7 +423,7 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 .daily-mission-section{padding-top:20px}
 .daily-mission-inner{max-width:900px;margin:0 auto}
 .daily-mission-inner .vote-card{width:100%;min-height:0}
-@media(max-width:850px){.jupiter-swap-card #jupiter-zombcash-terminal{min-height:560px}.swap-help-content{padding:18px}}
+@media(max-width:850px){.jupiter-swap-card #jupiter-zombcash-terminal{height:620px;min-height:0;max-height:620px}.swap-help-content{padding:18px}}
 
 /* Unite daily missions and community events in one two-column community block. */
 .world-community-pair{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:stretch;padding:16px;border:1px solid #31452e;background:linear-gradient(135deg,#0a100c,#080c0a)}
