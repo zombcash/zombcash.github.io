@@ -60,7 +60,7 @@
   const brandHref = isGermanPage ? '/de/' : (isHome ? '/index.html#home' : '/index.html');
   const target = (href) => {
     const parts = location.pathname.split('/').filter(Boolean);
-    const candidate = parts.length > 1 ? parts[0] : 'en';
+    const candidate = parts.length ? parts[0] : 'en';
     const locale = ['de','fr','it','ja','zh-CN','ru','tr','hi'].includes(candidate) ? candidate : 'en';
     if (locale === 'en') return href;
     const key = href.split('#')[0].split('/').pop() || 'index.html';
@@ -1116,23 +1116,7 @@
     labels.forEach((item, index) => {
       if (!links[index]) return;
       links[index].textContent = translated ? translated[index] : item[0];
-      const localizedCore = {
-        de:['index.html','survivor-field-manual.html','outbreak-transmission.html'],
-        fr:['index.html','survivor-field-manual.html','outbreak-transmission.html'],
-        it:['index.html','survivor-field-manual.html','outbreak-transmission.html'],
-        ja:['index.html','survivor-field-manual.html','outbreak-transmission.html'],
-        'zh-CN':['index.html','survivor-field-manual.html','outbreak-transmission.html'],
-        ru:['index.html','survivor-field-manual.html','outbreak-transmission.html'],
-        tr:['index.html','survivor-field-manual.html','outbreak-transmission.html'],
-        hi:['index.html','survivor-field-manual.html','outbreak-transmission.html']
-      };
-      const key = item[1].split('#')[0].split('/').pop() || 'index.html';
-      const suffix = item[1].includes('#') ? '#' + item[1].split('#').slice(1).join('#') : '';
-      if (language !== 'en' && localizedCore[language] && localizedCore[language].includes(key)) {
-        links[index].href = '/' + language + '/' + key + suffix;
-      } else {
-        links[index].href = item[1];
-      }
+      links[index].href = target(item[1]);
     });
     const back = header.querySelector('.zsh-actions > .zsh-home');
     if (back) back.innerHTML = '<span aria-hidden="true">←</span> ' + (translated ? translated[10] : 'BACK TO HOME');
