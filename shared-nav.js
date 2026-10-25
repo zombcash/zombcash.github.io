@@ -1116,12 +1116,23 @@
     labels.forEach((item, index) => {
       if (!links[index]) return;
       links[index].textContent = translated ? translated[index] : item[0];
-      // Use German counterparts where they exist; leave English destinations for features not localized yet.
-      if (language === 'de') {
-        const germanDestinations = {'/index.html#living-world':'/de/','#home':'/de/','/survivor-field-manual.html':'/de/survivor-field-manual.html','/outbreak-transmission.html':'/de/outbreak-transmission.html'};
-        if (germanDestinations[item[1]]) links[index].href = germanDestinations[item[1]];
-        else links[index].href = item[1];
-      } else links[index].href = item[1];
+      const localizedCore = {
+        de:['index.html','survivor-field-manual.html','outbreak-transmission.html'],
+        fr:['index.html','survivor-field-manual.html','outbreak-transmission.html'],
+        it:['index.html','survivor-field-manual.html','outbreak-transmission.html'],
+        ja:['index.html','survivor-field-manual.html','outbreak-transmission.html'],
+        'zh-CN':['index.html','survivor-field-manual.html','outbreak-transmission.html'],
+        ru:['index.html','survivor-field-manual.html','outbreak-transmission.html'],
+        tr:['index.html','survivor-field-manual.html','outbreak-transmission.html'],
+        hi:['index.html','survivor-field-manual.html','outbreak-transmission.html']
+      };
+      const key = item[1].split('#')[0].split('/').pop() || 'index.html';
+      const suffix = item[1].includes('#') ? '#' + item[1].split('#').slice(1).join('#') : '';
+      if (language !== 'en' && localizedCore[language] && localizedCore[language].includes(key)) {
+        links[index].href = '/' + language + '/' + key + suffix;
+      } else {
+        links[index].href = item[1];
+      }
     });
     const back = header.querySelector('.zsh-actions > .zsh-home');
     if (back) back.innerHTML = '<span aria-hidden="true">←</span> ' + (translated ? translated[10] : 'BACK TO HOME');
