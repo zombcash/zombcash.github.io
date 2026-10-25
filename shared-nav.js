@@ -1180,7 +1180,7 @@
 
   // Load the shared site assistant.
   const assistantScript = document.createElement('script');
-  assistantScript.src = '/site-assistant.js?v=assistant-controls-clear-20261024-2';
+  assistantScript.src = '/site-assistant.js?v=assistant-mobile-clear-20261025-1';
   assistantScript.defer = true;
   document.head.append(assistantScript);
 
