@@ -58,7 +58,29 @@
     ? header.querySelector('button[data-i18n="login"], button.top-cta')
     : null;
   const brandHref = isGermanPage ? '/de/' : (isHome ? '/index.html#home' : '/index.html');
-  const target = (href) => href;
+  const target = (href) => {
+    const parts = location.pathname.split('/').filter(Boolean);
+    const locale = parts.length > 1 ? parts[0] : (isGermanPage ? 'de' : 'en');
+    if (locale === 'en') return href;
+    const locales = {
+      de:['index.html','survivor-field-manual.html','outbreak-transmission.html','crew-vote.html','survivor-hub.html','arcade.html','gallery.html','zombie-maker.html'],
+      fr:['index.html','survivor-field-manual.html','outbreak-transmission.html','crew-vote.html','survivor-hub.html','arcade.html','gallery.html','zombie-maker.html'],
+      it:['index.html','survivor-field-manual.html','outbreak-transmission.html','crew-vote.html','survivor-hub.html','arcade.html','gallery.html','zombie-maker.html'],
+      ja:['index.html','survivor-field-manual.html','outbreak-transmission.html','crew-vote.html','survivor-hub.html','arcade.html','gallery.html','zombie-maker.html'],
+      'zh-CN':['index.html','survivor-field-manual.html','outbreak-transmission.html','crew-vote.html','survivor-hub.html','arcade.html','gallery.html','zombie-maker.html'],
+      ru:['index.html','survivor-field-manual.html','outbreak-transmission.html','crew-vote.html','survivor-hub.html','arcade.html','gallery.html','zombie-maker.html'],
+      tr:['index.html','survivor-field-manual.html','outbreak-transmission.html','crew-vote.html','survivor-hub.html','arcade.html','gallery.html','zombie-maker.html'],
+      hi:['index.html','survivor-field-manual.html','outbreak-transmission.html','crew-vote.html','survivor-hub.html','arcade.html','gallery.html','zombie-maker.html']
+    };
+    const key = href.split('#')[0].split('/').pop() || 'index.html';
+    if (locales[locale] && locales[locale].includes(key)) {
+      const suffix = href.includes('#') ? '#' + href.split('#').slice(1).join('#') : '';
+      return '/' + locale + '/' + (key === 'index.html' && href.includes('#') ? 'index.html' : key) + suffix;
+    }
+    // This destination has no localized counterpart yet: keep the URL honest and switch
+    // the document's language through the normal language selector rather than fake locale URLs.
+    return href;
+  };
 
   header.classList.add('zombcash-shared-header');
   header.innerHTML =
