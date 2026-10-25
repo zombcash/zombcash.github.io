@@ -1416,7 +1416,7 @@ footer {
   };
   if (window.Jupiter && typeof window.Jupiter.init === 'function') init();
   else {
-    const script = document.querySelector('script[src*="terminal.jup.ag/main-v4.js"]');
+    const script = document.querySelector('script[src*="plugin.jup.ag/plugin-v1.js"]');
     if (script) {
       script.addEventListener('load', init, {once:true});
       script.addEventListener('error', fallback, {once:true});
