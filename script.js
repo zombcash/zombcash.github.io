@@ -306,6 +306,8 @@ function stopGame(won, reason) {
   drawGame();
 }
 function resetGame() {
+  // The shared script is loaded on pages without the Snake game; do not touch absent game UI.
+  if (!scoreEl || !gameState || !gameMessage || !action || !screen) return;
   cancelAnimationFrame(gameFrame);
   gameFrame = 0;
   gameActive = false;
