@@ -20,6 +20,7 @@
   }
   const file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   const isHome = file === 'index.html';
+  const isGermanPage = location.pathname === '/de/' || location.pathname.startsWith('/de/');
   if (!isHome) document.body.classList.add('zsh-inner-page');
   // All shared navigation destinations are rooted at the site root. Relative links
   // incorrectly sent visitors from /ru/, /de/, etc. to nonexistent translated copies.
@@ -56,7 +57,7 @@
   const loginButton = file === 'survivor-hub.html'
     ? header.querySelector('button[data-i18n="login"], button.top-cta')
     : null;
-  const brandHref = isHome ? '/index.html#home' : '/index.html';
+  const brandHref = isGermanPage ? '/de/' : (isHome ? '/index.html#home' : '/index.html');
   const target = (href) => href;
 
   header.classList.add('zombcash-shared-header');
@@ -80,7 +81,7 @@
       }).join('') +
     '</nav>' +
     '<div class="zsh-actions">' +
-      (!isHome ? '<a class="zsh-home home-return-button" href="/index.html"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
+      (!isHome ? '<a class="zsh-home home-return-button" href="' + (isGermanPage ? '/de/' : '/index.html') + '"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
       '<div class="zsh-language-slot"></div>' +
       (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<a class="zsh-login-button top-cta" href="/survivor-hub.html" data-zsh-login>LOGIN WITH TELEGRAM</a>') +
     '</div>';
@@ -1096,7 +1097,16 @@
   function localizeNav(language) {
     const translated = navDictionary[language];
     const links = [...nav.querySelectorAll(':scope > a')].filter(link => !link.classList.contains('zsh-home'));
-    labels.forEach((item, index) => { if (links[index]) links[index].textContent = translated ? translated[index] : item[0]; });
+    labels.forEach((item, index) => {
+      if (!links[index]) return;
+      links[index].textContent = translated ? translated[index] : item[0];
+      // Use German counterparts where they exist; leave English destinations for features not localized yet.
+      if (language === 'de') {
+        const germanDestinations = {'/index.html#living-world':'/de/','#home':'/de/','/survivor-field-manual.html':'/de/survivor-field-manual.html','/outbreak-transmission.html':'/de/outbreak-transmission.html'};
+        if (germanDestinations[item[1]]) links[index].href = germanDestinations[item[1]];
+        else links[index].href = item[1];
+      } else links[index].href = item[1];
+    });
     const back = header.querySelector('.zsh-actions > .zsh-home');
     if (back) back.innerHTML = '<span aria-hidden="true">←</span> ' + (translated ? translated[10] : 'BACK TO HOME');
     /* The global header now uses LOGIN WITH TELEGRAM, not a registration CTA. */
