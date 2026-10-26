@@ -516,6 +516,36 @@ const manualNavLabels={
 "MENU":{de:"MENÜ",fr:"MENU",it:"MENU",ja:"メニュー","zh-CN":"菜单",tr:"MENÜ",hi:"मेनू",ru:"МЕНЮ"}
 }
 Object.entries(manualNavLabels).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
+// Additional Japanese homepage labels found during the 2026-10-26 localization audit.
+const jaHomepageAudit = {
+  "Momentum and activity · last 5 minutes":"勢いと取引活動 · 直近5分",
+  "ZOMBIECASH SYSTEM STATUS":"ZOMBCASHシステム状態",
+  "CHECKING LIVE SYSTEMS":"システムを確認中",
+  "Connecting to market data and community activity…":"市場データとコミュニティ活動に接続中…",
+  "MARKET":"市場",
+  "API":"API",
+  "COMMUNITY":"コミュニティ",
+  "CHECKING":"確認中",
+  "24H MARKET SWING":"24時間の価格変動",
+  "WAITING FOR VERIFIED MARKET DATA":"検証済み市場データを待機中",
+  "VISITS TODAY":"本日の訪問数",
+  "24H VOLUME":"24時間取引高",
+  "CREW ACTIVITY":"クルーの活動",
+  "OPEN CALL":"参加受付中",
+  "MEME TRANSMISSION":"ミーム通信",
+  "Drop your best apocalypse meme and join the daily signal.":"最高の終末ミームを投稿して、毎日のシグナルに参加しよう。",
+  "CREW CHECK-IN":"クルーのチェックイン",
+  "Meet survivors, share ideas, and help shape the next build.":"サバイバーと交流し、アイデアを共有して、次の開発に参加しよう。",
+  "RADAR RUN":"レーダー探索",
+  "Scan Solana tokens and compare community-rated finds.":"Solanaトークンをスキャンし、コミュニティ評価の銘柄を比較しよう。",
+  "0 / 3 DONE":"0 / 3 完了",
+  "NEW MISSIONS EVERY DAY":"ミッションは毎日更新",
+  "RESET CHECKLIST ↻":"チェックリストをリセット ↻",
+  "A neon green biohazard radar scanning a ruined city at night":"夜の廃墟都市をスキャンするネオングリーンのバイオハザード・レーダー",
+  "ZombieCash cinematic outbreak radar artwork":"ZombieCashの感染拡大レーダー・アートワーク"
+};
+Object.assign(langs.ja.map, jaHomepageAudit);
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 const supportedLanguages=['en','de','fr','it','ja','zh-CN','ru','tr','hi'];
 const getRequestedLanguage=()=>{try{const q=new URLSearchParams(location.search).get('lang');if(q&&supportedLanguages.includes(q))return q;}catch(_){}return null;};
