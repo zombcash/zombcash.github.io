@@ -66,6 +66,8 @@ async function connectWallet(){
 }
 async function disconnectWallet(){
  const p=walletProvider;
+ const headers=walletAuthHeaders();
+ try{if(headers)await fetch(API+'/api/roulette/wallet/disconnect',{method:'POST',headers,body:'{}',cache:'no-store'})}catch(_){}
  clearWalletState();
  try{if(p&&typeof p.disconnect==='function')await p.disconnect()}catch(_){}
 }
