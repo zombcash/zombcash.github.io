@@ -128,9 +128,10 @@ for (const file of HTML_FILES) {
   if (canonical.length === 1 && seen.has(langAttr) && targets[codes.indexOf(langAttr)] !== canonical[0]) {
     errors.push(rel + ': hreflang for own html lang does not point to its canonical URL');
   }
+  if (!seen.has('x-default')) warnings.push(rel + ': no x-default alternate found');
 
   const ogImageTags = findMeta(head, 'property', 'og:image');
-  if (ogImageTags.length !== 1) warnings.push(rel + ': expected one og:image, found ' + ogImageTags.length);
+  if (ogImageTags.length !== 1) errors.push(rel + ': expected exactly one og:image, found ' + ogImageTags.length);
   else if (!/^https:\/\/[^/]+\/.+/i.test(attr(ogImageTags[0], 'content') || '')) {
     errors.push(rel + ': og:image must be an absolute HTTPS URL');
   }
