@@ -1211,7 +1211,9 @@
 /* Shared About link: visible from every page without crowding the main navigation. */
 (() => {
   const localeCandidate = (location.pathname.split('/').filter(Boolean)[0] || 'en');
-  const locale = ['de','fr','it','ja','zh-CN','ru','tr','hi'].includes(localeCandidate) ? localeCandidate : 'en';
+  const queryLocale = new URLSearchParams(location.search).get('lang');
+  const supportedLocales = ['de','fr','it','ja','zh-CN','ru','tr','hi'];
+  const locale = supportedLocales.includes(localeCandidate) ? localeCandidate : (supportedLocales.includes(queryLocale) ? queryLocale : 'en');
   const labels = {
     en: ['ABOUT & EDITORIAL POLICY','Independent community project'],
     de: ['ÜBER UNS & REDAKTIONSRICHTLINIEN','Unabhängiges Community-Projekt'],
