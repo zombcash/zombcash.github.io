@@ -567,7 +567,7 @@ function renderRadar() {
     const tokenAddress = t.baseToken?.address || '';
     const safeIcon = /^https:\/\//i.test(icon) ? icon : '';
     const fallback = '☣';
-    const img = safeIcon ? '<img class="token-icon" loading="lazy" src="' + safeIcon.replace(/"/g, '&quot;') + '" alt="" onerror="this.style.display=\'none\'">' : '<span class="token-icon token-fallback">' + fallback + '</span>';
+    const img = safeIcon ? '<span class="token-icon token-fallback" style="display:none">' + fallback + '</span><img class="token-icon" loading="lazy" src="' + safeIcon.replace(/"/g, '&quot;') + '" alt="" onerror="this.style.display=\'none\';if(this.previousElementSibling)this.previousElementSibling.style.display=\'inline-flex\'">' : '<span class="token-icon token-fallback">' + fallback + '</span>';
     return '<tr><td><div class="token-cell">' + img + '<div><span class="token-name" title="' + name.replace(/"/g,'&quot;') + '">' + name.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</span><span class="token-symbol">' + symbol.replace(/</g,'&lt;').replace(/>/g,'&gt;') + (t.boosts?.isBoosted ? ' · ⚡ ' + (radarJapaneseUI ? 'ブースト済み' : 'BOOSTED') : '') + '</span></div></div></td><td class="token-price">' + price(t.priceUsd) + '</td><td>' + pct(t.priceChange?.h1) + '</td><td>' + money(t.volume?.h24) + '</td><td>' + money(t.liquidity?.usd) + '</td><td><a class="pair-link" href="' + (t.url || 'https://dexscreener.com/solana') + '" target="_blank" rel="noopener noreferrer">' + (radarJapaneseUI ? '表示 ↗' : 'VIEW ↗') + '</a></td></tr>';
   }).join('');
 }
