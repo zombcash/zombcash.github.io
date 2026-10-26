@@ -3,10 +3,12 @@
 // Core editorial pages have dedicated locale URLs; honor language-switcher query strings.
 const routeUrl = new URL(window.location.href);
 const routeLang = routeUrl.searchParams.get('lang');
-if (routeUrl.pathname === '/outbreak-transmission.html' && ['de','fr','it','ja','zh-CN','ru','tr','hi'].includes(routeLang)) {
+const localizedEditorialPages = ['/outbreak-transmission.html', '/survivor-field-manual.html'];
+if (localizedEditorialPages.includes(routeUrl.pathname) && ['de','fr','it','ja','zh-CN','ru','tr','hi'].includes(routeLang)) {
   routeUrl.searchParams.delete('lang');
   const query = routeUrl.searchParams.toString();
-  window.location.replace('/' + routeLang + '/outbreak-transmission.html' + (query ? '?' + query : '') + routeUrl.hash);
+  const page = routeUrl.pathname.slice(1);
+  window.location.replace('/' + routeLang + '/' + page + (query ? '?' + query : '') + routeUrl.hash);
   return;
 }
 const langs={
