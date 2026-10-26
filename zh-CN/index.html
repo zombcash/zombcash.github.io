@@ -1678,7 +1678,7 @@ section.section.community-console #jupiter-zombcash-terminal #jupiter-terminal-i
   }
   prev.addEventListener('click',()=>{if(index>0){index--;render()}});
   next.addEventListener('click',()=>{if(index<videos.length-1){index++;render()}});
-  fetch('promo-videos.json?v=20261024-1',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('manifest');return r.json()}).then(data=>{
+  fetch('../promo-videos.json?v=20261026-1',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('manifest');return r.json()}).then(data=>{
     if(!Array.isArray(data.videos)||!data.videos.length)throw Error('empty');
     videos=data.videos.filter(v=>v&&safeUrl(v.src));
     if(!videos.length)throw Error('invalid');
