@@ -30,11 +30,18 @@ function walk(dir) {
 }
 
 function attr(tag, name) {
-  const opening = tag.match(/^<\\w+\\b/);
-  const escaped = name.replace(/[^a-zA-Z0-9_-]/g, '');
-  const token = tag.match(new RegExp('(?:^|\\\\s)' + escaped + '=([^\\\\s>]+)', 'i'));
-  if (!token) return null;
-  return token[1].replace(/^['\\\"]|['\\\"]$/g, '');
+  const lower = tag.toLowerCase();
+  const target = name.toLowerCase() + '=';
+  const i = lower.indexOf(target);
+  if (i < 0) return null;
+  const start = i + target.length;
+  const quote = tag[start];
+  if (quote === '"' || quote === "'") {
+    const end = tag.indexOf(quote, start + 1);
+    return end < 0 ? null : tag.slice(start + 1, end);
+  }
+  const end = tag.search(/[\\s>]/, start);
+  return tag.slice(start, end < 0 ? tag.length : end);
 }
 function tags(head, tagName, predicate) {
   const re = new RegExp('<' + tagName + '\\b[^>]*>', 'gi');
