@@ -3,11 +3,25 @@
 // Core editorial pages have dedicated locale URLs; honor language-switcher query strings.
 const routeUrl = new URL(window.location.href);
 const routeLang = routeUrl.searchParams.get('lang');
-const localizedEditorialPages = ['/outbreak-transmission.html', '/survivor-field-manual.html'];
-if (localizedEditorialPages.includes(routeUrl.pathname) && ['de','fr','it','ja','zh-CN','ru','tr','hi'].includes(routeLang)) {
+const localizedEditorialPages = {
+  '/': ['de','fr','it','ja','zh-CN','ru','tr','hi'],
+  '/index.html': ['de','fr','it','ja','zh-CN','ru','tr','hi'],
+  '/outbreak-transmission.html': ['de','fr','it','ja','zh-CN','ru','tr','hi'],
+  '/survivor-field-manual.html': ['de','fr','it','ja','zh-CN','ru','tr','hi'],
+  '/transmission-rug-pull-check.html': ['de','fr','it','ja','zh-CN','ru','tr','hi'],
+  '/transmission-solana-memecoin-warning-signs.html': ['de','fr','it','ja','zh-CN','ru','tr','hi'],
+  '/transmission-wallet-security-red-flags.html': ['de','fr','it','ja','zh-CN','ru','tr','hi'],
+  '/zombcash-buying-guide.html': ['de','fr','it','ja','zh-CN','ru','tr','hi'],
+  '/avoid-fake-token-websites-wallet-scams.html': ['de','ru'],
+  '/check-liquidity-holder-distribution-solana.html': ['de','ru'],
+  '/how-to-research-solana-meme-coins.html': ['de','ru'],
+  '/solana-token-safety-checklist.html': ['ru']
+};
+const routePath = routeUrl.pathname === '/' ? '/index.html' : routeUrl.pathname;
+if (localizedEditorialPages[routePath]?.includes(routeLang)) {
   routeUrl.searchParams.delete('lang');
   const query = routeUrl.searchParams.toString();
-  const page = routeUrl.pathname.slice(1);
+  const page = routePath.slice(1);
   window.location.replace('/' + routeLang + '/' + page + (query ? '?' + query : '') + routeUrl.hash);
   return;
 }
