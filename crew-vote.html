@@ -137,6 +137,9 @@ hi:{doc:'क्रू वोट — ZombieCash',desc:'ZombieCash समुदा
 const t=translations[lang]||translations.en;
 const setText=(id,value)=>{const e=document.getElementById(id);if(e)e.textContent=value;};
 document.documentElement.lang=lang==='zh-CN'?'zh-CN':lang;
+const localePrefix=lang==='en'?'':'/'+lang;
+const manualLink=document.getElementById('partner-manual-link');if(manualLink)manualLink.href=localePrefix+'/survivor-field-manual.html';
+const transmissionLink=document.getElementById('partner-transmission-link');if(transmissionLink)transmissionLink.href=localePrefix+'/outbreak-transmission.html';
 document.title=t.doc;
 const meta=document.querySelector('meta[name="description"]');if(meta)meta.content=t.desc;
 setText('page-kicker',t.kicker);setText('crew-title',t.crew);setText('crew-votes',t.votes);setText('page-intro',t.intro);setText('poll-kicker',t.pollKicker);setText('poll-lead',t.pollLead);setText('poll-mission',t.mission);setText('vote-note',t.note);setText('poll-loading',t.loading);
