@@ -511,6 +511,7 @@ document.addEventListener('fullscreenchange', () => {
 });
 
 // Live Solana Radar: public DexScreener API, no API key required.
+const radarJapaneseUI = document.documentElement.lang === 'ja';
 const radarRows = document.getElementById('radar-rows');
 const radarStatus = document.getElementById('radar-status');
 const radarUpdated = document.getElementById('radar-updated');
@@ -567,15 +568,15 @@ function renderRadar() {
     const safeIcon = /^https:\/\//i.test(icon) ? icon : '';
     const fallback = '☣';
     const img = safeIcon ? '<img class="token-icon" loading="lazy" src="' + safeIcon.replace(/"/g, '&quot;') + '" alt="" onerror="this.style.display=\'none\'">' : '<span class="token-icon token-fallback">' + fallback + '</span>';
-    return '<tr><td><div class="token-cell">' + img + '<div><span class="token-name" title="' + name.replace(/"/g,'&quot;') + '">' + name.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</span><span class="token-symbol">' + symbol.replace(/</g,'&lt;').replace(/>/g,'&gt;') + (t.boosts?.isBoosted ? ' · ⚡ BOOSTED' : '') + '</span></div></div></td><td class="token-price">' + price(t.priceUsd) + '</td><td>' + pct(t.priceChange?.h1) + '</td><td>' + money(t.volume?.h24) + '</td><td>' + money(t.liquidity?.usd) + '</td><td><a class="pair-link" href="' + (t.url || 'https://dexscreener.com/solana') + '" target="_blank" rel="noopener noreferrer">VIEW ↗</a></td></tr>';
+    return '<tr><td><div class="token-cell">' + img + '<div><span class="token-name" title="' + name.replace(/"/g,'&quot;') + '">' + name.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</span><span class="token-symbol">' + symbol.replace(/</g,'&lt;').replace(/>/g,'&gt;') + (t.boosts?.isBoosted ? ' · ⚡ ' + (radarJapaneseUI ? 'ブースト済み' : 'BOOSTED') : '') + '</span></div></div></td><td class="token-price">' + price(t.priceUsd) + '</td><td>' + pct(t.priceChange?.h1) + '</td><td>' + money(t.volume?.h24) + '</td><td>' + money(t.liquidity?.usd) + '</td><td><a class="pair-link" href="' + (t.url || 'https://dexscreener.com/solana') + '" target="_blank" rel="noopener noreferrer">' + (radarJapaneseUI ? '表示 ↗' : 'VIEW ↗') + '</a></td></tr>';
   }).join('');
 }
 async function loadRadar(force = false) {
   if (radarBusy) return;
   if (!force && lastRadarSuccess && Date.now() - lastRadarSuccess < 55000) return;
   radarBusy = true;
-  if (radarStatus) radarStatus.textContent = 'SCANNING SOLANA';
-  if (radarRefresh) { radarRefresh.disabled = true; radarRefresh.textContent = '↻ SCANNING'; }
+  if (radarStatus) radarStatus.textContent = radarJapaneseUI ? 'Solanaをスキャン中' : 'SCANNING SOLANA';
+  if (radarRefresh) { radarRefresh.disabled = true; radarRefresh.textContent = radarJapaneseUI ? '↻ スキャン中' : '↻ SCANNING'; }
   try {
     const response = await fetch('https://zombcash-bot.fadehost.app/api/radar', {cache:'no-store'});
     if (!response.ok) throw new Error('Radar API returned HTTP ' + response.status);
@@ -586,22 +587,22 @@ async function loadRadar(force = false) {
     lastRadarSuccess = Date.now();
     renderRadar();
     const sourceUpdatedAt = Number(payload.updatedAt || 0) * 1000;
-    const sourceTime = sourceUpdatedAt ? new Date(sourceUpdatedAt).toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'}) : 'UNKNOWN';
+    const sourceTime = sourceUpdatedAt ? new Date(sourceUpdatedAt).toLocaleTimeString(radarJapaneseUI ? 'ja-JP' : 'en-US', {hour:'2-digit',minute:'2-digit'}) : (radarJapaneseUI ? '不明' : 'UNKNOWN');
     if (payload.stale) {
-      if (radarStatus) radarStatus.textContent = 'STALE DATA — RETRYING';
-      if (radarUpdated) radarUpdated.textContent = 'LAST SOURCE UPDATE ' + sourceTime;
+      if (radarStatus) radarStatus.textContent = radarJapaneseUI ? '古いデータ — 再試行中' : 'STALE DATA — RETRYING';
+      if (radarUpdated) radarUpdated.textContent = (radarJapaneseUI ? '最終ソース更新 ' : 'LAST SOURCE UPDATE ') + sourceTime;
     } else {
-      if (radarStatus) radarStatus.textContent = 'RADAR ONLINE';
-      if (radarUpdated) radarUpdated.textContent = 'SOURCE UPDATED ' + sourceTime;
+      if (radarStatus) radarStatus.textContent = radarJapaneseUI ? 'レーダー稼働中' : 'RADAR ONLINE';
+      if (radarUpdated) radarUpdated.textContent = (radarJapaneseUI ? 'ソース更新 ' : 'SOURCE UPDATED ') + sourceTime;
     }
   } catch (error) {
     console.warn('ZombieCash Radar update failed:', error);
-    if (!radarTokens.length && radarRows) radarRows.innerHTML = '<tr><td colspan="6" class="radar-message">RADAR SIGNAL UNAVAILABLE. Check your connection or refresh shortly. <br><small>Data is supplied by DexScreener; temporary API limits or browser restrictions can interrupt the feed.</small></td></tr>';
-    if (radarStatus) radarStatus.textContent = radarTokens.length ? 'SHOWING LAST SIGNAL' : 'SIGNAL INTERRUPTED';
-    if (radarUpdated && !lastRadarSuccess) radarUpdated.textContent = 'RETRY AVAILABLE';
+    if (!radarTokens.length && radarRows) radarRows.innerHTML = '<tr><td colspan="6" class="radar-message">' + (radarJapaneseUI ? 'レーダー信号を利用できません。接続を確認するか、しばらくして更新してください。<br><small>データはDexScreenerから提供されます。一時的なAPI制限やブラウザーの制限で停止することがあります。</small>' : 'RADAR SIGNAL UNAVAILABLE. Check your connection or refresh shortly. <br><small>Data is supplied by DexScreener; temporary API limits or browser restrictions can interrupt the feed.</small>') + '</td></tr>';
+    if (radarStatus) radarStatus.textContent = radarTokens.length ? (radarJapaneseUI ? '前回のシグナルを表示中' : 'SHOWING LAST SIGNAL') : (radarJapaneseUI ? 'シグナルが中断されました' : 'SIGNAL INTERRUPTED');
+    if (radarUpdated && !lastRadarSuccess) radarUpdated.textContent = radarJapaneseUI ? '再試行できます' : 'RETRY AVAILABLE';
   } finally {
     radarBusy = false;
-    if (radarRefresh) { radarRefresh.disabled = false; radarRefresh.textContent = '↻ REFRESH'; }
+    if (radarRefresh) { radarRefresh.disabled = false; radarRefresh.textContent = radarJapaneseUI ? '↻ 更新' : '↻ REFRESH'; }
   }
 }
 radarFilters.forEach(button => button.addEventListener('click', () => {
@@ -874,6 +875,7 @@ if (zomMarket) {
 
 // Community features: DexScreener trade counts, shared daily voting and survival leaderboard.
 (() => {
+  const activityJapaneseUI = document.documentElement.lang === 'ja';
   const apiBase = 'https://zombcash-bot.fadehost.app';
   const getEl = (id) => document.getElementById(id);
   const activityStatus = getEl('activity-status');
@@ -1059,8 +1061,8 @@ if (zomMarket) {
     const points = Array.isArray(data && data.points) ? data.points.filter(p => Number(p.time)>0 && Number(p.price)>0) : [];
     chartEl.replaceChildren();
     if (points.length < 2) {
-      if (chartStatus) chartStatus.textContent = 'PRICE HISTORY UNAVAILABLE';
-      chartMessage('Price history is temporarily unavailable'); return;
+      if (chartStatus) chartStatus.textContent = activityJapaneseUI ? '価格履歴を利用できません' : 'PRICE HISTORY UNAVAILABLE';
+      chartMessage(activityJapaneseUI ? '価格履歴は一時的に利用できません' : 'Price history is temporarily unavailable'); return;
     }
     const W=720,H=190,pad=12, vals=points.map(p=>Number(p.price));
     const min=Math.min(...vals), max=Math.max(...vals), span=(max-min)||Math.max(max*.02,1e-12);
@@ -1073,15 +1075,15 @@ if (zomMarket) {
     line.setAttribute('d',pts.map((p,i)=>(i?'L':'M')+' '+p.x+' '+p.y).join(' '));line.setAttribute('fill','none');line.setAttribute('stroke','#9bff45');line.setAttribute('stroke-width','2.5');line.setAttribute('stroke-linejoin','round');chartEl.append(line);
     const last=pts[pts.length-1],dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
     dot.setAttribute('cx',String(last.x));dot.setAttribute('cy',String(last.y));dot.setAttribute('r','4');dot.setAttribute('fill','#d9ffb0');dot.setAttribute('stroke','#9bff45');dot.setAttribute('stroke-width','2');chartEl.append(dot);
-    if(chartStatus)chartStatus.textContent=(data.source||'PRICE FEED')+(data.stale?' · CACHED':'')+' · '+points.length+' POINTS';
+    if(chartStatus)chartStatus.textContent=(data.source||(activityJapaneseUI?'価格データ':'PRICE FEED'))+(data.stale?(activityJapaneseUI?' · キャッシュ':' · CACHED'):'')+' · '+points.length+(activityJapaneseUI?'ポイント':' POINTS');
     if(chartCurrent)chartCurrent.textContent=money(points[points.length-1].price);
-    const fmt=t=>new Date(Number(t)*1000).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:chartPeriod==='24h'?'2-digit':undefined,minute:chartPeriod==='24h'?'2-digit':undefined});
+    const fmt=t=>new Date(Number(t)*1000).toLocaleDateString(activityJapaneseUI?'ja-JP':'en-US',{month:'short',day:'numeric',hour:chartPeriod==='24h'?'2-digit':undefined,minute:chartPeriod==='24h'?'2-digit':undefined});
     if(chartStart)chartStart.textContent=fmt(points[0].time);if(chartEnd)chartEnd.textContent=fmt(points[points.length-1].time);
   }
   async function loadPriceChart() {
-    if(!chartEl)return;if(chartStatus)chartStatus.textContent='LOADING PRICE HISTORY…';
+    if(!chartEl)return;if(chartStatus)chartStatus.textContent=activityJapaneseUI?'価格履歴を読み込み中…':'LOADING PRICE HISTORY…';
     try {const response=await fetch(apiBase+'/api/price-history?period='+encodeURIComponent(chartPeriod),{cache:'no-store',signal:AbortSignal.timeout(12000)});if(!response.ok)throw new Error('HTTP '+response.status);renderPriceChart(await response.json());}
-    catch(error){chartMessage('Price history request failed');if(chartStatus)chartStatus.textContent='API ERROR · '+String(error&&error.message||'REQUEST FAILED').slice(0,45);}
+    catch(error){chartMessage(activityJapaneseUI?'価格履歴の取得に失敗しました':'Price history request failed');if(chartStatus)chartStatus.textContent=(activityJapaneseUI?'APIエラー · ':'API ERROR · ')+String(error&&error.message||'REQUEST FAILED').slice(0,45);}
   }
   document.querySelectorAll('.activity-chart-tab').forEach(button=>button.addEventListener('click',()=>{chartPeriod=button.dataset.chartPeriod||'24h';document.querySelectorAll('.activity-chart-tab').forEach(tab=>tab.classList.toggle('active',tab===button));loadPriceChart();}));
   async function loadRecentTrades() {
@@ -1091,18 +1093,18 @@ if (zomMarket) {
       if(!response.ok)throw new Error('HTTP '+response.status);
       const data=await response.json(), trades=Array.isArray(data.trades)?data.trades:[];
       tradesEl.replaceChildren();
-      if(!trades.length){const empty=document.createElement('p');empty.className='recent-trade-empty';empty.textContent='No recent transactions are available right now.';tradesEl.append(empty);return;}
+      if(!trades.length){const empty=document.createElement('p');empty.className='recent-trade-empty';empty.textContent=activityJapaneseUI?'現在、最近の取引データはありません。':'No recent transactions are available right now.';tradesEl.append(empty);return;}
       trades.slice(0,8).forEach(trade=>{
         const row=document.createElement('div');row.className='recent-trade-row';
         const type=String(trade.type||'trade').toLowerCase(),side=document.createElement('span');
-        side.className='recent-trade-side '+(type==='buy'?'buy':type==='sell'?'sell':'');side.textContent=type==='buy'?'BUY':type==='sell'?'SELL':'TRADE';
+        side.className='recent-trade-side '+(type==='buy'?'buy':type==='sell'?'sell':'');side.textContent=type==='buy'?(activityJapaneseUI?'買い':'BUY'):type==='sell'?(activityJapaneseUI?'売り':'SELL'):(activityJapaneseUI?'取引':'TRADE');
         const main=document.createElement('div');main.className='recent-trade-main';const hash=String(trade.txHash||'');
         const link=document.createElement('a');link.href='https://solscan.io/tx/'+encodeURIComponent(hash);link.target='_blank';link.rel='noopener noreferrer';link.textContent=hash?hash.slice(0,7)+'…'+hash.slice(-6):'Transaction';
         const meta=document.createElement('small'),when=Number(trade.timestamp||0),wallet=String(trade.wallet||'');
-        meta.textContent=(when?new Date(when*1000).toLocaleString():'Time unavailable')+(wallet?' · '+wallet.slice(0,4)+'…'+wallet.slice(-4):'');main.append(link,meta);
+        meta.textContent=(when?new Date(when*1000).toLocaleString(activityJapaneseUI?'ja-JP':undefined):(activityJapaneseUI?'時刻不明':'Time unavailable'))+(wallet?' · '+wallet.slice(0,4)+'…'+wallet.slice(-4):'');main.append(link,meta);
         const value=document.createElement('strong');value.className='recent-trade-value';value.textContent=money(trade.usd);row.append(side,main,value);tradesEl.append(row);
       });
-    } catch(error){const notice=document.createElement('p');notice.className='recent-trade-empty';notice.textContent='Transaction API error: '+String(error&&error.message||'request failed').slice(0,70);tradesEl.replaceChildren(notice);}
+    } catch(error){const notice=document.createElement('p');notice.className='recent-trade-empty';notice.textContent=(activityJapaneseUI?'取引APIエラー：':'Transaction API error: ')+String(error&&error.message||'request failed').slice(0,70);tradesEl.replaceChildren(notice);}
   }
 
   loadActivity();
@@ -1307,6 +1309,7 @@ if (zomMarket) {
 /* Zombie Radar Picks: consume the existing shared /api/radar feed.
    Time controls mirror bot-supported periods m5, h1 and h24. */
 (() => {
+  const japaneseUI = document.documentElement.lang === 'ja';
   const apiBase = 'https://zombcash-bot.fadehost.app';
   const panel = document.querySelector('.zombie-radar-ai-panel');
   const list = document.getElementById('zombie-radar-ai-list');
@@ -1317,9 +1320,9 @@ if (zomMarket) {
   if (!panel || !list || !state || !refreshButton) return;
 
   const periods = {
-    m5: {label:'last 5 minutes'},
-    h1: {label:'last hour'},
-    h24: {label:'last 24 hours'}
+    m5: {label:japaneseUI ? '直近5分' : 'last 5 minutes'},
+    h1: {label:japaneseUI ? '直近1時間' : 'last hour'},
+    h24: {label:japaneseUI ? '直近24時間' : 'last 24 hours'}
   };
   let activePeriod = 'm5';
   let requestId = 0;
@@ -1471,17 +1474,17 @@ if (zomMarket) {
       const metricsLine = document.createElement('div');
       metricsLine.className = 'zrai-metrics';
       metricsLine.append(
-        createMetric('CHANGE', percent(metrics.change), metrics.change > 0 ? 'positive' : metrics.change < 0 ? 'negative' : ''),
-        createMetric('VOLUME', compactMoney(metrics.volume)),
-        createMetric('LIQUIDITY', compactMoney(metrics.liquidity))
+        createMetric(japaneseUI ? '変動' : 'CHANGE', percent(metrics.change), metrics.change > 0 ? 'positive' : metrics.change < 0 ? 'negative' : ''),
+        createMetric(japaneseUI ? '取引量' : 'VOLUME', compactMoney(metrics.volume)),
+        createMetric(japaneseUI ? '流動性' : 'LIQUIDITY', compactMoney(metrics.liquidity))
       );
       const signal = document.createElement('div');
       signal.className = 'zrai-signal-line';
       signal.textContent = metrics.hasTrades
-        ? 'BUY ' + (metrics.buys === null ? '—' : metrics.buys.toLocaleString()) +
-          ' · SELL ' + (metrics.sells === null ? '—' : metrics.sells.toLocaleString()) +
-          ' · ' + (metrics.trades ? 'TRADES ' + metrics.trades.toLocaleString() : 'NO TRADES')
-        : 'TRADE-FLOW SIGNAL UNAVAILABLE';
+        ? (japaneseUI ? '買い ' : 'BUY ') + (metrics.buys === null ? '—' : metrics.buys.toLocaleString()) +
+          (japaneseUI ? ' · 売り ' : ' · SELL ') + (metrics.sells === null ? '—' : metrics.sells.toLocaleString()) +
+          ' · ' + (metrics.trades ? (japaneseUI ? '取引 ' : 'TRADES ') + metrics.trades.toLocaleString() : (japaneseUI ? '取引なし' : 'NO TRADES'))
+        : (japaneseUI ? '取引フローのシグナルを利用できません' : 'TRADE-FLOW SIGNAL UNAVAILABLE');
       const addressLink = document.createElement('a');
       addressLink.className = 'zrai-address';
       addressLink.href = 'https://solscan.io/token/' + encodeURIComponent(address);
@@ -1496,7 +1499,7 @@ if (zomMarket) {
       view.href = dexUrl;
       view.target = '_blank';
       view.rel = 'noopener noreferrer';
-      view.textContent = 'VIEW';
+      view.textContent = japaneseUI ? '表示' : 'VIEW';
       view.setAttribute('aria-label', 'View ' + symbol + ' on DexScreener');
       card.append(rank, body, view);
       list.append(card);
@@ -1509,22 +1512,22 @@ if (zomMarket) {
       icon.textContent = '✳';
       const copy = document.createElement('div');
       const title = document.createElement('strong');
-      title.textContent = ranked.length + ' VERIFIED PICKS';
+      title.textContent = ranked.length + (japaneseUI ? '件の確認済み候補' : ' VERIFIED PICKS');
       const detail = document.createElement('span');
-      detail.textContent = 'Radar only shows tokens with real data for this time horizon. Try another interval or refresh to discover more.';
+      detail.textContent = japaneseUI ? 'レーダーには選択した期間の実データがあるトークンのみ表示されます。別の期間を選ぶか更新してください。' : 'Radar only shows tokens with real data for this time horizon. Try another interval or refresh to discover more.';
       copy.append(title, detail);
       filler.append(icon, copy);
       list.append(filler);
     }
-    setState(payload.stale ? 'STALE FEED' : 'RADAR ONLINE', payload.stale ? 'stale' : 'online');
+    setState(payload.stale ? (japaneseUI ? '古いデータ' : 'STALE FEED') : (japaneseUI ? 'レーダー稼働中' : 'RADAR ONLINE'), payload.stale ? 'stale' : 'online');
   }
   async function load(showLoading) {
     const currentRequest = ++requestId;
     refreshButton.disabled = true;
     refreshButton.classList.add('is-loading');
-    setText(refreshButton, '↻ SCANNING');
-    setState('SCANNING', 'loading');
-    if (!lastPayload || showLoading) setMessage('Fetching the shared Zombie Radar feed…', 'loading');
+    setText(refreshButton, japaneseUI ? '↻ スキャン中' : '↻ SCANNING');
+    setState(japaneseUI ? 'スキャン中' : 'SCANNING', 'loading');
+    if (!lastPayload || showLoading) setMessage(japaneseUI ? '共有Zombie Radarフィードを取得中…' : 'Fetching the shared Zombie Radar feed…', 'loading');
     try {
       const response = await fetch(apiBase + '/api/radar', {
         cache: 'no-store',
@@ -1538,22 +1541,22 @@ if (zomMarket) {
       lastSuccessAt = Date.now();
       render(payload);
       const timestamp = number(payload.updatedAt);
-      setText(updated, 'SOURCE UPDATED ' + (timestamp ? new Date(timestamp * 1000).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) : 'TIME UNKNOWN'));
-      if (payload.stale) setText(updated, 'SOURCE SNAPSHOT IS STALE');
+      setText(updated, (japaneseUI ? 'ソース更新 ' : 'SOURCE UPDATED ') + (timestamp ? new Date(timestamp * 1000).toLocaleTimeString(japaneseUI ? 'ja-JP' : 'en-US',{hour:'2-digit',minute:'2-digit'}) : (japaneseUI ? '時刻不明' : 'TIME UNKNOWN')));
+      if (payload.stale) setText(updated, japaneseUI ? 'ソースデータが古くなっています' : 'SOURCE SNAPSHOT IS STALE');
     } catch (error) {
       if (currentRequest !== requestId) return;
       console.warn('Zombie Radar feed request failed:', error);
-      setState(lastPayload ? 'STALE FEED' : 'API ERROR', lastPayload ? 'stale' : 'error');
-      if (!lastPayload) setMessage('Radar feed is unavailable. No recommendations are being shown; retry shortly.', 'error');
-      else setMessage('Refresh failed. Previous radar data is retained and marked stale.', 'error');
+      setState(lastPayload ? (japaneseUI ? '古いデータ' : 'STALE FEED') : (japaneseUI ? 'APIエラー' : 'API ERROR'), lastPayload ? 'stale' : 'error');
+      if (!lastPayload) setMessage(japaneseUI ? 'レーダーフィードを利用できません。現在おすすめを表示していません。しばらくして再試行してください。' : 'Radar feed is unavailable. No recommendations are being shown; retry shortly.', 'error');
+      else setMessage(japaneseUI ? '更新に失敗しました。以前のデータを保持し、古いデータとして表示しています。' : 'Refresh failed. Previous radar data is retained and marked stale.', 'error');
       setText(updated, lastPayload
-        ? 'LAST SUCCESS ' + new Date(lastSuccessAt).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})
-        : 'NO SUCCESSFUL FETCH');
+        ? (japaneseUI ? '最終成功 ' : 'LAST SUCCESS ') + new Date(lastSuccessAt).toLocaleTimeString(japaneseUI ? 'ja-JP' : 'en-US',{hour:'2-digit',minute:'2-digit'})
+        : (japaneseUI ? '取得成功なし' : 'NO SUCCESSFUL FETCH'));
     } finally {
       if (currentRequest === requestId) {
         refreshButton.disabled = false;
         refreshButton.classList.remove('is-loading');
-        setText(refreshButton, '↻ REFRESH');
+        setText(refreshButton, japaneseUI ? '↻ 更新' : '↻ REFRESH');
       }
     }
   }
