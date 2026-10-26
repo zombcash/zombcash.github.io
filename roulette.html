@@ -34,18 +34,22 @@
 .panel{min-width:0;border:1px solid var(--line);background:linear-gradient(150deg,#0d1510,#080d0e);padding:clamp(16px,2.6vw,26px)}
 .panel h2{font:700 clamp(17px,2vw,22px) Orbitron,sans-serif;margin:0 0 9px}.muted{color:var(--muted);font-size:15px;line-height:1.4}.wallet-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:18px}.wallet-status{font-size:14px;color:#a4b2a2;overflow-wrap:anywhere}.wallet-address{color:var(--green);font-family:monospace;font-size:13px}
 .btn{border:1px solid #527a39;background:#111b10;color:var(--green);padding:12px 16px;cursor:pointer;font:700 10px Orbitron,sans-serif;letter-spacing:.04em;transition:transform .15s,border-color .15s,background .15s}.btn:hover:not(:disabled){transform:translateY(-1px);border-color:var(--green)}.btn.primary{background:var(--green);border-color:var(--green);color:#081006}.btn:disabled{opacity:.45;cursor:not-allowed}.btn.ghost{border-color:#354737;color:#d2dfd0;background:#090e0b}
-.wheel-stage{display:grid;place-items:center;position:relative;padding:18px 0 22px}
+.wheel-stage{display:grid;place-items:center;position:relative;padding:26px 0 26px;background:radial-gradient(ellipse at center,#9bff4510,transparent 66%)}
+.wheel-stage:after{content:'☣ ZOMBIE BRAIN LOTTERY ☣';position:absolute;bottom:3px;left:0;right:0;text-align:center;color:#7da55c;font:900 8px Orbitron,sans-serif;letter-spacing:.2em;text-shadow:0 0 10px #9bff4533;pointer-events:none}
 .pointer{position:absolute;z-index:4;top:5px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:0;border-bottom:29px solid #f7fff1;filter:drop-shadow(0 0 6px #9bff45a8)}
-.wheel-shell{width:min(100%,390px);aspect-ratio:1;border-radius:50%;padding:11px;background:radial-gradient(circle,#273b27 0 63%,#101a10 64% 68%,#6b8b3d 69% 71%,#111a10 72%);border:1px solid #47633a;box-shadow:0 0 0 5px #080e09,0 0 34px #79ff2521;position:relative}
-.wheel{width:100%;height:100%;border-radius:50%;position:relative;border:3px solid #233c24;overflow:hidden;transform:rotate(0deg);transition:transform 4.2s cubic-bezier(.12,.72,.08,1);background:conic-gradient(from -25.714deg,#9bff45 0deg 51.428deg,#263d28 51.428deg 102.856deg,#4c6a38 102.856deg 154.284deg,#1d3022 154.284deg 205.712deg,#d6b653 205.712deg 257.14deg,#a75c35 257.14deg 308.568deg,#4c2829 308.568deg 360deg)}
-.wheel-label{position:absolute;left:50%;top:50%;width:76px;margin-left:-38px;margin-top:-14px;text-align:center;transform-origin:50% 14px;font:800 clamp(8px,1.8vw,10px)/1.15 Orbitron,sans-serif;color:#081006;text-shadow:0 1px #ffffff66}.wheel-label:nth-child(even){color:#f2f6e9;text-shadow:0 1px #000}.wheel-center{position:absolute;z-index:3;left:50%;top:50%;transform:translate(-50%,-50%);width:25%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;border:4px solid #243d25;background:radial-gradient(circle,#1c2b1b,#060b08 70%);box-shadow:0 0 0 4px #9bff45aa,0 0 25px #9bff4533;color:var(--green);font-size:clamp(20px,4vw,33px)}
+.wheel-shell{width:min(100%,430px);aspect-ratio:1;border-radius:50%;padding:11px;background:radial-gradient(circle,#243a22 0 64%,#101a10 65% 68%,#9bff45 69% 70%,#111a10 71%);border:1px solid #66864a;box-shadow:0 0 0 5px #080e09,0 0 40px #79ff2530;position:relative}
+.wheel{width:100%;height:100%;border-radius:50%;position:relative;border:4px solid #233c24;overflow:hidden;transform:rotate(0deg);transition:transform 4.2s cubic-bezier(.12,.72,.08,1);background:conic-gradient(from -22.5deg,#9bff45 0deg 45deg,#283f2b 45deg 90deg,#6d8740 90deg 135deg,#e0b94f 135deg 180deg,#a6f54a 180deg 225deg,#273d2a 225deg 270deg,#b36a3c 270deg 315deg,#4c2829 315deg 360deg)}
+.wheel:before{content:'☣  ☠  ☣  ☠  ☣  ☠  ☣  ☠';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;word-spacing:16px;color:#07100618;font:900 25px/1 Orbitron,sans-serif;letter-spacing:3px;transform:rotate(-24deg);pointer-events:none}
+.wheel-label{position:absolute;left:50%;top:50%;width:78px;min-height:26px;margin-left:-39px;margin-top:-13px;display:grid;place-items:center;text-align:center;white-space:nowrap;transform-origin:center center;transform:rotate(var(--angle)) translateY(-118px) rotate(calc(-1 * var(--angle)));font:900 clamp(9px,1.65vw,11px)/1.1 Orbitron,sans-serif;color:#061006;text-shadow:0 1px #ffffffaa,0 0 5px #ffffff77;filter:drop-shadow(0 1px 1px #fff5);z-index:1}
+.wheel-label[data-kind='dark']{color:#f3ffe9;text-shadow:0 1px #000,0 0 5px #0009}
+.wheel-center{position:absolute;z-index:3;left:50%;top:50%;transform:translate(-50%,-50%);width:27%;aspect-ratio:1;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border:4px solid #243d25;background:radial-gradient(circle,#233d1f,#060b08 72%);box-shadow:0 0 0 4px #9bff45aa,0 0 25px #9bff4555;color:var(--green);font-size:clamp(22px,4vw,35px);text-shadow:0 0 10px #9bff45}.wheel-center small{font:900 clamp(6px,1vw,8px)/1 Orbitron,sans-serif;letter-spacing:.04em;color:#c6f9a7}
 .spin-actions{text-align:center;display:grid;gap:10px;max-width:340px;width:100%;margin:0 auto}.spin-actions .btn{width:100%;min-height:47px}.spin-meta{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;color:#8c9a8a;font-size:13px}.spin-result{min-height:62px;margin-top:16px;border:1px dashed #38533a;background:#08100b;padding:13px;text-align:center;display:grid;place-items:center}.spin-result strong{font:700 clamp(15px,2.4vw,22px) Orbitron,sans-serif;color:var(--green)}.spin-result small{color:#9aaa97;font-size:13px}
 .prize-list{display:grid;gap:8px;margin-top:17px}.prize-item{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid #223526;background:#080f0b;padding:10px 12px}.prize-icon{width:34px;height:34px;border:1px solid #426239;display:grid;place-items:center;color:var(--green);font:700 14px Orbitron,sans-serif}.prize-item:nth-child(5) .prize-icon{color:var(--gold);border-color:#79662b}.prize-item:last-child .prize-icon{color:var(--red);border-color:#7c3436}.prize-name{font:700 10px Orbitron,sans-serif}.prize-desc{font-size:13px;color:#9aaa97;margin-top:3px}.prize-odds{font:700 13px Orbitron,sans-serif;color:var(--green);white-space:nowrap}
 .auth-box{margin-top:18px;border:1px solid #344b35;background:#080f0b;padding:15px}.auth-box strong{font:700 10px Orbitron,sans-serif;color:var(--green)}.auth-box p{margin:7px 0 0;color:#a9b6a6;font-size:14px;line-height:1.4}
 .lower-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.rule-list{padding-left:20px;color:#b2c0b0;line-height:1.5}.rule-list li{margin:7px 0}.history{display:grid;gap:8px;margin-top:14px}.history-item{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #1e3022;padding:9px 0;font-size:14px}.history-item b{color:var(--green);text-align:right}.link-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}.link-row a{border-bottom:1px solid #46663b;color:#bde8a7;padding:4px 0;font:700 10px Orbitron,sans-serif}
 footer.footer{border-top:1px solid #263a2a;padding:24px 16px;text-align:center;color:#667766;font:700 9px Orbitron,sans-serif;letter-spacing:.08em}
 @media(max-width:800px){.play-grid{grid-template-columns:1fr}.wheel-shell{width:min(82vw,350px)}.lower-grid{grid-template-columns:1fr}.roulette-wrap{width:min(100% - 20px,1180px);margin-top:18px}.hero{padding:22px 18px}}
-@media(max-width:430px){.wheel-shell{width:min(86vw,330px);padding:8px}.wheel-label{width:60px;margin-left:-30px;font-size:8px}.panel{padding:15px}.prize-item{grid-template-columns:32px minmax(0,1fr) auto;padding:9px}.prize-icon{width:30px;height:30px}.prize-name{font-size:9px}.prize-odds{font-size:11px}}
+@media(max-width:430px){.wheel-shell{width:min(88vw,350px);padding:8px}.wheel-label{width:66px;margin-left:-33px;font-size:8px;transform:rotate(var(--angle)) translateY(-99px) rotate(calc(-1 * var(--angle)))}.panel{padding:15px}.prize-item{grid-template-columns:32px minmax(0,1fr) auto;padding:9px}.prize-icon{width:30px;height:30px}.prize-name{font-size:9px}.prize-odds{font-size:11px}}
 </style>
 </head>
 <body>
@@ -65,14 +69,15 @@ footer.footer{border-top:1px solid #263a2a;padding:24px 16px;text-align:center;c
 <div class="wheel-stage">
 <div class="pointer" aria-hidden="true"></div>
 <div class="wheel-shell"><div class="wheel" id="roulette-wheel" aria-label="Prize wheel">
-<div class="wheel-label" data-i18n="wheelPrize1" style="transform:rotate(0deg) translateY(-118px)">+$1</div>
-<div class="wheel-label" data-i18n="wheelAgain" style="transform:rotate(51.428deg) translateY(-118px)">↻ AGAIN</div>
-<div class="wheel-label" data-i18n="wheelAgain" style="transform:rotate(102.856deg) translateY(-118px)">↻ AGAIN</div>
-<div class="wheel-label" data-i18n="wheelPrize2" style="transform:rotate(154.284deg) translateY(-118px)">+$2</div>
-<div class="wheel-label" data-i18n="wheelPrize5" style="transform:rotate(205.712deg) translateY(-118px)">+$5</div>
-<div class="wheel-label" data-i18n="wheelPrize10" style="transform:rotate(257.14deg) translateY(-118px)">+$10</div>
-<div class="wheel-label" data-i18n="wheelPrize100" style="transform:rotate(308.568deg) translateY(-118px)">$100</div>
-<div class="wheel-center" aria-hidden="true">☣</div></div></div>
+<div class="wheel-label" data-kind="light" data-i18n="wheelPrize1" style="--angle:0deg">🧟 $1</div>
+<div class="wheel-label" data-kind="dark" data-i18n="wheelAgain" style="--angle:45deg">🧠 AGAIN</div>
+<div class="wheel-label" data-kind="light" data-i18n="wheelPrize2" style="--angle:90deg">🧪 $2</div>
+<div class="wheel-label" data-kind="dark" data-i18n="wheelPrize5" style="--angle:135deg">💀 $5</div>
+<div class="wheel-label" data-kind="light" data-i18n="wheelPrize1" style="--angle:180deg">🧟 $1</div>
+<div class="wheel-label" data-kind="dark" data-i18n="wheelAgain" style="--angle:225deg">🧠 AGAIN</div>
+<div class="wheel-label" data-kind="dark" data-i18n="wheelPrize10" style="--angle:270deg">⚡ $10</div>
+<div class="wheel-label" data-kind="dark" data-i18n="wheelPrize100" style="--angle:315deg">👑 $100</div>
+<div class="wheel-center" aria-hidden="true"><span>🧟</span><small>BRAIN ROT</small></div></div></div>
 </div>
 <div class="spin-actions">
 <button class="btn primary" id="spin-free" type="button" data-i18n="spinFree">SPIN FREE — ONCE A DAY</button>
