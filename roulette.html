@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080b11">
+<meta name="description" content="Spin the Outbreak — ZombieCash's demo prize wheel. Telegram registration required. No real token payouts or paid spins in demo mode.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://zombcash.github.io/roulette.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Spin the Outbreak — ZombieCash">
+<meta property="og:description" content="One daily free demo spin for registered survivors. No real payouts in demo mode.">
+<meta property="og:url" content="https://zombcash.github.io/roulette.html">
+<link rel="icon" type="image/svg+xml" href="zombcash-hand-logo.svg">
+<link rel="apple-touch-icon" href="zombcash-hand-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Spin the Outbreak — ZombieCash</title>
+<style>
+:root{--bg:#080b11;--panel:#0d1410;--line:#31452e;--green:#9bff45;--text:#edf5e5;--muted:#a8b2a5;--red:#ff6268;--gold:#f1c65a}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 50% 0,#142619 0,transparent 46%),var(--bg);color:var(--text);font-family:Rajdhani,Arial,sans-serif;min-height:100vh}a{color:inherit;text-decoration:none}button{font:inherit}
+.roulette-wrap{width:min(1180px,calc(100% - 32px));margin:28px auto 64px}
+.kicker{font:700 10px Orbitron,sans-serif;letter-spacing:.16em;color:var(--green);text-transform:uppercase}
+.hero{border:1px solid var(--line);background:linear-gradient(125deg,#0c1510f2,#090e0df5 62%,#10180f);padding:clamp(22px,4vw,44px);position:relative;overflow:hidden}
+.hero:after{content:"☣";position:absolute;right:2%;top:-48px;font-size:clamp(130px,25vw,300px);line-height:1;color:#9bff4509;pointer-events:none}
+.hero h1{font:800 clamp(28px,5vw,54px)/1.08 Orbitron,sans-serif;letter-spacing:-.04em;margin:12px 0;color:#f0f6e9;position:relative;z-index:1}
+.hero h1 span{color:var(--green)}.hero .intro{max-width:700px;color:#b8c6b6;font-size:clamp(17px,2vw,21px);line-height:1.45;margin:0;position:relative;z-index:1}
+.demo-warning{margin-top:20px;border:1px solid #a97d2f;background:#241d0d;color:#ffdf93;padding:13px 15px;display:flex;gap:11px;align-items:flex-start;font-size:15px;line-height:1.35;position:relative;z-index:1}.demo-warning strong{display:block;font:700 10px Orbitron,sans-serif;letter-spacing:.08em;margin-bottom:5px}
+.status-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;position:relative;z-index:1}.status-pill{border:1px solid #2c4930;background:#08100b;padding:7px 10px;color:#a9c19f;font:700 9px Orbitron,sans-serif;letter-spacing:.06em}.status-pill b{color:var(--green)}
+.play-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(290px,.8fr);gap:18px;margin-top:18px;align-items:stretch}
+.panel{min-width:0;border:1px solid var(--line);background:linear-gradient(150deg,#0d1510,#080d0e);padding:clamp(16px,2.6vw,26px)}
+.panel h2{font:700 clamp(17px,2vw,22px) Orbitron,sans-serif;margin:0 0 9px}.muted{color:var(--muted);font-size:15px;line-height:1.4}.wallet-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:18px}.wallet-status{font-size:14px;color:#a4b2a2;overflow-wrap:anywhere}.wallet-address{color:var(--green);font-family:monospace;font-size:13px}
+.btn{border:1px solid #527a39;background:#111b10;color:var(--green);padding:12px 16px;cursor:pointer;font:700 10px Orbitron,sans-serif;letter-spacing:.04em;transition:transform .15s,border-color .15s,background .15s}.btn:hover:not(:disabled){transform:translateY(-1px);border-color:var(--green)}.btn.primary{background:var(--green);border-color:var(--green);color:#081006}.btn:disabled{opacity:.45;cursor:not-allowed}.btn.ghost{border-color:#354737;color:#d2dfd0;background:#090e0b}
+.wheel-stage{display:grid;place-items:center;position:relative;padding:18px 0 22px}
+.pointer{position:absolute;z-index:4;top:5px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:0;border-bottom:29px solid #f7fff1;filter:drop-shadow(0 0 6px #9bff45a8)}
+.wheel-shell{width:min(100%,390px);aspect-ratio:1;border-radius:50%;padding:11px;background:radial-gradient(circle,#273b27 0 63%,#101a10 64% 68%,#6b8b3d 69% 71%,#111a10 72%);border:1px solid #47633a;box-shadow:0 0 0 5px #080e09,0 0 34px #79ff2521;position:relative}
+.wheel{width:100%;height:100%;border-radius:50%;position:relative;border:3px solid #233c24;overflow:hidden;transform:rotate(0deg);transition:transform 4.2s cubic-bezier(.12,.72,.08,1);background:conic-gradient(from -25.714deg,#9bff45 0deg 51.428deg,#263d28 51.428deg 102.856deg,#4c6a38 102.856deg 154.284deg,#1d3022 154.284deg 205.712deg,#d6b653 205.712deg 257.14deg,#a75c35 257.14deg 308.568deg,#4c2829 308.568deg 360deg)}
+.wheel-label{position:absolute;left:50%;top:50%;width:76px;margin-left:-38px;margin-top:-14px;text-align:center;transform-origin:50% 14px;font:800 clamp(8px,1.8vw,10px)/1.15 Orbitron,sans-serif;color:#081006;text-shadow:0 1px #ffffff66}.wheel-label:nth-child(even){color:#f2f6e9;text-shadow:0 1px #000}.wheel-center{position:absolute;z-index:3;left:50%;top:50%;transform:translate(-50%,-50%);width:25%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;border:4px solid #243d25;background:radial-gradient(circle,#1c2b1b,#060b08 70%);box-shadow:0 0 0 4px #9bff45aa,0 0 25px #9bff4533;color:var(--green);font-size:clamp(20px,4vw,33px)}
+.spin-actions{text-align:center;display:grid;gap:10px;max-width:340px;width:100%;margin:0 auto}.spin-actions .btn{width:100%;min-height:47px}.spin-meta{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;color:#8c9a8a;font-size:13px}.spin-result{min-height:62px;margin-top:16px;border:1px dashed #38533a;background:#08100b;padding:13px;text-align:center;display:grid;place-items:center}.spin-result strong{font:700 clamp(15px,2.4vw,22px) Orbitron,sans-serif;color:var(--green)}.spin-result small{color:#9aaa97;font-size:13px}
+.prize-list{display:grid;gap:8px;margin-top:17px}.prize-item{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid #223526;background:#080f0b;padding:10px 12px}.prize-icon{width:34px;height:34px;border:1px solid #426239;display:grid;place-items:center;color:var(--green);font:700 14px Orbitron,sans-serif}.prize-item:nth-child(5) .prize-icon{color:var(--gold);border-color:#79662b}.prize-item:last-child .prize-icon{color:var(--red);border-color:#7c3436}.prize-name{font:700 10px Orbitron,sans-serif}.prize-desc{font-size:13px;color:#9aaa97;margin-top:3px}.prize-odds{font:700 13px Orbitron,sans-serif;color:var(--green);white-space:nowrap}
+.auth-box{margin-top:18px;border:1px solid #344b35;background:#080f0b;padding:15px}.auth-box strong{font:700 10px Orbitron,sans-serif;color:var(--green)}.auth-box p{margin:7px 0 0;color:#a9b6a6;font-size:14px;line-height:1.4}
+.lower-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.rule-list{padding-left:20px;color:#b2c0b0;line-height:1.5}.rule-list li{margin:7px 0}.history{display:grid;gap:8px;margin-top:14px}.history-item{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #1e3022;padding:9px 0;font-size:14px}.history-item b{color:var(--green);text-align:right}.link-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}.link-row a{border-bottom:1px solid #46663b;color:#bde8a7;padding:4px 0;font:700 10px Orbitron,sans-serif}
+footer.footer{border-top:1px solid #263a2a;padding:24px 16px;text-align:center;color:#667766;font:700 9px Orbitron,sans-serif;letter-spacing:.08em}
+@media(max-width:800px){.play-grid{grid-template-columns:1fr}.wheel-shell{width:min(82vw,350px)}.lower-grid{grid-template-columns:1fr}.roulette-wrap{width:min(100% - 20px,1180px);margin-top:18px}.hero{padding:22px 18px}}
+@media(max-width:430px){.wheel-shell{width:min(86vw,330px);padding:8px}.wheel-label{width:60px;margin-left:-30px;font-size:8px}.panel{padding:15px}.prize-item{grid-template-columns:32px minmax(0,1fr) auto;padding:9px}.prize-icon{width:30px;height:30px}.prize-name{font-size:9px}.prize-odds{font-size:11px}}
+</style>
+</head>
+<body>
+<main class="roulette-wrap">
+<section class="hero">
+<div class="kicker" data-i18n="kicker">☣ ZOMBIECASH LABORATORY // EXPERIMENT 001</div>
+<h1 data-i18n-html="title">SPIN THE <span>OUTBREAK</span></h1>
+<p class="intro" data-i18n="intro">One daily free spin for registered survivors. Will you escape with loot, or get sent back to the lab?</p>
+<div class="demo-warning" role="alert"><div aria-hidden="true">⚠</div><div><strong data-i18n="demoTitle">DEMO MODE — NO REAL MONEY OR TOKENS</strong><span data-i18n="demoText">This is a demonstration only. No ZOMBCASH is transferred, no prizes are paid, and spin purchases are disabled. Displayed dollar values are illustrative only.</span></div></div>
+<div class="status-row"><span class="status-pill"><b data-i18n="demoBadge">DEMO ONLY</b></span><span class="status-pill" data-i18n="telegramBadge">TELEGRAM REGISTRATION REQUIRED</span><span class="status-pill" data-i18n="walletBadge">SOLANA WALLET: OPTIONAL IN DEMO</span></div>
+</section>
+
+<div class="play-grid">
+<section class="panel" aria-labelledby="wheel-heading">
+<h2 id="wheel-heading" data-i18n="wheelHeading">THE FATE ROTATOR</h2>
+<p class="muted" data-i18n="wheelIntro">The server chooses the result. The wheel animation just adds dramatic laboratory suspense.</p>
+<div class="wheel-stage">
+<div class="pointer" aria-hidden="true"></div>
+<div class="wheel-shell"><div class="wheel" id="roulette-wheel" aria-label="Prize wheel">
+<div class="wheel-label" style="transform:rotate(0deg) translateY(-118px)">+$1</div>
+<div class="wheel-label" style="transform:rotate(51.428deg) translateY(-118px)">↻ AGAIN</div>
+<div class="wheel-label" style="transform:rotate(102.856deg) translateY(-118px)">↻ AGAIN</div>
+<div class="wheel-label" style="transform:rotate(154.284deg) translateY(-118px)">+$2</div>
+<div class="wheel-label" style="transform:rotate(205.712deg) translateY(-118px)">+$5</div>
+<div class="wheel-label" style="transform:rotate(257.14deg) translateY(-118px)">+$10</div>
+<div class="wheel-label" style="transform:rotate(308.568deg) translateY(-118px)">$100</div>
+<div class="wheel-center" aria-hidden="true">☣</div></div></div>
+</div>
+<div class="spin-actions">
+<button class="btn primary" id="spin-free" type="button" data-i18n="spinFree">SPIN FREE — ONCE A DAY</button>
+<button class="btn" id="spin-bonus" type="button" disabled data-i18n="spinBonus">USE BONUS SPIN (0)</button>
+<div class="spin-meta"><span><span data-i18n="dailyLabel">Daily free spin</span>: <b id="daily-status">—</b></span><span><span data-i18n="bonusLabel">Bonus spins</span>: <b id="bonus-count">0</b></span></div>
+</div>
+<div class="spin-result" id="spin-result" aria-live="polite"><strong data-i18n="resultIdle">AWAITING SURVIVOR AUTHORIZATION</strong><small data-i18n="resultHint">Log in with Telegram to enter the experiment.</small></div>
+<div class="auth-box"><strong id="auth-title" data-i18n="authTitle">TELEGRAM SURVIVOR CHECK</strong><p id="auth-message" data-i18n="authNeedLogin">Register or log in through Telegram using the button in the site header. Your registration is checked by the ZombieCash API before a spin.</p><div class="link-row"><a href="survivor-hub.html" data-i18n="survivorHubLink">SURVIVOR HUB →</a><a href="arcade.html" data-i18n="arcadeLink">ARCADE →</a></div></div>
+</section>
+
+<aside class="panel" aria-labelledby="prizes-heading">
+<h2 id="prizes-heading" data-i18n="prizesHeading">LOOT TABLE</h2>
+<p class="muted" data-i18n="prizesIntro">These are demo outcomes, not promises of payment. Dollar values are future ZOMBCASH equivalents, based on a price rule that must be published before any real launch.</p>
+<div class="prize-list">
+<div class="prize-item"><span class="prize-icon">◎</span><div><div class="prize-name" data-i18n="prize1">$1 IN ZOMBCASH</div><div class="prize-desc" data-i18n="prize1Desc">Common loot. The lab is feeling generous-ish.</div></div><span class="prize-odds">45%</span></div>
+<div class="prize-item"><span class="prize-icon">↻</span><div><div class="prize-name" data-i18n="prizeAgain">SPIN AGAIN</div><div class="prize-desc" data-i18n="prizeAgainDesc">Two separate bonus-spin sectors.</div></div><span class="prize-odds">36%</span></div>
+<div class="prize-item"><span class="prize-icon">◎</span><div><div class="prize-name" data-i18n="prize2">$2 IN ZOMBCASH</div><div class="prize-desc" data-i18n="prize2Desc">A little less cemetery, a little more luxury.</div></div><span class="prize-odds">10%</span></div>
+<div class="prize-item"><span class="prize-icon">☣</span><div><div class="prize-name" data-i18n="prize5">$5 IN ZOMBCASH</div><div class="prize-desc" data-i18n="prize5Desc">Rare loot for a suspiciously lively corpse.</div></div><span class="prize-odds">5%</span></div>
+<div class="prize-item"><span class="prize-icon">⚡</span><div><div class="prize-name" data-i18n="prize10">$10 IN ZOMBCASH</div><div class="prize-desc" data-i18n="prize10Desc">Very rare. Do not wake the neighbors.</div></div><span class="prize-odds">3.95%</span></div>
+<div class="prize-item"><span class="prize-icon">★</span><div><div class="prize-name" data-i18n="prize100">$100 SUPER PRIZE</div><div class="prize-desc" data-i18n="prize100Desc">One chance in two thousand. Even the lab director is nervous.</div></div><span class="prize-odds">0.05%</span></div>
+</div>
+<div class="wallet-row">
+<button class="btn" id="wallet-connect" type="button" data-i18n="walletConnect">CONNECT SOLANA WALLET</button>
+<span class="wallet-status" id="wallet-status" data-i18n="walletNotConnected">Wallet not connected. No signature or transaction is requested in demo mode.</span>
+</div>
+<p class="muted" style="margin-top:12px" data-i18n="walletNote">Wallet connection is optional for this demo. In a future live campaign, a wallet will be bound to the Telegram-registered survivor profile before any eligible payout.</p>
+<button class="btn ghost" id="buy-spins" type="button" disabled style="width:100%;margin-top:10px" data-i18n="buyDisabled">BUY EXTRA SPINS — DISABLED IN DEMO</button>
+</aside>
+</div>
+
+<div class="lower-grid">
+<section class="panel">
+<h2 data-i18n="rulesHeading">FIELD RULES</h2>
+<ul class="rule-list">
+<li data-i18n="rule1">Only Telegram-registered ZombieCash survivors can spin. Guests are laboratory equipment, not participants.</li>
+<li data-i18n="rule2">One free spin per user per UTC day. Landing on a SPIN AGAIN sector can grant a bonus spin; the demo allows at most three total spins per day.</li>
+<li data-i18n="rule3">The outcome is selected by the server, not by your browser. Animation cannot change the result.</li>
+<li data-i18n="rule4">Spin purchases are shown for planning only and are disabled. No wallet funds are requested or spent.</li>
+<li data-i18n="rule5">No real prizes or payouts are issued in demo mode. Future dollar-equivalent token amounts and pricing rules must be published before launch.</li>
+</ul>
+</section>
+<section class="panel">
+<h2 data-i18n="historyHeading">YOUR LAST DEMO SPINS</h2>
+<p class="muted" data-i18n="historyIntro">The lab keeps a short demo record for your Telegram account. No wallet address is needed to play.</p>
+<div class="history" id="spin-history"><div class="history-item"><span data-i18n="historyEmpty">No demo spins recorded yet.</span><b>—</b></div></div>
+<div class="link-row"><a href="https://t.me/ZOMBCASH" target="_blank" rel="noopener noreferrer" data-i18n="telegramLink">TELEGRAM COMMUNITY ↗</a><a href="index.html#living-world" data-i18n="homeLink">LIVE WORLD →</a></div>
+</section>
+</div>
+</main>
+<footer class="footer">BUILT FOR THE UNDEAD · DEMO MODE · © 2026 ZOMBIECASH</footer>
+<script src="shared-nav.js?v=multilingual-nav-20261026-1" defer></script>
+<script src="language.js?v=language-routing-20261026-5" defer></script>
+<script src="survivor-auth.js?v=survivor-identity-online-20261022-2" defer></script>
+<script src="survivor-activity.js?v=survivor-activity-20261022-1" defer></script>
+<script src="roulette.js?v=roulette-demo-20261026-1" defer></script>
+</body>
+</html>
