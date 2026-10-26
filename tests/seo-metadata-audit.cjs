@@ -61,11 +61,9 @@ function normalizedUrl(raw) {
 function expectedLanguage(relativePath, html) {
   const first = relativePath.split(path.sep)[0];
   if (relativePath.includes(path.sep) && LANG_DIRS.has(first)) {
-    const localeMatch = attr((html.match(/<html\\b[^>]*>/i) || [''])[0], 'lang');
-    return localeMatch ? localeMatch[1] : first;
+    // The locale lives in the directory; html[lang] is validated separately.
+    return first;
   }
-  // English-root pages may be translated dynamically at runtime; the
-  // document source remains English unless the page ships under a locale path.
   return 'en';
 }
 
