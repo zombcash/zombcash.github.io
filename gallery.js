@@ -72,7 +72,10 @@
     }),
     timeout
   ]).then(data => {
-    const allowedGalleryCaption = caption => /\bNIGHTMARE\s+DROP\b/i.test(String(caption ?? "")) || /\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b/i.test(String(caption ?? ""));
+    const allowedGalleryCaption = caption =>
+      /\bNIGHTMARE\s+DROP\b/i.test(String(caption ?? "")) ||
+      /\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b/i.test(String(caption ?? "")) ||
+      /\bUNDEAD\s+AFTER\s+DARK\b/i.test(String(caption ?? ""));
     const items = Array.isArray(data.items)
       ? data.items.filter(item => item.image && item.caption && allowedGalleryCaption(item.caption))
       : [];
