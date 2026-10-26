@@ -65,6 +65,56 @@ h1{font:800 clamp(32px,6vw,66px)/1.1 Orbitron,sans-serif;letter-spacing:-2px;mar
 <div class="rule"><strong id="rule-two-title">02 / LIVE RESULTS</strong><p id="rule-two-text">Vote totals and percentages are loaded from the ZombieCash community API.</p></div>
 <div class="rule"><strong id="rule-three-title">03 / MORE TO COME</strong><p id="rule-three-text">This page is designed to expand with proposals, mission history, and additional community decisions.</p></div>
 </div>
+
+<section class="vote-card partner-resources" aria-labelledby="partner-resources-title" style="margin-top:22px">
+  <div class="card-head">
+    <div>
+      <div class="kicker" id="partner-resources-kicker">[ COMMUNITY RESOURCES ]</div>
+      <h2 id="partner-resources-title">RESOURCES &amp; <span class="green">PARTNERS</span></h2>
+    </div>
+  </div>
+  <p class="note" id="partner-resources-intro">Useful tools, community projects and related resources. Listings are provided for discovery and do not automatically imply endorsement.</p>
+  <div class="rules partner-grid">
+    <div class="rule">
+      <strong id="partner-polymart-label">CRYPTO TOOLS DIRECTORY</strong>
+      <p id="partner-polymart-copy">Discover crypto tools and project resources in the PolyMart directory.</p>
+      <p style="margin-top:12px"><a href="https://polymart.app/crypto" target="_blank" rel="noopener noreferrer" style="color:var(--green);font-weight:700;text-decoration:underline;text-underline-offset:3px" id="partner-polymart-link">PolyMart — Crypto Tools ↗</a></p>
+    </div>
+    <div class="rule">
+      <strong id="partner-manual-label">ZOMBIECASH GUIDES</strong>
+      <p id="partner-manual-copy">Practical guides to researching Solana tokens and understanding common risk signals.</p>
+      <p style="margin-top:12px"><a href="/survivor-field-manual.html" style="color:var(--green);font-weight:700;text-decoration:underline;text-underline-offset:3px" id="partner-manual-link">Survivor Field Manual →</a></p>
+    </div>
+    <div class="rule">
+      <strong id="partner-transmission-label">PROJECT UPDATES</strong>
+      <p id="partner-transmission-copy">Read ZombieCash news, project updates and field reports.</p>
+      <p style="margin-top:12px"><a href="/outbreak-transmission.html" style="color:var(--green);font-weight:700;text-decoration:underline;text-underline-offset:3px" id="partner-transmission-link">Outbreak Transmission →</a></p>
+    </div>
+  </div>
+</section>
+<script>
+(()=> {
+  const q = new URLSearchParams(location.search).get('lang');
+  const first = location.pathname.split('/').filter(Boolean)[0];
+  const supported = ['en','de','fr','it','ja','zh-CN','ru','tr','hi'];
+  const lang = supported.includes(q) ? q : (supported.includes(first) ? first : 'en');
+  const copy = {
+    en: ['[ COMMUNITY RESOURCES ]','RESOURCES & PARTNERS','Useful tools, community projects and related resources. Listings are provided for discovery and do not automatically imply endorsement.','CRYPTO TOOLS DIRECTORY','Discover crypto tools and project resources in the PolyMart directory.','PolyMart — Crypto Tools ↗','ZOMBIECASH GUIDES','Practical guides to researching Solana tokens and understanding common risk signals.','Survivor Field Manual →','PROJECT UPDATES','Read ZombieCash news, project updates and field reports.','Outbreak Transmission →'],
+    de: ['[ COMMUNITY-RESSOURCEN ]','RESSOURCEN & PARTNER','Nützliche Tools, Community-Projekte und verwandte Ressourcen. Einträge dienen der Orientierung und bedeuten keine automatische Empfehlung.','KRYPTOTOOLS-VERZEICHNIS','Entdecke Krypto-Tools und Projekte im PolyMart-Verzeichnis.','PolyMart — Krypto-Tools ↗','ZOMBIECASH-RATGEBER','Praktische Leitfäden zur Recherche von Solana-Token und zu typischen Risikosignalen.','Survivor Field Manual →','PROJEKT-NEUIGKEITEN','Lies ZombieCash-Nachrichten, Projektupdates und Berichte.','Outbreak Transmission →'],
+    fr: ['[ RESSOURCES COMMUNAUTAIRES ]','RESSOURCES ET PARTENAIRES','Outils utiles, projets communautaires et ressources connexes. Les liens facilitent la découverte et ne constituent pas automatiquement une approbation.','ANNUAIRE D’OUTILS CRYPTO','Découvrez des outils crypto et des projets dans l’annuaire PolyMart.','PolyMart — Outils crypto ↗','GUIDES ZOMBIECASH','Des guides pratiques pour étudier les jetons Solana et repérer les signaux de risque.','Survivor Field Manual →','ACTUALITÉS DU PROJET','Lisez les actualités, mises à jour et rapports de ZombieCash.','Outbreak Transmission →'],
+    it: ['[ RISORSE DELLA COMMUNITY ]','RISORSE E PARTNER','Strumenti utili, progetti della community e risorse correlate. I link aiutano a scoprire risorse e non costituiscono automaticamente un’approvazione.','DIRECTORY DI STRUMENTI CRYPTO','Scopri strumenti crypto e progetti nella directory PolyMart.','PolyMart — Strumenti crypto ↗','GUIDE ZOMBIECASH','Guide pratiche per analizzare i token Solana e riconoscere i segnali di rischio.','Survivor Field Manual →','AGGIORNAMENTI DEL PROGETTO','Leggi notizie, aggiornamenti e rapporti di ZombieCash.','Outbreak Transmission →'],
+    ja: ['[ コミュニティリソース ]','リソースとパートナー','便利なツール、コミュニティプロジェクト、関連リソースを紹介します。掲載は発見を助けるもので、必ずしも推奨を意味しません。','暗号資産ツール一覧','PolyMartのディレクトリで暗号資産ツールやプロジェクトを探せます。','PolyMart — Crypto Tools ↗','ZOMBIECASHガイド','Solanaトークンの調査やリスクの兆候を理解するための実用ガイド。','Survivor Field Manual →','プロジェクト更新情報','ZombieCashのニュース、更新情報、レポートを読む。','Outbreak Transmission →'],
+    'zh-CN': ['[ 社区资源 ]','资源与合作伙伴','实用工具、社区项目及相关资源。此处链接用于发现资源，并不自动代表认可或背书。','加密工具目录','在 PolyMart 目录中发现加密工具和项目资源。','PolyMart — 加密工具 ↗','ZOMBIECASH 指南','了解 Solana 代币研究方法和常见风险信号的实用指南。','Survivor Field Manual →','项目动态','阅读 ZombieCash 新闻、项目更新和现场报告。','Outbreak Transmission →'],
+    ru: ['[ РЕСУРСЫ СООБЩЕСТВА ]','РЕСУРСЫ И ПАРТНЁРЫ','Полезные инструменты, проекты сообщества и связанные ресурсы. Ссылки помогают находить материалы и не означают автоматического одобрения.','КАТАЛОГ КРИПТОИНСТРУМЕНТОВ','Ищите криптоинструменты и проекты в каталоге PolyMart.','PolyMart — каталог инструментов ↗','РУКОВОДСТВА ZOMBIECASH','Практические руководства по исследованию токенов Solana и распознаванию рисков.','Survivor Field Manual →','НОВОСТИ ПРОЕКТА','Читайте новости ZombieCash, обновления проекта и тематические публикации.','Outbreak Transmission →'],
+    tr: ['[ TOPLULUK KAYNAKLARI ]','KAYNAKLAR VE ORTAKLAR','Yararlı araçlar, topluluk projeleri ve ilgili kaynaklar. Bağlantılar keşif içindir ve otomatik olarak onay anlamına gelmez.','KRİPTO ARAÇLARI DİZİNİ','PolyMart dizininde kripto araçlarını ve proje kaynaklarını keşfedin.','PolyMart — Kripto Araçları ↗','ZOMBIECASH REHBERLERİ','Solana token araştırması ve yaygın risk işaretleri hakkında pratik rehberler.','Survivor Field Manual →','PROJE GÜNCELLEMELERİ','ZombieCash haberlerini, proje güncellemelerini ve saha raporlarını okuyun.','Outbreak Transmission →'],
+    hi: ['[ समुदाय संसाधन ]','संसाधन और साझेदार','उपयोगी टूल, समुदाय परियोजनाएँ और संबंधित संसाधन। ये लिंक खोज में मदद करते हैं और अपने-आप समर्थन या अनुमोदन नहीं दर्शाते।','क्रिप्टो टूल निर्देशिका','PolyMart निर्देशिका में क्रिप्टो टूल और परियोजना संसाधन खोजें।','PolyMart — Crypto Tools ↗','ZOMBIECASH गाइड','Solana टोकन की जाँच और सामान्य जोखिम संकेतों को समझने के लिए व्यावहारिक गाइड।','Survivor Field Manual →','परियोजना अपडेट','ZombieCash समाचार, परियोजना अपडेट और रिपोर्ट पढ़ें।','Outbreak Transmission →']
+  };
+  const ids = ['partner-resources-kicker','partner-resources-title','partner-resources-intro','partner-polymart-label','partner-polymart-copy','partner-polymart-link','partner-manual-label','partner-manual-copy','partner-manual-link','partner-transmission-label','partner-transmission-copy','partner-transmission-link'];
+  const values = copy[lang] || copy.en;
+  ids.forEach((id, i) => { const el = document.getElementById(id); if (el) el.textContent = values[i]; });
+})();
+</script>
+
 </main>
 <script>
 (()=>{'use strict';
