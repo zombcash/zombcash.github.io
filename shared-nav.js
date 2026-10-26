@@ -35,7 +35,7 @@
     ['ZOMBIE GALLERY', '/gallery.html', 'gallery'],
     ['ZOMBIE MAKER', '/zombie-maker.html', 'maker'],
     ['LOTTERY', '/roulette.html', 'lottery'],
-    ['BUY $ZOMBCASH', '/index.html#community-console', 'home']
+    ['BUY $ZOMBCASH', '/buy-zombcash.html', 'buy']
   ];
   // Do not mistake a translated landing-page hero (<header class="hero">) for the shared site header.
   // Some locale pages have a hero header but no separate site header; create the shared shell without
@@ -65,7 +65,7 @@
     const key = href.split('#')[0].split('/').pop() || 'index.html';
     const suffix = href.includes('#') ? '#' + href.split('#').slice(1).join('#') : '';
     // Only route to localized files confirmed to exist in every locale tree.
-    const localizedCore = ['index.html','survivor-field-manual.html','outbreak-transmission.html'];
+    const localizedCore = ['index.html','survivor-field-manual.html','outbreak-transmission.html','buy-zombcash.html'];
     if (localizedCore.includes(key)) return '/' + locale + '/' + key + suffix;
     // Features without a localized counterpart remain explicit English destinations.
     return href;
@@ -81,7 +81,7 @@
     '<button class="zsh-menu-toggle" type="button" aria-label="Open navigation" aria-controls="zsh-navigation" aria-expanded="false"><span aria-hidden="true">☰</span><span class="zsh-menu-label">MENU</span></button>' +
     '<nav id="zsh-navigation" class="zsh-nav" aria-label="Main navigation">' +
       labels.map(([label, href, id]) => {
-        const destination = id === 'home' ? target(href) : href;
+        const destination = (id === 'home' || id === 'buy') ? target(href) : href;
         const active = (id === 'manual' && file === 'survivor-field-manual.html') ||
           (id === 'vote' && file === 'crew-vote.html') ||
           (id === 'arcade' && file === 'arcade.html') ||
@@ -89,7 +89,8 @@
           (id === 'maker' && file === 'zombie-maker.html') ||
           (id === 'hub' && file === 'survivor-hub.html') ||
           (id === 'transmission' && file === 'outbreak-transmission.html') ||
-          (id === 'lottery' && file === 'roulette.html');
+          (id === 'lottery' && file === 'roulette.html') ||
+          (id === 'buy' && file === 'buy-zombcash.html');
         return '<a href="' + destination + '"' + (active ? ' aria-current="page"' : '') + '>' + label + '</a>';
       }).join('') +
     '</nav>' +
