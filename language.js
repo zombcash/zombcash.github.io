@@ -293,6 +293,14 @@ Object.entries(sharedGallery).forEach(([source,translations])=>Object.entries(tr
 
 
 const sharedRuntimeMessages={
+"RADAR ONLINE":{de:"RADAR AKTIV",fr:"RADAR EN LIGNE",it:"RADAR ATTIVO",ja:"レーダー稼働中","zh-CN":"雷达在线",ru:"РАДАР В СЕТИ",tr:"RADAR ÇEVRİM İÇİ",hi:"रडार ऑनलाइन"},
+"SCANNING SOLANA":{de:"SOLANA WIRD GESCANNT",fr:"ANALYSE DE SOLANA",it:"SCANSIONE SOLANA",ja:"SOLANAをスキャン中","zh-CN":"正在扫描 Solana",ru:"СКАНИРУЕМ SOLANA",tr:"SOLANA TARANIYOR",hi:"SOLANA स्कैन हो रहा है"},
+"STALE DATA — RETRYING":{de:"VERALTETE DATEN — NEUER VERSUCH",fr:"DONNÉES ANCIENNES — NOUVEL ESSAI",it:"DATI OBSOLETI — NUOVO TENTATIVO",ja:"古いデータ — 再試行中","zh-CN":"数据已过期 — 正在重试",ru:"УСТАРЕВШИЕ ДАННЫЕ — ПОВТОР",tr:"ESKİ VERİ — YENİDEN DENENİYOR",hi:"पुराना डेटा — फिर कोशिश हो रही है"},
+"SHOWING LAST SIGNAL":{de:"LETZTES SIGNAL",fr:"DERNIER SIGNAL AFFICHÉ",it:"ULTIMO SEGNALE MOSTRATO",ja:"最後のシグナルを表示中","zh-CN":"显示上次信号",ru:"ПОКАЗАН ПОСЛЕДНИЙ СИГНАЛ",tr:"SON SİNYAL GÖSTERİLİYOR",hi:"पिछला सिग्नल दिख रहा है"},
+"SIGNAL INTERRUPTED":{de:"SIGNAL UNTERBROCHEN",fr:"SIGNAL INTERROMPU",it:"SEGNALE INTERROTTO",ja:"シグナルが中断されました","zh-CN":"信号中断",ru:"СИГНАЛ ПРЕРВАН",tr:"SİNYAL KESİLDİ",hi:"सिग्नल बाधित"},
+"RETRY AVAILABLE":{de:"ERNEUTER VERSUCH MÖGLICH",fr:"NOUVEL ESSAI POSSIBLE",it:"NUOVO TENTATIVO DISPONIBILE",ja:"再試行できます","zh-CN":"可以重试",ru:"МОЖНО ПОВТОРИТЬ",tr:"YENİDEN DENEYEBİLİRSİNİZ",hi:"फिर कोशिश कर सकते हैं"},
+"SOURCE UPDATED":{de:"QUELLE AKTUALISIERT",fr:"SOURCE MISE À JOUR",it:"FONTE AGGIORNATA",ja:"ソース更新","zh-CN":"来源已更新",ru:"ИСТОЧНИК ОБНОВЛЁН",tr:"KAYNAK GÜNCELLENDİ",hi:"स्रोत अपडेट हुआ"},
+"LAST SOURCE UPDATE":{de:"LETZTE QUELLENAKTUALISIERUNG",fr:"DERNIÈRE MISE À JOUR DE LA SOURCE",it:"ULTIMO AGGIORNAMENTO DELLA FONTE",ja:"ソースの最終更新","zh-CN":"来源上次更新时间",ru:"ПОСЛЕДНЕЕ ОБНОВЛЕНИЕ ИСТОЧНИКА",tr:"SON KAYNAK GÜNCELLEMESİ",hi:"स्रोत का अंतिम अपडेट"}
 "YOUR FACE.":{de:"DEIN GESICHT.",fr:"TON VISAGE.",it:"IL TUO VOLTO.",ja:"あなたの顔。","zh-CN":"你的面孔。",ru:"ТВОЁ ЛИЦО.",tr:"SENİN YÜZÜN.",hi:"आपका चेहरा।"},
 "THE UNDEAD.":{de:"DIE UNTOTEN.",fr:"LES MORTS-VIVANTS.",it:"I NON-MORTI.",ja:"アンデッド。","zh-CN":"不死之身。",ru:"НЕЖИТЬ.",tr:"YAŞAYAN ÖLÜLER.",hi:"अनडेड।"},
 "Please choose a JPG, PNG or WebP image.":{de:"Bitte wähle ein JPG-, PNG- oder WebP-Bild.",fr:"Veuillez choisir une image JPG, PNG ou WebP.",it:"Scegli un’immagine JPG, PNG o WebP.",ja:"JPG、PNG、WebP形式の画像を選んでください。","zh-CN":"请选择 JPG、PNG 或 WebP 图片。",ru:"Выбери изображение в формате JPG, PNG или WebP.",tr:"Lütfen JPG, PNG veya WebP biçiminde bir görsel seç.",hi:"कृपया JPG, PNG या WebP इमेज चुनें。"},
