@@ -44,7 +44,7 @@ function attr(tag, name) {
   return tag.slice(start, end < 0 ? tag.length : end);
 }
 function tags(head, tagName, predicate) {
-  const re = new RegExp('<' + tagName + '\\b[^>]*>', 'gi');
+  const re = new RegExp('<' + tagName + '[^>]*>', 'gi');
   return [...head.matchAll(re)].map(match => match[0]).filter(predicate || (() => true));
 }
 function findLinks(head, rel) {
@@ -85,7 +85,7 @@ const warnings = [];
 for (const file of HTML_FILES) {
   const rel = path.relative(ROOT, file).split(path.sep).join('/');
   const html = fs.readFileSync(file, 'utf8');
-  const headMatch = html.match(/<head\b[^>]*>([\s\S]*?)<\/head>/i);
+  const headMatch = html.match(/<head[^>]*>([\s\S]*?)<\/head>/i);
   if (!headMatch) {
     errors.push(rel + ': missing <head>');
     continue;
@@ -108,7 +108,7 @@ for (const file of HTML_FILES) {
   if (ogUrls.length !== 1) errors.push(rel + ': expected exactly one og:url, found ' + ogUrls.length);
   else if (canonical.length === 1 && ogUrls[0] !== canonical[0]) errors.push(rel + ': og:url differs from canonical (' + ogUrls[0] + ')');
 
-  const langAttr = attr((html.match(/<html\b[^>]*>/i) || [''])[0], 'lang');
+  const langAttr = attr((html.match(/<html[^>]*>/i) || [''])[0], 'lang');
   if (!langAttr) errors.push(rel + ': missing html lang');
   else if (langAttr.toLowerCase() !== expectedLanguage(rel, html).toLowerCase()) {
     errors.push(rel + ': html lang "' + langAttr + '" differs from expected path locale "' + expectedLanguage(rel, html) + '"');
