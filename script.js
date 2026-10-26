@@ -683,6 +683,7 @@ if (zomMarket) {
 
 // Living World: shared RSS news, live token alarms, daily missions and community events.
 (() => {
+  const missionJapaneseUI = document.documentElement.lang === 'ja';
   const apiBase = 'https://zombcash-bot.fadehost.app';
   const newsList = document.getElementById('world-news-list');
   const newsStatus = document.getElementById('world-news-status');
@@ -812,19 +813,19 @@ if (zomMarket) {
 
   const missionSets = [
     [
-      ['Scan the outbreak', 'Open the live Solana radar and inspect one token.', '#living-world', 'OPEN RADAR ↗'],
-      ['Check the signal', 'Review $ZOMBCASH movement and market activity.', '#community-console', 'CHECK MARKET ↗'],
-      ['Report to the crew', 'Visit the Telegram community and share one useful thought.', 'https://t.me/ZombieCashCTO', 'JOIN THE CREW ↗']
+      [missionJapaneseUI ? '感染状況をスキャン' : 'Scan the outbreak', missionJapaneseUI ? 'Solanaのライブレーダーを開き、トークンを1つ確認する。' : 'Open the live Solana radar and inspect one token.', '#living-world', missionJapaneseUI ? 'レーダーを開く ↗' : 'OPEN RADAR ↗'],
+      [missionJapaneseUI ? 'シグナルを確認' : 'Check the signal', missionJapaneseUI ? '$ZOMBCASHの値動きと市場活動を確認する。' : 'Review $ZOMBCASH movement and market activity.', '#community-console', missionJapaneseUI ? '市場を確認 ↗' : 'CHECK MARKET ↗'],
+      [missionJapaneseUI ? 'クルーに報告' : 'Report to the crew', missionJapaneseUI ? 'Telegramコミュニティを訪れ、有益な考えを共有する。' : 'Visit the Telegram community and share one useful thought.', 'https://t.me/ZombieCashCTO', missionJapaneseUI ? 'クルーに参加 ↗' : 'JOIN THE CREW ↗']
     ],
     [
-      ['Read a transmission', 'Open one story in the live news feed.', '#living-world', 'READ NEWS ↗'],
-      ['Compare survivors', 'Compare volume and liquidity for two radar tokens.', '#living-world', 'COMPARE TOKENS ↗'],
-      ['Join the resistance', 'Check the latest project discussion in Telegram.', 'https://t.me/ZombieCashCTO', 'OPEN COMMUNITY ↗']
+      [missionJapaneseUI ? '通信を読む' : 'Read a transmission', missionJapaneseUI ? 'ライブニュースフィードの記事を1件開く。' : 'Open one story in the live news feed.', '#living-world', missionJapaneseUI ? 'ニュースを読む ↗' : 'READ NEWS ↗'],
+      [missionJapaneseUI ? 'トークンを比較' : 'Compare survivors', missionJapaneseUI ? 'レーダーにある2つのトークンの取引量と流動性を比較する。' : 'Compare volume and liquidity for two radar tokens.', '#living-world', missionJapaneseUI ? 'トークンを比較 ↗' : 'COMPARE TOKENS ↗'],
+      [missionJapaneseUI ? 'コミュニティに参加' : 'Join the resistance', missionJapaneseUI ? 'Telegramでプロジェクトの最新の議論を確認する。' : 'Check the latest project discussion in Telegram.', 'https://t.me/ZombieCashCTO', missionJapaneseUI ? 'コミュニティを開く ↗' : 'OPEN COMMUNITY ↗']
     ],
     [
-      ['Inspect the market', 'Review the latest $ZOMBCASH market snapshot.', '#community-console', 'VIEW MARKET ↗'],
-      ['Find a new signal', 'Explore the radar for a token you have not seen before.', '#living-world', 'EXPLORE RADAR ↗'],
-      ['Spread the signal', 'Share the ZombieCash homepage with another survivor.', 'https://t.me/ZOMBCASH', 'OPEN CHANNEL ↗']
+      [missionJapaneseUI ? '市場を調査' : 'Inspect the market', missionJapaneseUI ? '$ZOMBCASHの最新市場スナップショットを確認する。' : 'Review the latest $ZOMBCASH market snapshot.', '#community-console', missionJapaneseUI ? '市場を見る ↗' : 'VIEW MARKET ↗'],
+      [missionJapaneseUI ? '新しいシグナルを探す' : 'Find a new signal', missionJapaneseUI ? 'まだ見たことのないトークンをレーダーで探す。' : 'Explore the radar for a token you have not seen before.', '#living-world', missionJapaneseUI ? 'レーダーを探索 ↗' : 'EXPLORE RADAR ↗'],
+      [missionJapaneseUI ? 'シグナルを広める' : 'Spread the signal', missionJapaneseUI ? 'ZombieCashのホームページを仲間に共有する。' : 'Share the ZombieCash homepage with another survivor.', 'https://t.me/ZOMBCASH', missionJapaneseUI ? 'チャンネルを開く ↗' : 'OPEN CHANNEL ↗']
     ]
   ];
   const dayKey = new Date().toISOString().slice(0,10);
