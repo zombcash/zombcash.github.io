@@ -55,7 +55,7 @@ h1{font:800 clamp(32px,6vw,66px)/1.1 Orbitron,sans-serif;letter-spacing:-2px;mar
 <h1><span id="crew-title">THE CREW</span> <span id="crew-votes">VOTES.</span></h1>
 <p class="intro" id="page-intro">Your vote helps choose what the ZombieCash crew builds and does next. This page is the dedicated home for community polls and future voting features.</p>
 <section class="vote-card" aria-labelledby="poll-title">
-<div class="card-head"><div><div class="kicker" id="poll-kicker">[ DAILY COMMUNITY POLL ]</div><h2 id="poll-title">WHAT'S OUR NEXT <span class="green" id="poll-mission">MISSION?</span></h2></div><span id="vote-status" class="status" aria-live="polite">LOADING…</span></div>
+<div class="card-head"><div><div class="kicker" id="poll-kicker">[ DAILY COMMUNITY POLL ]</div><h2 id="poll-title"><span id="poll-lead">WHAT'S OUR NEXT</span> <span class="green" id="poll-mission">MISSION?</span></h2></div><span id="vote-status" class="status" aria-live="polite">LOADING…</span></div>
 <p class="note" id="vote-note">One vote per browser each UTC day. Results are shared with the community.</p>
 <div id="daily-vote-options" aria-live="polite"><p class="note" id="poll-loading">Loading today's poll…</p></div>
 <div class="vote-foot"><span id="vote-total">0 VOTES</span><span id="vote-date">UTC DAILY POLL</span></div>
@@ -88,7 +88,7 @@ const setText=(id,value)=>{const e=document.getElementById(id);if(e)e.textConten
 document.documentElement.lang=lang==='zh-CN'?'zh-CN':lang;
 document.title=t.doc;
 const meta=document.querySelector('meta[name="description"]');if(meta)meta.content=t.desc;
-setText('page-kicker',t.kicker);setText('crew-title',t.crew);setText('crew-votes',t.votes);setText('page-intro',t.intro);setText('poll-kicker',t.pollKicker);setText('poll-title',t.pollLead);setText('poll-mission',t.mission);setText('vote-note',t.note);setText('poll-loading',t.loading);
+setText('page-kicker',t.kicker);setText('crew-title',t.crew);setText('crew-votes',t.votes);setText('page-intro',t.intro);setText('poll-kicker',t.pollKicker);setText('poll-lead',t.pollLead);setText('poll-mission',t.mission);setText('vote-note',t.note);setText('poll-loading',t.loading);
 setText('rule-one-title',t.rules[0]);setText('rule-one-text',t.rules[1]);setText('rule-two-title',t.rules[2]);setText('rule-two-text',t.rules[3]);setText('rule-three-title',t.rules[4]);setText('rule-three-text',t.rules[5]);
 const options={meme:t.options[0],raid:t.options[1],game:t.options[2]};
 const el=id=>document.getElementById(id), box=el('daily-vote-options'),status=el('vote-status'),totalEl=el('vote-total'),dateEl=el('vote-date');
