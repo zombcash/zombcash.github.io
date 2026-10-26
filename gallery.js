@@ -95,6 +95,13 @@
     }).join("");
     cards = Array.from(grid.querySelectorAll(".gallery-card"));
     cards.forEach((card, index) => {
+      const image = card.querySelector("img");
+      image?.addEventListener("error", () => {
+        if (image.dataset.fallbackApplied) return;
+        image.dataset.fallbackApplied = "true";
+        image.src = "/zombcash-hand-logo.svg";
+        image.alt = "Gallery image temporarily unavailable";
+      }, { once: true });
       card.addEventListener("click", event => { if (!event.target.closest("a")) showImage(index); });
       card.addEventListener("keydown", event => {
         if ((event.key === "Enter" || event.key === " ") && event.target === card) {
