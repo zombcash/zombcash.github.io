@@ -4,6 +4,21 @@
   const updated = document.getElementById("gallery-updated");
   if (!grid) return;
 
+  const galleryLocale = {
+    en:{images:"IMAGES",updated:"UPDATED",offline:"ARCHIVE OFFLINE",none:"NO IMAGES YET",noneMsg:"The Telegram archive has not synced any images yet.",error:"COULD NOT LOAD IMAGES",errorMsg:"The gallery data request failed or timed out. Refresh the page, or open the Telegram channel directly.",source:"SOURCE ↗",open:"OPEN @ZOMBCASH ↗"},
+    ru:{images:"ИЗОБРАЖЕНИЙ",updated:"ОБНОВЛЕНО",offline:"АРХИВ НЕДОСТУПЕН",none:"ПОКА НЕТ ИЗОБРАЖЕНИЙ",noneMsg:"Архив Telegram ещё не синхронизировал изображения.",error:"НЕ УДАЛОСЬ ЗАГРУЗИТЬ ИЗОБРАЖЕНИЯ",errorMsg:"Не удалось загрузить данные галереи или истекло время ожидания. Обнови страницу или открой Telegram-канал.",source:"ИСТОЧНИК ↗",open:"ОТКРЫТЬ @ZOMBCASH ↗"},
+    de:{images:"BILDER",updated:"AKTUALISIERT",offline:"ARCHIV OFFLINE",none:"NOCH KEINE BILDER",noneMsg:"Das Telegram-Archiv hat noch keine Bilder synchronisiert.",error:"BILDER KONNTEN NICHT GELADEN WERDEN",errorMsg:"Die Galerie-Datenanfrage ist fehlgeschlagen oder abgelaufen. Aktualisiere die Seite oder öffne direkt den Telegram-Kanal.",source:"QUELLE ↗",open:"@ZOMBCASH ÖFFNEN ↗"},
+    fr:{images:"IMAGES",updated:"MIS À JOUR",offline:"ARCHIVES HORS LIGNE",none:"PAS ENCORE D’IMAGES",noneMsg:"L’archive Telegram n’a pas encore synchronisé d’images.",error:"IMPOSSIBLE DE CHARGER LES IMAGES",errorMsg:"La demande de données de la galerie a échoué ou expiré. Actualisez la page ou ouvrez directement le canal Telegram.",source:"SOURCE ↗",open:"OUVRIR @ZOMBCASH ↗"},
+    it:{images:"IMMAGINI",updated:"AGGIORNATO",offline:"ARCHIVIO OFFLINE",none:"ANCORA NESSUNA IMMAGINE",noneMsg:"L’archivio Telegram non ha ancora sincronizzato immagini.",error:"IMPOSSIBILE CARICARE LE IMMAGINI",errorMsg:"La richiesta dei dati della galleria non è riuscita o è scaduta. Aggiorna la pagina o apri direttamente il canale Telegram.",source:"FONTE ↗",open:"APRI @ZOMBCASH ↗"},
+    ja:{images:"枚",updated:"更新",offline:"アーカイブ停止中",none:"画像はまだありません",noneMsg:"Telegramアーカイブにはまだ画像が同期されていません。",error:"画像を読み込めませんでした",errorMsg:"ギャラリーデータの取得に失敗したか、タイムアウトしました。ページを更新するか、Telegramチャンネルを直接開いてください。",source:"出典 ↗",open:"@ZOMBCASHを開く ↗"},
+    "zh-CN":{images:"张图片",updated:"更新于",offline:"档案离线",none:"暂无图片",noneMsg:"Telegram 档案库尚未同步任何图片。",error:"无法加载图片",errorMsg:"图库数据请求失败或超时。请刷新页面，或直接打开 Telegram 频道。",source:"来源 ↗",open:"打开 @ZOMBCASH ↗"},
+    tr:{images:"GÖRSEL",updated:"GÜNCELLENDİ",offline:"ARŞİV ÇEVRİMDIŞI",none:"HENÜZ GÖRSEL YOK",noneMsg:"Telegram arşivi henüz hiçbir görseli senkronize etmedi.",error:"GÖRSELLER YÜKLENEMEDİ",errorMsg:"Galeri veri isteği başarısız oldu veya zaman aşımına uğradı. Sayfayı yenile ya da Telegram kanalını doğrudan aç.",source:"KAYNAK ↗",open:"@ZOMBCASH'İ AÇ ↗"},
+    hi:{images:"इमेज",updated:"अपडेट",offline:"आर्काइव ऑफ़लाइन",none:"अभी कोई इमेज नहीं",noneMsg:"Telegram आर्काइव ने अभी तक कोई इमेज सिंक नहीं की है।",error:"इमेज लोड नहीं हो सकीं",errorMsg:"गैलरी डेटा अनुरोध विफल हुआ या समय समाप्त हो गया। पेज रीफ़्रेश करें या Telegram चैनल सीधे खोलें।",source:"स्रोत ↗",open:"@ZOMBCASH खोलें ↗"}
+  };
+  let galleryLang=document.documentElement.lang||"en";
+  const gtx=k=>(galleryLocale[galleryLang]||galleryLocale.en)[k]||galleryLocale.en[k]||k;
+  const localizeGalleryMeta=(items,updatedAt)=>{if(count&&items!==null)count.textContent=items.length+" "+gtx("images");if(updated)updated.textContent=updatedAt?gtx("updated")+" "+new Date(updatedAt).toLocaleString(galleryLang,{month:"short",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"";};
+  document.addEventListener("zombcash:languagechange",e=>{galleryLang=e.detail?.language||document.documentElement.lang||"en";grid.querySelectorAll(".gallery-caption a").forEach(a=>a.textContent=gtx("source"));if(count&&/IMAGES|ИЗОБРАЖЕНИЙ|BILDER|IMAGES|IMMAGINI|枚|张图片|GÖRSEL|इमेज/.test(count.textContent)){const n=parseInt(count.textContent,10);if(Number.isFinite(n))count.textContent=n+" "+gtx("images");}if(updated&&updated.textContent){const raw=updated.textContent.replace(/^(UPDATED|ОБНОВЛЕНО|AKTUALISIERT|MIS À JOUR|AGGIORNATO|更新|更新于|GÜNCELLENDİ|अपडेट)\\s*/,"");updated.textContent=gtx("updated")+" "+raw;}});
   const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, ch => {
     const entities = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
     return entities[ch];
@@ -16,7 +31,7 @@
   const state = (title, message) => {
     grid.innerHTML = '<div class="gallery-state"><h3>' + escapeHtml(title) +
       '</h3><p>' + escapeHtml(message) +
-      '</p><a class="gallery-empty-link" href="https://t.me/ZOMBCASH" target="_blank" rel="noreferrer">OPEN @ZOMBCASH ↗</a></div>';
+      '</p><a class="gallery-empty-link" href="https://t.me/ZOMBCASH" target="_blank" rel="noreferrer">'+escapeHtml(gtx("open"))+'</a></div>';
   };
 
   const lightbox = document.createElement("div");
@@ -79,12 +94,9 @@
     const items = Array.isArray(data.items)
       ? data.items.filter(item => item.image && item.caption && allowedGalleryCaption(item.caption))
       : [];
-    if (count) count.textContent = items.length + " IMAGES";
-    if (updated) updated.textContent = data.updated_at
-      ? "UPDATED " + new Date(data.updated_at).toLocaleString(undefined, { month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit" })
-      : "";
+    localizeGalleryMeta(items, data.updated_at);
     if (!items.length) {
-      state("NO IMAGES YET", "The Telegram archive has not synced any images yet.");
+      state(gtx("none"), gtx("noneMsg"));
       return;
     }
     grid.innerHTML = items.map(item => {
@@ -94,7 +106,7 @@
       return '<article class="gallery-card" tabindex="0" role="button" aria-label="Open image: ' + escapeHtml(caption) + '">' +
         '<img src="' + image + '" alt="' + escapeHtml(caption) + '" loading="lazy" decoding="async">' +
         '<div class="gallery-caption"><p>' + escapeHtml(caption) + '</p>' +
-        '<a href="' + post + '" target="_blank" rel="noreferrer">SOURCE ↗</a></div></article>';
+        '<a href="' + post + '" target="_blank" rel="noreferrer">'+escapeHtml(gtx("source"))+'</a></div></article>';
     }).join("");
     cards = Array.from(grid.querySelectorAll(".gallery-card"));
     cards.forEach((card, index) => {
@@ -114,8 +126,8 @@
       });
     });
   }).catch(error => {
-    if (count) count.textContent = "ARCHIVE OFFLINE";
+    if (count) count.textContent = gtx("offline");
     if (updated) updated.textContent = "";
-    state("COULD NOT LOAD IMAGES", "The gallery data request failed or timed out. Refresh the page, or open the Telegram channel directly.");
+    state(gtx("error"), gtx("errorMsg"));
   });
 })();

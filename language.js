@@ -266,6 +266,8 @@ Object.entries(sharedGallery).forEach(([source,translations])=>Object.entries(tr
 
 
 const sharedRuntimeMessages={
+"YOUR FACE.":{de:"DEIN GESICHT.",fr:"TON VISAGE.",it:"IL TUO VOLTO.",ja:"あなたの顔。","zh-CN":"你的面孔。",ru:"ТВОЁ ЛИЦО.",tr:"SENİN YÜZÜN.",hi:"आपका चेहरा।"},
+"THE UNDEAD.":{de:"DIE UNTOTEN.",fr:"LES MORTS-VIVANTS.",it:"I NON-MORTI.",ja:"アンデッド。","zh-CN":"不死之身。",ru:"НЕЖИТЬ.",tr:"YAŞAYAN ÖLÜLER.",hi:"अनडेड।"},
 "Please choose a JPG, PNG or WebP image.":{de:"Bitte wähle ein JPG-, PNG- oder WebP-Bild.",fr:"Veuillez choisir une image JPG, PNG ou WebP.",it:"Scegli un’immagine JPG, PNG o WebP.",ja:"JPG、PNG、WebP形式の画像を選んでください。","zh-CN":"请选择 JPG、PNG 或 WebP 图片。",ru:"Выбери изображение в формате JPG, PNG или WebP.",tr:"Lütfen JPG, PNG veya WebP biçiminde bir görsel seç.",hi:"कृपया JPG, PNG या WebP इमेज चुनें。"},
 "That file is over 5 MB. Choose a smaller image.":{de:"Die Datei ist größer als 5 MB. Wähle ein kleineres Bild.",fr:"Ce fichier dépasse 5 Mo. Choisissez une image plus petite.",it:"Il file supera i 5 MB. Scegli un’immagine più piccola.",ja:"ファイルが5 MBを超えています。小さい画像を選んでください。","zh-CN":"文件超过 5 MB，请选择较小的图片。",ru:"Файл больше 5 МБ. Выбери изображение поменьше.",tr:"Dosya 5 MB'den büyük. Daha küçük bir görsel seç.",hi:"यह फ़ाइल 5 MB से बड़ी है। छोटी इमेज चुनें。"},
 "The image service is temporarily unavailable.":{de:"Der Bilddienst ist vorübergehend nicht verfügbar.",fr:"Le service d’image est temporairement indisponible.",it:"Il servizio immagini non è temporaneamente disponibile.",ja:"画像サービスは一時的に利用できません。","zh-CN":"图像服务暂时不可用。",ru:"Сервис обработки изображений временно недоступен.",tr:"Görsel hizmeti geçici olarak kullanılamıyor.",hi:"इमेज सेवा अस्थायी रूप से उपलब्ध नहीं है।"},
