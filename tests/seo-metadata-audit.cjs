@@ -30,9 +30,9 @@ function walk(dir) {
 }
 
 function attr(tag, name) {
-  const key = name.replace(/[^a-zA-Z0-9_-]/g, '');
-  const match = tag.match(new RegExp('\\\\b' + key + '\\\\s*=\\\\s*["\\']?([^"\\'\\s>]+)', 'i'));
-  return match ? match[1] : null;
+  const match = tag.match(/(?:^|\\s)([a-zA-Z0-9_-]+)\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))/);
+  if (!match || match[1].toLowerCase() !== name.toLowerCase()) return null;
+  return match[2] ?? match[3] ?? match[4] ?? null;
 }
 function tags(head, tagName, predicate) {
   const re = new RegExp('<' + tagName + '\\b[^>]*>', 'gi');
