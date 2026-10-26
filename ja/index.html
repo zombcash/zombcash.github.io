@@ -819,10 +819,10 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
       <p>ZombieCashの世界を探索し、ツールを試して、サバイバーの仲間に加わろう。</p>
       <div class="zc-promo-video-controls" aria-label="Promo video navigation">
         <button type="button" id="zc-promo-prev" disabled aria-label="前のプロモーション動画">← 前へ</button>
-        <span id="zc-promo-count" aria-live="polite">LOADING VIDEO LIBRARY…</span>
+        <span id="zc-promo-count" aria-live="polite">動画ライブラリを読み込み中…</span>
         <button type="button" id="zc-promo-next" disabled aria-label="次のプロモーション動画">次へ →</button>
       </div>
-      <p class="zc-promo-video-note" id="zc-promo-status" role="status">Loading the latest transmission…</p>
+      <p class="zc-promo-video-note" id="zc-promo-status" role="status">最新の通信を読み込み中…</p>
       <a class="zc-promo-video-release" id="zc-promo-release" href="https://github.com/zombcash/zombcash.github.io/releases" target="_blank" rel="noopener noreferrer">動画リリース一覧 ↗</a>
     </div>
     <div class="zc-promo-player-wrap">
@@ -928,9 +928,9 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
       <div class="live-status"><i></i><span id="radar-status">レーダーに接続中</span><small id="radar-updated">最初のシグナルを待機中</small></div>
     </div>
     <div class="radar-controls">
-      <label class="radar-search"><span>⌕</span><input id="radar-search" type="search" placeholder="Search token name or ticker..." autocomplete="off"></label>
+      <label class="radar-search"><span>⌕</span><input id="radar-search" type="search" placeholder="トークン名またはティッカーを検索…" autocomplete="off"></label>
       <div class="radar-filters" role="group" aria-label="Filter tokens">
-        <button class="radar-filter active" data-filter="hot">注目</button><button class="radar-filter" data-filter="volume">VOLUME</button><button class="radar-filter" data-filter="gainers">値上がり</button>
+        <button class="radar-filter active" data-filter="hot">注目</button><button class="radar-filter" data-filter="volume">取引量</button><button class="radar-filter" data-filter="gainers">値上がり</button>
       </div>
       <button class="radar-refresh" id="radar-refresh">↻ 更新</button>
     </div>
@@ -955,7 +955,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
     </div>
     <div class="zombcash-market-bottom"><small id="zombcash-market-updated">市場データを待機中</small><div><a href="https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">取引 ↗</a><a href="https://dexscreener.com/solana/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">チャート ↗</a><button id="zombcash-market-refresh" type="button">↻ 更新</button></div></div>
   </div>
-      <div class="activity-period"><button class="activity-tab active" data-period="h1">1H</button><button class="activity-tab" data-period="h6">6H</button><button class="activity-tab" data-period="h24">24時間</button></div>
+      <div class="activity-period"><button class="activity-tab active" data-period="h1">1時間</button><button class="activity-tab" data-period="h6">6時間</button><button class="activity-tab" data-period="h24">24時間</button></div>
       <div class="activity-numbers"><div><small>買い</small><strong id="activity-buys">—</strong></div><div><small>売り</small><strong id="activity-sells">—</strong></div><div><small>買い / 売り</small><strong id="activity-ratio">—</strong></div></div>
       <div class="activity-bar"><span id="activity-buy-bar"></span></div>
       <p class="crew-note" id="activity-note">最新のDexScreenerペア活動を待機中。</p>
@@ -967,7 +967,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
     <button class="swap-help-button" id="swap-help-open" type="button" aria-haspopup="dialog">? ヘルプ</button>
   </div>
   <div class="jupiter-terminal-shell">
-    <div class="jupiter-terminal-top"><span><i></i> SWAP TERMINAL</span><span>POWERED BY JUPITER</span></div>
+    <div class="jupiter-terminal-top"><span><i></i> スワップ端末</span><span>Jupiter提供</span></div>
     <div id="jupiter-zombcash-terminal" aria-label="Jupiter swap interface"><div class="jupiter-terminal-loading"><span class="jupiter-loader"></span><strong>スワップ端末を初期化中</strong><small>Jupiterに接続中…</small></div></div>
     <p class="jupiter-terminal-note" id="jupiter-terminal-status" aria-live="polite">公式Jupiterインターフェースを読み込み中…</p>
   </div>
@@ -990,7 +990,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 
 <dialog class="all-leaderboards-dialog" id="all-leaderboards-dialog" aria-labelledby="all-leaderboards-title">
  <div class="all-leaderboards-content">
-  <div class="crew-card-head"><div><div class="section-kicker">[ SURVIVAL RECORDS / ALL GAMES ]</div><h3 id="all-leaderboards-title">トップ<span class="green">ゾンビハンター</span></h3></div><button type="button" class="swap-help-button" id="close-all-leaderboards">✕ CLOSE</button></div>
+  <div class="crew-card-head"><div><div class="section-kicker">[ SURVIVAL RECORDS / ALL GAMES ]</div><h3 id="all-leaderboards-title">トップ<span class="green">ゾンビハンター</span></h3></div><button type="button" class="swap-help-button" id="close-all-leaderboards">✕ 閉じる</button></div>
   <div class="leaderboard-game-tabs" role="tablist" aria-label="Choose game leaderboard"><button type="button" class="active" data-leaderboard-game="snake">ZOMBIE SNAKE</button><button type="button" data-leaderboard-game="breaker">ZOMBIE BREAKER</button><button type="button" data-leaderboard-game="maze">ZOMBIE MAZE</button><button type="button" data-leaderboard-game="wall">UNDEAD WALL</button></div>
   <p class="crew-note" id="all-leaderboards-caption">ゾンビスネーク · 上位10件</p><div class="all-leaderboards-list" id="all-leaderboards-list" aria-live="polite">記録を読み込み中…</div>
   <a class="btn btn-primary all-leaderboards-play" href="/arcade.html">▶ PLAY THE ARCADE</a>
@@ -998,7 +998,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 </dialog>
 <dialog class="swap-help-dialog" id="swap-help-dialog" aria-labelledby="swap-help-title">
   <div class="swap-help-content">
-    <div class="crew-card-head"><div><span class="section-kicker">[ JUPITER SWAP INTERFACE ]</span><h3 id="swap-help-title">あなたのウォレット。<span class="green">決めるのはあなた。</span></h3></div><button class="swap-help-button" id="swap-help-close" type="button">✕ CLOSE</button></div>
+    <div class="crew-card-head"><div><span class="section-kicker">[ JUPITERスワップ画面 ]</span><h3 id="swap-help-title">あなたのウォレット。<span class="green">決めるのはあなた。</span></h3></div><button class="swap-help-button" id="swap-help-close" type="button">✕ 閉じる</button></div>
     <p>Trade through Jupiter's swap interface without leaving ZombieCash. Your wallet stays in your control: the site never asks for your recovery phrase or private key.</p>
     <ol><li><b>01</b> 対応するSolanaウォレットを接続します。</li><li><b>02</b> SOLの金額を選び、ルートと手数料を確認します。</li><li><b>03</b> トークンと取引の詳細を確認してから承認します。</li></ol>
     <p class="jupiter-buy-warning">暗号資産は価格変動が大きいため、スワップ前に$ZOMBCASHトークンを確認してください。これは投資助言ではありません。</p>
@@ -1020,7 +1020,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
     </article>
 </section>
 <dialog class="snake-modal" id="snake-modal" aria-label="Zombie Snake arcade">
-  <div class="snake-modal-head"><div><span class="section-kicker">ZOMBCASH ARCADE / GAME 001</span><h2>ZOMBIE <span class="green">SNAKE</span></h2></div><button class="snake-close" id="snake-close" type="button" aria-label="Close game">✕ CLOSE</button></div>
+  <div class="snake-modal-head"><div><span class="section-kicker">ZOMBCASH ARCADE / GAME 001</span><h2>ZOMBIE <span class="green">SNAKE</span></h2></div><button class="snake-close" id="snake-close" type="button" aria-label="Close game">✕ 閉じる</button></div>
   <div class="game-box"><div class="game-head"><span>ZOMBIE SNAKE.EXE</span><span id="game-state">STANDBY</span><button class="game-fullscreen" id="game-fullscreen" type="button" aria-label="Open Zombie Snake fullscreen">⛶ FULLSCREEN</button></div><div class="game-screen" id="game-screen"><div class="game-grid"></div><canvas id="zombie-canvas" class="zombie-canvas" aria-label="Keyboard-controlled Zombie Snake. Use arrow keys or WASD to move."></canvas><div class="game-center"><div class="game-skull">☠</div><p id="game-message">USE ARROW KEYS OR WASD TO MOVE</p><button id="game-action" class="game-action">START SNAKE</button></div><div class="game-score">SCORE <b id="game-score">000</b></div></div><div class="game-foot"><span>SNAKE PROTOCOL v1.0</span><span>SURVIVAL SCORE LEADERBOARD</span></div><div class="game-submit"><input id="survivor-name" maxlength="18" placeholder="SURVIVOR NAME" aria-label="Survivor name"><button id="submit-survival-score" type="button" disabled>SAVE RECORD</button><span id="score-submit-status" aria-live="polite">Finish a round to save your snake score.</span></div></div>
 </dialog>
 <section class="section transmission" id="community">
@@ -1380,7 +1380,7 @@ footer {
 </style>
 
 <script src="/runtime-fixes.js?v=20261020-2"></script>
-<script src="/script.js?v=survivor-arcade-score-save-20261026-2"></script>
+<script src="/script.js?v=survivor-arcade-score-save-20261026-3"></script>
 <script src="/living-world-recovery.js?v=news-commentary-sync-20261021-2"></script>
 <script id="jupiter-zombcash-init">
 (() => {
