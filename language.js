@@ -585,8 +585,8 @@ function translateGalleryHeadings(){
  const headings=galleryHeadingTranslations[current];
  const hero=document.querySelector('.gallery-hero h1');
  const section=document.querySelector('.gallery-heading h2');
- if(headings&&hero)hero.innerHTML=headings.heroLead+' <span class="green">'+headings.heroGreen+'</span>';
- if(headings&&section)section.innerHTML=headings.sectionLead+' <span class="green">'+headings.sectionGreen+'</span>';
+ if(headings&&hero){const html=headings.heroLead+' <span class="green">'+headings.heroGreen+'</span>';if(hero.innerHTML!==html)hero.innerHTML=html;}
+ if(headings&&section){const html=headings.sectionLead+' <span class="green">'+headings.sectionGreen+'</span>';if(section.innerHTML!==html)section.innerHTML=html;}
 }
 
 
