@@ -1196,3 +1196,13 @@
   moveLanguage();
   new MutationObserver(moveLanguage).observe(document.body, {childList:true,subtree:true});
 })();
+
+/* Shared page-level visit counters, loaded after the common navigation shell. */
+(() => {
+  if (document.querySelector('script[data-zsh-page-footprint]')) return;
+  const script = document.createElement('script');
+  script.src = '/page-footprint.js?v=20261026-1';
+  script.defer = true;
+  script.dataset.zshPageFootprint = 'true';
+  document.head.appendChild(script);
+})();
