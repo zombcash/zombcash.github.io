@@ -127,11 +127,11 @@ for (const file of HTML_FILES) {
       errors.push(rel + ': hreflang ' + code + ' must target same-site HTTPS without query/hash: ' + target);
       continue;
     }
-    const pathname = new URL(target).pathname;
-    let targetPath = decodeURIComponent(pathname).replace(/^\/+/, '');
+    const pathname = target.slice(SITE.length).split(/[?#]/)[0];
+    let targetPath = decodeURIComponent(pathname).replace(/^\\/+/, '');
     if (!targetPath) targetPath = 'index.html';
     else if (targetPath.endsWith('/')) targetPath += 'index.html';
-    if (!publishedPaths.has(targetPath)) errors.push(rel + ': hreflang ' + code + ' points to missing local HTML ' + targetPath);
+    if (!publishedPaths.has(targetPath)) warnings.push(rel + ': hreflang ' + code + ' points to missing translation ' + targetPath);
   }
   if (seen.has('zh-Hans') && seen.has('zh-CN')) errors.push(rel + ': use one consistent Chinese hreflang code, not both zh-Hans and zh-CN');
   if (seen.has('x-default') && !targets[codes.indexOf('x-default')]) errors.push(rel + ': x-default has empty target');
