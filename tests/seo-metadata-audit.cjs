@@ -128,9 +128,10 @@ for (const file of HTML_FILES) {
       continue;
     }
     const suffix = target.slice(SITE.length).split('?')[0].split('#')[0];
-    let normalizedTarget = suffix.replace(/^\\/+|\\/+$/g, '');
+    const pathParts = suffix.split('/').filter(Boolean);
+    let normalizedTarget = pathParts.join('/');
     if (!normalizedTarget) normalizedTarget = 'index.html';
-    else if (normalizedTarget.endsWith('/')) normalizedTarget += 'index.html';
+    else if (suffix.endsWith('/')) normalizedTarget += '/index.html';
     normalizedTarget = decodeURIComponent(normalizedTarget);
     if (!publishedPaths.has(normalizedTarget)) warnings.push(rel + ': hreflang ' + code + ' points to missing translation ' + normalizedTarget);
   }
