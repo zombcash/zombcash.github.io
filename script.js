@@ -587,7 +587,7 @@ async function loadRadar(force = false) {
     lastRadarSuccess = Date.now();
     renderRadar();
     const sourceUpdatedAt = Number(payload.updatedAt || 0) * 1000;
-    const sourceTime = sourceUpdatedAt ? new Date(sourceUpdatedAt).toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'}) : 'UNKNOWN';
+    const sourceTime = sourceUpdatedAt ? new Date(sourceUpdatedAt).toLocaleTimeString(radarJapaneseUI ? 'ja-JP' : 'en-US', {hour:'2-digit',minute:'2-digit'}) : (radarJapaneseUI ? '不明' : 'UNKNOWN');
     if (payload.stale) {
       if (radarStatus) radarStatus.textContent = radarJapaneseUI ? '古いデータ — 再試行中' : 'STALE DATA — RETRYING';
       if (radarUpdated) radarUpdated.textContent = (radarJapaneseUI ? '最終ソース更新 ' : 'LAST SOURCE UPDATE ') + sourceTime;
