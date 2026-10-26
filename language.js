@@ -569,22 +569,23 @@ const galleryStaticTranslations={
 Object.entries(galleryStaticTranslations).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
 const galleryHeadingTranslations={
-de:{hero:"ZOMBIE-GALERIE.",section:"NEUESTE ÜBERTRAGUNGEN"},
-fr:{hero:"GALERIE ZOMBIE.",section:"TRANSMISSIONS RÉCENTES"},
-it:{hero:"GALLERIA ZOMBIE.",section:"TRASMISSIONI RECENTI"},
-ja:{hero:"ゾンビギャラリー。",section:"最近の送信"},
-"zh-CN":{hero:"僵尸画廊。",section:"最新传输"},
-ru:{hero:"ГАЛЕРЕЯ ЗОМБИ.",section:"ПОСЛЕДНИЕ ТРАНСЛЯЦИИ"},
-tr:{hero:"ZOMBİ GALERİSİ.",section:"SON İLETİLER"},
-hi:{hero:"ज़ॉम्बी गैलरी।",section:"हालिया ट्रांसमिशन"}
+en:{heroLead:"ZOMBIE",heroGreen:"GALLERY.",sectionLead:"RECENT",sectionGreen:"TRANSMISSIONS"},
+de:{heroLead:"ZOMBIE-",heroGreen:"GALERIE.",sectionLead:"NEUESTE",sectionGreen:"ÜBERTRAGUNGEN"},
+fr:{heroLead:"GALERIE",heroGreen:"ZOMBIE.",sectionLead:"TRANSMISSIONS",sectionGreen:"RÉCENTES"},
+it:{heroLead:"GALLERIA",heroGreen:"ZOMBIE.",sectionLead:"TRASMISSIONI",sectionGreen:"RECENTI"},
+ja:{heroLead:"ゾンビ",heroGreen:"ギャラリー。",sectionLead:"最近の",sectionGreen:"送信"},
+"zh-CN":{heroLead:"僵尸",heroGreen:"画廊。",sectionLead:"最新",sectionGreen:"传输"},
+ru:{heroLead:"ГАЛЕРЕЯ",heroGreen:"ЗОМБИ.",sectionLead:"ПОСЛЕДНИЕ",sectionGreen:"ТРАНСЛЯЦИИ"},
+tr:{heroLead:"ZOMBİ",heroGreen:"GALERİSİ.",sectionLead:"SON",sectionGreen:"İLETİLER"},
+hi:{heroLead:"ज़ॉम्बी",heroGreen:"गैलरी।",sectionLead:"हालिया",sectionGreen:"ट्रांसमिशन"}
 };
 function translateGalleryHeadings(){
  if(!document.body.classList.contains('gallery-page'))return;
  const headings=galleryHeadingTranslations[current];
  const hero=document.querySelector('.gallery-hero h1');
  const section=document.querySelector('.gallery-heading h2');
- if(headings&&hero)hero.textContent=headings.hero;
- if(headings&&section)section.textContent=headings.section;
+ if(headings&&hero)hero.innerHTML=headings.heroLead+' <span class="green">'+headings.heroGreen+'</span>';
+ if(headings&&section)section.innerHTML=headings.sectionLead+' <span class="green">'+headings.sectionGreen+'</span>';
 }
 
 
