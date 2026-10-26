@@ -1550,8 +1550,8 @@ if (zomMarket) {
       if (!lastPayload) setMessage(japaneseUI ? 'レーダーフィードを利用できません。現在おすすめを表示していません。しばらくして再試行してください。' : 'Radar feed is unavailable. No recommendations are being shown; retry shortly.', 'error');
       else setMessage(japaneseUI ? '更新に失敗しました。以前のデータを保持し、古いデータとして表示しています。' : 'Refresh failed. Previous radar data is retained and marked stale.', 'error');
       setText(updated, lastPayload
-        ? 'LAST SUCCESS ' + new Date(lastSuccessAt).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})
-        : 'NO SUCCESSFUL FETCH');
+        ? (japaneseUI ? '最終成功 ' : 'LAST SUCCESS ') + new Date(lastSuccessAt).toLocaleTimeString(japaneseUI ? 'ja-JP' : 'en-US',{hour:'2-digit',minute:'2-digit'})
+        : (japaneseUI ? '取得成功なし' : 'NO SUCCESSFUL FETCH'));
     } finally {
       if (currentRequest === requestId) {
         refreshButton.disabled = false;
