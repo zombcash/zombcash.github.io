@@ -128,8 +128,10 @@ for (const file of HTML_FILES) {
       continue;
     }
     const suffix = target.slice(SITE.length).split('?')[0].split('#')[0];
-    const targetPath = suffix ? decodeURIComponent(suffix).replace(/^\/+|\/+$/g, '') : 'index.html';
-    const normalizedTarget = targetPath.endsWith('/index.html') ? targetPath : (target.endsWith('/') ? targetPath + '/index.html' : targetPath);
+    let normalizedTarget = suffix.replace(/^\\/+|\\/+$/g, '');
+    if (!normalizedTarget) normalizedTarget = 'index.html';
+    else if (normalizedTarget.endsWith('/')) normalizedTarget += 'index.html';
+    normalizedTarget = decodeURIComponent(normalizedTarget);
     if (!publishedPaths.has(normalizedTarget)) warnings.push(rel + ': hreflang ' + code + ' points to missing translation ' + normalizedTarget);
   }
   if (seen.has('zh-Hans') && seen.has('zh-CN')) errors.push(rel + ': use one consistent Chinese hreflang code, not both zh-Hans and zh-CN');
