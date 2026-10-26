@@ -1142,7 +1142,10 @@
     let language = routeLanguage;
     try {
       const saved = localStorage.getItem('zombcash-language');
-      if (routeLanguage === 'en' && saved && navDictionary[saved]) language = saved;
+      // The English homepage URL is authoritative when switching back from a localized homepage.
+      // Avoid briefly rendering stale translated navigation on / or /index.html.
+      const englishHome = location.pathname === '/' || location.pathname === '/index.html';
+      if (!englishHome && routeLanguage === 'en' && saved && navDictionary[saved]) language = saved;
     } catch (_) {}
     localizeNav(language);
   };
