@@ -30,10 +30,9 @@ function walk(dir) {
 }
 
 function attr(tag, name) {
-  const escapedName = name.replace(/[^a-zA-Z0-9_-]/g, '');
-  const match = tag.match(new RegExp('\\\\b' + escapedName + '\\\\s*=\\\\s*([^\\\\s>]+)', 'i'));
-  if (!match) return null;
-  return match[1].replace(/^["']|["']$/g, '');
+  const namePattern = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const match = tag.match(new RegExp('\\b' + namePattern + '\\s*=\\s*(?:"([^"]*)"|\\'([^\\']*)\\'|([^\\s>]+))', 'i'));
+  return match ? (match[1] ?? match[2] ?? match[3] ?? null) : null;
 }
 function tags(head, tagName, predicate) {
   const re = new RegExp('<' + tagName + '\\b[^>]*>', 'gi');
