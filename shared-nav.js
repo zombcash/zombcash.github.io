@@ -57,7 +57,6 @@
   const loginButton = file === 'survivor-hub.html'
     ? header.querySelector('button[data-i18n="login"], button.top-cta')
     : null;
-  const brandHref = target(isHome ? '/index.html#home' : '/index.html');
   const target = (href) => {
     const parts = location.pathname.split('/').filter(Boolean);
     const candidate = parts.length ? parts[0] : 'en';
@@ -71,6 +70,7 @@
     // Features without a localized counterpart remain explicit English destinations.
     return href;
   };
+  const brandHref = target(isHome ? '/index.html#home' : '/index.html');
 
   header.classList.add('zombcash-shared-header');
   header.innerHTML =
