@@ -36,12 +36,12 @@
   });
   const cleanCaption = value => {
     let caption = String(value ?? "")
-      .replace(/\\s+/g, " ")
-      .split(/━━━━━━━━|🧟\\s*\\$ZOMBCASH|MARKET DIED\\.|📋\\s*CA:|🌐\\s*Website:|𝕏\\s*X Community|💬\\s*Telegram/i)[0]
+      .replace(/\s+/g, " ")
+      .split(/━━━━━━━━|🧟\s*\$ZOMBCASH|MARKET DIED\.|📋\s*CA:|🌐\s*Website:|𝕏\s*X Community|💬\s*Telegram/i)[0]
       .trim();
     const labels = galleryCaptionLabels[galleryLang] || galleryCaptionLabels.en;
     Object.keys(galleryCaptionLabels.en).sort((a, b) => b.length - a.length).forEach(key => {
-      caption = caption.replace(new RegExp(key.replace(/[.*+?^$\{\}()|[\]\\\\]/g, "\\\\$&"), "ig"), labels[key] || key);
+      caption = caption.replace(new RegExp(key, "ig"), labels[key] || key);
     });
     return caption;
   };
