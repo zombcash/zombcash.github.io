@@ -207,7 +207,8 @@ const sharedMaker={
 "Corporate apocalypse":{"de":"Unternehmensapokalypse","fr":"Apocalypse d’entreprise","it":"Apocalisse aziendale","ja":"企業の終末","zh-CN":"企业末日风","ru":"Корпоративный апокалипсис","tr":"Kurumsal kıyamet","hi":"कॉर्पोरेट प्रलय"},
 "Last one standing":{"de":"Der letzte Überlebende","fr":"Le dernier survivant","it":"L’ultimo rimasto","ja":"最後の生存者","zh-CN":"最后的幸存者","ru":"Последний оставшийся в живых","tr":"Ayakta kalan son kişi","hi":"आख़िरी जीवित बचा व्यक्ति"},
 "Neon city mutation":{"de":"Mutation der Neonstadt","fr":"Mutation de la ville néon","it":"Mutazione della città al neon","ja":"ネオン都市の変異","zh-CN":"霓虹城市变异","ru":"Мутация неонового города","tr":"Neon şehir mutasyonu","hi":"नियॉन शहर का म्यूटेशन"},
-"Elite biohazard mutant":{"de":"Elite-Biogefahrenmutant","fr":"Mutant de biohazard d’élite","it":"Mutante biologico d’élite","ja":"エリート・バイオハザード変異体","zh-CN":"精英生化危害变种","ru":"Элитный мутант-биоопасность","tr":"Seçkin biyolojik tehlike mutantı","hi":"विशिष्ट जैव-खतरा म्यूटेंट"},
+"Elite biohazard mutant":{"de":"Elite-Biogefahrenmutant","fr":"Mutant de biohazard d’élite","it":"Mutante biologico d’élite","ja":"エリート・バイオハザード変異体","zh-CN":"精英生化危害变种","ru":"Элитный мутант-биоопасность","tr":"Seçkin biyolojik tehlike mutantı","hi":"विशिष्ट जैव-खतरा м्यूटेंट"}
+};
 Object.entries(sharedMaker).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
 
