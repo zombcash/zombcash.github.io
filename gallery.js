@@ -15,6 +15,17 @@
     tr:{images:"GÖRSEL",updated:"GÜNCELLENDİ",offline:"ARŞİV ÇEVRİMDIŞI",none:"HENÜZ GÖRSEL YOK",noneMsg:"Telegram arşivi henüz hiçbir görseli senkronize etmedi.",error:"GÖRSELLER YÜKLENEMEDİ",errorMsg:"Galeri veri isteği başarısız oldu veya zaman aşımına uğradı. Sayfayı yenile ya da Telegram kanalını doğrudan aç.",source:"KAYNAK ↗",open:"@ZOMBCASH'İ AÇ ↗"},
     hi:{images:"इमेज",updated:"अपडेट",offline:"आर्काइव ऑफ़लाइन",none:"अभी कोई इमेज नहीं",noneMsg:"Telegram आर्काइव ने अभी तक कोई इमेज सिंक नहीं की है।",error:"इमेज लोड नहीं हो सकीं",errorMsg:"गैलरी डेटा अनुरोध विफल हुआ या समय समाप्त हो गया। पेज रीफ़्रेश करें या Telegram चैनल सीधे खोलें।",source:"स्रोत ↗",open:"@ZOMBCASH खोलें ↗"}
   };
+  const galleryCaptionLabels = {
+    en:{"NIGHTMARE DROP":"NIGHTMARE DROP","ZOMBIE MEME OF THE HOUR":"ZOMBIE MEME OF THE HOUR","ZOMBIE MEME":"ZOMBIE MEME","UNDEAD AFTER DARK":"UNDEAD AFTER DARK"},
+    ru:{"NIGHTMARE DROP":"НОЧНОЙ КОШМАР","ZOMBIE MEME OF THE HOUR":"ЗОМБИ-МЕМ ЧАСА","ZOMBIE MEME":"ЗОМБИ-МЕМ","UNDEAD AFTER DARK":"НЕЖИТЬ ПОСЛЕ ЗАКАТА"},
+    de:{"NIGHTMARE DROP":"ALBTRAUM-DROP","ZOMBIE MEME OF THE HOUR":"ZOMBIE-MEME DER STUNDE","ZOMBIE MEME":"ZOMBIE-MEME","UNDEAD AFTER DARK":"UNTOTE NACH EINBRUCH DER DUNKELHEIT"},
+    fr:{"NIGHTMARE DROP":"DROP CAUCHEMAR","ZOMBIE MEME OF THE HOUR":"LE MÈME ZOMBIE DU MOMENT","ZOMBIE MEME":"MÈME ZOMBIE","UNDEAD AFTER DARK":"MORTS-VIVANTS APRÈS LA NUIT"},
+    it:{"NIGHTMARE DROP":"DROP DA INCUBO","ZOMBIE MEME OF THE HOUR":"IL MEME ZOMBIE DEL MOMENTO","ZOMBIE MEME":"MEME ZOMBIE","UNDEAD AFTER DARK":"NON MORTI DOPO IL TRAMONTO"},
+    ja:{"NIGHTMARE DROP":"悪夢のドロップ","ZOMBIE MEME OF THE HOUR":"今時のゾンビミーム","ZOMBIE MEME":"ゾンビミーム","UNDEAD AFTER DARK":"夜更けのアンデッド"},
+    "zh-CN":{"NIGHTMARE DROP":"噩梦掉落","ZOMBIE MEME OF THE HOUR":"本小时僵尸梗图","ZOMBIE MEME":"僵尸梗图","UNDEAD AFTER DARK":"午夜不死者"},
+    tr:{"NIGHTMARE DROP":"KÂBUS PAYLAŞIMI","ZOMBIE MEME OF THE HOUR":"SAATİN ZOMBİ MEMİ","ZOMBIE MEME":"ZOMBİ MEMİ","UNDEAD AFTER DARK":"GECE SONRASI YAŞAYAN ÖLÜLER"},
+    hi:{"NIGHTMARE DROP":"दुःस्वप्न ड्रॉप","ZOMBIE MEME OF THE HOUR":"इस घंटे का ज़ॉम्बी मीम","ZOMBIE MEME":"ज़ॉम्बी मीम","UNDEAD AFTER DARK":"रात के बाद अनडेड"}
+  };
   let galleryLang=document.documentElement.lang||"en";
   const gtx=k=>(galleryLocale[galleryLang]||galleryLocale.en)[k]||galleryLocale.en[k]||k;
   const localizeGalleryMeta=(items,updatedAt)=>{if(count&&items!==null)count.textContent=items.length+" "+gtx("images");if(updated)updated.textContent=updatedAt?gtx("updated")+" "+new Date(updatedAt).toLocaleString(galleryLang,{month:"short",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"";};
@@ -23,10 +34,17 @@
     const entities = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
     return entities[ch];
   });
-  const cleanCaption = value => String(value ?? "")
-    .replace(/\s+/g, " ")
-    .split(/━━━━━━━━|🧟\s*\$ZOMBCASH|MARKET DIED\.|📋\s*CA:|🌐\s*Website:|𝕏\s*X Community|💬\s*Telegram/i)[0]
-    .trim();
+  const cleanCaption = value => {
+    let caption = String(value ?? "")
+      .replace(/\\s+/g, " ")
+      .split(/━━━━━━━━|🧟\\s*\\$ZOMBCASH|MARKET DIED\\.|📋\\s*CA:|🌐\\s*Website:|𝕏\\s*X Community|💬\\s*Telegram/i)[0]
+      .trim();
+    const labels = galleryCaptionLabels[galleryLang] || galleryCaptionLabels.en;
+    Object.keys(galleryCaptionLabels.en).sort((a, b) => b.length - a.length).forEach(key => {
+      caption = caption.replace(new RegExp(key.replace(/[.*+?^$\{\}()|[\]\\\\]/g, "\\\\$&"), "ig"), labels[key] || key);
+    });
+    return caption;
+  };
 
   const state = (title, message) => {
     grid.innerHTML = '<div class="gallery-state"><h3>' + escapeHtml(title) +
