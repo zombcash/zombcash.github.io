@@ -58,9 +58,14 @@ function normalizedUrl(raw) {
     return u.href;
   } catch (_) { return null; }
 }
-function expectedLanguage(relativePath) {
+function expectedLanguage(relativePath, html) {
   const first = relativePath.split(path.sep)[0];
-  if (relativePath.includes(path.sep) && LANG_DIRS.has(first)) return first;
+  if (relativePath.includes(path.sep) && LANG_DIRS.has(first)) {
+    const localeMatch = html.match(/<html\\b[^>]*\\blang=["']([^"']+)["']/i);
+    return localeMatch ? localeMatch[1] : first;
+  }
+  // English-root pages may be translated dynamically at runtime; the
+  // document source remains English unless the page ships under a locale path.
   return 'en';
 }
 
@@ -97,8 +102,8 @@ for (const file of HTML_FILES) {
 
   const langAttr = attr((html.match(/<html\b[^>]*>/i) || [''])[0], 'lang');
   if (!langAttr) errors.push(rel + ': missing html lang');
-  else if (langAttr.toLowerCase() !== expectedLanguage(rel).toLowerCase()) {
-    warnings.push(rel + ': html lang "' + langAttr + '" differs from path-derived "' + expectedLanguage(rel) + '"; verify intentionally localized exceptions');
+  else if (langAttr.toLowerCase() !== expectedLanguage(rel, html).toLowerCase()) {
+    warnings.push(rel + ': html lang "' + langAttr + '" differs from path-derived "' + expectedLanguage(rel, html) + '"; verify intentionally localized exceptions');
   }
 
   const alternates = findLinks(head, 'alternate').filter(t => attr(t, 'hreflang'));
