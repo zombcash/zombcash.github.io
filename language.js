@@ -1,5 +1,14 @@
 (() => {
 'use strict';
+// Core editorial pages have dedicated locale URLs; honor language-switcher query strings.
+const routeUrl = new URL(window.location.href);
+const routeLang = routeUrl.searchParams.get('lang');
+if (routeUrl.pathname === '/outbreak-transmission.html' && ['de','fr','it','ja','zh-CN','ru','tr','hi'].includes(routeLang)) {
+  routeUrl.searchParams.delete('lang');
+  const query = routeUrl.searchParams.toString();
+  window.location.replace('/' + routeLang + '/outbreak-transmission.html' + (query ? '?' + query : '') + routeUrl.hash);
+  return;
+}
 const langs={
 en:{n:'English',f:'🇬🇧',t:[]},
 de:{n:'Deutsch',f:'🇩🇪',t:['LEBENDIGE WELT','RADAR','CREW-ABSTIMMUNG','ZOMBIE-LABOR','ARCADE','ZOMBIE-GALERIE','ZOMBIE-MAKER','AUSBRUCH','COMMUNITY','$ZOMBCASH KAUFEN','SCHLIESS DICH AN','NACHRICHTEN AUS DEM AUSBRUCH','ZOMBIE-RADAR-KI-EMPFEHLUNGEN','MISSIONEN DES TAGES','COMMUNITY-EVENTS','TÄGLICHES PROTOKOLL','CHECKLISTE ZURÜCKSETZEN ↻','ZURÜCK ZUR STARTSEITE','STARTSEITE','AKTUALISIEREN','ANSEHEN','RADAR ÖFFNEN ↗','MARKT PRÜFEN ↗','CREW BEITRETEN ↗']},
