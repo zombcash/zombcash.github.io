@@ -1207,3 +1207,37 @@
   script.dataset.zshPageFootprint = 'true';
   document.head.appendChild(script);
 })();
+
+/* Shared About link: visible from every page without crowding the main navigation. */
+(() => {
+  const localeCandidate = (location.pathname.split('/').filter(Boolean)[0] || 'en');
+  const queryLocale = new URLSearchParams(location.search).get('lang');
+  const supportedLocales = ['de','fr','it','ja','zh-CN','ru','tr','hi'];
+  const locale = supportedLocales.includes(localeCandidate) ? localeCandidate : (supportedLocales.includes(queryLocale) ? queryLocale : 'en');
+  const labels = {
+    en: ['ABOUT & EDITORIAL POLICY','Independent community project'],
+    de: ['ÜBER UNS & REDAKTIONSRICHTLINIEN','Unabhängiges Community-Projekt'],
+    fr: ['À PROPOS & POLITIQUE ÉDITORIALE','Projet communautaire indépendant'],
+    it: ['CHI SIAMO & POLITICA EDITORIALE','Progetto comunitario indipendente'],
+    ja: ['概要・編集方針','独立したコミュニティプロジェクト'],
+    'zh-CN': ['关于我们与编辑政策','独立社区项目'],
+    ru: ['О ПРОЕКТЕ И РЕДАКЦИОННОЙ ПОЛИТИКЕ','Независимый проект сообщества'],
+    tr: ['HAKKIMIZDA VE YAYIN POLİTİKASI','Bağımsız topluluk projesi'],
+    hi: ['हमारे बारे में और संपादकीय नीति','स्वतंत्र समुदाय परियोजना']
+  };
+  const addAboutFooter = () => {
+    if (!document.body || document.getElementById('zsh-about-footer')) return;
+    const copy = labels[locale] || labels.en;
+    const footer = document.createElement('footer');
+    footer.id = 'zsh-about-footer';
+    const aboutHref = locale === 'en' ? '/about.html' : '/' + locale + '/about.html';
+    footer.innerHTML = '<a href="' + aboutHref + '">' + copy[0] + '</a><span>ZombieCash · ' + copy[1] + '</span>';
+    const style = document.createElement('style');
+    style.id = 'zsh-about-footer-style';
+    style.textContent = '#zsh-about-footer{box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;width:100%;max-width:100%;margin:36px 0 0;padding:18px clamp(16px,4vw,48px);border-top:1px solid #9bff4533;background:#050907;color:#8e9d8d;font:500 12px/1.5 Rajdhani,Arial,sans-serif}#zsh-about-footer a{color:#b8f992;text-decoration:none;font:700 10px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.04em}#zsh-about-footer a:hover{color:#9bff45;text-decoration:underline}#zsh-about-footer span{color:#718071}@media(max-width:600px){#zsh-about-footer{flex-direction:column;align-items:flex-start;padding:16px}}';
+    document.head.appendChild(style);
+    document.body.appendChild(footer);
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addAboutFooter, {once:true});
+  else addAboutFooter();
+})();
