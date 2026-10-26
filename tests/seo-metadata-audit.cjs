@@ -127,7 +127,7 @@ for (const file of HTML_FILES) {
       errors.push(rel + ': hreflang ' + code + ' must target same-site HTTPS without query/hash: ' + target);
       continue;
     }
-    const pathname = target.slice(SITE.length).split(/[?#]/)[0];
+    const pathname = target.slice(SITE.length).split('?')[0].split('#')[0];
     let targetPath = decodeURIComponent(pathname).replace(/^\\/+/, '');
     if (!targetPath) targetPath = 'index.html';
     else if (targetPath.endsWith('/')) targetPath += 'index.html';
