@@ -43,6 +43,7 @@
 
 /* ZombieCash first-party campaign tracking. Aggregate-only; no IP or wallet addresses stored. */
 (() => {
+  window.__zombcashCampaignTrackingLoaded = true;
   const endpoint = 'https://zombcash-bot.fadehost.app/api/track';
   const params = new URLSearchParams(window.location.search);
   const clean = (value, fallback) => String(value || fallback).toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 60) || fallback;
