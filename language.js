@@ -244,6 +244,8 @@ const sharedArcade={
 };
 Object.entries(sharedArcade).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 const sharedGallery={
+"ZOMBIE":{de:"ZOMBIE",fr:"ZOMBIE",it:"ZOMBIE",ja:"ゾンビ","zh-CN":"僵尸",ru:"ЗОМБИ",tr:"ZOMBİ",hi:"ज़ॉम्बी"},
+
 "THE ZOMBIE":{de:"DIE ZOMBIE-GALERIE",fr:"LA GALERIE ZOMBIE",it:"LA GALLERIA ZOMBIE",ja:"ゾンビギャラリー","zh-CN":"僵尸画廊",ru:"ГАЛЕРЕЯ ЗОМБИ",tr:"ZOMBİ GALERİSİ",hi:"ज़ॉम्बी गैलरी"},
 "GALLERY.":{de:"GALERIE.",fr:"GALERIE.",it:"GALLERIA.",ja:"ギャラリー。","zh-CN":"画廊。",ru:"ГАЛЕРЕЯ.",tr:"GALERİ.",hi:"गैलरी।"},
 "AI-generated artwork from our Telegram channel. Scroll inside the gallery to browse, and open any image full size.":{de:"KI-generierte Kunst aus unserem Telegram-Kanal. Scrolle in der Galerie, um Bilder zu durchsuchen und sie in voller Größe zu öffnen.",fr:"Œuvres générées par IA depuis notre canal Telegram. Faites défiler la galerie pour parcourir les images et les ouvrir en grand.",it:"Opere generate dall’IA dal nostro canale Telegram. Scorri nella galleria per esplorare e aprire le immagini a grandezza naturale.",ja:"TelegramチャンネルのAI生成アートです。ギャラリー内をスクロールして閲覧し、画像をフルサイズで開けます。","zh-CN":"来自 Telegram 频道的 AI 生成作品。滚动浏览图库，点击任意图片即可查看大图。",ru:"Работы, созданные ИИ для нашего Telegram-канала. Прокручивай галерею и открывай изображения в полном размере.",tr:"Telegram kanalımızdan yapay zekâyla oluşturulan eserler. Galeride kaydırarak göz at ve görselleri tam boyutta aç.",hi:"हमारे Telegram चैनल की AI-निर्मित कलाकृतियाँ। गैलरी में स्क्रॉल करें और किसी भी चित्र को पूरे आकार में खोलें।"},
