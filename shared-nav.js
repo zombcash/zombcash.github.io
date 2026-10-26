@@ -1100,12 +1100,12 @@
     de:['LEBENDIGE WELT','FELDHANDBUCH','ÜBERTRAGUNG','CREW-ABSTIMMUNG','ÜBERLEBENDEN-ZENTRUM','SPIELHALLE','ZOMBIE-GALERIE','ZOMBIE-MAKER','GEMEINSCHAFT','$ZOMBCASH KAUFEN','ZURÜCK ZUR STARTSEITE','ÜBERLEBENDEN BEITRETEN','TELEGRAM ÖFFNEN','MENÜ'],
     fr:['MONDE VIVANT','GUIDE DE SURVIE','ALERTE','VOTE DE L’ÉQUIPE','CENTRE DES SURVIVANTS','SALLE DE JEUX','GALERIE ZOMBIE','CRÉATEUR DE ZOMBIES','COMMUNAUTÉ','ACHETER $ZOMBCASH','RETOUR À L’ACCUEIL','REJOINDRE LES SURVIVANTS','OUVRIR TELEGRAM','MENU'],
     it:['MONDO VIVO','MANUALE DI SOPRAVVIVENZA','TRASMISSIONE','VOTO DELLA CREW','CENTRO DEI SOPRAVVISSUTI','SALA GIOCHI','GALLERIA ZOMBIE','CREA ZOMBIE','COMUNITÀ','COMPRA $ZOMBCASH','TORNA ALLA HOME','UNISCITI AI SOPRAVVISSUTI','APRI TELEGRAM','MENU'],
-    ja:['ライブワールド','サバイバルガイド','アウトブレイク通信','クルー投票','サバイバーハブ','アーケード','ゾンビギャラリー','ゾンビメーカー','コミュニティ','$ZOMBCASHを購入','ホームに戻る','サバイバーに参加','Telegramを開く','メニュー'],
-    'zh-CN':['实时世界','生存指南','疫情广播','团队投票','幸存者中心','街机','僵尸画廊','僵尸制作器','社区','购买 $ZOMBCASH','返回首页','加入幸存者','打开 Telegram','菜单'],
+    ja:['ライブワールド','サバイバーフィールドマニュアル','アウトブレイク通信','クルー投票','サバイバー拠点','アーケード','ゾンビギャラリー','ゾンビメーカー','コミュニティ','$ZOMBCASHを購入','ホームに戻る','サバイバーに参加','Telegramを開く','メニュー'],
+    'zh-CN':['实时世界','幸存者实用手册','疫情广播','团队投票','幸存者中心','街机','僵尸画廊','僵尸制作器','社区','购买 $ZOMBCASH','返回首页','加入幸存者','打开 Telegram','菜单'],
     ru:['ЖИВОЙ МИР','ПОЛЕВОЕ РУКОВОДСТВО','ТРАНСЛЯЦИЯ','ГОЛОСОВАНИЕ КОМАНДЫ','ЦЕНТР ВЫЖИВШИХ','АРКАДА','ГАЛЕРЕЯ ЗОМБИ','СОЗДАТЕЛЬ ЗОМБИ','СООБЩЕСТВО','КУПИТЬ $ZOMBCASH','НА ГЛАВНУЮ','ПРИСОЕДИНИТЬСЯ К ВЫЖИВШИМ','ОТКРЫТЬ TELEGRAM','МЕНЮ'],
-    tr:['CANLI DÜNYA','HAYATTA KALMA REHBERİ','YAYINLAR','EKİP OYLAMASI','HAYATTA KALANLAR MERKEZİ','OYUN SALONU','ZOMBİ GALERİSİ','ZOMBİ OLUŞTURUCU','TOPLULUK','$ZOMBCASH SATIN AL','ANA SAYFAYA DÖN','HAYATTA KALANLARA KATIL','TELEGRAM’I AÇ','MENÜ'],
-    hi:['लाइव दुनिया','सर्वाइवल गाइड','प्रसारण','टीम वोट','सर्वाइवर केंद्र','आर्केड','ज़ॉम्बी गैलरी','ज़ॉम्बी मेकर','समुदाय','$ZOMBCASH खरीदें','होम पर लौटें','सर्वाइवर्स से जुड़ें','TELEGRAM खोलें','मेन्यू']
-  }
+    tr:['CANLI DÜNYA','SAHA KILAVUZU','YAYINLAR','EKİP OYLAMASI','HAYATTA KALANLAR MERKEZİ','OYUN SALONU','ZOMBİ GALERİSİ','ZOMBİ OLUŞTURUCU','TOPLULUK','$ZOMBCASH SATIN AL','ANA SAYFAYA DÖN','HAYATTA KALANLARA KATIL','TELEGRAM’I AÇ','MENÜ'],
+    hi:['लाइव दुनिया','सर्वाइवर फील्ड मैनुअल','प्रकोप प्रसारण','टीम वोट','सर्वाइवर केंद्र','आर्केड','ज़ॉम्बी गैलरी','ज़ॉम्बी मेकर','समुदाय','$ZOMBCASH खरीदें','होम पर लौटें','सर्वाइवर्स से जुड़ें','TELEGRAM खोलें','मेन्यू']
+  };
   function localizeNav(language) {
     const translated = navDictionary[language];
     const links = [...nav.querySelectorAll(':scope > a')].filter(link => !link.classList.contains('zsh-home'));
