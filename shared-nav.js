@@ -1228,7 +1228,8 @@
     const copy = labels[locale] || labels.en;
     const footer = document.createElement('footer');
     footer.id = 'zsh-about-footer';
-    footer.innerHTML = '<a href="/about.html">' + copy[0] + '</a><span>ZombieCash · ' + copy[1] + '</span>';
+    const aboutHref = locale === 'en' ? '/about.html' : '/' + locale + '/about.html';
+    footer.innerHTML = '<a href="' + aboutHref + '">' + copy[0] + '</a><span>ZombieCash · ' + copy[1] + '</span>';
     const style = document.createElement('style');
     style.id = 'zsh-about-footer-style';
     style.textContent = '#zsh-about-footer{box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;width:100%;max-width:100%;margin:36px 0 0;padding:18px clamp(16px,4vw,48px);border-top:1px solid #9bff4533;background:#050907;color:#8e9d8d;font:500 12px/1.5 Rajdhani,Arial,sans-serif}#zsh-about-footer a{color:#b8f992;text-decoration:none;font:700 10px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.04em}#zsh-about-footer a:hover{color:#9bff45;text-decoration:underline}#zsh-about-footer span{color:#718071}@media(max-width:600px){#zsh-about-footer{flex-direction:column;align-items:flex-start;padding:16px}}';
