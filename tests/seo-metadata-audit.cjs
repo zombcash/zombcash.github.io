@@ -101,7 +101,7 @@ for (const file of HTML_FILES) {
   const langAttr = attr((html.match(/<html\b[^>]*>/i) || [''])[0], 'lang');
   if (!langAttr) errors.push(rel + ': missing html lang');
   else if (langAttr.toLowerCase() !== expectedLanguage(rel, html).toLowerCase()) {
-    warnings.push(rel + ': html lang "' + langAttr + '" differs from path-derived "' + expectedLanguage(rel, html) + '"; verify intentionally localized exceptions');
+    errors.push(rel + ': html lang "' + langAttr + '" differs from expected path locale "' + expectedLanguage(rel, html) + '"');
   }
 
   const alternates = findLinks(head, 'alternate').filter(t => attr(t, 'hreflang'));
