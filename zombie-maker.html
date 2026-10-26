@@ -325,7 +325,7 @@
   const campaign = clean(q.get('utm_campaign') || 'none', 'none');
   const send = (event, target) => {
     const body = JSON.stringify({event, source, medium, campaign, page: '/zombie-maker.html', target: clean(target, 'none')});
-    try { navigator.sendBeacon(endpoint, new Blob([body], {type:'application/json'})); } catch (_) {}
+    try { fetch(endpoint, {method:'POST', mode:'cors', credentials:'omit', headers:{'Content-Type':'application/json'}, body, keepalive:true}).catch(() => {}); } catch (_) {}
   };
   window.zcTrack = send;
   if (q.get('ref')) send('creator_referral_visit', clean(q.get('ref'), 'unknown'));
@@ -343,6 +343,6 @@
 })();
 </script>
 
-<script src="shared-nav.js?v=multilingual-nav-20261025-7" defer></script><script src="language.js?v=language-routing-20261026-5" defer></script><script src="survivor-auth.js?v=survivor-identity-online-20261022-2" defer></script><script src="survivor-activity.js?v=survivor-activity-20261022-1" defer></script>
+<script src="shared-nav.js?v=multilingual-nav-20261025-7" defer></script><script src="language.js?v=language-routing-20261026-6" defer></script><script src="survivor-auth.js?v=survivor-identity-online-20261022-2" defer></script><script src="survivor-activity.js?v=survivor-activity-20261022-1" defer></script>
 </body>
 </html>
