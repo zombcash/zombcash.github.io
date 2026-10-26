@@ -128,12 +128,9 @@ for (const file of HTML_FILES) {
       continue;
     }
     const suffix = target.slice(SITE.length).split('?')[0].split('#')[0];
-    const pathParts = suffix.split('/').filter(Boolean);
-    let normalizedTarget = pathParts.join('/');
-    if (!normalizedTarget) normalizedTarget = 'index.html';
-    else if (suffix.endsWith('/')) normalizedTarget += '/index.html';
-    normalizedTarget = decodeURIComponent(normalizedTarget);
-    if (!publishedPaths.has(normalizedTarget)) warnings.push(rel + ': hreflang ' + code + ' points to missing translation ' + normalizedTarget);
+    const normalizedTarget = suffix.split('/').filter(Boolean).join('/') || 'index.html';
+    const targetWithIndex = suffix.endsWith('/') && normalizedTarget !== 'index.html' ? normalizedTarget + '/index.html' : normalizedTarget;
+    if (!publishedPaths.has(decodeURIComponent(targetWithIndex))) warnings.push(rel + ': hreflang ' + code + ' points to missing translation ' + targetWithIndex);
   }
   if (seen.has('zh-Hans') && seen.has('zh-CN')) errors.push(rel + ': use one consistent Chinese hreflang code, not both zh-Hans and zh-CN');
   if (seen.has('x-default') && !targets[codes.indexOf('x-default')]) errors.push(rel + ': x-default has empty target');
