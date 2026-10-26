@@ -29,7 +29,7 @@
   let galleryLang=document.documentElement.lang||"en";
   const gtx=k=>(galleryLocale[galleryLang]||galleryLocale.en)[k]||galleryLocale.en[k]||k;
   const localizeGalleryMeta=(items,updatedAt)=>{if(count&&items!==null)count.textContent=items.length+" "+gtx("images");if(updated)updated.textContent=updatedAt?gtx("updated")+" "+new Date(updatedAt).toLocaleString(galleryLang,{month:"short",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"";};
-  document.addEventListener("zombcash:languagechange",e=>{galleryLang=e.detail?.language||document.documentElement.lang||"en";grid.querySelectorAll(".gallery-caption a").forEach(a=>a.textContent=gtx("source"));if(count&&/IMAGES|ИЗОБРАЖЕНИЙ|BILDER|IMAGES|IMMAGINI|枚|张图片|GÖRSEL|इमेज/.test(count.textContent)){const n=parseInt(count.textContent,10);if(Number.isFinite(n))count.textContent=n+" "+gtx("images");}if(updated&&updated.textContent){const raw=updated.textContent.replace(/^(UPDATED|ОБНОВЛЕНО|AKTUALISIERT|MIS À JOUR|AGGIORNATO|更新|更新于|GÜNCELLENDİ|अपडेट)\\s*/,"");updated.textContent=gtx("updated")+" "+raw;}});
+  document.addEventListener("zombcash:languagechange",e=>{galleryLang=e.detail?.language||document.documentElement.lang||"en";grid.querySelectorAll(".gallery-caption p").forEach(p=>{p.textContent=cleanCaption(p.dataset.originalCaption||p.textContent);});grid.querySelectorAll(".gallery-caption a").forEach(a=>a.textContent=gtx("source"));if(count&&/IMAGES|ИЗОБРАЖЕНИЙ|BILDER|IMAGES|IMMAGINI|枚|张图片|GÖRSEL|इमेज/.test(count.textContent)){const n=parseInt(count.textContent,10);if(Number.isFinite(n))count.textContent=n+" "+gtx("images");}if(updated&&updated.textContent){const raw=updated.textContent.replace(/^(UPDATED|ОБНОВЛЕНО|AKTUALISIERT|MIS À JOUR|AGGIORNATO|更新|更新于|GÜNCELLENDİ|अपडेट)\\s*/,"");updated.textContent=gtx("updated")+" "+raw;}});
   const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, ch => {
     const entities = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
     return entities[ch];
@@ -123,7 +123,7 @@
       const post = item.post_url ? escapeHtml(item.post_url) : "https://t.me/ZOMBCASH";
       return '<article class="gallery-card" tabindex="0" role="button" aria-label="Open image: ' + escapeHtml(caption) + '">' +
         '<img src="' + image + '" alt="' + escapeHtml(caption) + '" loading="lazy" decoding="async">' +
-        '<div class="gallery-caption"><p>' + escapeHtml(caption) + '</p>' +
+        '<div class="gallery-caption"><p data-original-caption="' + escapeHtml(item.caption) + '">' + escapeHtml(caption) + '</p>' +
         '<a href="' + post + '" target="_blank" rel="noreferrer">'+escapeHtml(gtx("source"))+'</a></div></article>';
     }).join("");
     cards = Array.from(grid.querySelectorAll(".gallery-card"));
