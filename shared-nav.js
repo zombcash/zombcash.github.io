@@ -381,7 +381,7 @@
       body main .lead{font-size:18px!important}
     }
 
-    @media(max-width:1700px){
+    @media(min-width:1451px) and (max-width:1700px){
       header.zombcash-shared-header{grid-template-columns:minmax(0,1fr) auto!important;gap:10px!important;padding:10px 18px!important}
       header.zombcash-shared-header .zsh-actions{grid-column:2;grid-row:1}
       header.zombcash-shared-header .zsh-nav{
