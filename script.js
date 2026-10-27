@@ -1150,7 +1150,8 @@ if (zomMarket) {
  document.querySelectorAll('[data-leaderboard-game]').forEach(b=>b.addEventListener('click',()=>load(b.dataset.leaderboardGame)));
 })();
 
-/* Anonymous unique website visitor counter */
+/* Anonymous visitor statistics display.
+   shared-nav.js owns the site-wide visitor heartbeat; this widget is read-only. */
 (() => {
   if (new URLSearchParams(window.location.search).get('arcadeSnake') === '1') return;
   const apiBase = 'https://zombcash-bot.fadehost.app';
@@ -1159,45 +1160,24 @@ if (zomMarket) {
   const onlineEl = document.getElementById('visits-online');
   const updatedEl = document.getElementById('visits-updated');
   if (!totalEl || !todayEl || !updatedEl) return;
-  const storageKey = 'zombcash_site_visitor_v1';
-  let visitorId = '';
-  try {
-    visitorId = localStorage.getItem(storageKey) || '';
-    if (!/^[a-f0-9-]{16,80}$/.test(visitorId)) {
-      visitorId = (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-        const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-      })).toLowerCase();
-      localStorage.setItem(storageKey, visitorId);
-    }
-  } catch (_) {
-    visitorId = 'session-' + Math.random().toString(16).slice(2) + '-' + Date.now().toString(16);
-  }
+
   const render = data => {
     if (Number.isFinite(Number(data.total))) totalEl.textContent = Number(data.total).toLocaleString();
     if (Number.isFinite(Number(data.today))) todayEl.textContent = Number(data.today).toLocaleString();
     if (onlineEl && Number.isFinite(Number(data.online))) onlineEl.textContent = Number(data.online).toLocaleString();
     updatedEl.textContent = 'UTC DAY · UPDATED ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
   };
-  const updateVisits = async () => {
+  const refreshVisits = async () => {
     try {
-      const response = await fetch(apiBase + '/api/visits', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({visitor:visitorId})
-      });
+      const response = await fetch(apiBase + '/api/visits', {cache:'no-store'});
       if (!response.ok) throw new Error('Visit counter unavailable');
       render(await response.json());
     } catch (_) {
       updatedEl.textContent = 'VISITOR STATS TEMPORARILY OFFLINE';
-      try {
-        const response = await fetch(apiBase + '/api/visits');
-        if (response.ok) render(await response.json());
-      } catch (_) {}
     }
   };
-  updateVisits();
-  setInterval(async () => {
-    try { const r = await fetch(apiBase + '/api/visits'); if (r.ok) render(await r.json()); } catch (_) {}
-  }, 15000);
+  refreshVisits();
+  setInterval(refreshVisits, 15000);
 })();
 
 
