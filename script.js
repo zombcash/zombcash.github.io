@@ -43,6 +43,7 @@
 
 /* ZombieCash first-party campaign tracking. Aggregate-only; no IP or wallet addresses stored. */
 (() => {
+  if (new URLSearchParams(window.location.search).get('arcadeSnake') === '1') return;
   window.__zombcashCampaignTrackingLoaded = true;
   const endpoint = 'https://zombcash-bot.fadehost.app/api/track';
   const params = new URLSearchParams(window.location.search);
@@ -1150,6 +1151,7 @@ if (zomMarket) {
 
 /* Anonymous unique website visitor counter */
 (() => {
+  if (new URLSearchParams(window.location.search).get('arcadeSnake') === '1') return;
   const apiBase = 'https://zombcash-bot.fadehost.app';
   const totalEl = document.getElementById('visits-total');
   const todayEl = document.getElementById('visits-today');
