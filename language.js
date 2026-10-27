@@ -890,6 +890,15 @@ const homepageItalianFeatureLabels={
 };
 Object.entries(homepageItalianFeatureLabels).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
+
+/* Final fixed homepage microcopy found in the static-node audit, 2026-10-27. */
+const homepageLastFixedLabels={
+"ONLINE NOW":{de:"JETZT ONLINE",fr:"EN LIGNE",it:"ONLINE ORA",ja:"オンライン中","zh-CN":"当前在线",ru:"СЕЙЧАС В СЕТИ",tr:"ŞU AN ÇEVRİM İÇİ",hi:"अभी ऑनलाइन"},
+"DexScreener ↗":{de:"DexScreener öffnen ↗",fr:"Ouvrir DexScreener ↗",it:"Apri DexScreener ↗",ja:"DexScreenerを開く ↗","zh-CN":"打开 DexScreener ↗",ru:"Открыть DexScreener ↗",tr:"DexScreener'ı aç ↗",hi:"DexScreener खोलें ↗"},
+"BUY $ZOMBCASH ↗":{de:"$ZOMBCASH KAUFEN ↗",fr:"ACHETER $ZOMBCASH ↗",it:"ACQUISTA $ZOMBCASH ↗",ja:"$ZOMBCASHを購入 ↗","zh-CN":"购买 $ZOMBCASH ↗",ru:"КУПИТЬ $ZOMBCASH ↗",tr:"$ZOMBCASH SATIN AL ↗",hi:"$ZOMBCASH खरीदें ↗"}
+};
+Object.entries(homepageLastFixedLabels).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 const supportedLanguages=['en','de','fr','it','ja','zh-CN','ru','tr','hi'];
 const getRequestedLanguage=()=>{try{const q=new URLSearchParams(location.search).get('lang');if(q&&supportedLanguages.includes(q))return q;}catch(_){}return null;};
