@@ -1286,7 +1286,7 @@
 
   // Load the shared site assistant.
   const assistantScript = document.createElement('script');
-  assistantScript.src = '/site-assistant.js?v=assistant-mobile-clear-20261025-1';
+  assistantScript.src = '/site-assistant.js?v=assistant-mobile-clear-20261027-1';
   assistantScript.defer = true;
   document.head.append(assistantScript);
 
@@ -1356,10 +1356,10 @@
     slot.className = 'aads-ad-section zsh-shared-ad';
     slot.setAttribute('aria-label', 'Advertisement');
     slot.setAttribute('data-zombcash-ad-slot', 'shared-adaptive');
-    slot.innerHTML = '<div class="zsh-shared-ad-inner"><div class="zsh-shared-ad-label">SPONSORED TRANSMISSION</div><div id="frame" style="width:100%;margin:auto;position:relative;z-index:0;"><iframe data-aa="2460185" src="//acceptable.a-ads.com/2460185/?size=Adaptive" style="border:0; padding:0; width:70%; height:auto; overflow:hidden;display: block;margin: auto"></iframe></div></div>';
+    slot.innerHTML = '<div class="zsh-shared-ad-inner"><div class="zsh-shared-ad-label">SPONSORED TRANSMISSION</div><div class="zsh-shared-ad-frame" id="zsh-ad-frame"><iframe data-aa="2460185" src="//acceptable.a-ads.com/2460185/?size=Adaptive" title="Sponsored advertisement" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="display:block;box-sizing:border-box;border:0;padding:0;width:100%;max-width:100%;height:auto;margin:0 auto;overflow:hidden"></iframe></div></div>';
     const style = document.createElement('style');
     style.id = 'zsh-shared-ad-style';
-    style.textContent = '.zsh-shared-ad{box-sizing:border-box;width:100%;max-width:100%;margin:28px auto 18px;padding:18px clamp(12px,4vw,48px);background:#080b11;border-top:1px solid #9bff4524;border-bottom:1px solid #9bff4524;overflow:hidden}.zsh-shared-ad-inner{box-sizing:border-box;width:100%;max-width:1120px;min-width:0;margin:0 auto;text-align:center}.zsh-shared-ad-label{margin:0 0 10px;color:#71816e;font:600 9px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.14em}.zsh-shared-ad-frame{box-sizing:border-box;width:100%;max-width:900px;min-width:0;margin:0 auto;overflow:hidden}.zsh-shared-ad iframe{display:block;box-sizing:border-box;width:100%;max-width:100%;height:auto;margin:0 auto;padding:0;border:0;background:transparent;overflow:hidden}@media(max-width:600px){.zsh-shared-ad{margin:20px auto 12px;padding:14px 10px}.zsh-shared-ad-label{font-size:8px}}';
+    style.textContent = '.zsh-shared-ad{box-sizing:border-box;width:100%;max-width:100%;margin:28px auto 18px;padding:18px clamp(12px,4vw,48px);background:#080b11;border-top:1px solid #9bff4524;border-bottom:1px solid #9bff4524;overflow:hidden}.zsh-shared-ad-inner{box-sizing:border-box;width:100%;max-width:1120px;min-width:0;margin:0 auto;text-align:center}.zsh-shared-ad-label{margin:0 0 10px;color:#71816e;font:600 9px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.14em}.zsh-shared-ad-frame{box-sizing:border-box;width:100%;max-width:100%;min-width:0;margin:0 auto;overflow:hidden}.zsh-shared-ad iframe{display:block;box-sizing:border-box;width:100%;max-width:100%;height:auto;margin:0 auto;padding:0;border:0;background:transparent;overflow:hidden}@media(max-width:600px){.zsh-shared-ad{margin:20px auto 12px;padding:14px 10px}.zsh-shared-ad-label{font-size:8px}}';
     document.head.appendChild(style);
     const existingFooter = document.getElementById('zsh-about-footer') || document.querySelector('body > footer, body footer');
     if (existingFooter && existingFooter.parentNode) existingFooter.parentNode.insertBefore(slot, existingFooter);
