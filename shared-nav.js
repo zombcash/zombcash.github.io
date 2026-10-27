@@ -1238,9 +1238,9 @@
     };
     const controlsOverlapAd = mobile && window.scrollY > 220 && intersectsAd(controls);
     controls.classList.toggle('is-ad-overlap', controlsOverlapAd);
-    const assistantOverlapAd = mobile && window.scrollY > 220 && intersectsAd(assistantLauncher);
+    const assistantOverlapAd = mobile && intersectsAd(assistantLauncher);
     let assistantOverlapsContent = false;
-    if (mobile && window.scrollY > 220 && assistantLauncher && assistantLauncher.getClientRects().length) {
+    if (mobile && assistantLauncher && assistantLauncher.getClientRects().length) {
       const launcherRect = assistantLauncher.getBoundingClientRect();
       const contentSelectors = 'img, picture, video, canvas, button, [role="button"], input, select, textarea';
       for (const target of document.querySelectorAll(contentSelectors)) {
