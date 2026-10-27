@@ -5,6 +5,8 @@
   'use strict';
   /* Anonymous site-wide presence heartbeat. This shared file runs on every public page. */
   (() => {
+    // The arcade game embeds index.html in an iframe; do not count that embedded document as a separate visit.
+    if (new URLSearchParams(location.search).get('arcadeSnake') === '1') return;
     const api = 'https://zombcash-bot.fadehost.app/api/visits';
     const key = 'zombcash_site_visitor_v1';
     const validVisitor = value => /^[a-f0-9-]{16,80}$/.test(value);
@@ -39,7 +41,7 @@
 
   // ZombieCash GA4: centralized measurement tag for pages loading shared-nav.js.
   // Keep the measurement ID in one place to avoid duplicate tags across HTML pages.
-  if (!window.__zombcashGa4Loaded) {
+  if (new URLSearchParams(location.search).get('arcadeSnake') !== '1' && !window.__zombcashGa4Loaded) {
     window.__zombcashGa4Loaded = true;
     window.dataLayer = window.dataLayer || [];
     window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
@@ -1300,6 +1302,7 @@
 
 /* Shared page-level visit counters, loaded after the common navigation shell. */
 (() => {
+  if (new URLSearchParams(location.search).get('arcadeSnake') === '1') return;
   if (document.querySelector('script[data-zsh-page-footprint]')) return;
   const script = document.createElement('script');
   script.src = '/page-footprint.js?v=20261026-1';
