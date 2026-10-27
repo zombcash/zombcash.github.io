@@ -881,6 +881,15 @@ const homepageMissionDetailTranslations={
 };
 Object.entries(homepageMissionDetailTranslations).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
+
+/* Homepage final polish: localize Italian feature-link labels while preserving external brand names. */
+const homepageItalianFeatureLabels={
+"Meme Radar":{it:"Radar dei meme"},
+"Zombie Lab":{it:"Laboratorio Zombie"},
+"Zombie Maker":{it:"Creatore di zombie"}
+};
+Object.entries(homepageItalianFeatureLabels).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 const supportedLanguages=['en','de','fr','it','ja','zh-CN','ru','tr','hi'];
 const getRequestedLanguage=()=>{try{const q=new URLSearchParams(location.search).get('lang');if(q&&supportedLanguages.includes(q))return q;}catch(_){}return null;};
