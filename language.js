@@ -998,7 +998,7 @@ const homepageFinalUiTranslations={
 "[ PRICE HISTORY ]":{de:"[ PREISVERLAUF ]",fr:"[ HISTORIQUE DES PRIX ]",it:"[ STORICO DEI PREZZI ]",ja:"[ 価格履歴 ]","zh-CN":"[ 价格历史 ]",ru:"[ ИСТОРИЯ ЦЕН ]",tr:"[ FİYAT GEÇMİŞİ ]",hi:"[ कीमतों का इतिहास ]"},
 "MARKET":{de:"MARKT",fr:"MARCHÉ",it:"MERCATO",ja:"市場","zh-CN":"市场",ru:"РЫНОК",tr:"PİYASA",hi:"बाज़ार"},
 "CHART":{de:"CHART",fr:"GRAPHIQUE",it:"GRAFICO",ja:"チャート","zh-CN":"图表",ru:"ГРАФИК",tr:"GRAFİK",hi:"चार्ट"},
-"[ ON-CHAIN FEED ]":{de:"[ ON-CHAIN-FEED ]",fr:"[ FLUX ON-CHAIN ]",it:"[ FEED ON-CHAIN ]",ja:"[ オンチェーンフィード ]","zh-CN":"[ 链上动态 ]",ru:"[ ОНЧЕЙН-ЛЕНТА ]",tr:"[ ZİNCİR ÜSTÜ AKIŞ ]",hi:"[ ऑन-चेन फ़ीड ]"},
+"[ ON-CHAIN FEED ]":{de:"[ ON-CHAIN-DATENFEED ]",fr:"[ FLUX ON-CHAIN ]",it:"[ FEED ON-CHAIN ]",ja:"[ オンチェーンフィード ]","zh-CN":"[ 链上动态 ]",ru:"[ ОНЧЕЙН-ЛЕНТА ]",tr:"[ ZİNCİR ÜSTÜ AKIŞ ]",hi:"[ ऑन-चेन फ़ीड ]"},
 "LATEST":{de:"NEUESTE",fr:"DERNIÈRES",it:"ULTIME",ja:"最新","zh-CN":"最新",ru:"ПОСЛЕДНИЕ",tr:"SON",hi:"नवीनतम"},
 "TRANSACTIONS":{de:"TRANSAKTIONEN",fr:"TRANSACTIONS",it:"TRANSAZIONI",ja:"取引","zh-CN":"交易",ru:"ТРАНЗАКЦИИ",tr:"İŞLEMLER",hi:"लेन-देन"},
 "OPEN SOLSCAN ↗":{de:"SOLSCAN ÖFFNEN ↗",fr:"OUVRIR SOLSCAN ↗",it:"APRI SOLSCAN ↗",ja:"Solscanを開く ↗","zh-CN":"打开 SOLSCAN ↗",ru:"ОТКРЫТЬ SOLSCAN ↗",tr:"SOLSCAN'I AÇ ↗",hi:"SOLSCAN खोलें ↗"},
