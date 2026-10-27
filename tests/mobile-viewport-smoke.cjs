@@ -54,12 +54,12 @@ fs.mkdirSync(outDir, { recursive: true });
           globalFootprintCounter: !!document.querySelector('#zsh-global-footprint'),
           pageFootprintCounter: !!document.querySelector('.page-footprint'),
           adGeometry: (() => {
-          const ad = document.querySelector('.aads-ad-section iframe[data-aa="2460185"], .aads-ad-section iframe[data-aa=\'2460185\']');
-          if (!ad) return null;
-          const r = ad.getBoundingClientRect();
-          const header = document.querySelector('header.zombcash-shared-header');
-          const h = header?.getBoundingClientRect();
-          return { x: Math.round(r.x), right: Math.round(r.right), width: Math.round(r.width), position: getComputedStyle(ad).position, overlapsHeader: !!h && r.width > 0 && r.bottom > h.top && r.top < h.bottom };
+            const ad = document.querySelector('.aads-ad-section iframe[data-aa="2460185"], .aads-ad-section iframe[data-aa=\'2460185\']');
+            if (!ad) return null;
+            const r = ad.getBoundingClientRect();
+            const header = document.querySelector('header.zombcash-shared-header');
+            const h = header?.getBoundingClientRect();
+            return { x: Math.round(r.x), right: Math.round(r.right), width: Math.round(r.width), position: getComputedStyle(ad).position, overlapsHeader: !!h && r.width > 0 && r.bottom > h.top && r.top < h.bottom };
           })(),
         };
       });
