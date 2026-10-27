@@ -18,6 +18,80 @@
     gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-2FZH07QTR7';
     document.head.appendChild(gaScript);
   }
+  // Track intentional internal navigation and language selection as custom GA4 events.
+  // Do not emit GA4's reserved/automatically collected "click" event here: Enhanced
+  // Measurement already handles eligible outbound clicks, and this handler focuses
+  // on internal navigation plus the custom language picker only.
+  if (!window.__zombcashInteractionTrackingLoaded) {
+    window.__zombcashInteractionTrackingLoaded = true;
+    const currentLocale = () => {
+      const first = location.pathname.split('/').filter(Boolean)[0] || 'en';
+      return ['de', 'fr', 'it', 'ja', 'zh-CN', 'ru', 'tr', 'hi'].includes(first) ? first : 'en';
+    };
+    const safeTarget = (rawHref) => {
+      try {
+        const url = new URL(rawHref, location.href);
+        if (url.origin !== location.origin || !/^https?:$/.test(url.protocol)) return null;
+        const path = url.pathname || '/';
+        // Record only an allow-listed section identifier, never arbitrary query parameters.
+        const allowedSections = new Set([
+          'home', 'living-world', 'radar', 'lab', 'community', 'community-console',
+          'buy-zombcash', 'survivor-hub', 'gallery', 'outbreak', 'manual'
+        ]);
+        let section = '';
+        if (url.hash) {
+          try { section = decodeURIComponent(url.hash.slice(1)).slice(0, 80); }
+          catch (_) { section = ''; }
+        }
+        return {
+          destination_path: path.slice(0, 180),
+          destination_section: allowedSections.has(section) ? section : ''
+        };
+      } catch (_) {
+        return null;
+      }
+    };
+    const emitInteraction = (eventName, params) => {
+      if (typeof window.gtag !== 'function') return;
+      window.gtag('event', eventName, {
+        ...params,
+        page_language: currentLocale(),
+        transport_type: 'beacon'
+      });
+    };
+    document.addEventListener('click', (event) => {
+      const option = event.target && event.target.closest
+        ? event.target.closest('.language-option[data-lang]')
+        : null;
+      if (option) {
+        const language = String(option.getAttribute('data-lang') || '').slice(0, 8);
+        if (['en', 'de', 'fr', 'it', 'ja', 'zh-CN', 'ru', 'tr', 'hi'].includes(language)) {
+          emitInteraction('language_select', { target_language: language });
+        }
+        return;
+      }
+      const anchor = event.target && event.target.closest
+        ? event.target.closest('a[href]')
+        : null;
+      if (!anchor || anchor.closest('.language-switcher')) return;
+      const destination = safeTarget(anchor.href || anchor.getAttribute('href') || '');
+      if (!destination) return;
+      emitInteraction('internal_navigation', {
+        ...destination,
+        navigation_label: String(
+          anchor.getAttribute('aria-label') ||
+          anchor.getAttribute('title') ||
+          anchor.textContent ||
+          ''
+        ).trim().replace(/\s+/g, ' ').slice(0, 60),
+        navigation_region: anchor.closest('header') ? 'header'
+          : anchor.closest('footer') ? 'footer'
+          : anchor.closest('nav') ? 'nav'
+          : 'content'
+      });
+    }, { capture: true });
+  }
+
   const file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   const isHome = file === 'index.html';
   const isGermanPage = location.pathname === '/de/' || location.pathname.startsWith('/de/');
