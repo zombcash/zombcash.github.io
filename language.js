@@ -1032,6 +1032,18 @@ const homepageFinalUiTranslations={
 };
 Object.entries(homepageFinalUiTranslations).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
+
+
+/* Final targeted fixes from the v18 live browser pass: composite headings and ready-state status. */
+const homepageCompositeNodeFixes={
+"THE OUTBREAK IS GROWING":{de:"DER AUSBRUCH WÄCHST",fr:"L’ÉPIDÉMIE PREND DE L’AMPLEUR",it:"IL FOCOLAIO SI ESPANDE",ja:"感染拡大が進行中","zh-CN":"疫情正在扩散",ru:"ВСПЫШКА РАСТЁТ",tr:"SALGIN YAYILIYOR",hi:"प्रकोप फैल रहा है"},
+"READY":{de:"BEREIT",fr:"PRÊT",it:"PRONTO",ja:"準備完了","zh-CN":"就绪",ru:"ГОТОВО",tr:"HAZIR",hi:"तैयार"},
+"[ ON-CHAIN-FEED ]":{de:"[ ON-CHAIN-FEED ]",fr:"[ FLUX ON-CHAIN ]",it:"[ FEED ON-CHAIN ]",ja:"[ オンチェーンフィード ]","zh-CN":"[ 链上动态 ]",ru:"[ ОНЧЕЙН-ЛЕНТА ]",tr:"[ ZİNCİR ÜSTÜ AKIŞ ]",hi:"[ ऑन-चेन फ़ीड ]"},
+"FOUR GAMES · COMMUNITY RECORDS · FULLSCREEN AVAILABLE":{de:"VIER SPIELE · COMMUNITY-REKORDE · VOLLBILD VERFÜGBAR",fr:"QUATRE JEUX · RECORDS DE LA COMMUNAUTÉ · PLEIN ÉCRAN DISPONIBLE",it:"QUATTRO GIOCHI · RECORD DELLA COMMUNITY · SCHERMO INTERO DISPONIBILE",ja:"4つのゲーム · コミュニティ記録 · 全画面表示対応","zh-CN":"四款游戏 · 社区纪录 · 支持全屏",ru:"ЧЕТЫРЕ ИГРЫ · РЕКОРДЫ СООБЩЕСТВА · ЕСТЬ ПОЛНОЭКРАННЫЙ РЕЖИМ",tr:"DÖRT OYUN · TOPLULUK REKORLARI · TAM EKRAN MEVCUT",hi:"चार गेम · समुदाय रिकॉर्ड · फ़ुलस्क्रीन उपलब्ध"},
+"SNAKE PROTOCOL v1.0SURVIVAL SCORE LEADERBOARD":{de:"SCHLANGENPROTOKOLL v1.0ÜBERLEBENS-BESTENLISTE",fr:"PROTOCOLE SERPENT v1.0CLASSEMENT DES SCORES DE SURVIE",it:"PROTOCOLLO SERPENTE v1.0CLASSIFICA DEI PUNTEGGI DI SOPRAVVIVENZA",ja:"スネークプロトコル v1.0サバイバルスコアランキング","zh-CN":"贪吃蛇协议 v1.0生存得分排行榜",ru:"ПРОТОКОЛ ЗМЕЙКИ v1.0ТАБЛИЦА РЕКОРДОВ ВЫЖИВАНИЯ",tr:"YILAN PROTOKOLÜ v1.0HAYATTA KALMA SKOR TABLOSU",hi:"स्नेक प्रोटोकॉल v1.0सर्वाइवल स्कोर लीडरबोर्ड"}
+};
+Object.entries(homepageCompositeNodeFixes).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 const supportedLanguages=['en','de','fr','it','ja','zh-CN','ru','tr','hi'];
 const getRequestedLanguage=()=>{try{const q=new URLSearchParams(location.search).get('lang');if(q&&supportedLanguages.includes(q))return q;}catch(_){}return null;};
