@@ -1271,3 +1271,27 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addAboutFooter, {once:true});
   else addAboutFooter();
 })();
+
+
+// Shared responsive A-ADS placement for pages without a page-specific ad unit.
+// Reuses the site's existing adaptive unit; never duplicates a slot already on the page.
+(() => {
+  'use strict';
+  const addSharedAd = () => {
+    if (!document.body || document.querySelector('iframe[data-aa], .aads-ad-section, .arcade-ad-unit, [data-zombcash-ad-slot]')) return;
+    const slot = document.createElement('section');
+    slot.className = 'aads-ad-section zsh-shared-ad';
+    slot.setAttribute('aria-label', 'Advertisement');
+    slot.setAttribute('data-zombcash-ad-slot', 'shared-adaptive');
+    slot.innerHTML = '<div class="zsh-shared-ad-inner"><div class="zsh-shared-ad-label">SPONSORED TRANSMISSION</div><div class="zsh-shared-ad-frame"><iframe data-aa="2459727" src="https://acceptable.a-ads.com/2459727/?size=Adaptive" title="Advertisement" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe></div></div>';
+    const style = document.createElement('style');
+    style.id = 'zsh-shared-ad-style';
+    style.textContent = '.zsh-shared-ad{box-sizing:border-box;width:100%;max-width:100%;margin:28px auto 18px;padding:18px clamp(12px,4vw,48px);background:#080b11;border-top:1px solid #9bff4524;border-bottom:1px solid #9bff4524;overflow:hidden}.zsh-shared-ad-inner{box-sizing:border-box;width:100%;max-width:1120px;min-width:0;margin:0 auto;text-align:center}.zsh-shared-ad-label{margin:0 0 10px;color:#71816e;font:600 9px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.14em}.zsh-shared-ad-frame{box-sizing:border-box;width:100%;max-width:900px;min-width:0;margin:0 auto;overflow:hidden}.zsh-shared-ad iframe{display:block;box-sizing:border-box;width:100%;max-width:100%;min-height:100px;height:auto;margin:0 auto;padding:0;border:0;background:transparent;overflow:hidden}@media(max-width:600px){.zsh-shared-ad{margin:20px auto 12px;padding:14px 10px}.zsh-shared-ad-label{font-size:8px}.zsh-shared-ad iframe{min-height:90px}}';
+    document.head.appendChild(style);
+    const existingFooter = document.getElementById('zsh-about-footer') || document.querySelector('body > footer, body footer');
+    if (existingFooter && existingFooter.parentNode) existingFooter.parentNode.insertBefore(slot, existingFooter);
+    else document.body.appendChild(slot);
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addSharedAd, {once:true});
+  else addSharedAd();
+})();
