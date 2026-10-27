@@ -12,6 +12,9 @@
   document.getElementById('scroll-to-top')?.addEventListener('click', () => scroll('top'));
   document.getElementById('scroll-to-bottom')?.addEventListener('click', () => scroll('bottom'));
 
+  // Keep the embedded arcade game from recording a second homepage visit or polling analytics.
+  if (new URLSearchParams(window.location.search).get('arcadeSnake') === '1') return;
+
   const root = document.getElementById('campaign-dashboard');
   const endpoint = 'https://zombcash-bot.fadehost.app/api/track';
   const byId = id => document.getElementById(id);
