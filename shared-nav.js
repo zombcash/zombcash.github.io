@@ -1222,7 +1222,7 @@
     controls.classList.toggle('is-visible', mobile && window.scrollY > 220);
     const assistant = document.getElementById('zombcash-floating-assistant');
     const assistantLauncher = assistant && assistant.querySelector('.zfa-launch');
-    const adSelectors = '.outbreak-ad-unit, .hilltop-footer-ads, .aads-ad-section, .zsh-shared-ad, [data-aa], [id^="frame-"]';
+    const adSelectors = '.outbreak-ad-unit, .aads-ad-section, .zsh-shared-ad, [data-aa], [id^="frame-"]';
     const intersectsAd = (element) => {
       if (!element || element.getClientRects().length === 0) return false;
       const rect = element.getBoundingClientRect();
@@ -1244,7 +1244,7 @@
       const launcherRect = assistantLauncher.getBoundingClientRect();
       const contentSelectors = 'img, picture, video, canvas, button, [role="button"], input, select, textarea';
       for (const target of document.querySelectorAll(contentSelectors)) {
-        if (assistant.contains(target) || target.closest('header, nav, footer, .page-scroll-controls, #zombcash-floating-assistant, .zsh-shared-ad, .outbreak-ad-unit, .hilltop-footer-ads, [data-aa], [id^="frame-"]') || target.getClientRects().length === 0) continue;
+        if (assistant.contains(target) || target.closest('header, nav, footer, .page-scroll-controls, #zombcash-floating-assistant, .zsh-shared-ad, .outbreak-ad-unit, [data-aa], [id^="frame-"]') || target.getClientRects().length === 0) continue;
         const targetRect = target.getBoundingClientRect();
         if (targetRect.width > 0 && targetRect.height > 0 &&
             launcherRect.left < targetRect.right && launcherRect.right > targetRect.left &&
