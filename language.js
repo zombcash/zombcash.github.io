@@ -1052,6 +1052,11 @@ const homepageLivePrefixFixes={
 };
 Object.entries(homepageLivePrefixFixes).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
+
+
+/* Exact rendered DOM spelling observed on the live German homepage. */
+if(langs.de) langs.de.map["[ ON-CHAIN-FEED ]"]="[ ON-CHAIN-TRANSAKTIONSFEED ]";
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 const supportedLanguages=['en','de','fr','it','ja','zh-CN','ru','tr','hi'];
 const getRequestedLanguage=()=>{try{const q=new URLSearchParams(location.search).get('lang');if(q&&supportedLanguages.includes(q))return q;}catch(_){}return null;};
