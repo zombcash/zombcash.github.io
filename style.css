@@ -129,7 +129,7 @@
 /* Website visitor counter */
 .site-visits{border-top:1px solid #25362a;border-bottom:1px solid #25362a;background:linear-gradient(110deg,#0a1110,#0c1510 55%,#080d0e);padding:28px 5%;position:relative;overflow:hidden}
 .site-visits:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,#72ff2c0b,transparent 65%);pointer-events:none}
-.site-visits-inner{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(220px,1.4fr) 1fr 1fr;gap:18px;align-items:center;position:relative}
+.site-visits-inner{max-width:1380px;margin:0 auto;display:grid;grid-template-columns:minmax(220px,1.25fr) repeat(3,minmax(0,1fr));gap:14px;align-items:center;position:relative}
 .visits-heading .section-kicker{font:700 8px Orbitron;letter-spacing:1.5px;color:var(--green)}
 .visits-heading h2{font:700 clamp(19px,2.4vw,28px) Orbitron;margin:7px 0;color:#e4eee4}
 .visits-heading p{font:500 13px Rajdhani;color:#809084;margin:0}
@@ -137,6 +137,8 @@
 .visits-icon{font-size:25px;color:var(--green);text-shadow:0 0 16px #72ff2c55}
 .visits-stat small{display:block;font:700 8px Orbitron;letter-spacing:.8px;color:#87998b;margin-bottom:7px}
 .visits-stat strong{font:700 clamp(21px,2.5vw,29px) Orbitron;color:var(--green);font-variant-numeric:tabular-nums}
+.visits-stat-online .visits-icon{font-size:12px;color:#9bff45;animation:visitsOnlinePulse 1.8s ease-in-out infinite}
+@keyframes visitsOnlinePulse{0%,100%{opacity:1;text-shadow:0 0 10px #72ff2c80}50%{opacity:.45;text-shadow:0 0 2px #72ff2c30}}
 .visits-updated{grid-column:2/-1;text-align:right;color:#607366;font:700 8px Orbitron;letter-spacing:.8px}
 @media(max-width:700px){.site-visits-inner{grid-template-columns:1fr 1fr;gap:10px}.visits-heading{grid-column:1/-1;margin-bottom:4px}.visits-stat{padding:13px 12px;gap:10px}.visits-stat small{font-size:7px}.visits-updated{grid-column:1/-1;text-align:left}}
 

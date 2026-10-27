@@ -1153,6 +1153,7 @@ if (zomMarket) {
   const apiBase = 'https://zombcash-bot.fadehost.app';
   const totalEl = document.getElementById('visits-total');
   const todayEl = document.getElementById('visits-today');
+  const onlineEl = document.getElementById('visits-online');
   const updatedEl = document.getElementById('visits-updated');
   if (!totalEl || !todayEl || !updatedEl) return;
   const storageKey = 'zombcash_site_visitor_v1';
@@ -1171,6 +1172,7 @@ if (zomMarket) {
   const render = data => {
     if (Number.isFinite(Number(data.total))) totalEl.textContent = Number(data.total).toLocaleString();
     if (Number.isFinite(Number(data.today))) todayEl.textContent = Number(data.today).toLocaleString();
+    if (onlineEl && Number.isFinite(Number(data.online))) onlineEl.textContent = Number(data.online).toLocaleString();
     updatedEl.textContent = 'UTC DAY · UPDATED ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
   };
   const updateVisits = async () => {
@@ -1192,7 +1194,7 @@ if (zomMarket) {
   updateVisits();
   setInterval(async () => {
     try { const r = await fetch(apiBase + '/api/visits'); if (r.ok) render(await r.json()); } catch (_) {}
-  }, 60000);
+  }, 15000);
 })();
 
 
