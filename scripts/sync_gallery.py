@@ -13,8 +13,18 @@ from bs4 import BeautifulSoup
 CHANNEL = "ZOMBCASH"
 BASE_URL = f"https://t.me/s/{CHANNEL}"
 OUTPUT = Path("gallery-data.json")
-MAX_PAGES = 20
+MAX_PAGES = 100
 MAX_ITEMS = 50
+
+# The gallery is an artwork archive, not a general feed. Keep only the three
+# recurring visual series and continue paging backward until we have 50 images.
+def is_gallery_artwork(caption):
+    text = str(caption or "")
+    return bool(
+        re.search(r"\\bNIGHTMARE\\s+DROP\\b", text, re.I)
+        or re.search(r"\\bZOMBIE\\s+MEME(?:\\s+OF\\s+THE\\s+HOUR)?\\b", text, re.I)
+        or re.search(r"\\bUNDEAD\\s+AFTER\\s+DARK\\b", text, re.I)
+    )
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; ZombieCashGalleryBot/1.0)"}
 
 
@@ -67,8 +77,9 @@ def main():
         response.raise_for_status()
         items, oldest_id = parse_page(response.text)
         for item in items:
-            all_items[item["id"]] = item
-        if not oldest_id or oldest_id <= 1:
+            if is_gallery_artwork(item.get("caption")):
+                all_items[item["id"]] = item
+        if len(all_items) >= MAX_ITEMS or not oldest_id or oldest_id <= 1:
             break
         next_before = oldest_id
         if before == next_before:
