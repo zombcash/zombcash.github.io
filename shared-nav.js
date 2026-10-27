@@ -1178,7 +1178,7 @@
     // A localized URL is authoritative. Do not render English navigation first
     // just because localStorage contains a language selected on another page.
     const pathParts = location.pathname.split('/').filter(Boolean);
-    const routeLanguage = pathParts.length > 1 && navDictionary[pathParts[0]] ? pathParts[0] : 'en';
+    const routeLanguage = pathParts.length >= 1 && navDictionary[pathParts[0]] ? pathParts[0] : 'en';
     // The URL is the source of truth for page language. A saved preference must
     // never translate an English-only article or tool page into another language.
     // Language switching should navigate to the matching localized URL instead.
