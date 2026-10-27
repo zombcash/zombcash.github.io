@@ -165,5 +165,5 @@ document.addEventListener('zombcash:languagechange',e=>{const next=e.detail&&e.d
 let applyScheduled=false;const observer=new MutationObserver(records=>{if(applyScheduled)return;const hasAddedElement=records.some(record=>record.type==="childList"&&[...record.addedNodes].some(node=>node.nodeType===1&&!node.matches(".language-switcher,[data-no-translate]")&&!node.closest(".language-switcher,[data-no-translate]")));if(!hasAddedElement)return;applyScheduled=true;queueMicrotask(()=>{applyScheduled=false;apply();});});observer.observe(document.body,{subtree:true,childList:true});apply();
 })();
 </script>
-<script src="shared-nav.js?v=unified-global-footprint-20261027-11" defer></script><script src="language.js?v=language-routing-20261027-5" defer></script><script src="survivor-auth.js?v=survivor-identity-online-20261022-2" defer></script><script src="survivor-activity.js?v=survivor-activity-20261022-1" defer></script>
+<script src="shared-nav.js?v=unified-global-footprint-20261027-12" defer></script><script src="language.js?v=language-routing-20261027-5" defer></script><script src="survivor-auth.js?v=survivor-identity-online-20261022-2" defer></script><script src="survivor-activity.js?v=survivor-activity-20261022-1" defer></script>
 </body></html>
