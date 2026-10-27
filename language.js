@@ -748,6 +748,17 @@ const homepageRemainingUi={
 };
 Object.entries(homepageRemainingUi).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
+
+/* Split heading fragments are separate DOM text nodes, so translate each fragment too. */
+const homepageSplitHeadingTranslations={
+"THE CREW":{de:"DIE CREW",fr:"L’ÉQUIPE",it:"LA CREW",ja:"クルー","zh-CN":"团队",ru:"КОМАНДА",tr:"EKİP",hi:"टीम"},
+"DECIDES.":{de:"ENTSCHEIDET.",fr:"DÉCIDE.",it:"DECIDE.",ja:"が決める。","zh-CN":"来决定。",ru:"РЕШАЕТ.",tr:"KARAR VERİR.",hi:"फ़ैसला करती है।"},
+"YOUR WALLET.":{de:"DEIN WALLET.",fr:"VOTRE PORTEFEUILLE.",it:"IL TUO WALLET.",ja:"あなたのウォレット。","zh-CN":"你的钱包。",ru:"ТВОЙ КОШЕЛЁК.",tr:"CÜZDANIN.",hi:"आपका वॉलेट।"},
+"YOUR CALL.":{de:"DEINE ENTSCHEIDUNG.",fr:"VOTRE CHOIX.",it:"LA TUA SCELTA.",ja:"決めるのはあなた。","zh-CN":"由你做主。",ru:"ТВОЁ РЕШЕНИЕ.",tr:"KARAR SENİN.",hi:"आपका फ़ैसला।"},
+"LIVE FOOTPRINT.":{de:"LIVE-SPUREN.",fr:"TRACES EN DIRECT.",it:"TRACCE IN TEMPO REALE.",ja:"ライブの痕跡。","zh-CN":"实时足迹。",ru:"СЛЕД В РЕАЛЬНОМ ВРЕМЕНИ.",tr:"CANLI İZLER.",hi:"लाइव गतिविधि。"}
+};
+Object.entries(homepageSplitHeadingTranslations).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 const supportedLanguages=['en','de','fr','it','ja','zh-CN','ru','tr','hi'];
 const getRequestedLanguage=()=>{try{const q=new URLSearchParams(location.search).get('lang');if(q&&supportedLanguages.includes(q))return q;}catch(_){}return null;};
