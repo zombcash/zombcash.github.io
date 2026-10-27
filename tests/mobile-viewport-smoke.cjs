@@ -73,6 +73,8 @@ fs.mkdirSync(outDir, { recursive: true });
       if (!result.pageVisitCounter) issues.push('homepage global visitor counter section is missing');
       if (result.adGeometry && result.adGeometry.position === 'fixed') issues.push('AADS iframe must not be fixed while scrolling');
       if (result.adGeometry && result.adGeometry.width > width + 1) issues.push('AADS iframe exceeds the viewport width');
+      if (result.adGeometry && result.adGeometry.x < -1) issues.push('AADS iframe starts outside the left viewport edge');
+      if (result.adGeometry && result.adGeometry.right > width + 1) issues.push('AADS iframe extends beyond the right viewport edge');
 
       if (result.menuButton.visible) {
         await page.locator('header.zombcash-shared-header .zsh-menu-toggle').click();
