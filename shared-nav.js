@@ -1137,14 +1137,14 @@
 
   // Keep the generated navigation labels in sync with the existing nine-language selector.
   const navDictionary = {
-    de:['LEBENDIGE WELT','FELDHANDBUCH','ÜBERTRAGUNG','CREW-ABSTIMMUNG','ÜBERLEBENDEN-ZENTRUM','SPIELHALLE','ZOMBIE-GALERIE','ZOMBIE-MAKER','LOTTERIE','$ZOMBCASH KAUFEN','ZURÜCK ZUR STARTSEITE','ÜBERLEBENDEN BEITRETEN','TELEGRAM ÖFFNEN','MENÜ'],
-    fr:['MONDE VIVANT','GUIDE DE SURVIE','ALERTE','VOTE DE L’ÉQUIPE','CENTRE DES SURVIVANTS','SALLE DE JEUX','GALERIE ZOMBIE','CRÉATEUR DE ZOMBIES','LOTERIE','ACHETER $ZOMBCASH','RETOUR À L’ACCUEIL','REJOINDRE LES SURVIVANTS','OUVRIR TELEGRAM','MENU'],
-    it:['MONDO VIVO','MANUALE DI SOPRAVVIVENZA','TRASMISSIONE','VOTO DELLA CREW','CENTRO DEI SOPRAVVISSUTI','SALA GIOCHI','GALLERIA ZOMBIE','CREA ZOMBIE','LOTTERIA','COMPRA $ZOMBCASH','TORNA ALLA HOME','UNISCITI AI SOPRAVVISSUTI','APRI TELEGRAM','MENU'],
-    ja:['ライブワールド','サバイバーフィールドマニュアル','アウトブレイク通信','クルー投票','サバイバー拠点','アーケード','ゾンビギャラリー','ゾンビメーカー','宝くじ','$ZOMBCASHを購入','ホームに戻る','サバイバーに参加','Telegramを開く','メニュー'],
-    'zh-CN':['实时世界','幸存者实用手册','疫情广播','团队投票','幸存者中心','街机','僵尸画廊','僵尸制作器','抽奖','购买 $ZOMBCASH','返回首页','加入幸存者','打开 Telegram','菜单'],
-    ru:['ЖИВОЙ МИР','ПОЛЕВОЕ РУКОВОДСТВО','ТРАНСЛЯЦИЯ','ГОЛОСОВАНИЕ КОМАНДЫ','ЦЕНТР ВЫЖИВШИХ','АРКАДА','ГАЛЕРЕЯ ЗОМБИ','СОЗДАТЕЛЬ ЗОМБИ','ЛОТЕРЕЯ','КУПИТЬ $ZOMBCASH','НА ГЛАВНУЮ','ПРИСОЕДИНИТЬСЯ К ВЫЖИВШИМ','ОТКРЫТЬ TELEGRAM','МЕНЮ'],
-    tr:['CANLI DÜNYA','SAHA KILAVUZU','YAYINLAR','EKİP OYLAMASI','HAYATTA KALANLAR MERKEZİ','OYUN SALONU','ZOMBİ GALERİSİ','ZOMBİ OLUŞTURUCU','ÇEKİLİŞ','$ZOMBCASH SATIN AL','ANA SAYFAYA DÖN','HAYATTA KALANLARA KATIL','TELEGRAM’I AÇ','MENÜ'],
-    hi:['लाइव दुनिया','सर्वाइवर फील्ड मैनुअल','प्रकोप प्रसारण','टीम वोट','सर्वाइवर केंद्र','आर्केड','ज़ॉम्बी गैलरी','ज़ॉम्बी मेकर','लॉटरी','$ZOMBCASH खरीदें','होम पर लौटें','सर्वाइवर्स से जुड़ें','TELEGRAM खोलें','मेन्यू']
+    de:['STARTSEITE','FELDHANDBUCH','ÜBERTRAGUNGEN','CREW-ABSTIMMUNG','ÜBERLEBENDEN-ZENTRUM','ARCADE','ZOMBIE-GALERIE','ZOMBIE-GENERATOR','LOTTERIE','$ZOMBCASH KAUFEN','ZURÜCK ZUR STARTSEITE','ÜBERLEBENDEN BEITRETEN','TELEGRAM ÖFFNEN','MENÜ'],
+    fr:['ACCUEIL','MANUEL DE TERRAIN','TRANSMISSIONS','VOTE DE L’ÉQUIPE','CENTRE DES SURVIVANTS','ARCADE','GALERIE ZOMBIE','CRÉATEUR DE ZOMBIES','LOTERIE','ACHETER $ZOMBCASH','RETOUR À L’ACCUEIL','REJOINDRE LES SURVIVANTS','OUVRIR TELEGRAM','MENU'],
+    it:['HOME','MANUALE DA CAMPO','TRASMISSIONI','VOTO DELLA CREW','CENTRO DEI SOPRAVVISSUTI','ARCADE','GALLERIA ZOMBIE','CREA ZOMBIE','LOTTERIA','COMPRA $ZOMBCASH','TORNA ALLA HOME','UNISCITI AI SOPRAVVISSUTI','APRI TELEGRAM','MENU'],
+    ja:['ホーム','サバイバルガイド','ニュース配信','クルー投票','サバイバーハブ','アーケード','ゾンビギャラリー','ゾンビメーカー','宝くじ','$ZOMBCASHを購入','ホームに戻る','サバイバーに参加','Telegramを開く','メニュー'],
+    'zh-CN':['首页','生存指南','疫情快讯','团队投票','幸存者中心','街机游戏','僵尸画廊','僵尸制作器','抽奖','购买 $ZOMBCASH','返回首页','加入幸存者','打开 Telegram','菜单'],
+    ru:['ГЛАВНАЯ','ПОЛЕВОЕ РУКОВОДСТВО','ТРАНСЛЯЦИЯ','ГОЛОСОВАНИЕ КОМАНДЫ','ЦЕНТР ВЫЖИВШИХ','АРКАДА','ГАЛЕРЕЯ ЗОМБИ','СОЗДАТЕЛЬ ЗОМБИ','ЛОТЕРЕЯ','КУПИТЬ $ZOMBCASH','НА ГЛАВНУЮ','ПРИСОЕДИНИТЬСЯ К ВЫЖИВШИМ','ОТКРЫТЬ TELEGRAM','МЕНЮ'],
+    tr:['ANA SAYFA','SAHA REHBERİ','YAYINLAR','EKİP OYLAMASI','HAYATTA KALANLAR MERKEZİ','ARCADE','ZOMBİ GALERİSİ','ZOMBİ OLUŞTURUCU','ÇEKİLİŞ','$ZOMBCASH SATIN AL','ANA SAYFAYA DÖN','HAYATTA KALANLARA KATIL','TELEGRAM’I AÇ','MENÜ'],
+    hi:['होम','जीवन रक्षा मार्गदर्शिका','प्रसारण','टीम मतदान','सर्वाइवर केंद्र','आर्केड','ज़ॉम्बी गैलरी','ज़ॉम्बी मेकर','लॉटरी','$ZOMBCASH खरीदें','होम पर लौटें','सर्वाइवर्स से जुड़ें','TELEGRAM खोलें','मेन्यू']
   };
   function localizeNav(language) {
     const translated = navDictionary[language];
