@@ -1224,7 +1224,7 @@
     controls.classList.toggle('is-visible', mobile && window.scrollY > 220);
     const assistant = document.getElementById('zombcash-floating-assistant');
     const assistantLauncher = assistant && assistant.querySelector('.zfa-launch');
-    const adSelectors = '.outbreak-ad-unit, .aads-ad-section, .zsh-shared-ad, [data-aa], [id^="frame-"]';
+    const adSelectors = '.outbreak-ad-unit, .arcade-ad-unit, .aads-ad-section, .zsh-shared-ad, aside[aria-label="Advertisement"], #frame, [data-aa], [id^="frame-"]';
     const intersectsAd = (element) => {
       if (!element || element.getClientRects().length === 0) return false;
       const rect = element.getBoundingClientRect();
@@ -1251,13 +1251,13 @@
     };
     const controlsOverlapAd = intersectsAd(controls) && (!mobile || window.scrollY > 220);
     controls.classList.toggle('is-ad-overlap', controlsOverlapAd);
-    const controlsOverlapGame = intersectsTargets(controls, 'iframe, canvas');
+    const controlsOverlapGame = intersectsTargets(controls, 'iframe, canvas, .leaderboard, .player-progress, .leaderboard-card, .player-progress-grid');
     controls.classList.toggle('is-content-overlap', controlsOverlapGame);
     const assistantOverlapAd = intersectsAd(assistantLauncher);
     let assistantOverlapsContent = false;
     if (assistantLauncher && assistantLauncher.getClientRects().length) {
       const launcherRect = assistantLauncher.getBoundingClientRect();
-      const contentSelectors = 'iframe, img, picture, video, canvas, button, [role="button"], input, select, textarea';
+      const contentSelectors = 'iframe, img, picture, video, canvas, button, [role="button"], input, select, textarea, .leaderboard, .player-progress, .leaderboard-card, .player-progress-grid';
       for (const target of document.querySelectorAll(contentSelectors)) {
         if (assistant.contains(target) || target.closest('header, nav, footer, .page-scroll-controls, #zombcash-floating-assistant, .zsh-shared-ad, .outbreak-ad-unit, [data-aa], [id^="frame-"]') || target.getClientRects().length === 0) continue;
         const targetRect = target.getBoundingClientRect();
