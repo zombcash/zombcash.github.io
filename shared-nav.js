@@ -1201,11 +1201,22 @@
     if (!document.getElementById('zsh-shared-scroll-controls-style')) {
       const style = document.createElement('style');
       style.id = 'zsh-shared-scroll-controls-style';
-      style.textContent = '.page-scroll-controls{position:fixed!important;z-index:1000!important;right:clamp(12px,2vw,26px)!important;bottom:clamp(18px,4vh,34px)!important;display:flex!important;flex-direction:column!important;gap:8px!important;margin:0!important;padding:0!important}.page-scroll-controls button{box-sizing:border-box!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;max-width:42px!important;max-height:42px!important;display:grid!important;place-items:center!important;padding:0!important;border:1px solid #4a7044!important;border-radius:0!important;background:#0a140eef!important;color:#9bff45!important;font:700 24px/1 Rajdhani,sans-serif!important;box-shadow:0 5px 22px #0007!important;cursor:pointer!important;backdrop-filter:blur(10px);transition:background .18s,border-color .18s,color .18s,transform .18s}.page-scroll-controls button:hover{background:#9bff45!important;color:#071007!important;border-color:#9bff45!important;transform:translateY(-2px)}.page-scroll-controls button:focus-visible{outline:2px solid #9bff45!important;outline-offset:3px}@media(max-width:760px){.page-scroll-controls{right:10px!important;bottom:14px!important}.page-scroll-controls button{width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;max-width:38px!important;max-height:38px!important;font-size:22px!important}}';
+      style.textContent = '.page-scroll-controls{position:fixed!important;z-index:1000!important;right:clamp(12px,2vw,26px)!important;bottom:clamp(18px,4vh,34px)!important;display:flex!important;flex-direction:column!important;gap:8px!important;margin:0!important;padding:0!important}.page-scroll-controls button{box-sizing:border-box!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;max-width:42px!important;max-height:42px!important;display:grid!important;place-items:center!important;padding:0!important;border:1px solid #4a7044!important;border-radius:0!important;background:#0a140eef!important;color:#9bff45!important;font:700 24px/1 Rajdhani,sans-serif!important;box-shadow:0 5px 22px #0007!important;cursor:pointer!important;backdrop-filter:blur(10px);transition:background .18s,border-color .18s,color .18s,transform .18s}.page-scroll-controls button:hover{background:#9bff45!important;color:#071007!important;border-color:#9bff45!important;transform:translateY(-2px)}.page-scroll-controls button:focus-visible{outline:2px solid #9bff45!important;outline-offset:3px}@media(max-width:760px){.page-scroll-controls{opacity:0!important;visibility:hidden!important;pointer-events:none!important;right:10px!important;bottom:14px!important}.page-scroll-controls.is-visible{opacity:1!important;visibility:visible!important;pointer-events:auto!important}.page-scroll-controls button{width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;max-width:38px!important;max-height:38px!important;font-size:22px!important}}';
       document.head.appendChild(style);
     }
   };
   ensurePageScrollControls();
+  // On mobile, keep fixed scroll controls out of the initial viewport so they
+  // cannot cover the first ad or page content. Reveal them after the user scrolls.
+  const updateScrollControlsVisibility = () => {
+    const controls = document.querySelector('.page-scroll-controls');
+    if (controls) controls.classList.toggle('is-visible', window.scrollY > 220);
+  };
+  if (!window.__zshScrollControlsVisibilityBound) {
+    window.__zshScrollControlsVisibilityBound = true;
+    window.addEventListener('scroll', updateScrollControlsVisibility, {passive:true});
+    updateScrollControlsVisibility();
+  }
 
   // Load the shared site assistant.
   const assistantScript = document.createElement('script');
