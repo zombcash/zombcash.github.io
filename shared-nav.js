@@ -1170,15 +1170,10 @@
     // just because localStorage contains a language selected on another page.
     const pathParts = location.pathname.split('/').filter(Boolean);
     const routeLanguage = pathParts.length > 1 && navDictionary[pathParts[0]] ? pathParts[0] : 'en';
-    let language = routeLanguage;
-    try {
-      const saved = localStorage.getItem('zombcash-language');
-      // The English homepage URL is authoritative when switching back from a localized homepage.
-      // Avoid briefly rendering stale translated navigation on / or /index.html.
-      const englishHome = location.pathname === '/' || location.pathname === '/index.html';
-      if (!englishHome && routeLanguage === 'en' && saved && navDictionary[saved]) language = saved;
-    } catch (_) {}
-    localizeNav(language);
+    // The URL is the source of truth for page language. A saved preference must
+    // never translate an English-only article or tool page into another language.
+    // Language switching should navigate to the matching localized URL instead.
+    localizeNav(routeLanguage);
   };
   document.addEventListener('zombcash:languagechange', event => localizeNav(event.detail && event.detail.language || 'en'));
   readLanguage();
