@@ -7,18 +7,25 @@
   (() => {
     const api = 'https://zombcash-bot.fadehost.app/api/visits';
     const key = 'zombcash_site_visitor_v1';
+    const validVisitor = value => /^[a-f0-9-]{16,80}$/.test(value);
+    const makeVisitorId = () => {
+      try {
+        if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+          return window.crypto.randomUUID().toLowerCase();
+        }
+      } catch (_) {}
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+        const r = Math.random() * 16 | 0;
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+      }).toLowerCase();
+    };
     let visitor = '';
-    try {
-      visitor = localStorage.getItem(key) || '';
-      if (!/^[a-f0-9-]{16,80}$/.test(visitor)) {
-        visitor = (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-          const r = Math.random() * 16 | 0;
-          return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-        })).toLowerCase();
-        localStorage.setItem(key, visitor);
-      }
-    } catch (_) {
-      visitor = 'session-' + Math.random().toString(16).slice(2) + '-' + Date.now().toString(16);
+    try { visitor = localStorage.getItem(key) || ''; } catch (_) {}
+    if (!validVisitor(visitor)) {
+      visitor = makeVisitorId();
+      // Persistence is best-effort. If storage is blocked, keep a valid ID for
+      // this page session so the API does not reject the visitor heartbeat.
+      try { localStorage.setItem(key, visitor); } catch (_) {}
     }
     const heartbeat = () => {
       if (document.visibilityState === 'hidden') return;
