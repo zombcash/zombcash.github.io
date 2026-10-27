@@ -25,6 +25,8 @@ fs.mkdirSync(outDir, { recursive: true });
       // The live site may keep analytics/API requests open; do not wait for networkidle.
       await page.waitForLoadState('load', { timeout: 20000 }).catch(() => {});
       await page.waitForSelector('header.zombcash-shared-header', { timeout: 20000 });
+      // Give shared ad/counter insertion scripts a chance to run before measuring.
+      await page.waitForTimeout(1200);
 
       const result = await page.evaluate(() => {
         const header = document.querySelector('header.zombcash-shared-header');
