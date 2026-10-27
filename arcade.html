@@ -239,7 +239,7 @@ reset();
 loadLeaderboard();
 loadPlayerProgress();
 document.addEventListener('zombcash:survivorlogin',()=>{loadPlayerProgress();loadLeaderboard()});document.addEventListener('zombcash:survivorprofileupdated',()=>{loadPlayerProgress();loadLeaderboard()});
-if(query.get('game')==='snake') document.querySelector('[data-game="snake"]')?.click();
+const requestedGame=query.get('game');if(['snake','breaker','maze','wall'].includes(requestedGame))document.querySelector('[data-game="'+requestedGame+'"]')?.click();
 })();
 </script>
 <script id="arcade-page-localization">
