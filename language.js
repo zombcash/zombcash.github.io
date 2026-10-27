@@ -969,6 +969,24 @@ const homepageRuntimeGapTranslations={
 };
 Object.entries(homepageRuntimeGapTranslations).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
+
+
+/* Last follow-up: exact arcade and mixed/split homepage text nodes seen in rendered locales. */
+const homepageArcadeAndSplitNodeTranslations={
+"COMMUNITY RATINGS":{de:"COMMUNITY-BEWERTUNGEN",fr:"AVIS DE LA COMMUNAUTÉ",it:"VALUTAZIONI DELLA COMMUNITY",ja:"コミュニティ評価","zh-CN":"社区评分",ru:"ОЦЕНКИ СООБЩЕСТВА",tr:"TOPLULUK DEĞERLENDİRMELERİ",hi:"समुदाय रेटिंग"},
+"COMMUNITY CHAT":{de:"COMMUNITY-CHAT",fr:"CHAT COMMUNAUTAIRE",it:"CHAT DELLA COMMUNITY",ja:"コミュニティチャット","zh-CN":"社区聊天",ru:"ЧАТ СООБЩЕСТВА",tr:"TOPLULUK SOHBETİ",hi:"कम्युनिटी चैट"},
+"PROJECT UPDATES":{de:"PROJEKT-NEUIGKEITEN",fr:"ACTUALITÉS DU PROJET",it:"AGGIORNAMENTI DEL PROGETTO",ja:"プロジェクト更新情報","zh-CN":"项目动态",ru:"ОБНОВЛЕНИЯ ПРОЕКТА",tr:"PROJE GÜNCELLEMELERİ",hi:"प्रोजेक्ट अपडेट"},
+"COMMUNITY-CHAT":{de:"COMMUNITY-CHAT",fr:"CHAT COMMUNAUTAIRE",it:"CHAT DELLA COMMUNITY",ja:"コミュニティチャット","zh-CN":"社区聊天",ru:"ЧАТ СООБЩЕСТВА",tr:"TOPLULUK SOHBETİ",hi:"समुदाय चैट"},
+"MEME TRANSMISSIONS":{de:"MEME-ÜBERTRAGUNGEN",fr:"TRANSMISSIONS DE MÈMES",it:"TRASMISSIONI DI MEME",ja:"ミーム通信","zh-CN":"梗图传送",ru:"МЕМ-ТРАНСЛЯЦИИ",tr:"MEME YAYINLARI",hi:"मीम प्रसारण"},
+"✚ COMMUNITY RECORDS":{de:"✚ COMMUNITY-REKORDE",fr:"✚ RECORDS DE LA COMMUNAUTÉ",it:"✚ RECORD DELLA COMMUNITY",ja:"✚ コミュニティ記録","zh-CN":"✚ 社区纪录",ru:"✚ РЕКОРДЫ СООБЩЕСТВА",tr:"✚ TOPLULUK REKORLARI",hi:"✚ समुदाय रिकॉर्ड"},
+"FOUR GAMES · COMMUNITY RECORDS · FULLSCREEN AVAILABLE":{de:"VIER SPIELE · COMMUNITY-REKORDE · VOLLBILD VERFÜGBAR",fr:"QUATRE JEUX · RECORDS DE LA COMMUNAUTÉ · PLEIN ÉCRAN DISPONIBLE",it:"QUATTRO GIOCHI · RECORD DELLA COMMUNITY · SCHERMO INTERO DISPONIBILE",ja:"4つのゲーム · コミュニティ記録 · 全画面表示対応","zh-CN":"四款游戏 · 社区纪录 · 支持全屏",ru:"ЧЕТЫРЕ ИГРЫ · РЕКОРДЫ СООБЩЕСТВА · ЕСТЬ ПОЛНОЭКРАННЫЙ РЕЖИМ",tr:"DÖRT OYUN · TOPLULUK REKORLARI · TAM EKRAN MEVCUT",hi:"चार गेम · समुदाय रिकॉर्ड · फ़ुलस्क्रीन उपलब्ध"},
+"No records yet. Be the first survivor.":{de:"Noch keine Rekorde. Sei der erste Survivor.",fr:"Aucun record pour l’instant. Soyez le premier survivant.",it:"Nessun record ancora. Sii il primo sopravvissuto.",ja:"まだ記録はありません。最初のサバイバーになろう。","zh-CN":"暂无纪录。成为第一位幸存者。",ru:"Рекордов пока нет. Стань первым выжившим.",tr:"Henüz kayıt yok. İlk hayatta kalan sen ol.",hi:"अभी कोई रिकॉर्ड नहीं है। पहले सर्वाइवर बनें।"},
+"Future $ZOMBCASH prizes may be announced for selected competitions. No token rewards are currently enabled or guaranteed.":{de:"Für ausgewählte Wettbewerbe können künftig $ZOMBCASH-Preise angekündigt werden. Derzeit sind keine Token-Belohnungen aktiviert oder garantiert.",fr:"Des prix en $ZOMBCASH pourront être annoncés pour certaines compétitions. Aucune récompense en tokens n’est actuellement activée ni garantie.",it:"In futuro potrebbero essere annunciati premi in $ZOMBCASH per alcune competizioni. Al momento non sono attivi né garantiti premi in token.",ja:"一部の大会では将来 $ZOMBCASH 賞が発表される場合があります。現在、トークン報酬は有効化されておらず、保証もされません。","zh-CN":"未来可能会为特定比赛公布 $ZOMBCASH 奖励。目前尚未启用或保证任何代币奖励。",ru:"В будущем для отдельных соревнований могут объявляться призы в $ZOMBCASH. Сейчас токеновые награды не включены и не гарантируются.",tr:"Gelecekte bazı yarışmalar için $ZOMBCASH ödülleri duyurulabilir. Şu anda token ödülleri etkin değil ve garanti edilmiyor.",hi:"चुनी गई प्रतियोगिताओं के लिए भविष्य में $ZOMBCASH पुरस्कार घोषित हो सकते हैं। फ़िलहाल कोई टोकन पुरस्कार सक्रिय या गारंटीकृत नहीं है।"},
+"ZOMBIE SNAKE.EXESTANDBY":{de:"ZOMBIE SNAKE.EXE-BEREIT",fr:"ZOMBIE SNAKE.EXE EN VEILLE",it:"ZOMBIE SNAKE.EXE IN ATTESA",ja:"ZOMBIE SNAKE.EXE 待機中","zh-CN":"ZOMBIE SNAKE.EXE 待机中",ru:"ZOMBIE SNAKE.EXE — ОЖИДАНИЕ",tr:"ZOMBIE SNAKE.EXE BEKLEMEDE",hi:"ZOMBIE SNAKE.EXE स्टैंडबाय"},
+"COMMUNITY SUPPORT / SPONSORED":{de:"COMMUNITY-UNTERSTÜTZUNG / GESPONSERT",fr:"SOUTIEN À LA COMMUNAUTÉ / SPONSORISÉ",it:"SUPPORTO ALLA COMMUNITY / SPONSORIZZATO",ja:"コミュニティ支援／スポンサー","zh-CN":"社区支持／赞助内容",ru:"ПОДДЕРЖКА СООБЩЕСТВА / СПОНСОРСКИЙ МАТЕРИАЛ",tr:"TOPLULUK DESTEĞİ / SPONSORLU",hi:"समुदाय सहायता / प्रायोजित"}
+};
+Object.entries(homepageArcadeAndSplitNodeTranslations).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 const supportedLanguages=['en','de','fr','it','ja','zh-CN','ru','tr','hi'];
 const getRequestedLanguage=()=>{try{const q=new URLSearchParams(location.search).get('lang');if(q&&supportedLanguages.includes(q))return q;}catch(_){}return null;};
