@@ -96,4 +96,7 @@
 
   loadDashboard();
   if (root) window.setInterval(loadDashboard, 60000);
+  // Only one homepage bundle should register page_view and click tracking.
+  if (window.__zombcashCampaignTrackingLoaded) return;
+  window.__zombcashCampaignTrackingLoaded = true;
 })();
