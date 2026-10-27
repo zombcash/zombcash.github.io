@@ -3,6 +3,32 @@
  */
 (() => {
   'use strict';
+  /* Anonymous site-wide presence heartbeat. This shared file runs on every public page. */
+  (() => {
+    const api = 'https://zombcash-bot.fadehost.app/api/visits';
+    const key = 'zombcash_site_visitor_v1';
+    let visitor = '';
+    try {
+      visitor = localStorage.getItem(key) || '';
+      if (!/^[a-f0-9-]{16,80}$/.test(visitor)) {
+        visitor = (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+          const r = Math.random() * 16 | 0;
+          return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        })).toLowerCase();
+        localStorage.setItem(key, visitor);
+      }
+    } catch (_) {
+      visitor = 'session-' + Math.random().toString(16).slice(2) + '-' + Date.now().toString(16);
+    }
+    const heartbeat = () => {
+      if (document.visibilityState === 'hidden') return;
+      fetch(api, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({visitor}), keepalive:true}).catch(() => {});
+    };
+    heartbeat();
+    setInterval(heartbeat, 20000);
+    document.addEventListener('visibilitychange', heartbeat);
+  })();
+
 
   // ZombieCash GA4: centralized measurement tag for pages loading shared-nav.js.
   // Keep the measurement ID in one place to avoid duplicate tags across HTML pages.
