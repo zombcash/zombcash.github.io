@@ -21,9 +21,9 @@ MAX_ITEMS = 50
 def is_gallery_artwork(caption):
     text = str(caption or "")
     return bool(
-        re.search(r"\\bNIGHTMARE\\s+DROP\\b", text, re.I)
-        or re.search(r"\\bZOMBIE\\s+MEME(?:\\s+OF\\s+THE\\s+HOUR)?\\b", text, re.I)
-        or re.search(r"\\bUNDEAD\\s+AFTER\\s+DARK\\b", text, re.I)
+        re.search(r"\bNIGHTMARE\s+DROP\\b", text, re.I)
+        or re.search(r"\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\\b", text, re.I)
+        or re.search(r"\bUNDEAD\s+AFTER\s+DARK\\b", text, re.I)
     )
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; ZombieCashGalleryBot/1.0)"}
 
