@@ -1061,6 +1061,10 @@ Object.entries(homepageGermanOnchainFix).forEach(([source,translations])=>Object
 /* Live-browser fix: German translation for the exact hyphenated on-chain feed heading. */
 if(langs.de) langs.de.map["[ ON-CHAIN-FEED ]"]="[ ON-CHAIN-TRANSAKTIONSFEED ]";
 
+
+/* Correct the source key actually matched by the live German DOM. */
+if(langs.de) langs.de.map["[ ON-CHAIN FEED ]"]="[ ON-CHAIN-TRANSAKTIONSFEED ]";
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 const supportedLanguages=['en','de','fr','it','ja','zh-CN','ru','tr','hi'];
 const getRequestedLanguage=()=>{try{const q=new URLSearchParams(location.search).get('lang');if(q&&supportedLanguages.includes(q))return q;}catch(_){}return null;};
