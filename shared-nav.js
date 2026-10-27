@@ -119,7 +119,7 @@
     '<button class="zsh-menu-toggle" type="button" aria-label="Open navigation" aria-controls="zsh-navigation" aria-expanded="false"><span aria-hidden="true">☰</span><span class="zsh-menu-label">MENU</span></button>' +
     '<nav id="zsh-navigation" class="zsh-nav" aria-label="Main navigation">' +
       labels.map(([label, href, id]) => {
-        const destination = (id === 'home' || id === 'buy') ? target(href) : href;
+        const destination = target(href);
         const active = (id === 'manual' && file === 'survivor-field-manual.html') ||
           (id === 'vote' && file === 'crew-vote.html') ||
           (id === 'arcade' && file === 'arcade.html') ||
