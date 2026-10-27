@@ -24,9 +24,9 @@
   if (!isHome) document.body.classList.add('zsh-inner-page');
   // All shared navigation destinations are rooted at the site root. Relative links
   // incorrectly sent visitors from /ru/, /de/, etc. to nonexistent translated copies.
-  const home = '/index.html';
+  const home = '/';
   const labels = [
-    ['LIVE WORLD', '/index.html#living-world', 'home'],
+    ['LIVE WORLD', '/#living-world', 'home'],
     ['FIELD MANUAL', '/survivor-field-manual.html', 'manual'],
     ['TRANSMISSION', '/outbreak-transmission.html', 'transmission'],
     ['CREW VOTE', '/crew-vote.html', 'vote'],
@@ -70,7 +70,7 @@
     // Features without a localized counterpart remain explicit English destinations.
     return href;
   };
-  const brandHref = target(isHome ? '/index.html#home' : '/index.html');
+  const brandHref = target(isHome ? '/#home' : '/');
 
   header.classList.add('zombcash-shared-header');
   header.innerHTML =
@@ -95,7 +95,7 @@
       }).join('') +
     '</nav>' +
     '<div class="zsh-actions">' +
-      (!isHome ? '<a class="zsh-home home-return-button" href="' + target('/index.html') + '"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
+      (!isHome ? '<a class="zsh-home home-return-button" href="' + target('/') + '"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
       '<div class="zsh-language-slot"></div>' +
       (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<a class="zsh-login-button top-cta" href="/survivor-hub.html" data-zsh-login>LOGIN WITH TELEGRAM</a>') +
     '</div>';
