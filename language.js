@@ -1123,6 +1123,28 @@ const homepageRemainingLabelsTranslations={
 };
 Object.entries(homepageRemainingLabelsTranslations).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
+/* Canonical shared navigation labels. These keys match shared-nav.js exactly.
+   Keep all locales on the same destinations and menu order; do not translate HOME as LIVE WORLD. */
+const sharedNavigationTranslations = {
+  "HOME": {de:"STARTSEITE",fr:"ACCUEIL",it:"HOME",ja:"ホーム","zh-CN":"首页",ru:"ГЛАВНАЯ",tr:"ANA SAYFA",hi:"होम"},
+  "FIELD MANUAL": {de:"FELDHANDBUCH",fr:"MANUEL DE TERRAIN",it:"MANUALE DA CAMPO",ja:"サバイバルガイド","zh-CN":"生存指南",ru:"ПОЛЕВОЕ РУКОВОДСТВО",tr:"SAHA REHBERİ",hi:"जीवन रक्षा मार्गदर्शिका"},
+  "TRANSMISSION": {de:"ÜBERTRAGUNGEN",fr:"TRANSMISSIONS",it:"TRASMISSIONI",ja:"ニュース配信","zh-CN":"疫情快讯",ru:"ТРАНСЛЯЦИЯ",tr:"YAYINLAR",hi:"प्रसारण"},
+  "CREW VOTE": {de:"CREW-ABSTIMMUNG",fr:"VOTE DE L’ÉQUIPE",it:"VOTO DELLA CREW",ja:"クルー投票","zh-CN":"团队投票",ru:"ГОЛОСОВАНИЕ КОМАНДЫ",tr:"EKİP OYLAMASI",hi:"टीम मतदान"},
+  "SURVIVOR HUB": {de:"ÜBERLEBENDEN-ZENTRUM",fr:"CENTRE DES SURVIVANTS",it:"CENTRO DEI SOPRAVVISSUTI",ja:"サバイバーハブ","zh-CN":"幸存者中心",ru:"ЦЕНТР ВЫЖИВШИХ",tr:"HAYATTA KALANLAR MERKEZİ",hi:"सर्वाइवर केंद्र"},
+  "ARCADE": {de:"ARCADE",fr:"ARCADE",it:"ARCADE",ja:"アーケード","zh-CN":"街机游戏",ru:"АРКАДА",tr:"ARCADE",hi:"आर्केड"},
+  "ZOMBIE GALLERY": {de:"ZOMBIE-GALERIE",fr:"GALERIE ZOMBIE",it:"GALLERIA ZOMBIE",ja:"ゾンビギャラリー","zh-CN":"僵尸画廊",ru:"ГАЛЕРЕЯ ЗОМБИ",tr:"ZOMBİ GALERİSİ",hi:"ज़ॉम्बी गैलरी"},
+  "ZOMBIE MAKER": {de:"ZOMBIE-GENERATOR",fr:"CRÉATEUR DE ZOMBIES",it:"CREA ZOMBIE",ja:"ゾンビメーカー","zh-CN":"僵尸制作器",ru:"СОЗДАТЕЛЬ ЗОМБИ",tr:"ZOMBİ OLUŞTURUCU",hi:"ज़ॉम्बी मेकर"},
+  "LOTTERY": {de:"LOTTERIE",fr:"LOTERIE",it:"LOTTERIA",ja:"宝くじ","zh-CN":"抽奖",ru:"ЛОТЕРЕЯ",tr:"ÇEKİLİŞ",hi:"लॉटरी"},
+  "BUY $ZOMBCASH": {de:"$ZOMBCASH KAUFEN",fr:"ACHETER $ZOMBCASH",it:"COMPRA $ZOMBCASH",ja:"$ZOMBCASHを購入","zh-CN":"购买 $ZOMBCASH",ru:"КУПИТЬ $ZOMBCASH",tr:"$ZOMBCASH SATIN AL",hi:"$ZOMBCASH खरीदें"},
+  "BACK TO HOME": {de:"ZURÜCK ZUR STARTSEITE",fr:"RETOUR À L’ACCUEIL",it:"TORNA ALLA HOME",ja:"ホームに戻る","zh-CN":"返回首页",ru:"НА ГЛАВНУЮ",tr:"ANA SAYFAYA DÖN",hi:"होम पर लौटें"},
+  "LOGIN WITH TELEGRAM": {de:"MIT TELEGRAM ANMELDEN",fr:"SE CONNECTER AVEC TELEGRAM",it:"ACCEDI CON TELEGRAM",ja:"Telegramでログイン","zh-CN":"使用 Telegram 登录",ru:"ВОЙТИ ЧЕРЕЗ TELEGRAM",tr:"TELEGRAM İLE GİRİŞ YAP",hi:"TELEGRAM से लॉगिन करें"}
+};
+Object.entries(sharedNavigationTranslations).forEach(([source, translations]) => {
+  Object.entries(translations).forEach(([lang, value]) => {
+    if (langs[lang]) langs[lang].map[source] = value;
+  });
+});
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 const supportedLanguages=['en','de','fr','it','ja','zh-CN','ru','tr','hi'];
 const getRequestedLanguage=()=>{try{const q=new URLSearchParams(location.search).get('lang');if(q&&supportedLanguages.includes(q))return q;}catch(_){}return null;};
