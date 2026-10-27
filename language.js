@@ -1127,10 +1127,10 @@ Object.entries(homepageRemainingLabelsTranslations).forEach(([source,translation
    Keep all locales on the same destinations and menu order; do not translate HOME as LIVE WORLD. */
 const sharedNavigationTranslations = {
   "HOME": {de:"STARTSEITE",fr:"ACCUEIL",it:"HOME",ja:"ホーム","zh-CN":"首页",ru:"ГЛАВНАЯ",tr:"ANA SAYFA",hi:"होम"},
-  "FIELD MANUAL": {de:"FELDHANDBUCH",fr:"MANUEL DE SURVIE",it:"MANUALE DA CAMPO",ja:"サバイバルガイド","zh-CN":"生存指南",ru:"ПОЛЕВОЙ СПРАВОЧНИК",tr:"SAHA REHBERİ",hi:"जीवन रक्षा मार्गदर्शिका"},
-  "TRANSMISSION": {de:"AUSBRUCH-MELDUNGEN",fr:"ACTUALITÉS",it:"NOTIZIE",ja:"ニュース","zh-CN":"疫情快讯",ru:"СВОДКИ",tr:"GÜNCELLEMELER",hi:"समाचार"},
+  "FIELD MANUAL": {de:"FELDHANDBUCH",fr:"MANUEL DE TERRAIN",it:"MANUALE DA CAMPO",ja:"サバイバルガイド","zh-CN":"生存指南",ru:"ПОЛЕВОЕ РУКОВОДСТВО",tr:"SAHA REHBERİ",hi:"जीवन रक्षा मार्गदर्शिका"},
+  "TRANSMISSION": {de:"ÜBERTRAGUNGEN",fr:"TRANSMISSIONS",it:"TRASMISSIONI",ja:"ニュース配信","zh-CN":"疫情快讯",ru:"ТРАНСЛЯЦИЯ",tr:"YAYINLAR",hi:"प्रसारण"},
   "CREW VOTE": {de:"CREW-ABSTIMMUNG",fr:"VOTE DE L’ÉQUIPE",it:"VOTO DELLA CREW",ja:"クルー投票","zh-CN":"团队投票",ru:"ГОЛОСОВАНИЕ КОМАНДЫ",tr:"EKİP OYLAMASI",hi:"टीम मतदान"},
-  "SURVIVOR HUB": {de:"ÜBERLEBENDEN-ZENTRUM",fr:"QG DES SURVIVANTS",it:"CENTRO DEI SOPRAVVISSUTI",ja:"サバイバーハブ","zh-CN":"幸存者中心",ru:"ЦЕНТР ВЫЖИВШИХ",tr:"HAYATTA KALANLAR MERKEZİ",hi:"सर्वाइवर केंद्र"},
+  "SURVIVOR HUB": {de:"ÜBERLEBENDEN-ZENTRUM",fr:"CENTRE DES SURVIVANTS",it:"CENTRO DEI SOPRAVVISSUTI",ja:"サバイバーハブ","zh-CN":"幸存者中心",ru:"ЦЕНТР ВЫЖИВШИХ",tr:"HAYATTA KALANLAR MERKEZİ",hi:"सर्वाइवर केंद्र"},
   "ARCADE": {de:"ARCADE",fr:"ARCADE",it:"ARCADE",ja:"アーケード","zh-CN":"街机游戏",ru:"АРКАДА",tr:"ARCADE",hi:"आर्केड"},
   "ZOMBIE GALLERY": {de:"ZOMBIE-GALERIE",fr:"GALERIE ZOMBIE",it:"GALLERIA ZOMBIE",ja:"ゾンビギャラリー","zh-CN":"僵尸画廊",ru:"ГАЛЕРЕЯ ЗОМБИ",tr:"ZOMBİ GALERİSİ",hi:"ज़ॉम्बी गैलरी"},
   "ZOMBIE MAKER": {de:"ZOMBIE-GENERATOR",fr:"CRÉATEUR DE ZOMBIES",it:"CREA ZOMBIE",ja:"ゾンビメーカー","zh-CN":"僵尸制作器",ru:"СОЗДАТЕЛЬ ЗОМБИ",tr:"ZOMBİ OLUŞTURUCU",hi:"ज़ॉम्बी मेकर"},
