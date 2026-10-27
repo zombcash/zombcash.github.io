@@ -987,6 +987,51 @@ const homepageArcadeAndSplitNodeTranslations={
 };
 Object.entries(homepageArcadeAndSplitNodeTranslations).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
+
+
+/* Final homepage locale pass: visitor footprint, on-chain/chart headings, and all-games/gameplay UI. */
+const homepageFinalUiTranslations={
+"LIVE":{de:"LIVE",fr:"EN DIRECT",it:"IN DIRETTA",ja:"ライブ","zh-CN":"实时",ru:"В ЭФИРЕ",tr:"CANLI",hi:"लाइव"},
+"FOOTPRINT.":{de:"REICHWEITE.",fr:"EMPREINTE.",it:"IMPRONTA.",ja:"利用状況","zh-CN":"访问概况",ru:"ОХВАТ.",tr:"ETKİ ALANI.",hi:"प्रभाव."},
+"Real community visits, counted once per browser.":{de:"Echte Community-Besuche, pro Browser einmal gezählt.",fr:"Visites réelles de la communauté, comptées une fois par navigateur.",it:"Visite reali della community, conteggiate una sola volta per browser.",ja:"実際のコミュニティ訪問数。ブラウザーごとに1回だけカウントします。","zh-CN":"真实社区访问量，每个浏览器只计一次。",ru:"Реальные посещения сообщества, каждое учитывается один раз в браузере.",tr:"Gerçek topluluk ziyaretleri, tarayıcı başına bir kez sayılır.",hi:"समुदाय की वास्तविक विज़िट, हर ब्राउज़र से एक बार गिनी जाती हैं।"},
+"UTC DAY · UPDATED":{de:"UTC-TAG · AKTUALISIERT",fr:"JOUR UTC · MIS À JOUR",it:"GIORNO UTC · AGGIORNATO",ja:"UTC日付 · 更新","zh-CN":"UTC 日期 · 已更新",ru:"ДЕНЬ UTC · ОБНОВЛЕНО",tr:"UTC GÜNÜ · GÜNCELLENDİ",hi:"UTC दिन · अपडेट"},
+"[ PRICE HISTORY ]":{de:"[ PREISVERLAUF ]",fr:"[ HISTORIQUE DES PRIX ]",it:"[ STORICO DEI PREZZI ]",ja:"[ 価格履歴 ]","zh-CN":"[ 价格历史 ]",ru:"[ ИСТОРИЯ ЦЕН ]",tr:"[ FİYAT GEÇMİŞİ ]",hi:"[ कीमतों का इतिहास ]"},
+"MARKET":{de:"MARKT",fr:"MARCHÉ",it:"MERCATO",ja:"市場","zh-CN":"市场",ru:"РЫНОК",tr:"PİYASA",hi:"बाज़ार"},
+"CHART":{de:"CHART",fr:"GRAPHIQUE",it:"GRAFICO",ja:"チャート","zh-CN":"图表",ru:"ГРАФИК",tr:"GRAFİK",hi:"चार्ट"},
+"[ ON-CHAIN FEED ]":{de:"[ ON-CHAIN-FEED ]",fr:"[ FLUX ON-CHAIN ]",it:"[ FEED ON-CHAIN ]",ja:"[ オンチェーンフィード ]","zh-CN":"[ 链上动态 ]",ru:"[ ОНЧЕЙН-ЛЕНТА ]",tr:"[ ZİNCİR ÜSTÜ AKIŞ ]",hi:"[ ऑन-चेन फ़ीड ]"},
+"LATEST":{de:"NEUESTE",fr:"DERNIÈRES",it:"ULTIME",ja:"最新","zh-CN":"最新",ru:"ПОСЛЕДНИЕ",tr:"SON",hi:"नवीनतम"},
+"TRANSACTIONS":{de:"TRANSAKTIONEN",fr:"TRANSACTIONS",it:"TRANSAZIONI",ja:"取引","zh-CN":"交易",ru:"ТРАНЗАКЦИИ",tr:"İŞLEMLER",hi:"लेन-देन"},
+"OPEN SOLSCAN ↗":{de:"SOLSCAN ÖFFNEN ↗",fr:"OUVRIR SOLSCAN ↗",it:"APRI SOLSCAN ↗",ja:"Solscanを開く ↗","zh-CN":"打开 SOLSCAN ↗",ru:"ОТКРЫТЬ SOLSCAN ↗",tr:"SOLSCAN'I AÇ ↗",hi:"SOLSCAN खोलें ↗"},
+"[ SURVIVAL RECORDS / ALL GAMES ]":{de:"[ ÜBERLEBENSREKORDE / ALLE SPIELE ]",fr:"[ RECORDS DE SURVIE / TOUS LES JEUX ]",it:"[ RECORD DI SOPRAVVIVENZA / TUTTI I GIOCHI ]",ja:"[ サバイバル記録 / 全ゲーム ]","zh-CN":"[ 生存纪录 / 全部游戏 ]",ru:"[ РЕКОРДЫ ВЫЖИВАНИЯ / ВСЕ ИГРЫ ]",tr:"[ HAYATTA KALMA REKORLARI / TÜM OYUNLAR ]",hi:"[ सर्वाइवल रिकॉर्ड / सभी गेम ]"},
+"TOP":{de:"TOP",fr:"TOP",it:"TOP",ja:"トップ","zh-CN":"排行",ru:"ТОП",tr:"EN İYİ",hi:"शीर्ष"},
+"ZOMBIE HUNTERS":{de:"ZOMBIEJÄGER",fr:"CHASSEURS DE ZOMBIES",it:"CACCIATORI DI ZOMBI",ja:"ゾンビハンター","zh-CN":"僵尸猎人",ru:"ОХОТНИКИ НА ЗОМБИ",tr:"ZOMBİ AVCILARI",hi:"ज़ॉम्बी शिकारी"},
+"TOP ZOMBIE HUNTERS":{de:"TOP-ZOMBIEJÄGER",fr:"MEILLEURS CHASSEURS DE ZOMBIES",it:"MIGLIORI CACCIATORI DI ZOMBI",ja:"ゾンビハンターランキング","zh-CN":"顶尖僵尸猎人",ru:"ЛУЧШИЕ ОХОТНИКИ НА ЗОМБИ",tr:"EN İYİ ZOMBİ AVCILARI",hi:"शीर्ष ज़ॉम्बी शिकारी"},
+"TOP 10":{de:"TOP 10",fr:"TOP 10",it:"TOP 10",ja:"トップ10","zh-CN":"前 10 名",ru:"ТОП-10",tr:"İLK 10",hi:"शीर्ष 10"},
+"RECORD":{de:"REKORD",fr:"RECORD",it:"RECORD",ja:"記録","zh-CN":"记录",ru:"РЕКОРД",tr:"REKOR",hi:"रिकॉर्ड"},
+"Zombie Snake · Top 10 records":{de:"Zombie Snake · Top-10-Rekorde",fr:"Zombie Snake · 10 meilleurs records",it:"Zombie Snake · migliori 10 record",ja:"Zombie Snake · 上位10件の記録","zh-CN":"Zombie Snake · 前 10 名纪录",ru:"Зомби-змейка · 10 лучших результатов",tr:"Zombie Snake · İlk 10 rekor",hi:"Zombie Snake · शीर्ष 10 रिकॉर्ड"},
+"PLAY THE ARCADE":{de:"ARCADE SPIELEN",fr:"JOUER À L’ARCADE",it:"GIOCA ALL’ARCADE",ja:"アーケードをプレイ","zh-CN":"开始街机游戏",ru:"ИГРАТЬ В АРКАДУ",tr:"ARCADE OYNA",hi:"आर्केड खेलें"},
+"▶ PLAY THE ARCADE":{de:"▶ ARCADE SPIELEN",fr:"▶ JOUER À L’ARCADE",it:"▶ GIOCA ALL’ARCADE",ja:"▶ アーケードをプレイ","zh-CN":"▶ 开始街机游戏",ru:"▶ ИГРАТЬ В АРКАДУ",tr:"▶ ARCADE OYNA",hi:"▶ आर्केड खेलें"},
+"✕ CLOSE":{de:"✕ SCHLIESSEN",fr:"✕ FERMER",it:"✕ CHIUDI",ja:"✕ 閉じる","zh-CN":"✕ 关闭",ru:"✕ ЗАКРЫТЬ",tr:"✕ KAPAT",hi:"✕ बंद करें"},
+"Loading records…":{de:"Rekorde werden geladen …",fr:"Chargement des records…",it:"Caricamento record…",ja:"記録を読み込み中…","zh-CN":"正在加载纪录…",ru:"Загружаем рекорды…",tr:"Kayıtlar yükleniyor…",hi:"रिकॉर्ड लोड हो रहे हैं…"},
+"ZOMBIECASH ARCADE / GAME 001":{de:"ZOMBCASH ARCADE / SPIEL 001",fr:"ARCADE ZOMBCASH / JEU 001",it:"ARCADE ZOMBCASH / GIOCO 001",ja:"ZOMBCASHアーケード / ゲーム001","zh-CN":"ZOMBCASH 街机 / 游戏 001",ru:"АРКАДА ZOMBCASH / ИГРА 001",tr:"ZOMBCASH ARCADE / OYUN 001",hi:"ZOMBCASH आर्केड / गेम 001"},
+"STANDBY":{de:"BEREIT",fr:"EN ATTENTE",it:"IN ATTESA",ja:"待機中","zh-CN":"待机中",ru:"ОЖИДАНИЕ",tr:"BEKLEMEDE",hi:"स्टैंडबाय"},
+"⛶ FULLSCREEN":{de:"⛶ VOLLBILD",fr:"⛶ PLEIN ÉCRAN",it:"⛶ SCHERMO INTERO",ja:"⛶ 全画面","zh-CN":"⛶ 全屏",ru:"⛶ НА ВЕСЬ ЭКРАН",tr:"⛶ TAM EKRAN",hi:"⛶ फ़ुलस्क्रीन"},
+"START SNAKE":{de:"SCHLANGE STARTEN",fr:"LANCER LE SERPENT",it:"AVVIA IL SERPENTE",ja:"スネーク開始","zh-CN":"开始贪吃蛇",ru:"НАЧАТЬ ИГРУ",tr:"YILANI BAŞLAT",hi:"स्नेक शुरू करें"},
+"SCORE":{de:"PUNKTZAHL",fr:"SCORE",it:"PUNTEGGIO",ja:"スコア","zh-CN":"得分",ru:"СЧЁТ",tr:"SKOR",hi:"स्कोर"},
+"LIVES":{de:"LEBEN",fr:"VIES",it:"VITE",ja:"ライフ","zh-CN":"生命",ru:"ЖИЗНИ",tr:"CAN",hi:"जीवन"},
+"LEVEL":{de:"LEVEL",fr:"NIVEAU",it:"LIVELLO",ja:"レベル","zh-CN":"关卡",ru:"УРОВЕНЬ",tr:"SEVİYE",hi:"स्तर"},
+"SNAKE PROTOCOL v1.0":{de:"SCHLANGENPROTOKOLL v1.0",fr:"PROTOCOLE SERPENT v1.0",it:"PROTOCOLLO SERPENTE v1.0",ja:"スネークプロトコル v1.0","zh-CN":"贪吃蛇协议 v1.0",ru:"ПРОТОКОЛ ЗМЕЙКИ v1.0",tr:"YILAN PROTOKOLÜ v1.0",hi:"स्नेक प्रोटोकॉल v1.0"},
+"SURVIVAL SCORE LEADERBOARD":{de:"ÜBERLEBENS-BESTENLISTE",fr:"CLASSEMENT DES SCORES DE SURVIE",it:"CLASSIFICA DEI PUNTEGGI DI SOPRAVVIVENZA",ja:"サバイバルスコアランキング","zh-CN":"生存得分排行榜",ru:"ТАБЛИЦА РЕКОРДОВ ВЫЖИВАНИЯ",tr:"HAYATTA KALMA SKOR TABLOSU",hi:"सर्वाइवल स्कोर लीडरबोर्ड"},
+"SAVE RECORD":{de:"REKORD SPEICHERN",fr:"ENREGISTRER LE RECORD",it:"SALVA IL RECORD",ja:"記録を保存","zh-CN":"保存纪录",ru:"СОХРАНИТЬ РЕЗУЛЬТАТ",tr:"REKORU KAYDET",hi:"रिकॉर्ड सहेजें"},
+"Finish a round to save your snake score.":{de:"Beende eine Runde, um deinen Schlangen-Score zu speichern.",fr:"Terminez une partie pour enregistrer votre score.",it:"Completa una partita per salvare il punteggio.",ja:"ラウンドを終えるとスコアを保存できます。","zh-CN":"完成一局即可保存你的贪吃蛇分数。",ru:"Заверши раунд, чтобы сохранить результат.",tr:"Yılan puanını kaydetmek için bir turu tamamla.",hi:"अपना स्कोर सहेजने के लिए एक राउंड पूरा करें。"},
+"SURVIVOR NAME":{de:"SURVIVOR-NAME",fr:"NOM DU SURVIVANT",it:"NOME DEL SOPRAVVISSUTO",ja:"サバイバー名","zh-CN":"幸存者名称",ru:"ИМЯ ВЫЖИВШЕГО",tr:"HAYATTA KALAN ADI",hi:"सर्वाइवर का नाम"},
+"Survivor name":{de:"Survivor-Name",fr:"Nom du survivant",it:"Nome del sopravvissuto",ja:"サバイバー名","zh-CN":"幸存者名称",ru:"Имя выжившего",tr:"Hayatta kalan adı",hi:"सर्वाइवर का नाम"},
+"Close game":{de:"Spiel schließen",fr:"Fermer le jeu",it:"Chiudi il gioco",ja:"ゲームを閉じる","zh-CN":"关闭游戏",ru:"Закрыть игру",tr:"Oyunu kapat",hi:"गेम बंद करें"},
+"Open Zombie Snake fullscreen":{de:"Zombie Snake im Vollbild öffnen",fr:"Ouvrir Zombie Snake en plein écran",it:"Apri Zombie Snake a schermo intero",ja:"Zombie Snakeを全画面で開く","zh-CN":"全屏打开 Zombie Snake",ru:"Открыть «Зомби-змейку» на весь экран",tr:"Zombie Snake'i tam ekranda aç",hi:"Zombie Snake को फ़ुलस्क्रीन में खोलें"},
+"Keyboard-controlled Zombie Snake. Use arrow keys or WASD to move.":{de:"Zombie Snake per Tastatur steuern. Mit Pfeiltasten oder WASD bewegen.",fr:"Zombie Snake se contrôle au clavier. Utilisez les flèches ou WASD.",it:"Controlla Zombie Snake con la tastiera. Usa le frecce o WASD.",ja:"キーボードで操作するZombie Snake。矢印キーまたはWASDで移動します。","zh-CN":"键盘控制 Zombie Snake。使用方向键或 WASD 移动。",ru:"Управление «Зомби-змейкой» с клавиатуры. Используй стрелки или WASD.",tr:"Zombie Snake klavyeyle kontrol edilir. Ok tuşlarını veya WASD'yi kullan.",hi:"Zombie Snake को कीबोर्ड से चलाएँ। तीर कुंजियों या WASD का उपयोग करें。"}
+};
+Object.entries(homepageFinalUiTranslations).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 const supportedLanguages=['en','de','fr','it','ja','zh-CN','ru','tr','hi'];
 const getRequestedLanguage=()=>{try{const q=new URLSearchParams(location.search).get('lang');if(q&&supportedLanguages.includes(q))return q;}catch(_){}return null;};
