@@ -852,6 +852,15 @@ const homepageFooterAndIntroTranslations={
 };
 Object.entries(homepageFooterAndIntroTranslations).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
+
+/* Dynamic daily mission labels: translate text inserted by the mission renderer. */
+const homepageMissionTranslations={
+"Inspect the market":{de:"Markt prüfen",fr:"Examiner le marché",it:"Esamina il mercato",ja:"市場を調査","zh-CN":"检查市场",ru:"Проверить рынок",tr:"Piyasayı incele",hi:"बाज़ार की जाँच करें"},
+"Find a new signal":{de:"Ein neues Signal finden",fr:"Trouver un nouveau signal",it:"Trova un nuovo segnale",ja:"新しいシグナルを探す","zh-CN":"寻找新信号",ru:"Найти новый сигнал",tr:"Yeni bir sinyal bul",hi:"नया संकेत खोजें"},
+"Spread the signal":{de:"Das Signal verbreiten",fr:"Diffuser le signal",it:"Diffondi il segnale",ja:"シグナルを広める","zh-CN":"传播信号",ru:"Распространить сигнал",tr:"Sinyali yay",hi:"संकेत फैलाएँ"}
+};
+Object.entries(homepageMissionTranslations).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 const supportedLanguages=['en','de','fr','it','ja','zh-CN','ru','tr','hi'];
 const getRequestedLanguage=()=>{try{const q=new URLSearchParams(location.search).get('lang');if(q&&supportedLanguages.includes(q))return q;}catch(_){}return null;};
