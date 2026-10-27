@@ -45,21 +45,21 @@ fs.mkdirSync(outDir, { recursive: true });
           navInitiallyClosed: !!nav && !nav.classList.contains('zsh-open'),
           languageButton: { exists: !!languageButton, rect: rect(languageButton) },
           languageMenuExists: !!languageMenu,
-        languageMenuRect: rect(languageMenu),
-        ads: document.querySelectorAll('[data-aa="2460185"], [data-aa=\'2460185\']').length,
-        adSectionCount: document.querySelectorAll('.aads-ad-section').length,
-        pageVisitCounter: !!document.querySelector('#site-visits'),
-        globalFootprintCounter: !!document.querySelector('#zsh-global-footprint'),
-        pageFootprintCounter: !!document.querySelector('.page-footprint'),
-        adGeometry: (() => {
+          languageMenuRect: rect(languageMenu),
+          ads: document.querySelectorAll('[data-aa="2460185"], [data-aa=\'2460185\']').length,
+          adSectionCount: document.querySelectorAll('.aads-ad-section').length,
+          pageVisitCounter: !!document.querySelector('#site-visits'),
+          globalFootprintCounter: !!document.querySelector('#zsh-global-footprint'),
+          pageFootprintCounter: !!document.querySelector('.page-footprint'),
+          adGeometry: (() => {
           const ad = document.querySelector('.aads-ad-section iframe[data-aa="2460185"], .aads-ad-section iframe[data-aa=\'2460185\']');
           if (!ad) return null;
           const r = ad.getBoundingClientRect();
           const header = document.querySelector('header.zombcash-shared-header');
           const h = header?.getBoundingClientRect();
           return { x: Math.round(r.x), right: Math.round(r.right), width: Math.round(r.width), position: getComputedStyle(ad).position, overlapsHeader: !!h && r.width > 0 && r.bottom > h.top && r.top < h.bottom };
-        })(),
-      };
+          })(),
+        };
       });
 
       const issues = [];
@@ -69,7 +69,6 @@ fs.mkdirSync(outDir, { recursive: true });
       if (!result.languageButton.exists) issues.push('language selector button is missing');
       if (result.ads !== 1 || result.adSectionCount !== 1) issues.push(`expected exactly one AADS unit/section, found ${result.ads}/${result.adSectionCount}`);
       if (!result.pageVisitCounter) issues.push('homepage global visitor counter section is missing');
-      if (!result.pageFootprintCounter && location.pathname !== '/') { /* internal-page counter is injected asynchronously */ }
       if (result.adGeometry && result.adGeometry.position === 'fixed') issues.push('AADS iframe must not be fixed while scrolling');
       if (result.adGeometry && result.adGeometry.width > width + 1) issues.push('AADS iframe exceeds the viewport width');
 
