@@ -1295,3 +1295,49 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addSharedAd, {once:true});
   else addSharedAd();
 })();
+
+
+// Shared global visitor footprint for every non-home page.
+// This is a site-wide total, separate from any page-specific analytics card.
+(() => {
+  'use strict';
+  const api = 'https://zombcash-bot.fadehost.app/api/visits';
+  const addFootprint = () => {
+    if (!document.body || location.pathname === '/' || location.pathname === '/index.html' ||
+        document.getElementById('zsh-global-footprint') ||
+        document.querySelector('[data-zombcash-global-footprint]')) return;
+    const section = document.createElement('section');
+    section.id = 'zsh-global-footprint';
+    section.setAttribute('data-zombcash-global-footprint', 'true');
+    section.setAttribute('aria-label', 'Global website visitor statistics');
+    section.innerHTML = '<div class="zsh-global-footprint-inner"><div class="zsh-global-footprint-heading"><span class="zsh-global-pulse" aria-hidden="true"></span><span>GLOBAL OUTBREAK FOOTPRINT</span></div><div class="zsh-global-footprint-stats"><div><small>ALL-TIME VISITORS</small><strong id="zsh-global-total">—</strong></div><div><small>TODAY\'S VISITORS</small><strong id="zsh-global-today">—</strong></div><div><small>ONLINE NOW</small><strong id="zsh-global-online">—</strong></div></div><p id="zsh-global-updated">CONNECTING TO THE OUTBREAK…</p></div>';
+    const style = document.createElement('style');
+    style.id = 'zsh-global-footprint-style';
+    style.textContent = '#zsh-global-footprint{box-sizing:border-box;width:100%;max-width:100%;margin:30px auto 18px;padding:18px clamp(14px,4vw,48px);background:linear-gradient(110deg,#07100b,#080d0c 58%,#080b11);border-top:1px solid #9bff4538;border-bottom:1px solid #9bff4524;color:#d5e6d0;overflow:hidden}#zsh-global-footprint *{box-sizing:border-box}#zsh-global-footprint .zsh-global-footprint-inner{width:100%;max-width:1180px;margin:0 auto}#zsh-global-footprint .zsh-global-footprint-heading{display:flex;align-items:center;gap:9px;margin-bottom:14px;color:#9bff45;font:700 10px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.1em}#zsh-global-footprint .zsh-global-pulse{width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:#9bff45;box-shadow:0 0 10px #9bff45;animation:zshGlobalPulse 1.8s ease-in-out infinite}@keyframes zshGlobalPulse{50%{opacity:.45;box-shadow:0 0 3px #9bff45}}#zsh-global-footprint .zsh-global-footprint-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}#zsh-global-footprint .zsh-global-footprint-stats>div{min-width:0;padding:12px 14px;border:1px solid #9bff4524;background:#03080680}#zsh-global-footprint small{display:block;color:#849384;font:600 9px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.05em}#zsh-global-footprint strong{display:block;margin-top:5px;color:#9bff45;font:700 clamp(20px,3vw,28px)/1.1 Orbitron,Arial,sans-serif;font-variant-numeric:tabular-nums}#zsh-global-footprint p{margin:10px 0 0;color:#657565;font:500 9px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.06em}@media(max-width:520px){#zsh-global-footprint{margin:22px auto 14px;padding:14px 10px}#zsh-global-footprint .zsh-global-footprint-stats{gap:6px}#zsh-global-footprint .zsh-global-footprint-stats>div{padding:10px 7px}#zsh-global-footprint small{font-size:7px;letter-spacing:0}#zsh-global-footprint strong{font-size:18px}}';
+    document.head.appendChild(style);
+    const footer = document.getElementById('zsh-about-footer') || document.querySelector('body > footer, body footer');
+    if (footer && footer.parentNode) footer.parentNode.insertBefore(section, footer);
+    else document.body.appendChild(section);
+    const render = data => {
+      const total = document.getElementById('zsh-global-total');
+      const today = document.getElementById('zsh-global-today');
+      const online = document.getElementById('zsh-global-online');
+      const updated = document.getElementById('zsh-global-updated');
+      if (total && Number.isFinite(Number(data.total))) total.textContent = Number(data.total).toLocaleString();
+      if (today && Number.isFinite(Number(data.today))) today.textContent = Number(data.today).toLocaleString();
+      if (online && Number.isFinite(Number(data.online))) online.textContent = Number(data.online).toLocaleString();
+      if (updated) updated.textContent = 'UTC DAY · UPDATED ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    };
+    const refresh = () => fetch(api, {cache:'no-store'}).then(response => {
+      if (!response.ok) throw new Error('stats unavailable');
+      return response.json();
+    }).then(render).catch(() => {
+      const updated = document.getElementById('zsh-global-updated');
+      if (updated) updated.textContent = 'VISITOR STATS TEMPORARILY UNAVAILABLE';
+    });
+    refresh();
+    window.setInterval(refresh, 20000);
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addFootprint, {once:true});
+  else addFootprint();
+})();
