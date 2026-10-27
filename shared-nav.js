@@ -52,7 +52,7 @@
   // incorrectly sent visitors from /ru/, /de/, etc. to nonexistent translated copies.
   const home = '/';
   const labels = [
-    ['LIVE WORLD', '/#living-world', 'home'],
+    ['HOME', '/', 'home'],
     ['FIELD MANUAL', '/survivor-field-manual.html', 'manual'],
     ['TRANSMISSION', '/outbreak-transmission.html', 'transmission'],
     ['CREW VOTE', '/crew-vote.html', 'vote'],
