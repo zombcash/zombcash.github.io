@@ -1341,7 +1341,20 @@
       return response.json();
     }).then(render).catch(() => {
       const updated = document.getElementById('zsh-global-updated');
-      if (updated) updated.textContent = 'VISITOR STATS TEMPORARILY UNAVAILABLE';
+      if (updated) {
+        const unavailable = {
+          en: 'VISITOR STATS TEMPORARILY UNAVAILABLE',
+          de: 'BESUCHERSTATISTIK VORÜBERGEHEND NICHT VERFÜGBAR',
+          fr: 'STATISTIQUES DES VISITEURS TEMPORAIREMENT INDISPONIBLES',
+          it: 'STATISTICHE DEI VISITATORI TEMPORANEAMENTE NON DISPONIBILI',
+          ja: '訪問者統計は一時的に利用できません',
+          'zh-cn': '访客统计暂时不可用',
+          tr: 'ZİYARETÇİ İSTATİSTİKLERİ GEÇİCİ OLARAK KULLANILAMIYOR',
+          hi: 'आगंतुक आँकड़े अस्थायी रूप से उपलब्ध नहीं हैं',
+          ru: 'Статистика посетителей временно недоступна'
+        };
+        updated.textContent = unavailable[footprintLang] || unavailable[footprintLang.split('-')[0]] || unavailable.en;
+      }
     });
     refresh();
     window.setInterval(refresh, 20000);
