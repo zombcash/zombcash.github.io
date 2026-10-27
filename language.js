@@ -717,6 +717,48 @@ const homepageLastVisibleCopy={
 };
 Object.entries(homepageLastVisibleCopy).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
+
+/* Shared fixed UI found in the five-locale live spot-check. */
+const homepageRemainingUi={
+"ENTER THE UNDEAD INTERNET.":{de:"BETRITT DAS INTERNET DER UNTOTEN.",fr:"ENTREZ DANS L’INTERNET DES MORTS-VIVANTS.",it:"ENTRA NELL’INTERNET DEI NON MORTI.",ja:"アンデッド・インターネットへ。","zh-CN":"进入不死者互联网。",ru:"ВОЙДИ В ИНТЕРНЕТ НЕЖИТИ.",tr:"YAŞAYAN ÖLÜLERİN İNTERNETİNE GİR.",hi:"ज़ॉम्बी इंटरनेट में प्रवेश करें।"},
+"ENTER THE LAB ↗":{de:"LABOR BETRETEN ↗",fr:"ENTRER DANS LE LABO ↗",it:"ENTRA NEL LABORATORIO ↗",ja:"ラボに入る ↗","zh-CN":"进入实验室 ↗",ru:"ВОЙТИ В ЛАБОРАТОРИЮ ↗",tr:"LABA GİR ↗",hi:"लैब में जाएँ ↗"},
+"VIEW MARKET ↗":{de:"MARKT ANSEHEN ↗",fr:"VOIR LE MARCHÉ ↗",it:"VEDI IL MERCATO ↗",ja:"市場を見る ↗","zh-CN":"查看市场 ↗",ru:"СМОТРЕТЬ РЫНОК ↗",tr:"PİYASAYI GÖR ↗",hi:"बाज़ार देखें ↗"},
+"JOIN THE GROUP ↗":{de:"GRUPPE BEITRETEN ↗",fr:"REJOINDRE LE GROUPE ↗",it:"UNISCITI AL GRUPPO ↗",ja:"グループに参加 ↗","zh-CN":"加入群组 ↗",ru:"ВОЙТИ В ГРУППУ ↗",tr:"GRUBA KATIL ↗",hi:"ग्रुप से जुड़ें ↗"},
+"LAUNCH MEME RADAR ↗":{de:"MEME-RADAR STARTEN ↗",fr:"LANCER LE RADAR À MÈMES ↗",it:"AVVIA MEME RADAR ↗",ja:"ミームレーダーを起動 ↗","zh-CN":"启动梗币雷达 ↗",ru:"ЗАПУСТИТЬ МЕМ-РАДАР ↗",tr:"MEME RADAR'I BAŞLAT ↗",hi:"मीम रडार शुरू करें ↗"},
+"COMMUNITY RATINGS":{de:"COMMUNITY-BEWERTUNGEN",fr:"AVIS DE LA COMMUNAUTÉ",it:"VALUTAZIONI DELLA COMMUNITY",ja:"コミュニティ評価","zh-CN":"社区评分",ru:"ОЦЕНКИ СООБЩЕСТВА",tr:"TOPLULUK PUANLARI",hi:"कम्युनिटी रेटिंग"},
+"LAUNCH RADAR ↗":{de:"RADAR STARTEN ↗",fr:"LANCER LE RADAR ↗",it:"AVVIA IL RADAR ↗",ja:"レーダーを起動 ↗","zh-CN":"启动雷达 ↗",ru:"ЗАПУСТИТЬ РАДАР ↗",tr:"RADARI BAŞLAT ↗",hi:"रडार शुरू करें ↗"},
+"COMMUNITY CHAT":{de:"COMMUNITY-CHAT",fr:"CHAT COMMUNAUTAIRE",it:"CHAT DELLA COMMUNITY",ja:"コミュニティチャット","zh-CN":"社区聊天",ru:"ЧАТ СООБЩЕСТВА",tr:"TOPLULUK SOHBETİ",hi:"कम्युनिटी चैट"},
+"PROJECT UPDATES":{de:"PROJEKT-NEUIGKEITEN",fr:"ACTUALITÉS DU PROJET",it:"AGGIORNAMENTI DEL PROGETTO",ja:"プロジェクト更新情報","zh-CN":"项目动态",ru:"ОБНОВЛЕНИЯ ПРОЕКТА",tr:"PROJE GÜNCELLEMELERİ",hi:"प्रोजेक्ट अपडेट"},
+"JOIN THE CREW ↗":{de:"CREW BEITRETEN ↗",fr:"REJOINDRE L’ÉQUIPE ↗",it:"UNISCITI ALLA CREW ↗",ja:"仲間に加わる ↗","zh-CN":"加入团队 ↗",ru:"ПРИСОЕДИНИТЬСЯ К КОМАНДЕ ↗",tr:"EKİBE KATIL ↗",hi:"टीम से जुड़ें ↗"},
+"THE OUTBREAK RIGHT NOW.":{de:"DER AUSBRUCH JETZT.",fr:"L’ÉPIDÉMIE EN DIRECT.",it:"IL FOCOLAIO IN TEMPO REALE.",ja:"現在の感染状況。","zh-CN":"此刻的疫情。",ru:"ВСПЫШКА ПРЯМО СЕЙЧАС.",tr:"SALGIN ŞU ANDA.",hi:"अभी का प्रकोप।"},
+"TRADE ↗":{de:"HANDELN ↗",fr:"ÉCHANGER ↗",it:"SCAMBIER ↗",ja:"取引 ↗","zh-CN":"交易 ↗",ru:"ТОРГОВАТЬ ↗",tr:"İŞLEM YAP ↗",hi:"ट्रेड करें ↗"},
+"CHART ↗":{de:"CHART ↗",fr:"GRAPHIQUE ↗",it:"GRAFICO ↗",ja:"チャート ↗","zh-CN":"图表 ↗",ru:"ГРАФИК ↗",tr:"GRAFİK ↗",hi:"चार्ट ↗"},
+"OPEN SOLSCAN ↗":{de:"SOLSCAN ÖFFNEN ↗",fr:"OUVRIR SOLSCAN ↗",it:"APRI SOLSCAN ↗",ja:"Solscanを開く ↗","zh-CN":"打开 Solscan ↗",ru:"ОТКРЫТЬ SOLSCAN ↗",tr:"SOLSCAN'I AÇ ↗",hi:"SOLSCAN खोलें ↗"},
+"OPEN JUPITER IN A NEW TAB ↗":{de:"JUPITER IN NEUEM TAB ÖFFNEN ↗",fr:"OUVRIR JUPITER DANS UN NOUVEL ONGLET ↗",it:"APRI JUPITER IN UNA NUOVA SCHEDA ↗",ja:"新しいタブでJupiterを開く ↗","zh-CN":"在新标签页打开 Jupiter ↗",ru:"ОТКРЫТЬ JUPITER В НОВОЙ ВКЛАДКЕ ↗",tr:"JUPITER'I YENİ SEKMEDE AÇ ↗",hi:"JUPITER नए टैब में खोलें ↗"},
+"TOP ZOMBIE HUNTERS":{de:"TOP-ZOMBIEJÄGER",fr:"MEILLEURS CHASSEURS DE ZOMBIES",it:"MIGLIORI CACCIATORI DI ZOMBI",ja:"ゾンビハンターランキング","zh-CN":"顶尖僵尸猎人",ru:"ЛУЧШИЕ ОХОТНИКИ НА ЗОМБИ",tr:"EN İYİ ZOMBİ AVCILARI",hi:"शीर्ष ज़ॉम्बी शिकारी"},
+"PLAY THE ARCADE":{de:"ARCADE SPIELEN",fr:"JOUER À L’ARCADE",it:"GIOCA ALL’ARCADE",ja:"アーケードで遊ぶ","zh-CN":"进入街机游戏",ru:"ИГРАТЬ В АРКАДУ",tr:"ARCADE OYNA",hi:"आर्केड खेलें"},
+"ONE MORE RUN. NO HUMANITY.":{de:"NOCH EIN RUN. KEINE MENSCHLICHKEIT.",fr:"ENCORE UNE PARTIE. PLUS D’HUMANITÉ.",it:"UN’ALTRA PARTITA. NIENTE UMANITÀ.",ja:"もう一度。人間性は不要。","zh-CN":"再来一局。不留人性。",ru:"ЕЩЁ ОДИН ЗАБЕГ. НИКАКОЙ ЧЕЛОВЕЧНОСТИ.",tr:"BİR TUR DAHA. İNSANLIK YOK.",hi:"एक और राउंड। इंसानियत नहीं।"},
+"ALONE.":{de:"ALLEIN.",fr:"SEUL.",it:"DA SOLO.",ja:"ひとりで。","zh-CN":"独自生存。",ru:"ОДИН.",tr:"TEK BAŞINA.",hi:"अकेले।"},
+"Live World":{de:"Lebendige Welt",fr:"Monde vivant",it:"Mondo vivo",ja:"ライブワールド","zh-CN":"生存世界",ru:"Живой мир",tr:"Canlı Dünya",hi:"जीवित दुनिया"},
+"Buy $ZOMBCASH":{de:"$ZOMBCASH kaufen",fr:"Acheter $ZOMBCASH",it:"Acquista $ZOMBCASH",ja:"$ZOMBCASHを購入","zh-CN":"购买 $ZOMBCASH",ru:"Купить $ZOMBCASH",tr:"$ZOMBCASH satın al",hi:"$ZOMBCASH खरीदें"},
+"Survivor Field Manual":{de:"Feldhandbuch der Überlebenden",fr:"Manuel de terrain des survivants",it:"Manuale da campo dei sopravvissuti",ja:"サバイバーフィールドマニュアル","zh-CN":"幸存者实地手册",ru:"Полевое руководство выживших",tr:"Hayatta Kalanlar Saha Rehberi",hi:"सर्वाइवर फील्ड मैनुअल"},
+"Survivor Hub":{de:"Überlebenden-Zentrale",fr:"Base des survivants",it:"Hub dei sopravvissuti",ja:"サバイバーハブ","zh-CN":"幸存者中心",ru:"Центр выживших",tr:"Hayatta Kalanlar Merkezi",hi:"सर्वाइवर हब"},
+"COMMUNITY & DATA":{de:"COMMUNITY & DATEN",fr:"COMMUNAUTÉ ET DONNÉES",it:"COMMUNITY E DATI",ja:"コミュニティとデータ","zh-CN":"社区与数据",ru:"СООБЩЕСТВО И ДАННЫЕ",tr:"TOPLULUK VE VERİ",hi:"कम्युनिटी और डेटा"},
+"Review the latest $ZOMBCASH market snapshot.":{de:"Sieh dir den aktuellen $ZOMBCASH-Marktüberblick an.",fr:"Consultez le dernier aperçu du marché $ZOMBCASH.",it:"Consulta l’ultimo riepilogo del mercato $ZOMBCASH.",ja:"最新の$ZOMBCASH市場スナップショットを確認しましょう。","zh-CN":"查看最新的 $ZOMBCASH 市场概览。",ru:"Изучи последний обзор рынка $ZOMBCASH.",tr:"En son $ZOMBCASH piyasa özetini inceleyin.",hi:"नवीनतम $ZOMBCASH बाज़ार सारांश देखें।"}
+};
+Object.entries(homepageRemainingUi).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
+
+/* Split heading fragments are separate DOM text nodes, so translate each fragment too. */
+const homepageSplitHeadingTranslations={
+"THE CREW":{de:"DIE CREW",fr:"L’ÉQUIPE",it:"LA CREW",ja:"クルー","zh-CN":"团队",ru:"КОМАНДА",tr:"EKİP",hi:"टीम"},
+"DECIDES.":{de:"ENTSCHEIDET.",fr:"DÉCIDE.",it:"DECIDE.",ja:"が決める。","zh-CN":"来决定。",ru:"РЕШАЕТ.",tr:"KARAR VERİR.",hi:"फ़ैसला करती है।"},
+"YOUR WALLET.":{de:"DEIN WALLET.",fr:"VOTRE PORTEFEUILLE.",it:"IL TUO WALLET.",ja:"あなたのウォレット。","zh-CN":"你的钱包。",ru:"ТВОЙ КОШЕЛЁК.",tr:"CÜZDANIN.",hi:"आपका वॉलेट।"},
+"YOUR CALL.":{de:"DEINE ENTSCHEIDUNG.",fr:"VOTRE CHOIX.",it:"LA TUA SCELTA.",ja:"決めるのはあなた。","zh-CN":"由你做主。",ru:"ТВОЁ РЕШЕНИЕ.",tr:"KARAR SENİN.",hi:"आपका फ़ैसला।"},
+"LIVE FOOTPRINT.":{de:"LIVE-SPUREN.",fr:"TRACES EN DIRECT.",it:"TRACCE IN TEMPO REALE.",ja:"ライブの痕跡。","zh-CN":"实时足迹。",ru:"СЛЕД В РЕАЛЬНОМ ВРЕМЕНИ.",tr:"CANLI İZLER.",hi:"लाइव गतिविधि。"}
+};
+Object.entries(homepageSplitHeadingTranslations).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 const supportedLanguages=['en','de','fr','it','ja','zh-CN','ru','tr','hi'];
 const getRequestedLanguage=()=>{try{const q=new URLSearchParams(location.search).get('lang');if(q&&supportedLanguages.includes(q))return q;}catch(_){}return null;};
