@@ -1,5 +1,6 @@
 /* Render the public aggregate traffic dashboard from the first-party API. */
 (() => {
+  if (new URLSearchParams(window.location.search).get('arcadeSnake') === '1') return;
   const root = document.getElementById('campaign-dashboard');
   if (!root) return;
   const endpoint = 'https://zombcash-bot.fadehost.app/api/track';
@@ -1222,6 +1223,7 @@ if (zomMarket) {
 
 /* Live system status: use real API responses and never display fabricated market data. */
 (() => {
+  if (new URLSearchParams(window.location.search).get('arcadeSnake') === '1') return;
   const apiBase = 'https://zombcash-bot.fadehost.app';
   const byId = id => document.getElementById(id);
   const setService = (name, state) => {
