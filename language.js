@@ -1139,7 +1139,11 @@ const sharedNavigationTranslations = {
   "LOTTERY": {de:"LOTTERIE",fr:"LOTERIE",it:"LOTTERIA",ja:"宝くじ","zh-CN":"抽奖",ru:"ЛОТЕРЕЯ",tr:"ÇEKİLİŞ",hi:"लॉटरी"},
   "BUY $ZOMBCASH": {de:"$ZOMBCASH KAUFEN",fr:"ACHETER $ZOMBCASH",it:"COMPRA $ZOMBCASH",ja:"$ZOMBCASHを購入","zh-CN":"购买 $ZOMBCASH",ru:"КУПИТЬ $ZOMBCASH",tr:"$ZOMBCASH SATIN AL",hi:"$ZOMBCASH खरीदें"},
   "BACK TO HOME": {de:"ZURÜCK ZUR STARTSEITE",fr:"RETOUR À L’ACCUEIL",it:"TORNA ALLA HOME",ja:"ホームに戻る","zh-CN":"返回首页",ru:"НА ГЛАВНУЮ",tr:"ANA SAYFAYA DÖN",hi:"होम पर लौटें"},
-  "LOGIN WITH TELEGRAM": {de:"MIT TELEGRAM ANMELDEN",fr:"SE CONNECTER AVEC TELEGRAM",it:"ACCEDI CON TELEGRAM",ja:"Telegramでログイン","zh-CN":"使用 Telegram 登录",ru:"ВОЙТИ ЧЕРЕЗ TELEGRAM",tr:"TELEGRAM İLE GİRİŞ YAP",hi:"TELEGRAM से लॉगिन करें"}
+  "LOGIN WITH TELEGRAM": {de:"MIT TELEGRAM ANMELDEN",fr:"SE CONNECTER AVEC TELEGRAM",it:"ACCEDI CON TELEGRAM",ja:"Telegramでログイン","zh-CN":"使用 Telegram 登录",ru:"ВОЙТИ ЧЕРЕЗ TELEGRAM",tr:"TELEGRAM İLE GİRİŞ YAP",hi:"TELEGRAM से लॉगिन करें"},
+  "MENU": {de:"MENÜ",fr:"MENU",it:"MENU",ja:"メニュー","zh-CN":"菜单",ru:"МЕНЮ",tr:"MENÜ",hi:"मेन्यू"},
+  "OPEN NAVIGATION": {de:"Navigation öffnen",fr:"Ouvrir la navigation",it:"Apri la navigazione",ja:"ナビゲーションを開く","zh-CN":"打开导航",ru:"ОТКРЫТЬ МЕНЮ",tr:"Gezinmeyi aç",hi:"नेविगेशन खोलें"},
+  "MAIN NAVIGATION": {de:"Hauptnavigation",fr:"Navigation principale",it:"Navigazione principale",ja:"メインナビゲーション","zh-CN":"主导航",ru:"ОСНОВНАЯ НАВИГАЦИЯ",tr:"Ana gezinme",hi:"मुख्य नेविगेशन"},
+  "ZOMBIECASH HOME": {de:"ZombieCash-Startseite",fr:"Accueil ZombieCash",it:"Home ZombieCash",ja:"ZombieCashホーム","zh-CN":"ZombieCash 首页",ru:"ГЛАВНАЯ ZOMBIECASH",tr:"ZombieCash ana sayfa",hi:"ZombieCash होम"}
 };
 Object.entries(sharedNavigationTranslations).forEach(([source, translations]) => {
   Object.entries(translations).forEach(([lang, value]) => {
