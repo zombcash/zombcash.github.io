@@ -911,6 +911,14 @@ const homepageDynamicLabels={
 };
 Object.entries(homepageDynamicLabels).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
+
+/* Final live audit polish: localize the full source nodes, including the icon prefix. */
+const homepageFeedBrandLabels={
+"☣ ZOMBIECASH ORIGINAL":{de:"☣ ZOMBIECASH-ORIGINAL",fr:"☣ ÉDITION ORIGINALE ZOMBIECASH",it:"☣ ZOMBIECASH ORIGINALE",ja:"☣ ZOMBIECASHオリジナル","zh-CN":"☣ ZOMBIECASH 原创",ru:"☣ ОРИГИНАЛ ZOMBIECASH",tr:"☣ ZOMBIECASH ORİJİNAL",hi:"☣ ZOMBIECASH ओरिजिनल"},
+"ZOMBIECASH NEWS ONLINE":{de:"ZOMBIECASH-NACHRICHTEN ONLINE",fr:"ACTUALITÉS ZOMBIECASH EN LIGNE",it:"NOTIZIE ZOMBIECASH ONLINE",ja:"ZOMBIECASHニュース配信中","zh-CN":"ZOMBIECASH 新闻在线",ru:"НОВОСТИ ZOMBIECASH В СЕТИ",tr:"ZOMBIECASH HABERLERİ ÇEVRİM İÇİ",hi:"ZOMBIECASH समाचार ऑनलाइन"}
+};
+Object.entries(homepageFeedBrandLabels).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 const supportedLanguages=['en','de','fr','it','ja','zh-CN','ru','tr','hi'];
 const getRequestedLanguage=()=>{try{const q=new URLSearchParams(location.search).get('lang');if(q&&supportedLanguages.includes(q))return q;}catch(_){}return null;};
