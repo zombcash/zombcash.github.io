@@ -66,7 +66,10 @@
     const suffix = href.includes('#') ? '#' + href.split('#').slice(1).join('#') : '';
     // Only route to localized files confirmed to exist in every locale tree.
     const localizedCore = ['index.html','survivor-field-manual.html','outbreak-transmission.html','buy-zombcash.html'];
-    if (localizedCore.includes(key)) return '/' + locale + '/' + key + suffix;
+    if (localizedCore.includes(key)) {
+      const localizedPath = key === 'index.html' ? '/' + locale + '/' : '/' + locale + '/' + key;
+      return localizedPath + suffix;
+    }
     // Features without a localized counterpart remain explicit English destinations.
     return href;
   };
