@@ -1350,12 +1350,53 @@
 })();
 
 
-// Shared responsive A-ADS placement for pages without a page-specific ad unit.
-// Reuses the site's existing adaptive unit; never duplicates a slot already on the page.
+// A-ADS is permitted only once on the English homepage.
+// Remove A-ADS containers from every other page and prevent late ad injection.
 (() => {
   'use strict';
+  const isEnglishHomepage = (location.pathname === '/' || location.pathname === '/index.html') &&
+    (document.documentElement.lang || 'en').toLowerCase().startsWith('en');
+  const adSelector = 'iframe[data-aa], .aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, [data-zombcash-ad-slot]';
+  const removeAads = () => {
+    const nodes = Array.from(document.querySelectorAll(adSelector));
+    if (isEnglishHomepage) {
+      // Keep exactly one existing A-ADS unit on the English homepage.
+      const keep = document.querySelector('iframe[data-aa="2460185"]');
+      nodes.forEach(node => {
+        if (keep && (node === keep || node.contains(keep) || keep.contains(node))) return;
+        if (node.matches('iframe[data-aa]')) {
+          const wrapper = node.closest('.aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, [data-zombcash-ad-slot]');
+          if (wrapper) wrapper.remove();
+          else node.remove();
+        } else if (!keep || !node.contains(keep)) {
+          node.remove();
+        }
+      });
+      return;
+    }
+    nodes.forEach(node => {
+      if (node.matches('iframe[data-aa]')) {
+        const wrapper = node.closest('.aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, [data-zombcash-ad-slot]');
+        if (wrapper) wrapper.remove();
+        else node.remove();
+      } else {
+        node.remove();
+      }
+    });
+  };
+  removeAads();
+  const adRemovalObserver = new MutationObserver(removeAads);
+  const startAdRemovalObserver = () => {
+    if (document.body) adRemovalObserver.observe(document.body, {childList:true, subtree:true});
+  };
+  if (document.body) startAdRemovalObserver();
+  else document.addEventListener('DOMContentLoaded', startAdRemovalObserver, {once:true});
+  if (!isEnglishHomepage) return;
+
+  // Shared responsive placement is retained only as a fallback for the English homepage.
+  // The homepage's existing unit wins, so this never adds a second block.
   const addSharedAd = () => {
-    if (!document.body || document.querySelector('iframe[data-aa], .aads-ad-section, .arcade-ad-unit, [data-zombcash-ad-slot]')) return;
+    if (!document.body || document.querySelector('iframe[data-aa="2460185"], .aads-ad-section, .arcade-ad-unit, [data-zombcash-ad-slot]')) return;
     const slot = document.createElement('section');
     slot.className = 'aads-ad-section zsh-shared-ad';
     slot.setAttribute('aria-label', 'Advertisement');
