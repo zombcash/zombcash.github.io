@@ -17,8 +17,8 @@ SITEMAP_URL = "https://zombcash.github.io/sitemap-gallery-images.xml"
 
 def clean_caption(value):
     return re.split(
-        r"━━━━━━━━|🧟\\s*\\$ZOMBCASH|MARKET DIED\\.|📋\\s*CA:|🌐\\s*Website:|𝕏\\s*X Community|💬\\s*Telegram",
-        re.sub(r"\\s+", " ", str(value or "")),
+        r"━━━━━━━━|🧟\s*\$ZOMBCASH|MARKET DIED\.|📋\s*CA:|🌐\s*Website:|𝕏\s*X Community|💬\s*Telegram",
+        re.sub(r"\s+", " ", str(value or "")),
         flags=re.IGNORECASE,
     )[0].strip()
 
@@ -26,7 +26,7 @@ def clean_caption(value):
 def make_cards(items):
     cards = []
     for item in items:
-        image = html.escape(str(item.get("image", "")), quote=True)
+        image = html.escape(str(item.get("image", "")).strip(), quote=True)
         caption_raw = str(item.get("caption", ""))
         caption = clean_caption(caption_raw)
         post = html.escape(str(item.get("post_url") or "https://t.me/ZOMBCASH"), quote=True)
@@ -35,12 +35,12 @@ def make_cards(items):
         if not image.startswith(("https://", "http://")):
             continue
         cards.append(
-            '      <article class="gallery-card" tabindex="0" role="button" aria-label="Open image: ' + esc_caption + '">\\n'
-            '        <img src="' + image + '" alt="ZombieCash gallery image: ' + esc_caption + '" title="' + esc_caption + '" loading="lazy" decoding="async" width="800" height="800">\\n'
-            '        <div class="gallery-caption"><p data-original-caption="' + esc_raw + '">' + esc_caption + '</p><a href="' + post + '" target="_blank" rel="noreferrer">SOURCE ↗</a></div>\\n'
+            '      <article class="gallery-card" tabindex="0" role="button" aria-label="Open image: ' + esc_caption + '">\n'
+            '        <img src="' + image + '" alt="ZombieCash gallery image: ' + esc_caption + '" title="' + esc_caption + '" loading="lazy" decoding="async">\n'
+            '        <div class="gallery-caption"><p data-original-caption="' + esc_raw + '">' + esc_caption + '</p><a href="' + post + '" target="_blank" rel="noreferrer">SOURCE ↗</a></div>\n'
             '      </article>'
         )
-    return "\\n".join(cards)
+    return "\n".join(cards)
 
 
 def make_sitemap(items):
@@ -65,7 +65,7 @@ def make_sitemap(items):
             '    </image:image>',
         ])
     rows.extend(['  </url>', '</urlset>', ''])
-    return "\\n".join(rows), len(seen)
+    return "\n".join(rows), len(seen)
 
 
 def main():
@@ -79,7 +79,7 @@ def main():
         raise SystemExit("gallery.html is missing generated-card markers; refusing to overwrite it")
     before, rest = gallery.split(START, 1)
     _, after = rest.split(END, 1)
-    gallery = before + START + "\\n" + make_cards(items) + "\\n      " + END + after
+    gallery = before + START + "\n" + make_cards(items) + "\n      " + END + after
     GALLERY_FILE.write_text(gallery, encoding="utf-8")
 
     sitemap, image_count = make_sitemap(items)
@@ -87,7 +87,7 @@ def main():
 
     robots = ROBOTS_FILE.read_text(encoding="utf-8")
     if SITEMAP_URL not in robots:
-        robots = robots.rstrip() + "\\nSitemap: " + SITEMAP_URL + "\\n"
+        robots = robots.rstrip() + "\nSitemap: " + SITEMAP_URL + "\n"
         ROBOTS_FILE.write_text(robots, encoding="utf-8")
     print(f"Synced {image_count} unique images into gallery HTML and image sitemap.")
 
