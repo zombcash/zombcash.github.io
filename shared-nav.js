@@ -1449,7 +1449,7 @@
     document.body.classList.add('zc-homepage-ad-enabled');
     section.classList.add('zc-home-floating-ad');
     section.setAttribute('aria-label', 'Advertisement');
-    hero.appendChild(section);
+    if (section.parentElement !== hero) hero.appendChild(section);
     ensureFixedAdSize(section);
     addHomeAdStyles();
   };
