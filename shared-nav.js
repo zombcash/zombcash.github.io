@@ -1450,7 +1450,7 @@
       const href = target.getAttribute('href') || target.dataset.href || '';
       let url = null;
       try { if (href) url = new URL(href, location.href); } catch (_) {}
-      const text = (target.innerText || target.getAttribute('aria-label') || target.getAttribute('title') || '').trim().replace(/\\s+/g, ' ').slice(0, 120);
+      const text = (target.innerText || target.getAttribute('aria-label') || target.getAttribute('title') || '').trim().replace(/\s+/g, ' ').slice(0, 120);
       const domain = url ? url.hostname.toLowerCase() : '';
       const path = url ? url.pathname.toLowerCase() : '';
       const params = {
@@ -1459,9 +1459,9 @@
         link_domain: domain,
         page_path: location.pathname
       };
-      const isTelegram = /(^|\\.)t\\.me$|(^|\\.)telegram\\.me$/.test(domain) || /telegram/i.test(text);
-      const isX = /(^|\\.)x\\.com$|(^|\\.)twitter\\.com$/.test(domain) || /\\b(x community|follow on x|twitter)\\b/i.test(text);
-      const isTokenMarket = /pump\\.fun$|dexscreener\\.com$|jup\\.ag$/.test(domain) || /buy zombcash|view token|open on dex/i.test(text);
+      const isTelegram = /(^|\.)t\.me$|(^|\.)telegram\.me$/.test(domain) || /telegram/i.test(text);
+      const isX = /(^|\.)x\.com$|(^|\.)twitter\.com$/.test(domain) || /\b(x community|follow on x|twitter)\b/i.test(text);
+      const isTokenMarket = /pump\.fun$|dexscreener\.com$|jup\.ag$/.test(domain) || /buy zombcash|view token|open on dex/i.test(text);
       const isLogin = /zsh-login-button|telegram-login/i.test(String(target.className || '') + ' ' + text) || /login with telegram|register|join the survivors/i.test(text);
       if (isLogin) {
         window.gtag('event', 'telegram_login_click', Object.assign({cta_type:'login'}, params));
@@ -1471,9 +1471,9 @@
         window.gtag('event', 'x_community_click', params);
       } else if (isTokenMarket) {
         window.gtag('event', 'token_market_click', params);
-      } else if (/zombie-maker\\.html/.test(path) || /zombie maker/i.test(text)) {
+      } else if (/zombie-maker\.html/.test(path) || /zombie maker/i.test(text)) {
         window.gtag('event', 'zombie_maker_open', params);
-      } else if (/arcade\\.html|survivor-hub\\.html|survivor-challenge/i.test(path) || /\\b(play|launch|start game)\\b/i.test(text)) {
+      } else if (/arcade\.html|survivor-hub\.html|survivor-challenge/i.test(path) || /\b(play|launch|start game)\b/i.test(text)) {
         window.gtag('event', 'game_open', params);
       } else if (url && url.origin !== location.origin) {
         window.gtag('event', 'outbound_click', params);
