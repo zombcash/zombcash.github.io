@@ -135,7 +135,7 @@
     '<div class="zsh-actions">' +
       (!isHome ? '<a class="zsh-home home-return-button" href="' + target('/') + '"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
       '<div class="zsh-language-slot"></div>' +
-      (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<a class="zsh-login-button top-cta" href="/survivor-hub.html" data-zsh-login>LOGIN WITH TELEGRAM</a>') +
+      (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<a class="zsh-login-button top-cta" href="/survivor-hub.html" data-zsh-login>JOIN THE SURVIVORS</a>') +
     '</div>';
 
   const actions = header.querySelector('.zsh-actions');
@@ -1156,7 +1156,7 @@
     });
     const back = header.querySelector('.zsh-actions > .zsh-home');
     if (back) back.innerHTML = '<span aria-hidden="true">←</span> ' + (translated ? translated[10] : 'BACK TO HOME');
-    /* The global header now uses LOGIN WITH TELEGRAM, not a registration CTA. */
+    /* Keep the global CTA as JOIN THE SURVIVORS; the Survivor Hub's actual login control remains LOGIN WITH TELEGRAM. */
     const menuLabel = header.querySelector('.zsh-menu-label');
     if (menuLabel) menuLabel.textContent = translated ? translated[13] : 'MENU';
     const brandSmall = header.querySelector('.zsh-brand-copy small');
@@ -1171,7 +1171,11 @@
     const loginControl = header.querySelector('.zsh-login-button');
     if (loginControl) {
       const loginLabels = {de:'MIT TELEGRAM ANMELDEN',fr:'SE CONNECTER AVEC TELEGRAM',it:'ACCEDI CON TELEGRAM',ja:'TELEGRAMでログイン','zh-CN':'使用 TELEGRAM 登录',ru:'ВОЙТИ ЧЕРЕЗ TELEGRAM',tr:'TELEGRAM İLE GİRİŞ',hi:'TELEGRAM से लॉग इन करें'};
-      loginControl.textContent = language === 'en' ? 'LOGIN WITH TELEGRAM' : (loginLabels[language] || 'LOGIN WITH TELEGRAM');
+      if (file === 'survivor-hub.html') {
+        loginControl.textContent = language === 'en' ? 'LOGIN WITH TELEGRAM' : (loginLabels[language] || 'LOGIN WITH TELEGRAM');
+      } else {
+        loginControl.textContent = language === 'en' ? 'JOIN THE SURVIVORS' : (translated ? translated[11] : 'JOIN THE SURVIVORS');
+      }
     }
   }
   const readLanguage = () => {
