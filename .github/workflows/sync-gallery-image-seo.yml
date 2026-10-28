@@ -1,0 +1,43 @@
+name: Sync gallery image SEO assets
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "gallery-data.json"
+      - "scripts/sync_gallery_image_seo.py"
+      - ".github/workflows/sync-gallery-image-seo.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "17 */6 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-gallery-image-seo
+  cancel-in-progress: false
+
+jobs:
+  sync-gallery:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Regenerate crawlable gallery and image sitemap
+        run: python scripts/sync_gallery_image_seo.py
+      - name: Commit generated SEO assets when changed
+        run: |
+          if git diff --quiet -- gallery.html sitemap-gallery-images.xml robots.txt; then
+            echo "Gallery SEO assets are already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add gallery.html sitemap-gallery-images.xml robots.txt
+          git commit -m "SEO: sync gallery image index"
+          git push
