@@ -112,12 +112,12 @@
 
   header.classList.add('zombcash-shared-header');
   header.innerHTML =
-    '<a class="zsh-brand notranslate" translate="no" href="' + brandHref + '" aria-label="ZombieCash home">' +
+    '<a class="zsh-brand notranslate" translate="no" href="' + brandHref + '" aria-label="ZOMBIECASH HOME">' +
       '<span class="zsh-mark" aria-hidden="true">☣</span>' +
       '<span class="zsh-brand-copy">ZOMBIE<span class="zsh-green">CASH</span><small>THE UNDEAD INTERNET</small></span>' +
     '</a>' +
-    '<button class="zsh-menu-toggle" type="button" aria-label="Open navigation" aria-controls="zsh-navigation" aria-expanded="false"><span aria-hidden="true">☰</span><span class="zsh-menu-label">MENU</span></button>' +
-    '<nav id="zsh-navigation" class="zsh-nav" aria-label="Main navigation">' +
+    '<button class="zsh-menu-toggle" type="button" aria-label="OPEN NAVIGATION" aria-controls="zsh-navigation" aria-expanded="false"><span aria-hidden="true">☰</span><span class="zsh-menu-label">MENU</span></button>' +
+    '<nav id="zsh-navigation" class="zsh-nav" aria-label="MAIN NAVIGATION">' +
       labels.map(([label, href, id]) => {
         const destination = target(href);
         const active = (id === 'manual' && file === 'survivor-field-manual.html') ||
