@@ -282,9 +282,9 @@
     header.zombcash-shared-header .zsh-actions .survivor-entry-button,
     header.zombcash-shared-header .zsh-actions .top-cta,
     header.zombcash-shared-header .zsh-actions .zsh-login-button{cursor:pointer;text-decoration:none!important}
-    /* Keep language control first, Back to Home before registration, registration at far right. */
-    header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:1!important}
-    header.zombcash-shared-header .zsh-actions>.zsh-home{order:2!important}
+    /* Back to Home first, language selector second, registration CTA at far right. */
+    header.zombcash-shared-header .zsh-actions>.zsh-home{order:1!important}
+    header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:2!important}
     header.zombcash-shared-header .zsh-actions .zsh-login-button{order:3!important}
     header.zombcash-shared-header .zsh-actions>.zsh-home:hover,
     header.zombcash-shared-header .zsh-actions .language-trigger:hover,
@@ -496,9 +496,9 @@
     header.zombcash-shared-header .zsh-nav>a[aria-current="page"]{
       box-shadow:inset 0 -2px 0 #9bff45!important;
     }
-    /* Consistent action order on every page: language, Back to Home, registration at far right. */
-    header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:1!important}
-    header.zombcash-shared-header .zsh-actions>.zsh-home{order:2!important}
+    /* Consistent action order on every page: Back to Home, language, registration at far right. */
+    header.zombcash-shared-header .zsh-actions>.zsh-home{order:1!important}
+    header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:2!important}
     header.zombcash-shared-header .zsh-actions .zsh-login-button{order:3!important}
     body.zsh-inner-page>.wrap,
     body.zsh-inner-page>.container,
@@ -1088,9 +1088,9 @@
         min-width:0!important;
       }
       header.zombcash-shared-header .zsh-language-slot {
-        order:1!important;display:flex!important;align-items:center!important;flex:0 0 auto!important;
+        order:2!important;display:flex!important;align-items:center!important;flex:0 0 auto!important;
       }
-      header.zombcash-shared-header .zsh-actions>.zsh-home { order:2!important; }
+      header.zombcash-shared-header .zsh-actions>.zsh-home { order:1!important; }
       header.zombcash-shared-header .zsh-actions .zsh-login-button { order:3!important; }
       header.zombcash-shared-header .language-switcher {
         position:relative!important;flex:0 0 auto!important;max-width:none!important;
