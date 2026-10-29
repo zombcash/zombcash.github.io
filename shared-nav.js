@@ -1386,18 +1386,21 @@
     style.textContent = `
       body.zc-homepage-ad-enabled .hero {
         display:grid!important;
-        grid-template-columns:minmax(0,1.1fr) minmax(380px,.9fr)!important;
+        grid-template-columns:minmax(0,760px) minmax(360px,520px)!important;
         grid-template-rows:auto auto!important;
+        justify-content:center!important;
         align-items:start!important;
-        gap:clamp(28px,3.2vw,52px)!important;
+        column-gap:clamp(28px,3vw,52px)!important;
+        row-gap:36px!important;
         width:100%!important;
         max-width:none!important;
         height:auto!important;
         min-height:760px!important;
         max-height:none!important;
         margin-inline:0!important;
-        padding:clamp(48px,5vw,76px) clamp(24px,6.5vw,104px) 64px!important;
+        padding:clamp(44px,5vw,76px) clamp(24px,4vw,64px) 64px!important;
         overflow:hidden!important;
+        box-sizing:border-box!important;
       }
       body.zc-homepage-ad-enabled .hero > .hero-layout {
         grid-column:1!important;
@@ -1523,10 +1526,11 @@
       body.zc-homepage-ad-enabled .hero > .hero-bottom {
         grid-column:1 / -1!important;
       }
-      @media(max-width:900px) {
+      @media(max-width:1100px) {
         body.zc-homepage-ad-enabled .hero {
           grid-template-columns:minmax(0,1fr)!important;
           grid-template-rows:auto auto auto!important;
+          justify-content:stretch!important;
           gap:24px!important;
           min-height:0!important;
           padding:36px clamp(18px,4vw,36px) 32px!important;
