@@ -1370,7 +1370,7 @@
   'use strict';
   const path = location.pathname;
   const isHomepage = path === '/' || path === '/index.html' ||
-    /^\/(?:de|fr|it|ja|zh-CN|ru|tr|hi)\/?$/.test(path);
+    /^\/(?:de|fr|it|ja|zh-CN|ru|tr|hi)(?:\/index\.html)?\/?$/.test(path);
   const adSrc = 'https://acceptable.a-ads.com/2460185/?size=Adaptive';
   const wrapperSelector = '.aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, [data-zombcash-ad-slot]';
   const iframeSelector = 'iframe[data-aa="2460185"]';
