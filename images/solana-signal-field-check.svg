@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
+<title id="title">Solana memecoin field signal check</title>
+<desc id="desc">A survival field console showing four checks: token mint identity, liquidity depth, holder distribution and sellability.</desc>
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#14251a"/><stop offset="1" stop-color="#080d12"/></linearGradient>
+ <radialGradient id="radar"><stop stop-color="#9bff45" stop-opacity=".22"/><stop offset="1" stop-color="#9bff45" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1200" height="560" rx="28" fill="url(#bg)"/>
+<g stroke="#35543a" opacity=".55"><path d="M0 90H1200M0 180H1200M0 270H1200M0 360H1200M0 450H1200"/><path d="M120 0V560M240 0V560M360 0V560M480 0V560M600 0V560M720 0V560M840 0V560M960 0V560M1080 0V560"/></g>
+<circle cx="260" cy="280" r="205" fill="url(#radar)"/>
+<g fill="none" stroke="#9bff45" stroke-width="3" opacity=".8"><circle cx="260" cy="280" r="165"/><circle cx="260" cy="280" r="110"/><circle cx="260" cy="280" r="55"/><path d="M260 75V485M55 280H465M115 135L405 425M405 135L115 425"/></g>
+<path d="M260 280L390 156" stroke="#9bff45" stroke-width="6" stroke-linecap="round"/><circle cx="390" cy="156" r="10" fill="#d2ffb2"/>
+<g font-family="Arial,sans-serif" fill="#edf5eb"><text x="520" y="95" font-size="26" letter-spacing="6" fill="#9bff45" font-weight="700">SURVIVOR FIELD CHECK</text><text x="520" y="145" font-size="42" font-weight="700">READ THE SIGNALS.</text><text x="520" y="190" font-size="25" fill="#b8cbb6">Never trust one metric on its own.</text></g>
+<g font-family="Arial,sans-serif">
+ <g transform="translate(520 245)"><rect width="285" height="112" rx="16" fill="#0a120d" stroke="#496c40" stroke-width="2"/><text x="22" y="38" fill="#9bff45" font-size="18" font-weight="700">01 / IDENTITY</text><text x="22" y="76" fill="#edf5eb" font-size="22">Verify the full mint</text></g>
+ <g transform="translate(835 245)"><rect width="285" height="112" rx="16" fill="#0a120d" stroke="#496c40" stroke-width="2"/><text x="22" y="38" fill="#9bff45" font-size="18" font-weight="700">02 / LIQUIDITY</text><text x="22" y="76" fill="#edf5eb" font-size="22">Inspect pool depth</text></g>
+ <g transform="translate(520 380)"><rect width="285" height="112" rx="16" fill="#0a120d" stroke="#496c40" stroke-width="2"/><text x="22" y="38" fill="#9bff45" font-size="18" font-weight="700">03 / HOLDERS</text><text x="22" y="76" fill="#edf5eb" font-size="22">Check concentration</text></g>
+ <g transform="translate(835 380)"><rect width="285" height="112" rx="16" fill="#0a120d" stroke="#496c40" stroke-width="2"/><text x="22" y="38" fill="#9bff45" font-size="18" font-weight="700">04 / EXIT</text><text x="22" y="76" fill="#edf5eb" font-size="22">Test sellability safely</text></g>
+</g></svg>
