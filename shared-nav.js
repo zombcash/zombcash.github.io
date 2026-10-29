@@ -1433,11 +1433,50 @@
         box-sizing:border-box!important;
       }
       body.zc-homepage-ad-enabled main#home > .hero {
-        width:100%!important;
-        max-width:none!important;
-        margin-left:0!important;
-        margin-right:0!important;
+        display:grid!important;
         grid-template-columns:minmax(0,1fr) minmax(320px,390px)!important;
+        grid-template-rows:auto!important;
+        width:calc(100% - 48px)!important;
+        max-width:1360px!important;
+        min-width:0!important;
+        margin:0 auto!important;
+        padding:32px 28px!important;
+        gap:28px!important;
+        position:relative!important;
+        isolation:isolate!important;
+        box-sizing:border-box!important;
+      }
+      /* Decorative hero layers are absolutely positioned; otherwise they become
+         extra CSS-grid items and silently create extra columns/rows. */
+      body.zc-homepage-ad-enabled main#home > .hero > .hero-grid,
+      body.zc-homepage-ad-enabled main#home > .hero > .moon,
+      body.zc-homepage-ad-enabled main#home > .hero > .city {
+        position:absolute!important;
+        inset:0!important;
+        width:100%!important;
+        height:100%!important;
+        pointer-events:none!important;
+        z-index:0!important;
+      }
+      body.zc-homepage-ad-enabled main#home > .hero > .hero-layout {
+        grid-column:1!important;
+        grid-row:1!important;
+        position:relative!important;
+        z-index:1!important;
+        width:100%!important;
+        min-width:0!important;
+        max-width:none!important;
+        margin:0!important;
+      }
+      body.zc-homepage-ad-enabled main#home > .hero > .zc-home-right-stack {
+        grid-column:2!important;
+        grid-row:1!important;
+        position:relative!important;
+        z-index:2!important;
+        width:100%!important;
+        min-width:0!important;
+        max-width:none!important;
+        margin:0!important;
       }
       body.zc-homepage-ad-enabled .hero > .hero-layout > .hero-content {
         max-width:100%!important;
@@ -1570,12 +1609,12 @@
         body.zc-homepage-ad-enabled > .hero,
         body.zc-homepage-ad-enabled main .hero {
           grid-template-columns:minmax(0,1fr)!important;
-          grid-template-rows:auto auto auto!important;
-          width:100%!important;
-          max-width:none!important;
+          grid-template-rows:auto auto!important;
+          width:calc(100% - 24px)!important;
+          max-width:760px!important;
           gap:20px!important;
           min-height:0!important;
-          padding:30px clamp(16px,4vw,30px) 26px!important;
+          padding:24px 18px!important;
         }
         body.zc-homepage-ad-enabled .hero > .hero-layout {
           grid-column:1!important;
