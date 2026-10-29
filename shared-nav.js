@@ -164,7 +164,7 @@
     '<div class="zsh-actions">' +
       (!isHome ? '<a class="zsh-home home-return-button" href="' + target('/') + '"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
       '<div class="zsh-language-slot"></div>' +
-      (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<a class="zsh-login-button top-cta" href="/survivor-hub.html" data-zsh-login>JOIN THE SURVIVORS</a>') +
+      (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<a class="zsh-login-button" href="/survivor-hub.html" data-zsh-login>JOIN THE SURVIVORS</a>') +
     '</div>';
 
   const actions = header.querySelector('.zsh-actions');
@@ -311,10 +311,16 @@
     header.zombcash-shared-header .zsh-actions .survivor-entry-button,
     header.zombcash-shared-header .zsh-actions .top-cta,
     header.zombcash-shared-header .zsh-actions .zsh-login-button{cursor:pointer;text-decoration:none!important}
-    /* Keep the registration CTA fully readable on every page and in every locale. */
+    /* Registration CTA: use the shared navigation button component, not legacy page .top-cta styling. */
     header.zombcash-shared-header .zsh-actions .zsh-login-button{
-      flex:0 0 auto!important;min-width:max-content!important;width:auto!important;
-      padding-left:12px!important;padding-right:12px!important;white-space:nowrap!important;
+      appearance:none!important;-webkit-appearance:none!important;display:inline-flex!important;
+      align-items:center!important;justify-content:center!important;box-sizing:border-box!important;
+      flex:0 0 auto!important;width:auto!important;min-width:max-content!important;height:36px!important;min-height:36px!important;
+      margin:0!important;padding:0 12px!important;border:1px solid #42613a!important;border-radius:2px!important;
+      background:#0b120c!important;color:#b8f992!important;box-shadow:none!important;
+      font:700 8px/1 Orbitron,system-ui,sans-serif!important;letter-spacing:.1px!important;
+      text-align:center!important;text-decoration:none!important;text-transform:none!important;
+      white-space:nowrap!important;overflow:visible!important;overflow-wrap:normal!important;
     }
     /* Back to Home first, language selector second, registration CTA at far right. */
     header.zombcash-shared-header .zsh-actions>.zsh-home{order:1!important}
