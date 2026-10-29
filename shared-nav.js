@@ -1389,6 +1389,8 @@
       }
       body.zc-homepage-ad-enabled .hero > .zc-home-floating-ad {
         display:grid!important;
+        grid-column:1 / -1!important;
+        grid-row:auto!important;
         grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr)!important;
         gap:clamp(28px,5vw,84px)!important;
         align-items:start!important;
