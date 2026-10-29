@@ -1420,6 +1420,33 @@
         padding:0!important;
         box-sizing:border-box!important;
       }
+      /* Remove inherited centered/max-width constraints from legacy hero wrappers.
+         The section is full-width; its two-column content grid must use that width. */
+      body.zc-homepage-ad-enabled main#home {
+        width:100%!important;
+        max-width:none!important;
+        min-width:0!important;
+        margin-left:0!important;
+        margin-right:0!important;
+        padding-left:0!important;
+        padding-right:0!important;
+        box-sizing:border-box!important;
+      }
+      body.zc-homepage-ad-enabled main#home > .hero {
+        width:100%!important;
+        max-width:none!important;
+        margin-left:0!important;
+        margin-right:0!important;
+        grid-template-columns:minmax(0,1.28fr) minmax(320px,.82fr)!important;
+      }
+      body.zc-homepage-ad-enabled .hero > .hero-layout > .hero-content {
+        max-width:100%!important;
+      }
+      body.zc-homepage-ad-enabled .hero .field-manual-spotlight {
+        width:100%!important;
+        max-width:100%!important;
+        box-sizing:border-box!important;
+      }
       body.zc-homepage-ad-enabled .hero > .hero-layout > .hero-content {
         display:block!important;
         grid-column:auto!important;
@@ -1557,6 +1584,8 @@
         body.zc-homepage-ad-enabled main .hero {
           grid-template-columns:minmax(0,1fr)!important;
           grid-template-rows:auto auto auto!important;
+          width:100%!important;
+          max-width:none!important;
           gap:20px!important;
           min-height:0!important;
           padding:30px clamp(16px,4vw,30px) 26px!important;
