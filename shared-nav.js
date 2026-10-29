@@ -1410,7 +1410,7 @@
         width:100%!important; height:100%!important; max-width:100%!important; max-height:100%!important;
         min-width:0!important; min-height:0!important; margin:0!important; padding:0!important; border:0!important;
       }
-      body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner>div:first-child {display:none!important}
+      body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-label {display:none!important}
       @media(max-width:900px) {
         body.zc-homepage-ad-enabled .zc-hero-art-panel > .zc-home-floating-ad { inset:8px!important; }
         body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner { width:100%!important; }
@@ -1455,7 +1455,7 @@
       section = document.createElement('section');
       section.className = 'aads-ad-section zsh-shared-ad';
       section.setAttribute('data-zombcash-ad-slot', 'responsive-adaptive');
-      section.innerHTML = '<div class="aads-ad-inner"><div id="frame"><iframe data-aa="2460185" src="' + adSrc + '" title="Sponsored advertisement" loading="eager" referrerpolicy="strict-origin-when-cross-origin"></iframe></div></div>';
+      section.innerHTML = '<div class="aads-ad-inner"><div class="aads-ad-label">COMMUNITY SUPPORT / SPONSORED</div><div id="frame"><iframe data-aa="2460185" src="' + adSrc + '" title="Sponsored advertisement" loading="eager" referrerpolicy="strict-origin-when-cross-origin"></iframe></div></div>';
       frame = section.querySelector(iframeSelector);
     }
     if (!section) return;
