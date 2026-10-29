@@ -72,22 +72,6 @@
     ['LOTTERY', '/roulette.html', 'lottery'],
     ['BUY $ZOMBCASH', '/buy-zombcash.html', 'buy']
   ];
-  const activeLocale = (() => {
-    const parts = location.pathname.split('/').filter(Boolean);
-    const pathLocale = parts.length && supportedLocaleSet.has(parts[0]) ? parts[0] : '';
-    const queryLocale = new URLSearchParams(location.search).get('lang') || '';
-    return pathLocale || (supportedLocaleSet.has(queryLocale) ? queryLocale : 'en');
-  })();
-  const navTranslations = {
-    ru: {home:'ГЛАВНАЯ',manual:'СПРАВОЧНИК',transmission:'СВОДКА',vote:'ГОЛОСОВАНИЕ',hub:'ХАБ ВЫЖИВШИХ',arcade:'АРКАДА',gallery:'ГАЛЕРЕЯ ЗОМБИ',maker:'СОЗДАТЬ ЗОМБИ',lottery:'ЛОТЕРЕЯ',buy:'КУПИТЬ $ZOMBCASH',back:'НА ГЛАВНУЮ',join:'ПРИСОЕДИНИТЬСЯ',tagline:'ИНТЕРНЕТ НЕЖИТИ',menu:'МЕНЮ'},
-    de: {home:'START',manual:'FELDHANDBUCH',transmission:'ÜBERTRAGUNG',vote:'CREW-ABSTIMMUNG',hub:'ÜBERLEBENDEN-HUB',arcade:'ARCADE',gallery:'ZOMBIE-GALERIE',maker:'ZOMBIE ERSTELLEN',lottery:'LOTTERIE',buy:'$ZOMBCASH KAUFEN',back:'ZUR STARTSEITE',join:'MITMACHEN',tagline:'DAS UNTOTE INTERNET',menu:'MENÜ'},
-    fr: {home:'ACCUEIL',manual:'MANUEL',transmission:'TRANSMISSION',vote:'VOTE DE L’ÉQUIPE',hub:'BASE DES SURVIVANTS',arcade:'ARCADE',gallery:'GALERIE ZOMBIE',maker:'CRÉER UN ZOMBIE',lottery:'LOTERIE',buy:'ACHETER $ZOMBCASH',back:'RETOUR À L’ACCUEIL',join:'REJOINDRE',tagline:'L’INTERNET DES MORTS-VIVANTS',menu:'MENU'},
-    it: {home:'HOME',manual:'MANUALE',transmission:'TRASMISSIONE',vote:'VOTO DELLA SQUADRA',hub:'HUB DEI SUPERSTITI',arcade:'ARCADE',gallery:'GALLERIA ZOMBIE',maker:'CREA ZOMBIE',lottery:'LOTTERIA',buy:'ACQUISTA $ZOMBCASH',back:'TORNA ALLA HOME',join:'UNISCITI',tagline:'INTERNET DEI NON MORTI',menu:'MENU'},
-    ja: {home:'ホーム',manual:'サバイバル手引き',transmission:'アウトブレイク通信',vote:'クルー投票',hub:'サバイバーハブ',arcade:'アーケード',gallery:'ゾンビギャラリー',maker:'ゾンビメーカー',lottery:'抽選',buy:'$ZOMBCASHを購入',back:'ホームへ戻る',join:'参加する',tagline:'アンデッド・インターネット',menu:'メニュー'},
-    'zh-CN': {home:'首页',manual:'生存手册',transmission:'疫情播报',vote:'队伍投票',hub:'幸存者中心',arcade:'街机游戏',gallery:'僵尸画廊',maker:'僵尸制作器',lottery:'抽奖',buy:'购买 $ZOMBCASH',back:'返回首页',join:'加入幸存者',tagline:'亡者互联网',menu:'菜单'},
-    tr: {home:'ANA SAYFA',manual:'SAHA REHBERİ',transmission:'SALGIN YAYINI',vote:'EKİP OYLAMASI',hub:'HAYATTA KALANLAR',arcade:'ARCADE',gallery:'ZOMBİ GALERİSİ',maker:'ZOMBİ OLUŞTUR',lottery:'ÇEKİLİŞ',buy:'$ZOMBCASH SATIN AL',back:'ANA SAYFAYA DÖN',join:'EKİBE KATIL',tagline:'YAŞAYAN ÖLÜLERİN İNTERNETİ',menu:'MENÜ'},
-    hi: {home:'होम',manual:'सर्वाइवल गाइड',transmission:'आउटब्रेक समाचार',vote:'टीम वोट',hub:'सर्वाइवर हब',arcade:'आर्केड',gallery:'ज़ॉम्बी गैलरी',maker:'ज़ॉम्बी बनाएँ',lottery:'लॉटरी',buy:'$ZOMBCASH खरीदें',back:'होम पर लौटें',join:'साथ जुड़ें',tagline:'अंडेड इंटरनेट',menu:'मेनू'}
-  };
   // Reuse only a page-level shell header. Descendant headers may belong to article content
   // (for example, article breadcrumbs and their language links) and must remain untouched.
   // Support the legacy top-level wrappers used by older page templates without selecting
@@ -159,9 +143,9 @@
   header.innerHTML =
     '<a class="zsh-brand notranslate" translate="no" href="' + brandHref + '" aria-label="ZOMBIECASH HOME">' +
       '<span class="zsh-mark" aria-hidden="true">☣</span>' +
-      '<span class="zsh-brand-copy">ZOMBIE<span class="zsh-green">CASH</span><small>' + (navTranslations[activeLocale]?.tagline || 'THE UNDEAD INTERNET') + '</small></span>' +
+      '<span class="zsh-brand-copy">ZOMBIE<span class="zsh-green">CASH</span><small>THE UNDEAD INTERNET</small></span>' +
     '</a>' +
-    '<button class="zsh-menu-toggle" type="button" aria-label="' + (navTranslations[activeLocale]?.menu || 'OPEN NAVIGATION') + '" aria-controls="zsh-navigation" aria-expanded="false"><span aria-hidden="true">☰</span><span class="zsh-menu-label">' + (navTranslations[activeLocale]?.menu || 'MENU') + '</span></button>' +
+    '<button class="zsh-menu-toggle" type="button" aria-label="OPEN NAVIGATION" aria-controls="zsh-navigation" aria-expanded="false"><span aria-hidden="true">☰</span><span class="zsh-menu-label">MENU</span></button>' +
     '<nav id="zsh-navigation" class="zsh-nav" aria-label="MAIN NAVIGATION">' +
       labels.map(([label, href, id]) => {
         const destination = target(href);
@@ -174,14 +158,13 @@
           (id === 'transmission' && file === 'outbreak-transmission.html') ||
           (id === 'lottery' && file === 'roulette.html') ||
           (id === 'buy' && file === 'buy-zombcash.html');
-        const shownLabel = navTranslations[activeLocale]?.[id] || label;
-        return '<a href="' + destination + '"' + (active ? ' aria-current="page"' : '') + '>' + shownLabel + '</a>';
+        return '<a href="' + destination + '"' + (active ? ' aria-current="page"' : '') + '>' + label + '</a>';
       }).join('') +
     '</nav>' +
     '<div class="zsh-actions">' +
-      (!isHome ? '<a class="zsh-home home-return-button" href="' + target('/') + '"><span aria-hidden="true">←</span> ' + (navTranslations[activeLocale]?.back || 'BACK TO HOME') + '</a>' : '') +
+      (!isHome ? '<a class="zsh-home home-return-button" href="' + target('/') + '"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
       '<div class="zsh-language-slot"></div>' +
-      (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<a class="zsh-login-button top-cta" href="' + target('/survivor-hub.html') + '" data-zsh-login>' + (navTranslations[activeLocale]?.join || 'JOIN THE SURVIVORS') + '</a>') +
+      (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<a class="zsh-login-button top-cta" href="/survivor-hub.html" data-zsh-login>JOIN THE SURVIVORS</a>') +
     '</div>';
 
   const actions = header.querySelector('.zsh-actions');
