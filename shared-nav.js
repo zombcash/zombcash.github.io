@@ -1437,7 +1437,7 @@
         max-width:none!important;
         margin-left:0!important;
         margin-right:0!important;
-        grid-template-columns:minmax(0,1.28fr) minmax(320px,.82fr)!important;
+        grid-template-columns:minmax(0,1fr) minmax(320px,390px)!important;
       }
       body.zc-homepage-ad-enabled .hero > .hero-layout > .hero-content {
         max-width:100%!important;
@@ -1550,23 +1550,10 @@
         border:0!important;
         box-sizing:border-box!important;
       }
-      body.zc-homepage-ad-enabled .zc-home-right-stack > .outbreak-panel {
-        min-height:0!important;
-        aspect-ratio:900 / 650;
-        border:1px solid #304136!important;
-        background:linear-gradient(100deg,#111b19,#0b1118)!important;
-      }
-      body.zc-homepage-ad-enabled .zc-home-right-stack > .outbreak-panel .zc-radar-art {
-        display:block!important;
-        width:100%!important;
-        height:auto!important;
-        min-height:0!important;
-        aspect-ratio:900 / 650;
-      }
-      body.zc-homepage-ad-enabled .zc-home-right-stack > .outbreak-panel .zc-radar-scene {
-        display:block!important;
-        width:100%!important;
-        height:100%!important;
+      /* Temporarily hide the oversized radar panel marked by the site owner.
+         It remains in source for later restoration but must not affect layout. */
+      body.zc-homepage-ad-enabled .outbreak-panel {
+        display:none!important;
       }
       body.zc-homepage-ad-enabled .hero > .hero-bottom {
         grid-column:1 / -1!important;
@@ -1682,9 +1669,8 @@
       stack.setAttribute('data-zombcash-home-right-stack', 'true');
       hero.insertBefore(stack, hero.querySelector(':scope > .hero-bottom'));
     }
-    // Keep the left copy/guide content wide. Move only the radar art into the right column under the ad.
-    const radar = layout.querySelector(':scope > .outbreak-panel');
-    if (radar && radar.parentElement !== stack) stack.appendChild(radar);
+    // The oversized radar panel is intentionally hidden for now; do not move it
+    // into the right stack or let its intrinsic dimensions affect the grid.
     if (section.parentElement !== stack) stack.insertBefore(section, stack.firstChild);
     // Intentionally do not move or restyle the existing promo video section.
     frame = section.querySelector(iframeSelector) || frame;
