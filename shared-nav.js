@@ -1122,16 +1122,31 @@
 
   const toggle = header.querySelector('.zsh-menu-toggle');
   const nav = header.querySelector('.zsh-nav');
+  const menuAriaLabels = {
+    de: ['Navigation öffnen', 'Navigation schließen'],
+    fr: ['Ouvrir la navigation', 'Fermer la navigation'],
+    it: ['Apri la navigazione', 'Chiudi la navigazione'],
+    ja: ['ナビゲーションを開く', 'ナビゲーションを閉じる'],
+    'zh-CN': ['打开导航', '关闭导航'],
+    ru: ['Открыть навигацию', 'Закрыть навигацию'],
+    tr: ['Gezinmeyi aç', 'Gezinmeyi kapat'],
+    hi: ['नेविगेशन खोलें', 'नेविगेशन बंद करें']
+  };
+  const updateMenuToggleLabel = (open) => {
+    const language = document.documentElement.lang || 'en';
+    const labels = menuAriaLabels[language] || ['Open navigation', 'Close navigation'];
+    toggle.setAttribute('aria-label', labels[open ? 1 : 0]);
+  };
   toggle.addEventListener('click', () => {
     const open = nav.classList.toggle('zsh-open');
     toggle.setAttribute('aria-expanded', String(open));
-    toggle.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+    updateMenuToggleLabel(open);
   });
   nav.addEventListener('click', (event) => {
     if (event.target.closest('a')) {
       nav.classList.remove('zsh-open');
       toggle.setAttribute('aria-expanded', 'false');
-      toggle.setAttribute('aria-label', 'Open navigation');
+      updateMenuToggleLabel(false);
     }
   });
 
