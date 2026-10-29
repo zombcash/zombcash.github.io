@@ -27,7 +27,8 @@ const routePath = routeUrl.pathname === '/' ? '/index.html' : routeUrl.pathname;
 const routeSegments = routePath.split('/').filter(Boolean);
 const supportedRouteLocales = ['de','fr','it','ja','zh-CN','ru','tr','hi'];
 const routePrefix = routeSegments.length && supportedRouteLocales.includes(routeSegments[0]) ? routeSegments[0] : 'en';
-const routeBasePath = routePrefix === 'en' ? routePath : '/' + routeSegments.slice(1).join('/');
+const routeBasePathRaw = routePrefix === 'en' ? routePath : '/' + routeSegments.slice(1).join('/');
+const routeBasePath = routeBasePathRaw === '/' ? '/index.html' : routeBasePathRaw;
 if (localizedEditorialPages[routeBasePath]?.includes(routeLang)) {
   routeUrl.searchParams.delete('lang');
   const query = routeUrl.searchParams.toString();
