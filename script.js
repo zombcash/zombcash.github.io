@@ -667,7 +667,8 @@ if (zomMarket) {
       zomLiquidity.textContent = zomMoney(data.liquidity?.usd);
       zomCap.textContent = zomMoney(data.marketCap || data.fdv);
       const sourceTime = Number(data.updatedAt || 0) * 1000;
-      if (zomStatus) zomStatus.textContent = data.stale ? 'LAST KNOWN DATA' : (data.activityAvailable === false ? 'PRICE AVAILABLE · ACTIVITY UNAVAILABLE' : 'TOKEN FEED ONLINE');
+      const hasPrice = data.priceUsd != null && data.priceUsd !== '' && Number.isFinite(Number(data.priceUsd)) && Number(data.priceUsd) > 0;
+      if (zomStatus) zomStatus.textContent = data.stale ? 'LAST KNOWN DATA' : (!hasPrice ? 'MARKET DATA UNAVAILABLE' : (data.activityAvailable === false ? 'PRICE AVAILABLE · ACTIVITY UNAVAILABLE' : 'TOKEN FEED ONLINE'));
       if (zomUpdated) zomUpdated.textContent = (data.stale ? 'LAST SOURCE UPDATE ' : 'SOURCE UPDATED ') + (sourceTime ? new Date(sourceTime).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) : 'UNKNOWN');
     } catch (error) {
       console.warn('ZombieCash token market update failed:', error);
