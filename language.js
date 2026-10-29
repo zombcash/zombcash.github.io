@@ -24,11 +24,20 @@ const localizedEditorialPages = {
   '/solana-token-safety-checklist.html': ['ru']
 };
 const routePath = routeUrl.pathname === '/' ? '/index.html' : routeUrl.pathname;
-if (localizedEditorialPages[routePath]?.includes(routeLang)) {
+const routeSegments = routePath.split('/').filter(Boolean);
+const supportedRouteLocales = ['de','fr','it','ja','zh-CN','ru','tr','hi'];
+const routePrefix = routeSegments.length && supportedRouteLocales.includes(routeSegments[0]) ? routeSegments[0] : 'en';
+const routeBasePath = routePrefix === 'en' ? routePath : '/' + routeSegments.slice(1).join('/');
+if (localizedEditorialPages[routeBasePath]?.includes(routeLang)) {
   routeUrl.searchParams.delete('lang');
   const query = routeUrl.searchParams.toString();
-  const page = routePath.slice(1);
-  window.location.replace('/' + routeLang + '/' + page + (query ? '?' + query : '') + routeUrl.hash);
+  const page = routeBasePath.slice(1);
+  const targetPath = routeLang === 'en'
+    ? (routeBasePath === '/index.html' ? '/' : routeBasePath)
+    : (routeBasePath === '/index.html' ? '/' + routeLang + '/' : '/' + routeLang + '/' + page);
+  if (routeUrl.pathname !== targetPath || routeUrl.search) {
+    window.location.replace(targetPath + (query ? '?' + query : '') + routeUrl.hash);
+  }
   return;
 }
 const langs={
