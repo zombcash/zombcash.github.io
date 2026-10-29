@@ -179,7 +179,7 @@ const routeBasePath = routeBasePathRaw === '/' ? '/index.html' : routeBasePathRa
 // destination translation exists. Existing localized paths stay authoritative.
 if (routeLang && (routeLang === 'en' || supportedRouteLocales.includes(routeLang)) &&
     localizedEditorialPages[routeBasePath]?.includes(routeLang) &&
-    routePrefix !== routeLang) {
+    routePrefix === 'en') {
   routeUrl.searchParams.delete('lang');
   const query = routeUrl.searchParams.toString();
   const page = routeBasePath.slice(1);
