@@ -72,10 +72,13 @@
     ['LOTTERY', '/roulette.html', 'lottery'],
     ['BUY $ZOMBCASH', '/buy-zombcash.html', 'buy']
   ];
-  // Do not mistake a translated landing-page hero (<header class="hero">) for the shared site header.
-  // Some locale pages have a hero header but no separate site header; create the shared shell without
-  // replacing the hero, heading, or its localized content.
-  let header = document.querySelector('body > header:not(.hero), body header:not(.hero)');
+  // Reuse only a page-level shell header. Descendant headers may belong to article content
+  // (for example, article breadcrumbs and their language links) and must remain untouched.
+  // Support the legacy top-level wrappers used by older page templates without selecting
+  // headers nested inside .article, article, or main content.
+  let header = document.querySelector(
+    'body > header:not(.hero), body > .wrap > header:not(.hero), body > .container > header:not(.hero), body > .page-wrap > header:not(.hero)'
+  );
   if (!header) {
     header = document.createElement('header');
     document.body.insertBefore(header, document.body.firstChild);
