@@ -1385,6 +1385,10 @@
     style.id = 'zsh-home-ad-responsive-style';
     style.textContent = `
       body.zc-homepage-ad-enabled .hero > .hero-layout {
+        grid-column:1 / -1!important;
+        grid-row:1!important;
+        width:100%!important;
+        min-width:0!important;
         margin-bottom:0!important;
       }
       body.zc-homepage-ad-enabled .hero > .zc-home-floating-ad {
