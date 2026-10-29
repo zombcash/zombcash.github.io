@@ -77,6 +77,16 @@ jobs:
                       msg = f"HTTP {exc.resp.status}: {exc.content.decode('utf-8', errors='replace')[:500]}"
                       print(f"API ERROR: {msg}")
                       errors.append((url, msg))
+                      if exc.resp.status in (401, 403, 404):
+                          print("Stopping early after an authorization/property/API configuration error; remaining URLs will be marked NOT_RUN.")
+                          for remaining in urls[number:]:
+                              records.append({
+                                  "url": remaining, "verdict": "NOT_RUN", "coverageState": "NOT_RUN",
+                                  "indexingState": "", "robotsTxtState": "", "pageFetchState": "",
+                                  "lastCrawlTime": "", "googleCanonical": "", "userCanonical": "",
+                                  "sitemap": "", "referringUrls": "", "apiError": "Not attempted after an authorization/property/API configuration error",
+                              })
+                          break
                       break
                   except Exception as exc:
                       msg = f"{type(exc).__name__}: {exc}"
