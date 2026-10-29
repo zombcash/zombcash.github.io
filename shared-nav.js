@@ -96,26 +96,43 @@
     ? header.querySelector('button[data-i18n="login"], button.top-cta')
     : null;
   const supportedLocales = ['de','fr','it','ja','zh-CN','ru','tr','hi'];
-  const localizedCore = ['index.html','survivor-field-manual.html','outbreak-transmission.html','buy-zombcash.html'];
+  const supportedLocaleSet = new Set(['de','fr','it','ja','zh-CN','ru','tr','hi']);
+  // These pages actually have a translated HTML file in the language manifest.
+  // For other destinations preserve the active locale with ?lang= rather than
+  // constructing a path to a file that may not exist.
+  const localizedPagesByLocale = {
+    de: new Set(['about.html','avoid-fake-token-websites-wallet-scams.html','buy-zombcash.html','check-liquidity-holder-distribution-solana.html','how-to-research-solana-meme-coins.html','index.html','outbreak-transmission.html','solana-memecoin-research-guide.html','survivor-field-manual.html','transmission-memecoin-graveyard.html','transmission-memecoin-knowledge-business.html','transmission-rug-pull-check.html','transmission-solana-memecoin-warning-signs.html','transmission-trump-family-memecoins.html','transmission-wallet-security-red-flags.html','zombcash-buying-guide.html']),
+    fr: new Set(['about.html','avoid-fake-token-websites-wallet-scams.html','buy-zombcash.html','check-liquidity-holder-distribution-solana.html','how-to-research-solana-meme-coins.html','index.html','outbreak-transmission.html','solana-memecoin-research-guide.html','survivor-field-manual.html','transmission-memecoin-graveyard.html','transmission-memecoin-knowledge-business.html','transmission-rug-pull-check.html','transmission-solana-memecoin-warning-signs.html','transmission-trump-family-memecoins.html','transmission-wallet-security-red-flags.html','zombcash-buying-guide.html']),
+    it: new Set(['about.html','buy-zombcash.html','index.html','outbreak-transmission.html','solana-memecoin-research-guide.html','survivor-field-manual.html','transmission-memecoin-graveyard.html','transmission-memecoin-knowledge-business.html','transmission-rug-pull-check.html','transmission-solana-memecoin-warning-signs.html','transmission-trump-family-memecoins.html','transmission-wallet-security-red-flags.html','zombcash-buying-guide.html']),
+    ja: new Set(['about.html','buy-zombcash.html','index.html','outbreak-transmission.html','solana-memecoin-research-guide.html','survivor-field-manual.html','transmission-memecoin-graveyard.html','transmission-memecoin-knowledge-business.html','transmission-rug-pull-check.html','transmission-solana-memecoin-warning-signs.html','transmission-trump-family-memecoins.html','transmission-wallet-security-red-flags.html','zombcash-buying-guide.html']),
+    'zh-CN': new Set(['about.html','buy-zombcash.html','index.html','outbreak-transmission.html','solana-memecoin-research-guide.html','survivor-field-manual.html','transmission-memecoin-graveyard.html','transmission-memecoin-knowledge-business.html','transmission-rug-pull-check.html','transmission-solana-memecoin-warning-signs.html','transmission-trump-family-memecoins.html','transmission-wallet-security-red-flags.html','zombcash-buying-guide.html']),
+    ru: new Set(['about.html','avoid-fake-token-websites-wallet-scams.html','buy-zombcash.html','check-liquidity-holder-distribution-solana.html','how-to-research-solana-meme-coins.html','index.html','outbreak-transmission.html','solana-memecoin-research-guide.html','solana-token-safety-checklist.html','survivor-field-manual.html','transmission-memecoin-graveyard.html','transmission-memecoin-knowledge-business.html','transmission-rug-pull-check.html','transmission-solana-memecoin-warning-signs.html','transmission-trump-family-memecoins.html','transmission-wallet-security-red-flags.html','zombcash-buying-guide.html']),
+    tr: new Set(['about.html','buy-zombcash.html','index.html','outbreak-transmission.html','solana-memecoin-research-guide.html','survivor-field-manual.html','transmission-memecoin-graveyard.html','transmission-memecoin-knowledge-business.html','transmission-rug-pull-check.html','transmission-solana-memecoin-warning-signs.html','transmission-trump-family-memecoins.html','transmission-wallet-security-red-flags.html','zombcash-buying-guide.html']),
+    hi: new Set(['about.html','buy-zombcash.html','index.html','outbreak-transmission.html','solana-memecoin-research-guide.html','survivor-field-manual.html','transmission-memecoin-graveyard.html','transmission-memecoin-knowledge-business.html','transmission-rug-pull-check.html','transmission-solana-memecoin-warning-signs.html','transmission-trump-family-memecoins.html','transmission-wallet-security-red-flags.html','zombcash-buying-guide.html'])
+  };
   const target = (href) => {
-    // Carry the active locale across both translated pages and English-only features.
-    // Locale may be encoded in the URL path (localized editorial pages) or in ?lang=
-    // (features such as Arcade, Survivor Hub, Gallery and Zombie Maker).
     const parts = location.pathname.split('/').filter(Boolean);
-    const pathLocale = parts.length && supportedLocales.includes(parts[0]) ? parts[0] : '';
-    const queryLocale = new URLSearchParams(location.search).get('lang') || '';
-    const locale = pathLocale || (supportedLocales.includes(queryLocale) ? queryLocale : 'en');
-    if (locale === 'en') return href;
-
+    const pathLocale = parts.length && supportedLocaleSet.has(parts[0]) ? parts[0] : '';
+    const params = new URLSearchParams(location.search);
+    const queryLocale = params.get('lang') || '';
+    const locale = pathLocale || (supportedLocaleSet.has(queryLocale) ? queryLocale : 'en');
     const source = new URL(href, location.origin);
-    const key = (source.pathname.split('/').filter(Boolean).pop() || 'index.html').toLowerCase();
+    const destinationPath = source.pathname.split('/').filter(Boolean);
+    const destinationLocale = destinationPath.length && supportedLocaleSet.has(destinationPath[0]) ? destinationPath[0] : '';
+    const key = (destinationPath.slice(destinationLocale ? 1 : 0).pop() || 'index.html').toLowerCase();
     const suffix = source.hash;
-    if (localizedCore.includes(key)) {
-      const localizedPath = key === 'index.html' ? '/' + locale + '/' : '/' + locale + '/' + key;
-      return localizedPath + suffix;
+    if (locale === 'en') {
+      if (destinationLocale) {
+        source.pathname = '/' + destinationPath.slice(1).join('/');
+        if (!source.pathname || source.pathname === '') source.pathname = '/';
+      }
+      source.searchParams.delete('lang');
+      return source.pathname + source.search + suffix;
     }
-
-    // No translated file exists for this feature: preserve language using language.js.
+    if (localizedPagesByLocale[locale]?.has(key)) {
+      const localizedPath = key === 'index.html' ? '/' + locale + '/' : '/' + locale + '/' + key;
+      return localizedPath + source.search + suffix;
+    }
     source.searchParams.set('lang', locale);
     return source.pathname + source.search + suffix;
   };
