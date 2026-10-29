@@ -24,6 +24,7 @@ jobs:
           import sys
           import time
           import requests
+          import csv
           import xml.etree.ElementTree as ET
           from google.oauth2 import service_account
           from googleapiclient.discovery import build
@@ -55,6 +56,7 @@ jobs:
 
           counts = {}
           errors = []
+          records = []
           for number, url in enumerate(urls, start=1):
               print("\\n" + "=" * 78)
               print(f"[{number}/{len(urls)}] URL: {url}")
@@ -81,11 +83,41 @@ jobs:
                       break
               if data is None:
                   counts["API_ERROR"] = counts.get("API_ERROR", 0) + 1
+                  records.append({
+                      "url": url, "verdict": "API_ERROR", "coverageState": "API_ERROR",
+                      "indexingState": "", "robotsTxtState": "", "pageFetchState": "",
+                      "lastCrawlTime": "", "googleCanonical": "", "userCanonical": "",
+                      "sitemap": "", "referringUrls": "", "apiError": errors[-1][1] if errors else "No response",
+                  })
+                  if errors and ("API is not enabled" in errors[-1][1] or "PERMISSION_DENIED" in errors[-1][1] or "insufficient authentication scopes" in errors[-1][1]):
+                      print("Stopping early because the inspection service or credentials are not authorized; remaining URLs will be marked NOT_RUN.")
+                      for remaining in urls[number:]:
+                          records.append({
+                              "url": remaining, "verdict": "NOT_RUN", "coverageState": "NOT_RUN",
+                              "indexingState": "", "robotsTxtState": "", "pageFetchState": "",
+                              "lastCrawlTime": "", "googleCanonical": "", "userCanonical": "",
+                              "sitemap": "", "referringUrls": "", "apiError": "Not attempted after a service/permission error",
+                          })
+                      break
                   continue
               index = data.get("inspectionResult", {}).get("indexStatusResult", {})
               verdict = index.get("verdict", "NOT_RETURNED")
               state = index.get("coverageState", "NOT_RETURNED")
               counts[state] = counts.get(state, 0) + 1
+              records.append({
+                  "url": url,
+                  "verdict": verdict,
+                  "coverageState": state,
+                  "indexingState": index.get("indexingState", ""),
+                  "robotsTxtState": index.get("robotsTxtState", ""),
+                  "pageFetchState": index.get("pageFetchState", ""),
+                  "lastCrawlTime": index.get("lastCrawlTime", ""),
+                  "googleCanonical": index.get("googleCanonical", ""),
+                  "userCanonical": index.get("userCanonical", ""),
+                  "sitemap": "; ".join(index.get("sitemap", [])) if isinstance(index.get("sitemap", []), list) else index.get("sitemap", ""),
+                  "referringUrls": "; ".join(index.get("referringUrls", [])) if isinstance(index.get("referringUrls", []), list) else index.get("referringUrls", ""),
+                  "apiError": "",
+              })
               print(f"Verdict: {verdict}")
               print(f"Coverage state: {state}")
               print(f"Indexing state: {index.get('indexingState', 'NOT_RETURNED')}")
@@ -107,5 +139,29 @@ jobs:
               print("URLS WITH API ERRORS:")
               for url, error in errors:
                   print(f"- {url}: {error}")
+          fields = [
+              "url", "verdict", "coverageState", "indexingState", "robotsTxtState",
+              "pageFetchState", "lastCrawlTime", "googleCanonical", "userCanonical",
+              "sitemap", "referringUrls", "apiError",
+          ]
+          with open("search-console-url-inspection.csv", "w", encoding="utf-8-sig", newline="") as handle:
+              writer = csv.DictWriter(handle, fieldnames=fields)
+              writer.writeheader()
+              writer.writerows(records)
+          with open("search-console-url-inspection.json", "w", encoding="utf-8") as handle:
+              json.dump({"property": site_url, "sitemap": sitemap_url, "totalUniqueUrls": len(urls),
+                         "inspectedOrRecorded": len(records), "coverageStateCounts": counts,
+                         "apiErrorCount": len(errors), "records": records}, handle, ensure_ascii=False, indent=2)
           print("Inspection is a snapshot of Google's available data; it does not itself request indexing.")
           PY
+
+      - name: Upload URL inspection report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: search-console-url-inspection
+          path: |
+            search-console-url-inspection.csv
+            search-console-url-inspection.json
+          if-no-files-found: warn
+          retention-days: 14
