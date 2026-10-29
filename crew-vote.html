@@ -97,7 +97,7 @@ h1{font:800 clamp(32px,6vw,66px)/1.1 Orbitron,sans-serif;letter-spacing:-2px;mar
   const q = new URLSearchParams(location.search).get('lang');
   const first = location.pathname.split('/').filter(Boolean)[0];
   const supported = ['en','de','fr','it','ja','zh-CN','ru','tr','hi'];
-  const lang = supported.includes(q) ? q : (supported.includes(first) ? first : 'en');
+  const lang = supported.includes(first) && first !== 'en' ? first : (supported.includes(q) ? q : (supported.includes(first) ? first : 'en'));
   const copy = {
     en: ['[ COMMUNITY RESOURCES ]','RESOURCES & PARTNERS','Useful tools, community projects and related resources. Listings are provided for discovery and do not automatically imply endorsement.','CRYPTO TOOLS DIRECTORY','Discover crypto tools and project resources in the PolyMart directory.','PolyMart — Crypto Tools ↗','ZOMBIECASH GUIDES','Practical guides to researching Solana tokens and understanding common risk signals.','Survivor Field Manual →','PROJECT UPDATES','Read ZombieCash news, project updates and field reports.','Outbreak Transmission →'],
     de: ['[ COMMUNITY-RESSOURCEN ]','RESSOURCEN & PARTNER','Nützliche Tools, Community-Projekte und verwandte Ressourcen. Einträge dienen der Orientierung und bedeuten keine automatische Empfehlung.','KRYPTOTOOLS-VERZEICHNIS','Entdecke Krypto-Tools und Projekte im PolyMart-Verzeichnis.','PolyMart — Krypto-Tools ↗','ZOMBIECASH-RATGEBER','Praktische Leitfäden zur Recherche von Solana-Token und zu typischen Risikosignalen.','Survivor Field Manual →','PROJEKT-NEUIGKEITEN','Lies ZombieCash-Nachrichten, Projektupdates und Berichte.','Outbreak Transmission →'],
