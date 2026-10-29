@@ -1351,22 +1351,22 @@
 
 
 // A-ADS is permitted once on each localized homepage (and nowhere else).
-// Keep one fixed 300x250 unit and place it in the lower-right of the homepage hero.
+// Use the large 300x600 format in the hero's right-hand visual slot on every language.
 (() => {
   'use strict';
   const path = location.pathname;
   const isHomepage = path === '/' || path === '/index.html' ||
     /^\/(?:de|fr|it|ja|zh-CN|ru|tr|hi)\/?$/.test(path);
   const adSelector = 'iframe[data-aa], .aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, [data-zombcash-ad-slot]';
+  const adSrc = 'https://acceptable.a-ads.com/2460185/?size=300x600';
   const ensureFixedAdSize = (root) => {
     if (!root) return;
     root.querySelectorAll('iframe[data-aa="2460185"]').forEach(frame => {
-      const fixedSrc = 'https://acceptable.a-ads.com/2460185/?size=300x250';
-      if (frame.getAttribute('src') !== fixedSrc) frame.setAttribute('src', fixedSrc);
+      if (frame.getAttribute('src') !== adSrc) frame.setAttribute('src', adSrc);
       frame.setAttribute('width', '300');
-      frame.setAttribute('height', '250');
+      frame.setAttribute('height', '600');
       frame.style.setProperty('width', '300px', 'important');
-      frame.style.setProperty('height', '250px', 'important');
+      frame.style.setProperty('height', '600px', 'important');
       frame.style.setProperty('max-width', '100%', 'important');
       frame.style.setProperty('display', 'block', 'important');
     });
@@ -1403,39 +1403,50 @@
     const style = document.createElement('style');
     style.id = 'zsh-home-ad-position-style';
     style.textContent = `
-      body.zc-homepage-ad-enabled main#home .hero,
-      body.zc-homepage-ad-enabled main .hero { position:relative!important; }
+      body.zc-homepage-ad-enabled .zc-hero-art-panel {
+        position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;
+        box-sizing:border-box!important;width:100%!important;height:620px!important;min-height:620px!important;
+        max-height:none!important;aspect-ratio:auto!important;overflow:hidden!important;
+      }
       body.zc-homepage-ad-enabled .zc-home-floating-ad {
-        position:absolute!important;right:clamp(16px,5%,72px)!important;bottom:18px!important;
-        display:block!important;box-sizing:border-box!important;width:300px!important;height:250px!important;
-        max-width:calc(100% - 32px)!important;min-width:0!important;margin:0!important;padding:0!important;
-        border:0!important;background:#fff!important;overflow:hidden!important;z-index:20!important;
-        text-align:left!important;
+        position:relative!important;inset:auto!important;display:flex!important;align-items:center!important;justify-content:center!important;
+        box-sizing:border-box!important;flex:0 0 300px!important;width:300px!important;height:600px!important;
+        min-width:0!important;max-width:calc(100% - 20px)!important;margin:0 auto!important;padding:0!important;
+        border:0!important;background:#fff!important;overflow:hidden!important;z-index:4!important;text-align:left!important;
       }
       body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner {
-        box-sizing:border-box!important;width:300px!important;height:250px!important;max-width:100%!important;
+        box-sizing:border-box!important;flex:0 0 300px!important;width:300px!important;height:600px!important;max-width:100%!important;
         margin:0!important;padding:0!important;overflow:hidden!important;text-align:left!important;
       }
       body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner>div:first-child {display:none!important}
       body.zc-homepage-ad-enabled .zc-home-floating-ad #frame,
       body.zc-homepage-ad-enabled .zc-home-floating-ad [id^="frame-"] {
-        box-sizing:border-box!important;width:300px!important;height:250px!important;max-width:100%!important;
+        box-sizing:border-box!important;width:300px!important;height:600px!important;max-width:100%!important;
         margin:0!important;padding:0!important;overflow:hidden!important;
       }
       body.zc-homepage-ad-enabled .zc-home-floating-ad iframe[data-aa="2460185"] {
-        display:block!important;width:300px!important;height:250px!important;max-width:100%!important;
+        display:block!important;box-sizing:border-box!important;width:300px!important;height:600px!important;max-width:100%!important;
         margin:0!important;padding:0!important;border:0!important;
       }
       body.zc-homepage-ad-enabled main#home .hero,
-      body.zc-homepage-ad-enabled main .hero {padding-bottom:290px!important;overflow:hidden!important}
+      body.zc-homepage-ad-enabled main .hero {position:relative!important;padding-bottom:30px!important;overflow:visible!important}
       @media(max-width:900px) {
+        body.zc-homepage-ad-enabled .zc-hero-art-panel {
+          height:620px!important;min-height:620px!important;max-height:none!important;aspect-ratio:auto!important;
+        }
         body.zc-homepage-ad-enabled .zc-home-floating-ad {
-          position:relative!important;right:auto!important;bottom:auto!important;
-          width:300px!important;height:250px!important;max-width:100%!important;
-          margin:22px auto 0!important;
+          flex-basis:300px!important;width:300px!important;height:600px!important;max-width:calc(100% - 20px)!important;
+          margin:0 auto!important;
         }
         body.zc-homepage-ad-enabled main#home .hero,
         body.zc-homepage-ad-enabled main .hero {padding-bottom:24px!important;overflow:visible!important}
+      }
+      @media(max-width:340px) {
+        body.zc-homepage-ad-enabled .zc-home-floating-ad,
+        body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner,
+        body.zc-homepage-ad-enabled .zc-home-floating-ad iframe[data-aa="2460185"] {
+          width:100%!important;max-width:100%!important;
+        }
       }
     `;
     document.head.appendChild(style);
@@ -1446,10 +1457,12 @@
     if (!hero) return;
     const section = document.querySelector('.aads-ad-section, .zsh-shared-ad, [data-zombcash-ad-slot]');
     if (!section) return;
+    const artPanel = hero.querySelector('.zc-hero-art-panel');
+    const target = artPanel || hero;
     document.body.classList.add('zc-homepage-ad-enabled');
     section.classList.add('zc-home-floating-ad');
     section.setAttribute('aria-label', 'Advertisement');
-    if (section.parentElement !== hero) hero.appendChild(section);
+    if (section.parentElement !== target) target.appendChild(section);
     ensureFixedAdSize(section);
     addHomeAdStyles();
   };
@@ -1458,11 +1471,12 @@
     const slot = document.createElement('section');
     slot.className = 'aads-ad-section zsh-shared-ad zc-home-floating-ad';
     slot.setAttribute('aria-label', 'Advertisement');
-    slot.setAttribute('data-zombcash-ad-slot', 'shared-adaptive');
-    slot.innerHTML = '<div class="aads-ad-inner"><iframe data-aa="2460185" src="https://acceptable.a-ads.com/2460185/?size=300x250" title="Sponsored advertisement" width="300" height="250" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="display:block;box-sizing:border-box;border:0;padding:0;width:300px;height:250px;max-width:100%;margin:0;overflow:hidden"></iframe></div>';
+    slot.setAttribute('data-zombcash-ad-slot', 'shared-fixed-300x600');
+    slot.innerHTML = '<div class="aads-ad-inner"><iframe data-aa="2460185" src="' + adSrc + '" title="Sponsored advertisement" width="300" height="600" loading="eager" referrerpolicy="strict-origin-when-cross-origin" style="display:block;box-sizing:border-box;border:0;padding:0;width:300px;height:600px;max-width:100%;margin:0;overflow:hidden"></iframe></div>';
     const hero = document.querySelector('main#home .hero, main .hero, body > .hero');
-    if (hero) {
-      hero.appendChild(slot);
+    const target = hero && (hero.querySelector('.zc-hero-art-panel') || hero);
+    if (target) {
+      target.appendChild(slot);
       document.body.classList.add('zc-homepage-ad-enabled');
       addHomeAdStyles();
     } else {
@@ -1479,11 +1493,8 @@
   const startAdRemovalObserver = () => {
     if (document.body) adRemovalObserver.observe(document.body, {childList:true, subtree:true});
   };
-  if (document.body) startAdRemovalObserver();
-  else document.addEventListener('DOMContentLoaded', startAdRemovalObserver, {once:true});
-  placeHomeAd();
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => { placeHomeAd(); addSharedAd(); }, {once:true});
-  else addSharedAd();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => { placeHomeAd(); addSharedAd(); startAdRemovalObserver(); }, {once:true});
+  else { placeHomeAd(); addSharedAd(); startAdRemovalObserver(); }
 })();
 
 
