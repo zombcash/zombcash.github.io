@@ -1384,9 +1384,9 @@
     const style = document.createElement('style');
     style.id = 'zsh-home-ad-responsive-style';
     style.textContent = `
-      /* One explicit layout contract: left column owns copy, guide card and stats;
-         right stack owns the ad and radar. Let the viewport, not old hero rules,
-         determine available width. */
+      /* Homepage composition contract: primary copy on the left, ad and radar
+         in a single equal-width right stack. Legacy hero styles no longer size
+         or position this structure. */
       body.zc-homepage-ad-enabled main#home > .hero,
       body.zc-homepage-ad-enabled > .hero,
       body.zc-homepage-ad-enabled main .hero {
@@ -1530,6 +1530,7 @@
         background:linear-gradient(100deg,#111b19,#0b1118)!important;
       }
       body.zc-homepage-ad-enabled .zc-home-right-stack > .outbreak-panel .zc-radar-art {
+        display:block!important;
         width:100%!important;
         height:auto!important;
         min-height:0!important;
@@ -1550,8 +1551,6 @@
         padding:12px 0 0!important;
         box-sizing:border-box!important;
       }
-      /* Match the actual useful breakpoint of the 2-column composition, rather
-         than forcing a cramped 360px sidebar until 1100px. */
       @media(max-width:900px) {
         body.zc-homepage-ad-enabled main#home > .hero,
         body.zc-homepage-ad-enabled > .hero,
