@@ -128,6 +128,8 @@ jobs:
               print(f"Robots.txt state: {index.get('robotsTxtState', 'NOT_RETURNED')}")
               print(f"Google canonical: {index.get('googleCanonical', 'NOT_RETURNED')}")
               print(f"User canonical: {index.get('userCanonical', 'NOT_RETURNED')}")
+              if verdict != "PASS" or state not in ("Submitted and indexed", "Indexed, not submitted in sitemap"):
+                  print("ATTENTION: this URL needs review based on its current Google inspection result.")
               # Respect service quota; URL Inspection has per-site daily limits.
               time.sleep(1)
 
