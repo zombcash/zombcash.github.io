@@ -1391,14 +1391,14 @@
       body.zc-homepage-ad-enabled > .hero,
       body.zc-homepage-ad-enabled main .hero {
         display:grid!important;
-        grid-template-columns:minmax(0,1.18fr) minmax(300px,.82fr)!important;
+        grid-template-columns:minmax(0,1fr) minmax(320px,390px)!important;
         grid-template-rows:auto auto!important;
         justify-content:center!important;
         align-items:start!important;
         column-gap:clamp(22px,2.6vw,40px)!important;
         row-gap:24px!important;
         width:100%!important;
-        max-width:1480px!important;
+        max-width:1360px!important;
         height:auto!important;
         min-height:0!important;
         max-height:none!important;
