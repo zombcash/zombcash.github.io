@@ -1356,24 +1356,22 @@
   const path = location.pathname;
   const isHomepage = path === '/' || path === '/index.html' ||
     /^\/(?:de|fr|it|ja|zh-CN|ru|tr|hi)\/?$/.test(path);
-  const adSrc = () => window.matchMedia('(min-width: 901px)').matches
-    ? 'https://acceptable.a-ads.com/2460185/?size=300x600'
-    : 'https://acceptable.a-ads.com/2460185/?size=Adaptive';
+  const adSrc = 'https://acceptable.a-ads.com/2460185/?size=Adaptive';
   const wrapperSelector = '.aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, [data-zombcash-ad-slot]';
   const iframeSelector = 'iframe[data-aa="2460185"]';
 
   const normalizeIframe = (frame) => {
     if (!frame) return;
-    if (frame.getAttribute('src') !== adSrc()) frame.setAttribute('src', adSrc());
+    if (frame.getAttribute('src') !== adSrc) frame.setAttribute('src', adSrc);
     frame.removeAttribute('width');
     frame.removeAttribute('height');
     frame.setAttribute('title', 'Sponsored advertisement');
     frame.style.setProperty('display', 'block', 'important');
     frame.style.setProperty('width', '100%', 'important');
-    frame.style.setProperty('height', window.matchMedia('(min-width: 901px)').matches ? '100%' : '250px', 'important');
+    frame.style.setProperty('height', '250px', 'important');
     frame.style.setProperty('min-width', '0', 'important');
     frame.style.setProperty('max-width', '100%', 'important');
-    frame.style.setProperty('min-height', window.matchMedia('(min-width: 901px)').matches ? '600px' : '250px', 'important');
+    frame.style.setProperty('min-height', '250px', 'important');
     frame.style.setProperty('max-height', 'none', 'important');
     frame.style.setProperty('border', '0', 'important');
     frame.style.setProperty('margin', '0', 'important');
@@ -1738,6 +1736,56 @@
         }
       }
     `;
+    /* Keep the real A-ADS creative at its delivered size. Fill the remaining
+       symmetrical card with a clearly separate ZombieCash sponsor panel. */
+    style.textContent += `
+      @media (min-width: 901px) {
+        body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner {
+          display:flex!important;flex-direction:column!important;
+          width:100%!important;height:100%!important;min-height:0!important;
+          box-sizing:border-box!important;
+        }
+        body.zc-homepage-ad-enabled .zc-home-floating-ad #frame,
+        body.zc-homepage-ad-enabled .zc-home-floating-ad [id^="frame-"] {
+          flex:0 0 250px!important;height:250px!important;min-height:250px!important;
+          max-height:250px!important;overflow:hidden!important;
+        }
+        body.zc-homepage-ad-enabled .zc-home-floating-ad iframe[data-aa="2460185"] {
+          flex:0 0 250px!important;height:250px!important;min-height:250px!important;
+          max-height:250px!important;
+        }
+        body.zc-homepage-ad-enabled .zc-ad-promo-fill {
+          display:flex!important;flex:1 1 auto!important;flex-direction:column!important;
+          align-items:center!important;justify-content:center!important;
+          min-height:260px!important;margin-top:14px!important;padding:28px!important;
+          border:1px solid #9bff4538!important;
+          background:radial-gradient(ellipse at 50% 35%,#17331a 0%,#09110c 48%,#070b0a 100%)!important;
+          text-align:center!important;box-sizing:border-box!important;
+        }
+        body.zc-homepage-ad-enabled .zc-ad-promo-fill .zc-ad-promo-kicker {
+          margin:0 0 18px!important;color:#9bff45!important;
+          font:700 10px/1.5 Orbitron,Arial,sans-serif!important;letter-spacing:.16em!important;
+        }
+        body.zc-homepage-ad-enabled .zc-ad-promo-fill .zc-ad-promo-title {
+          max-width:420px!important;margin:0 auto 14px!important;color:#eff6e9!important;
+          font:700 clamp(24px,2.2vw,38px)/1.12 Orbitron,Arial,sans-serif!important;
+          text-transform:uppercase!important;
+        }
+        body.zc-homepage-ad-enabled .zc-ad-promo-fill .zc-ad-promo-copy {
+          max-width:380px!important;margin:0 auto 24px!important;color:#a4b4a0!important;
+          font:500 15px/1.6 Rajdhani,Arial,sans-serif!important;
+        }
+        body.zc-homepage-ad-enabled .zc-ad-promo-fill .zc-ad-promo-link {
+          display:inline-flex!important;align-items:center!important;justify-content:center!important;
+          min-height:44px!important;padding:0 22px!important;border:1px solid #9bff45!important;
+          background:#9bff45!important;color:#071006!important;text-decoration:none!important;
+          font:700 10px/1.4 Orbitron,Arial,sans-serif!important;letter-spacing:.04em!important;
+        }
+      }
+      @media (max-width:900px) {
+        body.zc-homepage-ad-enabled .zc-ad-promo-fill {display:none!important}
+      }
+    `;
     document.head.appendChild(style);
   };
 
@@ -1777,7 +1825,7 @@
       section = document.createElement('section');
       section.className = 'aads-ad-section zsh-shared-ad';
       section.setAttribute('data-zombcash-ad-slot', 'responsive-adaptive');
-      section.innerHTML = '<div class="aads-ad-inner"><div class="aads-ad-label">COMMUNITY SUPPORT / SPONSORED</div><div id="frame"><iframe data-aa="2460185" src="' + adSrc() + '" title="Sponsored advertisement" loading="eager" referrerpolicy="strict-origin-when-cross-origin"></iframe></div></div>';
+      section.innerHTML = '<div class="aads-ad-inner"><div class="aads-ad-label">COMMUNITY SUPPORT / SPONSORED</div><div id="frame"><iframe data-aa="2460185" src="' + adSrc + '" title="Sponsored advertisement" loading="eager" referrerpolicy="strict-origin-when-cross-origin"></iframe></div></div>';
       frame = section.querySelector(iframeSelector);
     }
     if (!section) return;
@@ -1796,6 +1844,13 @@
     if (section.parentElement !== stack) stack.insertBefore(section, stack.firstChild);
     // Intentionally do not move or restyle the existing promo video section.
     frame = section.querySelector(iframeSelector) || frame;
+    const adInner = section.querySelector('.aads-ad-inner');
+    if (adInner && !adInner.querySelector('.zc-ad-promo-fill')) {
+      const promo = document.createElement('div');
+      promo.className = 'zc-ad-promo-fill';
+      promo.innerHTML = '<p class="zc-ad-promo-kicker">ZOMBCASH // SPONSOR ZONE</p><h2 class="zc-ad-promo-title">YOUR PROJECT. OUR UNDEAD INTERNET.</h2><p class="zc-ad-promo-copy">Put your project in front of the ZombieCash community. Launch a campaign and turn attention into action.</p><a class="zc-ad-promo-link" href="https://aads.com/campaigns/new?partner=2460185&source_type=ad_unit&source_id=2460185" target="_blank" rel="noopener noreferrer">ADVERTISE WITH A-ADS ↗</a>';
+      adInner.appendChild(promo);
+    }
     normalizeIframe(frame);
     document.body.classList.add('zc-homepage-ad-enabled');
     ensureStyles();
