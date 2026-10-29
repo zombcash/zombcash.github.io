@@ -1384,72 +1384,91 @@
     const style = document.createElement('style');
     style.id = 'zsh-home-ad-responsive-style';
     style.textContent = `
-      body.zc-homepage-ad-enabled .hero {
+      /* One explicit layout contract: left column owns copy, guide card and stats;
+         right stack owns the ad and radar. Let the viewport, not old hero rules,
+         determine available width. */
+      body.zc-homepage-ad-enabled main#home > .hero,
+      body.zc-homepage-ad-enabled > .hero,
+      body.zc-homepage-ad-enabled main .hero {
         display:grid!important;
-        grid-template-columns:minmax(0,760px) minmax(360px,520px)!important;
+        grid-template-columns:minmax(0,1.18fr) minmax(300px,.82fr)!important;
         grid-template-rows:auto auto!important;
         justify-content:center!important;
         align-items:start!important;
-        column-gap:clamp(28px,3vw,52px)!important;
-        row-gap:36px!important;
+        column-gap:clamp(22px,2.6vw,40px)!important;
+        row-gap:24px!important;
         width:100%!important;
-        max-width:none!important;
+        max-width:1480px!important;
         height:auto!important;
-        min-height:760px!important;
+        min-height:0!important;
         max-height:none!important;
-        margin-inline:0!important;
-        padding:clamp(44px,5vw,76px) clamp(24px,4vw,64px) 64px!important;
-        overflow:hidden!important;
+        margin:0 auto!important;
+        padding:clamp(30px,3.4vw,52px) clamp(20px,3.4vw,52px) 32px!important;
+        overflow:visible!important;
         box-sizing:border-box!important;
       }
       body.zc-homepage-ad-enabled .hero > .hero-layout {
         grid-column:1!important;
         grid-row:1!important;
         display:block!important;
-        width:100%!important;
-        max-width:760px!important;
-        min-width:0!important;
-        margin:0!important;
         align-self:start!important;
         justify-self:stretch!important;
-      }
-      body.zc-homepage-ad-enabled .hero > .hero-layout > .hero-content {
         width:100%!important;
-        max-width:760px!important;
+        max-width:none!important;
         min-width:0!important;
         margin:0!important;
+        padding:0!important;
+        box-sizing:border-box!important;
       }
-      body.zc-homepage-ad-enabled .zc-home-right-stack {
+      body.zc-homepage-ad-enabled .hero > .hero-layout > .hero-content {
+        display:block!important;
+        grid-column:auto!important;
+        grid-row:auto!important;
+        width:100%!important;
+        max-width:none!important;
+        min-width:0!important;
+        margin:0!important;
+        padding:0!important;
+        box-sizing:border-box!important;
+      }
+      body.zc-homepage-ad-enabled .hero > .zc-home-right-stack {
         grid-column:2!important;
         grid-row:1!important;
         display:flex!important;
         flex-direction:column!important;
         align-items:stretch!important;
-        gap:24px!important;
+        align-self:start!important;
+        gap:clamp(14px,1.6vw,22px)!important;
         width:100%!important;
-        max-width:520px!important;
+        max-width:none!important;
         min-width:0!important;
-        margin:0 auto!important;
+        margin:0!important;
         padding:0!important;
         box-sizing:border-box!important;
         position:relative!important;
         z-index:3!important;
       }
-      body.zc-homepage-ad-enabled .zc-home-right-stack > .zc-home-floating-ad {
-        order:1!important;
+      body.zc-homepage-ad-enabled .zc-home-right-stack > .zc-home-floating-ad,
+      body.zc-homepage-ad-enabled .zc-home-right-stack > .outbreak-panel {
+        order:initial!important;
         display:block!important;
         position:relative!important;
         inset:auto!important;
+        flex:0 0 auto!important;
+        align-self:stretch!important;
         width:100%!important;
+        max-width:100%!important;
         min-width:0!important;
         height:auto!important;
         max-height:none!important;
         margin:0!important;
         padding:0!important;
         box-sizing:border-box!important;
+        overflow:hidden!important;
+      }
+      body.zc-homepage-ad-enabled .zc-home-right-stack > .zc-home-floating-ad {
         border:1px solid #456b37!important;
         background:linear-gradient(145deg,#0b120d,#080b10)!important;
-        overflow:hidden!important;
       }
       body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner {
         display:block!important;
@@ -1461,7 +1480,7 @@
         min-height:0!important;
         max-height:none!important;
         margin:0!important;
-        padding:16px!important;
+        padding:clamp(10px,1.2vw,16px)!important;
         box-sizing:border-box!important;
         overflow:hidden!important;
         text-align:center!important;
@@ -1469,7 +1488,7 @@
       }
       body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-label {
         display:block!important;
-        margin:0 0 10px!important;
+        margin:0 0 8px!important;
         color:#71816e!important;
         font:600 9px/1.4 Orbitron,sans-serif!important;
         letter-spacing:1.5px!important;
@@ -1505,49 +1524,80 @@
         box-sizing:border-box!important;
       }
       body.zc-homepage-ad-enabled .zc-home-right-stack > .outbreak-panel {
-        order:2!important;
-        display:block!important;
-        position:relative!important;
-        inset:auto!important;
-        width:100%!important;
-        max-width:100%!important;
-        min-width:0!important;
-        height:auto!important;
-        min-height:280px!important;
-        margin:0!important;
-        align-self:stretch!important;
-        box-sizing:border-box!important;
-        overflow:hidden!important;
+        min-height:0!important;
+        aspect-ratio:900 / 650;
+        border:1px solid #304136!important;
+        background:linear-gradient(100deg,#111b19,#0b1118)!important;
       }
       body.zc-homepage-ad-enabled .zc-home-right-stack > .outbreak-panel .zc-radar-art {
         width:100%!important;
-        min-height:280px!important;
+        height:auto!important;
+        min-height:0!important;
+        aspect-ratio:900 / 650;
+      }
+      body.zc-homepage-ad-enabled .zc-home-right-stack > .outbreak-panel .zc-radar-scene {
+        display:block!important;
+        width:100%!important;
+        height:100%!important;
       }
       body.zc-homepage-ad-enabled .hero > .hero-bottom {
         grid-column:1 / -1!important;
+        grid-row:2!important;
+        position:relative!important;
+        inset:auto!important;
+        width:100%!important;
+        margin:0!important;
+        padding:12px 0 0!important;
+        box-sizing:border-box!important;
       }
-      @media(max-width:1100px) {
-        body.zc-homepage-ad-enabled .hero {
+      /* Match the actual useful breakpoint of the 2-column composition, rather
+         than forcing a cramped 360px sidebar until 1100px. */
+      @media(max-width:900px) {
+        body.zc-homepage-ad-enabled main#home > .hero,
+        body.zc-homepage-ad-enabled > .hero,
+        body.zc-homepage-ad-enabled main .hero {
           grid-template-columns:minmax(0,1fr)!important;
           grid-template-rows:auto auto auto!important;
-          justify-content:stretch!important;
-          gap:24px!important;
+          gap:20px!important;
           min-height:0!important;
-          padding:36px clamp(18px,4vw,36px) 32px!important;
+          padding:30px clamp(16px,4vw,30px) 26px!important;
         }
         body.zc-homepage-ad-enabled .hero > .hero-layout {
           grid-column:1!important;
           grid-row:1!important;
           width:100%!important;
-          margin:0!important;
+          min-width:0!important;
         }
-        body.zc-homepage-ad-enabled .zc-home-right-stack {
+        body.zc-homepage-ad-enabled .hero > .zc-home-right-stack {
           grid-column:1!important;
           grid-row:2!important;
           width:100%!important;
-          max-width:620px!important;
+          max-width:640px!important;
+          justify-self:center!important;
           margin:0 auto!important;
+          gap:16px!important;
+        }
+        body.zc-homepage-ad-enabled .hero > .hero-bottom {
+          grid-column:1!important;
+          grid-row:3!important;
+        }
+      }
+      @media(max-width:600px) {
+        body.zc-homepage-ad-enabled main#home > .hero,
+        body.zc-homepage-ad-enabled > .hero,
+        body.zc-homepage-ad-enabled main .hero {
           gap:18px!important;
+          padding:26px 16px 22px!important;
+        }
+        body.zc-homepage-ad-enabled .zc-home-right-stack {
+          gap:14px!important;
+        }
+        body.zc-homepage-ad-enabled .hero h1 {
+          overflow-wrap:normal!important;
+          word-break:normal!important;
+        }
+        body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner {
+          padding:10px!important;
         }
       }
     `;
