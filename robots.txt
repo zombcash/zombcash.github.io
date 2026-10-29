@@ -3,3 +3,4 @@ Allow: /
 
 Sitemap: https://zombcash.github.io/sitemap.xml
 Sitemap: https://zombcash.github.io/sitemap-gallery-images.xml
+Sitemap: https://zombcash.github.io/sitemap-zombie-fiction.xml
