@@ -115,7 +115,8 @@
     const pathLocale = parts.length && supportedLocaleSet.has(parts[0]) ? parts[0] : '';
     const params = new URLSearchParams(location.search);
     const queryLocale = params.get('lang') || '';
-    const locale = pathLocale || (supportedLocaleSet.has(queryLocale) ? queryLocale : 'en');
+    // An explicit locale parameter takes precedence on mixed URLs such as /de/?lang=fr.
+    const locale = supportedLocaleSet.has(queryLocale) ? queryLocale : (pathLocale || 'en');
     const source = new URL(href, location.origin);
     const destinationPath = source.pathname.split('/').filter(Boolean);
     const destinationLocale = destinationPath.length && supportedLocaleSet.has(destinationPath[0]) ? destinationPath[0] : '';
