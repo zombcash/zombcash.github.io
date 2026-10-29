@@ -189,10 +189,17 @@ fs.mkdirSync(outDir, { recursive: true });
       recentTradesText: document.querySelector('#recent-trades-list')?.textContent?.trim().slice(0, 180) || '',
     }));
     const liveDataIssues = [];
+    const marketDataUnavailable = /MARKET DATA UNAVAILABLE/i.test(liveDataResult.marketStatus);
+    const chartUnavailable = /PRICE HISTORY UNAVAILABLE/i.test(liveDataResult.chartStatus);
     if (liveDataResult.newsItems < 1) liveDataIssues.push('news feed did not render any articles');
-    if (!liveDataResult.marketPrice || liveDataResult.marketPrice === '—') liveDataIssues.push('market price did not load');
+    if ((!liveDataResult.marketPrice || liveDataResult.marketPrice === '—') && !marketDataUnavailable) {
+      liveDataIssues.push('market price is missing without an explicit unavailable status');
+    }
     if (/API ERROR|HTTP 5\d\d/i.test(liveDataResult.chartStatus)) liveDataIssues.push('price chart returned an API error');
-    if (!liveDataResult.chart30dSelected || liveDataResult.chartPathCount < 2 || !/POINTS/i.test(liveDataResult.chartStatus)) liveDataIssues.push('30-day chart did not render a real price series');
+    const chartHasSeries = liveDataResult.chartPathCount >= 2 && /POINTS/i.test(liveDataResult.chartStatus);
+    if (!liveDataResult.chart30dSelected || (!chartHasSeries && !(marketDataUnavailable && chartUnavailable))) {
+      liveDataIssues.push('30-day chart has neither a real price series nor an explicit provider-unavailable state');
+    }
     if (/Transaction API error:/i.test(liveDataResult.recentTradesText)) liveDataIssues.push('recent-trades request failed in the browser');
     if (liveDataErrors.length) liveDataIssues.push('browser JavaScript errors: ' + liveDataErrors.join(' | '));
     fs.writeFileSync(path.join(outDir, 'live-data-panels.json'), JSON.stringify({ result: liveDataResult, issues: liveDataIssues, pageErrors: liveDataErrors }, null, 2));
