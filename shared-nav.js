@@ -311,6 +311,11 @@
     header.zombcash-shared-header .zsh-actions .survivor-entry-button,
     header.zombcash-shared-header .zsh-actions .top-cta,
     header.zombcash-shared-header .zsh-actions .zsh-login-button{cursor:pointer;text-decoration:none!important}
+    /* Keep the registration CTA fully readable on every page and in every locale. */
+    header.zombcash-shared-header .zsh-actions .zsh-login-button{
+      flex:0 0 auto!important;min-width:max-content!important;width:auto!important;
+      padding-left:12px!important;padding-right:12px!important;white-space:nowrap!important;
+    }
     /* Back to Home first, language selector second, registration CTA at far right. */
     header.zombcash-shared-header .zsh-actions>.zsh-home{order:1!important}
     header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:2!important}
