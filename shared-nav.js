@@ -1384,35 +1384,62 @@
     const style = document.createElement('style');
     style.id = 'zsh-home-ad-responsive-style';
     style.textContent = `
+      body.zc-homepage-ad-enabled .hero {
+        display:grid!important;
+        grid-template-columns:minmax(0,1.45fr) minmax(320px,.75fr)!important;
+        grid-template-rows:auto!important;
+        align-items:start!important;
+        gap:clamp(24px,3vw,48px)!important;
+        width:100%!important;
+        height:auto!important;
+        min-height:0!important;
+        max-height:none!important;
+        padding-bottom:64px!important;
+        overflow:hidden!important;
+      }
       body.zc-homepage-ad-enabled .hero > .hero-layout {
-        grid-column:1 / -1!important;
+        grid-column:1!important;
         grid-row:1!important;
         width:100%!important;
-        min-width:0!important;
-        margin-bottom:0!important;
-      }
-      body.zc-homepage-ad-enabled .hero > .zc-home-floating-ad {
-        display:grid!important;
-        grid-column:1 / -1!important;
-        grid-row:auto!important;
-        grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr)!important;
-        gap:clamp(28px,5vw,84px)!important;
-        align-items:start!important;
-        width:100%!important;
         max-width:1500px!important;
-        margin:22px auto 0!important;
+        min-width:0!important;
+        margin:0!important;
+        align-self:start!important;
+      }
+      body.zc-homepage-ad-enabled .zc-home-right-stack {
+        grid-column:2!important;
+        grid-row:1!important;
+        display:flex!important;
+        flex-direction:column!important;
+        align-items:stretch!important;
+        gap:24px!important;
+        width:100%!important;
+        max-width:560px!important;
+        min-width:0!important;
+        margin:0 auto!important;
         padding:0!important;
         box-sizing:border-box!important;
-        border:0!important;
-        background:transparent!important;
-        overflow:visible!important;
         position:relative!important;
-        z-index:2!important;
+        z-index:3!important;
+      }
+      body.zc-homepage-ad-enabled .zc-home-right-stack > .zc-home-floating-ad {
+        order:1!important;
+        display:block!important;
+        position:relative!important;
+        inset:auto!important;
+        width:100%!important;
+        min-width:0!important;
+        height:auto!important;
+        max-height:none!important;
+        margin:0!important;
+        padding:0!important;
+        box-sizing:border-box!important;
+        border:1px solid #456b37!important;
+        background:linear-gradient(145deg,#0b120d,#080b10)!important;
+        overflow:hidden!important;
       }
       body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner {
         display:block!important;
-        grid-column:2!important;
-        grid-row:1!important;
         position:relative!important;
         width:100%!important;
         max-width:100%!important;
@@ -1421,19 +1448,19 @@
         min-height:0!important;
         max-height:none!important;
         margin:0!important;
-        padding:0!important;
+        padding:16px!important;
         box-sizing:border-box!important;
-        overflow:visible!important;
+        overflow:hidden!important;
         text-align:center!important;
         background:transparent!important;
       }
       body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-label {
         display:block!important;
-        margin:0 0 8px!important;
+        margin:0 0 10px!important;
         color:#71816e!important;
         font:600 9px/1.4 Orbitron,sans-serif!important;
         letter-spacing:1.5px!important;
-        text-align:left!important;
+        text-align:center!important;
       }
       body.zc-homepage-ad-enabled .zc-home-floating-ad #frame,
       body.zc-homepage-ad-enabled .zc-home-floating-ad [id^="frame-"] {
@@ -1443,12 +1470,12 @@
         max-width:100%!important;
         min-width:0!important;
         height:auto!important;
-        min-height:0!important;
+        min-height:250px!important;
         max-height:none!important;
-        margin:0!important;
+        margin:0 auto!important;
         padding:0!important;
         box-sizing:border-box!important;
-        overflow:visible!important;
+        overflow:hidden!important;
       }
       body.zc-homepage-ad-enabled .zc-home-floating-ad iframe[data-aa="2460185"] {
         display:block!important;
@@ -1456,24 +1483,67 @@
         width:100%!important;
         max-width:100%!important;
         min-width:0!important;
-        height:auto!important;
+        height:250px!important;
         min-height:250px!important;
-        max-height:none!important;
-        margin:0!important;
+        max-height:250px!important;
+        margin:0 auto!important;
         padding:0!important;
         border:0!important;
         box-sizing:border-box!important;
       }
+      body.zc-homepage-ad-enabled .zc-home-right-stack > .zc-promo-video {
+        order:2!important;
+        display:block!important;
+        width:100%!important;
+        min-width:0!important;
+        max-width:100%!important;
+        margin:0!important;
+        padding:20px!important;
+        box-sizing:border-box!important;
+        border:1px solid #456b37!important;
+        background:linear-gradient(145deg,#0b120d,#080b10)!important;
+      }
+      body.zc-homepage-ad-enabled .zc-home-right-stack .zc-promo-video-shell {
+        display:grid!important;
+        grid-template-columns:minmax(0,1fr)!important;
+        gap:16px!important;
+        width:100%!important;
+        max-width:100%!important;
+        margin:0!important;
+      }
+      body.zc-homepage-ad-enabled .zc-home-right-stack .zc-promo-video-copy h2 {
+        font-size:clamp(22px,2vw,32px)!important;
+        margin:12px 0!important;
+      }
+      body.zc-homepage-ad-enabled .zc-home-right-stack .zc-promo-video-copy>p {
+        font-size:14px!important;
+      }
+      body.zc-homepage-ad-enabled .zc-home-right-stack .zc-promo-player-wrap {
+        width:100%!important;
+        min-width:0!important;
+      }
+      body.zc-homepage-ad-enabled .hero > .hero-bottom {
+        grid-column:1 / -1!important;
+      }
       @media(max-width:900px) {
-        body.zc-homepage-ad-enabled .hero > .zc-home-floating-ad {
+        body.zc-homepage-ad-enabled .hero {
           grid-template-columns:minmax(0,1fr)!important;
-          gap:0!important;
-          margin-top:18px!important;
+          gap:24px!important;
+          padding-bottom:32px!important;
         }
-        body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner {
+        body.zc-homepage-ad-enabled .hero > .hero-layout {
           grid-column:1!important;
+          grid-row:1!important;
           width:100%!important;
-          max-width:100%!important;
+          margin:0!important;
+        }
+        body.zc-homepage-ad-enabled .zc-home-right-stack {
+          grid-column:1!important;
+          grid-row:2!important;
+          width:100%!important;
+          max-width:560px!important;
+          margin:0 auto!important;
+          gap:18px!important;
         }
       }
     `;
@@ -1523,10 +1593,17 @@
     section.classList.add('zc-home-floating-ad');
     section.setAttribute('aria-label', 'Advertisement');
     section.setAttribute('data-zombcash-ad-slot', 'responsive-adaptive');
-    // Keep the ad as a separate row below the entire hero layout. Never cover the radar or guide card.
-    if (section.parentElement !== hero || section.previousElementSibling !== layout) {
-      hero.insertBefore(section, layout.nextElementSibling);
+    let stack = hero.querySelector(':scope > .zc-home-right-stack');
+    if (!stack) {
+      stack = document.createElement('div');
+      stack.className = 'zc-home-right-stack';
+      stack.setAttribute('data-zombcash-home-right-stack', 'true');
+      hero.insertBefore(stack, hero.querySelector(':scope > .hero-bottom'));
     }
+    // Keep the hero content/radar as one left-hand unit and stack the ad and promo video in the right column.
+    if (section.parentElement !== stack) stack.appendChild(section);
+    const promo = document.querySelector('main#home .zc-promo-video, main .zc-promo-video');
+    if (promo && promo !== stack && promo.parentElement !== stack) stack.appendChild(promo);
     frame = section.querySelector(iframeSelector) || frame;
     normalizeIframe(frame);
     document.body.classList.add('zc-homepage-ad-enabled');
