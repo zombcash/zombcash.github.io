@@ -44,6 +44,8 @@ jobs:
           urls = list(dict.fromkeys((node.text or "").strip() for node in root.findall("sm:url/sm:loc", ns) if (node.text or "").strip()))
           if not urls:
               raise SystemExit("ERROR: No URL entries found in sitemap.")
+          if any(not url.startswith(site_url) for url in urls):
+              raise SystemExit("ERROR: Sitemap includes a URL outside the configured Search Console property.")
           print(f"Unique URLs discovered in sitemap: {len(urls)}")
 
           info = json.loads(raw)
