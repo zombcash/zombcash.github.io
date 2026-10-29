@@ -1491,37 +1491,6 @@
         border:0!important;
         box-sizing:border-box!important;
       }
-      body.zc-homepage-ad-enabled .zc-home-right-stack > .zc-promo-video {
-        order:2!important;
-        display:block!important;
-        width:100%!important;
-        min-width:0!important;
-        max-width:100%!important;
-        margin:0!important;
-        padding:20px!important;
-        box-sizing:border-box!important;
-        border:1px solid #456b37!important;
-        background:linear-gradient(145deg,#0b120d,#080b10)!important;
-      }
-      body.zc-homepage-ad-enabled .zc-home-right-stack .zc-promo-video-shell {
-        display:grid!important;
-        grid-template-columns:minmax(0,1fr)!important;
-        gap:16px!important;
-        width:100%!important;
-        max-width:100%!important;
-        margin:0!important;
-      }
-      body.zc-homepage-ad-enabled .zc-home-right-stack .zc-promo-video-copy h2 {
-        font-size:clamp(22px,2vw,32px)!important;
-        margin:12px 0!important;
-      }
-      body.zc-homepage-ad-enabled .zc-home-right-stack .zc-promo-video-copy>p {
-        font-size:14px!important;
-      }
-      body.zc-homepage-ad-enabled .zc-home-right-stack .zc-promo-player-wrap {
-        width:100%!important;
-        min-width:0!important;
-      }
       body.zc-homepage-ad-enabled .hero > .hero-bottom {
         grid-column:1 / -1!important;
       }
@@ -1602,8 +1571,7 @@
     }
     // Keep the hero content/radar as one left-hand unit and stack the ad and promo video in the right column.
     if (section.parentElement !== stack) stack.appendChild(section);
-    const promo = document.querySelector('main#home .zc-promo-video, main .zc-promo-video');
-    if (promo && promo !== stack && promo.parentElement !== stack) stack.appendChild(promo);
+    // Keep the existing promo video in its original document position; only position the ad.
     frame = section.querySelector(iframeSelector) || frame;
     normalizeIframe(frame);
     document.body.classList.add('zc-homepage-ad-enabled');
