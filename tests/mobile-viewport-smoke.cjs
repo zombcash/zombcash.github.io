@@ -189,7 +189,7 @@ fs.mkdirSync(outDir, { recursive: true });
       recentTradesText: document.querySelector('#recent-trades-list')?.textContent?.trim().slice(0, 180) || '',
     }));
     const liveDataIssues = [];
-    const marketDataUnavailable = /MARKET DATA UNAVAILABLE/i.test(liveDataResult.marketStatus);
+    const marketDataUnavailable = /MARKET DATA UNAVAILABLE|SIGNAL UNAVAILABLE/i.test(liveDataResult.marketStatus);
     const chartUnavailable = /PRICE HISTORY UNAVAILABLE/i.test(liveDataResult.chartStatus);
     if (liveDataResult.newsItems < 1) liveDataIssues.push('news feed did not render any articles');
     if ((!liveDataResult.marketPrice || liveDataResult.marketPrice === '—') && !marketDataUnavailable) {
