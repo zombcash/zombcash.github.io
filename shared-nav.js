@@ -1356,22 +1356,24 @@
   const path = location.pathname;
   const isHomepage = path === '/' || path === '/index.html' ||
     /^\/(?:de|fr|it|ja|zh-CN|ru|tr|hi)\/?$/.test(path);
-  const adSrc = 'https://acceptable.a-ads.com/2460185/?size=Adaptive';
+  const adSrc = () => window.matchMedia('(min-width: 901px)').matches
+    ? 'https://acceptable.a-ads.com/2460185/?size=300x600'
+    : 'https://acceptable.a-ads.com/2460185/?size=Adaptive';
   const wrapperSelector = '.aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, [data-zombcash-ad-slot]';
   const iframeSelector = 'iframe[data-aa="2460185"]';
 
   const normalizeIframe = (frame) => {
     if (!frame) return;
-    if (frame.getAttribute('src') !== adSrc) frame.setAttribute('src', adSrc);
+    if (frame.getAttribute('src') !== adSrc()) frame.setAttribute('src', adSrc());
     frame.removeAttribute('width');
     frame.removeAttribute('height');
     frame.setAttribute('title', 'Sponsored advertisement');
     frame.style.setProperty('display', 'block', 'important');
     frame.style.setProperty('width', '100%', 'important');
-    frame.style.setProperty('height', 'auto', 'important');
+    frame.style.setProperty('height', window.matchMedia('(min-width: 901px)').matches ? '100%' : '250px', 'important');
     frame.style.setProperty('min-width', '0', 'important');
     frame.style.setProperty('max-width', '100%', 'important');
-    frame.style.setProperty('min-height', '250px', 'important');
+    frame.style.setProperty('min-height', window.matchMedia('(min-width: 901px)').matches ? '600px' : '250px', 'important');
     frame.style.setProperty('max-height', 'none', 'important');
     frame.style.setProperty('border', '0', 'important');
     frame.style.setProperty('margin', '0', 'important');
@@ -1775,7 +1777,7 @@
       section = document.createElement('section');
       section.className = 'aads-ad-section zsh-shared-ad';
       section.setAttribute('data-zombcash-ad-slot', 'responsive-adaptive');
-      section.innerHTML = '<div class="aads-ad-inner"><div class="aads-ad-label">COMMUNITY SUPPORT / SPONSORED</div><div id="frame"><iframe data-aa="2460185" src="' + adSrc + '" title="Sponsored advertisement" loading="eager" referrerpolicy="strict-origin-when-cross-origin"></iframe></div></div>';
+      section.innerHTML = '<div class="aads-ad-inner"><div class="aads-ad-label">COMMUNITY SUPPORT / SPONSORED</div><div id="frame"><iframe data-aa="2460185" src="' + adSrc() + '" title="Sponsored advertisement" loading="eager" referrerpolicy="strict-origin-when-cross-origin"></iframe></div></div>';
       frame = section.querySelector(iframeSelector);
     }
     if (!section) return;
