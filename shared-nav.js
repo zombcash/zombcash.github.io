@@ -1368,10 +1368,11 @@
     frame.setAttribute('title', 'Sponsored advertisement');
     frame.style.setProperty('display', 'block', 'important');
     frame.style.setProperty('width', '100%', 'important');
-    frame.style.setProperty('height', '100%', 'important');
+    frame.style.setProperty('height', 'auto', 'important');
     frame.style.setProperty('min-width', '0', 'important');
     frame.style.setProperty('max-width', '100%', 'important');
-    frame.style.setProperty('min-height', '0', 'important');
+    frame.style.setProperty('min-height', '250px', 'important');
+    frame.style.setProperty('max-height', 'none', 'important');
     frame.style.setProperty('border', '0', 'important');
     frame.style.setProperty('margin', '0', 'important');
     frame.style.setProperty('padding', '0', 'important');
@@ -1383,37 +1384,91 @@
     const style = document.createElement('style');
     style.id = 'zsh-home-ad-responsive-style';
     style.textContent = `
-      body.zc-homepage-ad-enabled .zc-hero-art-panel {
-        position:relative!important; display:flex!important; align-items:center!important; justify-content:center!important;
-        box-sizing:border-box!important; overflow:hidden!important;
+      body.zc-homepage-ad-enabled .hero > .hero-layout {
+        margin-bottom:0!important;
       }
-      body.zc-homepage-ad-enabled .zc-hero-art-panel > .zc-home-floating-ad {
-        position:absolute!important; inset:12px!important; display:flex!important; align-items:center!important; justify-content:center!important;
-        box-sizing:border-box!important; width:auto!important; height:auto!important; min-width:0!important; min-height:0!important;
-        max-width:none!important; max-height:none!important; margin:0!important; padding:0!important;
-        border:0!important; background:transparent!important; overflow:hidden!important; z-index:5!important;
+      body.zc-homepage-ad-enabled .hero > .zc-home-floating-ad {
+        display:grid!important;
+        grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr)!important;
+        gap:clamp(28px,5vw,84px)!important;
+        align-items:start!important;
+        width:100%!important;
+        max-width:1500px!important;
+        margin:22px auto 0!important;
+        padding:0!important;
+        box-sizing:border-box!important;
+        border:0!important;
+        background:transparent!important;
+        overflow:visible!important;
+        position:relative!important;
+        z-index:2!important;
       }
       body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner {
-        display:block!important; position:relative!important; box-sizing:border-box!important;
-        width:min(100%, 380px)!important; height:100%!important; max-width:100%!important; max-height:100%!important;
-        min-width:0!important; min-height:0!important; margin:0!important; padding:0!important; overflow:hidden!important;
-        text-align:center!important; background:transparent!important;
+        display:block!important;
+        grid-column:2!important;
+        grid-row:1!important;
+        position:relative!important;
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        height:auto!important;
+        min-height:0!important;
+        max-height:none!important;
+        margin:0!important;
+        padding:0!important;
+        box-sizing:border-box!important;
+        overflow:visible!important;
+        text-align:center!important;
+        background:transparent!important;
+      }
+      body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-label {
+        display:block!important;
+        margin:0 0 8px!important;
+        color:#71816e!important;
+        font:600 9px/1.4 Orbitron,sans-serif!important;
+        letter-spacing:1.5px!important;
+        text-align:left!important;
       }
       body.zc-homepage-ad-enabled .zc-home-floating-ad #frame,
       body.zc-homepage-ad-enabled .zc-home-floating-ad [id^="frame-"] {
-        display:block!important; position:relative!important; box-sizing:border-box!important;
-        width:100%!important; height:100%!important; max-width:100%!important; max-height:100%!important;
-        min-width:0!important; min-height:0!important; margin:0!important; padding:0!important; overflow:hidden!important;
+        display:block!important;
+        position:relative!important;
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        height:auto!important;
+        min-height:0!important;
+        max-height:none!important;
+        margin:0!important;
+        padding:0!important;
+        box-sizing:border-box!important;
+        overflow:visible!important;
       }
       body.zc-homepage-ad-enabled .zc-home-floating-ad iframe[data-aa="2460185"] {
-        display:block!important; position:relative!important; box-sizing:border-box!important;
-        width:100%!important; height:100%!important; max-width:100%!important; max-height:100%!important;
-        min-width:0!important; min-height:0!important; margin:0!important; padding:0!important; border:0!important;
+        display:block!important;
+        position:relative!important;
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        height:auto!important;
+        min-height:250px!important;
+        max-height:none!important;
+        margin:0!important;
+        padding:0!important;
+        border:0!important;
+        box-sizing:border-box!important;
       }
-      body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-label {display:none!important}
       @media(max-width:900px) {
-        body.zc-homepage-ad-enabled .zc-hero-art-panel > .zc-home-floating-ad { inset:8px!important; }
-        body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner { width:100%!important; }
+        body.zc-homepage-ad-enabled .hero > .zc-home-floating-ad {
+          grid-template-columns:minmax(0,1fr)!important;
+          gap:0!important;
+          margin-top:18px!important;
+        }
+        body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner {
+          grid-column:1!important;
+          width:100%!important;
+          max-width:100%!important;
+        }
       }
     `;
     document.head.appendChild(style);
@@ -1446,8 +1501,8 @@
     if (!isHomepage || !document.body) return;
     const hero = document.querySelector('main#home .hero, main .hero, body > .hero');
     if (!hero) return;
-    const artPanel = hero.querySelector('.zc-hero-art-panel');
-    if (!artPanel) return;
+    const layout = hero.querySelector(':scope > .hero-layout');
+    if (!layout) return;
     let section = document.querySelector('.aads-ad-section, .zsh-shared-ad, [data-zombcash-ad-slot]');
     let frame = document.querySelector(iframeSelector);
     if (!section && frame) section = frame.closest(wrapperSelector);
@@ -1462,7 +1517,10 @@
     section.classList.add('zc-home-floating-ad');
     section.setAttribute('aria-label', 'Advertisement');
     section.setAttribute('data-zombcash-ad-slot', 'responsive-adaptive');
-    if (section.parentElement !== artPanel) artPanel.appendChild(section);
+    // Keep the ad as a separate row below the entire hero layout. Never cover the radar or guide card.
+    if (section.parentElement !== hero || section.previousElementSibling !== layout) {
+      hero.insertBefore(section, layout.nextElementSibling);
+    }
     frame = section.querySelector(iframeSelector) || frame;
     normalizeIframe(frame);
     document.body.classList.add('zc-homepage-ad-enabled');
