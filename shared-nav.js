@@ -1386,15 +1386,17 @@
     style.textContent = `
       body.zc-homepage-ad-enabled .hero {
         display:grid!important;
-        grid-template-columns:minmax(0,1.45fr) minmax(320px,.75fr)!important;
-        grid-template-rows:auto!important;
+        grid-template-columns:minmax(0,1.1fr) minmax(380px,.9fr)!important;
+        grid-template-rows:auto auto!important;
         align-items:start!important;
-        gap:clamp(24px,3vw,48px)!important;
+        gap:clamp(28px,3.2vw,52px)!important;
         width:100%!important;
+        max-width:none!important;
         height:auto!important;
-        min-height:0!important;
+        min-height:760px!important;
         max-height:none!important;
-        padding-bottom:64px!important;
+        margin-inline:0!important;
+        padding:clamp(48px,5vw,76px) clamp(24px,6.5vw,104px) 64px!important;
         overflow:hidden!important;
       }
       body.zc-homepage-ad-enabled .hero > .hero-layout {
@@ -1406,6 +1408,7 @@
         min-width:0!important;
         margin:0!important;
         align-self:start!important;
+        justify-self:stretch!important;
       }
       body.zc-homepage-ad-enabled .hero > .hero-layout > .hero-content {
         width:100%!important;
@@ -1421,7 +1424,7 @@
         align-items:stretch!important;
         gap:24px!important;
         width:100%!important;
-        max-width:560px!important;
+        max-width:520px!important;
         min-width:0!important;
         margin:0 auto!important;
         padding:0!important;
@@ -1523,8 +1526,10 @@
       @media(max-width:900px) {
         body.zc-homepage-ad-enabled .hero {
           grid-template-columns:minmax(0,1fr)!important;
+          grid-template-rows:auto auto auto!important;
           gap:24px!important;
-          padding-bottom:32px!important;
+          min-height:0!important;
+          padding:36px clamp(18px,4vw,36px) 32px!important;
         }
         body.zc-homepage-ad-enabled .hero > .hero-layout {
           grid-column:1!important;
@@ -1536,7 +1541,7 @@
           grid-column:1!important;
           grid-row:2!important;
           width:100%!important;
-          max-width:560px!important;
+          max-width:620px!important;
           margin:0 auto!important;
           gap:18px!important;
         }
