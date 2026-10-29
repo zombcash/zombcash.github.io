@@ -114,11 +114,18 @@ fs.mkdirSync(outDir, { recursive: true });
       const layout = document.querySelector('.hero-layout');
       const hero = document.querySelector('.hero');
       const grid = layout ? getComputedStyle(layout).gridTemplateColumns : '';
+      const childLefts = layout ? Array.from(layout.children)
+        .filter(child => {
+          const style = getComputedStyle(child);
+          const rect = child.getBoundingClientRect();
+          return style.display !== 'none' && rect.width > 0 && rect.height > 0;
+        })
+        .map(child => Math.round(child.getBoundingClientRect().left)) : [];
       return {
         viewportWidth: window.innerWidth,
         documentWidth: document.documentElement.scrollWidth,
         pointerCoarse: matchMedia('(pointer: coarse)').matches,
-        gridColumns: grid ? grid.trim().split(/\s+/).length : 0,
+        gridColumns: new Set(childLefts).size,
         gridTemplateColumns: grid,
         heroHeight: hero ? Math.round(hero.getBoundingClientRect().height) : null,
       };
