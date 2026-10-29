@@ -1436,11 +1436,11 @@
         display:grid!important;
         grid-template-columns:minmax(0,1fr) minmax(320px,390px)!important;
         grid-template-rows:auto!important;
-        width:calc(100% - 48px)!important;
-        max-width:1360px!important;
+        width:calc(100% - 40px)!important;
+        max-width:1276px!important;
         min-width:0!important;
         margin:0 auto!important;
-        padding:32px 28px!important;
+        padding:28px 24px!important;
         gap:28px!important;
         position:relative!important;
         isolation:isolate!important;
