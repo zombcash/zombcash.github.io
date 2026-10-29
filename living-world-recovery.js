@@ -136,9 +136,10 @@
       const body = node('div', '');
       body.append(node('strong', '', 'ZOMBCASH MARKET'));
       body.append(node('p', '', 'Price ' + priceText(data.priceUsd) + ' · ' + changeText + ' · 24h volume ' + volume));
-      item.append(body, node('span', 'alert-level', data.stale ? 'CACHED' : 'LIVE'));
+      const hasPrice = data.priceUsd != null && data.priceUsd !== '' && Number.isFinite(Number(data.priceUsd)) && Number(data.priceUsd) > 0;
+      item.append(body, node('span', 'alert-level', data.stale ? 'CACHED' : (hasPrice ? 'LIVE' : 'UNAVAILABLE')));
       alertList.append(item);
-      alertStatus.textContent = data.stale ? 'LAST KNOWN DATA' : 'MARKET ONLINE';
+      alertStatus.textContent = data.stale ? 'LAST KNOWN DATA' : (hasPrice ? 'MARKET ONLINE' : 'MARKET DATA UNAVAILABLE');
     } catch (error) {
       console.warn('Living World recovery: market alarms failed', error);
       alertStatus.textContent = 'MARKET API ERROR';
