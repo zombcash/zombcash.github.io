@@ -1655,6 +1655,63 @@
         }
       }
     `;
+    /* Final layout guard: override legacy homepage rules after every existing
+       responsive declaration so desktop stays balanced and mobile cannot collapse. */
+    style.textContent += `
+      @media (min-width: 901px) {
+        body.zc-homepage-ad-enabled main#home > .hero {
+          display:grid!important;
+          grid-template-columns:minmax(0,1fr) minmax(320px,390px)!important;
+          grid-template-rows:auto!important;
+          width:calc(100% - 40px)!important;
+          max-width:1276px!important;
+          min-width:0!important;
+          margin:0 auto!important;
+          padding:28px 24px!important;
+          gap:28px!important;
+          box-sizing:border-box!important;
+        }
+        body.zc-homepage-ad-enabled main#home > .hero > .hero-layout {
+          grid-column:1!important;grid-row:1!important;
+          display:block!important;width:100%!important;min-width:0!important;
+          max-width:none!important;margin:0!important;
+        }
+        body.zc-homepage-ad-enabled main#home > .hero > .zc-home-right-stack {
+          grid-column:2!important;grid-row:1!important;
+          width:100%!important;min-width:0!important;max-width:none!important;
+        }
+      }
+      @media (max-width:900px) {
+        body.zc-homepage-ad-enabled main#home > .hero {
+          display:grid!important;
+          grid-template-columns:minmax(0,1fr)!important;
+          grid-template-rows:auto auto auto!important;
+          grid-auto-flow:row!important;
+          width:calc(100% - 24px)!important;
+          max-width:760px!important;min-width:0!important;
+          margin:0 auto!important;padding:24px 18px!important;
+          gap:20px!important;box-sizing:border-box!important;
+        }
+        body.zc-homepage-ad-enabled main#home > .hero > .hero-layout,
+        body.zc-homepage-ad-enabled main#home > .hero > .hero-layout > .hero-content {
+          grid-column:1!important;grid-row:1!important;
+          display:block!important;width:100%!important;min-width:0!important;
+          max-width:none!important;margin:0!important;padding:0!important;
+          box-sizing:border-box!important;
+        }
+        body.zc-homepage-ad-enabled main#home > .hero > .zc-home-right-stack {
+          grid-column:1!important;grid-row:2!important;
+          display:flex!important;flex-direction:column!important;
+          width:100%!important;max-width:640px!important;min-width:0!important;
+          justify-self:center!important;align-self:start!important;
+          margin:0 auto!important;box-sizing:border-box!important;
+        }
+        body.zc-homepage-ad-enabled main#home > .hero > .hero-bottom {
+          grid-column:1!important;grid-row:3!important;
+          width:100%!important;min-width:0!important;
+        }
+      }
+    `;
     document.head.appendChild(style);
   };
 
