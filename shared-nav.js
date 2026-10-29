@@ -1665,7 +1665,9 @@
           overflow-wrap:normal!important;
           word-break:normal!important;
         }
-        body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner {
+        body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner,
+        body.zc-homepage-ad-enabled .aads-ad-section .aads-ad-inner,
+        body.zc-homepage-ad-enabled .zsh-shared-ad .aads-ad-inner {
           padding:10px!important;
         }
       }
@@ -1755,19 +1757,32 @@
        symmetrical card with a clearly separate ZombieCash sponsor panel. */
     style.textContent += `
       @media (min-width: 901px) {
-        body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner {
+        body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner,
+        body.zc-homepage-ad-enabled .aads-ad-section .aads-ad-inner,
+        body.zc-homepage-ad-enabled .zsh-shared-ad .aads-ad-inner {
           display:flex!important;flex-direction:column!important;
-          width:100%!important;height:100%!important;min-height:0!important;
-          box-sizing:border-box!important;
+          width:100%!important;max-width:100%!important;min-width:0!important;
+          height:auto!important;min-height:0!important;padding:clamp(10px,1.2vw,16px)!important;
+          box-sizing:border-box!important;overflow:hidden!important;
         }
         body.zc-homepage-ad-enabled .zc-home-floating-ad #frame,
-        body.zc-homepage-ad-enabled .zc-home-floating-ad [id^="frame-"] {
-          flex:0 0 250px!important;height:250px!important;min-height:250px!important;
-          max-height:250px!important;overflow:hidden!important;
+        body.zc-homepage-ad-enabled .zc-home-floating-ad [id^="frame-"],
+        body.zc-homepage-ad-enabled .aads-ad-section #frame,
+        body.zc-homepage-ad-enabled .aads-ad-section [id^="frame-"],
+        body.zc-homepage-ad-enabled .zsh-shared-ad #frame,
+        body.zc-homepage-ad-enabled .zsh-shared-ad [id^="frame-"] {
+          display:block!important;position:relative!important;flex:0 0 250px!important;
+          width:100%!important;max-width:100%!important;min-width:0!important;
+          height:250px!important;min-height:250px!important;max-height:250px!important;
+          margin:0 auto!important;padding:0!important;overflow:hidden!important;box-sizing:border-box!important;
         }
-        body.zc-homepage-ad-enabled .zc-home-floating-ad iframe[data-aa="2460185"] {
-          flex:0 0 250px!important;height:250px!important;min-height:250px!important;
-          max-height:250px!important;
+        body.zc-homepage-ad-enabled .zc-home-floating-ad iframe[data-aa="2460185"],
+        body.zc-homepage-ad-enabled .aads-ad-section iframe[data-aa="2460185"],
+        body.zc-homepage-ad-enabled .zsh-shared-ad iframe[data-aa="2460185"] {
+          display:block!important;position:relative!important;flex:0 0 250px!important;
+          width:100%!important;max-width:100%!important;min-width:0!important;
+          height:250px!important;min-height:250px!important;max-height:250px!important;
+          margin:0 auto!important;padding:0!important;border:0!important;box-sizing:border-box!important;
         }
         body.zc-homepage-ad-enabled .zc-ad-promo-fill {
           display:flex!important;flex:1 1 auto!important;flex-direction:column!important;
