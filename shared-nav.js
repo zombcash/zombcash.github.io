@@ -1661,7 +1661,8 @@
       @media (min-width: 901px) {
         body.zc-homepage-ad-enabled main#home > .hero {
           display:grid!important;
-          grid-template-columns:minmax(0,1fr) minmax(320px,390px)!important;
+          grid-template-columns:repeat(2,minmax(0,1fr))!important;
+          align-items:stretch!important;
           grid-template-rows:auto!important;
           width:calc(100% - 40px)!important;
           max-width:1276px!important;
@@ -1678,7 +1679,30 @@
         }
         body.zc-homepage-ad-enabled main#home > .hero > .zc-home-right-stack {
           grid-column:2!important;grid-row:1!important;
-          width:100%!important;min-width:0!important;max-width:none!important;
+          display:flex!important;flex-direction:column!important;
+          align-self:stretch!important;align-items:stretch!important;
+          width:100%!important;height:100%!important;min-width:0!important;max-width:none!important;
+          margin:0!important;
+        }
+        body.zc-homepage-ad-enabled main#home > .hero > .zc-home-right-stack > .zc-home-floating-ad {
+          display:flex!important;flex:1 1 auto!important;flex-direction:column!important;
+          width:100%!important;height:100%!important;min-height:100%!important;
+          box-sizing:border-box!important;
+        }
+        body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner {
+          display:flex!important;flex:1 1 auto!important;flex-direction:column!important;
+          width:100%!important;height:100%!important;min-height:0!important;
+          box-sizing:border-box!important;
+        }
+        body.zc-homepage-ad-enabled .zc-home-floating-ad #frame,
+        body.zc-homepage-ad-enabled .zc-home-floating-ad [id^="frame-"] {
+          display:block!important;flex:1 1 auto!important;
+          width:100%!important;height:auto!important;min-height:250px!important;
+          max-height:none!important;box-sizing:border-box!important;
+        }
+        body.zc-homepage-ad-enabled .zc-home-floating-ad iframe[data-aa="2460185"] {
+          display:block!important;width:100%!important;height:100%!important;
+          min-height:250px!important;max-height:none!important;box-sizing:border-box!important;
         }
       }
       @media (max-width:900px) {
