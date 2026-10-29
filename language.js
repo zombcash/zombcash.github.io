@@ -18,6 +18,7 @@ const localizedEditorialPages = {
   '/transmission-memecoin-knowledge-business.html': ['de','fr','it','ja','zh-CN','ru','tr','hi'],
   '/transmission-memecoin-graveyard.html': ['de','fr','it','ja','zh-CN','ru','tr','hi'],
   '/transmission-last-backup-ai-apocalypse.html': ['de','fr','it','ja','zh-CN','ru','tr','hi'],
+  '/transmission-zombie-fiction-rpg-guide.html': ['de','fr','it','ja','zh-CN','ru','tr','hi'],
   '/transmission-trump-family-memecoins.html': ['de','fr','it','ja','zh-CN','ru','tr','hi'],
   '/avoid-fake-token-websites-wallet-scams.html': ['de','fr','ru'],
   '/check-liquidity-holder-distribution-solana.html': ['de','fr','ru'],
