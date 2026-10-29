@@ -1400,11 +1400,18 @@
       body.zc-homepage-ad-enabled .hero > .hero-layout {
         grid-column:1!important;
         grid-row:1!important;
+        display:block!important;
         width:100%!important;
-        max-width:1500px!important;
+        max-width:760px!important;
         min-width:0!important;
         margin:0!important;
         align-self:start!important;
+      }
+      body.zc-homepage-ad-enabled .hero > .hero-layout > .hero-content {
+        width:100%!important;
+        max-width:760px!important;
+        min-width:0!important;
+        margin:0!important;
       }
       body.zc-homepage-ad-enabled .zc-home-right-stack {
         grid-column:2!important;
@@ -1491,6 +1498,25 @@
         border:0!important;
         box-sizing:border-box!important;
       }
+      body.zc-homepage-ad-enabled .zc-home-right-stack > .outbreak-panel {
+        order:2!important;
+        display:block!important;
+        position:relative!important;
+        inset:auto!important;
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        height:auto!important;
+        min-height:280px!important;
+        margin:0!important;
+        align-self:stretch!important;
+        box-sizing:border-box!important;
+        overflow:hidden!important;
+      }
+      body.zc-homepage-ad-enabled .zc-home-right-stack > .outbreak-panel .zc-radar-art {
+        width:100%!important;
+        min-height:280px!important;
+      }
       body.zc-homepage-ad-enabled .hero > .hero-bottom {
         grid-column:1 / -1!important;
       }
@@ -1569,9 +1595,11 @@
       stack.setAttribute('data-zombcash-home-right-stack', 'true');
       hero.insertBefore(stack, hero.querySelector(':scope > .hero-bottom'));
     }
-    // Keep the hero content/radar as one left-hand unit and stack the ad and promo video in the right column.
-    if (section.parentElement !== stack) stack.appendChild(section);
-    // Keep the existing promo video in its original document position; only position the ad.
+    // Keep the left copy/guide content wide. Move only the radar art into the right column under the ad.
+    const radar = layout.querySelector(':scope > .outbreak-panel');
+    if (radar && radar.parentElement !== stack) stack.appendChild(radar);
+    if (section.parentElement !== stack) stack.insertBefore(section, stack.firstChild);
+    // Intentionally do not move or restyle the existing promo video section.
     frame = section.querySelector(iframeSelector) || frame;
     normalizeIframe(frame);
     document.body.classList.add('zc-homepage-ad-enabled');
