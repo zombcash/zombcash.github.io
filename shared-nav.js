@@ -164,7 +164,7 @@
     '<div class="zsh-actions">' +
       (!isHome ? '<a class="zsh-home home-return-button" href="' + target('/') + '"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
       '<div class="zsh-language-slot"></div>' +
-      (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<a class="zsh-login-button" href="/survivor-hub.html" data-zsh-login>JOIN THE SURVIVORS</a>') +
+      (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<button class="zsh-login-button" type="button" data-zsh-login>JOIN THE SURVIVORS</button>') +
     '</div>';
 
   const actions = header.querySelector('.zsh-actions');
