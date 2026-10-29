@@ -95,21 +95,29 @@
   const loginButton = file === 'survivor-hub.html'
     ? header.querySelector('button[data-i18n="login"], button.top-cta')
     : null;
+  const supportedLocales = ['de','fr','it','ja','zh-CN','ru','tr','hi'];
+  const localizedCore = ['index.html','survivor-field-manual.html','outbreak-transmission.html','buy-zombcash.html'];
   const target = (href) => {
+    // Carry the active locale across both translated pages and English-only features.
+    // Locale may be encoded in the URL path (localized editorial pages) or in ?lang=
+    // (features such as Arcade, Survivor Hub, Gallery and Zombie Maker).
     const parts = location.pathname.split('/').filter(Boolean);
-    const candidate = parts.length ? parts[0] : 'en';
-    const locale = ['de','fr','it','ja','zh-CN','ru','tr','hi'].includes(candidate) ? candidate : 'en';
+    const pathLocale = parts.length && supportedLocales.includes(parts[0]) ? parts[0] : '';
+    const queryLocale = new URLSearchParams(location.search).get('lang') || '';
+    const locale = pathLocale || (supportedLocales.includes(queryLocale) ? queryLocale : 'en');
     if (locale === 'en') return href;
-    const key = href.split('#')[0].split('/').pop() || 'index.html';
-    const suffix = href.includes('#') ? '#' + href.split('#').slice(1).join('#') : '';
-    // Only route to localized files confirmed to exist in every locale tree.
-    const localizedCore = ['index.html','survivor-field-manual.html','outbreak-transmission.html','buy-zombcash.html'];
+
+    const source = new URL(href, location.origin);
+    const key = (source.pathname.split('/').filter(Boolean).pop() || 'index.html').toLowerCase();
+    const suffix = source.hash;
     if (localizedCore.includes(key)) {
       const localizedPath = key === 'index.html' ? '/' + locale + '/' : '/' + locale + '/' + key;
       return localizedPath + suffix;
     }
-    // Features without a localized counterpart remain explicit English destinations.
-    return href;
+
+    // No translated file exists for this feature: preserve language using language.js.
+    source.searchParams.set('lang', locale);
+    return source.pathname + source.search + suffix;
   };
   const brandHref = target(isHome ? '/#home' : '/');
 
