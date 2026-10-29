@@ -1350,151 +1350,145 @@
 })();
 
 
-// A-ADS is permitted once on each localized homepage (and nowhere else).
-// Use the large 300x600 format in the hero's right-hand visual slot on every language.
+// One responsive A-ADS unit on every localized homepage; no ad units on other pages.
 (() => {
   'use strict';
   const path = location.pathname;
   const isHomepage = path === '/' || path === '/index.html' ||
     /^\/(?:de|fr|it|ja|zh-CN|ru|tr|hi)\/?$/.test(path);
-  const adSelector = 'iframe[data-aa], .aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, [data-zombcash-ad-slot]';
-  const adSrc = 'https://acceptable.a-ads.com/2460185/?size=300x600';
-  const ensureFixedAdSize = (root) => {
-    if (!root) return;
-    root.querySelectorAll('iframe[data-aa="2460185"]').forEach(frame => {
-      if (frame.getAttribute('src') !== adSrc) frame.setAttribute('src', adSrc);
-      frame.setAttribute('width', '300');
-      frame.setAttribute('height', '600');
-      frame.style.setProperty('width', '300px', 'important');
-      frame.style.setProperty('height', '600px', 'important');
-      frame.style.setProperty('max-width', '100%', 'important');
-      frame.style.setProperty('display', 'block', 'important');
-    });
+  const adSrc = 'https://acceptable.a-ads.com/2460185/?size=Adaptive';
+  const wrapperSelector = '.aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, [data-zombcash-ad-slot]';
+  const iframeSelector = 'iframe[data-aa="2460185"]';
+
+  const normalizeIframe = (frame) => {
+    if (!frame) return;
+    if (frame.getAttribute('src') !== adSrc) frame.setAttribute('src', adSrc);
+    frame.removeAttribute('width');
+    frame.removeAttribute('height');
+    frame.setAttribute('title', 'Sponsored advertisement');
+    frame.style.setProperty('display', 'block', 'important');
+    frame.style.setProperty('width', '100%', 'important');
+    frame.style.setProperty('height', '100%', 'important');
+    frame.style.setProperty('min-width', '0', 'important');
+    frame.style.setProperty('max-width', '100%', 'important');
+    frame.style.setProperty('min-height', '0', 'important');
+    frame.style.setProperty('border', '0', 'important');
+    frame.style.setProperty('margin', '0', 'important');
+    frame.style.setProperty('padding', '0', 'important');
+    frame.style.setProperty('box-sizing', 'border-box', 'important');
   };
-  const removeAads = () => {
-    const nodes = Array.from(document.querySelectorAll(adSelector));
-    if (isHomepage) {
-      const keep = document.querySelector('iframe[data-aa="2460185"]');
-      nodes.forEach(node => {
-        if (keep && (node === keep || node.contains(keep) || keep.contains(node))) return;
-        if (node.matches('iframe[data-aa]')) {
-          const wrapper = node.closest('.aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, [data-zombcash-ad-slot]');
-          if (wrapper) wrapper.remove();
-          else node.remove();
-        } else if (!keep || !node.contains(keep)) {
-          node.remove();
-        }
-      });
-      if (keep) ensureFixedAdSize(document);
-      return;
-    }
-    nodes.forEach(node => {
-      if (node.matches('iframe[data-aa]')) {
-        const wrapper = node.closest('.aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, [data-zombcash-ad-slot]');
-        if (wrapper) wrapper.remove();
-        else node.remove();
-      } else {
-        node.remove();
-      }
-    });
-  };
-  const addHomeAdStyles = () => {
-    if (document.getElementById('zsh-home-ad-position-style')) return;
+
+  const ensureStyles = () => {
+    if (document.getElementById('zsh-home-ad-responsive-style')) return;
     const style = document.createElement('style');
-    style.id = 'zsh-home-ad-position-style';
+    style.id = 'zsh-home-ad-responsive-style';
     style.textContent = `
       body.zc-homepage-ad-enabled .zc-hero-art-panel {
-        position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;
-        box-sizing:border-box!important;width:100%!important;height:620px!important;min-height:620px!important;
-        max-height:none!important;aspect-ratio:auto!important;overflow:hidden!important;
+        position:relative!important; display:flex!important; align-items:center!important; justify-content:center!important;
+        box-sizing:border-box!important; overflow:hidden!important;
       }
-      body.zc-homepage-ad-enabled .zc-home-floating-ad {
-        position:relative!important;inset:auto!important;display:flex!important;align-items:center!important;justify-content:center!important;
-        box-sizing:border-box!important;flex:0 0 300px!important;width:300px!important;height:600px!important;
-        min-width:0!important;max-width:calc(100% - 20px)!important;margin:0 auto!important;padding:0!important;
-        border:0!important;background:#fff!important;overflow:hidden!important;z-index:4!important;text-align:left!important;
+      body.zc-homepage-ad-enabled .zc-hero-art-panel > .zc-home-floating-ad {
+        position:absolute!important; inset:12px!important; display:flex!important; align-items:center!important; justify-content:center!important;
+        box-sizing:border-box!important; width:auto!important; height:auto!important; min-width:0!important; min-height:0!important;
+        max-width:none!important; max-height:none!important; margin:0!important; padding:0!important;
+        border:0!important; background:transparent!important; overflow:hidden!important; z-index:5!important;
       }
       body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner {
-        box-sizing:border-box!important;flex:0 0 300px!important;width:300px!important;height:600px!important;max-width:100%!important;
-        margin:0!important;padding:0!important;overflow:hidden!important;text-align:left!important;
+        display:block!important; position:relative!important; box-sizing:border-box!important;
+        width:min(100%, 380px)!important; height:100%!important; max-width:100%!important; max-height:100%!important;
+        min-width:0!important; min-height:0!important; margin:0!important; padding:0!important; overflow:hidden!important;
+        text-align:center!important; background:transparent!important;
       }
-      body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner>div:first-child {display:none!important}
       body.zc-homepage-ad-enabled .zc-home-floating-ad #frame,
       body.zc-homepage-ad-enabled .zc-home-floating-ad [id^="frame-"] {
-        box-sizing:border-box!important;width:300px!important;height:600px!important;max-width:100%!important;
-        margin:0!important;padding:0!important;overflow:hidden!important;
+        display:block!important; position:relative!important; box-sizing:border-box!important;
+        width:100%!important; height:100%!important; max-width:100%!important; max-height:100%!important;
+        min-width:0!important; min-height:0!important; margin:0!important; padding:0!important; overflow:hidden!important;
       }
       body.zc-homepage-ad-enabled .zc-home-floating-ad iframe[data-aa="2460185"] {
-        display:block!important;box-sizing:border-box!important;width:300px!important;height:600px!important;max-width:100%!important;
-        margin:0!important;padding:0!important;border:0!important;
+        display:block!important; position:relative!important; box-sizing:border-box!important;
+        width:100%!important; height:100%!important; max-width:100%!important; max-height:100%!important;
+        min-width:0!important; min-height:0!important; margin:0!important; padding:0!important; border:0!important;
       }
-      body.zc-homepage-ad-enabled main#home .hero,
-      body.zc-homepage-ad-enabled main .hero {position:relative!important;padding-bottom:30px!important;overflow:visible!important}
+      body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner>div:first-child {display:none!important}
       @media(max-width:900px) {
-        body.zc-homepage-ad-enabled .zc-hero-art-panel {
-          height:620px!important;min-height:620px!important;max-height:none!important;aspect-ratio:auto!important;
-        }
-        body.zc-homepage-ad-enabled .zc-home-floating-ad {
-          flex-basis:300px!important;width:300px!important;height:600px!important;max-width:calc(100% - 20px)!important;
-          margin:0 auto!important;
-        }
-        body.zc-homepage-ad-enabled main#home .hero,
-        body.zc-homepage-ad-enabled main .hero {padding-bottom:24px!important;overflow:visible!important}
-      }
-      @media(max-width:340px) {
-        body.zc-homepage-ad-enabled .zc-home-floating-ad,
-        body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner,
-        body.zc-homepage-ad-enabled .zc-home-floating-ad iframe[data-aa="2460185"] {
-          width:100%!important;max-width:100%!important;
-        }
+        body.zc-homepage-ad-enabled .zc-hero-art-panel > .zc-home-floating-ad { inset:8px!important; }
+        body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner { width:100%!important; }
       }
     `;
     document.head.appendChild(style);
   };
-  const placeHomeAd = () => {
+
+  const removeExtraAds = () => {
+    const frames = Array.from(document.querySelectorAll('iframe[data-aa]'));
+    if (!isHomepage) {
+      document.querySelectorAll(wrapperSelector).forEach(node => node.remove());
+      frames.forEach(frame => {
+        const wrapper = frame.closest(wrapperSelector);
+        if (wrapper) wrapper.remove(); else frame.remove();
+      });
+      return;
+    }
+    const matching = Array.from(document.querySelectorAll(iframeSelector));
+    const keep = matching[0] || null;
+    frames.forEach(frame => {
+      if (frame === keep) return;
+      const wrapper = frame.closest(wrapperSelector);
+      if (wrapper) wrapper.remove(); else frame.remove();
+    });
+    document.querySelectorAll(wrapperSelector).forEach(node => {
+      if (keep && (node === keep || node.contains(keep))) return;
+      if (!keep || !node.contains(keep)) node.remove();
+    });
+  };
+
+  const placeAd = () => {
     if (!isHomepage || !document.body) return;
     const hero = document.querySelector('main#home .hero, main .hero, body > .hero');
     if (!hero) return;
-    const section = document.querySelector('.aads-ad-section, .zsh-shared-ad, [data-zombcash-ad-slot]');
-    if (!section) return;
     const artPanel = hero.querySelector('.zc-hero-art-panel');
-    const target = artPanel || hero;
-    document.body.classList.add('zc-homepage-ad-enabled');
+    if (!artPanel) return;
+    let section = document.querySelector('.aads-ad-section, .zsh-shared-ad, [data-zombcash-ad-slot]');
+    let frame = document.querySelector(iframeSelector);
+    if (!section && frame) section = frame.closest(wrapperSelector);
+    if (!section && !frame) {
+      section = document.createElement('section');
+      section.className = 'aads-ad-section zsh-shared-ad';
+      section.setAttribute('data-zombcash-ad-slot', 'responsive-adaptive');
+      section.innerHTML = '<div class="aads-ad-inner"><div id="frame"><iframe data-aa="2460185" src="' + adSrc + '" title="Sponsored advertisement" loading="eager" referrerpolicy="strict-origin-when-cross-origin"></iframe></div></div>';
+      frame = section.querySelector(iframeSelector);
+    }
+    if (!section) return;
     section.classList.add('zc-home-floating-ad');
     section.setAttribute('aria-label', 'Advertisement');
-    if (section.parentElement !== target) target.appendChild(section);
-    ensureFixedAdSize(section);
-    addHomeAdStyles();
+    section.setAttribute('data-zombcash-ad-slot', 'responsive-adaptive');
+    if (section.parentElement !== artPanel) artPanel.appendChild(section);
+    frame = section.querySelector(iframeSelector) || frame;
+    normalizeIframe(frame);
+    document.body.classList.add('zc-homepage-ad-enabled');
+    ensureStyles();
   };
-  const addSharedAd = () => {
-    if (!isHomepage || !document.body || document.querySelector('iframe[data-aa="2460185"], .aads-ad-section, .zsh-shared-ad, [data-zombcash-ad-slot]')) return;
-    const slot = document.createElement('section');
-    slot.className = 'aads-ad-section zsh-shared-ad zc-home-floating-ad';
-    slot.setAttribute('aria-label', 'Advertisement');
-    slot.setAttribute('data-zombcash-ad-slot', 'shared-fixed-300x600');
-    slot.innerHTML = '<div class="aads-ad-inner"><iframe data-aa="2460185" src="' + adSrc + '" title="Sponsored advertisement" width="300" height="600" loading="eager" referrerpolicy="strict-origin-when-cross-origin" style="display:block;box-sizing:border-box;border:0;padding:0;width:300px;height:600px;max-width:100%;margin:0;overflow:hidden"></iframe></div>';
-    const hero = document.querySelector('main#home .hero, main .hero, body > .hero');
-    const target = hero && (hero.querySelector('.zc-hero-art-panel') || hero);
-    if (target) {
-      target.appendChild(slot);
-      document.body.classList.add('zc-homepage-ad-enabled');
-      addHomeAdStyles();
-    } else {
-      const existingFooter = document.getElementById('zsh-about-footer') || document.querySelector('body > footer, body footer');
-      if (existingFooter && existingFooter.parentNode) existingFooter.parentNode.insertBefore(slot, existingFooter);
-      else document.body.appendChild(slot);
-    }
+
+  const run = () => {
+    removeExtraAds();
+    placeAd();
   };
-  removeAads();
-  const adRemovalObserver = new MutationObserver(() => {
-    removeAads();
-    if (isHomepage) placeHomeAd();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run, {once:true});
+  } else {
+    run();
+  }
+  let scheduled = false;
+  const observer = new MutationObserver(() => {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => { scheduled = false; run(); });
   });
-  const startAdRemovalObserver = () => {
-    if (document.body) adRemovalObserver.observe(document.body, {childList:true, subtree:true});
+  const observe = () => {
+    if (document.body) observer.observe(document.body, {childList:true, subtree:true});
   };
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => { placeHomeAd(); addSharedAd(); startAdRemovalObserver(); }, {once:true});
-  else { placeHomeAd(); addSharedAd(); startAdRemovalObserver(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', observe, {once:true});
+  else observe();
 })();
 
 
