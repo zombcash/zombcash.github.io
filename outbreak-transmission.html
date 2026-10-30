@@ -62,6 +62,20 @@ main>h2{margin-top:42px}
 @media(max-width:580px){.wrap{width:min(100% - 24px,1180px)}.grid{grid-template-columns:1fr;gap:14px}.grid>.card>.card-cover{aspect-ratio:16/9}.grid>.card>h2,.grid>.card>h3{font-size:20px}}
 @media(prefers-reduced-motion:reduce){.grid>.card{transition:none}.grid>.card:hover{transform:none}}
 
+
+/* Mobile related-link overflow fix — QA 30 Oct 2026 */
+.grid>.card>.related{
+  width:auto;
+  max-width:calc(100% - 36px);
+  min-width:0;
+  overflow-wrap:anywhere;
+  word-break:normal;
+}
+.grid>.card>.related a{
+  overflow-wrap:anywhere;
+  white-space:normal;
+}
+
 </style><meta name="referrer" content="no-referrer-when-downgrade" />
 </head><body><div class="wrap">
 <header class="top"><a class="brand" href="/">☣ ZOMBIE<span>CASH</span></a><a class="back" href="/">← Back to the main terminal</a></header>
