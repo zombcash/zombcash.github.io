@@ -32,6 +32,36 @@
 .editorial-featured{margin:30px 0}.editorial-featured>h2,.editorial-note h2{font-size:clamp(22px,3.6vw,30px);margin:24px 0 8px}.editorial-intro{max-width:780px;color:#c7d4c5}.editorial-card{display:flex;flex-direction:column;align-items:flex-start;min-width:0}.editorial-card h3{margin:12px 0 4px}.editorial-card .meta{margin-top:auto;padding-top:8px}.editorial-card .related{border-top:1px solid var(--line);padding-top:10px;font-size:13px;width:100%;overflow-wrap:anywhere}.editorial-note{border:1px solid var(--line);border-left:3px solid var(--green);background:#0e1712;border-radius:12px;padding:18px 20px;margin:28px 0}.editorial-note p{color:#c1cec3;font-size:15px;overflow-wrap:anywhere}
 @media(max-width:640px){.editorial-card{padding:17px}.editorial-note{padding:15px}}
 @media(max-width:640px){.grid{grid-template-columns:1fr}.lead{font-size:18px}.top{align-items:flex-start}.wrap{width:min(100% - 24px,1000px)}}
+
+/* Editorial card refresh — October 2026 */
+.wrap{width:min(100% - 40px,1180px)}
+body{background:radial-gradient(ellipse at 12% 0,rgba(104,25,35,.28),transparent 36%),radial-gradient(ellipse at 92% 8%,rgba(104,69,18,.16),transparent 34%),var(--bg)}
+:root{--line:#343039;--green:#ffbd4a;--text:#f4f1ec;--muted:#a9a3a0}
+a{color:#ffc45b}
+a:hover{color:#ffe0a1}
+.eyebrow,.notice strong,.kicker{color:#ffc45b}
+.tag{border:1px solid rgba(255,189,74,.45);color:#ffd28a;background:rgba(255,189,74,.08);border-radius:3px}
+.notice,.editorial-note{background:linear-gradient(135deg,rgba(28,22,21,.96),rgba(12,15,20,.96));border-color:#393039}
+.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:28px 0 38px;align-items:stretch}
+.grid>.card{position:relative;display:flex;flex-direction:column;min-width:0;min-height:100%;padding:0;margin:0;overflow:hidden;border:1px solid #37323a;border-radius:16px;background:linear-gradient(180deg,#17151a 0%,#0d1016 100%);box-shadow:0 12px 30px rgba(0,0,0,.22);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.grid>.card:hover{transform:translateY(-4px);border-color:rgba(255,189,74,.62);box-shadow:0 18px 38px rgba(0,0,0,.34)}
+.grid>.card>.card-cover{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;background:#17151a;border:0;border-bottom:1px solid #37323a}
+.grid>.card>.tag{align-self:flex-start;margin:17px 18px 0}
+.grid>.card>h2,.grid>.card>h3{margin:12px 18px 6px;font-size:clamp(18px,1.55vw,21px);line-height:1.22;letter-spacing:-.025em}
+.grid>.card>p{margin:9px 18px 0;font-size:14px;line-height:1.55;color:#c6c0bb}
+.grid>.card>.meta{margin-top:auto;padding-top:15px;color:#aaa19b;font-size:12px}
+.grid>.card>a:not(h2 a){display:inline-block;margin:14px 18px 18px;color:#ffc45b;font-size:13px;font-weight:800;text-decoration:none}
+.grid>.card>a:not(h2 a):hover{text-decoration:underline}
+.grid>.card>.related{margin:0 18px 16px;padding-top:12px;border-top:1px solid #37323a;font-size:12px}
+.editorial-featured{margin:34px 0 44px}
+.editorial-featured>h2,.editorial-note h2{font-size:clamp(22px,3.2vw,30px);letter-spacing:.025em}
+.editorial-intro{color:#c3bbb5}
+main>h2{margin-top:42px}
+.footer{border-color:#343039}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}
+@media(max-width:580px){.wrap{width:min(100% - 24px,1180px)}.grid{grid-template-columns:1fr;gap:14px}.grid>.card>.card-cover{aspect-ratio:16/9}.grid>.card>h2,.grid>.card>h3{font-size:20px}}
+@media(prefers-reduced-motion:reduce){.grid>.card{transition:none}.grid>.card:hover{transform:none}}
+
 </style><meta name="referrer" content="no-referrer-when-downgrade" />
 </head><body><div class="wrap">
 <header class="top"><a class="brand" href="/">☣ ZOMBIE<span>CASH</span></a><a class="back" href="/">← Back to the main terminal</a></header>
@@ -52,7 +82,7 @@
   <h2 id="latest-field-guides">START HERE · PRACTICAL SURVIVOR GUIDES</h2>
   <p class="editorial-intro">Three evergreen guides, linked together so each check leads to the next. No live-market claims are made here; use the cited tools directly for current data.</p>
   <div class="grid">
-    <article class="card editorial-card">
+    <article class="card editorial-card"><img class="card-cover" src="/solana-memecoin-field-guide-card.svg" alt="Solana memecoin research field guide cover" loading="lazy" decoding="async">
       <span class="tag">SECURITY CHECKLIST · 01</span>
       <h3><a href="/solana-memecoin-research-guide.html">How to Check a Memecoin Before You Buy</a></h3>
       <p>Verify the exact mint, inspect the actual liquidity pool, review holder concentration and authorities, and understand why busy trading does not prove safety.</p>
@@ -60,7 +90,7 @@
       <a href="/solana-memecoin-research-guide.html">Open the checklist →</a>
       <p class="related">RELATED: <a href="/check-liquidity-holder-distribution-solana.html">Liquidity & holder distribution</a> · <a href="/transmission-rug-pull-check.html">Rug pull warning signs</a></p>
     </article>
-    <article class="card editorial-card">
+    <article class="card editorial-card"><img class="card-cover" src="/images/memecoin-graveyard-cover.svg" alt="Rug pull warning signs dossier cover" loading="lazy" decoding="async">
       <span class="tag">SCAM AWARENESS · 02</span>
       <h3><a href="/transmission-rug-pull-check.html">Rug Pull: 7 Warning Signs Before You Buy</a></h3>
       <p>Learn to examine liquidity, top holders, token authorities, sellability and suspicious wallet prompts—without treating any single scanner as a verdict.</p>
@@ -68,7 +98,7 @@
       <a href="/transmission-rug-pull-check.html">Read the warning signs →</a>
       <p class="related">RELATED: <a href="/check-liquidity-holder-distribution-solana.html">Check pool depth and holders</a> · <a href="/transmission-wallet-security-red-flags.html">Wallet security checklist</a></p>
     </article>
-    <article class="card editorial-card">
+    <article class="card editorial-card"><img class="card-cover" src="/solana-memecoin-field-guide-card.svg" alt="Wallet security field guide cover" loading="lazy" decoding="async">
       <span class="tag">WALLET SAFETY · 03</span>
       <h3><a href="/transmission-wallet-security-red-flags.html">Wallet Security: Five Red Flags Before You Sign</a></h3>
       <p>Protect your seed phrase, spot cloned sites, reject unexplained prompts and reduce exposure by using a separate wallet for unfamiliar applications.</p>
@@ -87,23 +117,23 @@
 
 <section class="grid">
 
-<article class="card"><span class="tag">ZOMBIE CULTURE ARCHIVE · 12</span><h2><a href="/transmission-zombie-fiction-rpg-guide.html">The Undead Library: Zombie Fiction, Films, Games & RPGs</a></h2><p>A survivor’s guide to landmark zombie books, films, comics, video games and tabletop RPGs, with summaries, undead annotations and reliable links.</p><p class="meta">29 October 2026 · Zombie culture & survival role-playing</p><a href="/transmission-zombie-fiction-rpg-guide.html">Read the undead library →</a></article>
-<article class="card"><span class="tag">APOCALYPSE DOSSIER · 11</span><h2><a href="/transmission-last-backup-ai-apocalypse.html">The Last Backup: AI, Sam Altman & the Zombie Apocalypse</a></h2><p>A darkly funny, source-linked investigation of AI catastrophe risks, OpenAI's compute buildout, data-center energy, digital survival and why the meme may outlive the chart.</p><p class="meta">29 October 2026 · AI, infrastructure & digital survival</p><a href="/transmission-last-backup-ai-apocalypse.html">Read the apocalypse dossier →</a></article>
-<article class="card"><span class="tag">FIELD REPORT · 01</span><h2><a href="/transmission-solana-memecoin-warning-signs.html">Reading Solana Memecoin Signals Without Getting Baited</a></h2><p>How to compare liquidity, volume, buys and sells, pool changes and token identity without mistaking a loud chart for a safe token.</p><p class="meta">Updated 23 October 2026 · Token research</p><a href="/transmission-solana-memecoin-warning-signs.html">Open transmission →</a></article>
-<article class="card"><span class="tag">FIELD REPORT · 08</span><h2><a href="/transmission-memecoin-graveyard.html">The Memecoin Graveyard</a></h2><p>A sarcastic, source-linked autopsy of token survival, disappearing liquidity and suspicious volume.</p><p class="meta">26 October 2026 · Token research</p><a href="/transmission-memecoin-graveyard.html">Read the autopsy →</a></article>
-<article class="card"><span class="tag">FAMILY CRYPTO AUTOPSY · 09</span><h2><a href="/transmission-trump-family-memecoins.html">The Trump Family Memecoin Machine</a></h2><p>$TRUMP, $MELANIA, token supply, headline valuations and the brutal gap between a quoted market cap and actual exit liquidity.</p><p class="meta">26 October 2026 · Political memecoins</p><a href="/transmission-trump-family-memecoins.html">Read the family crypto autopsy →</a></article>
-<article class="card"><span class="tag">The REAL Memecoin Business · 10</span><h2><a href="/transmission-memecoin-knowledge-business.html">The Real Memecoin Edge: Sell the Map, Not the Lottery Ticket</a></h2><p>How to build an ethical knowledge business around memecoins: guides, research tools, workshops and community—without selling guaranteed profits.</p><p class="meta">26 October 2026 · Education & research</p><a href="/transmission-memecoin-knowledge-business.html">Read the field guide →</a></article>
+<article class="card"><img class="card-cover" src="/images/memecoin-graveyard-cover.svg" alt="Zombie fiction and culture archive cover" loading="lazy" decoding="async"><span class="tag">ZOMBIE CULTURE ARCHIVE · 12</span><h2><a href="/transmission-zombie-fiction-rpg-guide.html">The Undead Library: Zombie Fiction, Films, Games & RPGs</a></h2><p>A survivor’s guide to landmark zombie books, films, comics, video games and tabletop RPGs, with summaries, undead annotations and reliable links.</p><p class="meta">29 October 2026 · Zombie culture & survival role-playing</p><a href="/transmission-zombie-fiction-rpg-guide.html">Read the undead library →</a></article>
+<article class="card"><img class="card-cover" src="/images/the-last-backup-ai-apocalypse.svg" alt="AI apocalypse and digital survival dossier cover" loading="lazy" decoding="async"><span class="tag">APOCALYPSE DOSSIER · 11</span><h2><a href="/transmission-last-backup-ai-apocalypse.html">The Last Backup: AI, Sam Altman & the Zombie Apocalypse</a></h2><p>A darkly funny, source-linked investigation of AI catastrophe risks, OpenAI's compute buildout, data-center energy, digital survival and why the meme may outlive the chart.</p><p class="meta">29 October 2026 · AI, infrastructure & digital survival</p><a href="/transmission-last-backup-ai-apocalypse.html">Read the apocalypse dossier →</a></article>
+<article class="card"><img class="card-cover" src="/solana-memecoin-field-guide-card.svg" alt="Solana memecoin signals research cover" loading="lazy" decoding="async"><span class="tag">FIELD REPORT · 01</span><h2><a href="/transmission-solana-memecoin-warning-signs.html">Reading Solana Memecoin Signals Without Getting Baited</a></h2><p>How to compare liquidity, volume, buys and sells, pool changes and token identity without mistaking a loud chart for a safe token.</p><p class="meta">Updated 23 October 2026 · Token research</p><a href="/transmission-solana-memecoin-warning-signs.html">Open transmission →</a></article>
+<article class="card"><img class="card-cover" src="/images/memecoin-graveyard-cover.svg" alt="Memecoin graveyard research cover" loading="lazy" decoding="async"><span class="tag">FIELD REPORT · 08</span><h2><a href="/transmission-memecoin-graveyard.html">The Memecoin Graveyard</a></h2><p>A sarcastic, source-linked autopsy of token survival, disappearing liquidity and suspicious volume.</p><p class="meta">26 October 2026 · Token research</p><a href="/transmission-memecoin-graveyard.html">Read the autopsy →</a></article>
+<article class="card"><img class="card-cover" src="/images/trump-memecoin-autopsy-cover.svg" alt="Trump family memecoin analysis cover" loading="lazy" decoding="async"><span class="tag">FAMILY CRYPTO AUTOPSY · 09</span><h2><a href="/transmission-trump-family-memecoins.html">The Trump Family Memecoin Machine</a></h2><p>$TRUMP, $MELANIA, token supply, headline valuations and the brutal gap between a quoted market cap and actual exit liquidity.</p><p class="meta">26 October 2026 · Political memecoins</p><a href="/transmission-trump-family-memecoins.html">Read the family crypto autopsy →</a></article>
+<article class="card"><img class="card-cover" src="/images/memecoin-knowledge-business.svg" alt="Memecoin education and research business cover" loading="lazy" decoding="async"><span class="tag">The REAL Memecoin Business · 10</span><h2><a href="/transmission-memecoin-knowledge-business.html">The Real Memecoin Edge: Sell the Map, Not the Lottery Ticket</a></h2><p>How to build an ethical knowledge business around memecoins: guides, research tools, workshops and community—without selling guaranteed profits.</p><p class="meta">26 October 2026 · Education & research</p><a href="/transmission-memecoin-knowledge-business.html">Read the field guide →</a></article>
 
 
-<article class="card"><span class="tag">SECURITY DOSSIER · 02</span><h2><a href="/transmission-wallet-security-red-flags.html">Wallet Security: Five Red Flags Before You Sign</a></h2><p>A practical pre-signing routine for fake claims, cloned sites, suspicious approvals and social-engineering attempts.</p><p class="meta">Updated 23 October 2026 · Wallet safety</p><a href="/transmission-wallet-security-red-flags.html">Open dossier →</a></article>
-<article class="card"><span class="tag">FIELD REPORT · 03</span><h2><a href="/zombcash-buying-guide.html">How to Buy ZOMBCASH on Solana: A Step-by-Step Guide</a></h2><p>A beginner-friendly walkthrough: get SOL, verify the official mint, use a swap route, and understand the risks before buying.</p><p class="meta">23 October 2026 · Buying guide</p><a href="/zombcash-buying-guide.html">Read the guide →</a></article>
-<article class="card"><span class="tag">SECURITY DOSSIER · 07</span><h2><a href="/transmission-rug-pull-check.html">Rug Pull Warning Signs: 7 Checks Before You Buy</a></h2><p>Seven practical checks for token identity, liquidity, holder concentration, authorities and suspicious wallet prompts—before the chart eats your lunch.</p><a href="/transmission-rug-pull-check.html">Read the dossier →</a></article></section>
+<article class="card"><img class="card-cover" src="/solana-memecoin-field-guide-card.svg" alt="Wallet security field guide cover" loading="lazy" decoding="async"><span class="tag">SECURITY DOSSIER · 02</span><h2><a href="/transmission-wallet-security-red-flags.html">Wallet Security: Five Red Flags Before You Sign</a></h2><p>A practical pre-signing routine for fake claims, cloned sites, suspicious approvals and social-engineering attempts.</p><p class="meta">Updated 23 October 2026 · Wallet safety</p><a href="/transmission-wallet-security-red-flags.html">Open dossier →</a></article>
+<article class="card"><img class="card-cover" src="/solana-memecoin-field-guide-card.svg" alt="ZOMBCASH Solana buying guide cover" loading="lazy" decoding="async"><span class="tag">FIELD REPORT · 03</span><h2><a href="/zombcash-buying-guide.html">How to Buy ZOMBCASH on Solana: A Step-by-Step Guide</a></h2><p>A beginner-friendly walkthrough: get SOL, verify the official mint, use a swap route, and understand the risks before buying.</p><p class="meta">23 October 2026 · Buying guide</p><a href="/zombcash-buying-guide.html">Read the guide →</a></article>
+<article class="card"><img class="card-cover" src="/images/memecoin-graveyard-cover.svg" alt="Liquidity and holder distribution autopsy cover" loading="lazy" decoding="async"><span class="tag">SECURITY DOSSIER · 07</span><h2><a href="/transmission-rug-pull-check.html">Rug Pull Warning Signs: 7 Checks Before You Buy</a></h2><p>Seven practical checks for token identity, liquidity, holder concentration, authorities and suspicious wallet prompts—before the chart eats your lunch.</p><a href="/transmission-rug-pull-check.html">Read the dossier →</a></article></section>
 <h2>☣ Survivor Field Manual · New research library</h2>
 <section class="grid">
-<article class="card"><span class="tag">DOSSIER 002</span><h2><a href="/how-to-research-solana-meme-coins.html">How to Research Solana Meme Coins</a></h2><p>Verify the mint, inspect activity, liquidity and holders. No hype goggles required.</p><a href="/how-to-research-solana-meme-coins.html">Read field guide →</a></article>
-<article class="card"><span class="tag">CHECKLIST 003</span><h2><a href="/solana-token-safety-checklist.html">Solana Token Safety Checklist</a></h2><p>A quick go/no-go routine for token identity, pool depth, holders, authorities and wallet prompts.</p><a href="/solana-token-safety-checklist.html">Run the checklist →</a></article>
-<article class="card"><span class="tag">AUTOPSY 004</span><h2><a href="/check-liquidity-holder-distribution-solana.html">Check Liquidity & Holder Distribution</a></h2><p>Learn what liquidity, slippage and top-holder concentration really tell you—and what they don't.</p><a href="/check-liquidity-holder-distribution-solana.html">Read market autopsy →</a></article>
-<article class="card"><span class="tag">DEFENCE 005</span><h2><a href="/avoid-fake-token-websites-wallet-scams.html">Avoid Fake Token Sites & Wallet Scams</a></h2><p>Spot cloned domains, fake support, hostile airdrops and suspicious wallet signatures.</p><a href="/avoid-fake-token-websites-wallet-scams.html">Secure the bunker →</a></article>
+<article class="card"><img class="card-cover" src="/solana-memecoin-field-guide-card.svg" alt="Solana memecoin research field guide cover" loading="lazy" decoding="async"><span class="tag">DOSSIER 002</span><h2><a href="/how-to-research-solana-meme-coins.html">How to Research Solana Meme Coins</a></h2><p>Verify the mint, inspect activity, liquidity and holders. No hype goggles required.</p><a href="/how-to-research-solana-meme-coins.html">Read field guide →</a></article>
+<article class="card"><img class="card-cover" src="/solana-memecoin-field-guide-card.svg" alt="Solana token safety checklist cover" loading="lazy" decoding="async"><span class="tag">CHECKLIST 003</span><h2><a href="/solana-token-safety-checklist.html">Solana Token Safety Checklist</a></h2><p>A quick go/no-go routine for token identity, pool depth, holders, authorities and wallet prompts.</p><a href="/solana-token-safety-checklist.html">Run the checklist →</a></article>
+<article class="card"><img class="card-cover" src="/solana-memecoin-field-guide-card.svg" alt="Liquidity and holder distribution research cover" loading="lazy" decoding="async"><span class="tag">AUTOPSY 004</span><h2><a href="/check-liquidity-holder-distribution-solana.html">Check Liquidity & Holder Distribution</a></h2><p>Learn what liquidity, slippage and top-holder concentration really tell you—and what they don't.</p><a href="/check-liquidity-holder-distribution-solana.html">Read market autopsy →</a></article>
+<article class="card"><img class="card-cover" src="/images/memecoin-knowledge-business.svg" alt="Wallet scam awareness and defence guide cover" loading="lazy" decoding="async"><span class="tag">DEFENCE 005</span><h2><a href="/avoid-fake-token-websites-wallet-scams.html">Avoid Fake Token Sites & Wallet Scams</a></h2><p>Spot cloned domains, fake support, hostile airdrops and suspicious wallet signatures.</p><a href="/avoid-fake-token-websites-wallet-scams.html">Secure the bunker →</a></article>
 </section>
 <h2>More signal, less noise</h2><p>Use the <a href="/solana-memecoin-research-guide.html">Solana Memecoin Safety Checklist</a> for the full research routine, then explore the <a href="https://t.me/ZombieCashMemeRadarBot" target="_blank" rel="noopener noreferrer">ZombieCash Meme Radar ↗</a> as a discovery tool—not an automatic buy signal.</p>
 <p class="small">The archive will grow with reviewed explainers and source-grounded reports. No fabricated headlines, guaranteed predictions or unsupported market claims.</p></main>
