@@ -57,7 +57,7 @@
   lightbox.setAttribute("role", "dialog");
   lightbox.setAttribute("aria-modal", "true");
   lightbox.setAttribute("aria-label", "Expanded gallery image");
-  lightbox.innerHTML = '<button class="gallery-lightbox-close" type="button" aria-label="Close image">×</button>' +
+  lightbox.innerHTML = '<button class="gallery-lightbox-close" type="button" aria-label="Close fullscreen image">✕ <span>CLOSE</span></button>' +
     '<button class="gallery-lightbox-prev" type="button" aria-label="Previous image">‹</button>' +
     '<figure><img alt=""><figcaption></figcaption></figure>' +
     '<button class="gallery-lightbox-next" type="button" aria-label="Next image">›</button>';
