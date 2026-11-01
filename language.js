@@ -165,6 +165,16 @@ const localizedEditorialPages = {
     "tr",
     "hi"
   ],
+  "/transmission-liquidity-is-not-market-cap.html": [
+    "de",
+    "fr",
+    "it",
+    "ja",
+    "zh-CN",
+    "ru",
+    "tr",
+    "hi"
+  ],
   "/avoid-fake-token-websites-wallet-scams.html": [
     "de",
     "fr",
