@@ -17,4 +17,4 @@ This is a static GitHub Pages archive. Keep each article card in the HTML so sea
 
 ## Current languages
 
-English, German, French, Russian, Japanese, Turkish, Italian, Hindi and Simplified Chinese. The landing pages are localized; the linked long-form articles are currently English until translated article editions are published.
+English, German, French, Russian, Japanese, Turkish, Italian, Hindi and Simplified Chinese. The two publication landing pages (`survivor-field-manual.html` and `outbreak-transmission.html`) are maintained in all nine languages. The core `solana-memecoin-research-guide.html` also has localized editions in all eight non-English locales. Other article translations are maintained per article: never assume a translation exists because a landing-page card is localized. Before adding a language to an article's `hreflang` set, verify that the target file exists, its body is fully translated (not only its title or navigation), its canonical points to itself, and its metadata and structured data match that language.
