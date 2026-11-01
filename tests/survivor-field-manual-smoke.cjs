@@ -73,11 +73,10 @@ fs.mkdirSync(outDir, { recursive: true });
 
         // Language dropdown must open and expose all dedicated manual destinations.
         await page.locator('header.zombcash-shared-header .language-trigger').click();
-        const localeLinks = await page.locator('header.zombcash-shared-header .language-menu a').evaluateAll(as => as.map(a => a.getAttribute('href') || ''));
-        if (!localeLinks.length) issues.push('language dropdown has no links');
-        const required = locales.map(x => x.path);
-        const resolved = localeLinks.map(h => new URL(h, BASE).pathname.replace(/^\//, ''));
-        for (const p of required) if (!resolved.includes(p)) issues.push('language switcher missing destination: ' + p);
+        const languageOptions = await page.locator('header.zombcash-shared-header .language-menu .language-option').evaluateAll(bs => bs.map(b => b.dataset.lang || ''));
+        if (!languageOptions.length) issues.push('language dropdown has no options');
+        const required = locales.map(x => x.code);
+        for (const code of required) if (!languageOptions.includes(code)) issues.push('language switcher missing locale: ' + code);
 
         if (errors.length) issues.push('browser JS errors: ' + errors.join(' | '));
         await page.screenshot({ path: path.join(outDir, locale.code.replace(/[^a-z0-9]/gi, '-') + '-' + width + '.png'), fullPage: true });
