@@ -81,7 +81,7 @@ fs.mkdirSync(outDir, { recursive: true });
 
         if (errors.length) issues.push('browser JS errors: ' + errors.join(' | '));
         await page.screenshot({ path: path.join(outDir, locale.code.replace(/[^a-z0-9]/gi, '-') + '-' + width + '.png'), fullPage: true });
-        const report = { locale: locale.code, width, initial, filtered, restored, localeLinks, issues, errors };
+        const report = { locale: locale.code, width, initial, filtered, restored, languageOptions, issues, errors };
         fs.writeFileSync(path.join(outDir, locale.code.replace(/[^a-z0-9]/gi, '-') + '-' + width + '.json'), JSON.stringify(report, null, 2));
         summary.push(report);
         if (issues.length) failures.push({ locale: locale.code, width, issues });
