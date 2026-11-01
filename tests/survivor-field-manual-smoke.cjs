@@ -71,6 +71,52 @@ fs.mkdirSync(outDir, { recursive: true });
         await page.locator('#manual-sort').selectOption('date-asc');
         await page.locator('#manual-sort').selectOption('date-desc');
 
+        // Topic categories must match the cards and return a non-empty subset.
+        const category = page.locator('#manual-category');
+        const categoryValues = await category.locator('option').evaluateAll(options => options.map(option => option.value).filter(Boolean));
+        if (!categoryValues.length) issues.push('topic filter has no categories');
+        else {
+          await category.selectOption(categoryValues[0]);
+          const categoryVisible = await page.locator('#manual-articles .article-card:visible').count();
+          if (categoryVisible < 1 || categoryVisible >= initial.cards) issues.push('topic filter did not narrow the guide list (' + categoryVisible + ')');
+          await page.locator('#manual-clear').click();
+        }
+
+        // Exercise actual locale navigation once, across every dedicated language URL.
+        if (locale.code === 'en' && width === 390) {
+          for (const targetLocale of locales.filter(item => item.code !== 'en')) {
+            await page.locator('header.zombcash-shared-header .language-trigger').click();
+            await page.locator('.language-option[data-lang="' + targetLocale.code + '"]').click();
+            const expectedPath = '/' + targetLocale.path;
+            await page.waitForURL(url => url.pathname === expectedPath, { timeout: 25000 });
+            await page.waitForFunction(code => document.documentElement.lang === code, targetLocale.code, { timeout: 15000 });
+            const switched = await page.evaluate(() => ({
+              lang: document.documentElement.lang,
+              cards: document.querySelectorAll('#manual-articles .article-card').length,
+              nav: !!document.querySelector('header.zombcash-shared-header .language-trigger'),
+            }));
+            if (switched.lang !== targetLocale.code || switched.cards !== 9 || !switched.nav) {
+              issues.push('language switch failed for ' + targetLocale.code + ': ' + JSON.stringify(switched));
+            }
+          }
+          await page.locator('header.zombcash-shared-header .language-trigger').click();
+          await page.locator('.language-option[data-lang="en"]').click();
+          await page.waitForURL(url => url.pathname === '/survivor-field-manual.html', { timeout: 25000 });
+          await page.waitForFunction(() => document.documentElement.lang === 'en', { timeout: 15000 });
+
+          // Every distinct English article-card destination must return HTTP 2xx/3xx.
+          const destinations = await page.locator('#manual-articles .article-card h2 a, #manual-articles .article-card .article-link')
+            .evaluateAll(links => Array.from(new Set(links.map(link => link.href))));
+          const linkStatuses = [];
+          for (const destination of destinations) {
+            const response = await page.request.get(destination, { timeout: 20000 });
+            linkStatuses.push({ url: destination, status: response.status() });
+          }
+          const broken = linkStatuses.filter(item => item.status < 200 || item.status >= 400);
+          if (broken.length) issues.push('broken internal guide links: ' + JSON.stringify(broken));
+          fs.writeFileSync(path.join(outDir, 'english-internal-links.json'), JSON.stringify(linkStatuses, null, 2));
+        }
+
         // Language dropdown must open and expose all dedicated manual destinations.
         await page.locator('header.zombcash-shared-header .language-trigger').click();
         const languageOptions = await page.locator('header.zombcash-shared-header .language-menu .language-option').evaluateAll(bs => bs.map(b => b.dataset.lang || ''));
