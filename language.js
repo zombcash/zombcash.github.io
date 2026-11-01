@@ -58,12 +58,22 @@ const localizedEditorialPages = {
   "/transmission-rug-pull-check.html": [
     "de",
     "fr",
-    "ru"
+    "it",
+    "ja",
+    "zh-CN",
+    "ru",
+    "tr",
+    "hi"
   ],
   "/transmission-solana-memecoin-warning-signs.html": [
     "de",
     "fr",
-    "ru"
+    "it",
+    "ja",
+    "zh-CN",
+    "ru",
+    "tr",
+    "hi"
   ],
   "/solana-memecoin-research-guide.html": [
     "de",
@@ -78,7 +88,12 @@ const localizedEditorialPages = {
   "/transmission-wallet-security-red-flags.html": [
     "de",
     "fr",
-    "ru"
+    "it",
+    "ja",
+    "zh-CN",
+    "ru",
+    "tr",
+    "hi"
   ],
   "/zombcash-buying-guide.html": [
     "de",
