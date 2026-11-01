@@ -60,7 +60,7 @@ fs.mkdirSync(outDir, { recursive: true });
 
         // Search must reduce the result set; reset must restore it.
         const search = page.locator('#manual-search');
-        const firstTitle = (await page.locator('#manual-articles .article-card h2').first().innerText()).trim().split(/\\s+/).slice(0, 2).join(' ');
+        const firstTitle = (await page.locator('#manual-articles .article-card h2').first().innerText()).trim().split(/\s+/).slice(0, 2).join(' ');
         await search.fill(firstTitle);
         const filtered = await page.locator('#manual-articles .article-card:visible').count();
         if (filtered < 1 || filtered >= initial.cards) issues.push('search did not produce a narrower result set (' + filtered + ')');
@@ -75,7 +75,7 @@ fs.mkdirSync(outDir, { recursive: true });
         const localeLinks = await page.locator('header.zombcash-shared-header .language-menu a').evaluateAll(as => as.map(a => a.getAttribute('href') || ''));
         if (!localeLinks.length) issues.push('language dropdown has no links');
         const required = locales.map(x => x.path);
-        const resolved = localeLinks.map(h => new URL(h, BASE).pathname.replace(/^\\//, ''));
+        const resolved = localeLinks.map(h => new URL(h, BASE).pathname.replace(/^\//, ''));
         for (const p of required) if (!resolved.includes(p)) issues.push('language switcher missing destination: ' + p);
 
         if (errors.length) issues.push('browser JS errors: ' + errors.join(' | '));
