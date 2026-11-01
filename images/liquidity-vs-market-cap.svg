@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
+<title id="title">Valuation and executable liquidity are different</title>
+<desc id="desc">A large valuation symbol is shown separately from a trading pool with finite reserves and a narrow exit path.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#14271b"/><stop offset="1" stop-color="#0a1018"/></linearGradient>
+  <linearGradient id="green" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c6ff83"/><stop offset="1" stop-color="#68d72d"/></linearGradient>
+  <filter id="glow"><feGaussianBlur stdDeviation="12" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect x="8" y="8" width="1184" height="544" rx="30" fill="url(#bg)" stroke="#35533b" stroke-width="3"/>
+<g opacity=".14" stroke="#9bff45" stroke-width="1"><path d="M40 110H1160M40 220H1160M40 330H1160M40 440H1160"/><path d="M180 35V525M420 35V525M660 35V525M900 35V525"/></g>
+<g transform="translate(110 105)">
+ <rect width="360" height="350" rx="24" fill="#0c1711" stroke="#4c7547" stroke-width="3"/>
+ <circle cx="180" cy="142" r="88" fill="#15291a" stroke="url(#green)" stroke-width="8" filter="url(#glow)"/>
+ <text x="180" y="174" text-anchor="middle" font-family="Arial,sans-serif" font-size="104" font-weight="800" fill="#baff83">$</text>
+ <g fill="#9bff45" opacity=".9"><rect x="80" y="260" width="200" height="18" rx="9"/><rect x="105" y="292" width="150" height="12" rx="6" opacity=".55"/></g>
+ <path d="M92 220H268" stroke="#a8c99a" stroke-width="3" stroke-dasharray="8 12" opacity=".65"/>
+</g>
+<g transform="translate(730 105)">
+ <rect width="360" height="350" rx="24" fill="#0c1711" stroke="#4c7547" stroke-width="3"/>
+ <path d="M70 110H290L255 225H105Z" fill="#132a1a" stroke="#9bff45" stroke-width="5"/>
+ <path d="M105 225L130 270H230L255 225" fill="#1e4226" stroke="#9bff45" stroke-width="4"/>
+ <g fill="url(#green)" stroke="#d7ffad" stroke-width="2"><circle cx="135" cy="157" r="24"/><circle cx="185" cy="157" r="24"/><circle cx="235" cy="157" r="24"/></g>
+ <path d="M180 270V315" stroke="#9bff45" stroke-width="8" stroke-linecap="round"/>
+ <path d="M158 298L180 322L202 298" fill="none" stroke="#9bff45" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+ <path d="M180 323H180" stroke="#9bff45" stroke-width="8"/>
+</g>
+<g transform="translate(600 280)">
+ <circle r="55" fill="#0a1117" stroke="#9bff45" stroke-width="4"/>
+ <text y="19" text-anchor="middle" font-family="Arial,sans-serif" font-size="58" font-weight="800" fill="#d7ffad">≠</text>
+</g>
+<path d="M500 280H535M665 280H700" stroke="#9bff45" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 12"/>
+<g fill="#9bff45" opacity=".8"><circle cx="55" cy="55" r="5"/><circle cx="1145" cy="505" r="5"/><circle cx="1110" cy="75" r="4"/><circle cx="85" cy="490" r="4"/></g>
+</svg>

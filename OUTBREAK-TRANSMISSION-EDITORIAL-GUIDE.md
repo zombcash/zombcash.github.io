@@ -34,7 +34,7 @@ Dates are editorial targets, not claims that articles are already published.
 | 2026-10-28 | Meme Coin Analysis | How to Check a Memecoin Before You Buy | Repeatable pre-buy checks |
 | 2026-10-30 | Scam Alerts | Rug Pull Warning Signs: 7 Checks Before You Buy | Risk indicators and limits |
 | 2026-11-01 | Security Guides | Wallet Security: Five Red Flags Before You Sign | Prevent seed phrase theft and unsafe signatures |
-| 2026-11-04 | Market Notes | Liquidity Is Not Market Cap | Explain executable liquidity using sourced examples |
+| 2026-11-01 | Market Notes | Liquidity Is Not Market Cap: How to Read Solana Token Markets | Published in EN, DE, FR, IT, JA, ZH-CN, RU, TR and HI; explains valuation, pool-specific liquidity, price impact and slippage with primary references |
 | 2026-11-06 | Scam Alerts | Fake Token Websites and Impersonation | Domain and token identity checks |
 | 2026-11-08 | Security Guides | Mint and Freeze Authority Explained | Explain capabilities and trade-offs |
 | 2026-11-11 | Meme Coin Analysis | Reading Volume, Buys and Sells | Read activity without treating it as proof of organic demand |
