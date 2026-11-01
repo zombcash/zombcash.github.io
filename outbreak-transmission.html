@@ -76,6 +76,19 @@ main>h2{margin-top:42px}
   white-space:normal;
 }
 
+
+/* Narrow-screen title fit: keep the final word intact at 320px. */
+@media(max-width:360px){
+  main>h1{
+    font-size:clamp(25px,7.8vw,29px);
+    line-height:1.08;
+    letter-spacing:-.055em;
+    word-break:normal;
+    overflow-wrap:normal;
+    hyphens:none;
+    max-width:100%;
+  }
+}
 </style><meta name="referrer" content="no-referrer-when-downgrade" />
 </head><body><div class="wrap">
 <header class="top"><a class="brand" href="/">☣ ZOMBIE<span>CASH</span></a><a class="back" href="/">← Back to the main terminal</a></header>
