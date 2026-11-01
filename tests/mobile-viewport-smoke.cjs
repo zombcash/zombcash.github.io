@@ -148,6 +148,7 @@ fs.mkdirSync(outDir, { recursive: true });
           await search.fill('Wallet Security');
           const filtered = await page.locator('#manual-articles .article-card:visible').count();
           if (filtered < 1 || filtered >= 9) issues.push('search filter did not narrow the guide list');
+          await search.fill('');
           await page.locator('#manual-category').selectOption('solana');
           const categoryCount = await page.locator('#manual-articles .article-card:visible').count();
           if (categoryCount < 1) issues.push('topic filter returned no matching Solana guides');
