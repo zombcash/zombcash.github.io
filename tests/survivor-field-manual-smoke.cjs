@@ -32,6 +32,7 @@ fs.mkdirSync(outDir, { recursive: true });
         await page.waitForSelector('header.zombcash-shared-header', { timeout: 25000 });
         await page.waitForSelector('#manual-articles .article-card', { timeout: 15000 });
         await page.waitForTimeout(500);
+        await page.locator('#manual-articles img').evaluateAll(imgs => Promise.all(imgs.map(img => new Promise(resolve => { img.loading = 'eager'; if (img.complete && img.naturalWidth > 0) return resolve(); img.addEventListener('load', resolve, { once: true }); img.addEventListener('error', resolve, { once: true }); setTimeout(resolve, 12000); }))));
         const initial = await page.evaluate(() => {
           const imgs = [...document.querySelectorAll('main img, #manual-articles img')];
           return {
