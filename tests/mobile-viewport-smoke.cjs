@@ -98,6 +98,95 @@ fs.mkdirSync(outDir, { recursive: true });
       await page.close();
     }
 
+    // Survivor Field Manual: responsive, image, filter, language and link regression checks.
+    const manualLocales = [
+      { code: 'en', path: 'survivor-field-manual.html' },
+      { code: 'ru', path: 'ru/survivor-field-manual.html' },
+      { code: 'de', path: 'de/survivor-field-manual.html' },
+      { code: 'fr', path: 'fr/survivor-field-manual.html' },
+      { code: 'it', path: 'it/survivor-field-manual.html' },
+      { code: 'ja', path: 'ja/survivor-field-manual.html' },
+      { code: 'zh-CN', path: 'zh-CN/survivor-field-manual.html' },
+      { code: 'tr', path: 'tr/survivor-field-manual.html' },
+      { code: 'hi', path: 'hi/survivor-field-manual.html' },
+    ];
+    for (const locale of manualLocales) {
+      for (const width of [390, 1440]) {
+        const page = await browser.newPage({ viewport: { width, height: 980 } });
+        const pageErrors = [];
+        page.on('pageerror', error => pageErrors.push(error.message));
+        await page.goto(new URL(locale.path, BASE_URL).href, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await page.waitForSelector('header.zombcash-shared-header .language-trigger', { timeout: 20000 });
+        await page.waitForSelector('#manual-articles .article-card', { timeout: 10000 });
+        await page.waitForFunction(() => Array.from(document.querySelectorAll('#manual-articles img')).every(img => img.complete && img.naturalWidth > 0), { timeout: 15000 }).catch(() => {});
+        const result = await page.evaluate(() => ({
+          width: window.innerWidth,
+          documentWidth: document.documentElement.scrollWidth,
+          lang: document.documentElement.lang,
+          h1: document.querySelectorAll('main h1').length,
+          cards: document.querySelectorAll('#manual-articles .article-card').length,
+          brokenImages: Array.from(document.querySelectorAll('#manual-articles img')).filter(img => !img.complete || img.naturalWidth === 0).map(img => img.src),
+          flowSvgOpen: document.querySelectorAll('.manual-flow svg').length,
+          flowSvgTitle: !!document.querySelector('.manual-flow svg title'),
+          legendLabels: document.querySelectorAll('.manual-flow-legend span').length,
+          languageOptions: document.querySelectorAll('.language-option').length,
+          filterOptions: Array.from(document.querySelectorAll('#manual-category option')).map(option => option.value).filter(Boolean),
+          cardCategories: Array.from(new Set(Array.from(document.querySelectorAll('#manual-articles .article-card')).map(card => card.dataset.category))),
+        }));
+        const issues = [];
+        if (result.documentWidth > width + 1) issues.push('horizontal overflow');
+        if (result.lang !== locale.code) issues.push('document language mismatch: ' + result.lang);
+        if (result.h1 !== 1) issues.push('expected exactly one H1');
+        if (result.cards !== 9) issues.push('expected 9 guide cards, found ' + result.cards);
+        if (result.brokenImages.length) issues.push('broken guide images: ' + result.brokenImages.join(', '));
+        if (result.flowSvgOpen !== 1 || !result.flowSvgTitle || result.legendLabels !== 5) issues.push('five-checkpoint SVG/legend is incomplete');
+        if (result.languageOptions !== 9) issues.push('expected all 9 language options');
+        if (result.cardCategories.some(category => !result.filterOptions.includes(category))) issues.push('a card category has no matching filter option');
+        if (pageErrors.length) issues.push('JavaScript errors: ' + pageErrors.join(' | '));
+        if (locale.code === 'en' && width === 390) {
+          const search = page.locator('#manual-search');
+          await search.fill('Wallet Security');
+          const filtered = await page.locator('#manual-articles .article-card:visible').count();
+          if (filtered < 1 || filtered >= 9) issues.push('search filter did not narrow the guide list');
+          await page.locator('#manual-category').selectOption('solana');
+          const categoryCount = await page.locator('#manual-articles .article-card:visible').count();
+          if (categoryCount < 1) issues.push('topic filter returned no matching Solana guides');
+          await page.locator('#manual-sort').selectOption('popular');
+          await page.locator('#manual-clear').click();
+          const cleared = await page.locator('#manual-articles .article-card:visible').count();
+          if (cleared !== 9 || await search.inputValue() !== '') issues.push('clear filters did not restore all 9 guides');
+          await page.locator('header.zombcash-shared-header .language-trigger').click();
+          await page.locator('.language-option[data-lang="ru"]').click();
+          await page.waitForURL('**/ru/survivor-field-manual.html');
+          await page.waitForFunction(() => document.documentElement.lang === 'ru');
+          if (new URL(page.url()).pathname !== '/ru/survivor-field-manual.html') issues.push('language selector did not navigate to the Russian manual');
+        }
+        if (locale.code === 'en' && [390, 1440].includes(width)) {
+          await page.screenshot({ path: path.join(outDir, `field-manual-${width}.png`), fullPage: true });
+        }
+        const report = { locale: locale.code, width, result, issues, pageErrors };
+        fs.writeFileSync(path.join(outDir, `field-manual-${locale.code}-${width}.json`), JSON.stringify(report, null, 2));
+        console.log(JSON.stringify(report, null, 2));
+        if (issues.length) failures.push({ mode: 'field-manual', locale: locale.code, width, issues });
+        await page.close();
+      }
+    }
+
+    // Confirm all nine English article destinations respond successfully.
+    const manualLinksPage = await browser.newPage();
+    await manualLinksPage.goto(new URL('survivor-field-manual.html', BASE_URL).href, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    const manualLinks = await manualLinksPage.locator('#manual-articles .article-card h2 a, #manual-articles .article-card .article-link').evaluateAll(links => Array.from(new Set(links.map(link => link.href))));
+    const linkResults = [];
+    for (const url of manualLinks) {
+      const response = await manualLinksPage.request.get(url, { timeout: 20000 });
+      linkResults.push({ url, status: response.status() });
+    }
+    const failedManualLinks = linkResults.filter(item => item.status < 200 || item.status >= 400);
+    fs.writeFileSync(path.join(outDir, 'field-manual-links.json'), JSON.stringify({ links: linkResults, failures: failedManualLinks }, null, 2));
+    console.log(JSON.stringify({ fieldManualLinks: linkResults, failedManualLinks }, null, 2));
+    if (failedManualLinks.length) failures.push({ mode: 'field-manual-links', issues: failedManualLinks });
+    await manualLinksPage.close();
+
     // Chrome mobile "Desktop site" uses a wide viewport but still has touch input.
     // Keep a regression check for the homepage hero in that mode.
     const desktopTouch = await browser.newPage({
