@@ -966,4 +966,10 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/transmission-liquidity-is-not-market-cap.html"/>
     <lastmod>2026-11-01</lastmod><changefreq>monthly</changefreq><priority>0.6</priority>
   </url>
+  <url>
+    <loc>https://zombcash.github.io/whitepaper.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://zombcash.github.io/whitepaper.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/whitepaper.html"/>
+    <lastmod>2026-11-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority>
+  </url>
 </urlset>
