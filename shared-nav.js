@@ -149,7 +149,13 @@
     '<button class="zsh-menu-toggle" type="button" aria-label="OPEN NAVIGATION" aria-controls="zsh-navigation" aria-expanded="false"><span aria-hidden="true">☰</span><span class="zsh-menu-label">MENU</span></button>' +
     '<nav id="zsh-navigation" class="zsh-nav" aria-label="MAIN NAVIGATION">' +
       labels.map(([label, href, id]) => {
-        const destination = target(href);
+        const navPathParts = location.pathname.split('/').filter(Boolean);
+        const navPathLocale = navPathParts.length && supportedLocaleSet.has(navPathParts[0]) ? navPathParts[0] : '';
+        const navQueryLocale = new URLSearchParams(location.search).get('lang') || '';
+        const navLocale = navPathLocale || (supportedLocaleSet.has(navQueryLocale) ? navQueryLocale : 'en');
+        const destination = id === 'whitepaper'
+          ? (navLocale !== 'en' && localizedPagesByLocale[navLocale]?.has('whitepaper.html') ? '/' + navLocale + '/whitepaper.html' : '/whitepaper.html')
+          : target(href);
         const active = (id === 'manual' && file === 'survivor-field-manual.html') ||
           (id === 'whitepaper' && file === 'whitepaper.html') ||
           (id === 'vote' && file === 'crew-vote.html') ||
