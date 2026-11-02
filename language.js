@@ -25,6 +25,7 @@ const localizedEditorialPages = {
     "tr",
     "hi"
   ],
+  "/whitepaper.html": ["de","fr","it","ja","zh-CN","ru","tr","hi"],
   "/about.html": [
     "de",
     "fr",
@@ -929,6 +930,7 @@ const homepageRemainingUi={
 "ALONE.":{de:"ALLEIN.",fr:"SEUL.",it:"DA SOLO.",ja:"ひとりで。","zh-CN":"独自生存。",ru:"ОДИН.",tr:"TEK BAŞINA.",hi:"अकेले।"},
 "Live World":{de:"Lebendige Welt",fr:"Monde vivant",it:"Mondo vivo",ja:"ライブワールド","zh-CN":"生存世界",ru:"Живой мир",tr:"Canlı Dünya",hi:"जीवित दुनिया"},
 "Buy $ZOMBCASH":{de:"$ZOMBCASH kaufen",fr:"Acheter $ZOMBCASH",it:"Acquista $ZOMBCASH",ja:"$ZOMBCASHを購入","zh-CN":"购买 $ZOMBCASH",ru:"Купить $ZOMBCASH",tr:"$ZOMBCASH satın al",hi:"$ZOMBCASH खरीदें"},
+"WHITEPAPER":{de:"WHITEPAPER",fr:"LIVRE BLANC",it:"WHITEPAPER",ja:"ホワイトペーパー","zh-CN":"白皮书",ru:"WHITEPAPER",tr:"WHITEPAPER",hi:"व्हाइटपेपर"},
 "Survivor Field Manual":{de:"Feldhandbuch der Überlebenden",fr:"Manuel de terrain des survivants",it:"Manuale da campo dei sopravvissuti",ja:"サバイバーフィールドマニュアル","zh-CN":"幸存者实地手册",ru:"Полевое руководство выживших",tr:"Hayatta Kalanlar Saha Rehberi",hi:"सर्वाइवर फील्ड मैनुअल"},
 "Survivor Hub":{de:"Überlebenden-Zentrale",fr:"Base des survivants",it:"Hub dei sopravvissuti",ja:"サバイバーハブ","zh-CN":"幸存者中心",ru:"Центр выживших",tr:"Hayatta Kalanlar Merkezi",hi:"सर्वाइवर हब"},
 "COMMUNITY & DATA":{de:"COMMUNITY & DATEN",fr:"COMMUNAUTÉ ET DONNÉES",it:"COMMUNITY E DATI",ja:"コミュニティとデータ","zh-CN":"社区与数据",ru:"СООБЩЕСТВО И ДАННЫЕ",tr:"TOPLULUK VE VERİ",hi:"कम्युनिटी और डेटा"},
