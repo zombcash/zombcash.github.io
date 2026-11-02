@@ -97,7 +97,7 @@
     ? header.querySelector('button[data-i18n="login"], button.top-cta')
     : null;
   const supportedLocales = ['de','fr','it','ja','zh-CN','ru','tr','hi'];
-  const supportedLocaleSet = new Set(['de','fr','it','ja','zh-CN','ru','tr','hi',"whitepaper.html"]);
+  const supportedLocaleSet = new Set(['de','fr','it','ja','zh-CN','ru','tr','hi']);
   // These pages actually have a translated HTML file in the language manifest.
   // For other destinations preserve the active locale with ?lang= rather than
   // constructing a path to a file that may not exist.
