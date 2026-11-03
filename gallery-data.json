@@ -12,13 +12,15 @@
       "series": "zombie-meme",
       "category_ids": [
         "zombie-memes",
-        "crypto-apocalypse"
+        "crypto-apocalypse",
+        "zombie-characters"
       ],
       "tags": [
         "zombiecashmeme",
         "zombie-memes",
         "crypto-apocalypse",
-        "zombie-meme"
+        "zombie-meme",
+        "zombie-character"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -121,13 +123,15 @@
       "series": "zombie-meme",
       "category_ids": [
         "zombie-memes",
-        "crypto-apocalypse"
+        "crypto-apocalypse",
+        "zombie-characters"
       ],
       "tags": [
         "zombiecashmeme",
         "zombie-memes",
         "crypto-apocalypse",
-        "zombie-meme"
+        "zombie-meme",
+        "zombie-character"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -230,13 +234,15 @@
       "series": "zombie-meme",
       "category_ids": [
         "zombie-memes",
-        "crypto-apocalypse"
+        "crypto-apocalypse",
+        "zombie-characters"
       ],
       "tags": [
         "zombiecashmeme",
         "zombie-memes",
         "crypto-apocalypse",
-        "zombie-meme"
+        "zombie-meme",
+        "zombie-character"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -339,13 +345,15 @@
       "series": "zombie-meme",
       "category_ids": [
         "zombie-memes",
-        "crypto-apocalypse"
+        "crypto-apocalypse",
+        "zombie-characters"
       ],
       "tags": [
         "zombiecashmeme",
         "zombie-memes",
         "crypto-apocalypse",
-        "zombie-meme"
+        "zombie-meme",
+        "zombie-character"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -448,13 +456,15 @@
       "series": "zombie-meme",
       "category_ids": [
         "zombie-memes",
-        "crypto-apocalypse"
+        "crypto-apocalypse",
+        "zombie-characters"
       ],
       "tags": [
         "zombiecashmeme",
         "zombie-memes",
         "crypto-apocalypse",
-        "zombie-meme"
+        "zombie-meme",
+        "zombie-character"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -557,13 +567,15 @@
       "series": "zombie-meme",
       "category_ids": [
         "zombie-memes",
-        "crypto-apocalypse"
+        "crypto-apocalypse",
+        "zombie-characters"
       ],
       "tags": [
         "zombiecashmeme",
         "zombie-memes",
         "crypto-apocalypse",
-        "zombie-meme"
+        "zombie-meme",
+        "zombie-character"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -629,12 +641,14 @@
       "post_id": "ZOMBCASH/3724",
       "series": "nightmare-drop",
       "category_ids": [
-        "nightmare-horror"
+        "nightmare-horror",
+        "apocalypse-survival"
       ],
       "tags": [
         "zombiecashhorror",
         "nightmare-horror",
-        "nightmare-drop"
+        "nightmare-drop",
+        "apocalypse-survival"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -666,13 +680,15 @@
       "series": "zombie-meme",
       "category_ids": [
         "zombie-memes",
-        "crypto-apocalypse"
+        "crypto-apocalypse",
+        "zombie-characters"
       ],
       "tags": [
         "zombiecashmeme",
         "zombie-memes",
         "crypto-apocalypse",
-        "zombie-meme"
+        "zombie-meme",
+        "zombie-character"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -775,13 +791,15 @@
       "series": "zombie-meme",
       "category_ids": [
         "zombie-memes",
-        "crypto-apocalypse"
+        "crypto-apocalypse",
+        "zombie-characters"
       ],
       "tags": [
         "zombiecashmeme",
         "zombie-memes",
         "crypto-apocalypse",
-        "zombie-meme"
+        "zombie-meme",
+        "zombie-character"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -884,13 +902,15 @@
       "series": "zombie-meme",
       "category_ids": [
         "zombie-memes",
-        "crypto-apocalypse"
+        "crypto-apocalypse",
+        "zombie-characters"
       ],
       "tags": [
         "zombiecashmeme",
         "zombie-memes",
         "crypto-apocalypse",
-        "zombie-meme"
+        "zombie-meme",
+        "zombie-character"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -956,12 +976,14 @@
       "post_id": "ZOMBCASH/3681",
       "series": "nightmare-drop",
       "category_ids": [
-        "nightmare-horror"
+        "nightmare-horror",
+        "apocalypse-survival"
       ],
       "tags": [
         "zombiecashhorror",
         "nightmare-horror",
-        "nightmare-drop"
+        "nightmare-drop",
+        "apocalypse-survival"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -993,13 +1015,15 @@
       "series": "zombie-meme",
       "category_ids": [
         "zombie-memes",
-        "crypto-apocalypse"
+        "crypto-apocalypse",
+        "zombie-characters"
       ],
       "tags": [
         "zombiecashmeme",
         "zombie-memes",
         "crypto-apocalypse",
-        "zombie-meme"
+        "zombie-meme",
+        "zombie-character"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -1102,13 +1126,15 @@
       "series": "zombie-meme",
       "category_ids": [
         "zombie-memes",
-        "crypto-apocalypse"
+        "crypto-apocalypse",
+        "zombie-characters"
       ],
       "tags": [
         "zombiecashmeme",
         "zombie-memes",
         "crypto-apocalypse",
-        "zombie-meme"
+        "zombie-meme",
+        "zombie-character"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -1211,13 +1237,17 @@
       "series": "zombie-meme",
       "category_ids": [
         "zombie-memes",
-        "crypto-apocalypse"
+        "crypto-apocalypse",
+        "zombie-characters",
+        "apocalypse-survival"
       ],
       "tags": [
         "zombiecashmeme",
         "zombie-memes",
         "crypto-apocalypse",
-        "zombie-meme"
+        "zombie-meme",
+        "zombie-character",
+        "apocalypse-survival"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -1320,13 +1350,15 @@
       "series": "zombie-meme",
       "category_ids": [
         "zombie-memes",
-        "crypto-apocalypse"
+        "crypto-apocalypse",
+        "zombie-characters"
       ],
       "tags": [
         "zombiecashmeme",
         "zombie-memes",
         "crypto-apocalypse",
-        "zombie-meme"
+        "zombie-meme",
+        "zombie-character"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -1429,13 +1461,15 @@
       "series": "zombie-meme",
       "category_ids": [
         "zombie-memes",
-        "crypto-apocalypse"
+        "crypto-apocalypse",
+        "zombie-characters"
       ],
       "tags": [
         "zombiecashmeme",
         "zombie-memes",
         "crypto-apocalypse",
-        "zombie-meme"
+        "zombie-meme",
+        "zombie-character"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -1538,13 +1572,15 @@
       "series": "zombie-meme",
       "category_ids": [
         "zombie-memes",
-        "crypto-apocalypse"
+        "crypto-apocalypse",
+        "zombie-characters"
       ],
       "tags": [
         "zombiecashmeme",
         "zombie-memes",
         "crypto-apocalypse",
-        "zombie-meme"
+        "zombie-meme",
+        "zombie-character"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -1643,13 +1679,15 @@
       "series": "zombie-meme",
       "category_ids": [
         "zombie-memes",
-        "crypto-apocalypse"
+        "crypto-apocalypse",
+        "zombie-characters"
       ],
       "tags": [
         "zombiecashmeme",
         "zombie-memes",
         "crypto-apocalypse",
-        "zombie-meme"
+        "zombie-meme",
+        "zombie-character"
       ],
       "language": "en",
       "metadata_version": 1,
@@ -1752,13 +1790,15 @@
       "series": "zombie-meme",
       "category_ids": [
         "zombie-memes",
-        "crypto-apocalypse"
+        "crypto-apocalypse",
+        "zombie-characters"
       ],
       "tags": [
         "zombiecashmeme",
         "zombie-memes",
         "crypto-apocalypse",
-        "zombie-meme"
+        "zombie-meme",
+        "zombie-character"
       ],
       "language": "en",
       "metadata_version": 1,
