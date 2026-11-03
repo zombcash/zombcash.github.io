@@ -172,11 +172,15 @@ fs.mkdirSync(outDir, { recursive: true });
       localizedPage.on('pageerror', error => localizedErrors.push(error.message));
       const localizedUrl = new URL(`${locale}/whitepaper.html`, BASE_URL).href;
       await localizedPage.goto(localizedUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
+      // Wait for the actual locale-specific label, not merely a non-empty
+      // English placeholder. Shared navigation and the language dictionary can
+      // initialize in either order on a cold page load.
       await localizedPage.waitForFunction(
-        () => document.querySelector('.zsh-nav a[href*="whitepaper.html"]')?.textContent.trim() &&
-              document.querySelector('.language-trigger')?.textContent.trim(),
+        expected => document.querySelector('.zsh-nav a[href*="whitepaper.html"]')?.textContent.trim() === expected &&
+                    document.querySelector('.language-trigger')?.textContent.trim(),
+        expectedLabel,
         { timeout: 20000 }
-      );
+      ).catch(() => {});
       const navLabel = await localizedPage.locator('.zsh-nav a[href*="whitepaper.html"]').textContent();
       const actualLabel = (navLabel || '').trim();
       const htmlLang = await localizedPage.locator('html').getAttribute('lang');
