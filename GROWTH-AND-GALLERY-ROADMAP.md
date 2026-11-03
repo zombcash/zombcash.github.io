@@ -24,7 +24,7 @@
 - Fixed a mobile lightbox issue: the caption had a 90px max-height, clipping the newly added Like/Share controls. Caption now has a larger bounded scroll area, and Playwright asserts the Share control stays within the mobile viewport.
 - CI now regenerates crawlable cards, image sitemap and localized gallery pages from source JSON before validating them. This keeps generated HTML out of hand edits.
 - Localized pages now use the same CSS/JS cache versions as the English gallery; CI checks cache-version parity to prevent locale pages silently loading stale scripts.
-- Previous complete CI run 41728298351 passed all static checks, the Pinterest rights gate, desktop/mobile interaction checks, contact-sheet generation and artifact upload. A newer run is validating the final visual ALT and mobile-caption changes.
+- Latest complete CI run 41731133422 passed: Python validation, generated gallery/locale pages, Pinterest durable-ledger/queue reconciliation, desktop/mobile Playwright tests, all locale checks, language switching, share controls, mobile lightbox visibility, contact-sheet generation and evidence upload.
 
 
 ## Pinterest inventory reconciliation — 2026-11-04
