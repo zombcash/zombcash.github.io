@@ -55,7 +55,11 @@ assert published_result["eligible_count"] == 0 and published_result["blocked_cou
 assert published_result["published"][0]["pin_id"] == "620441286210443503"
 
 # An older gallery image remains in the durable ledger even after it rolls off the current 50-item snapshot.
-rolling_snapshot = {"items": [sample_item()]}
+new_gallery_item = sample_item()
+new_gallery_item["id"] = "ZOMBCASH/5678:0"
+new_gallery_item["anchor_id"] = "gallery-image-5678-0"
+new_gallery_item["pinterest_destination_url"] = "https://zombcash.github.io/gallery.html#gallery-image-5678-0"
+rolling_snapshot = {"items": [new_gallery_item]}
 rolling_ledger = {"pins": published_ledger["pins"] + [{
     "gallery_id": "ZOMBCASH/OLD:0",
     "pin_id": "620441286210443504",
