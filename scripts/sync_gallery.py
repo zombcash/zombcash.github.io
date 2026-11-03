@@ -87,7 +87,59 @@ def main():
         before = next_before
         time.sleep(0.35)
     items = sorted(all_items.values(), key=lambda item: (item.get("date") or "", item.get("post_id") or ""), reverse=True)[:MAX_ITEMS]
-    payload = {"source": f"https://t.me/{CHANNEL}", "updated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "items": items}
+
+    # Preserve editorial metadata across scheduled Telegram syncs. The source
+    # caption/image/post fields remain authoritative; enrichment fields survive
+    # only when the stable Telegram image ID matches.
+    previous = {}
+    if OUTPUT.exists():
+        try:
+            old_payload = json.loads(OUTPUT.read_text(encoding="utf-8"))
+            previous = {
+                str(entry.get("id")): entry
+                for entry in old_payload.get("items", [])
+                if isinstance(entry, dict) and entry.get("id")
+            }
+        except (OSError, json.JSONDecodeError, AttributeError):
+            previous = {}
+
+    editorial_fields = (
+        "title", "description", "alt_text", "category_ids", "series",
+        "tags", "language", "credit", "rights_status", "localized",
+        "metadata_version",
+    )
+    for item in items:
+        old = previous.get(str(item.get("id")), {})
+        for field in editorial_fields:
+            if field in old:
+                item[field] = old[field]
+
+        caption = str(item.get("caption") or "")
+        if not item.get("series") or not item.get("category_ids"):
+            if re.search(r"\bNIGHTMARE\s+DROP\b", caption, re.I):
+                item.setdefault("series", "nightmare-drop")
+                item.setdefault("category_ids", ["nightmare-horror"])
+            elif re.search(r"\bUNDEAD\s+AFTER\s+DARK\b", caption, re.I):
+                item.setdefault("series", "undead-after-dark")
+                item.setdefault("category_ids", ["undead-after-dark"])
+            elif re.search(r"\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b", caption, re.I):
+                categories = ["zombie-memes"]
+                if re.search(r"\b(portfolio|trading|charts?|market|crypto|token|bags|candles|rug pull)\b", caption, re.I):
+                    categories.append("crypto-apocalypse")
+                item.setdefault("series", "zombie-meme")
+                item.setdefault("category_ids", categories)
+        item.setdefault("tags", list(dict.fromkeys(
+            tag.lower() for tag in re.findall(r"#([\w]+)", caption, flags=re.UNICODE)
+        )))
+        item.setdefault("language", "en")
+        item.setdefault("metadata_version", 1)
+
+    payload = {
+        "source": f"https://t.me/{CHANNEL}",
+        "updated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "schema_version": 2,
+        "items": items,
+    }
     OUTPUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Synced {len(items)} image entries from @{CHANNEL} into {OUTPUT} (limit: {MAX_ITEMS})")
 
