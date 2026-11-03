@@ -111,6 +111,16 @@ const { spawn } = require("child_process");
     await mobile.goto("http://127.0.0.1:4173/gallery.html", { waitUntil: "domcontentloaded" });
     await mobile.waitForSelector(".gallery-toolbar");
     await mobile.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50);
+    await mobile.locator("#gallery-grid img").evaluateAll(images => images.forEach(image => { image.loading = "eager"; }));
+    await mobile.evaluate(async () => {
+      const images = Array.from(document.querySelectorAll("#gallery-grid img"));
+      await Promise.all(images.map(image => new Promise(resolve => {
+        if (image.complete) return resolve();
+        image.addEventListener("load", resolve, { once: true });
+        image.addEventListener("error", resolve, { once: true });
+        setTimeout(resolve, 15000);
+      })));
+    });
     await mobile.screenshot({ path: "gallery-mobile-smoke.png", fullPage: true });
     const overflow = await mobile.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
