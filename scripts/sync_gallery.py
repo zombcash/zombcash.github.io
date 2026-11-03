@@ -106,7 +106,9 @@ def main():
     editorial_fields = (
         "title", "description", "alt_text", "category_ids", "series",
         "tags", "language", "credit", "rights_status", "alt_review_status", "localized",
-        "metadata_version",
+        "metadata_version", "slug", "anchor_id", "pinterest_status", "pinterest_board_id",
+        "pinterest_board_category", "pinterest_title", "pinterest_description", "pinterest_alt",
+        "pinterest_destination_url",
     )
     for item in items:
         old = previous.get(str(item.get("id")), {})
@@ -136,6 +138,19 @@ def main():
         item.setdefault("rights_status", "review-required")
         item.setdefault("alt_review_status", "caption-derived-pending-visual-review")
         item.setdefault("metadata_version", 1)
+        stable_id = str(item.get("id") or "")
+        stable_match = re.fullmatch(r"ZOMBCASH/(\\d+):(\\d+)", stable_id)
+        if stable_match:
+            message_id, media_index = stable_match.groups()
+            item.setdefault("slug", f"gallery-{message_id}-{media_index}")
+            item.setdefault("anchor_id", f"gallery-image-{message_id}-{media_index}")
+            item.setdefault("pinterest_status", "blocked-rights-review")
+            item.setdefault("pinterest_board_id", None)
+            item.setdefault("pinterest_board_category", (item.get("category_ids") or [None])[0])
+            item.setdefault("pinterest_title", item.get("title") or caption[:80])
+            item.setdefault("pinterest_description", item.get("description") or caption)
+            item.setdefault("pinterest_alt", item.get("alt_text") or ("ZombieCash gallery artwork accompanying the story: " + caption))
+            item.setdefault("pinterest_destination_url", "https://zombcash.github.io/gallery.html#" + item["anchor_id"])
 
     payload = {
         "source": f"https://t.me/{CHANNEL}",
