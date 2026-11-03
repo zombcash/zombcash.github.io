@@ -93,7 +93,9 @@ fs.mkdirSync(out, { recursive: true });
     for (const code of locales.filter(x => x !== 'en')) {
       await page.locator('header.zombcash-shared-header .language-trigger').click();
       await page.locator('.language-option[data-lang="' + code + '"]').click();
-      await page.waitForURL(url => url.pathname === '/' + paths[code], { timeout: 25000 });
+      // Article images can delay the full load event after navigation has committed.
+      // Waiting for DOM readiness avoids a false timeout while still verifying the destination.
+      await page.waitForURL(url => url.pathname === '/' + paths[code], { timeout: 25000, waitUntil: 'domcontentloaded' });
       await page.waitForFunction(expected => document.documentElement.lang === expected, code, { timeout: 15000 });
     }
     reports.push({ languageSwitch: 'passed all 8 destinations' });
