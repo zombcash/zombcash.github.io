@@ -59,6 +59,10 @@ fs.mkdirSync(out, { recursive: true });
             sources: [...document.querySelectorAll('main a[href]')].filter(a => /coinsniper|coinmooner|coinvote|semrush|tranco/i.test(a.href)).length,
             languageTrigger: !!menu,
             nav: !!document.querySelector('header.zombcash-shared-header'),
+            mainWrap: !!document.querySelector('main')?.parentElement.classList.contains('wrap'),
+            bodyBackground: getComputedStyle(document.body).backgroundColor + ' ' + getComputedStyle(document.body).backgroundImage,
+            tableCount: document.querySelectorAll('main table').length,
+            tableWrappers: document.querySelectorAll('main .table-wrap').length,
           };
         });
         const issues = [];
@@ -71,6 +75,9 @@ fs.mkdirSync(out, { recursive: true });
         if (result.brokenImages.length) issues.push('broken article images: ' + result.brokenImages.join(', '));
         if (result.sources < 8) issues.push('source links missing: ' + result.sources);
         if (!result.languageTrigger || !result.nav) issues.push('shared navigation or language selector missing');
+        if (!result.mainWrap) issues.push('article content wrapper missing');
+        if (result.bodyBackground.includes('255, 255, 255')) issues.push('article rendered with white/default background instead of the dark site theme');
+        if (result.tableCount > result.tableWrappers) issues.push('one or more tables lack a responsive horizontal-scroll wrapper');
         if (errors.length) issues.push('JS errors: ' + errors.join(' | '));
         await page.screenshot({ path: path.join(out, locale.replace(/[^a-z0-9]/gi,'-') + '-' + width + '.png'), fullPage: true });
         reports.push({ locale, width, result, issues });
