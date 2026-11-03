@@ -13,6 +13,15 @@ ROBOTS_FILE = ROOT / "robots.txt"
 START = "<!-- GALLERY_IMAGE_CARDS_START -->"
 END = "<!-- GALLERY_IMAGE_CARDS_END -->"
 SITEMAP_URL = "https://zombcash.github.io/sitemap-gallery-images.xml"
+CATEGORY_LABELS = {
+    "zombie-memes": "Zombie Memes",
+    "nightmare-horror": "Nightmare & Horror",
+    "undead-after-dark": "Undead After Dark",
+    "zombie-characters": "Zombie Characters",
+    "apocalypse-survival": "Apocalypse & Survival",
+    "crypto-apocalypse": "Crypto Apocalypse",
+    "community-creations": "Community Creations",
+}
 
 
 def clean_caption(value):
@@ -45,7 +54,7 @@ def make_cards(items):
         cards.append(
             '      <article class="gallery-card" data-gallery-id="' + gallery_id + '" data-categories="' + categories + '" data-gallery-title="' + esc_title + '" data-gallery-description="' + esc_description + '" tabindex="0" role="group" aria-label="Open image: ' + esc_title + '">\n'
             '        <img src="' + image + '" alt="' + esc_alt + '" title="' + esc_title + '" loading="lazy" decoding="async">\n'
-            '        <div class="gallery-caption"><p data-original-caption="' + esc_raw + '" data-original-title="' + esc_title + '">' + esc_title + '</p><div class="gallery-card-tags">' + "".join('<span class="gallery-category-tag">' + html.escape(category, quote=True) + '</span>' for category in (item.get("category_ids") or [])) + '</div><a href="' + post + '" target="_blank" rel="noreferrer">SOURCE ↗</a></div>\n'
+            '        <div class="gallery-caption"><p data-original-caption="' + esc_raw + '" data-original-title="' + esc_title + '">' + esc_title + '</p><div class="gallery-card-tags">' + "".join('<span class="gallery-category-tag">' + html.escape(CATEGORY_LABELS.get(category, category), quote=True) + '</span>' for category in (item.get("category_ids") or [])) + '</div><a href="' + post + '" target="_blank" rel="noreferrer">SOURCE ↗</a></div>\n'
             '      </article>'
         )
     return "\n".join(cards)
