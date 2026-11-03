@@ -71,9 +71,7 @@ body:has(.wrap) .hero img,body:has(.wrap) .manual-hero img{
  border:0;border-radius:0;filter:saturate(.78) contrast(1.06);
 }
 body:has(.wrap) .hero:after,body:has(.wrap) .manual-hero:after{
- content:"";position:absolute;inset:0;pointer-events:none;
- background:linear-gradient(90deg,rgba(4,8,10,.24),transparent 48%,rgba(4,8,10,.12)),
- linear-gradient(0deg,rgba(4,8,10,.22),transparent 40%);
+ display:none;
 }
 body:has(.wrap) figure{margin:28px 0}
 body:has(.wrap) figcaption{padding:10px 12px;background:#0b1011;border-left:1px solid var(--zc-edge)}
