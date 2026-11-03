@@ -36,12 +36,23 @@ def build_queue(data):
             reasons.append("visual-alt-review-required")
         if not item.get("pinterest_board_id"):
             reasons.append("pinterest-board-not-assigned")
-        if not str(item.get("pinterest_title") or "").strip():
+        if item.get("pinterest_board_category") not in (item.get("category_ids") or []):
+            reasons.append("invalid-board-category")
+        pin_title = str(item.get("pinterest_title") or "").strip()
+        pin_description = str(item.get("pinterest_description") or "").strip()
+        pin_alt = str(item.get("pinterest_alt") or "").strip()
+        if not pin_title:
             reasons.append("missing-pin-title")
-        if not str(item.get("pinterest_description") or "").strip():
+        elif len(pin_title) > 100:
+            reasons.append("pin-title-too-long")
+        if not pin_description:
             reasons.append("missing-pin-description")
-        if not str(item.get("pinterest_alt") or "").strip():
+        elif len(pin_description) > 500:
+            reasons.append("pin-description-too-long")
+        if not pin_alt:
             reasons.append("missing-pin-alt")
+        elif len(pin_alt) > 500:
+            reasons.append("pin-alt-too-long")
         if not image.startswith("https://"):
             reasons.append("image-url-not-https")
         destination = str(item.get("pinterest_destination_url") or "")
@@ -55,9 +66,9 @@ def build_queue(data):
         else:
             eligible.append({
                 "id": stable_id,
-                "title": str(item["pinterest_title"]).strip(),
-                "description": str(item["pinterest_description"]).strip(),
-                "alt_text": str(item["pinterest_alt"]).strip(),
+                "title": pin_title,
+                "description": pin_description,
+                "alt_text": pin_alt,
                 "image_url": image,
                 "destination_url": destination,
                 "board_id": str(item["pinterest_board_id"]),
