@@ -134,6 +134,7 @@
     lightbox.classList.remove("is-open");
     document.body.classList.remove("gallery-lightbox-open");
     fullImage.removeAttribute("src");
+    refreshGalleryForLikes();
   };
   closeButton.addEventListener("click", closeImage);
   lightbox.querySelector(".gallery-lightbox-prev").addEventListener("click", () => showImage(activeIndex - 1));
