@@ -13,46 +13,55 @@ ROBOTS_PATH = ROOT / "robots.txt"
 
 LOCALES = {
     "en": {
+        "subtitle": "AI-generated artwork from our Telegram channel. Browse the archive and open any image full size.",
         "title": "Zombie Gallery — ZombieCash",
         "description": "Explore the ZombieCash gallery of zombie art, horror memes and undead transmissions from the community. Browse image stories and open original Telegram posts.",
         "og_locale": "en_US",
     },
     "de": {
+        "subtitle": "KI-generierte Kunst aus unserem Telegram-Kanal. Durchsuche das Archiv und öffne jedes Bild in voller Größe.",
         "title": "Zombie-Galerie — ZombieCash",
         "description": "Entdecke die ZombieCash-Galerie mit Zombie-Kunst, Horror-Memes und Untoten-Übertragungen aus der Community. Sieh dir Bildgeschichten an und öffne die ursprünglichen Telegram-Beiträge.",
         "og_locale": "de_DE",
     },
     "fr": {
+        "subtitle": "Œuvres générées par IA depuis notre canal Telegram. Parcourez les archives et ouvrez chaque image en plein format.",
         "title": "Galerie Zombie — ZombieCash",
         "description": "Explorez la galerie ZombieCash : art zombie, mèmes d’horreur et transmissions des morts-vivants de la communauté. Parcourez les images et ouvrez les publications Telegram originales.",
         "og_locale": "fr_FR",
     },
     "it": {
+        "subtitle": "Opere generate dall’IA dal nostro canale Telegram. Esplora l’archivio e apri ogni immagine a grandezza naturale.",
         "title": "Galleria Zombie — ZombieCash",
         "description": "Esplora la galleria ZombieCash con arte zombie, meme horror e trasmissioni dei non morti della community. Sfoglia le immagini e apri i post originali su Telegram.",
         "og_locale": "it_IT",
     },
     "ja": {
+        "subtitle": "TelegramチャンネルのAI生成アートです。アーカイブを閲覧し、画像をフルサイズで開けます。",
         "title": "ゾンビギャラリー — ZombieCash",
         "description": "ZombieCashのゾンビアート、ホラーミーム、コミュニティからのアンデッド通信を紹介。画像を閲覧し、元のTelegram投稿を開けます。",
         "og_locale": "ja_JP",
     },
     "zh-CN": {
+        "subtitle": "来自 Telegram 频道的 AI 生成作品。浏览档案并打开任意图片查看大图。",
         "title": "僵尸画廊 — ZombieCash",
         "description": "探索 ZombieCash 僵尸艺术、恐怖梗图和社区不死者广播。浏览图片故事并打开原始 Telegram 帖子。",
         "og_locale": "zh_CN",
     },
     "ru": {
+        "subtitle": "Работы, созданные ИИ для нашего Telegram-канала. Просматривай архив и открывай любое изображение в полном размере.",
         "title": "Галерея зомби — ZombieCash",
         "description": "Исследуй галерею ZombieCash: зомби-арт, хоррор-мемы и передачи нежити от сообщества. Просматривай изображения и открывай оригинальные публикации в Telegram.",
         "og_locale": "ru_RU",
     },
     "tr": {
+        "subtitle": "Telegram kanalımızdan yapay zekâ ile oluşturulan eserler. Arşivi keşfet ve herhangi bir görseli tam boyutunda aç.",
         "title": "Zombi Galerisi — ZombieCash",
         "description": "ZombieCash zombi sanatını, korku memlerini ve topluluktan gelen yaşayan ölü yayınlarını keşfet. Görselleri incele ve özgün Telegram gönderilerini aç.",
         "og_locale": "tr_TR",
     },
     "hi": {
+        "subtitle": "हमारे Telegram चैनल की AI-निर्मित कलाकृतियाँ। संग्रह ब्राउज़ करें और किसी भी चित्र को पूर्ण आकार में खोलें。",
         "title": "ज़ॉम्बी गैलरी — ZombieCash",
         "description": "ZombieCash की ज़ॉम्बी कला, हॉरर मीम और समुदाय की अनडेड प्रसारण गैलरी देखें। चित्रों को ब्राउज़ करें और मूल Telegram पोस्ट खोलें।",
         "og_locale": "hi_IN",
@@ -98,6 +107,10 @@ def build_page(base, locale):
     page = replace_tag(page, r'<html lang="[^"]+"', f'<html lang="{escape(locale)}"')
     page = set_meta(page, r'<meta name="description" content="[^"]*">',
                     f'<meta name="description" content="{escape(meta["description"], quote=True)}">')
+    page = page.replace(
+        "AI-generated artwork from our Telegram channel. Scroll inside the gallery to browse, and open any image full size.",
+        escape(meta["subtitle"]),
+    )
     page = set_meta(page, r'<title>.*?</title>', f'<title>{escape(meta["title"])}</title>')
     page = set_meta(page, r'<meta property="og:title" content="[^"]*">',
                     f'<meta property="og:title" content="{escape(meta["title"], quote=True)}">')
