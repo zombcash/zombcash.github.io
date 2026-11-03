@@ -82,7 +82,10 @@
   const galleryLikeStats = new Map();
   let galleryLikeLabels = {like:"LIKE",unlike:"LIKED",loginLike:"Log in with Telegram to like",likeError:"Could not update like. Try again."};
   let handleGalleryLike = null;
-  const readGalleryToken = () => { try { return localStorage.getItem("zombcash-survivor-token") || ""; } catch (_) { return ""; } };
+  const readGalleryToken = () => {
+    try { return window.ZombieCashSurvivorAuth?.getToken?.() || localStorage.getItem("zombcash-survivor-token") || ""; }
+    catch (_) { return ""; }
+  };
   const likeStateFor = card => galleryLikeStats.get(card?.dataset?.galleryId || "") || {like_count:0,liked:false};
   const updateCardLikeButton = card => {
     const button = card?.querySelector(".gallery-like-button");
@@ -265,8 +268,9 @@
       if (!card) return;
       const token = readGalleryToken();
       if (!token) {
-        const login = document.querySelector(".top-cta, .survivor-entry-button, .zsh-login-button");
-        login?.click();
+        const auth = window.ZombieCashSurvivorAuth;
+        if (auth?.openLogin) auth.openLogin();
+        else document.querySelector(".top-cta, .survivor-entry-button, .zsh-login-button")?.click();
         return;
       }
       const imageId = card.dataset.galleryId || "";
@@ -283,8 +287,10 @@
         });
         const payload = await response.json().catch(() => ({}));
         if (response.status === 401) {
-          const login = document.querySelector(".top-cta, .survivor-entry-button, .zsh-login-button");
-          login?.click();
+          const auth = window.ZombieCashSurvivorAuth;
+          if (auth?.clearSession) auth.clearSession();
+          if (auth?.openLogin) auth.openLogin();
+          else document.querySelector(".top-cta, .survivor-entry-button, .zsh-login-button")?.click();
           return;
         }
         if (!response.ok || !payload.ok || !payload.stats) {
