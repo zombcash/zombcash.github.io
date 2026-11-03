@@ -123,7 +123,7 @@ body.gallery-lightbox-open{overflow:hidden}
 
 /* Mobile archive: let the page scroll naturally and present artwork as a compact masonry-like stream. */
 @media(max-width:720px){
-  .gallery-scroll-panel{height:auto;max-height:none;overflow:visible;overscroll-behavior:auto;scrollbar-gutter:auto;padding:8px;border:0;background:transparent;box-shadow:none}
+  .gallery-page .gallery-scroll-panel{height:auto!important;max-height:none!important;min-height:0!important;overflow:visible!important;overflow-y:visible!important;overflow-x:visible!important;overscroll-behavior:auto;scrollbar-gutter:auto;padding:8px;border:0!important;background:transparent!important;box-shadow:none!important}
   .zombie-gallery-grid{display:block;column-count:2;column-gap:9px}
   .gallery-card{display:inline-block;width:100%;margin:0 0 9px;break-inside:avoid;vertical-align:top}
   .gallery-card img{width:100%;height:auto;object-fit:contain}
