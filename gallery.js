@@ -83,6 +83,7 @@
   let galleryLikeLabels = {like:"LIKE",unlike:"LIKED",loginLike:"Log in with Telegram to like",likeError:"Could not update like. Try again."};
   let handleGalleryLike = null;
   let refreshGalleryForLikes = () => {};
+  const trackGalleryEvent = (event, target = "gallery") => { try { window.ZombieCashTrack?.(event, target); } catch (_) {} };
   const readGalleryToken = () => {
     try { return window.ZombieCashSurvivorAuth?.getToken?.() || localStorage.getItem("zombcash-survivor-token") || ""; }
     catch (_) { return ""; }
@@ -119,6 +120,7 @@
     const description = card.dataset.galleryDescription || "";
     const categories = card.querySelector(".gallery-card-tags")?.textContent || "";
     const sourceUrl = card.querySelector(".gallery-caption a")?.href || "https://t.me/ZOMBCASH";
+    trackGalleryEvent("gallery_image_open", "image_" + String(card.dataset.galleryId || "").replace(/[^0-9]/g, "_"));
     fullCaption.innerHTML =
       '<strong class="gallery-lightbox-title">' + escapeHtml(title) + '</strong>' +
       (description ? '<span class="gallery-lightbox-description">' + escapeHtml(description) + '</span>' : '') +
@@ -235,7 +237,7 @@
         button.className = "gallery-category-chip" + (selectedCategory === id ? " is-active" : "");
         button.textContent = label;
         button.setAttribute("aria-pressed", selectedCategory === id ? "true" : "false");
-        button.addEventListener("click", () => { selectedCategory = id; renderToolbar(); renderGallery(); });
+        button.addEventListener("click", () => { selectedCategory = id; trackGalleryEvent("gallery_filter", id); renderToolbar(); renderGallery(); });
         filterRow.appendChild(button);
       });
       resultsLabel.textContent = t.results + ": " + grid.querySelectorAll(".gallery-card").length + " / " + items.length;
@@ -306,6 +308,7 @@
           liked: Boolean(payload.stats.liked)
         };
         galleryLikeStats.set(imageId, stats);
+        trackGalleryEvent(stats.liked ? "gallery_like" : "gallery_unlike", "image_" + imageId.replace(/[^0-9]/g, "_"));
         cards.forEach(updateCardLikeButton);
         syncLightboxLikeButton();
         if (sortOrder === "liked" && !lightbox.classList.contains("is-open")) renderGallery();
@@ -379,8 +382,9 @@
     refreshGalleryControls = () => { renderToolbar(); renderGallery(); };
     refreshGalleryForLikes = () => { if (sortOrder === "liked") renderGallery(); };
     searchInput.addEventListener("input", () => { searchTerm = searchInput.value.trim().toLocaleLowerCase(galleryLang); renderGallery(); });
-    sortSelect.addEventListener("change", () => { sortOrder = sortSelect.value; renderGallery(); });
-    resetButton.addEventListener("click", () => { selectedCategory = "all"; searchTerm = ""; sortOrder = "newest"; searchInput.value = ""; sortSelect.value = "newest"; renderToolbar(); renderGallery(); });
+    searchInput.addEventListener("change", () => { if (searchInput.value.trim()) trackGalleryEvent("gallery_search", "gallery"); });
+    sortSelect.addEventListener("change", () => { sortOrder = sortSelect.value; trackGalleryEvent("gallery_sort", sortOrder); renderGallery(); });
+    resetButton.addEventListener("click", () => { selectedCategory = "all"; searchTerm = ""; sortOrder = "newest"; searchInput.value = ""; sortSelect.value = "newest"; trackGalleryEvent("gallery_filter_reset", "gallery"); renderToolbar(); renderGallery(); });
     renderToolbar();
     renderGallery();
   }).catch(error => {
