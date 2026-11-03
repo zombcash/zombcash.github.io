@@ -3,6 +3,23 @@
 Repository inspected: `zombcash/zombcash.github.io` (main) and backend repository `vovik777-beep/zombcash-bot`.
 Work branch: `growth-gallery-roadmap-2026-11`.
 
+## Current verified status — 2026-11-04
+
+- The feature branch contains the new gallery experience and all nine locale pages. No production deployment has occurred; the separate repository zombcash-world remains untouched.
+- All 50 source images were reviewed using the full-resolution contact sheet. All 50 now have image-specific ALT text with alt_review_status=visual-reviewed. Rights status intentionally remains review-required for all 50.
+- Browser image delivery is intermittently affected by Chromium net::ERR_BLOCKED_BY_ORB for one CDN request at a time. The failing request changes between runs; direct recovery requests return HTTP 200 image/jpeg. Do not replace source URLs based on these transient browser failures.
+- Gallery tests cover all eight non-English URLs, 50 cards per locale, canonical/hreflang, localized CollectionPage JSON-LD, asset-cache parity, language switching, category/search/sort, stable sharing, and mobile lightbox controls.
+- The mobile lightbox caption height was increased so Like/Share controls remain visible; a viewport-bound assertion was added.
+- The Pinterest account @ZOMBCASH was reconciled directly: 97 total Pins on the account; 50/50 current gallery Telegram posts already exist exactly once on the three ZombieCash public boards. All 50 existing Pin IDs, board IDs, URLs, timestamps and original destinations are now recorded in gallery-data.json. No Pins were created during this audit.
+- The Pinterest queue is now an existing-publication ledger: 50 published, 0 eligible for new publishing, 0 blocked. The rights-review status remains unchanged and is not treated as permission to create more Pins.
+- The three ZombieCash board IDs are:
+  - ZombieCash Memes | Crypto Humor — 620441354855296934
+  - Undead After Dark | Zombie Art — 620441354855296935
+  - Nightmare & Horror | Zombie Stories — 620441354855296933
+- The two legacy secret Pinterest boards (Трактори, Швидке збереження) are not used.
+- Pinterest domain zombcash.github.io is verified, but the account website field still points to http://zombcash.github.io and an old unverified Google+ URL remains as a second website. This profile cleanup is still pending.
+- Backend PR #53 remains draft/undeployed. Likes are not live; comments are not implemented. No changes have been deployed to production.
+
 ## Historical baseline before the feature-branch implementation
 
 The following findings describe the pre-change main-branch state and are retained as an audit trail. The current implementation status is recorded in the sections below.
@@ -60,14 +77,18 @@ The following findings describe the pre-change main-branch state and are retaine
 - Localized UI and metadata URLs are in place; gallery item titles/descriptions remain English source-derived until translated and visually reviewed. Desktop/mobile/Russian screenshot artifacts from CI were downloaded and visually inspected. An earlier run reported 49/50 original images loaded; the subsequent full locale run loaded 50/50 with zero fallbacks, so the first failure appears transient. The full-resolution contact sheet was inspected. 48/50 source images loaded and received unique visual ALT descriptions. Two items, ZOMBCASH/3623:0 and ZOMBCASH/3621:0, triggered `net::ERR_BLOCKED_BY_ORB`; their original URLs are retained in the report and ALT remains pending. All 50 rights statuses remain `review-required`. Actual image-by-image semantic classification, final ALT and rights checks remain pending. No TinyFish or Browser Use sessions are used.
 
 ## Phase 0 status
+
 - [x] Repository and gallery source files inspected.
 - [x] Existing image count, series distribution, unique IDs and URLs checked.
 - [x] Gallery sync and image SEO workflows inspected.
 - [x] Existing Telegram authentication and Supabase schema inspected.
-- [ ] Visual audit of every image on desktop/mobile. Actual artwork content has not yet been verified image-by-image; do not write final ALT text from captions alone.
-- [x] Verify natural dimensions for 48 loaded source images (800×800 JPEG); [ ] resolve the two ORB-blocked URLs (3623, 3621) and confirm formats/rights for all 50.
-- [x] Confirm feature-branch desktop/mobile appearance and responsive behavior through Playwright screenshots and width/overflow assertions. [ ] Verify every source image and semantic ALT individually.
-- [x] Identify Pinterest publishing connector: Zernio. Pinterest account session is present; Zernio is currently waiting for a default board selection. The available boards are unrelated to ZombieCash, so do not select them or publish until dedicated ZombieCash boards are created.\n
+- [x] Desktop/mobile screenshots and full-resolution contact sheet reviewed.
+- [x] All 50 images visually reviewed and assigned image-specific ALT text.
+- [x] Natural dimensions and source image response evidence captured for all 50; intermittent Chromium ORB errors were verified recoverable with direct HTTP 200 JPEG responses.
+- [x] Responsive layout, mobile lightbox controls, locale routing and language switching covered by Playwright.
+- [x] Pinterest inventory reconciled: 50/50 current gallery images already published exactly once; 0 missing and 0 duplicate.
+- [ ] Confirm rights/ownership or permission for all 50 images before any future new Pinterest publication.
+- [ ] Update Pinterest profile website field to canonical HTTPS URL and remove the stale unverified Google+ URL.
 
 ## Security and community feature progress — 2026-11-03
 - Inspected the live ZombieCash Supabase project and found the five-argument `record_survivor_arcade_score` SECURITY DEFINER overload executable through PUBLIC. Revoked PUBLIC/anon/authenticated execution and retained service_role access. Verified anon=false, authenticated=false, service_role=true.
@@ -75,12 +96,24 @@ The following findings describe the pre-change main-branch state and are retaine
 - Companion backend API is drafted in `vovik777-beep/zombcash-bot` PR #53. It validates the signed Survivor session, ignores client-supplied Telegram IDs and applies a 30/minute per-account rate limit. Not deployed.
 
 ## Phase 1 implementation status (feature branch only)
-- [x] Additive taxonomy fields (series, category_ids, tags, language, metadata_version) added to all 50 records.
-- [x] Preserve editorial metadata across hourly Telegram syncs by stable item ID.
-- [x] Add category chips, search and newest/oldest sorting with nine-language labels.
-- [x] Add responsive styling and regenerate crawlable HTML/image sitemap in the feature branch.
-- [ ] Complete per-image visual review before finalizing titles, descriptions, ALT, rights status or Pinterest eligibility.
-- [ ] Add likes/comments only after backend/API design, security review and tests.
 
-## Next implementation step
-Finalize the taxonomy and backward-compatible metadata schema, then add category browsing and improve per-image title/description/ALT generation. Likes/comments and Pinterest publishing follow after stable IDs and metadata are in place.
+- [x] Additive taxonomy fields and stable anchors added to all 50 records; original Telegram source fields retained.
+- [x] Preserve editorial metadata across hourly Telegram syncs by stable item ID.
+- [x] Add localized category chips, search, newest/oldest/most-liked sorting and clear filters.
+- [x] Add responsive styling, crawlable card HTML and 50-image sitemap generation.
+- [x] Add dedicated gallery URLs for all nine locales, localized metadata, self-canonical, reciprocal hreflang, JSON-LD and sitemap.
+- [x] Add aggregate first-party analytics hooks without search text or personal identifiers.
+- [x] Complete image-by-image visual review and unique ALT text for all 50 images.
+- [x] Add localized stable image sharing and mobile-visible lightbox controls.
+- [x] Record 50 existing Pinterest Pins and exact board IDs; queue prevents republishing.
+- [ ] Deploy backend PR #53 only after review/security checks, then verify live like/unlike.
+- [ ] Design and implement comments only after moderation, abuse-prevention and rate-limit decisions.
+
+
+## Next implementation steps
+
+1. Complete the final CI run after the lightbox category/source-link polish and Pinterest ledger update.
+2. Review backend PR #53 and deploy only after security review; then test live likes end-to-end.
+3. Finish wider SEO/indexing and Core Web Vitals checks; validate Search Console data after the next full reporting window.
+4. Update the Pinterest profile website field to https://zombcash.github.io and remove the stale unverified Google+ website entry.
+5. Build comments as a separate moderation-protected feature. Do not create or publish additional Pins for the current 50-image gallery; all 50 are already published.
