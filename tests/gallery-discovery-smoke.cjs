@@ -1,5 +1,7 @@
 const { chromium } = require("playwright");
 const { spawn } = require("child_process");
+const fs = require("fs");
+const path = require("path");
 
 (async () => {
   const server = spawn("python3", ["-m", "http.server", "4173", "--bind", "127.0.0.1"], { stdio: "ignore", cwd: process.cwd() });
@@ -50,6 +52,37 @@ const { spawn } = require("child_process");
       fallbacks: images.filter(image => image.dataset.fallbackApplied).length
     }));
     await page.screenshot({ path: "gallery-desktop-smoke.png", fullPage: true });
+    fs.mkdirSync("gallery-visual-audit/images", { recursive: true });
+    const visualAudit = [];
+    for (const card of await page.locator("#gallery-grid .gallery-card").all()) {
+      const image = card.locator("img");
+      const details = await card.evaluate(element => {
+        const img = element.querySelector("img");
+        return {
+          id: element.dataset.galleryId || "",
+          title: element.dataset.galleryTitle || "",
+          src: img?.currentSrc || img?.src || "",
+          alt: img?.alt || "",
+          naturalWidth: img?.naturalWidth || 0,
+          naturalHeight: img?.naturalHeight || 0,
+          fallbackApplied: Boolean(img?.dataset.fallbackApplied)
+        };
+      });
+      const safeId = details.id.replace(/[^a-zA-Z0-9_-]/g, "_");
+      if (details.naturalWidth > 0) {
+        details.screenshot = "images/" + safeId + ".png";
+        await image.screenshot({ path: path.join("gallery-visual-audit", details.screenshot) });
+      }
+      visualAudit.push(details);
+    }
+    fs.writeFileSync("gallery-visual-audit/report.json", JSON.stringify({
+      generatedAt: new Date().toISOString(),
+      total: visualAudit.length,
+      loaded: visualAudit.filter(item => item.naturalWidth > 0 && !item.fallbackApplied).length,
+      fallback: visualAudit.filter(item => item.fallbackApplied).length,
+      failed: visualAudit.filter(item => item.naturalWidth === 0),
+      images: visualAudit
+    }, null, 2) + "\n");
     await page.evaluate(() => {
       window.__galleryEvents = [];
       const originalTrack = window.ZombieCashTrack;
