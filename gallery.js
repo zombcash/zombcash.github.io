@@ -384,12 +384,18 @@
         const caption = cleanCaption(item.caption);
         const title = String(item.title || caption);
         const image = escapeHtml(item.image);
+        const imageWidth = Number(item.image_width);
+        const imageHeight = Number(item.image_height);
+        const dimensionAttributes = Number.isInteger(imageWidth) && imageWidth > 0 && imageWidth <= 10000 &&
+          Number.isInteger(imageHeight) && imageHeight > 0 && imageHeight <= 10000
+          ? ' width="' + imageWidth + '" height="' + imageHeight + '"'
+          : '';
         const post = item.post_url ? escapeHtml(item.post_url) : "https://t.me/ZOMBCASH";
         const alt = String(item.alt_text || ("ZombieCash gallery artwork accompanying the story: " + (item.description || caption)));
         const labels = categoryText[galleryLang] || categoryText.en;
         const categoryMarkup = (item.category_ids || []).map(id => '<span class="gallery-category-tag">' + escapeHtml(labels[id] || id) + '</span>').join("");
         return '<article class="gallery-card" id="' + escapeHtml(item.anchor_id || "") + '" data-gallery-id="' + escapeHtml(item.id || "") + '" data-categories="' + escapeHtml((item.category_ids || []).join(" ")) + '" data-gallery-title="' + escapeHtml(title) + '" data-gallery-description="' + escapeHtml(item.description || "") + '" tabindex="0" role="group" aria-label="Open image: ' + escapeHtml(title) + '">' +
-          '<img src="' + image + '" alt="' + escapeHtml(alt) + '" loading="lazy" decoding="async">' +
+          '<img' + dimensionAttributes + ' src="' + image + '" alt="' + escapeHtml(alt) + '" loading="lazy" decoding="async">' +
           '<div class="gallery-caption"><p data-original-caption="' + escapeHtml(item.caption) + '" data-original-title="' + escapeHtml(title) + '">' + escapeHtml(title) + '</p>' +
           '<div class="gallery-card-tags">' + categoryMarkup + '</div>' +
           '<div class="gallery-card-actions"><button class="gallery-like-button" type="button" aria-pressed="false" title="' + escapeHtml(galleryLikeLabels.loginLike) + '"><span class="gallery-like-heart" aria-hidden="true">♡</span><span class="gallery-like-count">0</span></button></div>' +

@@ -79,10 +79,12 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     const imageLoadAudit = await page.locator("#gallery-grid img").evaluateAll(images => ({
       total: images.length,
       originalLoaded: images.filter(image => !image.dataset.fallbackApplied && image.naturalWidth > 0).length,
-      fallbacks: images.filter(image => image.dataset.fallbackApplied).length
+      fallbacks: images.filter(image => image.dataset.fallbackApplied).length,
+      missingDimensions: images.filter(image => !image.hasAttribute("width") || !image.hasAttribute("height")).length
     }));
     await page.screenshot({ path: "gallery-desktop-smoke.png", fullPage: true });
     await Promise.all(imageResponseTasks);
+    if (imageLoadAudit.missingDimensions !== 0) throw new Error("Gallery card images must declare intrinsic width and height");
     const recoveryChecks = [];
     for (const event of imageNetworkEvents.filter(item => item.type === "request-failed")) {
       try {

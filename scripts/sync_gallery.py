@@ -4,11 +4,13 @@ import json
 import re
 import time
 from datetime import datetime, timezone
+from io import BytesIO
 from pathlib import Path
 from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
+from PIL import Image
 
 CHANNEL = "ZOMBCASH"
 BASE_URL = f"https://t.me/s/{CHANNEL}"
@@ -42,6 +44,22 @@ def image_urls(message):
         if src and src.startswith("https://") and src not in found:
             found.append(src)
     return found
+
+
+def image_dimensions(url):
+    if not url:
+        return None, None
+    try:
+        response = requests.get(url, headers=HEADERS, timeout=25)
+        response.raise_for_status()
+        with Image.open(BytesIO(response.content)) as image:
+            width, height = image.size
+        if not (0 < width <= 10000 and 0 < height <= 10000):
+            return None, None
+        return int(width), int(height)
+    except Exception as exc:
+        print(f"WARNING: could not read gallery image dimensions for {url}: {exc}")
+        return None, None
 
 
 def parse_page(html):
@@ -106,7 +124,7 @@ def main():
     editorial_fields = (
         "title", "description", "alt_text", "category_ids", "series",
         "tags", "language", "credit", "rights_status", "alt_review_status", "alt_reviewed_at", "alt_review_method", "localized",
-        "metadata_version", "slug", "anchor_id", "pinterest_status", "pinterest_board_id",
+        "metadata_version", "image_width", "image_height", "slug", "anchor_id", "pinterest_status", "pinterest_board_id",
         "pinterest_board_category", "pinterest_title", "pinterest_description", "pinterest_alt",
         "pinterest_destination_url", "pinterest_pin_id", "pinterest_pin_url",
         "pinterest_published_at", "pinterest_published_destination", "pinterest_publication_verified_at",
@@ -116,6 +134,12 @@ def main():
         for field in editorial_fields:
             if field in old:
                 item[field] = old[field]
+
+        if not item.get("image_width") or not item.get("image_height"):
+            width, height = image_dimensions(item.get("image"))
+            if width and height:
+                item["image_width"] = width
+                item["image_height"] = height
 
         caption = str(item.get("caption") or "")
         if not item.get("series") or not item.get("category_ids"):
