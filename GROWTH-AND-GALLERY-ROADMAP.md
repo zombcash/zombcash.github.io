@@ -1,0 +1,219 @@
+# ZombieCash Growth & Gallery Expansion Roadmap
+**Project:** ZombieCash website — https://zombcash.github.io/
+**Repository:** zombcash/zombcash.github.io
+**Branch:** growth-gallery-roadmap-2026-11
+**Scope guard:** Do not modify `zombcash-world`. Preserve the current visual identity, responsive layout, nine locales (en, de, fr, it, ja, zh-CN, ru, tr, hi), canonical/hreflang behavior, existing gallery sync and image SEO workflows. No news-image generation; keep the existing three-hour community posting cadence.
+
+
+## Analytics refresh — 2026-11-03 (Windsor.ai / GA4 + Search Console)
+
+- GA4, last 28 days: **941 sessions**.
+- Acquisition mix: **847 Direct / none (90.0%)**, **40 Google organic (4.3%)**, **3 Bing organic (0.3%)**, **14 Telegram bot**, **2 Telegram social**, **13 ChatGPT referrals**, **9 AADS referrals**, **5 CoinScope referrals**, plus small GitHub/X/other sources. Organic search remains a small share; do not interpret Direct as confirmed human traffic.
+- GA4 page sessions: / 497, /index.html 147, /gallery.html 115, /arcade.html 110, /outbreak-transmission.html 93, /survivor-field-manual.html 86, /zombie-maker.html 78. The homepage root and /index.html split 644 sessions across two URL forms; keep canonical/redirect behavior under audit.
+- Engagement-quality warning: weighted average engagement time per session is anomalously high on 2026-10-29 (~4,791 seconds) and 2026-10-30 (~2,916 seconds). These days should be reviewed for idle tabs, instrumentation errors or automated traffic before using engagement duration as a KPI.
+- Search Console, last 28 days: **97 impressions / 10 clicks** total (web: 87 / 8; image: 10 / 2). Most visible queries are branded or near-branded (zombie cash, zombie ethereum, zombcash); non-brand query coverage is not yet demonstrated by the surfaced rows.
+- Search Console sitemap connector fields currently return null/0 for submitted/indexed/last-downloaded values. Treat this as missing connector reporting, not proof that Google has not fetched the sitemap. Verify directly in Search Console before making indexing claims.
+- Current priority: increase non-brand impressions with useful research/safety and gallery/category landing pages; maintain image sitemap and translated gallery URLs; use UTMs for Telegram/X/Pinterest; validate bot/internal traffic and attribution before setting growth targets.
+
+
+## Visual and interaction QA update — 2026-11-04
+
+- Inspected the full 50-image contact sheet and the two images previously left with caption-derived ALT. Replaced both with image-specific descriptions and marked them visually reviewed: Telegram items 3623 and 3621. All 50 now have visual-review status; rights status remains review-required for every image.
+- One card (Telegram item 3686) used the fallback during one browser run because Chromium reported net::ERR_BLOCKED_BY_ORB. An immediate direct recovery request returned HTTP 200, image/jpeg, 167,205 bytes. This points to an intermittent browser/CDN delivery issue, not a confirmed missing source asset. Keep monitoring; do not replace the source URL on this evidence alone.
+- Added per-image audit capture: original URL, natural dimensions, ALT, fallback flag, browser network failures, retry response and original image bytes. The contact sheet confirms all 50 image subjects are visible; one transient fallback was recorded in the sampled run.
+- Fixed a mobile lightbox issue: the caption had a 90px max-height, clipping the newly added Like/Share controls. Caption now has a larger bounded scroll area, and Playwright asserts the Share control stays within the mobile viewport.
+- CI now regenerates crawlable cards, image sitemap and localized gallery pages from source JSON before validating them. This keeps generated HTML out of hand edits.
+- Localized pages now use the same CSS/JS cache versions as the English gallery; CI checks cache-version parity to prevent locale pages silently loading stale scripts.
+- Latest complete CI run 41731133422 passed: Python validation, generated gallery/locale pages, Pinterest durable-ledger/queue reconciliation, desktop/mobile Playwright tests, all locale checks, language switching, share controls, mobile lightbox visibility, contact-sheet generation and evidence upload.
+
+
+## Pinterest inventory reconciliation — 2026-11-04
+
+- Connected Pinterest business account @ZOMBCASH was read directly. Live account reports 97 Pins and 3 active public ZombieCash boards; the account inventory also contains two legacy secret boards ("Трактори" and "Швидке збереження"), which are not used for ZombieCash publishing.
+- Verified board mapping:
+  - ZombieCash Memes | Crypto Humor — 620441354855296934 (33 Pins)
+  - Undead After Dark | Zombie Art — 620441354855296935 (32 Pins)
+  - Nightmare & Horror | Zombie Stories — 620441354855296933 (32 Pins)
+- Reconciled every Telegram source post ID in the current 50-image gallery against all Pins on the three ZombieCash boards: **50/50 already published, 0 missing, 0 duplicate**. The other 47 account Pins are earlier archive posts outside this 50-image snapshot.
+- Updated gallery-data.json with each verified existing Pin ID, board ID, Pin URL, publish timestamp and original destination URL. pinterest-queue.json is now a ledger of 50 already-published Pins, 0 eligible for new publishing, 0 blocked. No Pins were created during this reconciliation.
+- Added a separate durable pinterest-published-ledger.json containing all 50 verified Pin records. The queue exporter now consults this permanent ledger, and sync_gallery.py preserves per-item Pinterest publication fields. Older Pins remain recorded even when their gallery items roll out of the latest 50-image Telegram snapshot.
+- Rights status remains review-required in the gallery records; visual ALT review does not retroactively establish image ownership or permission. The published ledger prevents accidental duplicates while rights are reviewed.
+- Pinterest business profile reports zombcash.github.io as a verified domain, but the profile website field still uses http://zombcash.github.io and retains an old unverified Google+ URL as a second website. Updating the profile website to the canonical HTTPS URL remains a UI task; the current browser automation environment has no credits, so no profile changes were made.
+- Pinterest account analytics for 2026-10-07 through 2026-11-03 return BEFORE_BUSINESS_CREATED for the entire range (the business profile was created on 2026-11-03); do not use those zeroes as evidence of no reach. Collect a fresh baseline after the account has a full reporting day.
+
+## Mission
+Increase qualified search discovery and returning visitors by turning the existing ZombieCash gallery into a structured, searchable, community-participation visual archive, then distribute its eligible artwork to Pinterest and other discovery channels. Improve measurement so growth is based on real engaged users rather than raw or potentially automated sessions.
+
+## Work rules
+1. Work in small, reversible commits on a feature branch; inspect affected files before every change.
+2. Never overwrite gallery source data or existing Telegram sync state without a backup and schema check.
+3. Keep generated assets generated by their existing scripts; do not hand-edit generated card blocks.
+4. Preserve image attribution/source links and respect original image ownership and platform terms.
+5. All visible gallery UI, metadata, category labels, empty/error states and interaction messages must support all nine locales.
+6. Public gallery pages and image metadata must remain crawlable without login. Comments/likes are progressive enhancements, not a prerequisite to view images.
+7. Registered-user actions must be authenticated and validated server-side. Never trust client-supplied user IDs or counters.
+8. Moderate comments: length limits, rate limits, spam controls, report/hide/admin moderation, escaping, and safe rendering. Likes must be one per account per image, reversible, and protected against duplicate requests.
+9. Do not publish the entire gallery to Pinterest until the account/integration, image rights, pin URLs, rate limits and duplicate policy are verified. Keep an export/retry log and avoid duplicate pins.
+10. No mass link spam, fake engagement, purchased traffic or misleading financial claims.
+
+## Current execution status — 2026-11-03
+- Feature branch only: `growth-gallery-roadmap-2026-11`; no production deployment and no changes to `zombcash-world`.
+- Latest successful CI run: `41718724932`, conclusion `success`. It verified gallery interactions, desktop/mobile layout constraints, all eight non-English locale URLs, 50 cards per locale, canonical/hreflang and the Pinterest safety gate. The current run `41719010532` adds per-image screenshot evidence and a contact sheet.
+- Desktop, mobile and Russian screenshots were downloaded from the Actions artifact and visually inspected. The visual identity is intact; mobile uses a two-column masonry-style archive with natural page scrolling.
+- An earlier run reported 49/50 original images loaded; a repeat run loaded all 50/50 with zero fallbacks, indicating the earlier failure was transient. The full-resolution contact sheet was inspected: 48/50 original images loaded and received image-specific ALT descriptions; two images (ZOMBCASH/3623:0 and ZOMBCASH/3621:0) were blocked by Chromium ORB and remain pending ALT review. All 50 rights statuses remain review-required.
+- Added schema.org CollectionPage JSON-LD with each locale's title, description, canonical URL and language to all nine gallery URLs. The generator maintains this block idempotently and CI validates it.
+- Dedicated localized gallery URLs exist for all eight non-English locales. Each page has its own canonical, nine locale alternates plus x-default, localized metadata and root-relative assets; the nine-URL hreflang sitemap is referenced by robots.txt. Expanded Playwright checks now cover all eight pages.
+- Likes UI and API/database foundation are drafted on separate feature branches; backend PR #53 is not deployed, so likes are not yet live. Comments are design-only.
+- Pinterest/Zernio export is safely gated: 0 eligible / 50 blocked. No Pins have been published; board IDs, rights confirmation and visual ALT review are still missing.
+
+## Phase 0 — Baseline and safety audit (first)
+- [x] Capture feature-branch desktop/mobile screenshots and verify responsive layout constraints through Playwright. Manual visual review of the screenshot artifacts completed; actual image-by-image classification remains pending.
+- [x] Review `gallery.html`, `gallery.js`, `gallery.css`, `gallery-data.json`, `scripts/sync_gallery.py`, `scripts/sync_gallery_image_seo.py` and both gallery workflows.
+- [x] Inventory all 50 currently synchronized image entries and group them by existing series. Visual caption-to-image review remains pending.
+- [ ] Complete per-image source URL, natural-dimension, format and rights review. CI now captures natural dimensions and the exact failed/fallback item for all 50 images; one item was observed using fallback in the previous run.
+- [x] Confirm gallery card HTML is generated from `gallery-data.json`; verify image sitemap generation and robots references in source.
+- [x] Inspect existing Telegram Survivor authentication and API/database capabilities. Existing signed server-side session can be reused as the identity foundation; new interaction routes/tables are still required.
+- [x] Record desktop/mobile responsive smoke evidence and locale metadata checks. [ ] Capture full Core Web Vitals/accessibility baseline before release.
+
+## Phase 1 — Gallery taxonomy and browsing experience
+### 1A. Theme taxonomy
+Use categories that reflect the actual gallery, not arbitrary tags. Initial candidate taxonomy:
+- **Zombie Memes** — crypto humor, portfolio jokes, meme templates.
+- **Nightmare / Horror** — horror scenes, creepy environments, suspense and monsters.
+- **Undead After Dark** — stylish, glamorous, nightlife and character art; apply appropriate age-safe editorial rules.
+- **Zombie Characters & Avatars** — portraits, survivor identities, profile/avatar art.
+- **Apocalypse & Survival** — wasteland scenes, shelters, supplies, survival atmosphere.
+- **Crypto Apocalypse** — Solana, charts, trading culture and blockchain jokes.
+- **Community Creations** — user-submitted artwork, only with explicit permission and attribution.
+Categories may overlap; allow multiple tags per image. Keep series labels such as NIGHTMARE DROP as series metadata, not the only taxonomy.
+
+### 1B. Data model
+Extend gallery entries compatibly; preserve existing fields:
+- `id`, `image`, `caption`, `post_url`, `date`, `post_id`
+- Add structured fields: `category_ids[]`, `series`, `title`, `description`, `alt_text`, `tags[]`, `language`, `credit`, `source_type`, `pinterest_status` (internal export state only).
+- Generate stable slugs/IDs; do not use caption text as the database identity.
+- [x] Add schema/version metadata (schema_version: 2, per-item metadata_version) while keeping old source fields intact.
+- [x] Preserve editorial metadata during scheduled Telegram syncs by stable image ID.
+- [ ] Add full validation for all editorial fields and localized metadata.
+
+### 1C. User experience
+- [x] Add localized category chips, text search (including series), newest/oldest/most-liked sorting and clear filters on the feature branch. All nine locales have category and control labels.
+- [x] Add 50 unique editorial titles and caption-derived descriptions, preserving original Telegram captions.
+- [x] Expand the lightbox with title, description, categories and Telegram source link.
+- [x] Add Playwright desktop/mobile interaction smoke tests and a PR GitHub Actions workflow; first run is pending.
+- [ ] Add per-card category labels, detail/share improvements and pagination after visual review.
+- [ ] Add most-liked sorting only after real authenticated like counts exist.
+- Add category chips/filtering, search by title/caption/tags, sort newest/oldest/most liked, and clear-filter behavior.
+- Keep the existing gallery grid and lightbox aesthetic; no disruptive redesign.
+- Add image detail view with full-size image, title, concise description, category/tags, original Telegram source and share link.
+- Add pagination or “Load more” for larger archives; avoid loading every full-size image at once.
+- Add graceful offline/fallback states and maintain keyboard, screen-reader and mobile usability.
+- Ensure categories are discoverable as crawlable pages or crawlable filtered URLs only where each page has unique useful content. Do not create thin indexable filter combinations.
+
+## Phase 2 — Image titles, captions and image SEO
+- [x] Generate dedicated gallery pages for all nine locales with translated title/description metadata, self-canonical URLs and reciprocal hreflang tags.
+- [x] Add the nine-page hreflang sitemap and reference it from robots.txt.
+- [x] Update the language switcher to route gallery users to dedicated locale URLs rather than lang query variants.
+- [ ] Translate editorial titles/descriptions for priority images; source Telegram captions remain preserved in English.
+- [x] Update generated SEO cards and image sitemap to consume editorial title, description and alt_text fields when available.
+- [ ] Populate and human-review those fields per image after visual inspection; current ALT fallback is temporary and not considered final.
+For every image:
+- Write a concise, human-readable unique title describing the visible subject.
+- Write a useful description/caption (normally one or two sentences) with context, mood or joke; do not keyword-stuff.
+- Write descriptive, image-specific ALT text that explains the image for accessibility; avoid repeating the same boilerplate.
+- Use descriptive filenames for locally hosted/optimized copies where legally and technically appropriate; retain original source reference.
+- Add dimensions, responsive variants, modern formats and compression only after visual quality and source retention are verified.
+- Use meaningful image captions and nearby page text.
+- Ensure Open Graph/social previews use the actual image where suitable.
+- Keep image sitemap synchronized with canonical gallery/detail URLs and meaningful image captions.
+- Translate category names and UI strings for all nine locales. Do not machine-translate proper names or overwrite source captions without preserving originals.
+- Provide human-reviewed localized metadata for priority images; add fallback language behavior.
+
+## Phase 3 — Registered-user likes
+- Reuse the existing Survivor/Telegram account only after verifying API token validation server-side.
+- Add a like toggle on image cards and detail/lightbox view; display a count only from server data.
+- Enforce one active like per authenticated account per image using a database uniqueness constraint.
+- Make toggling idempotent; prevent double-click/race inflation.
+- Require login to like; show a localized sign-in prompt for guests.
+- Add rate limiting and abuse protection; do not award Survival Points for likes initially.
+- Add admin ability to remove abusive activity and recalculate counts from source records.
+- Track events in analytics without exposing private account identifiers.
+
+## Phase 3 implementation status — registered-user likes
+- [x] Create the `gallery_likes` table with unique `(telegram_id, image_id)` constraint, RLS enabled, and service-role-only access.
+- [x] Add SECURITY INVOKER RPCs for aggregate like stats and idempotent like/unlike operations; revoke browser roles.
+- [x] Add card and lightbox like controls on the website feature branch; guest clicks open the existing Telegram login.
+- [x] Draft backend API in `vovik777-beep/zombcash-bot` PR #53 with signed-session validation and account rate limiting.
+- [ ] Merge/review/deploy the backend API before merging the website UI; then test guest, registered, logout, duplicate and concurrent requests end-to-end.
+- [ ] Run production smoke checks and verify no Survival Points are awarded for likes.
+- [x] Prepare the next-stage comments API/security/moderation design in GALLERY-COMMUNITY-INTERACTIONS-DESIGN.md; no comments tables or endpoints have been created yet.
+
+## Phase 4 — Registered-user comments
+- Authenticated users can post, edit their own comments within a defined window, and delete their own comments.
+- Proposed initial limits: 500 characters, plain text only, rate-limited posting, no HTML/Markdown rendering by default.
+- Display public display name and optional avatar only; never expose Telegram ID, email, auth token or private profile fields.
+- Add report button, spam/rate controls, blocked terms, moderation queue and admin hide/delete/restore actions.
+- Prevent links or repeated copy-paste spam; add a slow mode if needed.
+- Keep comments out of image ALT/title and out of indexable page content until quality/moderation policy is proven.
+- Add localized labels, errors, timestamps and consent/privacy notice.
+- Add tests for XSS, unauthorized edits/deletes, duplicate submissions, rate limits and cross-account access.
+
+## Phase 5 — Pinterest distribution
+- [x] Add stable per-image gallery anchors and Pinterest destination URLs for all 50 current images.
+- [x] Add a local queue exporter that includes an image only when rights are project-owned/permission-confirmed, ALT has been visually reviewed, a Pinterest board ID is assigned, and the pin is explicitly marked ready.
+- [x] Add per-pin UTM parameters (`utm_source=pinterest`, `utm_medium=social`, campaign and stable image ID) while retaining the exact canonical image anchor separately.
+- [x] Add queue regeneration to the hourly Telegram gallery sync so new images cannot silently bypass the Pinterest rights/ALT gate.
+- [x] Generate the initial queue: 0 eligible, 50 blocked. No publishing occurs from this exporter.
+- [ ] Create dedicated ZombieCash boards in Zernio/Pinterest and assign their IDs; unrelated existing boards are not acceptable.
+- [x] Identify the selected connector as Zernio and confirm the Pinterest account is signed in.\n- [ ] Complete Zernio's default-board selection using a dedicated ZombieCash board; existing unrelated boards should not be used.\n- Connect the ZombieCash Pinterest business/account using Zernio only after board setup is complete.
+- Audit all gallery assets for ownership/permission and platform eligibility.
+- Create boards aligned with taxonomy, e.g. Zombie Memes, Zombie Horror Art, Undead Characters & Avatars, Apocalypse Survival Art, Crypto Apocalypse.
+- Prepare each Pin with vertical 2:3 creative where appropriate, unique title, natural description, relevant tags, canonical destination URL and image alt text.
+- Prefer the site's relevant category/detail page as destination, not only the homepage or Telegram.
+- Build a queue from all eligible existing gallery images; publish in controlled batches with rate limits.
+- Maintain pin ledger: gallery image ID, Pinterest pin ID/URL, board, published time, status, retry/error, last update.
+- Deduplicate by stable gallery image ID and image hash; never republish on every sync.
+- Add new images to the queue after gallery sync; manual review for borderline content.
+- Measure outbound Pinterest sessions, engaged sessions, sign-ups and returning visitors via UTMs/GA4.
+- Do not claim every image is published until the Pinterest API/integration confirms each result.
+
+## Phase 6 — Broader organic reach and technical SEO
+- Audit all sitemap URLs and Google/Bing indexing status; separate sitemap fetch status from actual URL indexing.
+- Validate canonical, reciprocal hreflang, language metadata, indexability, redirects and duplicate homepage variants.
+- Maintain robots.txt, sitemap index and image sitemap; submit/update in Google Search Console and Bing Webmaster Tools.
+- Build topic clusters around Solana token research/security, ZombieCash project identity, gallery/art and arcade/tools.
+- Improve internal links between relevant guides, gallery collections, tools and project pages.
+- Improve Core Web Vitals, image loading, mobile UX, crawlable text and error states.
+- Expand external distribution through X, Reddit, YouTube Shorts, Pinterest, relevant communities and legitimate editorial links.
+- Keep news posts on the existing cadence and do not generate bespoke news images.
+
+## Phase 7 — Analytics and growth measurement
+- Audit GA4 source attribution, referral exclusions, internal traffic and possible bot/noise patterns.
+- Separate organic search, image search, Bing, direct, Telegram, X, Pinterest, AI referrals and paid campaigns.
+- Track gallery category views, image detail opens, outbound source clicks, likes, comments, shares, Pinterest referrals, registrations and returning users.
+- Report weekly: impressions, clicks, CTR, average position, indexed URLs, image-search clicks, engaged sessions, returning users and community conversions.
+- Compare by locale, landing page, category and acquisition channel.
+- Do not set arbitrary traffic guarantees; establish targets after a clean 28-day baseline.
+
+## Acceptance criteria
+- Gallery remains visually consistent and works on desktop/mobile.
+- All nine locales have complete gallery controls and messages.
+- Every published image has a useful title, caption/description, unique ALT, category and preserved source attribution.
+- Filters/search/sort work with keyboard and touch.
+- Likes/comments are authenticated, secure, moderated and duplicate-safe.
+- Pinterest publishing is auditable, deduplicated and confirmed by the connected service.
+- Image sitemap and robots references remain valid and generated from the same source data.
+- Existing gallery Telegram sync and other site features continue to work.
+- No changes to `zombcash-world`.
+
+## Current implementation baseline (observed before changes)
+- Gallery source is `gallery-data.json`; current data has 50 items and fields: `id`, `image`, `caption`, `post_url`, `date`, `post_id`.
+- `scripts/sync_gallery.py` pulls recent images from the public Telegram channel, filters three recurring series (NIGHTMARE DROP, ZOMBIE MEME, UNDEAD AFTER DARK), and caps the feed at 50.
+- `gallery.js` currently filters to those same three caption patterns and renders a single grid/lightbox; it does not yet provide taxonomy filters, user likes or comments.
+- `scripts/sync_gallery_image_seo.py` generates crawlable cards and `sitemap-gallery-images.xml`; workflow runs on gallery data changes and every six hours.
+- `scripts/sync_gallery.py` workflow runs hourly.
+- Existing Survivor authentication is Telegram-based in `survivor-auth.js` and talks to the ZombieCash API. Backend/database must be inspected before adding social interactions.
+- Existing static gallery is English-rooted with nine-language caption-label handling in JavaScript; complete page-level localization still needs verification.
+
+## Execution order
+Start at Phase 0 and finish each phase's checks before moving to the next. Phase 1 taxonomy/data-model design must be finalized before implementing likes/comments or Pinterest automation, because all three depend on stable image IDs and metadata. No production changes until the affected files, backend contracts and tests are understood.

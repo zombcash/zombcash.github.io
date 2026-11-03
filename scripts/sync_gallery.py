@@ -87,7 +87,78 @@ def main():
         before = next_before
         time.sleep(0.35)
     items = sorted(all_items.values(), key=lambda item: (item.get("date") or "", item.get("post_id") or ""), reverse=True)[:MAX_ITEMS]
-    payload = {"source": f"https://t.me/{CHANNEL}", "updated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "items": items}
+
+    # Preserve editorial metadata across scheduled Telegram syncs. The source
+    # caption/image/post fields remain authoritative; enrichment fields survive
+    # only when the stable Telegram image ID matches.
+    previous = {}
+    if OUTPUT.exists():
+        try:
+            old_payload = json.loads(OUTPUT.read_text(encoding="utf-8"))
+            previous = {
+                str(entry.get("id")): entry
+                for entry in old_payload.get("items", [])
+                if isinstance(entry, dict) and entry.get("id")
+            }
+        except (OSError, json.JSONDecodeError, AttributeError):
+            previous = {}
+
+    editorial_fields = (
+        "title", "description", "alt_text", "category_ids", "series",
+        "tags", "language", "credit", "rights_status", "alt_review_status", "alt_reviewed_at", "alt_review_method", "localized",
+        "metadata_version", "slug", "anchor_id", "pinterest_status", "pinterest_board_id",
+        "pinterest_board_category", "pinterest_title", "pinterest_description", "pinterest_alt",
+        "pinterest_destination_url", "pinterest_pin_id", "pinterest_pin_url",
+        "pinterest_published_at", "pinterest_published_destination", "pinterest_publication_verified_at",
+    )
+    for item in items:
+        old = previous.get(str(item.get("id")), {})
+        for field in editorial_fields:
+            if field in old:
+                item[field] = old[field]
+
+        caption = str(item.get("caption") or "")
+        if not item.get("series") or not item.get("category_ids"):
+            if re.search(r"\bNIGHTMARE\s+DROP\b", caption, re.I):
+                item.setdefault("series", "nightmare-drop")
+                item.setdefault("category_ids", ["nightmare-horror"])
+            elif re.search(r"\bUNDEAD\s+AFTER\s+DARK\b", caption, re.I):
+                item.setdefault("series", "undead-after-dark")
+                item.setdefault("category_ids", ["undead-after-dark"])
+            elif re.search(r"\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b", caption, re.I):
+                categories = ["zombie-memes"]
+                if re.search(r"\b(portfolio|trading|charts?|market|crypto|token|bags|candles|rug pull)\b", caption, re.I):
+                    categories.append("crypto-apocalypse")
+                item.setdefault("series", "zombie-meme")
+                item.setdefault("category_ids", categories)
+        item.setdefault("tags", list(dict.fromkeys(
+            tag.lower() for tag in re.findall(r"#([\w]+)", caption, flags=re.UNICODE)
+        )))
+        item.setdefault("language", "en")
+        item.setdefault("credit", "@ZOMBCASH")
+        item.setdefault("rights_status", "review-required")
+        item.setdefault("alt_review_status", "caption-derived-pending-visual-review")
+        item.setdefault("metadata_version", 1)
+        stable_id = str(item.get("id") or "")
+        stable_match = re.fullmatch(r"ZOMBCASH/(\d+):(\d+)", stable_id)
+        if stable_match:
+            message_id, media_index = stable_match.groups()
+            item.setdefault("slug", f"gallery-{message_id}-{media_index}")
+            item.setdefault("anchor_id", f"gallery-image-{message_id}-{media_index}")
+            item.setdefault("pinterest_status", "blocked-rights-review")
+            item.setdefault("pinterest_board_id", None)
+            item.setdefault("pinterest_board_category", (item.get("category_ids") or [None])[0])
+            item.setdefault("pinterest_title", item.get("title") or caption[:80])
+            item.setdefault("pinterest_description", item.get("description") or caption)
+            item.setdefault("pinterest_alt", item.get("alt_text") or ("ZombieCash gallery artwork accompanying the story: " + caption))
+            item.setdefault("pinterest_destination_url", "https://zombcash.github.io/gallery.html#" + item["anchor_id"])
+
+    payload = {
+        "source": f"https://t.me/{CHANNEL}",
+        "updated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "schema_version": 2,
+        "items": items,
+    }
     OUTPUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Synced {len(items)} image entries from @{CHANNEL} into {OUTPUT} (limit: {MAX_ITEMS})")
 

@@ -1,0 +1,412 @@
+{
+  "schema_version": 1,
+  "source": "gallery-data.json",
+  "published_count": 50,
+  "eligible_count": 0,
+  "blocked_count": 0,
+  "published": [
+    {
+      "id": "ZOMBCASH/4102:0",
+      "pin_id": "620441286210443497",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443497/",
+      "board_id": "620441354855296934",
+      "published_at": "2026-11-03T21:36:54",
+      "destination_url": "https://t.me/ZOMBCASH/4102"
+    },
+    {
+      "id": "ZOMBCASH/4076:0",
+      "pin_id": "620441286210443524",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443524/",
+      "board_id": "620441354855296935",
+      "published_at": "2026-11-03T21:37:14",
+      "destination_url": "https://t.me/ZOMBCASH/4076"
+    },
+    {
+      "id": "ZOMBCASH/4055:0",
+      "pin_id": "620441286210443542",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443542/",
+      "board_id": "620441354855296933",
+      "published_at": "2026-11-03T21:37:23",
+      "destination_url": "https://t.me/ZOMBCASH/4055"
+    },
+    {
+      "id": "ZOMBCASH/4031:0",
+      "pin_id": "620441286210443495",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443495/",
+      "board_id": "620441354855296934",
+      "published_at": "2026-11-03T21:36:54",
+      "destination_url": "https://t.me/ZOMBCASH/4031"
+    },
+    {
+      "id": "ZOMBCASH/4016:0",
+      "pin_id": "620441286210443523",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443523/",
+      "board_id": "620441354855296935",
+      "published_at": "2026-11-03T21:37:12",
+      "destination_url": "https://t.me/ZOMBCASH/4016"
+    },
+    {
+      "id": "ZOMBCASH/3996:0",
+      "pin_id": "620441286210443543",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443543/",
+      "board_id": "620441354855296933",
+      "published_at": "2026-11-03T21:37:23",
+      "destination_url": "https://t.me/ZOMBCASH/3996"
+    },
+    {
+      "id": "ZOMBCASH/3974:0",
+      "pin_id": "620441286210443496",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443496/",
+      "board_id": "620441354855296934",
+      "published_at": "2026-11-03T21:36:54",
+      "destination_url": "https://t.me/ZOMBCASH/3974"
+    },
+    {
+      "id": "ZOMBCASH/3867:0",
+      "pin_id": "620441286210443521",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443521/",
+      "board_id": "620441354855296935",
+      "published_at": "2026-11-03T21:37:12",
+      "destination_url": "https://t.me/ZOMBCASH/3867"
+    },
+    {
+      "id": "ZOMBCASH/3840:0",
+      "pin_id": "620441286210443540",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443540/",
+      "board_id": "620441354855296933",
+      "published_at": "2026-11-03T21:37:23",
+      "destination_url": "https://t.me/ZOMBCASH/3840"
+    },
+    {
+      "id": "ZOMBCASH/3814:0",
+      "pin_id": "620441286210443499",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443499/",
+      "board_id": "620441354855296934",
+      "published_at": "2026-11-03T21:36:54",
+      "destination_url": "https://t.me/ZOMBCASH/3814"
+    },
+    {
+      "id": "ZOMBCASH/3796:0",
+      "pin_id": "620441286210443522",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443522/",
+      "board_id": "620441354855296935",
+      "published_at": "2026-11-03T21:37:12",
+      "destination_url": "https://t.me/ZOMBCASH/3796"
+    },
+    {
+      "id": "ZOMBCASH/3782:0",
+      "pin_id": "620441286210443541",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443541/",
+      "board_id": "620441354855296933",
+      "published_at": "2026-11-03T21:37:23",
+      "destination_url": "https://t.me/ZOMBCASH/3782"
+    },
+    {
+      "id": "ZOMBCASH/3769:0",
+      "pin_id": "620441286210443489",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443489/",
+      "board_id": "620441354855296934",
+      "published_at": "2026-11-03T21:36:51",
+      "destination_url": "https://t.me/ZOMBCASH/3769"
+    },
+    {
+      "id": "ZOMBCASH/3760:0",
+      "pin_id": "620441286210443518",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443518/",
+      "board_id": "620441354855296935",
+      "published_at": "2026-11-03T21:37:09",
+      "destination_url": "https://t.me/ZOMBCASH/3760"
+    },
+    {
+      "id": "ZOMBCASH/3749:0",
+      "pin_id": "620441286210443537",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443537/",
+      "board_id": "620441354855296933",
+      "published_at": "2026-11-03T21:37:22",
+      "destination_url": "https://t.me/ZOMBCASH/3749"
+    },
+    {
+      "id": "ZOMBCASH/3743:0",
+      "pin_id": "620441286210443490",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443490/",
+      "board_id": "620441354855296934",
+      "published_at": "2026-11-03T21:36:51",
+      "destination_url": "https://t.me/ZOMBCASH/3743"
+    },
+    {
+      "id": "ZOMBCASH/3732:0",
+      "pin_id": "620441286210443520",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443520/",
+      "board_id": "620441354855296935",
+      "published_at": "2026-11-03T21:37:10",
+      "destination_url": "https://t.me/ZOMBCASH/3732"
+    },
+    {
+      "id": "ZOMBCASH/3724:0",
+      "pin_id": "620441286210443536",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443536/",
+      "board_id": "620441354855296933",
+      "published_at": "2026-11-03T21:37:22",
+      "destination_url": "https://t.me/ZOMBCASH/3724"
+    },
+    {
+      "id": "ZOMBCASH/3719:0",
+      "pin_id": "620441286210443491",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443491/",
+      "board_id": "620441354855296934",
+      "published_at": "2026-11-03T21:36:51",
+      "destination_url": "https://t.me/ZOMBCASH/3719"
+    },
+    {
+      "id": "ZOMBCASH/3713:0",
+      "pin_id": "620441286210443519",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443519/",
+      "board_id": "620441354855296935",
+      "published_at": "2026-11-03T21:37:09",
+      "destination_url": "https://t.me/ZOMBCASH/3713"
+    },
+    {
+      "id": "ZOMBCASH/3709:0",
+      "pin_id": "620441286210443538",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443538/",
+      "board_id": "620441354855296933",
+      "published_at": "2026-11-03T21:37:22",
+      "destination_url": "https://t.me/ZOMBCASH/3709"
+    },
+    {
+      "id": "ZOMBCASH/3701:0",
+      "pin_id": "620441286210443492",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443492/",
+      "board_id": "620441354855296934",
+      "published_at": "2026-11-03T21:36:52",
+      "destination_url": "https://t.me/ZOMBCASH/3701"
+    },
+    {
+      "id": "ZOMBCASH/3694:0",
+      "pin_id": "620441286210443516",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443516/",
+      "board_id": "620441354855296935",
+      "published_at": "2026-11-03T21:37:09",
+      "destination_url": "https://t.me/ZOMBCASH/3694"
+    },
+    {
+      "id": "ZOMBCASH/3690:0",
+      "pin_id": "620441286210443539",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443539/",
+      "board_id": "620441354855296933",
+      "published_at": "2026-11-03T21:37:22",
+      "destination_url": "https://t.me/ZOMBCASH/3690"
+    },
+    {
+      "id": "ZOMBCASH/3686:0",
+      "pin_id": "620441286210443487",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443487/",
+      "board_id": "620441354855296934",
+      "published_at": "2026-11-03T21:36:48",
+      "destination_url": "https://t.me/ZOMBCASH/3686"
+    },
+    {
+      "id": "ZOMBCASH/3683:0",
+      "pin_id": "620441286210443512",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443512/",
+      "board_id": "620441354855296935",
+      "published_at": "2026-11-03T21:37:03",
+      "destination_url": "https://t.me/ZOMBCASH/3683"
+    },
+    {
+      "id": "ZOMBCASH/3681:0",
+      "pin_id": "620441286210443533",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443533/",
+      "board_id": "620441354855296933",
+      "published_at": "2026-11-03T21:37:19",
+      "destination_url": "https://t.me/ZOMBCASH/3681"
+    },
+    {
+      "id": "ZOMBCASH/3676:0",
+      "pin_id": "620441286210443486",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443486/",
+      "board_id": "620441354855296934",
+      "published_at": "2026-11-03T21:36:48",
+      "destination_url": "https://t.me/ZOMBCASH/3676"
+    },
+    {
+      "id": "ZOMBCASH/3675:0",
+      "pin_id": "620441286210443507",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443507/",
+      "board_id": "620441354855296935",
+      "published_at": "2026-11-03T21:37:00",
+      "destination_url": "https://t.me/ZOMBCASH/3675"
+    },
+    {
+      "id": "ZOMBCASH/3673:0",
+      "pin_id": "620441286210443534",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443534/",
+      "board_id": "620441354855296933",
+      "published_at": "2026-11-03T21:37:19",
+      "destination_url": "https://t.me/ZOMBCASH/3673"
+    },
+    {
+      "id": "ZOMBCASH/3670:0",
+      "pin_id": "620441286210443485",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443485/",
+      "board_id": "620441354855296934",
+      "published_at": "2026-11-03T21:36:47",
+      "destination_url": "https://t.me/ZOMBCASH/3670"
+    },
+    {
+      "id": "ZOMBCASH/3661:0",
+      "pin_id": "620441286210443508",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443508/",
+      "board_id": "620441354855296935",
+      "published_at": "2026-11-03T21:37:00",
+      "destination_url": "https://t.me/ZOMBCASH/3661"
+    },
+    {
+      "id": "ZOMBCASH/3654:0",
+      "pin_id": "620441286210443532",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443532/",
+      "board_id": "620441354855296933",
+      "published_at": "2026-11-03T21:37:19",
+      "destination_url": "https://t.me/ZOMBCASH/3654"
+    },
+    {
+      "id": "ZOMBCASH/3649:0",
+      "pin_id": "620441286210443484",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443484/",
+      "board_id": "620441354855296934",
+      "published_at": "2026-11-03T21:36:47",
+      "destination_url": "https://t.me/ZOMBCASH/3649"
+    },
+    {
+      "id": "ZOMBCASH/3644:0",
+      "pin_id": "620441286210443506",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443506/",
+      "board_id": "620441354855296935",
+      "published_at": "2026-11-03T21:37:00",
+      "destination_url": "https://t.me/ZOMBCASH/3644"
+    },
+    {
+      "id": "ZOMBCASH/3640:0",
+      "pin_id": "620441286210443531",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443531/",
+      "board_id": "620441354855296933",
+      "published_at": "2026-11-03T21:37:19",
+      "destination_url": "https://t.me/ZOMBCASH/3640"
+    },
+    {
+      "id": "ZOMBCASH/3637:0",
+      "pin_id": "620441286210443480",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443480/",
+      "board_id": "620441354855296934",
+      "published_at": "2026-11-03T21:36:45",
+      "destination_url": "https://t.me/ZOMBCASH/3637"
+    },
+    {
+      "id": "ZOMBCASH/3634:0",
+      "pin_id": "620441286210443509",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443509/",
+      "board_id": "620441354855296935",
+      "published_at": "2026-11-03T21:37:00",
+      "destination_url": "https://t.me/ZOMBCASH/3634"
+    },
+    {
+      "id": "ZOMBCASH/3633:0",
+      "pin_id": "620441286210443526",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443526/",
+      "board_id": "620441354855296933",
+      "published_at": "2026-11-03T21:37:16",
+      "destination_url": "https://t.me/ZOMBCASH/3633"
+    },
+    {
+      "id": "ZOMBCASH/3631:0",
+      "pin_id": "620441286210443481",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443481/",
+      "board_id": "620441354855296934",
+      "published_at": "2026-11-03T21:36:45",
+      "destination_url": "https://t.me/ZOMBCASH/3631"
+    },
+    {
+      "id": "ZOMBCASH/3630:0",
+      "pin_id": "620441286210443501",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443501/",
+      "board_id": "620441354855296935",
+      "published_at": "2026-11-03T21:36:57",
+      "destination_url": "https://t.me/ZOMBCASH/3630"
+    },
+    {
+      "id": "ZOMBCASH/3628:0",
+      "pin_id": "620441286210443528",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443528/",
+      "board_id": "620441354855296933",
+      "published_at": "2026-11-03T21:37:16",
+      "destination_url": "https://t.me/ZOMBCASH/3628"
+    },
+    {
+      "id": "ZOMBCASH/3624:0",
+      "pin_id": "620441286210443483",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443483/",
+      "board_id": "620441354855296934",
+      "published_at": "2026-11-03T21:36:45",
+      "destination_url": "https://t.me/ZOMBCASH/3624"
+    },
+    {
+      "id": "ZOMBCASH/3623:0",
+      "pin_id": "620441286210443504",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443504/",
+      "board_id": "620441354855296935",
+      "published_at": "2026-11-03T21:36:57",
+      "destination_url": "https://t.me/ZOMBCASH/3623"
+    },
+    {
+      "id": "ZOMBCASH/3621:0",
+      "pin_id": "620441286210443527",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443527/",
+      "board_id": "620441354855296933",
+      "published_at": "2026-11-03T21:37:16",
+      "destination_url": "https://t.me/ZOMBCASH/3621"
+    },
+    {
+      "id": "ZOMBCASH/3610:0",
+      "pin_id": "620441286210443482",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443482/",
+      "board_id": "620441354855296934",
+      "published_at": "2026-11-03T21:36:45",
+      "destination_url": "https://t.me/ZOMBCASH/3610"
+    },
+    {
+      "id": "ZOMBCASH/3603:0",
+      "pin_id": "620441286210443502",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443502/",
+      "board_id": "620441354855296935",
+      "published_at": "2026-11-03T21:36:57",
+      "destination_url": "https://t.me/ZOMBCASH/3603"
+    },
+    {
+      "id": "ZOMBCASH/3598:0",
+      "pin_id": "620441286210443525",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443525/",
+      "board_id": "620441354855296933",
+      "published_at": "2026-11-03T21:37:16",
+      "destination_url": "https://t.me/ZOMBCASH/3598"
+    },
+    {
+      "id": "ZOMBCASH/3592:0",
+      "pin_id": "620441286210443471",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443471/",
+      "board_id": "620441354855296934",
+      "published_at": "2026-11-03T21:36:11",
+      "destination_url": "https://t.me/ZOMBCASH/3592"
+    },
+    {
+      "id": "ZOMBCASH/3583:0",
+      "pin_id": "620441286210443503",
+      "pin_url": "https://ch.pinterest.com/pin/620441286210443503/",
+      "board_id": "620441354855296935",
+      "published_at": "2026-11-03T21:36:57",
+      "destination_url": "https://t.me/ZOMBCASH/3583"
+    }
+  ],
+  "eligible": [],
+  "blocked": [],
+  "ledger_total_count": 50
+}
