@@ -2,6 +2,7 @@ name: Gallery discovery smoke tests
 # Validate latest gallery metadata, including intrinsic image dimensions.
 
 on:
+  workflow_dispatch:
   pull_request:
     branches: [main]
     paths:
