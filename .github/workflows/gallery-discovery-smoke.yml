@@ -95,7 +95,7 @@ jobs:
           assert "sitemap-gallery-pages.xml" in Path("robots.txt").read_text(encoding="utf-8")
           language_js = Path("language.js").read_text(encoding="utf-8")
           assert '"/gallery.html": ["de","fr","it","ja","zh-CN","ru","tr","hi"]' in language_js
-          assert 'if(file===\\'zombie-maker.html\\')' in language_js
+          assert "if(file==='gallery.html'||file==='zombie-maker.html')" not in language_js
           sync_workflow = Path(".github/workflows/sync-zombie-gallery.yml").read_text(encoding="utf-8")
           assert "scripts/export_pinterest_queue.py" in sync_workflow
           assert "pinterest-queue.json" in sync_workflow
