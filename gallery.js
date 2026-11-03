@@ -130,15 +130,15 @@
     }
 
     const controlText = {
-      en:{all:"ALL ART",search:"Search titles, captions or tags…",sort:"SORT",newest:"Newest first",oldest:"Oldest first",results:"RESULTS",empty:"No images match this filter."},
-      ru:{all:"ВСЕ РАБОТЫ",search:"Поиск по названию, описанию или тегам…",sort:"СОРТИРОВКА",newest:"Сначала новые",oldest:"Сначала старые",results:"НАЙДЕНО",empty:"По этому фильтру изображений нет."},
-      de:{all:"ALLE BILDER",search:"Titel, Beschreibungen oder Tags suchen…",sort:"SORTIEREN",newest:"Neueste zuerst",oldest:"Älteste zuerst",results:"ERGEBNISSE",empty:"Keine Bilder für diesen Filter."},
-      fr:{all:"TOUTES LES ŒUVRES",search:"Rechercher titres, descriptions ou tags…",sort:"TRIER",newest:"Plus récentes",oldest:"Plus anciennes",results:"RÉSULTATS",empty:"Aucune image ne correspond à ce filtre."},
-      it:{all:"TUTTE LE OPERE",search:"Cerca titoli, descrizioni o tag…",sort:"ORDINA",newest:"Prima le più recenti",oldest:"Prima le più vecchie",results:"RISULTATI",empty:"Nessuna immagine corrisponde al filtro."},
-      ja:{all:"すべての作品",search:"タイトル・説明・タグを検索…",sort:"並べ替え",newest:"新しい順",oldest:"古い順",results:"件数",empty:"条件に一致する画像はありません。"},
-      "zh-CN":{all:"全部作品",search:"搜索标题、说明或标签…",sort:"排序",newest:"最新优先",oldest:"最早优先",results:"结果",empty:"没有符合筛选条件的图片。"},
-      tr:{all:"TÜM GÖRSELLER",search:"Başlık, açıklama veya etiket ara…",sort:"SIRALA",newest:"En yeni önce",oldest:"En eski önce",results:"SONUÇ",empty:"Bu filtreyle eşleşen görsel yok."},
-      hi:{all:"सभी कलाकृतियाँ",search:"शीर्षक, विवरण या टैग खोजें…",sort:"क्रम",newest:"नवीनतम पहले",oldest:"सबसे पुरानी पहले",results:"परिणाम",empty:"इस फ़िल्टर से कोई इमेज नहीं मिली।"}
+      en:{categories:"Gallery categories",all:"ALL ART",search:"Search titles, captions or tags…",sort:"SORT",newest:"Newest first",oldest:"Oldest first",results:"RESULTS",empty:"No images match this filter."},
+      ru:{categories:"Категории галереи",all:"ВСЕ РАБОТЫ",search:"Поиск по названию, описанию или тегам…",sort:"СОРТИРОВКА",newest:"Сначала новые",oldest:"Сначала старые",results:"НАЙДЕНО",empty:"По этому фильтру изображений нет."},
+      de:{categories:"Galeriekategorien",all:"ALLE BILDER",search:"Titel, Beschreibungen oder Tags suchen…",sort:"SORTIEREN",newest:"Neueste zuerst",oldest:"Älteste zuerst",results:"ERGEBNISSE",empty:"Keine Bilder für diesen Filter."},
+      fr:{categories:"Catégories de la galerie",all:"TOUTES LES ŒUVRES",search:"Rechercher titres, descriptions ou tags…",sort:"TRIER",newest:"Plus récentes",oldest:"Plus anciennes",results:"RÉSULTATS",empty:"Aucune image ne correspond à ce filtre."},
+      it:{categories:"Categorie della galleria",all:"TUTTE LE OPERE",search:"Cerca titoli, descrizioni o tag…",sort:"ORDINA",newest:"Prima le più recenti",oldest:"Prima le più vecchie",results:"RISULTATI",empty:"Nessuna immagine corrisponde al filtro."},
+      ja:{categories:"ギャラリーのカテゴリ",all:"すべての作品",search:"タイトル・説明・タグを検索…",sort:"並べ替え",newest:"新しい順",oldest:"古い順",results:"件数",empty:"条件に一致する画像はありません。"},
+      "zh-CN":{categories:"图库分类",all:"全部作品",search:"搜索标题、说明或标签…",sort:"排序",newest:"最新优先",oldest:"最早优先",results:"结果",empty:"没有符合筛选条件的图片。"},
+      tr:{categories:"Galeri kategorileri",all:"TÜM GÖRSELLER",search:"Başlık, açıklama veya etiket ara…",sort:"SIRALA",newest:"En yeni önce",oldest:"En eski önce",results:"SONUÇ",empty:"Bu filtreyle eşleşen görsel yok."},
+      hi:{categories:"गैलरी श्रेणियाँ",all:"सभी कलाकृतियाँ",search:"शीर्षक, विवरण या टैग खोजें…",sort:"क्रम",newest:"नवीनतम पहले",oldest:"सबसे पुरानी पहले",results:"परिणाम",empty:"इस फ़िल्टर से कोई इमेज नहीं मिली।"}
     };
     const categoryText = {
       en:{"zombie-memes":"Zombie Memes","nightmare-horror":"Nightmare & Horror","undead-after-dark":"Undead After Dark","zombie-characters":"Zombie Characters","apocalypse-survival":"Apocalypse & Survival","crypto-apocalypse":"Crypto Apocalypse","community-creations":"Community Creations"},
@@ -167,6 +167,7 @@
     const renderToolbar = () => {
       const t = controlText[galleryLang] || controlText.en;
       const c = categoryText[galleryLang] || categoryText.en;
+      filterRow.setAttribute("aria-label", t.categories);
       searchInput.placeholder = t.search;
       searchInput.setAttribute("aria-label", t.search);
       sortSelect.setAttribute("aria-label", t.sort);
