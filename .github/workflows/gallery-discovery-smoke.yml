@@ -8,6 +8,17 @@ on:
       - "gallery.js"
       - "gallery.css"
       - "gallery-data.json"
+      - "language.js"
+      - "sitemap-gallery-pages.xml"
+      - "scripts/generate_localized_gallery_pages.py"
+      - "de/gallery.html"
+      - "fr/gallery.html"
+      - "it/gallery.html"
+      - "ja/gallery.html"
+      - "zh-CN/gallery.html"
+      - "ru/gallery.html"
+      - "tr/gallery.html"
+      - "hi/gallery.html"
       - "scripts/sync_gallery.py"
       - "scripts/sync_gallery_image_seo.py"
       - "scripts/export_pinterest_queue.py"
@@ -42,7 +53,7 @@ jobs:
           npm install --no-save playwright
           npx playwright install --with-deps chromium
       - name: Validate Python scripts
-        run: python -m py_compile scripts/sync_gallery.py scripts/sync_gallery_image_seo.py scripts/export_pinterest_queue.py
+        run: python -m py_compile scripts/sync_gallery.py scripts/sync_gallery_image_seo.py scripts/export_pinterest_queue.py scripts/generate_localized_gallery_pages.py
       - name: Validate gallery JSON and generated index
         run: |
           python - <<'PY'
@@ -69,6 +80,22 @@ jobs:
           ns = {"image": "http://www.google.com/schemas/sitemap-image/1.1"}
           assert len(sitemap.findall(".//image:image", ns)) == len(items), "image sitemap count mismatch"
           print("Gallery data, generated cards and image sitemap are consistent.")
+          from pathlib import Path
+          locales = ["de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"]
+          for locale in locales:
+              page = Path(locale, "gallery.html").read_text(encoding="utf-8")
+              assert f'<html lang="{locale}">' in page
+              assert f'<link rel="canonical" href="https://zombcash.github.io/{locale}/gallery.html">' in page
+              assert page.count('rel="alternate" hreflang=') == 10
+              assert 'href="../gallery.css?' in page
+              assert 'src="../gallery.js?' in page
+              assert 'src="../language.js?' in page
+          locale_sitemap = ET.parse("sitemap-gallery-pages.xml")
+          assert len(locale_sitemap.findall(".//{http://www.sitemaps.org/schemas/sitemap/0.9}url")) == 9
+          assert "sitemap-gallery-pages.xml" in Path("robots.txt").read_text(encoding="utf-8")
+          language_js = Path("language.js").read_text(encoding="utf-8")
+          assert '"/gallery.html": ["de","fr","it","ja","zh-CN","ru","tr","hi"]' in language_js
+          assert 'if(file===\\'zombie-maker.html\\')' in language_js
           sync_workflow = Path(".github/workflows/sync-zombie-gallery.yml").read_text(encoding="utf-8")
           assert "scripts/export_pinterest_queue.py" in sync_workflow
           assert "pinterest-queue.json" in sync_workflow
