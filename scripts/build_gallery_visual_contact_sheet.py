@@ -36,6 +36,9 @@ def fit_text(draw, text, selected_font, max_width):
 
 
 def main():
+    if not REPORT.is_file():
+        print("No visual audit report was produced; Playwright did not reach image capture.")
+        return
     report = json.loads(REPORT.read_text(encoding="utf-8"))
     images = report.get("images", [])
     if not images:
