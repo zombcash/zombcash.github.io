@@ -158,8 +158,8 @@ def build_page(base, locale):
     schema_json = json.dumps(schema, ensure_ascii=False, separators=(",", ":"))
     schema_json = schema_json.replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
     schema_tag = '<script id="gallery-collection-jsonld" type="application/ld+json">' + schema_json + '</script>'
-    page = re.sub(r'\\s*<script id="gallery-collection-jsonld" type="application/ld\\+json">.*?</script>', "", page, flags=re.I | re.S)
-    page = page.replace("</head>", schema_tag + "\\n</head>", 1)
+    page = re.sub(r'\s*<script id="gallery-collection-jsonld" type="application/ld\+json">.*?</script>', "", page, flags=re.I | re.S)
+    page = page.replace("</head>", schema_tag + "\n</head>", 1)
 
     if locale != "en":
         asset_pattern = re.compile(r'\b(href|src)="([^"]+)"')
