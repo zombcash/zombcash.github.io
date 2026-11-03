@@ -70,3 +70,10 @@ Localized fields should be additive and structured, e.g. `localized.en.title`, `
 - Community Creations → Community Creations (only with creator permission)
 
 Every pin must have an image-specific title, natural description, image alt text, relevant board, canonical site destination and stable gallery image ID in the export ledger.
+
+
+## Current branch implementation snapshot — 2026-11-03
+- gallery-data.json is now schema version 2. All 50 entries preserve the six original Telegram source fields and include series, category_ids[], tags[], language and metadata_version.
+- Provisional category assignments from series/caption only: zombie-memes 17; crypto-apocalypse 17; nightmare-horror 16; undead-after-dark 17. The crypto overlap is based on explicit portfolio/market/trading wording in captions.
+- Search, category chips and newest/oldest sorting are implemented on the feature branch with localized labels for en, de, fr, it, ja, zh-CN, ru, tr and hi.
+- These categories are not a substitute for visual editorial review. title, description and alt_text remain unfilled until the actual image content has been inspected. Rights status and creator permission must also be reviewed before Pinterest distribution.
