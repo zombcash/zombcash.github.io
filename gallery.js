@@ -211,6 +211,7 @@
 
     const renderToolbar = () => {
       const t = controlText[galleryLang] || controlText.en;
+      galleryLikeLabels = t;
       const c = categoryText[galleryLang] || categoryText.en;
       filterRow.setAttribute("aria-label", t.categories);
       searchInput.placeholder = t.search;
@@ -233,6 +234,80 @@
       });
       resultsLabel.textContent = t.results + ": " + grid.querySelectorAll(".gallery-card").length + " / " + items.length;
     };
+    const GALLERY_API = "https://zombcash-bot.fadehost.app";
+    const loadGalleryLikeStats = async (force = false) => {
+      const ids = [...new Set(cards.map(card => card.dataset.galleryId).filter(Boolean))]
+        .filter(id => force || !galleryLikeStats.has(id));
+      if (!ids.length) return;
+      const token = readGalleryToken();
+      const headers = {};
+      if (token) headers.Authorization = "Bearer " + token;
+      try {
+        const response = await fetch(GALLERY_API + "/api/gallery/likes?ids=" + encodeURIComponent(ids.join(",")), {
+          headers,
+          cache: "no-store"
+        });
+        if (!response.ok) return;
+        const payload = await response.json();
+        (Array.isArray(payload.stats) ? payload.stats : []).forEach(row => {
+          if (!row || !row.image_id) return;
+          galleryLikeStats.set(row.image_id, {
+            like_count: Number(row.like_count || 0),
+            liked: Boolean(row.liked)
+          });
+        });
+        cards.forEach(updateCardLikeButton);
+        syncLightboxLikeButton();
+      } catch (_) {}
+    };
+
+    handleGalleryLike = async card => {
+      if (!card) return;
+      const token = readGalleryToken();
+      if (!token) {
+        const login = document.querySelector(".top-cta, .survivor-entry-button, .zsh-login-button");
+        login?.click();
+        return;
+      }
+      const imageId = card.dataset.galleryId || "";
+      if (!imageId) return;
+      const current = likeStateFor(card);
+      const button = card.querySelector(".gallery-like-button");
+      if (button) button.disabled = true;
+      try {
+        const response = await fetch(GALLERY_API + "/api/gallery/like", {
+          method: "POST",
+          headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+          body: JSON.stringify({ imageId, liked: !current.liked }),
+          cache: "no-store"
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (response.status === 401) {
+          const login = document.querySelector(".top-cta, .survivor-entry-button, .zsh-login-button");
+          login?.click();
+          return;
+        }
+        if (!response.ok || !payload.ok || !payload.stats) {
+          if (button) button.title = payload.error || galleryLikeLabels.likeError;
+          return;
+        }
+        const stats = {
+          like_count: Number(payload.stats.like_count || 0),
+          liked: Boolean(payload.stats.liked)
+        };
+        galleryLikeStats.set(imageId, stats);
+        cards.forEach(updateCardLikeButton);
+        syncLightboxLikeButton();
+      } catch (_) {
+        if (button) button.title = galleryLikeLabels.likeError;
+      } finally {
+        if (button) button.disabled = false;
+      }
+    };
+
+    document.addEventListener("zombcash:survivorlogin", () => { loadGalleryLikeStats(true); });
+    document.addEventListener("zombcash:survivorlogout", () => { loadGalleryLikeStats(true); });
+
     const renderGallery = () => {
       let visible = items.filter(item => {
         const matchesCategory = selectedCategory === "all" || (Array.isArray(item.category_ids) && item.category_ids.includes(selectedCategory));
@@ -248,13 +323,14 @@
         const title = String(item.title || caption);
         const image = escapeHtml(item.image);
         const post = item.post_url ? escapeHtml(item.post_url) : "https://t.me/ZOMBCASH";
-        const alt = String(item.alt_text || ("ZombieCash artwork: " + caption));
+        const alt = String(item.alt_text || ("ZombieCash gallery artwork accompanying the story: " + (item.description || caption)));
         const labels = categoryText[galleryLang] || categoryText.en;
         const categoryMarkup = (item.category_ids || []).map(id => '<span class="gallery-category-tag">' + escapeHtml(labels[id] || id) + '</span>').join("");
-        return '<article class="gallery-card" data-gallery-id="' + escapeHtml(item.id || "") + '" data-categories="' + escapeHtml((item.category_ids || []).join(" ")) + '" data-gallery-title="' + escapeHtml(title) + '" data-gallery-description="' + escapeHtml(item.description || "") + '" tabindex="0" role="button" aria-label="Open image: ' + escapeHtml(title) + '">' +
+        return '<article class="gallery-card" data-gallery-id="' + escapeHtml(item.id || "") + '" data-categories="' + escapeHtml((item.category_ids || []).join(" ")) + '" data-gallery-title="' + escapeHtml(title) + '" data-gallery-description="' + escapeHtml(item.description || "") + '" tabindex="0" role="group" aria-label="Open image: ' + escapeHtml(title) + '">' +
           '<img src="' + image + '" alt="' + escapeHtml(alt) + '" loading="lazy" decoding="async">' +
           '<div class="gallery-caption"><p data-original-caption="' + escapeHtml(item.caption) + '" data-original-title="' + escapeHtml(title) + '">' + escapeHtml(title) + '</p>' +
           '<div class="gallery-card-tags">' + categoryMarkup + '</div>' +
+          '<div class="gallery-card-actions"><button class="gallery-like-button" type="button" aria-pressed="false" title="' + escapeHtml(galleryLikeLabels.loginLike) + '"><span class="gallery-like-heart" aria-hidden="true">♡</span><span class="gallery-like-count">0</span></button></div>' +
           '<a href="' + post + '" target="_blank" rel="noreferrer">'+escapeHtml(gtx("source"))+'</a></div></article>';
       }).join("") : '<div class="gallery-state"><h3>' + escapeHtml((controlText[galleryLang]||controlText.en).empty) + '</h3></div>';
       cards = Array.from(grid.querySelectorAll(".gallery-card"));
@@ -266,7 +342,10 @@
           image.src = "/zombcash-hand-logo.svg";
           image.alt = "Gallery image temporarily unavailable";
         }, { once: true });
-        card.addEventListener("click", event => { if (!event.target.closest("a")) showImage(index); });
+        const likeButton = card.querySelector(".gallery-like-button");
+        likeButton?.addEventListener("click", event => { event.preventDefault(); event.stopPropagation(); handleGalleryLike?.(card); });
+        updateCardLikeButton(card);
+        card.addEventListener("click", event => { if (!event.target.closest("a,button")) showImage(index); });
         card.addEventListener("keydown", event => {
           if ((event.key === "Enter" || event.key === " ") && event.target === card) {
             event.preventDefault();
@@ -275,6 +354,7 @@
         });
       });
       renderToolbarCount();
+      loadGalleryLikeStats();
     };
     const renderToolbarCount = () => {
       const t = controlText[galleryLang] || controlText.en;
