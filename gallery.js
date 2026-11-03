@@ -129,7 +129,8 @@
     const card = cards[activeIndex];
     const title = card.dataset.galleryTitle || card.querySelector(".gallery-caption p")?.textContent || "";
     const description = card.dataset.galleryDescription || "";
-    const categories = card.querySelector(".gallery-card-tags")?.textContent || "";
+    const categories = Array.from(card.querySelectorAll(".gallery-category-tag"))
+      .map(tag => tag.textContent.trim()).filter(Boolean).join(" · ");
     const sourceUrl = card.querySelector(".gallery-caption a")?.href || "https://t.me/ZOMBCASH";
     const shareLabels = galleryShareLabels[galleryLang] || galleryShareLabels.en;
     trackGalleryEvent("gallery_image_open", "image_" + String(card.dataset.galleryId || "").replace(/[^0-9]/g, "_"));
@@ -141,7 +142,7 @@
       '<button class="gallery-lightbox-like" type="button" aria-pressed="false"></button>' +
       '<button class="gallery-lightbox-share" type="button" aria-label="' + escapeHtml(shareLabels.share) + '">' + escapeHtml(shareLabels.share) + '</button>' +
       '</span>' +
-      '<a class="gallery-lightbox-source" href="' + escapeHtml(sourceUrl) + '" target="_blank" rel="noreferrer">' + escapeHtml(gtx("source")) + ' ↗</a>';
+      '<a class="gallery-lightbox-source" href="' + escapeHtml(sourceUrl) + '" target="_blank" rel="noreferrer">' + escapeHtml(gtx("source")) + '</a>';
     syncLightboxLikeButton();
     lightbox.classList.add("is-open");
     document.body.classList.add("gallery-lightbox-open");
