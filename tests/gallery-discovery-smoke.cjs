@@ -58,6 +58,8 @@ const { spawn } = require("child_process");
     const horror = await page.locator("#gallery-grid .gallery-card").count();
     if (horror !== 16) throw new Error("Nightmare filter expected 16 cards, got " + horror);
     await page.locator(".gallery-search").fill("goldfish");
+    const searchTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_search"));
+    if (!searchTracked) throw new Error("Gallery search analytics event was not recorded");
     const search = await page.locator("#gallery-grid .gallery-card").count();
     if (search !== 0) throw new Error("Search should hide non-matching horror items, got " + search);
     await page.locator(".gallery-reset").click();
