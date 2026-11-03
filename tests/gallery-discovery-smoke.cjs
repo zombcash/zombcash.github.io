@@ -22,6 +22,17 @@ const path = require("path");
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     await page.route("https://**/*", route => route.abort());
     await page.route("https://cdn4.telesco.pe/file/**", route => route.continue());
+    const imageNetworkEvents = [];
+    page.on("response", response => {
+      if (response.url().includes("cdn4.telesco.pe/file/") && response.status() >= 400) {
+        imageNetworkEvents.push({ type: "http-error", status: response.status(), url: response.url() });
+      }
+    });
+    page.on("requestfailed", request => {
+      if (request.url().includes("cdn4.telesco.pe/file/")) {
+        imageNetworkEvents.push({ type: "request-failed", error: request.failure()?.errorText || "unknown", url: request.url() });
+      }
+    });
     await page.route("https://zombcash-bot.fadehost.app/api/gallery/likes?*", async route => {
       const url = new URL(route.request().url());
       const ids = (url.searchParams.get("ids") || "").split(",").filter(Boolean);
@@ -61,8 +72,8 @@ const path = require("path");
         return {
           id: element.dataset.galleryId || "",
           title: element.dataset.galleryTitle || "",
-          src: img?.currentSrc || img?.src || "",
-          alt: img?.alt || "",
+          src: img?.dataset.originalSrc || img?.currentSrc || img?.src || "",
+          alt: img?.dataset.originalAlt || img?.alt || "",
           naturalWidth: img?.naturalWidth || 0,
           naturalHeight: img?.naturalHeight || 0,
           fallbackApplied: Boolean(img?.dataset.fallbackApplied)
@@ -81,6 +92,7 @@ const path = require("path");
       loaded: visualAudit.filter(item => item.naturalWidth > 0 && !item.fallbackApplied).length,
       fallback: visualAudit.filter(item => item.fallbackApplied).length,
       failed: visualAudit.filter(item => item.naturalWidth === 0),
+      networkEvents: imageNetworkEvents,
       images: visualAudit
     }, null, 2) + "\n");
     await page.evaluate(() => {
@@ -208,7 +220,7 @@ const path = require("path");
       await localized.close();
     }
 
-    console.log(JSON.stringify({ status: "passed", initial, horror, search, reset, matching, oldestFirst, japaneseFilter, mobile: overflow, imageLoadAudit, localeAudit }));
+    console.log(JSON.stringify({ status: "passed", initial, horror, search, reset, matching, oldestFirst, japaneseFilter, mobile: overflow, imageLoadAudit, imageNetworkEvents, localeAudit }));
   } finally {
     if (browser) await browser.close();
     server.kill();
