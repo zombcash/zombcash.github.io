@@ -81,7 +81,10 @@ function safe(value) {
               articleCards: main?.querySelectorAll('article.card').length || 0,
               faqQuestions: main?.querySelectorAll('#zombcash-faq h3').length || 0,
               infraQuestions: main?.querySelectorAll('#ai-infrastructure-reality li').length || 0,
-              detailedChecklistItems: main?.querySelectorAll('#expanded-survivor-checklist li').length || 0,
+              detailedChecklistItems: (() => {
+                const checklist = main?.querySelector('#expanded-survivor-checklist');
+                return checklist?.querySelectorAll('li').length || checklist?.querySelectorAll('article.card').length || 0;
+              })(),
               images: [...document.querySelectorAll('main img')].map(img => ({
                 src: img.currentSrc || img.src,
                 loaded: img.complete && img.naturalWidth > 0,
