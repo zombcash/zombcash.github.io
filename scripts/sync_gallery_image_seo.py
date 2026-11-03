@@ -48,11 +48,12 @@ def make_cards(items):
         esc_description = html.escape(description, quote=True)
         esc_alt = html.escape(alt_text, quote=True)
         gallery_id = html.escape(str(item.get("id") or ""), quote=True)
+        anchor_id = html.escape(str(item.get("anchor_id") or ""), quote=True)
         categories = html.escape(" ".join(item.get("category_ids") or []), quote=True)
         if not image.startswith(("https://", "http://")):
             continue
         cards.append(
-            '      <article class="gallery-card" data-gallery-id="' + gallery_id + '" data-categories="' + categories + '" data-gallery-title="' + esc_title + '" data-gallery-description="' + esc_description + '" tabindex="0" role="group" aria-label="Open image: ' + esc_title + '">\n'
+            '      <article class="gallery-card" id="' + anchor_id + '" data-gallery-id="' + gallery_id + '" data-categories="' + categories + '" data-gallery-title="' + esc_title + '" data-gallery-description="' + esc_description + '" tabindex="0" role="group" aria-label="Open image: ' + esc_title + '">\n'
             '        <img src="' + image + '" alt="' + esc_alt + '" title="' + esc_title + '" loading="lazy" decoding="async">\n'
             '        <div class="gallery-caption"><p data-original-caption="' + esc_raw + '" data-original-title="' + esc_title + '">' + esc_title + '</p><div class="gallery-card-tags">' + "".join('<span class="gallery-category-tag">' + html.escape(CATEGORY_LABELS.get(category, category), quote=True) + '</span>' for category in (item.get("category_ids") or [])) + '</div><a href="' + post + '" target="_blank" rel="noreferrer">SOURCE ↗</a></div>\n'
             '      </article>'
