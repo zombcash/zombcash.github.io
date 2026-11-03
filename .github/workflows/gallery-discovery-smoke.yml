@@ -1,4 +1,5 @@
 name: Gallery discovery smoke tests
+# Validate latest gallery metadata, including intrinsic image dimensions.
 
 on:
   pull_request:
