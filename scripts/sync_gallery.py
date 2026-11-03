@@ -108,7 +108,8 @@ def main():
         "tags", "language", "credit", "rights_status", "alt_review_status", "alt_reviewed_at", "alt_review_method", "localized",
         "metadata_version", "slug", "anchor_id", "pinterest_status", "pinterest_board_id",
         "pinterest_board_category", "pinterest_title", "pinterest_description", "pinterest_alt",
-        "pinterest_destination_url",
+        "pinterest_destination_url", "pinterest_pin_id", "pinterest_pin_url",
+        "pinterest_published_at", "pinterest_published_destination", "pinterest_publication_verified_at",
     )
     for item in items:
         old = previous.get(str(item.get("id")), {})
