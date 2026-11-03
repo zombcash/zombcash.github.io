@@ -86,7 +86,16 @@
     const image = cards[activeIndex].querySelector("img");
     fullImage.src = image.currentSrc || image.src;
     fullImage.alt = image.alt || "";
-    fullCaption.textContent = cards[activeIndex].querySelector(".gallery-caption p")?.textContent || "";
+    const card = cards[activeIndex];
+    const title = card.dataset.galleryTitle || card.querySelector(".gallery-caption p")?.textContent || "";
+    const description = card.dataset.galleryDescription || "";
+    const categories = card.querySelector(".gallery-card-tags")?.textContent || "";
+    const sourceUrl = card.querySelector(".gallery-caption a")?.href || "https://t.me/ZOMBCASH";
+    fullCaption.innerHTML =
+      '<strong class="gallery-lightbox-title">' + escapeHtml(title) + '</strong>' +
+      (description ? '<span class="gallery-lightbox-description">' + escapeHtml(description) + '</span>' : '') +
+      (categories ? '<span class="gallery-lightbox-categories">' + escapeHtml(categories) + '</span>' : '') +
+      '<a class="gallery-lightbox-source" href="' + escapeHtml(sourceUrl) + '" target="_blank" rel="noreferrer">' + escapeHtml(gtx("source")) + ' ↗</a>';
     lightbox.classList.add("is-open");
     document.body.classList.add("gallery-lightbox-open");
     closeButton.focus();
@@ -207,7 +216,7 @@
         const alt = String(item.alt_text || ("ZombieCash artwork: " + caption));
         const labels = categoryText[galleryLang] || categoryText.en;
         const categoryMarkup = (item.category_ids || []).map(id => '<span class="gallery-category-tag">' + escapeHtml(labels[id] || id) + '</span>').join("");
-        return '<article class="gallery-card" tabindex="0" role="button" aria-label="Open image: ' + escapeHtml(title) + '">' +
+        return '<article class="gallery-card" data-gallery-id="' + escapeHtml(item.id || "") + '" data-categories="' + escapeHtml((item.category_ids || []).join(" ")) + '" data-gallery-title="' + escapeHtml(title) + '" data-gallery-description="' + escapeHtml(item.description || "") + '" tabindex="0" role="button" aria-label="Open image: ' + escapeHtml(title) + '">' +
           '<img src="' + image + '" alt="' + escapeHtml(alt) + '" loading="lazy" decoding="async">' +
           '<div class="gallery-caption"><p data-original-caption="' + escapeHtml(item.caption) + '" data-original-title="' + escapeHtml(title) + '">' + escapeHtml(title) + '</p>' +
           '<div class="gallery-card-tags">' + categoryMarkup + '</div>' +
