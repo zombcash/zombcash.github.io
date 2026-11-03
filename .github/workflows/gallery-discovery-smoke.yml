@@ -1,0 +1,79 @@
+name: Gallery discovery smoke tests
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "gallery.html"
+      - "gallery.js"
+      - "gallery.css"
+      - "gallery-data.json"
+      - "scripts/sync_gallery.py"
+      - "scripts/sync_gallery_image_seo.py"
+      - "tests/gallery-discovery-smoke.cjs"
+      - ".github/workflows/gallery-discovery-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gallery-discovery-\${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gallery-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Validate Python scripts
+        run: python -m py_compile scripts/sync_gallery.py scripts/sync_gallery_image_seo.py
+      - name: Validate gallery JSON and generated index
+        run: |
+          python - <<'PY'
+          import json
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+          data = json.loads(Path("gallery-data.json").read_text(encoding="utf-8"))
+          assert data.get("schema_version") == 2
+          items = data.get("items")
+          assert isinstance(items, list) and len(items) == 50
+          ids = [item.get("id") for item in items]
+          images = [item.get("image") for item in items]
+          assert len(set(ids)) == len(ids), "duplicate gallery IDs"
+          assert len(set(images)) == len(images), "duplicate image URLs"
+          allowed = {"zombie-memes", "nightmare-horror", "undead-after-dark", "zombie-characters", "apocalypse-survival", "crypto-apocalypse", "community-creations"}
+          for item in items:
+              assert item.get("image", "").startswith("https://")
+              assert item.get("post_url", "").startswith("https://t.me/")
+              assert item.get("category_ids") and set(item["category_ids"]) <= allowed
+              assert item.get("series") and item.get("metadata_version") == 1
+          html = Path("gallery.html").read_text(encoding="utf-8")
+          assert html.count('data-gallery-id=') == len(items), "generated HTML card count mismatch"
+          sitemap = ET.parse("sitemap-gallery-images.xml")
+          ns = {"image": "http://www.google.com/schemas/sitemap-image/1.1"}
+          assert len(sitemap.findall(".//image:image", ns)) == len(items), "image sitemap count mismatch"
+          print("Gallery data, generated cards and image sitemap are consistent.")
+          PY
+      - name: Run desktop and mobile interaction tests
+        run: node tests/gallery-discovery-smoke.cjs
+      - name: Upload gallery screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gallery-discovery-smoke-evidence
+          path: gallery-*-smoke.png
+          if-no-files-found: ignore
+          retention-days: 14
