@@ -37,10 +37,12 @@ def make_cards(items):
         esc_raw = html.escape(caption_raw, quote=True)
         esc_title = html.escape(title, quote=True)
         esc_alt = html.escape(alt_text, quote=True)
+        gallery_id = html.escape(str(item.get("id") or ""), quote=True)
+        categories = html.escape(" ".join(item.get("category_ids") or []), quote=True)
         if not image.startswith(("https://", "http://")):
             continue
         cards.append(
-            '      <article class="gallery-card" tabindex="0" role="button" aria-label="Open image: ' + esc_caption + '">\n'
+            '      <article class="gallery-card" data-gallery-id="' + gallery_id + '" data-categories="' + categories + '" tabindex="0" role="button" aria-label="Open image: ' + esc_title + '">\n'
             '        <img src="' + image + '" alt="' + esc_alt + '" title="' + esc_title + '" loading="lazy" decoding="async">\n'
             '        <div class="gallery-caption"><p data-original-caption="' + esc_raw + '">' + esc_caption + '</p><a href="' + post + '" target="_blank" rel="noreferrer">SOURCE ↗</a></div>\n'
             '      </article>'
