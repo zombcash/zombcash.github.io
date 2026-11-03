@@ -40,7 +40,7 @@ Add fields without deleting the original:
 - `rights_status`: `project-owned`, `permission-confirmed`, or `review-required`.
 - `metadata_version`: integer schema version.
 - `slug` and `anchor_id`: stable per-image website destination anchors.
-- `pinterest_status`, `pinterest_board_id`, `pinterest_board_category`, `pinterest_title`, `pinterest_description`, `pinterest_alt`, `pinterest_destination_url`: controlled publishing metadata; default to blocked until rights and visual ALT review are approved.
+- `pinterest_status`, `pinterest_board_id`, `pinterest_board_category`, `pinterest_title`, `pinterest_description`, `pinterest_alt`, `pinterest_destination_url`: controlled publishing metadata; destination_url stores the stable canonical image anchor, while the exporter adds Pinterest UTM parameters to the outbound Pin URL. Default to blocked until rights and visual ALT review are approved.
 
 Localized fields should be additive and structured, e.g. `localized.en.title`, `localized.ru.title`; never overwrite the original source caption. If a localized field is absent, use the source language as a clearly understood fallback.
 
