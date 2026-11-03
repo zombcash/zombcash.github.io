@@ -205,9 +205,12 @@
         const image = escapeHtml(item.image);
         const post = item.post_url ? escapeHtml(item.post_url) : "https://t.me/ZOMBCASH";
         const alt = String(item.alt_text || ("ZombieCash artwork: " + caption));
+        const labels = categoryText[galleryLang] || categoryText.en;
+        const categoryMarkup = (item.category_ids || []).map(id => '<span class="gallery-category-tag">' + escapeHtml(labels[id] || id) + '</span>').join("");
         return '<article class="gallery-card" tabindex="0" role="button" aria-label="Open image: ' + escapeHtml(title) + '">' +
           '<img src="' + image + '" alt="' + escapeHtml(alt) + '" loading="lazy" decoding="async">' +
           '<div class="gallery-caption"><p data-original-caption="' + escapeHtml(item.caption) + '" data-original-title="' + escapeHtml(title) + '">' + escapeHtml(title) + '</p>' +
+          '<div class="gallery-card-tags">' + categoryMarkup + '</div>' +
           '<a href="' + post + '" target="_blank" rel="noreferrer">'+escapeHtml(gtx("source"))+'</a></div></article>';
       }).join("") : '<div class="gallery-state"><h3>' + escapeHtml((controlText[galleryLang]||controlText.en).empty) + '</h3></div>';
       cards = Array.from(grid.querySelectorAll(".gallery-card"));
@@ -233,7 +236,7 @@
       const t = controlText[galleryLang] || controlText.en;
       resultsLabel.textContent = t.results + ": " + cards.length + " / " + items.length;
     };
-    refreshGalleryControls = renderToolbar;
+    refreshGalleryControls = () => { renderToolbar(); renderGallery(); };
     searchInput.addEventListener("input", () => { searchTerm = searchInput.value.trim().toLocaleLowerCase(galleryLang); renderGallery(); });
     sortSelect.addEventListener("change", () => { sortOrder = sortSelect.value; renderGallery(); });
     resetButton.addEventListener("click", () => { selectedCategory = "all"; searchTerm = ""; sortOrder = "newest"; searchInput.value = ""; sortSelect.value = "newest"; renderToolbar(); renderGallery(); });
