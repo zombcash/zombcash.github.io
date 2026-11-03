@@ -56,6 +56,16 @@ const localizedEditorialPages = {
     "tr",
     "hi"
   ],
+  "/memecoin-promotion-platforms-comparison.html": [
+    "de",
+    "fr",
+    "it",
+    "ja",
+    "zh-CN",
+    "ru",
+    "tr",
+    "hi"
+  ],
   "/transmission-rug-pull-check.html": [
     "de",
     "fr",
