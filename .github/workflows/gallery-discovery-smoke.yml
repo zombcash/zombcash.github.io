@@ -166,14 +166,15 @@ jobs:
           import json
           from pathlib import Path
           queue = json.loads(Path("pinterest-queue.json").read_text(encoding="utf-8"))
-          assert queue["eligible_count"] + queue["blocked_count"] == 50
+          assert queue["published_count"] + queue["eligible_count"] + queue["blocked_count"] == 50
+          assert len(queue["published"]) == queue["published_count"]
           assert len(queue["eligible"]) == queue["eligible_count"]
           assert len(queue["blocked"]) == queue["blocked_count"]
-          assert len({row["id"] for row in queue["eligible"] + queue["blocked"]}) == 50
-          assert queue["eligible_count"] == 0 and queue["blocked_count"] == 50
-          assert sum("visual-alt-review-required" in row["reasons"] for row in queue["blocked"]) == 2
-          assert all("rights-review-required" in row["reasons"] for row in queue["blocked"])
-          print(f"Pinterest queue: {queue['eligible_count']} eligible; {queue['blocked_count']} blocked.")
+          assert len({row["id"] for row in queue["published"] + queue["eligible"] + queue["blocked"]}) == 50
+          assert queue["published_count"] == 50
+          assert queue["eligible_count"] == 0 and queue["blocked_count"] == 0
+          assert all(row["pin_id"] and row["board_id"] and row["pin_url"] for row in queue["published"])
+          print(f"Pinterest inventory: {queue['published_count']} published; {queue['eligible_count']} eligible; {queue['blocked_count']} blocked.")
           PY
       - name: Run desktop and mobile interaction tests
         run: node tests/gallery-discovery-smoke.cjs
