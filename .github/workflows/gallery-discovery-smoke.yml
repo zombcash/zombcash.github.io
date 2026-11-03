@@ -78,8 +78,8 @@ jobs:
           assert data.get("schema_version") == 2
           items = data.get("items")
           assert isinstance(items, list) and len(items) == 50
-          assert sum(item.get("alt_review_status") == "visual-reviewed" for item in items) == 48
-          assert sum(item.get("alt_review_status") == "caption-derived-pending-visual-review" for item in items) == 2
+          assert sum(item.get("alt_review_status") == "visual-reviewed" for item in items) == 50
+          assert sum(item.get("alt_review_status") == "caption-derived-pending-visual-review" for item in items) == 0
           ids = [item.get("id") for item in items]
           images = [item.get("image") for item in items]
           anchors = [item.get("anchor_id") for item in items]
