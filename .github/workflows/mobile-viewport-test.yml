@@ -35,6 +35,12 @@ on:
 permissions:
   contents: read
 
+# Keep only the newest validation run for a burst of related commits.
+# Older runs are cancelled instead of producing duplicate failure emails.
+concurrency:
+  group: mobile-viewport-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   responsive-smoke:
     runs-on: ubuntu-latest
@@ -58,7 +64,7 @@ jobs:
       - name: Test multilingual comparison article visually across locales and viewports
         run: node tests/memecoin-platforms-article-smoke.cjs
       - name: Upload screenshots and diagnostics
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: mobile-viewport-evidence
