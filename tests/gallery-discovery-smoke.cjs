@@ -182,6 +182,13 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     const reset = await page.locator("#gallery-grid .gallery-card").count();
     if (reset !== 50) throw new Error("Clear filters should restore 50 cards, got " + reset);
     if (await page.locator("#gallery-grid .gallery-like-button").count() !== 50) throw new Error("Clear filters should restore like controls");
+    await page.getByRole("button", { name: "Zombie Characters" }).click();
+    const zombieCharacters = await page.locator("#gallery-grid .gallery-card").count();
+    if (zombieCharacters !== 17) throw new Error("Zombie Characters filter should show 17 visually classified items, got " + zombieCharacters);
+    await page.getByRole("button", { name: "Apocalypse & Survival" }).click();
+    const apocalypseSurvival = await page.locator("#gallery-grid .gallery-card").count();
+    if (apocalypseSurvival !== 3) throw new Error("Apocalypse & Survival filter should show 3 visually classified items, got " + apocalypseSurvival);
+    await page.locator(".gallery-reset").click();
     await page.locator(".gallery-search").fill("goldfish");
     const matching = await page.locator("#gallery-grid .gallery-card").count();
     if (matching !== 1) throw new Error("Search expected one goldfish caption, got " + matching);
