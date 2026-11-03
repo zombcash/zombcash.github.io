@@ -135,6 +135,7 @@ For every image:
 ## Phase 5 — Pinterest distribution
 - [x] Add stable per-image gallery anchors and Pinterest destination URLs for all 50 current images.
 - [x] Add a local queue exporter that includes an image only when rights are project-owned/permission-confirmed, ALT has been visually reviewed, a Pinterest board ID is assigned, and the pin is explicitly marked ready.
+- [x] Add per-pin UTM parameters (`utm_source=pinterest`, `utm_medium=social`, campaign and stable image ID) while retaining the exact canonical image anchor separately.
 - [x] Add queue regeneration to the hourly Telegram gallery sync so new images cannot silently bypass the Pinterest rights/ALT gate.
 - [x] Generate the initial queue: 0 eligible, 50 blocked. No publishing occurs from this exporter.
 - [ ] Create dedicated ZombieCash boards in Zernio/Pinterest and assign their IDs; unrelated existing boards are not acceptable.
