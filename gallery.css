@@ -133,3 +133,25 @@ body.gallery-lightbox-open{overflow:hidden}
   .gallery-category-tag{font-size:7px;padding:3px 4px}
   .gallery-like-button{min-height:30px;padding:5px 8px}
 }
+
+/* Lightbox actions: keep interactive controls in the caption flow, not over the image. */
+.gallery-lightbox-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.gallery-lightbox figcaption .gallery-lightbox-like,
+.gallery-lightbox figcaption .gallery-lightbox-share{
+  position:static!important;display:inline-flex!important;align-items:center;justify-content:center;
+  width:auto!important;min-width:0;height:auto!important;min-height:34px;padding:7px 12px!important;
+  border:1px solid #3d563f!important;background:#0a130c!important;color:#b7c8b8!important;
+  font:700 9px Orbitron,sans-serif!important;letter-spacing:.45px;line-height:1.2!important;
+}
+.gallery-lightbox figcaption .gallery-lightbox-share:hover,
+.gallery-lightbox figcaption .gallery-lightbox-like:hover,
+.gallery-lightbox figcaption .gallery-lightbox-like[aria-pressed="true"]{
+  border-color:#9bff45!important;background:#9bff4514!important;color:#cfffad!important;
+}
+.gallery-lightbox figcaption .gallery-lightbox-like:focus-visible,
+.gallery-lightbox figcaption .gallery-lightbox-share:focus-visible{outline:2px solid #9bff45;outline-offset:2px}
+@media(max-width:720px){
+  .gallery-lightbox-actions{gap:6px}
+  .gallery-lightbox figcaption .gallery-lightbox-like,
+  .gallery-lightbox figcaption .gallery-lightbox-share{min-height:32px;padding:6px 9px!important;font-size:8px!important}
+}
