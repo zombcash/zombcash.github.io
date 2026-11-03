@@ -44,7 +44,7 @@ Work branch: `growth-gallery-roadmap-2026-11`.
 - Added 50 unique editorial titles and 50 concise story descriptions derived strictly from the original Telegram captions. All 50 entries carry rights_status=review-required and alt_review_status=caption-derived-pending-visual-review; the ALT text is explicitly contextual/caption-derived, not claimed as a verified visual description.
 - Current provisional category coverage (based on existing series labels and caption semantics, not yet visual-confirmed): zombie-memes 17, crypto-apocalypse 17, nightmare-horror 16, undead-after-dark 17. Multi-category assignment is intentional.
 - Updated scripts/sync_gallery.py so future scheduled syncs preserve editorial fields by stable Telegram image ID instead of silently wiping them.
-- Added localized category chips, text search (title/caption/description/series/tags), newest/oldest sorting and clear-filter action in gallery.js; all nine locale dictionaries include control and category labels.
+- Added localized category chips, text search (title/caption/description/series/tags), newest/oldest/most-liked sorting and clear-filter action in gallery.js; all nine locale dictionaries include control and category labels.
 - Expanded the lightbox to show title, caption-derived description, category labels and the original Telegram source link.
 - Added responsive toolbar styling in gallery.css, refreshed gallery asset cache versions, and regenerated the branch's crawlable 50-card HTML plus 50-image sitemap from the current JSON.
 - Updated the SEO generator to use editorial title/ALT/description fields when supplied and to retain stable image/category attributes in generated cards.
