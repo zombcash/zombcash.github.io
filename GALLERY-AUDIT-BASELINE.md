@@ -38,15 +38,34 @@ Work branch: `growth-gallery-roadmap-2026-11`.
 6. Pinterest export must be deduplicated and tracked per image; do not publish automatically until account/integration and permissions are confirmed.
 7. No production UI changes were made during this baseline audit.
 
+## Work update — 2026-11-03
+
+- Added schema version 2 and conservative series/category metadata to all 50 current entries. Existing Telegram source fields were preserved.
+- Current provisional category coverage (based on existing series labels and caption semantics, not yet visual-confirmed): zombie-memes 17, crypto-apocalypse 17, nightmare-horror 16, undead-after-dark 17. Multi-category assignment is intentional.
+- Updated scripts/sync_gallery.py so future scheduled syncs preserve editorial fields by stable Telegram image ID instead of silently wiping them.
+- Added localized category chips, text search (title/caption/description/tags), and newest/oldest sorting in gallery.js; all nine locale dictionaries include control and category labels.
+- Added responsive toolbar styling in gallery.css, refreshed gallery asset cache versions, and regenerated the branch's crawlable 50-card HTML plus 50-image sitemap from the current JSON.
+- Updated the SEO generator to use editorial title/ALT/description fields when supplied and to retain stable image/category attributes in generated cards.
+- JavaScript syntax compilation passed; JSON schema/count/source/category consistency checks passed. No production branch deployment or live-site change has been made.
+- Visual audit of the actual artwork, per-image descriptive ALT, image URL/dimension checks and mobile screenshot audit are still pending. TinyFish visual browser run could not start because its wallet is below zero; no retry was attempted.
+
 ## Phase 0 status
 - [x] Repository and gallery source files inspected.
 - [x] Existing image count, series distribution, unique IDs and URLs checked.
 - [x] Gallery sync and image SEO workflows inspected.
 - [x] Existing Telegram authentication and Supabase schema inspected.
-- [ ] Visual audit of every image on desktop/mobile.
+- [ ] Visual audit of every image on desktop/mobile. Actual artwork content has not yet been verified image-by-image; do not write final ALT text from captions alone.
 - [ ] Verify image URL response, dimensions, formats and source rights.
-- [ ] Confirm live gallery appearance and responsive behavior.
+- [ ] Confirm live gallery appearance and responsive behavior. Public HTML and 50 source cards are readable, but browser screenshot/responsive verification remains pending.
 - [ ] Confirm current Pinterest integration provider/account and authorization route.
+
+## Phase 1 implementation status (feature branch only)
+- [x] Additive taxonomy fields (series, category_ids, tags, language, metadata_version) added to all 50 records.
+- [x] Preserve editorial metadata across hourly Telegram syncs by stable item ID.
+- [x] Add category chips, search and newest/oldest sorting with nine-language labels.
+- [x] Add responsive styling and regenerate crawlable HTML/image sitemap in the feature branch.
+- [ ] Complete per-image visual review before finalizing titles, descriptions, ALT, rights status or Pinterest eligibility.
+- [ ] Add likes/comments only after backend/API design, security review and tests.
 
 ## Next implementation step
 Finalize the taxonomy and backward-compatible metadata schema, then add category browsing and improve per-image title/description/ALT generation. Likes/comments and Pinterest publishing follow after stable IDs and metadata are in place.
