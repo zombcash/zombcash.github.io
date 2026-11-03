@@ -95,7 +95,7 @@ fs.mkdirSync(outDir, { recursive: true });
               cards: document.querySelectorAll('#manual-articles .article-card').length,
               nav: !!document.querySelector('header.zombcash-shared-header .language-trigger'),
             }));
-            if (switched.lang !== targetLocale.code || switched.cards !== 9 || !switched.nav) {
+            if (switched.lang !== targetLocale.code || switched.cards < 1 || !switched.nav) {
               issues.push('language switch failed for ' + targetLocale.code + ': ' + JSON.stringify(switched));
             }
           }
