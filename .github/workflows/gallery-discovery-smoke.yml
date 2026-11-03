@@ -166,6 +166,8 @@ jobs:
           import json
           from pathlib import Path
           queue = json.loads(Path("pinterest-queue.json").read_text(encoding="utf-8"))
+          ledger = json.loads(Path("pinterest-published-ledger.json").read_text(encoding="utf-8"))
+          assert queue["ledger_total_count"] == ledger["total_verified_pins"] == len(ledger["pins"]) == 50
           assert queue["published_count"] + queue["eligible_count"] + queue["blocked_count"] == 50
           assert len(queue["published"]) == queue["published_count"]
           assert len(queue["eligible"]) == queue["eligible_count"]
