@@ -48,6 +48,8 @@ const { spawn } = require("child_process");
     await page.locator(".gallery-sort").selectOption("oldest");
     const oldestFirst = await page.locator("#gallery-grid .gallery-card").first().getAttribute("data-gallery-id");
     if (!oldestFirst) throw new Error("Sorted cards must retain stable image IDs");
+    await page.locator(".gallery-sort").selectOption("liked");
+    if (await page.locator("#gallery-grid .gallery-card").count() !== 50) throw new Error("Most-liked sort should preserve all gallery cards");
     await page.evaluate(() => {
       document.documentElement.lang = "ja";
       document.dispatchEvent(new CustomEvent("zombcash:languagechange", { detail: { language: "ja" } }));
