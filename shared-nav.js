@@ -1213,8 +1213,8 @@
     it:['HOME','MANUALE DA CAMPO','WHITEPAPER','TRASMISSIONI','VOTO DELLA CREW','CENTRO DEI SOPRAVVISSUTI','ARCADE','GALLERIA ZOMBIE','CREA ZOMBIE','LOTTERIA','COMPRA $ZOMBCASH','TORNA ALLA HOME','REGISTRATI CON TELEGRAM','APRI TELEGRAM','MENU'],
     ja:['ホーム','サバイバルガイド','ホワイトペーパー','ニュース配信','クルー投票','サバイバーハブ','アーケード','ゾンビギャラリー','ゾンビメーカー','宝くじ','$ZOMBCASHを購入','ホームに戻る','TELEGRAMで登録','Telegramを開く','メニュー'],
     'zh-CN':['首页','生存指南','白皮书','疫情快讯','团队投票','幸存者中心','街机游戏','僵尸画廊','僵尸制作器','抽奖','购买 $ZOMBCASH','返回首页','使用 TELEGRAM 注册','打开 Telegram','菜单'],
-    ru:['ГЛАВНАЯ','ПОЛЕВОЕ РУКОВОДСТВО','WHITEPAPER','ТРАНСЛЯЦИЯ','ГОЛОСОВАНИЕ КОМАНДЫ','ЦЕНТР ВЫЖИВШИХ','АРКАДА','ГАЛЕРЕЯ ЗОМБИ','СОЗДАТЕЛЬ ЗОМБИ','ЛОТЕРЕЯ','КУПИТЬ $ZOMBCASH','НА ГЛАВНУЮ','РЕГИСТРАЦИЯ ЧЕРЕЗ TELEGRAM','ОТКРЫТЬ TELEGRAM','МЕНЮ'],
-    tr:['ANA SAYFA','SAHA REHBERİ','WHITEPAPER','YAYINLAR','EKİP OYLAMASI','HAYATTA KALANLAR MERKEZİ','ARCADE','ZOMBİ GALERİSİ','ZOMBİ OLUŞTURUCU','ÇEKİLİŞ','$ZOMBCASH SATIN AL','ANA SAYFAYA DÖN','TELEGRAM İLE KAYIT OL','TELEGRAM’I AÇ','MENÜ'],
+    ru:['ГЛАВНАЯ','ПОЛЕВОЕ РУКОВОДСТВО','ДОКУМЕНТ ПРОЕКТА','ТРАНСЛЯЦИЯ','ГОЛОСОВАНИЕ КОМАНДЫ','ЦЕНТР ВЫЖИВШИХ','АРКАДА','ГАЛЕРЕЯ ЗОМБИ','СОЗДАТЕЛЬ ЗОМБИ','ЛОТЕРЕЯ','КУПИТЬ $ZOMBCASH','НА ГЛАВНУЮ','РЕГИСТРАЦИЯ ЧЕРЕЗ TELEGRAM','ОТКРЫТЬ TELEGRAM','МЕНЮ'],
+    tr:['ANA SAYFA','SAHA REHBERİ','PROJE TANITIM BELGESİ','YAYINLAR','EKİP OYLAMASI','HAYATTA KALANLAR MERKEZİ','ARCADE','ZOMBİ GALERİSİ','ZOMBİ OLUŞTURUCU','ÇEKİLİŞ','$ZOMBCASH SATIN AL','ANA SAYFAYA DÖN','TELEGRAM İLE KAYIT OL','TELEGRAM’I AÇ','MENÜ'],
     hi:['होम','जीवन रक्षा मार्गदर्शिका','व्हाइटपेपर','प्रसारण','टीम मतदान','सर्वाइवर केंद्र','आर्केड','ज़ॉम्बी गैलरी','ज़ॉम्बी मेकर','लॉटरी','$ZOMBCASH खरीदें','होम पर लौटें','TELEGRAM से पंजीकरण करें','TELEGRAM खोलें','मेन्यू']
   };
   function localizeNav(language) {
