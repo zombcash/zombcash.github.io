@@ -50,7 +50,7 @@ Extend gallery entries compatibly; preserve existing fields:
 - [ ] Add full validation for all editorial fields and localized metadata.
 
 ### 1C. User experience
-- [x] Add localized category chips, text search (including series), newest/oldest sorting and clear filters on the feature branch. All nine locales have category and control labels.
+- [x] Add localized category chips, text search (including series), newest/oldest/most-liked sorting and clear filters on the feature branch. All nine locales have category and control labels.
 - [x] Add 50 unique editorial titles and caption-derived descriptions, preserving original Telegram captions.
 - [x] Expand the lightbox with title, description, categories and Telegram source link.
 - [x] Add Playwright desktop/mobile interaction smoke tests and a PR GitHub Actions workflow; first run is pending.
