@@ -27,9 +27,10 @@
     hi:{"NIGHTMARE DROP":"दुःस्वप्न ड्रॉप","ZOMBIE MEME OF THE HOUR":"इस घंटे का ज़ॉम्बी मीम","ZOMBIE MEME":"ज़ॉम्बी मीम","UNDEAD AFTER DARK":"रात के बाद अनडेड"}
   };
   let galleryLang=document.documentElement.lang||"en";
+  let refreshGalleryControls = () => {};
   const gtx=k=>(galleryLocale[galleryLang]||galleryLocale.en)[k]||galleryLocale.en[k]||k;
   const localizeGalleryMeta=(items,updatedAt)=>{if(count&&items!==null)count.textContent=items.length+" "+gtx("images");if(updated)updated.textContent=updatedAt?gtx("updated")+" "+new Date(updatedAt).toLocaleString(galleryLang,{month:"short",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"";};
-  document.addEventListener("zombcash:languagechange",e=>{galleryLang=e.detail?.language||document.documentElement.lang||"en";grid.querySelectorAll(".gallery-caption p").forEach(p=>{p.textContent=cleanCaption(p.dataset.originalCaption||p.textContent);});grid.querySelectorAll(".gallery-caption a").forEach(a=>a.textContent=gtx("source"));if(count&&/IMAGES|ИЗОБРАЖЕНИЙ|BILDER|IMAGES|IMMAGINI|枚|张图片|GÖRSEL|इमेज/.test(count.textContent)){const n=parseInt(count.textContent,10);if(Number.isFinite(n))count.textContent=n+" "+gtx("images");}if(updated&&updated.textContent){const raw=updated.textContent.replace(/^(UPDATED|ОБНОВЛЕНО|AKTUALISIERT|MIS À JOUR|AGGIORNATO|更新|更新于|GÜNCELLENDİ|अपडेट)\\s*/,"");updated.textContent=gtx("updated")+" "+raw;}});
+  document.addEventListener("zombcash:languagechange",e=>{galleryLang=e.detail?.language||document.documentElement.lang||"en";grid.querySelectorAll(".gallery-caption p").forEach(p=>{p.textContent=cleanCaption(p.dataset.originalCaption||p.textContent);});grid.querySelectorAll(".gallery-caption a").forEach(a=>a.textContent=gtx("source"));if(count&&/IMAGES|ИЗОБРАЖЕНИЙ|BILDER|IMAGES|IMMAGINI|枚|张图片|GÖRSEL|इमेज/.test(count.textContent)){const n=parseInt(count.textContent,10);if(Number.isFinite(n))count.textContent=n+" "+gtx("images");}if(updated&&updated.textContent){const raw=updated.textContent.replace(/^(UPDATED|ОБНОВЛЕНО|AKTUALISIERT|MIS À JOUR|AGGIORNATO|更新|更新于|GÜNCELLENDİ|अपडेट)\\s*/,"");updated.textContent=gtx("updated")+" "+raw;}refreshGalleryControls();});
   const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, ch => {
     const entities = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
     return entities[ch];
@@ -120,39 +121,120 @@
       /\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b/i.test(String(caption ?? "")) ||
       /\bUNDEAD\s+AFTER\s+DARK\b/i.test(String(caption ?? ""));
     const items = Array.isArray(data.items)
-      ? data.items.filter(item => item.image && item.caption && allowedGalleryCaption(item.caption))
+      ? data.items.filter(item => item.image && item.caption && (Array.isArray(item.category_ids) ? item.category_ids.length : allowedGalleryCaption(item.caption)))
       : [];
     localizeGalleryMeta(items, data.updated_at);
     if (!items.length) {
       state(gtx("none"), gtx("noneMsg"));
       return;
     }
-    grid.innerHTML = items.map(item => {
-      const caption = cleanCaption(item.caption);
-      const image = escapeHtml(item.image);
-      const post = item.post_url ? escapeHtml(item.post_url) : "https://t.me/ZOMBCASH";
-      return '<article class="gallery-card" tabindex="0" role="button" aria-label="Open image: ' + escapeHtml(caption) + '">' +
-        '<img src="' + image + '" alt="' + escapeHtml(caption) + '" loading="lazy" decoding="async">' +
-        '<div class="gallery-caption"><p data-original-caption="' + escapeHtml(item.caption) + '">' + escapeHtml(caption) + '</p>' +
-        '<a href="' + post + '" target="_blank" rel="noreferrer">'+escapeHtml(gtx("source"))+'</a></div></article>';
-    }).join("");
-    cards = Array.from(grid.querySelectorAll(".gallery-card"));
-    cards.forEach((card, index) => {
-      const image = card.querySelector("img");
-      image?.addEventListener("error", () => {
-        if (image.dataset.fallbackApplied) return;
-        image.dataset.fallbackApplied = "true";
-        image.src = "/zombcash-hand-logo.svg";
-        image.alt = "Gallery image temporarily unavailable";
-      }, { once: true });
-      card.addEventListener("click", event => { if (!event.target.closest("a")) showImage(index); });
-      card.addEventListener("keydown", event => {
-        if ((event.key === "Enter" || event.key === " ") && event.target === card) {
-          event.preventDefault();
-          showImage(index);
-        }
+
+    const controlText = {
+      en:{all:"ALL ART",search:"Search titles, captions or tags…",sort:"SORT",newest:"Newest first",oldest:"Oldest first",results:"RESULTS",empty:"No images match this filter."},
+      ru:{all:"ВСЕ РАБОТЫ",search:"Поиск по названию, описанию или тегам…",sort:"СОРТИРОВКА",newest:"Сначала новые",oldest:"Сначала старые",results:"НАЙДЕНО",empty:"По этому фильтру изображений нет."},
+      de:{all:"ALLE BILDER",search:"Titel, Beschreibungen oder Tags suchen…",sort:"SORTIEREN",newest:"Neueste zuerst",oldest:"Älteste zuerst",results:"ERGEBNISSE",empty:"Keine Bilder für diesen Filter."},
+      fr:{all:"TOUTES LES ŒUVRES",search:"Rechercher titres, descriptions ou tags…",sort:"TRIER",newest:"Plus récentes",oldest:"Plus anciennes",results:"RÉSULTATS",empty:"Aucune image ne correspond à ce filtre."},
+      it:{all:"TUTTE LE OPERE",search:"Cerca titoli, descrizioni o tag…",sort:"ORDINA",newest:"Prima le più recenti",oldest:"Prima le più vecchie",results:"RISULTATI",empty:"Nessuna immagine corrisponde al filtro."},
+      ja:{all:"すべての作品",search:"タイトル・説明・タグを検索…",sort:"並べ替え",newest:"新しい順",oldest:"古い順",results:"件数",empty:"条件に一致する画像はありません。"},
+      "zh-CN":{all:"全部作品",search:"搜索标题、说明或标签…",sort:"排序",newest:"最新优先",oldest:"最早优先",results:"结果",empty:"没有符合筛选条件的图片。"},
+      tr:{all:"TÜM GÖRSELLER",search:"Başlık, açıklama veya etiket ara…",sort:"SIRALA",newest:"En yeni önce",oldest:"En eski önce",results:"SONUÇ",empty:"Bu filtreyle eşleşen görsel yok."},
+      hi:{all:"सभी कलाकृतियाँ",search:"शीर्षक, विवरण या टैग खोजें…",sort:"क्रम",newest:"नवीनतम पहले",oldest:"सबसे पुरानी पहले",results:"परिणाम",empty:"इस फ़िल्टर से कोई इमेज नहीं मिली।"}
+    };
+    const categoryText = {
+      en:{"zombie-memes":"Zombie Memes","nightmare-horror":"Nightmare & Horror","undead-after-dark":"Undead After Dark","zombie-characters":"Zombie Characters","apocalypse-survival":"Apocalypse & Survival","crypto-apocalypse":"Crypto Apocalypse","community-creations":"Community Creations"},
+      ru:{"zombie-memes":"Зомби-мемы","nightmare-horror":"Кошмары и хоррор","undead-after-dark":"Нежить после заката","zombie-characters":"Персонажи-зомби","apocalypse-survival":"Апокалипсис и выживание","crypto-apocalypse":"Криптоапокалипсис","community-creations":"Работы сообщества"},
+      de:{"zombie-memes":"Zombie-Memes","nightmare-horror":"Albtraum & Horror","undead-after-dark":"Untote nach Einbruch der Dunkelheit","zombie-characters":"Zombie-Charaktere","apocalypse-survival":"Apokalypse & Überleben","crypto-apocalypse":"Krypto-Apokalypse","community-creations":"Community-Kreationen"},
+      fr:{"zombie-memes":"Mèmes zombies","nightmare-horror":"Cauchemar et horreur","undead-after-dark":"Morts-vivants après la nuit","zombie-characters":"Personnages zombies","apocalypse-survival":"Apocalypse et survie","crypto-apocalypse":"Crypto-apocalypse","community-creations":"Créations de la communauté"},
+      it:{"zombie-memes":"Meme zombie","nightmare-horror":"Incubo e horror","undead-after-dark":"Non morti dopo il tramonto","zombie-characters":"Personaggi zombie","apocalypse-survival":"Apocalisse e sopravvivenza","crypto-apocalypse":"Crypto-apocalisse","community-creations":"Creazioni della community"},
+      ja:{"zombie-memes":"ゾンビミーム","nightmare-horror":"悪夢とホラー","undead-after-dark":"夜更けのアンデッド","zombie-characters":"ゾンビキャラクター","apocalypse-survival":"終末とサバイバル","crypto-apocalypse":"暗号資産アポカリプス","community-creations":"コミュニティ作品"},
+      "zh-CN":{"zombie-memes":"僵尸梗图","nightmare-horror":"噩梦与恐怖","undead-after-dark":"午夜不死者","zombie-characters":"僵尸角色","apocalypse-survival":"末日与生存","crypto-apocalypse":"加密末日","community-creations":"社区创作"},
+      tr:{"zombie-memes":"Zombi Memleri","nightmare-horror":"Kâbus ve Korku","undead-after-dark":"Gece Sonrası Yaşayan Ölüler","zombie-characters":"Zombi Karakterleri","apocalypse-survival":"Kıyamet ve Hayatta Kalma","crypto-apocalypse":"Kripto Kıyameti","community-creations":"Topluluk Eserleri"},
+      hi:{"zombie-memes":"ज़ॉम्बी मीम","nightmare-horror":"दुःस्वप्न और हॉरर","undead-after-dark":"रात के बाद अनडेड","zombie-characters":"ज़ॉम्बी किरदार","apocalypse-survival":"प्रलय और उत्तरजीविता","crypto-apocalypse":"क्रिप्टो प्रलय","community-creations":"समुदाय की कलाकृतियाँ"}
+    };
+    const categories = ["zombie-memes","nightmare-horror","undead-after-dark","zombie-characters","apocalypse-survival","crypto-apocalypse","community-creations"];
+    const toolbar = document.createElement("div");
+    toolbar.className = "gallery-toolbar";
+    toolbar.innerHTML = '<div class="gallery-filter-row"><div class="gallery-category-filters" role="group" aria-label="Gallery categories"></div><label class="gallery-search-label"><span class="sr-only">Search gallery</span><input class="gallery-search" type="search" autocomplete="off"></label><label class="gallery-sort-label"><span class="sr-only">Sort gallery</span><select class="gallery-sort"><option value="newest"></option><option value="oldest"></option></select></label></div><p class="gallery-results" aria-live="polite"></p>';
+    grid.parentElement.insertBefore(toolbar, grid);
+    const filterRow = toolbar.querySelector(".gallery-category-filters");
+    const searchInput = toolbar.querySelector(".gallery-search");
+    const sortSelect = toolbar.querySelector(".gallery-sort");
+    const resultsLabel = toolbar.querySelector(".gallery-results");
+    let selectedCategory = "all";
+    let searchTerm = "";
+    let sortOrder = "newest";
+
+    const renderToolbar = () => {
+      const t = controlText[galleryLang] || controlText.en;
+      const c = categoryText[galleryLang] || categoryText.en;
+      searchInput.placeholder = t.search;
+      searchInput.setAttribute("aria-label", t.search);
+      sortSelect.setAttribute("aria-label", t.sort);
+      sortSelect.options[0].textContent = t.newest;
+      sortSelect.options[1].textContent = t.oldest;
+      const present = new Set(items.flatMap(item => Array.isArray(item.category_ids) ? item.category_ids : []));
+      filterRow.innerHTML = "";
+      const buttons = [{id:"all",label:t.all}, ...categories.filter(id => present.has(id)).map(id => ({id,label:c[id]||id}))];
+      buttons.forEach(({id,label}) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "gallery-category-chip" + (selectedCategory === id ? " is-active" : "");
+        button.textContent = label;
+        button.setAttribute("aria-pressed", selectedCategory === id ? "true" : "false");
+        button.addEventListener("click", () => { selectedCategory = id; renderToolbar(); renderGallery(); });
+        filterRow.appendChild(button);
       });
-    });
+      resultsLabel.textContent = t.results + ": " + grid.querySelectorAll(".gallery-card").length + " / " + items.length;
+    };
+    const renderGallery = () => {
+      let visible = items.filter(item => {
+        const matchesCategory = selectedCategory === "all" || (Array.isArray(item.category_ids) && item.category_ids.includes(selectedCategory));
+        const haystack = [item.title,item.description,item.caption,...(item.tags||[])].join(" ").toLocaleLowerCase(galleryLang);
+        return matchesCategory && (!searchTerm || haystack.includes(searchTerm));
+      });
+      visible.sort((a,b) => {
+        const delta = String(a.date||"").localeCompare(String(b.date||""));
+        return sortOrder === "oldest" ? delta : -delta;
+      });
+      grid.innerHTML = visible.length ? visible.map(item => {
+        const caption = cleanCaption(item.caption);
+        const title = String(item.title || caption);
+        const image = escapeHtml(item.image);
+        const post = item.post_url ? escapeHtml(item.post_url) : "https://t.me/ZOMBCASH";
+        const alt = String(item.alt_text || ("ZombieCash artwork: " + caption));
+        return '<article class="gallery-card" tabindex="0" role="button" aria-label="Open image: ' + escapeHtml(title) + '">' +
+          '<img src="' + image + '" alt="' + escapeHtml(alt) + '" loading="lazy" decoding="async">' +
+          '<div class="gallery-caption"><p data-original-caption="' + escapeHtml(item.caption) + '">' + escapeHtml(title) + '</p>' +
+          '<a href="' + post + '" target="_blank" rel="noreferrer">'+escapeHtml(gtx("source"))+'</a></div></article>';
+      }).join("") : '<div class="gallery-state"><h3>' + escapeHtml((controlText[galleryLang]||controlText.en).empty) + '</h3></div>';
+      cards = Array.from(grid.querySelectorAll(".gallery-card"));
+      cards.forEach((card, index) => {
+        const image = card.querySelector("img");
+        image?.addEventListener("error", () => {
+          if (image.dataset.fallbackApplied) return;
+          image.dataset.fallbackApplied = "true";
+          image.src = "/zombcash-hand-logo.svg";
+          image.alt = "Gallery image temporarily unavailable";
+        }, { once: true });
+        card.addEventListener("click", event => { if (!event.target.closest("a")) showImage(index); });
+        card.addEventListener("keydown", event => {
+          if ((event.key === "Enter" || event.key === " ") && event.target === card) {
+            event.preventDefault();
+            showImage(index);
+          }
+        });
+      });
+      renderToolbarCount();
+    };
+    const renderToolbarCount = () => {
+      const t = controlText[galleryLang] || controlText.en;
+      resultsLabel.textContent = t.results + ": " + cards.length + " / " + items.length;
+    };
+    refreshGalleryControls = renderToolbar;
+    searchInput.addEventListener("input", () => { searchTerm = searchInput.value.trim().toLocaleLowerCase(galleryLang); renderGallery(); });
+    sortSelect.addEventListener("change", () => { sortOrder = sortSelect.value; renderGallery(); });
+    renderToolbar();
+    renderGallery();
   }).catch(error => {
     if (count) count.textContent = gtx("offline");
     if (updated) updated.textContent = "";
