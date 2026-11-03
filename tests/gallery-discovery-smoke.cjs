@@ -2,6 +2,8 @@ const { chromium } = require("playwright");
 const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
+const galleryData = JSON.parse(fs.readFileSync("gallery-data.json", "utf8"));
+const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]));
 
 (async () => {
   const server = spawn("python3", ["-m", "http.server", "4173", "--bind", "127.0.0.1"], { stdio: "ignore", cwd: process.cwd() });
@@ -22,10 +24,27 @@ const path = require("path");
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     await page.route("https://**/*", route => route.abort());
     await page.route("https://cdn4.telesco.pe/file/**", route => route.continue());
+    fs.mkdirSync("gallery-visual-audit/images", { recursive: true });
     const imageNetworkEvents = [];
+    const imageResponseTasks = [];
     page.on("response", response => {
-      if (response.url().includes("cdn4.telesco.pe/file/") && response.status() >= 400) {
-        imageNetworkEvents.push({ type: "http-error", status: response.status(), url: response.url() });
+      const url = response.url();
+      if (!url.includes("cdn4.telesco.pe/file/")) return;
+      if (response.status() >= 400) {
+        imageNetworkEvents.push({ type: "http-error", status: response.status(), url });
+        return;
+      }
+      const imageId = imageIdByUrl.get(url);
+      if (imageId && response.status() === 200) {
+        imageResponseTasks.push((async () => {
+          try {
+            const body = await response.body();
+            const safeId = imageId.replace(/[^a-zA-Z0-9_-]/g, "_");
+            fs.writeFileSync(path.join("gallery-visual-audit", "images", safeId + ".jpg"), body);
+          } catch (error) {
+            imageNetworkEvents.push({ type: "body-read-failed", error: String(error), url });
+          }
+        })());
       }
     });
     page.on("requestfailed", request => {
@@ -63,7 +82,7 @@ const path = require("path");
       fallbacks: images.filter(image => image.dataset.fallbackApplied).length
     }));
     await page.screenshot({ path: "gallery-desktop-smoke.png", fullPage: true });
-    fs.mkdirSync("gallery-visual-audit/images", { recursive: true });
+    await Promise.all(imageResponseTasks);
     const visualAudit = [];
     for (const card of await page.locator("#gallery-grid .gallery-card").all()) {
       const image = card.locator("img");
@@ -80,10 +99,13 @@ const path = require("path");
         };
       });
       const safeId = details.id.replace(/[^a-zA-Z0-9_-]/g, "_");
-      if (details.naturalWidth > 0) {
+      if (details.fallbackApplied || details.naturalWidth === 0) {
         details.screenshot = "images/" + safeId + ".png";
         await image.screenshot({ path: path.join("gallery-visual-audit", details.screenshot) });
       }
+      details.sourceFile = fs.existsSync(path.join("gallery-visual-audit", "images", safeId + ".jpg"))
+        ? "images/" + safeId + ".jpg"
+        : (details.screenshot || null);
       visualAudit.push(details);
     }
     fs.writeFileSync("gallery-visual-audit/report.json", JSON.stringify({
