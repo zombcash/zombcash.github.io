@@ -153,7 +153,29 @@ const { spawn } = require("child_process");
     if (!(await russian.locator(".gallery-search").getAttribute("placeholder")).includes("Поиск")) throw new Error("Russian gallery search placeholder did not render");
     await russian.close();
 
-    console.log(JSON.stringify({ status: "passed", initial, horror, search, reset, matching, oldestFirst, japaneseFilter, mobile: overflow, imageLoadAudit }));
+    const localeAudit = [];
+    for (const locale of ["de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"]) {
+      const localized = await browser.newPage({ viewport: { width: 390, height: 844 } });
+      await localized.route("https://**/*", route => route.abort());
+      await localized.route("https://cdn4.telesco.pe/file/**", route => route.continue());
+      await localized.goto("http://127.0.0.1:4173/" + locale + "/gallery.html", { waitUntil: "domcontentloaded" });
+      await localized.waitForSelector(".gallery-toolbar");
+      await localized.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50);
+      const lang = await localized.locator("html").getAttribute("lang");
+      const canonical = await localized.locator('link[rel="canonical"]').getAttribute("href");
+      const alternates = await localized.locator('link[rel="alternate"][hreflang]').count();
+      const title = await localized.title();
+      const controls = await localized.locator(".gallery-category-chip").allTextContents();
+      if (lang !== locale) throw new Error(locale + " gallery lang mismatch: " + lang);
+      if (canonical !== "https://zombcash.github.io/" + locale + "/gallery.html") throw new Error(locale + " canonical mismatch: " + canonical);
+      if (alternates !== 10) throw new Error(locale + " should expose nine hreflang locales plus x-default, got " + alternates);
+      if (!title || !title.includes("Zombie") && locale !== "ja" && locale !== "zh-CN" && locale !== "hi") throw new Error(locale + " localized title is missing");
+      if (controls.length < 2 || controls.some(label => !label.trim())) throw new Error(locale + " category controls are missing localized labels");
+      localeAudit.push({ locale, lang, alternates, cards: 50, title });
+      await localized.close();
+    }
+
+    console.log(JSON.stringify({ status: "passed", initial, horror, search, reset, matching, oldestFirst, japaneseFilter, mobile: overflow, imageLoadAudit, localeAudit }));
   } finally {
     if (browser) await browser.close();
     server.kill();
