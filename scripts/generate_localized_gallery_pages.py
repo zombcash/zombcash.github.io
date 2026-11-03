@@ -86,6 +86,42 @@ ET.register_namespace("", NS)
 ET.register_namespace("xhtml", XHTML)
 
 
+
+CATEGORY_LABELS = {
+    "en": {"zombie-memes": "Zombie Memes", "nightmare-horror": "Nightmare & Horror", "undead-after-dark": "Undead After Dark", "zombie-characters": "Zombie Characters", "apocalypse-survival": "Apocalypse & Survival", "crypto-apocalypse": "Crypto Apocalypse", "community-creations": "Community Creations"},
+    "ru": {"zombie-memes": "Зомби-мемы", "nightmare-horror": "Кошмары и хоррор", "undead-after-dark": "Нежить после заката", "zombie-characters": "Персонажи-зомби", "apocalypse-survival": "Апокалипсис и выживание", "crypto-apocalypse": "Криптоапокалипсис", "community-creations": "Работы сообщества"},
+    "de": {"zombie-memes": "Zombie-Memes", "nightmare-horror": "Albtraum & Horror", "undead-after-dark": "Untote nach Einbruch der Dunkelheit", "zombie-characters": "Zombie-Charaktere", "apocalypse-survival": "Apokalypse & Überleben", "crypto-apocalypse": "Krypto-Apokalypse", "community-creations": "Community-Kreationen"},
+    "fr": {"zombie-memes": "Mèmes zombies", "nightmare-horror": "Cauchemar et horreur", "undead-after-dark": "Morts-vivants après la nuit", "zombie-characters": "Personnages zombies", "apocalypse-survival": "Apocalypse et survie", "crypto-apocalypse": "Crypto-apocalypse", "community-creations": "Créations de la communauté"},
+    "it": {"zombie-memes": "Meme zombie", "nightmare-horror": "Incubo e horror", "undead-after-dark": "Non morti dopo il tramonto", "zombie-characters": "Personaggi zombie", "apocalypse-survival": "Apocalisse e sopravvivenza", "crypto-apocalypse": "Crypto-apocalisse", "community-creations": "Creazioni della community"},
+    "ja": {"zombie-memes": "ゾンビミーム", "nightmare-horror": "悪夢とホラー", "undead-after-dark": "夜更けのアンデッド", "zombie-characters": "ゾンビキャラクター", "apocalypse-survival": "終末とサバイバル", "crypto-apocalypse": "暗号資産アポカリプス", "community-creations": "コミュニティ作品"},
+    "zh-CN": {"zombie-memes": "僵尸梗图", "nightmare-horror": "噩梦与恐怖", "undead-after-dark": "午夜不死者", "zombie-characters": "僵尸角色", "apocalypse-survival": "末日与生存", "crypto-apocalypse": "加密末日", "community-creations": "社区创作"},
+    "tr": {"zombie-memes": "Zombi Memleri", "nightmare-horror": "Kâbus ve Korku", "undead-after-dark": "Gece Sonrası Yaşayan Ölüler", "zombie-characters": "Zombi Karakterleri", "apocalypse-survival": "Kıyamet ve Hayatta Kalma", "crypto-apocalypse": "Kripto Kıyameti", "community-creations": "Topluluk Eserleri"},
+    "hi": {"zombie-memes": "ज़ॉम्बी मीम", "nightmare-horror": "दुःस्वप्न और हॉरर", "undead-after-dark": "रात के बाद अनडेड", "zombie-characters": "ज़ॉम्बी किरदार", "apocalypse-survival": "प्रलय और उत्तरजीविता", "crypto-apocalypse": "क्रिप्टो प्रलय", "community-creations": "समुदाय की कलाकृतियाँ"},
+}
+
+
+def localize_category_tags(page, locale):
+    labels = CATEGORY_LABELS.get(locale, CATEGORY_LABELS["en"])
+
+    def replace_card(match):
+        card = match.group(0)
+        categories_match = re.search(r'data-categories="([^"]*)"', card)
+        categories = categories_match.group(1).split() if categories_match else []
+        tags = "".join(
+            '<span class="gallery-category-tag">' + escape(labels.get(category, category)) + '</span>'
+            for category in categories
+        )
+        return re.sub(
+            r'<div class="gallery-card-tags">.*?</div>',
+            '<div class="gallery-card-tags">' + tags + '</div>',
+            card,
+            count=1,
+            flags=re.I | re.S,
+        )
+
+    return re.sub(r'<article class="gallery-card".*?</article>', replace_card, page, flags=re.I | re.S)
+
+
 def page_url(locale):
     return f"{BASE_URL}/gallery.html" if locale == "en" else f"{BASE_URL}/{locale}/gallery.html"
 
@@ -105,6 +141,7 @@ def build_page(base, locale):
     meta = LOCALES[locale]
     url = page_url(locale)
     page = base
+    page = localize_category_tags(page, locale)
     page = replace_tag(page, r'<html lang="[^"]+"', f'<html lang="{escape(locale)}"')
     page = set_meta(page, r'<meta name="description" content="[^"]*">',
                     f'<meta name="description" content="{escape(meta["description"], quote=True)}">')
