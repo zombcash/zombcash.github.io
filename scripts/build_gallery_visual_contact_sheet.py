@@ -52,7 +52,7 @@ def main():
         x = (index % COLUMNS) * TILE_W
         y = (index // COLUMNS) * TILE_H
         draw.rectangle((x + 5, y + 5, x + TILE_W - 5, y + TILE_H - 5), fill=PANEL, outline=(48, 76, 52))
-        image_path = AUDIT / str(item.get("screenshot") or "")
+        image_path = AUDIT / str(item.get("sourceFile") or item.get("screenshot") or "")
         if image_path.is_file():
             with Image.open(image_path) as source:
                 source = source.convert("RGB")
