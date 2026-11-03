@@ -19,6 +19,16 @@ const { spawn } = require("child_process");
     browser = await chromium.launch({ headless: true });
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     await page.route("https://**/*", route => route.abort());
+    await page.route("https://zombcash-bot.fadehost.app/api/gallery/likes?*", async route => {
+      const url = new URL(route.request().url());
+      const ids = (url.searchParams.get("ids") || "").split(",").filter(Boolean);
+      const stats = ids.map(image_id => ({
+        image_id,
+        like_count: image_id === "ZOMBCASH/3583:0" ? 100 : (image_id === "ZOMBCASH/4102:0" ? 10 : 0),
+        liked: false
+      }));
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ stats }) });
+    });
     await page.goto("http://127.0.0.1:4173/gallery.html", { waitUntil: "domcontentloaded" });
     await page.waitForSelector(".gallery-toolbar");
     await page.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50);
@@ -65,6 +75,8 @@ const { spawn } = require("child_process");
     if (!oldestFirst) throw new Error("Sorted cards must retain stable image IDs");
     await page.locator(".gallery-sort").selectOption("liked");
     if (await page.locator("#gallery-grid .gallery-card").count() !== 50) throw new Error("Most-liked sort should preserve all gallery cards");
+    const mostLikedFirst = await page.locator("#gallery-grid .gallery-card").first().getAttribute("data-gallery-id");
+    if (mostLikedFirst !== "ZOMBCASH/3583:0") throw new Error("Most-liked sort did not rank the highest-count image first: " + mostLikedFirst);
     const sortTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_sort"));
     if (!sortTracked) throw new Error("Gallery sort analytics event was not recorded");
     await page.evaluate(() => {
