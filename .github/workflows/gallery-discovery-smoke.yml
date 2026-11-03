@@ -62,7 +62,7 @@ jobs:
       - name: Validate gallery JSON and generated index
         run: |
           python - <<'PY'
-          import html
+          import html as html_lib
           import importlib.util
           import json
           import re
@@ -123,11 +123,11 @@ jobs:
                   card_marker = f'data-gallery-id="{item["id"]}"'
                   card_start = page.index(card_marker)
                   image_match = re.search(r'<img[^>]*alt="([^"]*)"', page[card_start:])
-                  assert image_match and html.unescape(image_match.group(1)) == item["alt_text"], f"ALT mismatch for {locale}: {item['id']}"
+                  assert image_match and html_lib.unescape(image_match.group(1)) == item["alt_text"], f"ALT mismatch for {locale}: {item['id']}"
                   card_end = page.index("</article>", card_start)
                   card_html = page[card_start:card_end]
                   tag_block = re.search(r'<div class="gallery-card-tags">(.*?)</div>', card_html, re.S)
-                  actual_tags = [html.unescape(value) for value in re.findall(r'<span class="gallery-category-tag">(.*?)</span>', tag_block.group(1) if tag_block else "", re.S)]
+                  actual_tags = [html_lib.unescape(value) for value in re.findall(r'<span class="gallery-category-tag">(.*?)</span>', tag_block.group(1) if tag_block else "", re.S)]
                   expected_tags = [gallery_pages.CATEGORY_LABELS[locale][category] for category in item["category_ids"]]
                   assert actual_tags == expected_tags, f"Localized category tags mismatch for {locale}: {item['id']}"
           locale_sitemap = ET.parse("sitemap-gallery-pages.xml")
