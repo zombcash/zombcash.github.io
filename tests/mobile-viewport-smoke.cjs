@@ -154,6 +154,41 @@ fs.mkdirSync(outDir, { recursive: true });
     if (localeIssues.length) failures.push({ mode: 'localized-root', issues: localeIssues });
     await localePage.close();
 
+    // Regression: every localized Whitepaper page must translate the shared navigation.
+    // This catches missing shared-nav dictionary keys and stale language.js cache URLs.
+    const whitepaperLabels = {
+      de: 'WHITEPAPER',
+      fr: 'LIVRE BLANC',
+      it: 'WHITEPAPER',
+      ja: 'ホワイトペーパー',
+      'zh-CN': '白皮书',
+      ru: 'ДОКУМЕНТ ПРОЕКТА',
+      tr: 'PROJE TANITIM BELGESİ',
+      hi: 'व्हाइटपेपर',
+    };
+    for (const [locale, expectedLabel] of Object.entries(whitepaperLabels)) {
+      const localizedPage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+      const localizedErrors = [];
+      localizedPage.on('pageerror', error => localizedErrors.push(error.message));
+      const localizedUrl = new URL(`${locale}/whitepaper.html`, BASE_URL).href;
+      await localizedPage.goto(localizedUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
+      await localizedPage.waitForFunction(
+        () => document.querySelector('.zsh-nav a[href*="whitepaper.html"]')?.textContent.trim() &&
+              document.querySelector('.language-trigger')?.textContent.trim(),
+        { timeout: 20000 }
+      );
+      const navLabel = await localizedPage.locator('.zsh-nav a[href*="whitepaper.html"]').textContent();
+      const actualLabel = (navLabel || '').trim();
+      const htmlLang = await localizedPage.locator('html').getAttribute('lang');
+      const issues = [];
+      if (htmlLang !== locale) issues.push(`html lang is ${htmlLang}, expected ${locale}`);
+      if (actualLabel !== expectedLabel) issues.push(`WHITEPAPER menu label is "${actualLabel}", expected "${expectedLabel}"`);
+      if (localizedErrors.length) issues.push('browser JavaScript errors: ' + localizedErrors.join(' | '));
+      console.log(JSON.stringify({ mode: 'localized-navigation', locale, actualLabel, expectedLabel, issues }));
+      if (issues.length) failures.push({ mode: 'localized-navigation', locale, issues });
+      await localizedPage.close();
+    }
+
     // Verify that the main live-data panels recover from their initial loading states.
     const liveDataPage = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     const liveDataErrors = [];
