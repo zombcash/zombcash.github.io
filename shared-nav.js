@@ -1299,7 +1299,7 @@
     controls.classList.toggle('is-visible', mobile && window.scrollY > 220);
     const assistant = document.getElementById('zombcash-floating-assistant');
     const assistantLauncher = assistant && assistant.querySelector('.zfa-launch');
-    const adSelectors = '.outbreak-ad-unit, .arcade-ad-unit, .aads-ad-section, .zsh-shared-ad, aside[aria-label="Advertisement"], #frame, [data-aa], [id^="frame-"]';
+    const adSelectors = '.zc-adsterra-section, .outbreak-ad-unit, .arcade-ad-unit, .aads-ad-section, .zsh-shared-ad, aside[aria-label="Advertisement"], #frame, [data-aa], [id^="frame-"]';
     const intersectsAd = (element) => {
       if (!element || element.getClientRects().length === 0) return false;
       const rect = element.getBoundingClientRect();
@@ -1334,7 +1334,7 @@
       const launcherRect = assistantLauncher.getBoundingClientRect();
       const contentSelectors = 'iframe, img, picture, video, canvas, button, [role="button"], input, select, textarea, .leaderboard, .player-progress, .leaderboard-card, .player-progress-grid';
       for (const target of document.querySelectorAll(contentSelectors)) {
-        if (assistant.contains(target) || target.closest('header, nav, footer, .page-scroll-controls, #zombcash-floating-assistant, .zsh-shared-ad, .outbreak-ad-unit, [data-aa], [id^="frame-"]') || target.getClientRects().length === 0) continue;
+        if (assistant.contains(target) || target.closest('header, nav, footer, .page-scroll-controls, #zombcash-floating-assistant, .zc-adsterra-section, .zsh-shared-ad, .outbreak-ad-unit, [data-aa], [id^="frame-"]') || target.getClientRects().length === 0) continue;
         const targetRect = target.getBoundingClientRect();
         if (targetRect.width > 0 && targetRect.height > 0 &&
             launcherRect.left < targetRect.right && launcherRect.right > targetRect.left &&
@@ -1421,547 +1421,109 @@
 })();
 
 
-// One responsive A-ADS unit on every localized homepage; no ad units on other pages.
+/* One Adsterra 728x90 banner on localized homepages; legacy ad placements are removed. */
 (() => {
   'use strict';
   const path = location.pathname;
   const isHomepage = path === '/' || path === '/index.html' ||
     /^\/(?:de|fr|it|ja|zh-CN|ru|tr|hi)(?:\/index\.html)?\/?$/.test(path);
-  const adSrc = 'https://acceptable.a-ads.com/2460185/?size=Adaptive';
-  const wrapperSelector = '.aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, [data-zombcash-ad-slot]';
-  const iframeSelector = 'iframe[data-aa="2460185"]';
+  const adScriptUrl = 'https://bauval.org/22/08/08a70f8414101d6c6b04e25aa232f436';
+  const legacyWrappers = '.aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, [data-zombcash-ad-slot]';
 
-  const normalizeIframe = (frame) => {
-    if (!frame) return;
-    if (frame.getAttribute('src') !== adSrc) frame.setAttribute('src', adSrc);
-    frame.removeAttribute('width');
-    frame.removeAttribute('height');
-    frame.setAttribute('title', 'Sponsored advertisement');
-    frame.style.setProperty('display', 'block', 'important');
-    frame.style.setProperty('width', '100%', 'important');
-    frame.style.setProperty('height', '250px', 'important');
-    frame.style.setProperty('min-width', '0', 'important');
-    frame.style.setProperty('max-width', '100%', 'important');
-    frame.style.setProperty('min-height', '250px', 'important');
-    frame.style.setProperty('max-height', 'none', 'important');
-    frame.style.setProperty('border', '0', 'important');
-    frame.style.setProperty('margin', '0', 'important');
-    frame.style.setProperty('padding', '0', 'important');
-    frame.style.setProperty('box-sizing', 'border-box', 'important');
+  const removeLegacyAds = () => {
+    document.querySelectorAll('iframe[data-aa], iframe[src*="acceptable.a-ads.com"], script[src*="acceptable.a-ads.com"]').forEach(node => node.remove());
+    if (!isHomepage) {
+      document.querySelectorAll(legacyWrappers + ', .zc-adsterra-section').forEach(node => node.remove());
+      document.querySelectorAll('script[src*="bauval.org"]').forEach(node => node.remove());
+      return;
+    }
+    document.querySelectorAll('.outbreak-ad-unit, .arcade-ad-unit, .zsh-shared-ad').forEach(node => node.remove());
   };
 
-  const ensureStyles = () => {
-    if (document.getElementById('zsh-home-ad-responsive-style')) return;
+  const addAdStyles = () => {
+    if (document.getElementById('zc-adsterra-responsive-style')) return;
     const style = document.createElement('style');
-    style.id = 'zsh-home-ad-responsive-style';
+    style.id = 'zc-adsterra-responsive-style';
     style.textContent = `
-      /* Homepage composition contract: primary copy on the left, ad and radar
-         in a single equal-width right stack. Legacy hero styles no longer size
-         or position this structure. */
-      body.zc-homepage-ad-enabled main#home > .hero,
-      body.zc-homepage-ad-enabled > .hero,
-      body.zc-homepage-ad-enabled main .hero {
-        display:grid!important;
-        grid-template-columns:minmax(0,1fr) minmax(320px,390px)!important;
-        grid-template-rows:auto auto!important;
-        justify-content:center!important;
-        align-items:start!important;
-        column-gap:clamp(22px,2.6vw,40px)!important;
-        row-gap:24px!important;
-        width:100%!important;
-        max-width:1360px!important;
-        height:auto!important;
-        min-height:0!important;
-        max-height:none!important;
-        margin:0 auto!important;
-        padding:clamp(30px,3.4vw,52px) clamp(20px,3.4vw,52px) 32px!important;
-        overflow:visible!important;
-        box-sizing:border-box!important;
-      }
-      body.zc-homepage-ad-enabled .hero > .hero-layout {
-        grid-column:1!important;
-        grid-row:1!important;
-        display:block!important;
-        align-self:start!important;
-        justify-self:stretch!important;
-        width:100%!important;
-        max-width:none!important;
-        min-width:0!important;
-        margin:0!important;
-        padding:0!important;
-        box-sizing:border-box!important;
-      }
-      /* Remove inherited centered/max-width constraints from legacy hero wrappers.
-         The section is full-width; its two-column content grid must use that width. */
-      body.zc-homepage-ad-enabled main#home {
-        width:100%!important;
-        max-width:none!important;
-        min-width:0!important;
-        margin-left:0!important;
-        margin-right:0!important;
-        padding-left:0!important;
-        padding-right:0!important;
-        box-sizing:border-box!important;
-      }
-      body.zc-homepage-ad-enabled main#home > .hero {
-        display:grid!important;
-        grid-template-columns:minmax(0,1fr) minmax(320px,390px)!important;
-        grid-template-rows:auto!important;
-        width:calc(100% - 40px)!important;
-        max-width:1276px!important;
-        min-width:0!important;
-        margin:0 auto!important;
-        padding:28px 24px!important;
-        gap:28px!important;
-        position:relative!important;
-        isolation:isolate!important;
-        box-sizing:border-box!important;
-      }
-      /* Decorative hero layers are absolutely positioned; otherwise they become
-         extra CSS-grid items and silently create extra columns/rows. */
-      body.zc-homepage-ad-enabled main#home > .hero > .hero-grid,
-      body.zc-homepage-ad-enabled main#home > .hero > .moon,
-      body.zc-homepage-ad-enabled main#home > .hero > .city {
-        position:absolute!important;
-        inset:0!important;
-        width:100%!important;
-        height:100%!important;
-        pointer-events:none!important;
-        z-index:0!important;
-      }
-      body.zc-homepage-ad-enabled main#home > .hero > .hero-layout {
-        grid-column:1!important;
-        grid-row:1!important;
-        position:relative!important;
-        z-index:1!important;
-        width:100%!important;
-        min-width:0!important;
-        max-width:none!important;
-        margin:0!important;
-      }
-      body.zc-homepage-ad-enabled main#home > .hero > .zc-home-right-stack {
-        grid-column:2!important;
-        grid-row:1!important;
-        position:relative!important;
-        z-index:2!important;
-        width:100%!important;
-        min-width:0!important;
-        max-width:none!important;
-        margin:0!important;
-      }
-      body.zc-homepage-ad-enabled .hero > .hero-layout > .hero-content {
-        max-width:100%!important;
-      }
-      body.zc-homepage-ad-enabled .hero .field-manual-spotlight {
-        width:100%!important;
-        max-width:100%!important;
-        box-sizing:border-box!important;
-      }
-      body.zc-homepage-ad-enabled .hero > .hero-layout > .hero-content {
-        display:block!important;
-        grid-column:auto!important;
-        grid-row:auto!important;
-        width:100%!important;
-        max-width:none!important;
-        min-width:0!important;
-        margin:0!important;
-        padding:0!important;
-        box-sizing:border-box!important;
-      }
-      body.zc-homepage-ad-enabled .hero > .zc-home-right-stack {
-        grid-column:2!important;
-        grid-row:1!important;
-        display:flex!important;
-        flex-direction:column!important;
-        align-items:stretch!important;
-        align-self:start!important;
-        gap:clamp(14px,1.6vw,22px)!important;
-        width:100%!important;
-        max-width:none!important;
-        min-width:0!important;
-        margin:0!important;
-        padding:0!important;
-        box-sizing:border-box!important;
-        position:relative!important;
-        z-index:3!important;
-      }
-      body.zc-homepage-ad-enabled .zc-home-right-stack > .zc-home-floating-ad,
-      body.zc-homepage-ad-enabled .zc-home-right-stack > .outbreak-panel {
-        order:initial!important;
-        display:block!important;
-        position:relative!important;
-        inset:auto!important;
-        flex:0 0 auto!important;
-        align-self:stretch!important;
-        width:100%!important;
-        max-width:100%!important;
-        min-width:0!important;
-        height:auto!important;
-        max-height:none!important;
-        margin:0!important;
-        padding:0!important;
-        box-sizing:border-box!important;
-        overflow:hidden!important;
-      }
-      body.zc-homepage-ad-enabled .zc-home-right-stack > .zc-home-floating-ad {
-        border:1px solid #456b37!important;
-        background:linear-gradient(145deg,#0b120d,#080b10)!important;
-      }
-      body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner {
-        display:block!important;
-        position:relative!important;
-        width:100%!important;
-        max-width:100%!important;
-        min-width:0!important;
-        height:auto!important;
-        min-height:0!important;
-        max-height:none!important;
-        margin:0!important;
-        padding:clamp(10px,1.2vw,16px)!important;
-        box-sizing:border-box!important;
-        overflow:hidden!important;
-        text-align:center!important;
-        background:transparent!important;
-      }
-      body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-label {
-        display:block!important;
-        margin:0 0 8px!important;
-        color:#71816e!important;
-        font:600 9px/1.4 Orbitron,sans-serif!important;
-        letter-spacing:1.5px!important;
-        text-align:center!important;
-      }
-      body.zc-homepage-ad-enabled .zc-home-floating-ad #frame,
-      body.zc-homepage-ad-enabled .zc-home-floating-ad [id^="frame-"] {
-        display:block!important;
-        position:relative!important;
-        width:100%!important;
-        max-width:100%!important;
-        min-width:0!important;
-        height:auto!important;
-        min-height:250px!important;
-        max-height:none!important;
-        margin:0 auto!important;
-        padding:0!important;
-        box-sizing:border-box!important;
-        overflow:hidden!important;
-      }
-      body.zc-homepage-ad-enabled .zc-home-floating-ad iframe[data-aa="2460185"] {
-        display:block!important;
-        position:relative!important;
-        width:100%!important;
-        max-width:100%!important;
-        min-width:0!important;
-        height:250px!important;
-        min-height:250px!important;
-        max-height:250px!important;
-        margin:0 auto!important;
-        padding:0!important;
-        border:0!important;
-        box-sizing:border-box!important;
-      }
-      /* Temporarily hide the oversized radar panel marked by the site owner.
-         It remains in source for later restoration but must not affect layout. */
-      body.zc-homepage-ad-enabled .outbreak-panel {
-        display:none!important;
-      }
-      body.zc-homepage-ad-enabled .hero > .hero-bottom {
-        grid-column:1 / -1!important;
-        grid-row:2!important;
-        position:relative!important;
-        inset:auto!important;
-        width:100%!important;
-        margin:0!important;
-        padding:12px 0 0!important;
-        box-sizing:border-box!important;
-      }
-      @media(max-width:900px) {
-        body.zc-homepage-ad-enabled main#home > .hero,
-        body.zc-homepage-ad-enabled > .hero,
-        body.zc-homepage-ad-enabled main .hero {
-          grid-template-columns:minmax(0,1fr)!important;
-          grid-template-rows:auto auto!important;
-          width:calc(100% - 24px)!important;
-          max-width:760px!important;
-          gap:20px!important;
-          min-height:0!important;
-          padding:24px 18px!important;
-        }
-        body.zc-homepage-ad-enabled .hero > .hero-layout {
-          grid-column:1!important;
-          grid-row:1!important;
-          width:100%!important;
-          min-width:0!important;
-        }
-        body.zc-homepage-ad-enabled .hero > .zc-home-right-stack {
-          grid-column:1!important;
-          grid-row:2!important;
-          width:100%!important;
-          max-width:640px!important;
-          justify-self:center!important;
-          margin:0 auto!important;
-          gap:16px!important;
-        }
-        body.zc-homepage-ad-enabled .hero > .hero-bottom {
-          grid-column:1!important;
-          grid-row:3!important;
-        }
-      }
-      @media(max-width:600px) {
-        body.zc-homepage-ad-enabled main#home > .hero,
-        body.zc-homepage-ad-enabled > .hero,
-        body.zc-homepage-ad-enabled main .hero {
-          gap:18px!important;
-          padding:26px 16px 22px!important;
-        }
-        body.zc-homepage-ad-enabled .zc-home-right-stack {
-          gap:14px!important;
-        }
-        body.zc-homepage-ad-enabled .hero h1 {
-          overflow-wrap:normal!important;
-          word-break:normal!important;
-        }
-        body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner,
-        body.zc-homepage-ad-enabled .aads-ad-section .aads-ad-inner,
-        body.zc-homepage-ad-enabled .zsh-shared-ad .aads-ad-inner {
-          padding:10px!important;
-        }
-      }
-    `;
-    /* Final layout guard: override legacy homepage rules after every existing
-       responsive declaration so desktop stays balanced and mobile cannot collapse. */
-    style.textContent += `
-      @media (min-width: 901px) {
-        body.zc-homepage-ad-enabled main#home > .hero {
-          display:grid!important;
-          grid-template-columns:repeat(2,minmax(0,1fr))!important;
-          align-items:stretch!important;
-          grid-template-rows:auto!important;
-          width:calc(100% - 40px)!important;
-          max-width:1276px!important;
-          min-width:0!important;
-          margin:0 auto!important;
-          padding:28px 24px!important;
-          gap:28px!important;
-          box-sizing:border-box!important;
-        }
-        body.zc-homepage-ad-enabled main#home > .hero > .hero-layout {
-          grid-column:1!important;grid-row:1!important;
-          display:block!important;width:100%!important;min-width:0!important;
-          max-width:none!important;margin:0!important;
-        }
-        body.zc-homepage-ad-enabled main#home > .hero > .zc-home-right-stack {
-          grid-column:2!important;grid-row:1!important;
-          display:flex!important;flex-direction:column!important;
-          align-self:stretch!important;align-items:stretch!important;
-          width:100%!important;height:100%!important;min-width:0!important;max-width:none!important;
-          margin:0!important;
-        }
-        body.zc-homepage-ad-enabled main#home > .hero > .zc-home-right-stack > .zc-home-floating-ad {
-          display:flex!important;flex:1 1 auto!important;flex-direction:column!important;
-          width:100%!important;height:100%!important;min-height:100%!important;
-          box-sizing:border-box!important;
-        }
-        body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner {
-          display:flex!important;flex:1 1 auto!important;flex-direction:column!important;
-          width:100%!important;height:100%!important;min-height:0!important;
-          box-sizing:border-box!important;
-        }
-        body.zc-homepage-ad-enabled .zc-home-floating-ad #frame,
-        body.zc-homepage-ad-enabled .zc-home-floating-ad [id^="frame-"] {
-          display:block!important;flex:1 1 auto!important;
-          width:100%!important;height:auto!important;min-height:250px!important;
-          max-height:none!important;box-sizing:border-box!important;
-        }
-        body.zc-homepage-ad-enabled .zc-home-floating-ad iframe[data-aa="2460185"] {
-          display:block!important;width:100%!important;height:100%!important;
-          min-height:250px!important;max-height:none!important;box-sizing:border-box!important;
-        }
-      }
-      @media (max-width:900px) {
-        body.zc-homepage-ad-enabled main#home > .hero {
-          display:grid!important;
-          grid-template-columns:minmax(0,1fr)!important;
-          grid-template-rows:auto auto auto!important;
-          grid-auto-flow:row!important;
-          width:calc(100% - 24px)!important;
-          max-width:760px!important;min-width:0!important;
-          margin:0 auto!important;padding:24px 18px!important;
-          gap:20px!important;box-sizing:border-box!important;
-        }
-        body.zc-homepage-ad-enabled main#home > .hero > .hero-layout,
-        body.zc-homepage-ad-enabled main#home > .hero > .hero-layout > .hero-content {
-          grid-column:1!important;grid-row:1!important;
-          display:block!important;width:100%!important;min-width:0!important;
-          max-width:none!important;margin:0!important;padding:0!important;
-          box-sizing:border-box!important;
-        }
-        body.zc-homepage-ad-enabled main#home > .hero > .zc-home-right-stack {
-          grid-column:1!important;grid-row:2!important;
-          display:flex!important;flex-direction:column!important;
-          width:100%!important;max-width:640px!important;min-width:0!important;
-          justify-self:center!important;align-self:start!important;
-          margin:0 auto!important;box-sizing:border-box!important;
-        }
-        body.zc-homepage-ad-enabled main#home > .hero > .hero-bottom {
-          grid-column:1!important;grid-row:3!important;
-          width:100%!important;min-width:0!important;
-        }
-      }
-    `;
-    /* Keep the real A-ADS creative at its delivered size. Fill the remaining
-       symmetrical card with a clearly separate ZombieCash sponsor panel. */
-    style.textContent += `
-      @media (min-width: 901px) {
-        body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner,
-        body.zc-homepage-ad-enabled .aads-ad-section .aads-ad-inner,
-        body.zc-homepage-ad-enabled .zsh-shared-ad .aads-ad-inner {
-          display:flex!important;flex-direction:column!important;
-          width:100%!important;max-width:100%!important;min-width:0!important;
-          height:auto!important;min-height:0!important;padding:clamp(10px,1.2vw,16px)!important;
-          box-sizing:border-box!important;overflow:hidden!important;
-        }
-        body.zc-homepage-ad-enabled .zc-home-floating-ad #frame,
-        body.zc-homepage-ad-enabled .zc-home-floating-ad [id^="frame-"],
-        body.zc-homepage-ad-enabled .aads-ad-section #frame,
-        body.zc-homepage-ad-enabled .aads-ad-section [id^="frame-"],
-        body.zc-homepage-ad-enabled .zsh-shared-ad #frame,
-        body.zc-homepage-ad-enabled .zsh-shared-ad [id^="frame-"] {
-          display:block!important;position:relative!important;flex:0 0 250px!important;
-          width:100%!important;max-width:100%!important;min-width:0!important;
-          height:250px!important;min-height:250px!important;max-height:250px!important;
-          margin:0 auto!important;padding:0!important;overflow:hidden!important;box-sizing:border-box!important;
-        }
-        body.zc-homepage-ad-enabled .zc-home-floating-ad iframe[data-aa="2460185"],
-        body.zc-homepage-ad-enabled .aads-ad-section iframe[data-aa="2460185"],
-        body.zc-homepage-ad-enabled .zsh-shared-ad iframe[data-aa="2460185"] {
-          display:block!important;position:relative!important;flex:0 0 250px!important;
-          width:100%!important;max-width:100%!important;min-width:0!important;
-          height:250px!important;min-height:250px!important;max-height:250px!important;
-          margin:0 auto!important;padding:0!important;border:0!important;box-sizing:border-box!important;
-        }
-        body.zc-homepage-ad-enabled .zc-ad-promo-fill {
-          display:flex!important;flex:1 1 auto!important;flex-direction:column!important;
-          align-items:center!important;justify-content:center!important;
-          min-height:260px!important;margin-top:14px!important;padding:28px!important;
-          border:1px solid #9bff4538!important;
-          background:radial-gradient(ellipse at 50% 35%,#17331a 0%,#09110c 48%,#070b0a 100%)!important;
-          text-align:center!important;box-sizing:border-box!important;
-        }
-        body.zc-homepage-ad-enabled .zc-ad-promo-fill .zc-ad-promo-kicker {
-          margin:0 0 18px!important;color:#9bff45!important;
-          font:700 10px/1.5 Orbitron,Arial,sans-serif!important;letter-spacing:.16em!important;
-        }
-        body.zc-homepage-ad-enabled .zc-ad-promo-fill .zc-ad-promo-title {
-          max-width:420px!important;margin:0 auto 14px!important;color:#eff6e9!important;
-          font:700 clamp(24px,2.2vw,38px)/1.12 Orbitron,Arial,sans-serif!important;
-          text-transform:uppercase!important;
-        }
-        body.zc-homepage-ad-enabled .zc-ad-promo-fill .zc-ad-promo-copy {
-          max-width:380px!important;margin:0 auto 24px!important;color:#a4b4a0!important;
-          font:500 15px/1.6 Rajdhani,Arial,sans-serif!important;
-        }
-        body.zc-homepage-ad-enabled .zc-ad-promo-fill .zc-ad-promo-link {
-          display:inline-flex!important;align-items:center!important;justify-content:center!important;
-          min-height:44px!important;padding:0 22px!important;border:1px solid #9bff45!important;
-          background:#9bff45!important;color:#071006!important;text-decoration:none!important;
-          font:700 10px/1.4 Orbitron,Arial,sans-serif!important;letter-spacing:.04em!important;
-        }
-      }
-      @media (max-width:900px) {
-        body.zc-homepage-ad-enabled .zc-ad-promo-fill {display:none!important}
-      }
+      .zc-adsterra-section{display:block;position:relative;box-sizing:border-box;width:100%;max-width:100%;min-width:0;margin:0;padding:18px clamp(12px,4vw,48px) 22px;background:#080b11;border-top:1px solid #9bff4522;border-bottom:1px solid #9bff4522;overflow:hidden}
+      .zc-adsterra-inner{display:flex;flex-direction:column;align-items:center;gap:10px;box-sizing:border-box;width:100%;max-width:1120px;min-width:0;margin:0 auto;text-align:center}
+      .zc-adsterra-label{margin:0;color:#9bff45;font:600 9px/1.5 Orbitron,Arial,sans-serif;letter-spacing:1.6px}
+      .zc-adsterra-stage{display:flex;align-items:flex-start;justify-content:center;position:relative;box-sizing:border-box;width:min(100%,728px);height:90px;min-width:0;margin:0 auto;overflow:hidden}
+      .zc-adsterra-unit{display:block;position:relative;flex:0 0 728px;width:728px;height:90px;min-width:728px;transform-origin:top center;margin:0 auto;overflow:visible}
+      .zc-adsterra-unit iframe{display:block!important;width:728px!important;height:90px!important;max-width:none!important;min-width:728px!important;border:0!important;margin:0!important;padding:0!important}
+      .zc-ad-promo-fill{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:100%;max-width:728px;margin:2px auto 0;padding:12px 16px;box-sizing:border-box;border:1px solid #9bff4528;background:linear-gradient(120deg,#0b140d,#090d12);text-align:center}
+      .zc-ad-promo-kicker{margin:0;color:#9bff45;font:700 9px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.14em}
+      .zc-ad-promo-title{margin:0;color:#edf5e5;font:700 clamp(14px,2vw,19px)/1.2 Orbitron,Arial,sans-serif}
+      .zc-ad-promo-copy{margin:0;color:#a4b4a0;font:500 14px/1.45 Rajdhani,Arial,sans-serif}
+      .zc-ad-promo-link{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:0 16px;border:1px solid #9bff45;background:#9bff45;color:#071006;text-decoration:none;font:700 9px/1.4 Orbitron,Arial,sans-serif;letter-spacing:.04em}
+      .zc-ad-promo-link:hover{background:#c5ff8a;border-color:#c5ff8a}
+      @media(max-width:600px){.zc-adsterra-section{padding:12px 8px 16px}.zc-adsterra-inner{gap:8px}.zc-adsterra-label{font-size:8px}.zc-ad-promo-fill{padding:10px 8px}.zc-ad-promo-copy{font-size:13px}}
     `;
     document.head.appendChild(style);
   };
 
-  const removeExtraAds = () => {
-    const frames = Array.from(document.querySelectorAll('iframe[data-aa]'));
-    if (!isHomepage) {
-      document.querySelectorAll(wrapperSelector).forEach(node => node.remove());
-      frames.forEach(frame => {
-        const wrapper = frame.closest(wrapperSelector);
-        if (wrapper) wrapper.remove(); else frame.remove();
-      });
-      return;
-    }
-    const matching = Array.from(document.querySelectorAll(iframeSelector));
-    const keep = matching[0] || null;
-    frames.forEach(frame => {
-      if (frame === keep) return;
-      const wrapper = frame.closest(wrapperSelector);
-      if (wrapper) wrapper.remove(); else frame.remove();
-    });
-    document.querySelectorAll(wrapperSelector).forEach(node => {
-      if (keep && (node === keep || node.contains(keep))) return;
-      if (!keep || !node.contains(keep)) node.remove();
-    });
-  };
-
-  const placeAd = () => {
+  const mountAd = () => {
     if (!isHomepage || !document.body) return;
     const hero = document.querySelector('main#home .hero, main .hero, body > .hero');
     if (!hero) return;
-    const layout = hero.querySelector(':scope > .hero-layout');
-    if (!layout) return;
-    let section = document.querySelector('.aads-ad-section, .zsh-shared-ad, [data-zombcash-ad-slot]');
-    let frame = document.querySelector(iframeSelector);
-    if (!section && frame) section = frame.closest(wrapperSelector);
-    if (!section && !frame) {
-      section = document.createElement('section');
-      section.className = 'aads-ad-section zsh-shared-ad';
-      section.setAttribute('data-zombcash-ad-slot', 'responsive-adaptive');
-      section.innerHTML = '<div class="aads-ad-inner"><div class="aads-ad-label">COMMUNITY SUPPORT / SPONSORED</div><div id="frame"><iframe data-aa="2460185" src="' + adSrc + '" title="Sponsored advertisement" loading="eager" referrerpolicy="strict-origin-when-cross-origin"></iframe></div></div>';
-      frame = section.querySelector(iframeSelector);
+
+    const candidates = Array.from(document.querySelectorAll('.zc-adsterra-section, .aads-ad-section, [data-zombcash-ad-slot]'));
+    let section = candidates.shift() || document.createElement('section');
+    candidates.forEach(node => node.remove());
+    section.className = 'zc-adsterra-section';
+    section.setAttribute('data-zombcash-ad-slot', 'adsterra-728x90');
+    section.setAttribute('aria-label', 'Sponsored advertisement');
+    section.innerHTML = '<div class="zc-adsterra-inner"><div class="zc-adsterra-label">COMMUNITY SUPPORT / SPONSORED</div><div class="zc-adsterra-stage"><div class="zc-adsterra-unit" aria-label="Adsterra 728 by 90 banner"></div></div><div class="zc-ad-promo-fill"><p class="zc-ad-promo-kicker">ZOMBCASH // SPONSOR ZONE</p><h2 class="zc-ad-promo-title">YOUR PROJECT. OUR UNDEAD INTERNET.</h2><p class="zc-ad-promo-copy">Put your project in front of the ZombieCash community. Contact the crew to discuss a sponsorship.</p><a class="zc-ad-promo-link" href="https://t.me/ZombieCashCTO" target="_blank" rel="noopener noreferrer">CONTACT THE CREW ↗</a></div></div>';
+
+    // The 728x90 creative belongs in a full-width sponsor strip, not in the
+    // narrow hero side column. Keep it directly below the hero and before video.
+    hero.insertAdjacentElement('afterend', section);
+    addAdStyles();
+
+    const stage = section.querySelector('.zc-adsterra-stage');
+    const unit = section.querySelector('.zc-adsterra-unit');
+    if (!stage || !unit) return;
+
+    const fitBanner = () => {
+      const available = Math.max(1, Math.min(728, stage.clientWidth || 728));
+      const scale = available / 728;
+      unit.style.transform = 'scale(' + scale + ')';
+      unit.style.transformOrigin = 'top center';
+      stage.style.height = (90 * scale) + 'px';
+    };
+    fitBanner();
+    if (window.ResizeObserver && !stage.dataset.resizeObserved) {
+      const observer = new ResizeObserver(fitBanner);
+      observer.observe(stage);
+      stage.dataset.resizeObserved = 'true';
+    } else if (!window.__zcAdsterraResizeBound) {
+      window.__zcAdsterraResizeBound = true;
+      window.addEventListener('resize', fitBanner, {passive:true});
     }
-    if (!section) return;
-    section.classList.add('zc-home-floating-ad');
-    section.setAttribute('aria-label', 'Advertisement');
-    section.setAttribute('data-zombcash-ad-slot', 'responsive-adaptive');
-    let stack = hero.querySelector(':scope > .zc-home-right-stack');
-    if (!stack) {
-      stack = document.createElement('div');
-      stack.className = 'zc-home-right-stack';
-      stack.setAttribute('data-zombcash-home-right-stack', 'true');
-      hero.insertBefore(stack, hero.querySelector(':scope > .hero-bottom'));
+
+    if (!unit.dataset.adsterraLoaded) {
+      window.atOptions = {
+        key: '08a70f8414101d6c6b04e25aa232f436',
+        format: 'iframe',
+        height: 90,
+        width: 728,
+        params: {}
+      };
+      const script = document.createElement('script');
+      script.src = adScriptUrl;
+      script.async = true;
+      script.dataset.zcAdsterra = 'true';
+      unit.dataset.adsterraLoaded = 'true';
+      unit.appendChild(script);
     }
-    // The oversized radar panel is intentionally hidden for now; do not move it
-    // into the right stack or let its intrinsic dimensions affect the grid.
-    if (section.parentElement !== stack) stack.insertBefore(section, stack.firstChild);
-    // Intentionally do not move or restyle the existing promo video section.
-    frame = section.querySelector(iframeSelector) || frame;
-    const adInner = section.querySelector('.aads-ad-inner');
-    if (adInner && !adInner.querySelector('.zc-ad-promo-fill')) {
-      const promo = document.createElement('div');
-      promo.className = 'zc-ad-promo-fill';
-      promo.innerHTML = '<p class="zc-ad-promo-kicker">ZOMBCASH // SPONSOR ZONE</p><h2 class="zc-ad-promo-title">YOUR PROJECT. OUR UNDEAD INTERNET.</h2><p class="zc-ad-promo-copy">Put your project in front of the ZombieCash community. Launch a campaign and turn attention into action.</p><a class="zc-ad-promo-link" href="https://aads.com/campaigns/new?partner=2460185&source_type=ad_unit&source_id=2460185" target="_blank" rel="noopener noreferrer">ADVERTISE WITH A-ADS ↗</a>';
-      adInner.appendChild(promo);
-    }
-    normalizeIframe(frame);
-    document.body.classList.add('zc-homepage-ad-enabled');
-    ensureStyles();
   };
 
   const run = () => {
-    removeExtraAds();
-    placeAd();
+    removeLegacyAds();
+    mountAd();
   };
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', run, {once:true});
-  } else {
-    run();
-  }
-  let scheduled = false;
-  const observer = new MutationObserver(() => {
-    if (scheduled) return;
-    scheduled = true;
-    requestAnimationFrame(() => { scheduled = false; run(); });
-  });
-  const observe = () => {
-    if (document.body) observer.observe(document.body, {childList:true, subtree:true});
-  };
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', observe, {once:true});
-  else observe();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run, {once:true});
+  else run();
 })();
 
 
