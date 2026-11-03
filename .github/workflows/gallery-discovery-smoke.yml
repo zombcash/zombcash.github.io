@@ -100,6 +100,10 @@ jobs:
               assert f'<link rel="canonical" href="{url}">' in page
               alternates = re.findall(r'<link rel="alternate" hreflang="[^"]+" href="([^"]+)">', page)
               assert len(alternates) == 10 and set(alternates) == expected_alternates | {expected_urls["en"]}
+              schema_match = re.search(r'<script id="gallery-collection-jsonld" type="application/ld\\+json">(.*?)</script>', page, re.S)
+              assert schema_match, f"missing CollectionPage JSON-LD for {locale}"
+              schema = json.loads(schema_match.group(1))
+              assert schema.get("@type") == "CollectionPage" and schema.get("url") == url and schema.get("inLanguage") == locale
               if locale != "en":
                   assert 'href="../gallery.css?' in page
                   assert 'src="../gallery.js?' in page
