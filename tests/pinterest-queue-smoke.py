@@ -38,10 +38,44 @@ published_item.update({
     "pinterest_published_at": "2026-11-03T21:36:57",
     "pinterest_published_destination": "https://t.me/ZOMBCASH/3583",
 })
-published_result = module.build_queue({"items": [published_item]})
+published_ledger = {
+    "pins": [{
+        "gallery_id": published_item["id"],
+        "pin_id": "620441286210443503",
+        "pin_url": "https://ch.pinterest.com/pin/620441286210443503/",
+        "board_id": "zombcash-board-1",
+        "published_at": "2026-11-03T21:36:57",
+        "original_destination_url": "https://t.me/ZOMBCASH/1234",
+    }]
+}
+published_result = module.build_queue({"items": [published_item]}, published_ledger)
 assert published_result["published_count"] == 1
+assert published_result["ledger_total_count"] == 1
 assert published_result["eligible_count"] == 0 and published_result["blocked_count"] == 0
 assert published_result["published"][0]["pin_id"] == "620441286210443503"
+
+# An older gallery image remains in the durable ledger even after it rolls off the current 50-item snapshot.
+rolling_snapshot = {"items": [sample_item()]}
+rolling_ledger = {"pins": published_ledger["pins"] + [{
+    "gallery_id": "ZOMBCASH/OLD:0",
+    "pin_id": "620441286210443504",
+    "pin_url": "https://ch.pinterest.com/pin/620441286210443504/",
+    "board_id": "zombcash-board-1",
+    "published_at": "2026-11-03T21:36:58",
+}]}
+rolling_result = module.build_queue(rolling_snapshot, rolling_ledger)
+assert rolling_result["ledger_total_count"] == 2
+assert rolling_result["published_count"] == 0
+assert rolling_result["eligible_count"] == 1
+
+missing_ledger = sample_item()
+missing_ledger["pinterest_status"] = "published"
+try:
+    module.build_queue({"items": [missing_ledger]}, {"pins": []})
+except ValueError:
+    pass
+else:
+    raise AssertionError("A gallery item marked published but missing from the durable ledger must fail closed")
 pin = valid["eligible"][0]
 assert pin["canonical_url"] == sample_item()["pinterest_destination_url"]
 tracking = urlsplit(pin["destination_url"])
