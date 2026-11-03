@@ -189,6 +189,8 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     const apocalypseSurvival = await page.locator("#gallery-grid .gallery-card").count();
     if (apocalypseSurvival !== 3) throw new Error("Apocalypse & Survival filter should show 3 visually classified items, got " + apocalypseSurvival);
     await page.locator(".gallery-reset").click();
+    const categoryReset = await page.locator("#gallery-grid .gallery-card").count();
+    if (categoryReset !== 50) throw new Error("Reset after taxonomy filters should restore all 50 images");
     await page.locator(".gallery-search").fill("goldfish");
     const matching = await page.locator("#gallery-grid .gallery-card").count();
     if (matching !== 1) throw new Error("Search expected one goldfish caption, got " + matching);
