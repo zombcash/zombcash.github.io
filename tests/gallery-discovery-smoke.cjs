@@ -151,6 +151,10 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     if (!openTracked) throw new Error("Gallery image open analytics event was not recorded");
     const detailDescription = await page.locator(".gallery-lightbox-description").textContent();
     if (!detailDescription) throw new Error("Lightbox should include the editorial description");
+    const detailCategories = await page.locator(".gallery-lightbox-categories").textContent();
+    if (!detailCategories || (await page.locator(".gallery-category-tag").count()) > 1 && !detailCategories.includes("·")) throw new Error("Lightbox category labels should be separated");
+    const sourceLabel = (await page.locator(".gallery-lightbox-source").textContent()).trim();
+    if (sourceLabel.endsWith("↗ ↗")) throw new Error("Lightbox source link must not repeat its arrow");
     await page.evaluate(() => {
       window.__sharedPayload = null;
       Object.defineProperty(navigator, "share", {
