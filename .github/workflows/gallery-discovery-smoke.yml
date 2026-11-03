@@ -14,6 +14,7 @@ on:
       - "pinterest-queue.json"
       - "tests/gallery-discovery-smoke.cjs"
       - ".github/workflows/gallery-discovery-smoke.yml"
+      - ".github/workflows/sync-zombie-gallery.yml"
   workflow_dispatch:
 
 permissions:
@@ -41,7 +42,7 @@ jobs:
           npm install --no-save playwright
           npx playwright install --with-deps chromium
       - name: Validate Python scripts
-        run: python -m py_compile scripts/sync_gallery.py scripts/sync_gallery_image_seo.py
+        run: python -m py_compile scripts/sync_gallery.py scripts/sync_gallery_image_seo.py scripts/export_pinterest_queue.py
       - name: Validate gallery JSON and generated index
         run: |
           python - <<'PY'
@@ -68,6 +69,9 @@ jobs:
           ns = {"image": "http://www.google.com/schemas/sitemap-image/1.1"}
           assert len(sitemap.findall(".//image:image", ns)) == len(items), "image sitemap count mismatch"
           print("Gallery data, generated cards and image sitemap are consistent.")
+          sync_workflow = Path(".github/workflows/sync-zombie-gallery.yml").read_text(encoding="utf-8")
+          assert "scripts/export_pinterest_queue.py" in sync_workflow
+          assert "pinterest-queue.json" in sync_workflow
           PY
       - name: Build and validate rights-gated Pinterest queue
         run: |
