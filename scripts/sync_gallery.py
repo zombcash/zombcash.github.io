@@ -139,7 +139,7 @@ def main():
         item.setdefault("alt_review_status", "caption-derived-pending-visual-review")
         item.setdefault("metadata_version", 1)
         stable_id = str(item.get("id") or "")
-        stable_match = re.fullmatch(r"ZOMBCASH/(\\d+):(\\d+)", stable_id)
+        stable_match = re.fullmatch(r"ZOMBCASH/(\d+):(\d+)", stable_id)
         if stable_match:
             message_id, media_index = stable_match.groups()
             item.setdefault("slug", f"gallery-{message_id}-{media_index}")
