@@ -95,6 +95,7 @@ For every image:
 - [x] Draft backend API in `vovik777-beep/zombcash-bot` PR #53 with signed-session validation and account rate limiting.
 - [ ] Merge/review/deploy the backend API before merging the website UI; then test guest, registered, logout, duplicate and concurrent requests end-to-end.
 - [ ] Run production smoke checks and verify no Survival Points are awarded for likes.
+- [x] Prepare the next-stage comments API/security/moderation design in GALLERY-COMMUNITY-INTERACTIONS-DESIGN.md; no comments tables or endpoints have been created yet.
 
 ## Phase 4 — Registered-user comments
 - Authenticated users can post, edit their own comments within a defined window, and delete their own comments.
