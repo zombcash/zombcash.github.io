@@ -83,6 +83,21 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     }));
     await page.screenshot({ path: "gallery-desktop-smoke.png", fullPage: true });
     await Promise.all(imageResponseTasks);
+    const recoveryChecks = [];
+    for (const event of imageNetworkEvents.filter(item => item.type === "request-failed")) {
+      try {
+        const response = await page.request.get(event.url, { timeout: 12000 });
+        const body = await response.body();
+        recoveryChecks.push({
+          url: event.url,
+          status: response.status(),
+          contentType: response.headers()["content-type"] || "",
+          bytes: body.length
+        });
+      } catch (error) {
+        recoveryChecks.push({ url: event.url, error: String(error) });
+      }
+    }
     const visualAudit = [];
     for (const card of await page.locator("#gallery-grid .gallery-card").all()) {
       const image = card.locator("img");
@@ -115,6 +130,7 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
       fallback: visualAudit.filter(item => item.fallbackApplied).length,
       failed: visualAudit.filter(item => item.naturalWidth === 0),
       networkEvents: imageNetworkEvents,
+      recoveryChecks,
       images: visualAudit
     }, null, 2) + "\n");
     await page.evaluate(() => {
@@ -280,7 +296,7 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
       await localized.close();
     }
 
-    console.log(JSON.stringify({ status: "passed", initial, horror, search, reset, matching, oldestFirst, japaneseFilter, mobile: overflow, imageLoadAudit, imageNetworkEvents, localeAudit }));
+    console.log(JSON.stringify({ status: "passed", initial, horror, search, reset, matching, oldestFirst, japaneseFilter, mobile: overflow, imageLoadAudit, imageNetworkEvents, recoveryChecks, localeAudit }));
   } finally {
     if (browser) await browser.close();
     server.kill();
