@@ -1393,15 +1393,15 @@
   const supportedLocales = ['de','fr','it','ja','zh-CN','ru','tr','hi'];
   const locale = supportedLocales.includes(localeCandidate) ? localeCandidate : (supportedLocales.includes(queryLocale) ? queryLocale : 'en');
   const labels = {
-    en: ['ABOUT & EDITORIAL POLICY','Independent community project'],
-    de: ['ÜBER UNS & REDAKTIONSRICHTLINIEN','Unabhängiges Community-Projekt'],
-    fr: ['À PROPOS & POLITIQUE ÉDITORIALE','Projet communautaire indépendant'],
-    it: ['CHI SIAMO & POLITICA EDITORIALE','Progetto comunitario indipendente'],
-    ja: ['概要・編集方針','独立したコミュニティプロジェクト'],
-    'zh-CN': ['关于我们与编辑政策','独立社区项目'],
-    ru: ['О ПРОЕКТЕ И РЕДАКЦИОННОЙ ПОЛИТИКЕ','Независимый проект сообщества'],
-    tr: ['HAKKIMIZDA VE YAYIN POLİTİKASI','Bağımsız topluluk projesi'],
-    hi: ['हमारे बारे में और संपादकीय नीति','स्वतंत्र समुदाय परियोजना']
+    en: ['ABOUT & EDITORIAL POLICY','Independent community project','FOLLOW THE OUTBREAK'],
+    de: ['ÜBER UNS & REDAKTIONSRICHTLINIEN','Unabhängiges Community-Projekt','DEM AUSBRUCH FOLGEN'],
+    fr: ['À PROPOS & POLITIQUE ÉDITORIALE','Projet communautaire indépendant','SUIVRE L’ÉPIDÉMIE'],
+    it: ['CHI SIAMO & POLITICA EDITORIALE','Progetto comunitario indipendente','SEGUI L’EPIDEMIA'],
+    ja: ['概要・編集方針','独立したコミュニティプロジェクト','アウトブレイクをフォロー'],
+    'zh-CN': ['关于我们与编辑政策','独立社区项目','关注疫情动态'],
+    ru: ['О ПРОЕКТЕ И РЕДАКЦИОННОЙ ПОЛИТИКЕ','Независимый проект сообщества','СЛЕДИТЬ ЗА ВСПЫШКОЙ'],
+    tr: ['HAKKIMIZDA VE YAYIN POLİTİKASI','Bağımsız topluluk projesi','SALGINI TAKİP ET'],
+    hi: ['हमारे बारे में और संपादकीय नीति','स्वतंत्र समुदाय परियोजना','आउटब्रेक को फ़ॉलो करें']
   };
   const addAboutFooter = () => {
     if (!document.body || document.getElementById('zsh-about-footer')) return;
@@ -1409,10 +1409,14 @@
     const footer = document.createElement('footer');
     footer.id = 'zsh-about-footer';
     const aboutHref = locale === 'en' ? '/about.html' : '/' + locale + '/about.html';
-    footer.innerHTML = '<a href="' + aboutHref + '">' + copy[0] + '</a><span>ZombieCash · ' + copy[1] + '</span>';
+    footer.innerHTML = '<div class="zsh-footer-about"><a href="' + aboutHref + '">' + copy[0] + '</a><span>ZombieCash · ' + copy[1] + '</span></div>' +
+      '<nav class="zsh-footer-social" aria-label="' + copy[2] + '"><span class="zsh-footer-social-label">' + copy[2] + '</span>' +
+      '<a href="https://discord.gg/9spZhHMhfQ" target="_blank" rel="noopener noreferrer" aria-label="ZombieCash on Discord">DISCORD</a>' +
+      '<a href="https://www.pinterest.com/ZOMBCASH/" target="_blank" rel="noopener noreferrer" aria-label="ZombieCash on Pinterest">PINTEREST</a>' +
+      '<a href="https://bsky.app/profile/zombcash.bsky.social" target="_blank" rel="noopener noreferrer" aria-label="ZombieCash on Bluesky">BLUESKY</a></nav>';
     const style = document.createElement('style');
     style.id = 'zsh-about-footer-style';
-    style.textContent = '#zsh-about-footer{box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;width:100%;max-width:100%;margin:36px 0 0;padding:18px clamp(16px,4vw,48px);border-top:1px solid #9bff4533;background:#050907;color:#8e9d8d;font:500 12px/1.5 Rajdhani,Arial,sans-serif}#zsh-about-footer a{color:#b8f992;text-decoration:none;font:700 10px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.04em}#zsh-about-footer a:hover{color:#9bff45;text-decoration:underline}#zsh-about-footer span{color:#718071}@media(max-width:600px){#zsh-about-footer{flex-direction:column;align-items:flex-start;padding:16px}}';
+    style.textContent = '#zsh-about-footer{box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px;width:100%;max-width:100%;margin:36px 0 0;padding:18px clamp(16px,4vw,48px);border-top:1px solid #9bff4533;background:#050907;color:#8e9d8d;font:500 12px/1.5 Rajdhani,Arial,sans-serif}#zsh-about-footer .zsh-footer-about{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}#zsh-about-footer a{color:#b8f992;text-decoration:none;font:700 10px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.04em}#zsh-about-footer a:hover{color:#9bff45;text-decoration:underline}#zsh-about-footer span{color:#718071}#zsh-about-footer .zsh-footer-social{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}#zsh-about-footer .zsh-footer-social-label{color:#718071;font:700 9px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.08em}#zsh-about-footer .zsh-footer-social a{padding:5px 8px;border:1px solid #9bff4533;border-radius:2px;background:#09110c;font-size:9px;letter-spacing:.06em}#zsh-about-footer .zsh-footer-social a:hover{border-color:#9bff45;background:#101b12}@media(max-width:600px){#zsh-about-footer{flex-direction:column;align-items:flex-start;padding:16px}#zsh-about-footer .zsh-footer-social{gap:8px}}';
     document.head.appendChild(style);
     document.body.appendChild(footer);
   };
