@@ -105,7 +105,14 @@ jobs:
                   assert 'src="../gallery.js?' in page
                   assert 'src="../language.js?' in page
           locale_sitemap = ET.parse("sitemap-gallery-pages.xml")
-          assert len(locale_sitemap.findall(".//{http://www.sitemaps.org/schemas/sitemap/0.9}url")) == 9
+          sitemap_urls = locale_sitemap.findall(".//{http://www.sitemaps.org/schemas/sitemap/0.9}url")
+          assert len(sitemap_urls) == 9
+          for sitemap_url in sitemap_urls:
+              loc = sitemap_url.find("{http://www.sitemaps.org/schemas/sitemap/0.9}loc")
+              alternates = sitemap_url.findall("{http://www.w3.org/1999/xhtml}link")
+              assert loc is not None and loc.text in expected_alternates
+              assert len(alternates) == 10
+              assert {item.attrib.get("href") for item in alternates} == expected_alternates
           assert "sitemap-gallery-pages.xml" in Path("robots.txt").read_text(encoding="utf-8")
           language_js = Path("language.js").read_text(encoding="utf-8")
           assert '"/gallery.html": ["de","fr","it","ja","zh-CN","ru","tr","hi"]' in language_js
