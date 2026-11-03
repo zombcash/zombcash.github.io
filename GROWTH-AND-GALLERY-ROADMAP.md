@@ -20,10 +20,10 @@ Increase qualified search discovery and returning visitors by turning the existi
 10. No mass link spam, fake engagement, purchased traffic or misleading financial claims.
 
 ## Phase 0 — Baseline and safety audit (first)
-- [ ] Capture current main branch SHA and current live gallery appearance on desktop/mobile.
+- [ ] Capture current main branch SHA and current live gallery appearance on desktop/mobile. Live HTML/source was inspected; screenshot/responsive verification remains pending.
 - [x] Review `gallery.html`, `gallery.js`, `gallery.css`, `gallery-data.json`, `scripts/sync_gallery.py`, `scripts/sync_gallery_image_seo.py` and both gallery workflows.
 - [x] Inventory all 50 currently synchronized image entries and group them by existing series. Visual caption-to-image review remains pending.
-- [ ] Check current image URL availability, duplicate images, dimensions/aspect ratios, file formats, source Telegram URLs and dates.
+- [ ] Check current image URL availability, dimensions/aspect ratios, file formats and source rights. Duplicate IDs/URLs, source Telegram URLs and dates were checked for the 50-item snapshot.
 - [x] Confirm gallery card HTML is generated from `gallery-data.json`; verify image sitemap generation and robots references in source.
 - [x] Inspect existing Telegram Survivor authentication and API/database capabilities. Existing signed server-side session can be reused as the identity foundation; new interaction routes/tables are still required.
 - [ ] Record baseline SEO, performance, responsive and accessibility checks. Do not change production until the baseline is captured.
@@ -45,9 +45,14 @@ Extend gallery entries compatibly; preserve existing fields:
 - `id`, `image`, `caption`, `post_url`, `date`, `post_id`
 - Add structured fields: `category_ids[]`, `series`, `title`, `description`, `alt_text`, `tags[]`, `language`, `credit`, `source_type`, `pinterest_status` (internal export state only).
 - Generate stable slugs/IDs; do not use caption text as the database identity.
-- Add schema/version metadata and validation so old records still render.
+- [x] Add schema/version metadata (schema_version: 2, per-item metadata_version) while keeping old source fields intact.
+- [x] Preserve editorial metadata during scheduled Telegram syncs by stable image ID.
+- [ ] Add full validation for all editorial fields and localized metadata.
 
 ### 1C. User experience
+- [x] Add localized category chips, text search and newest/oldest sorting on the feature branch. All nine locales have category and control labels.
+- [ ] Add per-card category labels, detail/share improvements and pagination after visual review.
+- [ ] Add most-liked sorting only after real authenticated like counts exist.
 - Add category chips/filtering, search by title/caption/tags, sort newest/oldest/most liked, and clear-filter behavior.
 - Keep the existing gallery grid and lightbox aesthetic; no disruptive redesign.
 - Add image detail view with full-size image, title, concise description, category/tags, original Telegram source and share link.
@@ -56,6 +61,8 @@ Extend gallery entries compatibly; preserve existing fields:
 - Ensure categories are discoverable as crawlable pages or crawlable filtered URLs only where each page has unique useful content. Do not create thin indexable filter combinations.
 
 ## Phase 2 — Image titles, captions and image SEO
+- [x] Update generated SEO cards and image sitemap to consume editorial title, description and alt_text fields when available.
+- [ ] Populate and human-review those fields per image after visual inspection; current ALT fallback is temporary and not considered final.
 For every image:
 - Write a concise, human-readable unique title describing the visible subject.
 - Write a useful description/caption (normally one or two sentences) with context, mood or joke; do not keyword-stuff.
