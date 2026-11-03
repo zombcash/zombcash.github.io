@@ -1623,8 +1623,8 @@
       "description": "Even the apocalypse has its gorgeous moments, darling.",
       "credit": "@ZOMBCASH",
       "rights_status": "review-required",
-      "alt_review_status": "caption-derived-pending-visual-review",
-      "alt_text": "ZombieCash gallery artwork accompanying the story: Even the apocalypse has its gorgeous moments, darling.",
+      "alt_review_status": "visual-reviewed",
+      "alt_text": "Two women in dark outfits stand inside a red-lit subway car.",
       "slug": "gallery-3623-0",
       "anchor_id": "gallery-image-3623-0",
       "pinterest_status": "blocked-rights-review",
@@ -1632,8 +1632,10 @@
       "pinterest_board_category": "undead-after-dark",
       "pinterest_title": "Gorgeous Moments, Darling",
       "pinterest_description": "Even the apocalypse has its gorgeous moments, darling.",
-      "pinterest_alt": "ZombieCash gallery artwork accompanying the story: Even the apocalypse has its gorgeous moments, darling.",
-      "pinterest_destination_url": "https://zombcash.github.io/gallery.html#gallery-image-3623-0"
+      "pinterest_alt": "Two women in dark outfits stand inside a red-lit subway car.",
+      "pinterest_destination_url": "https://zombcash.github.io/gallery.html#gallery-image-3623-0",
+      "alt_reviewed_at": "2026-11-04",
+      "alt_review_method": "manual-contact-sheet-review"
     },
     {
       "id": "ZOMBCASH/3621:0",
@@ -1657,8 +1659,8 @@
       "description": "The reflection in the dark basement window stops moving a second after the narrator does.",
       "credit": "@ZOMBCASH",
       "rights_status": "review-required",
-      "alt_review_status": "caption-derived-pending-visual-review",
-      "alt_text": "ZombieCash gallery artwork accompanying the story: The reflection in the dark basement window stops moving a second after the narrator does.",
+      "alt_review_status": "visual-reviewed",
+      "alt_text": "A decayed zombie face peers through a rain-streaked window in blue-green light.",
       "slug": "gallery-3621-0",
       "anchor_id": "gallery-image-3621-0",
       "pinterest_status": "blocked-rights-review",
@@ -1666,8 +1668,10 @@
       "pinterest_board_category": "nightmare-horror",
       "pinterest_title": "The Reflection Falls Behind",
       "pinterest_description": "The reflection in the dark basement window stops moving a second after the narrator does.",
-      "pinterest_alt": "ZombieCash gallery artwork accompanying the story: The reflection in the dark basement window stops moving a second after the narrator does.",
-      "pinterest_destination_url": "https://zombcash.github.io/gallery.html#gallery-image-3621-0"
+      "pinterest_alt": "A decayed zombie face peers through a rain-streaked window in blue-green light.",
+      "pinterest_destination_url": "https://zombcash.github.io/gallery.html#gallery-image-3621-0",
+      "alt_reviewed_at": "2026-11-04",
+      "alt_review_method": "manual-contact-sheet-review"
     },
     {
       "id": "ZOMBCASH/3610:0",
