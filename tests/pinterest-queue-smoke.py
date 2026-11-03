@@ -29,6 +29,19 @@ def sample_item():
 
 valid = module.build_queue({"items": [sample_item()]})
 assert valid["eligible_count"] == 1 and valid["blocked_count"] == 0
+
+published_item = sample_item()
+published_item.update({
+    "pinterest_status": "published",
+    "pinterest_pin_id": "620441286210443503",
+    "pinterest_pin_url": "https://ch.pinterest.com/pin/620441286210443503/",
+    "pinterest_published_at": "2026-11-03T21:36:57",
+    "pinterest_published_destination": "https://t.me/ZOMBCASH/3583",
+})
+published_result = module.build_queue({"items": [published_item]})
+assert published_result["published_count"] == 1
+assert published_result["eligible_count"] == 0 and published_result["blocked_count"] == 0
+assert published_result["published"][0]["pin_id"] == "620441286210443503"
 pin = valid["eligible"][0]
 assert pin["canonical_url"] == sample_item()["pinterest_destination_url"]
 tracking = urlsplit(pin["destination_url"])
