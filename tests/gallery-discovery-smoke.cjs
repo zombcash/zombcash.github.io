@@ -241,10 +241,13 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
       const canonical = await localized.locator('link[rel="canonical"]').getAttribute("href");
       const alternates = await localized.locator('link[rel="alternate"][hreflang]').count();
       const title = await localized.title();
+      const schemaText = await localized.locator("#gallery-collection-jsonld").textContent();
+      const schema = JSON.parse(schemaText);
       const controls = await localized.locator(".gallery-category-chip").allTextContents();
       if (lang !== locale) throw new Error(locale + " gallery lang mismatch: " + lang);
       if (canonical !== "https://zombcash.github.io/" + locale + "/gallery.html") throw new Error(locale + " canonical mismatch: " + canonical);
       if (alternates !== 10) throw new Error(locale + " should expose nine hreflang locales plus x-default, got " + alternates);
+      if (schema["@type"] !== "CollectionPage" || schema.url !== canonical || schema.inLanguage !== locale) throw new Error(locale + " CollectionPage JSON-LD is invalid");
       if (!title || !title.includes("Zombie") && locale !== "ja" && locale !== "zh-CN" && locale !== "hi") throw new Error(locale + " localized title is missing");
       if (controls.length < 2 || controls.some(label => !label.trim())) throw new Error(locale + " category controls are missing localized labels");
       localeAudit.push({ locale, lang, alternates, cards: 50, title });
