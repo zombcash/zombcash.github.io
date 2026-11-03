@@ -105,8 +105,8 @@ jobs:
           expected_urls = {"en": "https://zombcash.github.io/gallery.html", **{locale: f"https://zombcash.github.io/{locale}/gallery.html" for locale in locales}}
           expected_alternates = set(expected_urls.values())
           root_page = Path("gallery.html").read_text(encoding="utf-8")
-          root_css_asset = re.search(r'href="(gallery\\.css\\?v=[^"]+)"', root_page).group(1)
-          root_js_asset = re.search(r'src="(gallery\\.js\\?v=[^"]+)"', root_page).group(1)
+          root_css_asset = re.search(r'href="(gallery\.css\?v=[^"]+)"', root_page).group(1)
+          root_js_asset = re.search(r'src="(gallery\.js\?v=[^"]+)"', root_page).group(1)
           for locale, url in expected_urls.items():
               path = Path("gallery.html") if locale == "en" else Path(locale, "gallery.html")
               page = path.read_text(encoding="utf-8")
