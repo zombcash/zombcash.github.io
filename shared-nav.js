@@ -1299,7 +1299,7 @@
     controls.classList.toggle('is-visible', mobile && window.scrollY > 220);
     const assistant = document.getElementById('zombcash-floating-assistant');
     const assistantLauncher = assistant && assistant.querySelector('.zfa-launch');
-    const adSelectors = '.zc-adsterra-section, .outbreak-ad-unit, .arcade-ad-unit, .aads-ad-section, .zsh-shared-ad, aside[aria-label="Advertisement"], #frame, [data-aa], [id^="frame-"]';
+    const adSelectors = '.zc-adsterra-section, .outbreak-ad-unit, .arcade-ad-unit, .gallery-ad-unit, .field-manual-ad, .maker-ad-unit, .aads-ad-section, .zsh-shared-ad, aside[aria-label="Advertisement"], #frame, [data-aa], [id^="frame-"]';
     const intersectsAd = (element) => {
       if (!element || element.getClientRects().length === 0) return false;
       const rect = element.getBoundingClientRect();
@@ -1428,7 +1428,7 @@
   const isHomepage = path === '/' || path === '/index.html' ||
     /^\/(?:de|fr|it|ja|zh-CN|ru|tr|hi)(?:\/index\.html)?\/?$/.test(path);
   const adScriptUrl = 'https://bauval.org/22/08/08a70f8414101d6c6b04e25aa232f436';
-  const legacyWrappers = '.aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, [data-zombcash-ad-slot]';
+  const legacyWrappers = '.aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, .gallery-ad-unit, .field-manual-ad, .maker-ad-unit, [data-zombcash-ad-slot]';
 
   const removeLegacyAds = () => {
     document.querySelectorAll('iframe[data-aa], iframe[src*="acceptable.a-ads.com"], script[src*="acceptable.a-ads.com"]').forEach(node => node.remove());
@@ -1437,7 +1437,7 @@
       document.querySelectorAll('script[src*="bauval.org"]').forEach(node => node.remove());
       return;
     }
-    document.querySelectorAll('.outbreak-ad-unit, .arcade-ad-unit, .zsh-shared-ad').forEach(node => node.remove());
+    document.querySelectorAll('.outbreak-ad-unit, .arcade-ad-unit, .gallery-ad-unit, .field-manual-ad, .maker-ad-unit, .zsh-shared-ad').forEach(node => node.remove());
   };
 
   const addAdStyles = () => {
