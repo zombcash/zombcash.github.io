@@ -64,6 +64,10 @@ Extend gallery entries compatibly; preserve existing fields:
 - Ensure categories are discoverable as crawlable pages or crawlable filtered URLs only where each page has unique useful content. Do not create thin indexable filter combinations.
 
 ## Phase 2 — Image titles, captions and image SEO
+- [x] Generate dedicated gallery pages for all nine locales with translated title/description metadata, self-canonical URLs and reciprocal hreflang tags.
+- [x] Add the nine-page hreflang sitemap and reference it from robots.txt.
+- [x] Update the language switcher to route gallery users to dedicated locale URLs rather than lang query variants.
+- [ ] Translate editorial titles/descriptions for priority images; source Telegram captions remain preserved in English.
 - [x] Update generated SEO cards and image sitemap to consume editorial title, description and alt_text fields when available.
 - [ ] Populate and human-review those fields per image after visual inspection; current ALT fallback is temporary and not considered final.
 For every image:
