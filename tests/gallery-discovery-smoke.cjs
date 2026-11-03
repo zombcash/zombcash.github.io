@@ -135,6 +135,19 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     if (!openTracked) throw new Error("Gallery image open analytics event was not recorded");
     const detailDescription = await page.locator(".gallery-lightbox-description").textContent();
     if (!detailDescription) throw new Error("Lightbox should include the editorial description");
+    await page.evaluate(() => {
+      window.__sharedPayload = null;
+      Object.defineProperty(navigator, "share", {
+        configurable: true,
+        value: async payload => { window.__sharedPayload = payload; }
+      });
+    });
+    await page.screenshot({ path: "gallery-lightbox-smoke.png" });
+    await page.locator(".gallery-lightbox-share").click();
+    await page.waitForFunction(() => Boolean(window.__sharedPayload));
+    const sharedPayload = await page.evaluate(() => window.__sharedPayload);
+    if (!sharedPayload.url.includes("#gallery-image-")) throw new Error("Gallery share URL must use the stable image anchor");
+    await page.waitForFunction(() => window.__galleryEvents.some(item => item.event === "gallery_share"));
     await page.locator(".gallery-lightbox-close").click();
     await page.getByRole("button", { name: "Nightmare & Horror" }).click();
     const filterTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_filter"));
@@ -250,7 +263,11 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
       if (schema["@type"] !== "CollectionPage" || schema.url !== canonical || schema.inLanguage !== locale) throw new Error(locale + " CollectionPage JSON-LD is invalid");
       if (!title || !title.includes("Zombie") && locale !== "ja" && locale !== "zh-CN" && locale !== "hi") throw new Error(locale + " localized title is missing");
       if (controls.length < 2 || controls.some(label => !label.trim())) throw new Error(locale + " category controls are missing localized labels");
-      localeAudit.push({ locale, lang, alternates, cards: 50, title });
+      await localized.locator("#gallery-grid .gallery-card").first().click();
+      const shareLabel = (await localized.locator(".gallery-lightbox-share").textContent()).trim();
+      if (!shareLabel || shareLabel === "SHARE") throw new Error(locale + " gallery share control is not localized");
+      await localized.locator(".gallery-lightbox-close").click();
+      localeAudit.push({ locale, lang, alternates, cards: 50, title, shareLabel });
       await localized.close();
     }
 
