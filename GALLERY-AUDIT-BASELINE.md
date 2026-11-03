@@ -3,6 +3,10 @@
 Repository inspected: `zombcash/zombcash.github.io` (main) and backend repository `vovik777-beep/zombcash-bot`.
 Work branch: `growth-gallery-roadmap-2026-11`.
 
+## Historical baseline before the feature-branch implementation
+
+The following findings describe the pre-change main-branch state and are retained as an audit trail. The current implementation status is recorded in the sections below.
+
 ## Findings confirmed from source
 
 ### Current gallery content and pipeline
@@ -53,7 +57,7 @@ Work branch: `growth-gallery-roadmap-2026-11`.
 - Added stable per-image anchors for all 50 cards and a gated Pinterest queue exporter.
 - Added aggregate first-party tracking for gallery image opens, category filters, search use (without recording query text), sort changes, filter resets, like/unlike success and Telegram source opens.
 - Added dedicated gallery URLs for all eight non-English locales, each with translated page metadata, self-canonical URL, the complete 9-language hreflang set, root-relative assets, and a matching 9-URL hreflang sitemap. robots.txt now references the gallery-pages sitemap. The gallery language switcher routes to locale URLs instead of lang query variants. The API allowlist change is in backend PR #53; events contain no user IDs, IPs, wallets or search text. Current queue: 0 eligible, 50 blocked because rights confirmation, visual ALT review and board assignment are still outstanding. No Pins have been published.
-- Localized UI and metadata URLs are in place; gallery item titles/descriptions remain English source-derived until translated and visually reviewed. Visual audit of the actual artwork, final image-specific ALT, image URL/dimension checks and screenshot evidence are still pending. Direct CDN downloads are blocked in the current runtime; do not infer visual details from captions. TinyFish visual browser run could not start because its wallet is below zero; no retry was attempted.
+- Localized UI and metadata URLs are in place; gallery item titles/descriptions remain English source-derived until translated and visually reviewed. Desktop/mobile/Russian screenshot artifacts from CI were downloaded and visually inspected. The previous run reported 49/50 original images loaded and one fallback. The next run captures per-image source URL, natural dimensions, fallback state and a contact sheet. Actual image-by-image semantic classification, final ALT and rights checks remain pending. No TinyFish or Browser Use sessions are used.
 
 ## Phase 0 status
 - [x] Repository and gallery source files inspected.
@@ -61,8 +65,8 @@ Work branch: `growth-gallery-roadmap-2026-11`.
 - [x] Gallery sync and image SEO workflows inspected.
 - [x] Existing Telegram authentication and Supabase schema inspected.
 - [ ] Visual audit of every image on desktop/mobile. Actual artwork content has not yet been verified image-by-image; do not write final ALT text from captions alone.
-- [ ] Verify image URL response, dimensions, formats and source rights.
-- [ ] Confirm live gallery appearance and responsive behavior. Public HTML and 50 source cards are readable, but browser screenshot/responsive verification remains pending.
+- [ ] Verify image URL response, natural dimensions, formats and source rights. CI captures these values for each image; previous run showed one fallback.
+- [x] Confirm feature-branch desktop/mobile appearance and responsive behavior through Playwright screenshots and width/overflow assertions. [ ] Verify every source image and semantic ALT individually.
 - [x] Identify Pinterest publishing connector: Zernio. Pinterest account session is present; Zernio is currently waiting for a default board selection. The available boards are unrelated to ZombieCash, so do not select them or publish until dedicated ZombieCash boards are created.\n
 
 ## Security and community feature progress — 2026-11-03
