@@ -49,6 +49,7 @@ Work branch: `growth-gallery-roadmap-2026-11`.
 - Added responsive toolbar styling in gallery.css, refreshed gallery asset cache versions, and regenerated the branch's crawlable 50-card HTML plus 50-image sitemap from the current JSON.
 - Updated the SEO generator to use editorial title/ALT/description fields when supplied and to retain stable image/category attributes in generated cards.
 - JavaScript syntax compilation passed for gallery.js and the Playwright smoke-test script. JSON consistency checks passed: 50 entries, 50 unique IDs/URLs/titles, all records have categories, titles and descriptions; 50 generated cards and 50 sitemap image entries. A GitHub Actions PR smoke-test run has started; its final result is pending. No production branch deployment or live-site change has been made.
+- Implemented card and lightbox like controls on the feature branch, wired to the Survivor API contract. These controls are not live until the companion backend PR is merged and deployed.
 - Visual audit of the actual artwork, final image-specific ALT, image URL/dimension checks and screenshot evidence are still pending. Direct CDN downloads are blocked in the current runtime; do not infer visual details from captions. TinyFish visual browser run could not start because its wallet is below zero; no retry was attempted.
 
 ## Phase 0 status
@@ -60,6 +61,11 @@ Work branch: `growth-gallery-roadmap-2026-11`.
 - [ ] Verify image URL response, dimensions, formats and source rights.
 - [ ] Confirm live gallery appearance and responsive behavior. Public HTML and 50 source cards are readable, but browser screenshot/responsive verification remains pending.
 - [x] Identify Pinterest publishing connector: Zernio. Pinterest account session is present; Zernio is currently waiting for a default board selection. The available boards are unrelated to ZombieCash, so do not select them or publish until dedicated ZombieCash boards are created.\n
+
+## Security and community feature progress — 2026-11-03
+- Inspected the live ZombieCash Supabase project and found the five-argument `record_survivor_arcade_score` SECURITY DEFINER overload executable through PUBLIC. Revoked PUBLIC/anon/authenticated execution and retained service_role access. Verified anon=false, authenticated=false, service_role=true.
+- Added the `gallery_likes` table with RLS, service-role-only table grants, unique `(telegram_id, image_id)` constraint, and SECURITY INVOKER RPCs. Verified no anon/authenticated table or RPC access; no test user rows were inserted.
+- Companion backend API is drafted in `vovik777-beep/zombcash-bot` PR #53. It validates the signed Survivor session, ignores client-supplied Telegram IDs and applies a 30/minute per-account rate limit. Not deployed.
 
 ## Phase 1 implementation status (feature branch only)
 - [x] Additive taxonomy fields (series, category_ids, tags, language, metadata_version) added to all 50 records.
