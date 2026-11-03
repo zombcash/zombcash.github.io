@@ -88,6 +88,14 @@ For every image:
 - Add admin ability to remove abusive activity and recalculate counts from source records.
 - Track events in analytics without exposing private account identifiers.
 
+## Phase 3 implementation status — registered-user likes
+- [x] Create the `gallery_likes` table with unique `(telegram_id, image_id)` constraint, RLS enabled, and service-role-only access.
+- [x] Add SECURITY INVOKER RPCs for aggregate like stats and idempotent like/unlike operations; revoke browser roles.
+- [x] Add card and lightbox like controls on the website feature branch; guest clicks open the existing Telegram login.
+- [x] Draft backend API in `vovik777-beep/zombcash-bot` PR #53 with signed-session validation and account rate limiting.
+- [ ] Merge/review/deploy the backend API before merging the website UI; then test guest, registered, logout, duplicate and concurrent requests end-to-end.
+- [ ] Run production smoke checks and verify no Survival Points are awarded for likes.
+
 ## Phase 4 — Registered-user comments
 - Authenticated users can post, edit their own comments within a defined window, and delete their own comments.
 - Proposed initial limits: 500 characters, plain text only, rate-limited posting, no HTML/Markdown rendering by default.
