@@ -11,6 +11,25 @@
 - AI Agent / Zombie Lab bot: https://t.me/MemeCoinAIAgent_bot
 - X Community: https://x.com/i/communities/2013610165069591027
 
+
+## Research, guides and gallery
+- Zombie Gallery: https://zombcash.github.io/gallery.html
+- German Zombie Gallery: https://zombcash.github.io/de/gallery.html
+- French Zombie Gallery: https://zombcash.github.io/fr/gallery.html
+- Italian Zombie Gallery: https://zombcash.github.io/it/gallery.html
+- Japanese Zombie Gallery: https://zombcash.github.io/ja/gallery.html
+- Simplified Chinese Zombie Gallery: https://zombcash.github.io/zh-CN/gallery.html
+- Russian Zombie Gallery: https://zombcash.github.io/ru/gallery.html
+- Turkish Zombie Gallery: https://zombcash.github.io/tr/gallery.html
+- Hindi Zombie Gallery: https://zombcash.github.io/hi/gallery.html
+- Survivor Field Manual: https://zombcash.github.io/survivor-field-manual.html
+- Solana Memecoin Research Guide: https://zombcash.github.io/solana-memecoin-research-guide.html
+- Solana Token Safety Checklist: https://zombcash.github.io/solana-token-safety-checklist.html
+- Outbreak Transmission: https://zombcash.github.io/outbreak-transmission.html
+- Whitepaper: https://zombcash.github.io/whitepaper.html
+
+The Zombie Gallery is a community archive of AI-generated zombie art and memes from the official Telegram channel. It has searchable categories, localized controls, source links and a 50-image snapshot that is synchronized from Telegram. Image ownership and visual ALT review are handled separately; do not infer licensing from the fact that an image appears in the gallery.
+
 ## Token information
 - Network: Solana
 - Ticker: ZOMBCASH
