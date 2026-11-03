@@ -7,6 +7,7 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = ROOT / "gallery-data.json"
 OUTPUT_PATH = ROOT / "pinterest-queue.json"
+LEDGER_PATH = ROOT / "pinterest-published-ledger.json"
 APPROVED_RIGHTS = {"project-owned", "permission-confirmed"}
 APPROVED_ALT = {"visual-reviewed"}
 CANONICAL_PREFIX = "https://zombcash.github.io/gallery.html#"
@@ -24,8 +25,18 @@ def pinterest_tracking_url(canonical_url, stable_id):
     return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment))
 
 
-def build_queue(data):
+def build_queue(data, ledger=None):
     items = data.get("items", [])
+    ledger = ledger or {"pins": []}
+    ledger_items = ledger.get("pins", [])
+    ledger_by_id = {}
+    for entry in ledger_items:
+        gallery_id = str(entry.get("gallery_id") or "")
+        if not gallery_id or gallery_id in ledger_by_id:
+            raise ValueError("Pinterest publication ledger IDs must be present and unique")
+        if not entry.get("pin_id") or not entry.get("board_id") or not entry.get("pin_url"):
+            raise ValueError(f"Pinterest ledger entry {gallery_id} is missing Pin/board metadata")
+        ledger_by_id[gallery_id] = entry
     eligible = []
     blocked = []
     published = []
@@ -44,21 +55,19 @@ def build_queue(data):
         seen_ids.add(stable_id)
         seen_images.add(image)
 
-        if item.get("pinterest_status") == "published":
-            pin_id = str(item.get("pinterest_pin_id") or "").strip()
-            board_id = str(item.get("pinterest_board_id") or "").strip()
-            pin_url = str(item.get("pinterest_pin_url") or "").strip()
-            if not pin_id or not board_id or not pin_url:
-                raise ValueError(f"Published Pinterest item {stable_id} is missing its verified Pin/board ledger")
+        if stable_id in ledger_by_id:
+            entry = ledger_by_id[stable_id]
             published.append({
                 "id": stable_id,
-                "pin_id": pin_id,
-                "pin_url": pin_url,
-                "board_id": board_id,
-                "published_at": item.get("pinterest_published_at"),
-                "destination_url": item.get("pinterest_published_destination"),
+                "pin_id": str(entry["pin_id"]),
+                "pin_url": str(entry["pin_url"]),
+                "board_id": str(entry["board_id"]),
+                "published_at": entry.get("published_at"),
+                "destination_url": entry.get("original_destination_url"),
             })
             continue
+        if item.get("pinterest_status") == "published":
+            raise ValueError(f"Gallery item {stable_id} is marked published but missing from the durable Pinterest ledger")
 
         if item.get("rights_status") not in APPROVED_RIGHTS:
             reasons.append("rights-review-required")
@@ -111,6 +120,7 @@ def build_queue(data):
     return {
         "schema_version": 1,
         "source": "gallery-data.json",
+        "ledger_total_count": len(ledger_items),
         "published_count": len(published),
         "eligible_count": len(eligible),
         "blocked_count": len(blocked),
@@ -122,7 +132,8 @@ def build_queue(data):
 
 def main():
     data = json.loads(DATA_PATH.read_text(encoding="utf-8"))
-    queue = build_queue(data)
+    ledger = json.loads(LEDGER_PATH.read_text(encoding="utf-8")) if LEDGER_PATH.is_file() else {"pins": []}
+    queue = build_queue(data, ledger)
     OUTPUT_PATH.write_text(json.dumps(queue, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Pinterest inventory: {queue['published_count']} already published, {queue['eligible_count']} eligible, {queue['blocked_count']} blocked. No new pins were published.")
 
