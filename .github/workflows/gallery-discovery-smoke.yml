@@ -61,6 +61,9 @@ jobs:
         run: python -m py_compile scripts/sync_gallery.py scripts/sync_gallery_image_seo.py scripts/export_pinterest_queue.py scripts/generate_localized_gallery_pages.py scripts/build_gallery_visual_contact_sheet.py tests/pinterest-queue-smoke.py
       - name: Validate gallery JSON and generated index
         run: |
+          # Generate from source data before validating. Never hand-edit generated card HTML.
+          python scripts/sync_gallery_image_seo.py
+          python scripts/generate_localized_gallery_pages.py
           python - <<'PY'
           import html as html_lib
           import importlib.util
