@@ -249,6 +249,7 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     const mobileShareBox = await mobileShare.boundingBox();
     const mobileSharePosition = await mobileShare.evaluate(element => getComputedStyle(element).position);
     if (!mobileShareBox || mobileShareBox.x < 0 || mobileShareBox.x + mobileShareBox.width > 375) throw new Error("Mobile lightbox share control overflows the viewport");
+    if (mobileShareBox.y < 0 || mobileShareBox.y + mobileShareBox.height > 812) throw new Error("Mobile lightbox share control is clipped below the viewport");
     if (mobileSharePosition !== "static") throw new Error("Mobile lightbox share control must stay in the caption flow");
     await mobile.screenshot({ path: "gallery-lightbox-mobile-smoke.png" });
     await mobile.locator(".gallery-lightbox-close").click();
