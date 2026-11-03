@@ -1,3 +1,4 @@
+// Trigger a fresh performance regression run after the mobile layout specificity fix.
 (() => {
   const grid = document.getElementById("gallery-grid");
   const count = document.getElementById("gallery-count");
