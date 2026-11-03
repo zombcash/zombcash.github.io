@@ -155,3 +155,7 @@ body.gallery-lightbox-open{overflow:hidden}
   .gallery-lightbox figcaption .gallery-lightbox-like,
   .gallery-lightbox figcaption .gallery-lightbox-share{min-height:32px;padding:6px 9px!important;font-size:8px!important}
 }
+
+/* Keep all lightbox detail actions visible on small screens. */
+.gallery-lightbox figcaption{max-height:180px;overflow-y:auto;overscroll-behavior:contain}
+@media(max-width:720px){.gallery-lightbox figcaption{max-height:24vh;overflow-y:auto}}
