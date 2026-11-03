@@ -21,11 +21,11 @@ Increase qualified search discovery and returning visitors by turning the existi
 
 ## Phase 0 — Baseline and safety audit (first)
 - [ ] Capture current main branch SHA and current live gallery appearance on desktop/mobile.
-- [ ] Review `gallery.html`, `gallery.js`, `gallery.css`, `gallery-data.json`, `scripts/sync_gallery.py`, `scripts/sync_gallery_image_seo.py` and both gallery workflows.
-- [ ] Inventory all 50 currently synchronized image entries; group by existing series and inspect whether captions actually match the image.
+- [x] Review `gallery.html`, `gallery.js`, `gallery.css`, `gallery-data.json`, `scripts/sync_gallery.py`, `scripts/sync_gallery_image_seo.py` and both gallery workflows.
+- [x] Inventory all 50 currently synchronized image entries and group them by existing series. Visual caption-to-image review remains pending.
 - [ ] Check current image URL availability, duplicate images, dimensions/aspect ratios, file formats, source Telegram URLs and dates.
-- [ ] Confirm whether gallery card HTML is generated from `gallery-data.json` and verify the image sitemap output and robots references.
-- [ ] Inspect existing Telegram survivor authentication and API/database capabilities before designing comments/likes. Reuse existing identity only if server-side verification is sound.
+- [x] Confirm gallery card HTML is generated from `gallery-data.json`; verify image sitemap generation and robots references in source.
+- [x] Inspect existing Telegram Survivor authentication and API/database capabilities. Existing signed server-side session can be reused as the identity foundation; new interaction routes/tables are still required.
 - [ ] Record baseline SEO, performance, responsive and accessibility checks. Do not change production until the baseline is captured.
 
 ## Phase 1 — Gallery taxonomy and browsing experience
