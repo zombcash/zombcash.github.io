@@ -79,6 +79,30 @@
   });
   let cards = [];
   let activeIndex = 0;
+  const galleryLikeStats = new Map();
+  let galleryLikeLabels = {like:"LIKE",unlike:"LIKED",loginLike:"Log in with Telegram to like",likeError:"Could not update like. Try again."};
+  let handleGalleryLike = null;
+  const readGalleryToken = () => { try { return localStorage.getItem("zombcash-survivor-token") || ""; } catch (_) { return ""; } };
+  const likeStateFor = card => galleryLikeStats.get(card?.dataset?.galleryId || "") || {like_count:0,liked:false};
+  const updateCardLikeButton = card => {
+    const button = card?.querySelector(".gallery-like-button");
+    if (!button) return;
+    const stats = likeStateFor(card);
+    button.setAttribute("aria-pressed", stats.liked ? "true" : "false");
+    button.setAttribute("aria-label", (stats.liked ? galleryLikeLabels.unlike : galleryLikeLabels.like) + ": " + stats.like_count);
+    button.title = readGalleryToken() ? (stats.liked ? galleryLikeLabels.unlike : galleryLikeLabels.like) : galleryLikeLabels.loginLike;
+    button.innerHTML = '<span class="gallery-like-heart" aria-hidden="true">' + (stats.liked ? "♥" : "♡") + '</span><span class="gallery-like-count">' + Number(stats.like_count || 0) + '</span>';
+  };
+  const syncLightboxLikeButton = () => {
+    const button = lightbox.querySelector(".gallery-lightbox-like");
+    const card = cards[activeIndex];
+    if (!button || !card) return;
+    const stats = likeStateFor(card);
+    button.setAttribute("aria-pressed", stats.liked ? "true" : "false");
+    button.setAttribute("aria-label", (stats.liked ? galleryLikeLabels.unlike : galleryLikeLabels.like) + ": " + stats.like_count);
+    button.title = readGalleryToken() ? (stats.liked ? galleryLikeLabels.unlike : galleryLikeLabels.like) : galleryLikeLabels.loginLike;
+    button.innerHTML = (stats.liked ? "♥ " + galleryLikeLabels.unlike : "♡ " + galleryLikeLabels.like) + " · " + Number(stats.like_count || 0);
+  };
 
   const showImage = index => {
     if (!cards.length) return;
@@ -95,7 +119,9 @@
       '<strong class="gallery-lightbox-title">' + escapeHtml(title) + '</strong>' +
       (description ? '<span class="gallery-lightbox-description">' + escapeHtml(description) + '</span>' : '') +
       (categories ? '<span class="gallery-lightbox-categories">' + escapeHtml(categories) + '</span>' : '') +
+      '<button class="gallery-lightbox-like" type="button" aria-pressed="false"></button>' +
       '<a class="gallery-lightbox-source" href="' + escapeHtml(sourceUrl) + '" target="_blank" rel="noreferrer">' + escapeHtml(gtx("source")) + ' ↗</a>';
+    syncLightboxLikeButton();
     lightbox.classList.add("is-open");
     document.body.classList.add("gallery-lightbox-open");
     closeButton.focus();
@@ -108,7 +134,16 @@
   closeButton.addEventListener("click", closeImage);
   lightbox.querySelector(".gallery-lightbox-prev").addEventListener("click", () => showImage(activeIndex - 1));
   lightbox.querySelector(".gallery-lightbox-next").addEventListener("click", () => showImage(activeIndex + 1));
-  lightbox.addEventListener("click", event => { if (event.target === lightbox) closeImage(); });
+  lightbox.addEventListener("click", event => {
+    const likeButton = event.target.closest(".gallery-lightbox-like");
+    if (likeButton) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (handleGalleryLike && cards[activeIndex]) handleGalleryLike(cards[activeIndex]);
+      return;
+    }
+    if (event.target === lightbox) closeImage();
+  });
   document.addEventListener("keydown", event => {
     if (!lightbox.classList.contains("is-open")) return;
     if (event.key === "Escape") closeImage();
@@ -139,15 +174,15 @@
     }
 
     const controlText = {
-      en:{categories:"Gallery categories",clear:"Clear filters",all:"ALL ART",search:"Search titles, captions or tags…",sort:"SORT",newest:"Newest first",oldest:"Oldest first",results:"RESULTS",empty:"No images match this filter."},
-      ru:{categories:"Категории галереи",clear:"Сбросить фильтры",all:"ВСЕ РАБОТЫ",search:"Поиск по названию, описанию или тегам…",sort:"СОРТИРОВКА",newest:"Сначала новые",oldest:"Сначала старые",results:"НАЙДЕНО",empty:"По этому фильтру изображений нет."},
-      de:{categories:"Galeriekategorien",clear:"Filter zurücksetzen",all:"ALLE BILDER",search:"Titel, Beschreibungen oder Tags suchen…",sort:"SORTIEREN",newest:"Neueste zuerst",oldest:"Älteste zuerst",results:"ERGEBNISSE",empty:"Keine Bilder für diesen Filter."},
-      fr:{categories:"Catégories de la galerie",clear:"Effacer les filtres",all:"TOUTES LES ŒUVRES",search:"Rechercher titres, descriptions ou tags…",sort:"TRIER",newest:"Plus récentes",oldest:"Plus anciennes",results:"RÉSULTATS",empty:"Aucune image ne correspond à ce filtre."},
-      it:{categories:"Categorie della galleria",clear:"Azzera filtri",all:"TUTTE LE OPERE",search:"Cerca titoli, descrizioni o tag…",sort:"ORDINA",newest:"Prima le più recenti",oldest:"Prima le più vecchie",results:"RISULTATI",empty:"Nessuna immagine corrisponde al filtro."},
-      ja:{categories:"ギャラリーのカテゴリ",clear:"フィルターを解除",all:"すべての作品",search:"タイトル・説明・タグを検索…",sort:"並べ替え",newest:"新しい順",oldest:"古い順",results:"件数",empty:"条件に一致する画像はありません。"},
-      "zh-CN":{categories:"图库分类",clear:"清除筛选",all:"全部作品",search:"搜索标题、说明或标签…",sort:"排序",newest:"最新优先",oldest:"最早优先",results:"结果",empty:"没有符合筛选条件的图片。"},
-      tr:{categories:"Galeri kategorileri",clear:"Filtreleri temizle",all:"TÜM GÖRSELLER",search:"Başlık, açıklama veya etiket ara…",sort:"SIRALA",newest:"En yeni önce",oldest:"En eski önce",results:"SONUÇ",empty:"Bu filtreyle eşleşen görsel yok."},
-      hi:{categories:"गैलरी श्रेणियाँ",clear:"फ़िल्टर साफ़ करें",all:"सभी कलाकृतियाँ",search:"शीर्षक, विवरण या टैग खोजें…",sort:"क्रम",newest:"नवीनतम पहले",oldest:"सबसे पुरानी पहले",results:"परिणाम",empty:"इस फ़िल्टर से कोई इमेज नहीं मिली।"}
+      en:{like:"LIKE",unlike:"LIKED",loginLike:"Log in with Telegram to like",likeError:"Could not update like. Try again.",categories:"Gallery categories",clear:"Clear filters",all:"ALL ART",search:"Search titles, captions or tags…",sort:"SORT",newest:"Newest first",oldest:"Oldest first",results:"RESULTS",empty:"No images match this filter."},
+      ru:{like:"НРАВИТСЯ",unlike:"ОТМЕЧЕНО",loginLike:"Войдите через Telegram, чтобы отметить",likeError:"Не удалось обновить отметку. Попробуйте ещё раз.",categories:"Категории галереи",clear:"Сбросить фильтры",all:"ВСЕ РАБОТЫ",search:"Поиск по названию, описанию или тегам…",sort:"СОРТИРОВКА",newest:"Сначала новые",oldest:"Сначала старые",results:"НАЙДЕНО",empty:"По этому фильтру изображений нет."},
+      de:{like:"GEFÄLLT MIR",unlike:"GEMERKT",loginLike:"Mit Telegram anmelden, um zu liken",likeError:"Like konnte nicht gespeichert werden. Bitte erneut versuchen.",categories:"Galeriekategorien",clear:"Filter zurücksetzen",all:"ALLE BILDER",search:"Titel, Beschreibungen oder Tags suchen…",sort:"SORTIEREN",newest:"Neueste zuerst",oldest:"Älteste zuerst",results:"ERGEBNISSE",empty:"Keine Bilder für diesen Filter."},
+      fr:{like:"J’AIME",unlike:"AIMÉ",loginLike:"Connectez-vous avec Telegram pour aimer",likeError:"Impossible d’enregistrer le like. Réessayez.",categories:"Catégories de la galerie",clear:"Effacer les filtres",all:"TOUTES LES ŒUVRES",search:"Rechercher titres, descriptions ou tags…",sort:"TRIER",newest:"Plus récentes",oldest:"Plus anciennes",results:"RÉSULTATS",empty:"Aucune image ne correspond à ce filtre."},
+      it:{like:"MI PIACE",unlike:"PIACIUTO",loginLike:"Accedi con Telegram per mettere Mi piace",likeError:"Impossibile aggiornare il Mi piace. Riprova.",categories:"Categorie della galleria",clear:"Azzera filtri",all:"TUTTE LE OPERE",search:"Cerca titoli, descrizioni o tag…",sort:"ORDINA",newest:"Prima le più recenti",oldest:"Prima le più vecchie",results:"RISULTATI",empty:"Nessuna immagine corrisponde al filtro."},
+      ja:{like:"いいね",unlike:"いいね済み",loginLike:"いいねするにはTelegramでログイン",likeError:"いいねを更新できません。再試行してください。",categories:"ギャラリーのカテゴリ",clear:"フィルターを解除",all:"すべての作品",search:"タイトル・説明・タグを検索…",sort:"並べ替え",newest:"新しい順",oldest:"古い順",results:"件数",empty:"条件に一致する画像はありません。"},
+      "zh-CN":{like:"点赞",unlike:"已点赞",loginLike:"使用 Telegram 登录后点赞",likeError:"点赞更新失败，请重试。",categories:"图库分类",clear:"清除筛选",all:"全部作品",search:"搜索标题、说明或标签…",sort:"排序",newest:"最新优先",oldest:"最早优先",results:"结果",empty:"没有符合筛选条件的图片。"},
+      tr:{like:"BEĞEN",unlike:"BEĞENİLDİ",loginLike:"Beğenmek için Telegram ile giriş yap",likeError:"Beğeni güncellenemedi. Tekrar dene.",categories:"Galeri kategorileri",clear:"Filtreleri temizle",all:"TÜM GÖRSELLER",search:"Başlık, açıklama veya etiket ara…",sort:"SIRALA",newest:"En yeni önce",oldest:"En eski önce",results:"SONUÇ",empty:"Bu filtreyle eşleşen görsel yok."},
+      hi:{like:"पसंद",unlike:"पसंद किया",loginLike:"पसंद करने के लिए Telegram से लॉग इन करें",likeError:"पसंद अपडेट नहीं हो सकी। फिर प्रयास करें।",categories:"गैलरी श्रेणियाँ",clear:"फ़िल्टर साफ़ करें",all:"सभी कलाकृतियाँ",search:"शीर्षक, विवरण या टैग खोजें…",sort:"क्रम",newest:"नवीनतम पहले",oldest:"सबसे पुरानी पहले",results:"परिणाम",empty:"इस फ़िल्टर से कोई इमेज नहीं मिली।"}
     };
     const categoryText = {
       en:{"zombie-memes":"Zombie Memes","nightmare-horror":"Nightmare & Horror","undead-after-dark":"Undead After Dark","zombie-characters":"Zombie Characters","apocalypse-survival":"Apocalypse & Survival","crypto-apocalypse":"Crypto Apocalypse","community-creations":"Community Creations"},
