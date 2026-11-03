@@ -1323,6 +1323,7 @@ Object.entries(homepageRemainingLabelsTranslations).forEach(([source,translation
 /* Canonical shared navigation labels. These keys match shared-nav.js exactly.
    Keep all locales on the same destinations and menu order; do not translate HOME as LIVE WORLD. */
 const sharedNavigationTranslations = {
+  "WHITEPAPER": {de:"WHITEPAPER",fr:"LIVRE BLANC",it:"WHITEPAPER",ja:"ホワイトペーパー","zh-CN":"白皮书",ru:"ДОКУМЕНТ ПРОЕКТА",tr:"PROJE TANITIM BELGESİ",hi:"व्हाइटपेपर"},
   "HOME": {de:"STARTSEITE",fr:"ACCUEIL",it:"HOME",ja:"ホーム","zh-CN":"首页",ru:"ГЛАВНАЯ",tr:"ANA SAYFA",hi:"होम"},
   "FIELD MANUAL": {de:"FELDHANDBUCH",fr:"MANUEL DE TERRAIN",it:"MANUALE DA CAMPO",ja:"サバイバルガイド","zh-CN":"生存指南",ru:"ПОЛЕВОЕ РУКОВОДСТВО",tr:"SAHA REHBERİ",hi:"जीवन रक्षा मार्गदर्शिका"},
   "TRANSMISSION": {de:"ÜBERTRAGUNGEN",fr:"TRANSMISSIONS",it:"TRASMISSIONI",ja:"ニュース配信","zh-CN":"疫情快讯",ru:"ТРАНСЛЯЦИЯ",tr:"YAYINLAR",hi:"प्रसारण"},
