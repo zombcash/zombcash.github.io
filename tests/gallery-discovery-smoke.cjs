@@ -19,6 +19,7 @@ const { spawn } = require("child_process");
     browser = await chromium.launch({ headless: true });
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     await page.route("https://**/*", route => route.abort());
+    await page.route("https://cdn4.telesco.pe/file/**", route => route.continue());
     await page.route("https://zombcash-bot.fadehost.app/api/gallery/likes?*", async route => {
       const url = new URL(route.request().url());
       const ids = (url.searchParams.get("ids") || "").split(",").filter(Boolean);
@@ -33,6 +34,21 @@ const { spawn } = require("child_process");
     await page.waitForSelector(".gallery-toolbar");
     await page.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50);
     await page.waitForFunction(() => typeof window.ZombieCashTrack === "function");
+    await page.locator("#gallery-grid img").evaluateAll(images => images.forEach(image => { image.loading = "eager"; }));
+    await page.evaluate(async () => {
+      const images = Array.from(document.querySelectorAll("#gallery-grid img"));
+      await Promise.all(images.map(image => new Promise(resolve => {
+        if (image.complete) return resolve();
+        image.addEventListener("load", resolve, { once: true });
+        image.addEventListener("error", resolve, { once: true });
+        setTimeout(resolve, 15000);
+      })));
+    });
+    const imageLoadAudit = await page.locator("#gallery-grid img").evaluateAll(images => ({
+      total: images.length,
+      originalLoaded: images.filter(image => !image.dataset.fallbackApplied && image.naturalWidth > 0).length,
+      fallbacks: images.filter(image => image.dataset.fallbackApplied).length
+    }));
     await page.screenshot({ path: "gallery-desktop-smoke.png", fullPage: true });
     await page.evaluate(() => {
       window.__galleryEvents = [];
@@ -91,6 +107,7 @@ const { spawn } = require("child_process");
     if (japaneseFilter !== 1) throw new Error("Japanese category label did not render");
     const mobile = await browser.newPage({ viewport: { width: 375, height: 812 }, deviceScaleFactor: 1 });
     await mobile.route("https://**/*", route => route.abort());
+    await mobile.route("https://cdn4.telesco.pe/file/**", route => route.continue());
     await mobile.goto("http://127.0.0.1:4173/gallery.html", { waitUntil: "domcontentloaded" });
     await mobile.waitForSelector(".gallery-toolbar");
     await mobile.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50);
@@ -105,6 +122,7 @@ const { spawn } = require("child_process");
     if (overflow.toolbar > overflow.toolbarClient + 1) throw new Error("Gallery toolbar overflows horizontally: " + JSON.stringify(overflow));
     const russian = await browser.newPage({ viewport: { width: 390, height: 844 } });
     await russian.route("https://**/*", route => route.abort());
+    await russian.route("https://cdn4.telesco.pe/file/**", route => route.continue());
     await russian.goto("http://127.0.0.1:4173/ru/gallery.html", { waitUntil: "domcontentloaded" });
     await russian.waitForSelector(".gallery-toolbar");
     await russian.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50);
@@ -117,7 +135,7 @@ const { spawn } = require("child_process");
     if (!(await russian.locator(".gallery-search").getAttribute("placeholder")).includes("Поиск")) throw new Error("Russian gallery search placeholder did not render");
     await russian.close();
 
-    console.log(JSON.stringify({ status: "passed", initial, horror, search, reset, matching, oldestFirst, japaneseFilter, mobile: overflow }));
+    console.log(JSON.stringify({ status: "passed", initial, horror, search, reset, matching, oldestFirst, japaneseFilter, mobile: overflow, imageLoadAudit }));
   } finally {
     if (browser) await browser.close();
     server.kill();
