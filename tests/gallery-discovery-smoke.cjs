@@ -218,6 +218,15 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     if (mobileGalleryLayout.columns !== "2") throw new Error("Mobile gallery should render two compact columns");
     if (overflow.page > overflow.viewport + 1) throw new Error("Mobile page has horizontal overflow: " + JSON.stringify(overflow));
     if (overflow.toolbar > overflow.toolbarClient + 1) throw new Error("Gallery toolbar overflows horizontally: " + JSON.stringify(overflow));
+    await mobile.locator("#gallery-grid .gallery-card").first().click();
+    const mobileShare = mobile.locator(".gallery-lightbox-share");
+    await mobileShare.waitFor();
+    const mobileShareBox = await mobileShare.boundingBox();
+    const mobileSharePosition = await mobileShare.evaluate(element => getComputedStyle(element).position);
+    if (!mobileShareBox || mobileShareBox.x < 0 || mobileShareBox.x + mobileShareBox.width > 375) throw new Error("Mobile lightbox share control overflows the viewport");
+    if (mobileSharePosition !== "static") throw new Error("Mobile lightbox share control must stay in the caption flow");
+    await mobile.screenshot({ path: "gallery-lightbox-mobile-smoke.png" });
+    await mobile.locator(".gallery-lightbox-close").click();
     const russian = await browser.newPage({ viewport: { width: 390, height: 844 } });
     await russian.route("https://**/*", route => route.abort());
     await russian.route("https://cdn4.telesco.pe/file/**", route => route.continue());
