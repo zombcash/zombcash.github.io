@@ -105,7 +105,7 @@ def main():
 
     editorial_fields = (
         "title", "description", "alt_text", "category_ids", "series",
-        "tags", "language", "credit", "rights_status", "localized",
+        "tags", "language", "credit", "rights_status", "alt_review_status", "localized",
         "metadata_version",
     )
     for item in items:
@@ -132,6 +132,9 @@ def main():
             tag.lower() for tag in re.findall(r"#([\w]+)", caption, flags=re.UNICODE)
         )))
         item.setdefault("language", "en")
+        item.setdefault("credit", "@ZOMBCASH")
+        item.setdefault("rights_status", "review-required")
+        item.setdefault("alt_review_status", "caption-derived-pending-visual-review")
         item.setdefault("metadata_version", 1)
 
     payload = {
