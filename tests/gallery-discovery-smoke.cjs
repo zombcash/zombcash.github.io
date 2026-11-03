@@ -218,13 +218,14 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     if (russianCanonical !== "https://zombcash.github.io/ru/gallery.html") throw new Error("Russian gallery canonical is incorrect");
     if (await russian.getByRole("button", { name: "Кошмары и хоррор" }).count() !== 1) throw new Error("Russian category labels did not render");
     if (!(await russian.locator(".gallery-search").getAttribute("placeholder")).includes("Поиск")) throw new Error("Russian gallery search placeholder did not render");
+    await russian.waitForSelector(".language-trigger");
     await russian.locator(".language-trigger").click();
     await russian.locator('.language-option[data-lang="de"]').click();
-    await russian.waitForURL("**/de/gallery.html");
+    await russian.waitForURL(url => url.pathname === "/de/gallery.html");
     if (await russian.locator("html").getAttribute("lang") !== "de") throw new Error("Language switcher failed to route Russian gallery to German");
     await russian.locator(".language-trigger").click();
     await russian.locator('.language-option[data-lang="en"]').click();
-    await russian.waitForURL("**/gallery.html");
+    await russian.waitForURL(url => url.pathname === "/gallery.html");
     if (await russian.locator("html").getAttribute("lang") !== "en") throw new Error("Language switcher failed to route German gallery to English");
     await russian.close();
 
