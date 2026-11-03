@@ -1,0 +1,509 @@
+{
+  "schema_version": 1,
+  "source": "gallery-data.json",
+  "eligible_count": 0,
+  "blocked_count": 50,
+  "eligible": [],
+  "blocked": [
+    {
+      "id": "ZOMBCASH/4102:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/4076:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/4055:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/4031:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/4016:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3996:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3974:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3867:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3840:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3814:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3796:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3782:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3769:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3760:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3749:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3743:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3732:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3724:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3719:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3713:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3709:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3701:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3694:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3690:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3686:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3683:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3681:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3676:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3675:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3673:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3670:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3661:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3654:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3649:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3644:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3640:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3637:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3634:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3633:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3631:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3630:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3628:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3624:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3623:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3621:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3610:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3603:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3598:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3592:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    },
+    {
+      "id": "ZOMBCASH/3583:0",
+      "status": "blocked",
+      "reasons": [
+        "rights-review-required",
+        "visual-alt-review-required",
+        "pinterest-board-not-assigned",
+        "pin-not-approved"
+      ]
+    }
+  ]
+}
