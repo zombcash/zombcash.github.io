@@ -15,6 +15,17 @@
     tr:{images:"GÖRSEL",updated:"GÜNCELLENDİ",offline:"ARŞİV ÇEVRİMDIŞI",none:"HENÜZ GÖRSEL YOK",noneMsg:"Telegram arşivi henüz hiçbir görseli senkronize etmedi.",error:"GÖRSELLER YÜKLENEMEDİ",errorMsg:"Galeri veri isteği başarısız oldu veya zaman aşımına uğradı. Sayfayı yenile ya da Telegram kanalını doğrudan aç.",close:"KAPAT",closeAria:"Tam ekran görüntüsünü kapat",source:"KAYNAK ↗",open:"@ZOMBCASH'İ AÇ ↗"},
     hi:{images:"इमेज",updated:"अपडेट",offline:"आर्काइव ऑफ़लाइन",none:"अभी कोई इमेज नहीं",noneMsg:"Telegram आर्काइव ने अभी तक कोई इमेज सिंक नहीं की है।",error:"इमेज लोड नहीं हो सकीं",errorMsg:"गैलरी डेटा अनुरोध विफल हुआ या समय समाप्त हो गया। पेज रीफ़्रेश करें या Telegram चैनल सीधे खोलें।",close:"बंद करें",closeAria:"फ़ुल-स्क्रीन छवि बंद करें",source:"स्रोत ↗",open:"@ZOMBCASH खोलें ↗"}
   };
+  const galleryShareLabels = {
+    en:{share:"SHARE",copied:"LINK COPIED",unavailable:"SHARING UNAVAILABLE",error:"SHARE FAILED"},
+    ru:{share:"ПОДЕЛИТЬСЯ",copied:"ССЫЛКА СКОПИРОВАНА",unavailable:"ОТПРАВКА НЕДОСТУПНА",error:"НЕ УДАЛОСЬ ПОДЕЛИТЬСЯ"},
+    de:{share:"TEILEN",copied:"LINK KOPIERT",unavailable:"TEILEN NICHT VERFÜGBAR",error:"TEILEN FEHLGESCHLAGEN"},
+    fr:{share:"PARTAGER",copied:"LIEN COPIÉ",unavailable:"PARTAGE INDISPONIBLE",error:"ÉCHEC DU PARTAGE"},
+    it:{share:"CONDIVIDI",copied:"LINK COPIATO",unavailable:"CONDIVISIONE NON DISPONIBILE",error:"CONDIVISIONE NON RIUSCITA"},
+    ja:{share:"共有",copied:"リンクをコピーしました",unavailable:"共有できません",error:"共有に失敗しました"},
+    "zh-CN":{share:"分享",copied:"链接已复制",unavailable:"暂无法分享",error:"分享失败"},
+    tr:{share:"PAYLAŞ",copied:"BAĞLANTI KOPYALANDI",unavailable:"PAYLAŞIM KULLANILAMIYOR",error:"PAYLAŞIM BAŞARISIZ"},
+    hi:{share:"साझा करें",copied:"लिंक कॉपी हुआ",unavailable:"साझा करना उपलब्ध नहीं",error:"साझा नहीं हो सका"}
+  };
   const galleryCaptionLabels = {
     en:{"NIGHTMARE DROP":"NIGHTMARE DROP","ZOMBIE MEME OF THE HOUR":"ZOMBIE MEME OF THE HOUR","ZOMBIE MEME":"ZOMBIE MEME","UNDEAD AFTER DARK":"UNDEAD AFTER DARK"},
     ru:{"NIGHTMARE DROP":"НОЧНОЙ КОШМАР","ZOMBIE MEME OF THE HOUR":"ЗОМБИ-МЕМ ЧАСА","ZOMBIE MEME":"ЗОМБИ-МЕМ","UNDEAD AFTER DARK":"НЕЖИТЬ ПОСЛЕ ЗАКАТА"},
@@ -120,12 +131,16 @@
     const description = card.dataset.galleryDescription || "";
     const categories = card.querySelector(".gallery-card-tags")?.textContent || "";
     const sourceUrl = card.querySelector(".gallery-caption a")?.href || "https://t.me/ZOMBCASH";
+    const shareLabels = galleryShareLabels[galleryLang] || galleryShareLabels.en;
     trackGalleryEvent("gallery_image_open", "image_" + String(card.dataset.galleryId || "").replace(/[^0-9]/g, "_"));
     fullCaption.innerHTML =
       '<strong class="gallery-lightbox-title">' + escapeHtml(title) + '</strong>' +
       (description ? '<span class="gallery-lightbox-description">' + escapeHtml(description) + '</span>' : '') +
       (categories ? '<span class="gallery-lightbox-categories">' + escapeHtml(categories) + '</span>' : '') +
+      '<span class="gallery-lightbox-actions">' +
       '<button class="gallery-lightbox-like" type="button" aria-pressed="false"></button>' +
+      '<button class="gallery-lightbox-share" type="button">' + escapeHtml(shareLabels.share) + '</button>' +
+      '</span>' +
       '<a class="gallery-lightbox-source" href="' + escapeHtml(sourceUrl) + '" target="_blank" rel="noreferrer">' + escapeHtml(gtx("source")) + ' ↗</a>';
     syncLightboxLikeButton();
     lightbox.classList.add("is-open");
@@ -141,12 +156,39 @@
   closeButton.addEventListener("click", closeImage);
   lightbox.querySelector(".gallery-lightbox-prev").addEventListener("click", () => showImage(activeIndex - 1));
   lightbox.querySelector(".gallery-lightbox-next").addEventListener("click", () => showImage(activeIndex + 1));
-  lightbox.addEventListener("click", event => {
+  lightbox.addEventListener("click", async event => {
     const likeButton = event.target.closest(".gallery-lightbox-like");
     if (likeButton) {
       event.preventDefault();
       event.stopPropagation();
       if (handleGalleryLike && cards[activeIndex]) handleGalleryLike(cards[activeIndex]);
+      return;
+    }
+    const shareButton = event.target.closest(".gallery-lightbox-share");
+    if (shareButton) {
+      event.preventDefault();
+      event.stopPropagation();
+      const card = cards[activeIndex];
+      if (!card) return;
+      const labels = galleryShareLabels[galleryLang] || galleryShareLabels.en;
+      const shareUrl = new URL("/gallery.html", window.location.origin);
+      shareUrl.hash = card.id || "";
+      const shareTitle = card.dataset.galleryTitle || "ZombieCash Gallery";
+      const shareText = card.dataset.galleryDescription || shareTitle;
+      try {
+        if (navigator.share) {
+          await navigator.share({ title: shareTitle, text: shareText, url: shareUrl.href });
+        } else if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(shareUrl.href);
+          shareButton.textContent = labels.copied;
+        } else {
+          shareButton.title = labels.unavailable;
+          return;
+        }
+        trackGalleryEvent("gallery_share", "image_" + String(card.dataset.galleryId || "").replace(/[^0-9]/g, "_"));
+      } catch (error) {
+        if (error?.name !== "AbortError") shareButton.title = labels.error;
+      }
       return;
     }
     if (event.target === lightbox) closeImage();
