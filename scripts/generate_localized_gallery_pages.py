@@ -2,6 +2,7 @@
 """Generate dedicated localized gallery URLs, canonical/hreflang tags and sitemap."""
 from html import escape
 from pathlib import Path
+import json
 import re
 import xml.etree.ElementTree as ET
 
@@ -140,6 +141,25 @@ def build_page(base, locale):
     )
     page = replace_tag(page, r'<link rel="canonical" href="[^"]*">(?:\s*<link rel="alternate" hreflang="[^"]*" href="[^"]*">)*',
                       canonical_block)
+
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": meta["title"],
+        "description": meta["description"],
+        "url": url,
+        "inLanguage": locale,
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "ZombieCash",
+            "url": BASE_URL + "/",
+        },
+    }
+    schema_json = json.dumps(schema, ensure_ascii=False, separators=(",", ":"))
+    schema_json = schema_json.replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
+    schema_tag = '<script id="gallery-collection-jsonld" type="application/ld+json">' + schema_json + '</script>'
+    page = re.sub(r'\\s*<script id="gallery-collection-jsonld" type="application/ld\\+json">.*?</script>', "", page, flags=re.I | re.S)
+    page = page.replace("</head>", schema_tag + "\\n</head>", 1)
 
     if locale != "en":
         asset_pattern = re.compile(r'\b(href|src)="([^"]+)"')
