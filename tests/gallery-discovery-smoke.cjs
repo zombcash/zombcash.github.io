@@ -118,6 +118,14 @@ const { spawn } = require("child_process");
       toolbar: document.querySelector(".gallery-toolbar").scrollWidth,
       toolbarClient: document.querySelector(".gallery-toolbar").clientWidth
     }));
+    const mobileGalleryLayout = await mobile.locator(".gallery-scroll-panel").evaluate(panel => ({
+      overflowY: getComputedStyle(panel).overflowY,
+      height: panel.clientHeight,
+      scrollHeight: panel.scrollHeight,
+      columns: getComputedStyle(document.querySelector("#gallery-grid")).columnCount
+    }));
+    if (mobileGalleryLayout.overflowY !== "visible") throw new Error("Mobile gallery should use natural page scrolling");
+    if (mobileGalleryLayout.columns !== "2") throw new Error("Mobile gallery should render two compact columns");
     if (overflow.page > overflow.viewport + 1) throw new Error("Mobile page has horizontal overflow: " + JSON.stringify(overflow));
     if (overflow.toolbar > overflow.toolbarClient + 1) throw new Error("Gallery toolbar overflows horizontally: " + JSON.stringify(overflow));
     const russian = await browser.newPage({ viewport: { width: 390, height: 844 } });
