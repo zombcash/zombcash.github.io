@@ -25,6 +25,7 @@ on:
       - "tests/pinterest-queue-smoke.py"
       - "scripts/build_gallery_visual_contact_sheet.py"
       - "pinterest-queue.json"
+      - "pinterest-published-ledger.json"
       - "tests/gallery-discovery-smoke.cjs"
       - ".github/workflows/gallery-discovery-smoke.yml"
       - ".github/workflows/sync-zombie-gallery.yml"
