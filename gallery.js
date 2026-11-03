@@ -363,6 +363,8 @@
         }, { once: true });
         const likeButton = card.querySelector(".gallery-like-button");
         likeButton?.addEventListener("click", event => { event.preventDefault(); event.stopPropagation(); handleGalleryLike?.(card); });
+        const sourceLink = card.querySelector(".gallery-caption a");
+        sourceLink?.addEventListener("click", () => trackGalleryEvent("gallery_source_open", "image_" + String(card.dataset.galleryId || "").replace(/[^0-9]/g, "_")));
         updateCardLikeButton(card);
         card.addEventListener("click", event => { if (!event.target.closest("a,button")) showImage(index); });
         card.addEventListener("keydown", event => {
