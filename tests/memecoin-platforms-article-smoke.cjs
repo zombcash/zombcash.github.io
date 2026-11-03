@@ -33,8 +33,15 @@ fs.mkdirSync(out, { recursive: true });
         await page.waitForSelector('header.zombcash-shared-header', { timeout: 25000 });
         await page.waitForTimeout(600);
         const result = await page.evaluate(async () => {
+          const images = [...document.querySelectorAll('main img')];
+          await Promise.all(images.map(img => new Promise(resolve => {
+            img.loading = 'eager';
+            if (img.complete) return resolve();
+            img.addEventListener('load', resolve, { once: true });
+            img.addEventListener('error', resolve, { once: true });
+            setTimeout(resolve, 10000);
+          })));
           const cover = document.querySelector('main img[src*="memecoin-platforms-battlefield"]');
-          if (cover && !cover.complete) await new Promise(resolve => { cover.addEventListener('load', resolve, {once:true}); cover.addEventListener('error', resolve, {once:true}); setTimeout(resolve,10000); });
           const menu = document.querySelector('header.zombcash-shared-header .language-trigger');
           return {
             lang: document.documentElement.lang,
@@ -47,6 +54,8 @@ fs.mkdirSync(out, { recursive: true });
             headings: document.querySelectorAll('main h2').length,
             coverLoaded: !!cover && cover.complete && cover.naturalWidth > 0,
             coverNaturalWidth: cover?.naturalWidth || 0,
+            imageCount: images.length,
+            brokenImages: images.filter(img => !img.complete || img.naturalWidth === 0).map(img => img.currentSrc || img.src),
             sources: [...document.querySelectorAll('main a[href]')].filter(a => /coinsniper|coinmooner|coinvote|semrush|tranco/i.test(a.href)).length,
             languageTrigger: !!menu,
             nav: !!document.querySelector('header.zombcash-shared-header'),
@@ -59,6 +68,7 @@ fs.mkdirSync(out, { recursive: true });
         if (result.hreflang < 10) issues.push('incomplete hreflang cluster: ' + result.hreflang);
         if (result.headings < 10) issues.push('article sections missing: ' + result.headings);
         if (!result.coverLoaded) issues.push('cover image failed to load');
+        if (result.brokenImages.length) issues.push('broken article images: ' + result.brokenImages.join(', '));
         if (result.sources < 8) issues.push('source links missing: ' + result.sources);
         if (!result.languageTrigger || !result.nav) issues.push('shared navigation or language selector missing');
         if (errors.length) issues.push('JS errors: ' + errors.join(' | '));
