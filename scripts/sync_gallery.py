@@ -105,7 +105,7 @@ def main():
 
     editorial_fields = (
         "title", "description", "alt_text", "category_ids", "series",
-        "tags", "language", "credit", "rights_status", "alt_review_status", "localized",
+        "tags", "language", "credit", "rights_status", "alt_review_status", "alt_reviewed_at", "alt_review_method", "localized",
         "metadata_version", "slug", "anchor_id", "pinterest_status", "pinterest_board_id",
         "pinterest_board_category", "pinterest_title", "pinterest_description", "pinterest_alt",
         "pinterest_destination_url",
