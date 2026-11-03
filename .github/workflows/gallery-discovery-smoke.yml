@@ -22,6 +22,7 @@ on:
       - "scripts/sync_gallery.py"
       - "scripts/sync_gallery_image_seo.py"
       - "scripts/export_pinterest_queue.py"
+      - "tests/pinterest-queue-smoke.py"
       - "scripts/build_gallery_visual_contact_sheet.py"
       - "pinterest-queue.json"
       - "tests/gallery-discovery-smoke.cjs"
@@ -57,7 +58,7 @@ jobs:
           npm install --no-save playwright
           npx playwright install --with-deps chromium
       - name: Validate Python scripts
-        run: python -m py_compile scripts/sync_gallery.py scripts/sync_gallery_image_seo.py scripts/export_pinterest_queue.py scripts/generate_localized_gallery_pages.py scripts/build_gallery_visual_contact_sheet.py
+        run: python -m py_compile scripts/sync_gallery.py scripts/sync_gallery_image_seo.py scripts/export_pinterest_queue.py scripts/generate_localized_gallery_pages.py scripts/build_gallery_visual_contact_sheet.py tests/pinterest-queue-smoke.py
       - name: Validate gallery JSON and generated index
         run: |
           python - <<'PY'
@@ -131,6 +132,7 @@ jobs:
       - name: Build and validate rights-gated Pinterest queue
         run: |
           python scripts/export_pinterest_queue.py
+          python tests/pinterest-queue-smoke.py
           python - <<'PY'
           import json
           from pathlib import Path
