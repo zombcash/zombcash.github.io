@@ -15,6 +15,17 @@
 - Search Console sitemap connector fields currently return null/0 for submitted/indexed/last-downloaded values. Treat this as missing connector reporting, not proof that Google has not fetched the sitemap. Verify directly in Search Console before making indexing claims.
 - Current priority: increase non-brand impressions with useful research/safety and gallery/category landing pages; maintain image sitemap and translated gallery URLs; use UTMs for Telegram/X/Pinterest; validate bot/internal traffic and attribution before setting growth targets.
 
+
+## Visual and interaction QA update — 2026-11-04
+
+- Inspected the full 50-image contact sheet and the two images previously left with caption-derived ALT. Replaced both with image-specific descriptions and marked them visually reviewed: Telegram items 3623 and 3621. All 50 now have visual-review status; rights status remains review-required for every image.
+- One card (Telegram item 3686) used the fallback during one browser run because Chromium reported net::ERR_BLOCKED_BY_ORB. An immediate direct recovery request returned HTTP 200, image/jpeg, 167,205 bytes. This points to an intermittent browser/CDN delivery issue, not a confirmed missing source asset. Keep monitoring; do not replace the source URL on this evidence alone.
+- Added per-image audit capture: original URL, natural dimensions, ALT, fallback flag, browser network failures, retry response and original image bytes. The contact sheet confirms all 50 image subjects are visible; one transient fallback was recorded in the sampled run.
+- Fixed a mobile lightbox issue: the caption had a 90px max-height, clipping the newly added Like/Share controls. Caption now has a larger bounded scroll area, and Playwright asserts the Share control stays within the mobile viewport.
+- CI now regenerates crawlable cards, image sitemap and localized gallery pages from source JSON before validating them. This keeps generated HTML out of hand edits.
+- Localized pages now use the same CSS/JS cache versions as the English gallery; CI checks cache-version parity to prevent locale pages silently loading stale scripts.
+- Previous complete CI run 41728298351 passed all static checks, the Pinterest rights gate, desktop/mobile interaction checks, contact-sheet generation and artifact upload. A newer run is validating the final visual ALT and mobile-caption changes.
+
 ## Mission
 Increase qualified search discovery and returning visitors by turning the existing ZombieCash gallery into a structured, searchable, community-participation visual archive, then distribute its eligible artwork to Pinterest and other discovery channels. Improve measurement so growth is based on real engaged users rather than raw or potentially automated sessions.
 
