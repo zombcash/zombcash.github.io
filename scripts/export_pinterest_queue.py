@@ -56,7 +56,9 @@ def build_queue(data):
         if not image.startswith("https://"):
             reasons.append("image-url-not-https")
         destination = str(item.get("pinterest_destination_url") or "")
-        if not destination.startswith(CANONICAL_PREFIX):
+        anchor_id = str(item.get("anchor_id") or "")
+        expected_destination = CANONICAL_PREFIX + anchor_id if anchor_id else ""
+        if not anchor_id or destination != expected_destination:
             reasons.append("invalid-canonical-destination")
         if item.get("pinterest_status") != "ready":
             reasons.append("pin-not-approved")
