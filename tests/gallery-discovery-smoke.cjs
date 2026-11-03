@@ -33,6 +33,7 @@ const { spawn } = require("child_process");
     await page.waitForSelector(".gallery-toolbar");
     await page.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50);
     await page.waitForFunction(() => typeof window.ZombieCashTrack === "function");
+    await page.screenshot({ path: "gallery-desktop-smoke.png", fullPage: true });
     await page.evaluate(() => {
       window.__galleryEvents = [];
       const originalTrack = window.ZombieCashTrack;
@@ -93,6 +94,7 @@ const { spawn } = require("child_process");
     await mobile.goto("http://127.0.0.1:4173/gallery.html", { waitUntil: "domcontentloaded" });
     await mobile.waitForSelector(".gallery-toolbar");
     await mobile.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50);
+    await mobile.screenshot({ path: "gallery-mobile-smoke.png", fullPage: true });
     const overflow = await mobile.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
       page: document.documentElement.scrollWidth,
@@ -106,6 +108,7 @@ const { spawn } = require("child_process");
     await russian.goto("http://127.0.0.1:4173/ru/gallery.html", { waitUntil: "domcontentloaded" });
     await russian.waitForSelector(".gallery-toolbar");
     await russian.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50);
+    await russian.screenshot({ path: "gallery-russian-smoke.png", fullPage: true });
     const russianLang = await russian.locator("html").getAttribute("lang");
     if (russianLang !== "ru") throw new Error("Russian gallery html lang is incorrect");
     const russianCanonical = await russian.locator('link[rel="canonical"]').getAttribute("href");
@@ -114,8 +117,6 @@ const { spawn } = require("child_process");
     if (!(await russian.locator(".gallery-search").getAttribute("placeholder")).includes("Поиск")) throw new Error("Russian gallery search placeholder did not render");
     await russian.close();
 
-    await mobile.screenshot({ path: "gallery-mobile-smoke.png", fullPage: true });
-    await page.screenshot({ path: "gallery-desktop-smoke.png", fullPage: true });
     console.log(JSON.stringify({ status: "passed", initial, horror, search, reset, matching, oldestFirst, japaneseFilter, mobile: overflow }));
   } finally {
     if (browser) await browser.close();
