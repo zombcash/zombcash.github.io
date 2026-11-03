@@ -37,6 +37,8 @@ Add fields without deleting the original:
 - `credit`: original creator/source attribution where known.
 - `rights_status`: `project-owned`, `permission-confirmed`, or `review-required`.
 - `metadata_version`: integer schema version.
+- `slug` and `anchor_id`: stable per-image website destination anchors.
+- `pinterest_status`, `pinterest_board_id`, `pinterest_board_category`, `pinterest_title`, `pinterest_description`, `pinterest_alt`, `pinterest_destination_url`: controlled publishing metadata; default to blocked until rights and visual ALT review are approved.
 
 Localized fields should be additive and structured, e.g. `localized.en.title`, `localized.ru.title`; never overwrite the original source caption. If a localized field is absent, use the source language as a clearly understood fallback.
 
@@ -77,3 +79,7 @@ Every pin must have an image-specific title, natural description, image alt text
 - Provisional category assignments from series/caption only: zombie-memes 17; crypto-apocalypse 17; nightmare-horror 16; undead-after-dark 17. The crypto overlap is based on explicit portfolio/market/trading wording in captions.
 - Search, category chips and newest/oldest sorting are implemented on the feature branch with localized labels for en, de, fr, it, ja, zh-CN, ru, tr and hi.
 - These categories are not a substitute for visual editorial review. title, description and alt_text remain unfilled until the actual image content has been inspected. Rights status and creator permission must also be reviewed before Pinterest distribution.
+
+
+## Pinterest export gate
+The repository includes `scripts/export_pinterest_queue.py`. It never publishes. An image is export-eligible only when rights are `project-owned` or `permission-confirmed`, ALT is `visual-reviewed`, a board ID exists, all Pin metadata is present, and `pinterest_status` is `ready`. Current queue: 0 eligible / 50 blocked. All 50 remain blocked pending visual and rights review and dedicated board assignment.
