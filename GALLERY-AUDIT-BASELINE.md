@@ -41,13 +41,15 @@ Work branch: `growth-gallery-roadmap-2026-11`.
 ## Work update — 2026-11-03
 
 - Added schema version 2 and conservative series/category metadata to all 50 current entries. Existing Telegram source fields were preserved.
+- Added 50 unique editorial titles and 50 concise story descriptions derived strictly from the original Telegram captions. All 50 entries carry rights_status=review-required and alt_review_status=caption-derived-pending-visual-review; the ALT text is explicitly contextual/caption-derived, not claimed as a verified visual description.
 - Current provisional category coverage (based on existing series labels and caption semantics, not yet visual-confirmed): zombie-memes 17, crypto-apocalypse 17, nightmare-horror 16, undead-after-dark 17. Multi-category assignment is intentional.
 - Updated scripts/sync_gallery.py so future scheduled syncs preserve editorial fields by stable Telegram image ID instead of silently wiping them.
-- Added localized category chips, text search (title/caption/description/tags), and newest/oldest sorting in gallery.js; all nine locale dictionaries include control and category labels.
+- Added localized category chips, text search (title/caption/description/series/tags), newest/oldest sorting and clear-filter action in gallery.js; all nine locale dictionaries include control and category labels.
+- Expanded the lightbox to show title, caption-derived description, category labels and the original Telegram source link.
 - Added responsive toolbar styling in gallery.css, refreshed gallery asset cache versions, and regenerated the branch's crawlable 50-card HTML plus 50-image sitemap from the current JSON.
 - Updated the SEO generator to use editorial title/ALT/description fields when supplied and to retain stable image/category attributes in generated cards.
-- JavaScript syntax compilation passed; JSON schema/count/source/category consistency checks passed. No production branch deployment or live-site change has been made.
-- Visual audit of the actual artwork, per-image descriptive ALT, image URL/dimension checks and mobile screenshot audit are still pending. TinyFish visual browser run could not start because its wallet is below zero; no retry was attempted.
+- JavaScript syntax compilation passed for gallery.js and the Playwright smoke-test script. JSON consistency checks passed: 50 entries, 50 unique IDs/URLs/titles, all records have categories, titles and descriptions; 50 generated cards and 50 sitemap image entries. A GitHub Actions PR smoke-test run has started; its final result is pending. No production branch deployment or live-site change has been made.
+- Visual audit of the actual artwork, final image-specific ALT, image URL/dimension checks and screenshot evidence are still pending. Direct CDN downloads are blocked in the current runtime; do not infer visual details from captions. TinyFish visual browser run could not start because its wallet is below zero; no retry was attempted.
 
 ## Phase 0 status
 - [x] Repository and gallery source files inspected.
