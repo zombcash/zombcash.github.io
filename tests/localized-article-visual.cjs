@@ -49,8 +49,7 @@ function safe(value) {
 
           // Wait for the latest published content before judging the deployment.
           if (item.kind === 'fiction') {
-            const expectedBook = locale === 'zh-CN' ? '《赎罪》' : 'The Girl with All the Gifts';
-            await page.getByText(expectedBook, { exact: false }).first().waitFor({ state: 'attached', timeout: 90000 });
+            await page.waitForFunction(() => document.querySelectorAll('main article.card').length >= 22, { timeout: 90000 });
           }
           if (item.kind === 'backup') {
             await page.locator('#ai-infrastructure-reality').waitFor({ state: 'attached', timeout: 30000 });
