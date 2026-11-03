@@ -355,9 +355,14 @@
       cards = Array.from(grid.querySelectorAll(".gallery-card"));
       cards.forEach((card, index) => {
         const image = card.querySelector("img");
+        if (image) {
+          image.dataset.originalSrc = image.currentSrc || image.src;
+          image.dataset.originalAlt = image.alt;
+        }
         image?.addEventListener("error", () => {
           if (image.dataset.fallbackApplied) return;
           image.dataset.fallbackApplied = "true";
+          image.dataset.originalLoadFailed = "true";
           image.src = "/zombcash-hand-logo.svg";
           image.alt = "Gallery image temporarily unavailable";
         }, { once: true });
