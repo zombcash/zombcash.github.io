@@ -1,0 +1,87 @@
+name: Gallery Lighthouse performance audit
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "gallery.html"
+      - "whitepaper.html"
+      - "style.css"
+      - "gallery.css"
+      - "site-polish.css"
+      - "script.js"
+      - "gallery.js"
+      - ".github/workflows/gallery-lighthouse.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gallery-lighthouse-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install pinned Lighthouse and static server
+        run: npm install --no-save lighthouse@13.6.0 http-server@14.1.1
+      - name: Start local candidate site
+        run: |
+          npx http-server . -p 4173 -a 127.0.0.1 > /tmp/zombcash-http.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/zombcash-http.log
+          exit 1
+      - name: Run mobile and desktop Lighthouse audits
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+        run: |
+          mkdir -p lighthouse-reports
+          for page in home gallery whitepaper; do
+            case "$page" in
+              home) url="http://127.0.0.1:4173/" ;;
+              gallery) url="http://127.0.0.1:4173/gallery.html" ;;
+              whitepaper) url="http://127.0.0.1:4173/whitepaper.html" ;;
+            esac
+            npx lighthouse "$url" --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/${page}-mobile.json" --max-wait-for-load=45000
+            npx lighthouse "$url" --quiet --preset=desktop --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/${page}-desktop.json" --max-wait-for-load=45000
+          done
+      - name: Summarize lab metrics
+        if: always()
+        run: |
+          node <<'NODE' >> "$GITHUB_STEP_SUMMARY"
+          const fs = require('fs');
+          console.log('| Page | Device | Perf | LCP (s) | CLS | TBT (ms) | SEO | Accessibility | Best practices |');
+          console.log('|---|---|---:|---:|---:|---:|---:|---:|---:|');
+          for (const file of fs.readdirSync('lighthouse-reports').filter(x => x.endsWith('.json')).sort()) {
+            const r = JSON.parse(fs.readFileSync('lighthouse-reports/' + file, 'utf8'));
+            const a = r.audits || {};
+            const score = id => r.categories?.[id]?.score == null ? 'n/a' : Math.round(r.categories[id].score * 100);
+            const metric = (id, scale=1) => a[id]?.numericValue == null ? 'n/a' : (a[id].numericValue / scale).toFixed(2);
+            const page = file.replace(/-(mobile|desktop)\.json$/, '');
+            const device = file.includes('-mobile') ? 'Mobile' : 'Desktop';
+            console.log(`|${page}|${device}|${score('performance')}|${metric('largest-contentful-paint',1000)}|${metric('cumulative-layout-shift')}|${metric('total-blocking-time')}|${score('seo')}|${score('accessibility')}|${score('best-practices')}|`);
+          }
+          console.log('');
+          console.log('Lab data only: Lighthouse does not replace field Core Web Vitals (CrUX/PageSpeed Insights). INP is reported only when a field metric is present.');
+          NODE
+      - name: Upload Lighthouse JSON reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zombcash-lighthouse-reports
+          path: lighthouse-reports/
+          if-no-files-found: warn
+          retention-days: 14
