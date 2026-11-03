@@ -119,8 +119,8 @@ jobs:
           PY
       - name: Run desktop and mobile interaction tests
         run: node tests/gallery-discovery-smoke.cjs
-      - name: Upload gallery screenshots on failure
-        if: failure()
+      - name: Upload gallery visual QA screenshots
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: gallery-discovery-smoke-evidence
