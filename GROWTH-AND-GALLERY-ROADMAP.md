@@ -19,14 +19,23 @@ Increase qualified search discovery and returning visitors by turning the existi
 9. Do not publish the entire gallery to Pinterest until the account/integration, image rights, pin URLs, rate limits and duplicate policy are verified. Keep an export/retry log and avoid duplicate pins.
 10. No mass link spam, fake engagement, purchased traffic or misleading financial claims.
 
+## Current execution status — 2026-11-03
+- Feature branch only: `growth-gallery-roadmap-2026-11`; no production deployment and no changes to `zombcash-world`.
+- Latest completed CI run before the current expanded locale/image-evidence tests: `41717991554`, conclusion `success`. It verified gallery interactions, desktop/mobile layout constraints, Russian locale rendering, data consistency and the Pinterest safety gate.
+- Desktop, mobile and Russian screenshots were downloaded from the Actions artifact and visually inspected. The visual identity is intact; mobile uses a two-column masonry-style archive with natural page scrolling.
+- That run reported 49/50 original images loaded and one fallback. The next CI run now records each image ID, source URL, natural dimensions, ALT, fallback state and a labeled contact sheet to identify the exact failing asset.
+- Dedicated localized gallery URLs exist for all eight non-English locales. Each page has its own canonical, nine locale alternates plus x-default, localized metadata and root-relative assets; the nine-URL hreflang sitemap is referenced by robots.txt. Expanded Playwright checks now cover all eight pages.
+- Likes UI and API/database foundation are drafted on separate feature branches; backend PR #53 is not deployed, so likes are not yet live. Comments are design-only.
+- Pinterest/Zernio export is safely gated: 0 eligible / 50 blocked. No Pins have been published; board IDs, rights confirmation and visual ALT review are still missing.
+
 ## Phase 0 — Baseline and safety audit (first)
-- [ ] Capture current main branch SHA and current live gallery appearance on desktop/mobile. Live HTML/source was inspected; screenshot/responsive verification remains pending.
+- [x] Capture feature-branch desktop/mobile screenshots and verify responsive layout constraints through Playwright. Manual visual review of the screenshot artifacts completed; actual image-by-image classification remains pending.
 - [x] Review `gallery.html`, `gallery.js`, `gallery.css`, `gallery-data.json`, `scripts/sync_gallery.py`, `scripts/sync_gallery_image_seo.py` and both gallery workflows.
 - [x] Inventory all 50 currently synchronized image entries and group them by existing series. Visual caption-to-image review remains pending.
-- [ ] Check current image URL availability, dimensions/aspect ratios, file formats and source rights. Duplicate IDs/URLs, source Telegram URLs and dates were checked for the 50-item snapshot.
+- [ ] Complete per-image source URL, natural-dimension, format and rights review. CI now captures natural dimensions and the exact failed/fallback item for all 50 images; one item was observed using fallback in the previous run.
 - [x] Confirm gallery card HTML is generated from `gallery-data.json`; verify image sitemap generation and robots references in source.
 - [x] Inspect existing Telegram Survivor authentication and API/database capabilities. Existing signed server-side session can be reused as the identity foundation; new interaction routes/tables are still required.
-- [ ] Record baseline SEO, performance, responsive and accessibility checks. Do not change production until the baseline is captured.
+- [x] Record desktop/mobile responsive smoke evidence and locale metadata checks. [ ] Capture full Core Web Vitals/accessibility baseline before release.
 
 ## Phase 1 — Gallery taxonomy and browsing experience
 ### 1A. Theme taxonomy
