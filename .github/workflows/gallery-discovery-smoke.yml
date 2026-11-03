@@ -62,6 +62,7 @@ jobs:
       - name: Validate gallery JSON and generated index
         run: |
           python - <<'PY'
+          import html
           import json
           import re
           import xml.etree.ElementTree as ET
@@ -114,6 +115,11 @@ jobs:
                   assert 'href="../gallery.css?' in page
                   assert 'src="../gallery.js?' in page
                   assert 'src="../language.js?' in page
+              for item in items:
+                  card_marker = f'data-gallery-id="{item["id"]}"'
+                  card_start = page.index(card_marker)
+                  image_match = re.search(r'<img[^>]*alt="([^"]*)"', page[card_start:])
+                  assert image_match and html.unescape(image_match.group(1)) == item["alt_text"], f"ALT mismatch for {locale}: {item['id']}"
           locale_sitemap = ET.parse("sitemap-gallery-pages.xml")
           sitemap_urls = locale_sitemap.findall(".//{http://www.sitemaps.org/schemas/sitemap/0.9}url")
           assert len(sitemap_urls) == 9
@@ -146,6 +152,9 @@ jobs:
           assert len(queue["eligible"]) == queue["eligible_count"]
           assert len(queue["blocked"]) == queue["blocked_count"]
           assert len({row["id"] for row in queue["eligible"] + queue["blocked"]}) == 50
+          assert queue["eligible_count"] == 0 and queue["blocked_count"] == 50
+          assert sum("visual-alt-review-required" in row["reasons"] for row in queue["blocked"]) == 2
+          assert all("rights-review-required" in row["reasons"] for row in queue["blocked"])
           print(f"Pinterest queue: {queue['eligible_count']} eligible; {queue['blocked_count']} blocked.")
           PY
       - name: Run desktop and mobile interaction tests
