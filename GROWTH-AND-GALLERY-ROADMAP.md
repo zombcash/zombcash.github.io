@@ -21,7 +21,7 @@ Increase qualified search discovery and returning visitors by turning the existi
 
 ## Current execution status — 2026-11-03
 - Feature branch only: `growth-gallery-roadmap-2026-11`; no production deployment and no changes to `zombcash-world`.
-- Latest completed CI run before the current expanded locale/image-evidence tests: `41717991554`, conclusion `success`. It verified gallery interactions, desktop/mobile layout constraints, Russian locale rendering, data consistency and the Pinterest safety gate.
+- Latest successful CI run: `41718724932`, conclusion `success`. It verified gallery interactions, desktop/mobile layout constraints, all eight non-English locale URLs, 50 cards per locale, canonical/hreflang and the Pinterest safety gate. The current run `41719010532` adds per-image screenshot evidence and a contact sheet.
 - Desktop, mobile and Russian screenshots were downloaded from the Actions artifact and visually inspected. The visual identity is intact; mobile uses a two-column masonry-style archive with natural page scrolling.
 - An earlier run reported 49/50 original images loaded; a repeat run loaded all 50/50 with zero fallbacks, indicating the earlier failure was transient. The current CI now records each image ID, source URL, natural dimensions, ALT, fallback state and a labeled contact sheet for ongoing visual/source review.
 - Dedicated localized gallery URLs exist for all eight non-English locales. Each page has its own canonical, nine locale alternates plus x-default, localized metadata and root-relative assets; the nine-URL hreflang sitemap is referenced by robots.txt. Expanded Playwright checks now cover all eight pages.
