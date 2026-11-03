@@ -1,6 +1,7 @@
 import copy
 import importlib.util
 from pathlib import Path
+from urllib.parse import parse_qs, urlsplit
 
 SCRIPT = Path("scripts/export_pinterest_queue.py")
 spec = importlib.util.spec_from_file_location("pinterest_queue", SCRIPT)
@@ -28,6 +29,15 @@ def sample_item():
 
 valid = module.build_queue({"items": [sample_item()]})
 assert valid["eligible_count"] == 1 and valid["blocked_count"] == 0
+pin = valid["eligible"][0]
+assert pin["canonical_url"] == sample_item()["pinterest_destination_url"]
+tracking = urlsplit(pin["destination_url"])
+tracking_query = parse_qs(tracking.query)
+assert tracking_query.get("utm_source") == ["pinterest"]
+assert tracking_query.get("utm_medium") == ["social"]
+assert tracking_query.get("utm_campaign") == ["undead_reach_2026"]
+assert tracking_query.get("utm_content") == ["ZOMBCASH-1234-0"]
+assert tracking.fragment == "gallery-image-1234-0"
 
 gates = [
     ("rights_status", "review-required", "rights-review-required"),
