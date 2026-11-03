@@ -6,6 +6,14 @@ on:
     paths:
       - "gallery-data.json"
       - "scripts/sync_gallery_image_seo.py"
+      - "scripts/generate_localized_gallery_pages.py"
+      - "language.js"
+      - "gallery.html"
+      - "gallery.js"
+      - "gallery.css"
+      - "script.js"
+      - "survivor-auth.js"
+      - "shared-nav.js"
       - ".github/workflows/sync-gallery-image-seo.yml"
   workflow_dispatch:
   schedule:
@@ -29,16 +37,19 @@ jobs:
         with:
           python-version: "3.x"
       - name: Regenerate crawlable gallery and image sitemap
-        run: python scripts/sync_gallery_image_seo.py
+        run: |
+          python -m py_compile scripts/sync_gallery_image_seo.py scripts/generate_localized_gallery_pages.py
+          python scripts/sync_gallery_image_seo.py
+          python scripts/generate_localized_gallery_pages.py
       - name: Commit generated SEO assets when changed
         run: |
-          if git diff --quiet -- gallery.html sitemap-gallery-images.xml robots.txt; then
-            echo "Gallery SEO assets are already current."
+          if git diff --quiet -- gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html; then
+            echo "Gallery SEO and localized pages are already current."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add gallery.html sitemap-gallery-images.xml robots.txt
+          git add gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html
           git commit -m "SEO: sync gallery image index"
 
           # Another workflow or manual edit can advance main while this job
@@ -63,10 +74,11 @@ jobs:
           git fetch origin main
           git reset --hard origin/main
           python scripts/sync_gallery_image_seo.py
-          if git diff --quiet -- gallery.html sitemap-gallery-images.xml robots.txt; then
-            echo "Gallery SEO assets are current after syncing latest main."
+          python scripts/generate_localized_gallery_pages.py
+          if git diff --quiet -- gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html; then
+            echo "Gallery SEO and localized pages are current after syncing latest main."
             exit 0
           fi
-          git add gallery.html sitemap-gallery-images.xml robots.txt
+          git add gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html
           git commit -m "SEO: sync gallery image index (retry)"
           git push
