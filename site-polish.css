@@ -135,3 +135,80 @@ body:has(.wrap) footer{display:block}
 .page-scroll-controls button:focus-visible{outline:2px solid var(--zc-green);outline-offset:3px}
 @media(max-width:760px){.site-footer-main{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 22px;padding:34px 5%}.site-footer-brand{grid-column:1/-1}.site-footer-bottom{padding:17px 5% 22px;flex-direction:column;gap:10px}.footer-contract{max-width:100%}.page-scroll-controls{right:10px;bottom:14px}.page-scroll-controls button{width:38px;height:38px;font-size:22px}}
 @media(max-width:420px){.site-footer-main{grid-template-columns:minmax(0,1fr);gap:28px}.site-footer-brand{grid-column:auto}.site-footer-column{gap:12px}.footer-contract code{font-size:10px}.site-footer-bottom .footer-right{font-size:8px}}
+
+
+/* ZombieCash art direction v2 — unify the main site with survival-noir editorial pages */
+:root{
+ --zc-bg:#080b0d;--zc-panel:#101718;--zc-panel-raised:#151d1d;
+ --zc-line:rgba(184,198,190,.16);--zc-green:#b1c69a;--zc-purple:#8c7898;
+ --zc-text:#e1e5df;--zc-muted:#a1aca6;
+}
+body{
+ background:
+  radial-gradient(ellipse at 78% 4%,rgba(112,132,118,.11),transparent 34%),
+  linear-gradient(180deg,#080b0d,#0b1012 58%,#080b0d);
+ color:var(--zc-text);
+}
+.topbar{
+ background:rgba(8,12,13,.88);
+ border-bottom:1px solid rgba(184,198,190,.14);
+ backdrop-filter:blur(18px);
+}
+.brand-mark{
+ border-color:rgba(177,198,154,.62);color:#c2d0ae;
+ box-shadow:0 0 24px rgba(177,198,154,.1);
+}
+.green,.eyebrow,.section-kicker,.mini-label{color:#b4c59f}
+.topbar nav a:hover,.top-cta:hover{color:#d8e3cb}
+.top-cta,.btn-ghost,.menu-toggle{
+ border-color:rgba(177,198,154,.32);border-radius:0;
+ background:rgba(13,19,19,.55);
+}
+.btn-primary{
+ background:#a9bf91;color:#101610;border-color:#a9bf91;
+ box-shadow:0 8px 30px rgba(169,191,145,.12);
+}
+.btn-primary:hover{background:#c0d1ad;box-shadow:0 12px 34px rgba(169,191,145,.18)}
+.hero{
+ background:
+  radial-gradient(ellipse at 78% 42%,rgba(105,128,110,.2),transparent 40%),
+  linear-gradient(100deg,#080b0d 10%,rgba(8,11,13,.92) 46%,rgba(11,17,19,.68));
+}
+.hero-grid{opacity:.24}
+.moon{
+ background:radial-gradient(circle at 35% 30%,#d6dfc0,#8c9d78 44%,#465b4c 68%,#182720 78%);
+ box-shadow:0 0 55px rgba(145,166,126,.22),0 0 160px rgba(74,104,84,.12);
+ opacity:.42;
+}
+.hero-zombie{opacity:.38;filter:grayscale(.45)}
+.hero-zombie:before{color:#a6b895;text-shadow:0 0 25px rgba(177,198,154,.24),10px 10px 0 #241f2c}
+.hero-zombie:after{border-color:rgba(177,198,154,.12)}
+.hero-stats strong{color:#b4c59f}
+.ticker{background:#a9bf91;color:#101610}
+.outbreak-panel,.tool-card,.crew-card,.zom-market-panel,.campaign-card,.campaign-panel{
+ border:0;border-top:1px solid rgba(184,198,190,.2);
+ border-radius:0;
+ background:linear-gradient(140deg,rgba(23,31,30,.72),rgba(9,14,16,.48));
+ box-shadow:none;
+}
+.outbreak-panel:before{width:1px;background:linear-gradient(180deg,transparent,#a9bf91,transparent);box-shadow:none}
+.outbreak-icon{color:#b4c59f;text-shadow:none}
+.tool-grid,.crew-grid,.campaign-cards{gap:clamp(22px,3vw,42px)}
+.tool-card,.crew-card,.campaign-card,.campaign-panel{
+ padding:clamp(18px,2.5vw,30px) 0;
+}
+.tool-art{
+ border:0;border-block:1px solid rgba(184,198,190,.14);
+ border-radius:0;filter:saturate(.72);
+}
+.tool-card:hover,.crew-card:hover,.zom-market-panel:hover{
+ border-color:rgba(177,198,154,.4);
+ transform:translateY(-3px);
+ background:linear-gradient(140deg,rgba(35,47,42,.72),rgba(9,14,16,.48));
+}
+.card-link,.pill{border-radius:0}
+@media(max-width:760px){
+ .hero{min-height:620px}
+ .moon{width:270px;height:270px;right:-3%;top:9%}
+ .hero-zombie{width:55%;opacity:.24}
+}
