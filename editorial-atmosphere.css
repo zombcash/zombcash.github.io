@@ -1,0 +1,109 @@
+/* ZombieCash editorial atmosphere v1 — cinematic survival noir
+   Shared by long-form editorial pages; content, language and metadata remain untouched. */
+:root{
+ --zc-ink:#080b0d;--zc-ash:#151a1c;--zc-steel:#293235;--zc-fog:#aeb9b7;
+ --zc-paper:#e1e5df;--zc-toxic:#a8c58a;--zc-moss:#687b63;--zc-violet:#8c7898;
+ --zc-rust:#765d50;--zc-edge:rgba(184,198,190,.18);
+}
+body:has(.wrap){
+ background:
+  radial-gradient(ellipse at 78% 2%,rgba(116,137,126,.12),transparent 38%),
+  radial-gradient(ellipse at 8% 18%,rgba(82,105,92,.10),transparent 34%),
+  linear-gradient(180deg,#080b0d 0%,#0b1012 52%,#080b0d 100%) !important;
+ color:var(--zc-paper);
+}
+body:has(.wrap) .wrap{
+ width:min(100% - 36px,1120px);
+ position:relative;
+}
+body:has(.wrap) .wrap:before{
+ content:"";position:absolute;inset:0 auto 0 0;width:1px;
+ background:linear-gradient(180deg,transparent,var(--zc-edge) 12%,var(--zc-edge) 88%,transparent);
+ pointer-events:none;
+}
+body:has(.wrap) .top{
+ border-color:var(--zc-edge);
+ background:linear-gradient(90deg,rgba(18,24,25,.88),rgba(9,13,15,.65));
+ padding:16px 18px 18px;margin-bottom:22px;
+}
+body:has(.wrap) .brand{color:#dce2dd;letter-spacing:.12em}
+body:has(.wrap) .brand span{color:var(--zc-toxic)}
+body:has(.wrap) .back,body:has(.wrap) header.top>a:not(.brand){
+ color:#b7c1bb;text-decoration:none;border-bottom:1px solid transparent;
+}
+body:has(.wrap) .back:hover,body:has(.wrap) header.top>a:not(.brand):hover{color:#e8eee8;border-color:var(--zc-moss)}
+body:has(.wrap) .eyebrow,body:has(.wrap) .kicker{
+ color:#aebca9;letter-spacing:.2em;text-shadow:0 1px 12px #000;
+}
+body:has(.wrap) h1,body:has(.wrap) h2,body:has(.wrap) h3{
+ color:#e5e9e4;text-wrap:balance;
+}
+body:has(.wrap) h1{
+ font-size:clamp(36px,6.4vw,68px);line-height:1.02;letter-spacing:-.045em;
+ text-shadow:0 4px 24px #000;
+}
+body:has(.wrap) h2{letter-spacing:-.025em}
+body:has(.wrap) .lead{color:#c0c9c3;max-width:900px}
+body:has(.wrap) p{color:inherit}
+body:has(.wrap) .meta,body:has(.wrap) .small,body:has(.wrap) figcaption{
+ color:#929e99;
+}
+body:has(.wrap) a{color:#b7c99e;text-decoration-color:rgba(183,201,158,.35)}
+body:has(.wrap) a:hover{color:#e0ebce}
+body:has(.wrap) .tag,body:has(.wrap) .pill{
+ color:#c4d0b9;background:rgba(104,123,99,.12);
+ border:1px solid rgba(151,174,139,.32);border-radius:2px;
+}
+body:has(.wrap) .notice,body:has(.wrap) .box,body:has(.wrap) .card,
+body:has(.wrap) .editorial-note,body:has(.wrap) .chart,body:has(.wrap) .toc{
+ background:linear-gradient(145deg,rgba(24,31,32,.96),rgba(11,16,18,.98));
+ border:1px solid var(--zc-edge);border-radius:3px;
+ box-shadow:0 12px 34px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.025);
+}
+body:has(.wrap) .notice,body:has(.wrap) .box{border-left:2px solid #788a70}
+body:has(.wrap) .notice strong,body:has(.wrap) .box strong{color:#c6d2b9}
+body:has(.wrap) .hero,body:has(.wrap) .manual-hero{
+ position:relative;overflow:hidden;border:1px solid var(--zc-edge);
+ background:#101719;box-shadow:0 22px 55px #0008;
+}
+body:has(.wrap) .hero img,body:has(.wrap) .manual-hero img{
+ display:block;width:100%;height:auto;max-height:640px;object-fit:cover;
+ border:0;border-radius:0;filter:saturate(.78) contrast(1.06);
+}
+body:has(.wrap) .hero:after,body:has(.wrap) .manual-hero:after{
+ content:"";position:absolute;inset:0;pointer-events:none;
+ background:linear-gradient(90deg,rgba(4,8,10,.24),transparent 48%,rgba(4,8,10,.12)),
+ linear-gradient(0deg,rgba(4,8,10,.22),transparent 40%);
+}
+body:has(.wrap) figure{margin:28px 0}
+body:has(.wrap) figcaption{padding:10px 12px;background:#0b1011;border-left:1px solid var(--zc-edge)}
+body:has(.wrap) .grid{gap:16px}
+body:has(.wrap) .grid .card,body:has(.wrap) .manual-step{
+ border-radius:3px;background:linear-gradient(150deg,#182022,#0d1214);
+ border:1px solid var(--zc-edge);padding:clamp(16px,2.4vw,24px);
+}
+body:has(.wrap) .grid .card:hover,body:has(.wrap) .manual-step:hover{
+ border-color:rgba(168,197,138,.48);transform:translateY(-2px);
+}
+body:has(.wrap) .card-cover{filter:saturate(.76) contrast(1.04)}
+body:has(.wrap) table{border-color:var(--zc-edge)}
+body:has(.wrap) th{background:#1b2425;color:#d0d9ce}
+body:has(.wrap) td,body:has(.wrap) th{border-color:var(--zc-edge)}
+body:has(.wrap) .callout{border-left-color:#82957b;color:#c8d0ca}
+body:has(.wrap) .warning{border-left-color:#9b776c}
+body:has(.wrap) .good{border-left-color:#91a77e}
+body:has(.wrap) .steps li,body:has(.wrap) .faq details{
+ background:#101719;border-color:var(--zc-edge);border-radius:3px;
+}
+body:has(.wrap) .steps li:before,body:has(.wrap) .faq summary{color:#c4d0b9}
+body:has(.wrap) .footer{border-color:var(--zc-edge);color:#8e9b95}
+body:has(.wrap) img{max-width:100%}
+@media(max-width:760px){
+ body:has(.wrap) .wrap{width:min(100% - 24px,1120px)}
+ body:has(.wrap) .top{gap:12px;padding:12px 10px}
+ body:has(.wrap) .hero,body:has(.wrap) .manual-hero{border-radius:2px}
+ body:has(.wrap) .grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+ body:has(.wrap) .manual-step,body:has(.wrap) .grid .card{transition:none}
+}
