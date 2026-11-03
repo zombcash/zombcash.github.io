@@ -28,6 +28,7 @@ def build_queue(data):
     items = data.get("items", [])
     eligible = []
     blocked = []
+    published = []
     seen_ids = set()
     seen_images = set()
 
@@ -42,6 +43,22 @@ def build_queue(data):
             raise ValueError("Gallery image URLs must be present and unique")
         seen_ids.add(stable_id)
         seen_images.add(image)
+
+        if item.get("pinterest_status") == "published":
+            pin_id = str(item.get("pinterest_pin_id") or "").strip()
+            board_id = str(item.get("pinterest_board_id") or "").strip()
+            pin_url = str(item.get("pinterest_pin_url") or "").strip()
+            if not pin_id or not board_id or not pin_url:
+                raise ValueError(f"Published Pinterest item {stable_id} is missing its verified Pin/board ledger")
+            published.append({
+                "id": stable_id,
+                "pin_id": pin_id,
+                "pin_url": pin_url,
+                "board_id": board_id,
+                "published_at": item.get("pinterest_published_at"),
+                "destination_url": item.get("pinterest_published_destination"),
+            })
+            continue
 
         if item.get("rights_status") not in APPROVED_RIGHTS:
             reasons.append("rights-review-required")
@@ -94,8 +111,10 @@ def build_queue(data):
     return {
         "schema_version": 1,
         "source": "gallery-data.json",
+        "published_count": len(published),
         "eligible_count": len(eligible),
         "blocked_count": len(blocked),
+        "published": published,
         "eligible": eligible,
         "blocked": blocked,
     }
@@ -105,7 +124,7 @@ def main():
     data = json.loads(DATA_PATH.read_text(encoding="utf-8"))
     queue = build_queue(data)
     OUTPUT_PATH.write_text(json.dumps(queue, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Pinterest queue: {queue['eligible_count']} eligible, {queue['blocked_count']} blocked. No pins were published.")
+    print(f"Pinterest inventory: {queue['published_count']} already published, {queue['eligible_count']} eligible, {queue['blocked_count']} blocked. No new pins were published.")
 
 
 if __name__ == "__main__":
