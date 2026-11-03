@@ -1437,8 +1437,22 @@ if (zomMarket) {
       const imageUrl = safeHttpUrl(base.imageUrl || base.icon || pair.info && pair.info.imageUrl);
       if (imageUrl) {
         const img = document.createElement('img');
-        img.src = imageUrl;
+        let optimizedImageUrl = imageUrl;
+        try {
+          const iconUrl = new URL(imageUrl);
+          if (iconUrl.hostname === 'cdn.dexscreener.com') {
+            iconUrl.searchParams.set('width', '48');
+            iconUrl.searchParams.set('height', '48');
+            iconUrl.searchParams.set('quality', '75');
+            iconUrl.searchParams.set('format', 'auto');
+          }
+          optimizedImageUrl = iconUrl.href;
+        } catch (_) {}
+        img.src = optimizedImageUrl;
         img.alt = '';
+        img.width = 48;
+        img.height = 48;
+        img.decoding = 'async';
         img.loading = 'lazy';
         img.referrerPolicy = 'no-referrer';
         img.onerror = () => { img.remove(); logo.classList.remove('has-image'); };

@@ -1,0 +1,274 @@
+
+      /* Homepage composition contract: primary copy on the left, ad and radar
+         in a single equal-width right stack. Legacy hero styles no longer size
+         or position this structure. */
+      body.zc-homepage-ad-enabled main#home > .hero,
+      body.zc-homepage-ad-enabled > .hero,
+      body.zc-homepage-ad-enabled main .hero {
+        display:grid!important;
+        grid-template-columns:minmax(0,1fr) minmax(320px,390px)!important;
+        grid-template-rows:auto auto!important;
+        justify-content:center!important;
+        align-items:start!important;
+        column-gap:clamp(22px,2.6vw,40px)!important;
+        row-gap:24px!important;
+        width:100%!important;
+        max-width:1360px!important;
+        height:auto!important;
+        min-height:0!important;
+        max-height:none!important;
+        margin:0 auto!important;
+        padding:clamp(30px,3.4vw,52px) clamp(20px,3.4vw,52px) 32px!important;
+        overflow:visible!important;
+        box-sizing:border-box!important;
+      }
+      body.zc-homepage-ad-enabled .hero > .hero-layout {
+        grid-column:1!important;
+        grid-row:1!important;
+        display:block!important;
+        align-self:start!important;
+        justify-self:stretch!important;
+        width:100%!important;
+        max-width:none!important;
+        min-width:0!important;
+        margin:0!important;
+        padding:0!important;
+        box-sizing:border-box!important;
+      }
+      /* Remove inherited centered/max-width constraints from legacy hero wrappers.
+         The section is full-width; its two-column content grid must use that width. */
+      body.zc-homepage-ad-enabled main#home {
+        width:100%!important;
+        max-width:none!important;
+        min-width:0!important;
+        margin-left:0!important;
+        margin-right:0!important;
+        padding-left:0!important;
+        padding-right:0!important;
+        box-sizing:border-box!important;
+      }
+      body.zc-homepage-ad-enabled main#home > .hero {
+        display:grid!important;
+        grid-template-columns:minmax(0,1fr) minmax(320px,390px)!important;
+        grid-template-rows:auto!important;
+        width:calc(100% - 40px)!important;
+        max-width:1276px!important;
+        min-width:0!important;
+        margin:0 auto!important;
+        padding:28px 24px!important;
+        gap:28px!important;
+        position:relative!important;
+        isolation:isolate!important;
+        box-sizing:border-box!important;
+      }
+      /* Decorative hero layers are absolutely positioned; otherwise they become
+         extra CSS-grid items and silently create extra columns/rows. */
+      body.zc-homepage-ad-enabled main#home > .hero > .hero-grid,
+      body.zc-homepage-ad-enabled main#home > .hero > .moon,
+      body.zc-homepage-ad-enabled main#home > .hero > .city {
+        position:absolute!important;
+        inset:0!important;
+        width:100%!important;
+        height:100%!important;
+        pointer-events:none!important;
+        z-index:0!important;
+      }
+      body.zc-homepage-ad-enabled main#home > .hero > .hero-layout {
+        grid-column:1!important;
+        grid-row:1!important;
+        position:relative!important;
+        z-index:1!important;
+        width:100%!important;
+        min-width:0!important;
+        max-width:none!important;
+        margin:0!important;
+      }
+      body.zc-homepage-ad-enabled main#home > .hero > .zc-home-right-stack {
+        grid-column:2!important;
+        grid-row:1!important;
+        position:relative!important;
+        z-index:2!important;
+        width:100%!important;
+        min-width:0!important;
+        max-width:none!important;
+        margin:0!important;
+      }
+      body.zc-homepage-ad-enabled .hero > .hero-layout > .hero-content {
+        max-width:100%!important;
+      }
+      body.zc-homepage-ad-enabled .hero .field-manual-spotlight {
+        width:100%!important;
+        max-width:100%!important;
+        box-sizing:border-box!important;
+      }
+      body.zc-homepage-ad-enabled .hero > .hero-layout > .hero-content {
+        display:block!important;
+        grid-column:auto!important;
+        grid-row:auto!important;
+        width:100%!important;
+        max-width:none!important;
+        min-width:0!important;
+        margin:0!important;
+        padding:0!important;
+        box-sizing:border-box!important;
+      }
+      body.zc-homepage-ad-enabled .hero > .zc-home-right-stack {
+        grid-column:2!important;
+        grid-row:1!important;
+        display:flex!important;
+        flex-direction:column!important;
+        align-items:stretch!important;
+        align-self:start!important;
+        gap:clamp(14px,1.6vw,22px)!important;
+        width:100%!important;
+        max-width:none!important;
+        min-width:0!important;
+        margin:0!important;
+        padding:0!important;
+        box-sizing:border-box!important;
+        position:relative!important;
+        z-index:3!important;
+      }
+      body.zc-homepage-ad-enabled .zc-home-right-stack > .zc-home-floating-ad,
+      body.zc-homepage-ad-enabled .zc-home-right-stack > .outbreak-panel {
+        order:initial!important;
+        display:block!important;
+        position:relative!important;
+        inset:auto!important;
+        flex:0 0 auto!important;
+        align-self:stretch!important;
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        height:auto!important;
+        max-height:none!important;
+        margin:0!important;
+        padding:0!important;
+        box-sizing:border-box!important;
+        overflow:hidden!important;
+      }
+      body.zc-homepage-ad-enabled .zc-home-right-stack > .zc-home-floating-ad {
+        border:1px solid #456b37!important;
+        background:linear-gradient(145deg,#0b120d,#080b10)!important;
+      }
+      body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner {
+        display:block!important;
+        position:relative!important;
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        height:auto!important;
+        min-height:0!important;
+        max-height:none!important;
+        margin:0!important;
+        padding:clamp(10px,1.2vw,16px)!important;
+        box-sizing:border-box!important;
+        overflow:hidden!important;
+        text-align:center!important;
+        background:transparent!important;
+      }
+      body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-label {
+        display:block!important;
+        margin:0 0 8px!important;
+        color:#71816e!important;
+        font:600 9px/1.4 Orbitron,sans-serif!important;
+        letter-spacing:1.5px!important;
+        text-align:center!important;
+      }
+      body.zc-homepage-ad-enabled .zc-home-floating-ad #frame,
+      body.zc-homepage-ad-enabled .zc-home-floating-ad [id^="frame-"] {
+        display:block!important;
+        position:relative!important;
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        height:auto!important;
+        min-height:250px!important;
+        max-height:none!important;
+        margin:0 auto!important;
+        padding:0!important;
+        box-sizing:border-box!important;
+        overflow:hidden!important;
+      }
+      body.zc-homepage-ad-enabled .zc-home-floating-ad iframe[data-aa="2460185"] {
+        display:block!important;
+        position:relative!important;
+        width:100%!important;
+        max-width:100%!important;
+        min-width:0!important;
+        height:250px!important;
+        min-height:250px!important;
+        max-height:250px!important;
+        margin:0 auto!important;
+        padding:0!important;
+        border:0!important;
+        box-sizing:border-box!important;
+      }
+      /* Temporarily hide the oversized radar panel marked by the site owner.
+         It remains in source for later restoration but must not affect layout. */
+      body.zc-homepage-ad-enabled .outbreak-panel {
+        display:none!important;
+      }
+      body.zc-homepage-ad-enabled .hero > .hero-bottom {
+        grid-column:1 / -1!important;
+        grid-row:2!important;
+        position:relative!important;
+        inset:auto!important;
+        width:100%!important;
+        margin:0!important;
+        padding:12px 0 0!important;
+        box-sizing:border-box!important;
+      }
+      @media(max-width:900px) {
+        body.zc-homepage-ad-enabled main#home > .hero,
+        body.zc-homepage-ad-enabled > .hero,
+        body.zc-homepage-ad-enabled main .hero {
+          grid-template-columns:minmax(0,1fr)!important;
+          grid-template-rows:auto auto!important;
+          width:calc(100% - 24px)!important;
+          max-width:760px!important;
+          gap:20px!important;
+          min-height:0!important;
+          padding:24px 18px!important;
+        }
+        body.zc-homepage-ad-enabled .hero > .hero-layout {
+          grid-column:1!important;
+          grid-row:1!important;
+          width:100%!important;
+          min-width:0!important;
+        }
+        body.zc-homepage-ad-enabled .hero > .zc-home-right-stack {
+          grid-column:1!important;
+          grid-row:2!important;
+          width:100%!important;
+          max-width:640px!important;
+          justify-self:center!important;
+          margin:0 auto!important;
+          gap:16px!important;
+        }
+        body.zc-homepage-ad-enabled .hero > .hero-bottom {
+          grid-column:1!important;
+          grid-row:3!important;
+        }
+      }
+      @media(max-width:600px) {
+        body.zc-homepage-ad-enabled main#home > .hero,
+        body.zc-homepage-ad-enabled > .hero,
+        body.zc-homepage-ad-enabled main .hero {
+          gap:18px!important;
+          padding:26px 16px 22px!important;
+        }
+        body.zc-homepage-ad-enabled .zc-home-right-stack {
+          gap:14px!important;
+        }
+        body.zc-homepage-ad-enabled .hero h1 {
+          overflow-wrap:normal!important;
+          word-break:normal!important;
+        }
+        body.zc-homepage-ad-enabled .zc-home-floating-ad .aads-ad-inner,
+        body.zc-homepage-ad-enabled .aads-ad-section .aads-ad-inner,
+        body.zc-homepage-ad-enabled .zsh-shared-ad .aads-ad-inner {
+          padding:10px!important;
+        }
+      }
+    

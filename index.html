@@ -541,9 +541,10 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 @media(max-width:560px){.jupiter-buy-section{padding:48px 5%}.jupiter-buy-layout{margin-top:20px;gap:16px}.jupiter-buy-copy{padding:19px}.jupiter-terminal-top{padding:0 11px;font-size:7px}#jupiter-zombcash-terminal{min-height:560px}}
 </style>
 <!-- Current official Jupiter Plugin (replaces deprecated Jupiter Terminal v4). -->
-<script src="https://plugin.jup.ag/plugin-v1.js"></script>
+<script src="https://plugin.jup.ag/plugin-v1.js" defer></script>
 
 <link rel="stylesheet" href="site-polish.css?v=20261103-noir2">
+<link rel="stylesheet" href="homepage-ad-layout.css?v=20261104-cwv1" data-zsh-home-ad-responsive-style>
 
 <style id="zombcash-hero-art-panel">
 .zc-hero-art-panel{position:relative!important;display:block!important;min-width:0!important;width:100%!important;height:clamp(390px,38vw,520px)!important;max-height:520px!important;overflow:hidden!important;border:1px solid #456b37!important;border-radius:3px!important;background:#050906!important;box-shadow:inset 0 0 50px #9bff4510,0 0 35px #9bff4508!important;isolation:isolate!important}
@@ -767,7 +768,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 
 <meta name="38200f66893a4042799616bc41b0aa824be9a7b0" content="38200f66893a4042799616bc41b0aa824be9a7b0" />
 </head>
-<body>
+<body class="zc-homepage-ad-enabled">
 <div class="scanlines"></div>
 <header class="topbar">
   <a class="brand" href="#home" aria-label="ZombieCash home"><span class="brand-mark">☣</span><span>ZOMBIE<span class="green">CASH</span><small>THE UNDEAD INTERNET</small></span></a>
@@ -843,18 +844,26 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
       <div class="zc-art-caption"><span class="zc-art-live-dot"></span><span>OUTBREAK RADAR</span><b>LIVE / 24·7</b></div>
     </div>
   </aside>  </div>
-  <section class="aads-ad-section zc-home-floating-ad" aria-label="Advertisement" style="width:100%;min-width:0;box-sizing:border-box;padding:18px 5%;background:#080b11;">
+  <div class="zc-home-right-stack" data-zombcash-home-right-stack="true">
+<section class="aads-ad-section zc-home-floating-ad" aria-label="Advertisement" data-zombcash-ad-slot="responsive-adaptive" style="width:100%;min-width:0;box-sizing:border-box;padding:18px 5%;background:#080b11;">
   <div class="aads-ad-inner" style="width:100%;max-width:1120px;margin:0 auto;min-width:0;text-align:center;">
     <div style="margin:0 0 8px;color:#71816e;font:600 9px/1.4 Orbitron,sans-serif;letter-spacing:1.5px;">COMMUNITY SUPPORT / SPONSORED</div>
     <!-- BEGIN AADS AD UNIT 2460185 -->
 
 <div id="frame" style="display:block;width:100%;height:250px;min-height:250px;max-width:100%;min-width:0;box-sizing:border-box;margin:0 auto;position:relative;z-index:0;overflow:hidden;">
-          <iframe data-aa="2460185" src="https://acceptable.a-ads.com/2460185/?size=Adaptive" title="Sponsored advertisement" loading="eager" referrerpolicy="strict-origin-when-cross-origin" style="display:block;box-sizing:border-box;width:100%;height:250px;min-height:250px;max-height:250px;max-width:100%;min-width:0;border:0;margin:0;padding:0;overflow:hidden"></iframe>
+          <iframe data-aa="2460185" src="https://acceptable.a-ads.com/2460185/?size=Adaptive" title="Sponsored advertisement" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="display:block;box-sizing:border-box;width:100%;height:250px;min-height:250px;max-height:250px;max-width:100%;min-width:0;border:0;margin:0;padding:0;overflow:hidden"></iframe>
         </div>
 
 <!-- END AADS AD UNIT 2460185 -->
+    <div class="zc-ad-promo-fill">
+      <p class="zc-ad-promo-kicker">ZOMBCASH // SPONSOR ZONE</p>
+      <h2 class="zc-ad-promo-title">YOUR PROJECT. OUR UNDEAD INTERNET.</h2>
+      <p class="zc-ad-promo-copy">Put your project in front of the ZombieCash community. Launch a campaign and turn attention into action.</p>
+      <a class="zc-ad-promo-link" href="https://aads.com/campaigns/new?partner=2460185&amp;source_type=ad_unit&amp;source_id=2460185" target="_blank" rel="noopener noreferrer">ADVERTISE WITH A-ADS ↗</a>
+    </div>
   </div>
 </section>
+</div>
   <div class="hero-bottom"><span>SCANNING FOR SIGNS OF LIFE...</span><span>SYS.STATUS: <b>UNDEAD</b></span><span>COORD: 6C-CB-F9</span></div>
 </section>
 

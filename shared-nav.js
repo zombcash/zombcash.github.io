@@ -1451,7 +1451,7 @@
   };
 
   const ensureStyles = () => {
-    if (document.getElementById('zsh-home-ad-responsive-style')) return;
+    if (document.getElementById('zsh-home-ad-responsive-style') || document.querySelector('link[data-zsh-home-ad-responsive-style]')) return;
     const style = document.createElement('style');
     style.id = 'zsh-home-ad-responsive-style';
     style.textContent = `
