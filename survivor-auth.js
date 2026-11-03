@@ -68,6 +68,7 @@
     overlay.querySelector('#survivor-close').addEventListener('click', closeModal);
     overlay.querySelector('#survivor-logout').addEventListener('click', () => {
       try { localStorage.removeItem(STORAGE_TOKEN); localStorage.removeItem(STORAGE_PROFILE); } catch (_) {}
+      document.dispatchEvent(new CustomEvent('zombcash:survivorlogout'));
       updateCta(); renderModal(); statusNode.textContent = '';
     });
     overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
@@ -313,7 +314,7 @@
     if (!token()) return;
     try {
       const response = await fetch(API + '/api/profile', {headers:{'Authorization':'Bearer ' + token()}, cache:'no-store'});
-      if (response.status === 401) { localStorage.removeItem(STORAGE_TOKEN); localStorage.removeItem(STORAGE_PROFILE); return; }
+      if (response.status === 401) { localStorage.removeItem(STORAGE_TOKEN); localStorage.removeItem(STORAGE_PROFILE); document.dispatchEvent(new CustomEvent('zombcash:survivorlogout')); return; }
       if (response.ok) {
         const data = await response.json();
         if (data.profile) localStorage.setItem(STORAGE_PROFILE, JSON.stringify(data.profile));
