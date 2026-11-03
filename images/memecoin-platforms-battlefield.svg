@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="t d">
+<title id="t">The Memecoin Battlefield</title><desc id="d">ZombieCash research dossier comparing CoinSniper, CoinMooner and CoinVote.</desc>
+<defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#090d12"/><stop offset=".55" stop-color="#1b1516"/><stop offset="1" stop-color="#101a14"/></linearGradient><radialGradient id="glow"><stop stop-color="#a3332b" stop-opacity=".45"/><stop offset="1" stop-color="#a3332b" stop-opacity="0"/></radialGradient></defs>
+<rect width="1200" height="630" fill="url(#bg)"/><circle cx="1020" cy="80" r="420" fill="url(#glow)"/><path d="M0 470 1200 320M0 530 1200 380" stroke="#4b3933" stroke-width="2" opacity=".45"/>
+<g fill="none" stroke="#ffc45b" stroke-width="2" opacity=".6"><path d="M70 90h300v130H70zM830 90h300v130H830zM450 365h300v130H450z"/><path d="M370 155h95l80 120M830 155h-95l-80 120M600 275v90"/></g>
+<g fill="#ffc45b" font-family="Arial,sans-serif" font-weight="700"><text x="70" y="125" font-size="22" letter-spacing="4">ZOMBCASH · SURVIVOR FIELD MANUAL</text><text x="70" y="295" font-size="76" letter-spacing="-2">THE MEMECOIN</text><text x="70" y="380" font-size="92" letter-spacing="-3">BATTLEFIELD</text><text x="72" y="430" font-size="25" fill="#eee7dc" font-weight="400">COINSNIPER · COINMOONER · COINVOTE</text></g>
+<g font-family="Arial,sans-serif" text-anchor="middle"><text x="220" y="175" font-size="30" fill="#fff">COINSNIPER</text><text x="980" y="175" font-size="30" fill="#fff">COINMOONER</text><text x="600" y="445" font-size="34" fill="#fff">COINVOTE</text></g>
+<g fill="#ffc45b"><circle cx="600" cy="275" r="17"/><path d="M600 245v-35m0 130v-35m-30-30h-35m130 0h-35" stroke="#ffc45b" stroke-width="4"/></g>
+<text x="72" y="570" fill="#a9a3a0" font-family="Arial,sans-serif" font-size="18" letter-spacing="3">FIELD RESEARCH · 03 NOV 2026 · EVIDENCE OVER HYPE</text>
+</svg>
