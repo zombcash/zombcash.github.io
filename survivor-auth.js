@@ -324,6 +324,17 @@
   }
   function init() {
     ensureModal();
+    window.ZombieCashSurvivorAuth = Object.freeze({
+      getToken: token,
+      getProfile: readProfile,
+      openLogin: () => { ensureModal(); overlay.hidden = false; renderModal(); },
+      clearSession: () => {
+        try { localStorage.removeItem(STORAGE_TOKEN); localStorage.removeItem(STORAGE_PROFILE); } catch (_) {}
+        presenceOnline = false;
+        document.dispatchEvent(new CustomEvent('zombcash:survivorlogout'));
+        updateCta();
+      }
+    });
     // Reuse the shared header's existing Telegram login control; never create a duplicate CTA.
     let cta = document.querySelector('header.zombcash-shared-header .zsh-actions .zsh-login-button, header.zombcash-shared-header .zsh-actions .survivor-entry-button, .top-cta, .survivor-entry-button');
     if (!cta) {
