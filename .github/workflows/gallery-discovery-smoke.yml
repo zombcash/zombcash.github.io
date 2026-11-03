@@ -10,6 +10,8 @@ on:
       - "gallery-data.json"
       - "scripts/sync_gallery.py"
       - "scripts/sync_gallery_image_seo.py"
+      - "scripts/export_pinterest_queue.py"
+      - "pinterest-queue.json"
       - "tests/gallery-discovery-smoke.cjs"
       - ".github/workflows/gallery-discovery-smoke.yml"
   workflow_dispatch:
@@ -66,6 +68,19 @@ jobs:
           ns = {"image": "http://www.google.com/schemas/sitemap-image/1.1"}
           assert len(sitemap.findall(".//image:image", ns)) == len(items), "image sitemap count mismatch"
           print("Gallery data, generated cards and image sitemap are consistent.")
+          PY
+      - name: Build and validate rights-gated Pinterest queue
+        run: |
+          python scripts/export_pinterest_queue.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          queue = json.loads(Path("pinterest-queue.json").read_text(encoding="utf-8"))
+          assert queue["eligible_count"] + queue["blocked_count"] == 50
+          assert len(queue["eligible"]) == queue["eligible_count"]
+          assert len(queue["blocked"]) == queue["blocked_count"]
+          assert len({row["id"] for row in queue["eligible"] + queue["blocked"]}) == 50
+          print(f"Pinterest queue: {queue['eligible_count']} eligible; {queue['blocked_count']} blocked.")
           PY
       - name: Run desktop and mobile interaction tests
         run: node tests/gallery-discovery-smoke.cjs
