@@ -30,13 +30,18 @@ def make_cards(items):
         caption_raw = str(item.get("caption", ""))
         caption = clean_caption(caption_raw)
         post = html.escape(str(item.get("post_url") or "https://t.me/ZOMBCASH"), quote=True)
+        title = str(item.get("title") or caption).strip()
+        description = str(item.get("description") or caption).strip()
+        alt_text = str(item.get("alt_text") or "").strip() or ("ZombieCash artwork: " + caption)
         esc_caption = html.escape(caption, quote=True)
         esc_raw = html.escape(caption_raw, quote=True)
+        esc_title = html.escape(title, quote=True)
+        esc_alt = html.escape(alt_text, quote=True)
         if not image.startswith(("https://", "http://")):
             continue
         cards.append(
             '      <article class="gallery-card" tabindex="0" role="button" aria-label="Open image: ' + esc_caption + '">\n'
-            '        <img src="' + image + '" alt="ZombieCash gallery image: ' + esc_caption + '" title="' + esc_caption + '" loading="lazy" decoding="async">\n'
+            '        <img src="' + image + '" alt="' + esc_alt + '" title="' + esc_title + '" loading="lazy" decoding="async">\n'
             '        <div class="gallery-caption"><p data-original-caption="' + esc_raw + '">' + esc_caption + '</p><a href="' + post + '" target="_blank" rel="noreferrer">SOURCE ↗</a></div>\n'
             '      </article>'
         )
@@ -57,7 +62,7 @@ def make_sitemap(items):
         if not image.startswith(("https://", "http://")) or image in seen:
             continue
         seen.add(image)
-        caption = clean_caption(item.get("caption", "ZombieCash gallery image"))
+        caption = str(item.get("description") or item.get("title") or clean_caption(item.get("caption", "ZombieCash gallery image"))).strip()
         rows.extend([
             '    <image:image>',
             '      <image:loc>' + html.escape(image, quote=False) + '</image:loc>',
