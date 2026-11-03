@@ -50,7 +50,8 @@ Work branch: `growth-gallery-roadmap-2026-11`.
 - Updated the SEO generator to use editorial title/ALT/description fields when supplied and to retain stable image/category attributes in generated cards.
 - JavaScript syntax compilation passed for gallery.js and the Playwright smoke-test script. JSON consistency checks passed: 50 entries, 50 unique IDs/URLs/titles, all records have categories, titles and descriptions; 50 generated cards and 50 sitemap image entries. A GitHub Actions PR smoke-test run has started; its final result is pending. No production branch deployment or live-site change has been made.
 - Implemented card and lightbox like controls on the feature branch, wired to the Survivor API contract. These controls are not live until the companion backend PR is merged and deployed.
-- Added stable per-image anchors for all 50 cards and a gated Pinterest queue exporter. Current queue: 0 eligible, 50 blocked because rights confirmation, visual ALT review and board assignment are still outstanding. No Pins have been published.
+- Added stable per-image anchors for all 50 cards and a gated Pinterest queue exporter.
+- Added aggregate first-party tracking for gallery image opens, category filters, search use (without recording query text), sort changes, filter resets, like/unlike success and Telegram source opens. The API allowlist change is in backend PR #53; events contain no user IDs, IPs, wallets or search text. Current queue: 0 eligible, 50 blocked because rights confirmation, visual ALT review and board assignment are still outstanding. No Pins have been published.
 - Visual audit of the actual artwork, final image-specific ALT, image URL/dimension checks and screenshot evidence are still pending. Direct CDN downloads are blocked in the current runtime; do not infer visual details from captions. TinyFish visual browser run could not start because its wallet is below zero; no retry was attempted.
 
 ## Phase 0 status
