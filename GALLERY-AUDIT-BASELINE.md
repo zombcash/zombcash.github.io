@@ -57,7 +57,7 @@ Work branch: `growth-gallery-roadmap-2026-11`.
 - [ ] Visual audit of every image on desktop/mobile. Actual artwork content has not yet been verified image-by-image; do not write final ALT text from captions alone.
 - [ ] Verify image URL response, dimensions, formats and source rights.
 - [ ] Confirm live gallery appearance and responsive behavior. Public HTML and 50 source cards are readable, but browser screenshot/responsive verification remains pending.
-- [ ] Confirm current Pinterest integration provider/account and authorization route.
+- [x] Identify Pinterest publishing connector: Zernio. Pinterest account session is present; Zernio is currently waiting for a default board selection. The available boards are unrelated to ZombieCash, so do not select them or publish until dedicated ZombieCash boards are created.\n
 
 ## Phase 1 implementation status (feature branch only)
 - [x] Additive taxonomy fields (series, category_ids, tags, language, metadata_version) added to all 50 records.
