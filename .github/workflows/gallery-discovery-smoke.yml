@@ -34,7 +34,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: gallery-discovery-\${{ github.ref }}
+  group: gallery-discovery-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -49,6 +49,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
+      - name: Install visual QA image tooling
+        run: python -m pip install Pillow
       - name: Install Playwright
         run: |
           npm init -y
@@ -120,11 +122,16 @@ jobs:
           PY
       - name: Run desktop and mobile interaction tests
         run: node tests/gallery-discovery-smoke.cjs
-      - name: Upload gallery visual QA screenshots
+      - name: Build gallery visual contact sheet
+        if: always()
+        run: python scripts/build_gallery_visual_contact_sheet.py
+      - name: Upload gallery visual QA screenshots and per-image report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: gallery-discovery-smoke-evidence
-          path: gallery-*-smoke.png
+          path: |
+            gallery-*-smoke.png
+            gallery-visual-audit/**
           if-no-files-found: ignore
           retention-days: 14
