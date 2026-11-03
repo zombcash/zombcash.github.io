@@ -1473,7 +1473,9 @@
     section.className = 'zc-adsterra-section';
     section.setAttribute('data-zombcash-ad-slot', 'adsterra-728x90');
     section.setAttribute('aria-label', 'Sponsored advertisement');
-    section.innerHTML = '<div class="zc-adsterra-inner"><div class="zc-adsterra-label">COMMUNITY SUPPORT / SPONSORED</div><div class="zc-adsterra-stage"><div class="zc-adsterra-unit" aria-label="Adsterra 728 by 90 banner"></div></div><div class="zc-ad-promo-fill"><p class="zc-ad-promo-kicker">ZOMBCASH // SPONSOR ZONE</p><h2 class="zc-ad-promo-title">YOUR PROJECT. OUR UNDEAD INTERNET.</h2><p class="zc-ad-promo-copy">Put your project in front of the ZombieCash community. Contact the crew to discuss a sponsorship.</p><a class="zc-ad-promo-link" href="https://t.me/ZombieCashCTO" target="_blank" rel="noopener noreferrer">CONTACT THE CREW ↗</a></div></div>';
+    if (!section.querySelector('.zc-adsterra-unit')) {
+      section.innerHTML = '<div class="zc-adsterra-inner"><div class="zc-adsterra-label">COMMUNITY SUPPORT / SPONSORED</div><div class="zc-adsterra-stage"><div class="zc-adsterra-unit" aria-label="Adsterra 728 by 90 banner"></div></div><div class="zc-ad-promo-fill"><p class="zc-ad-promo-kicker">ZOMBCASH // SPONSOR ZONE</p><h2 class="zc-ad-promo-title">YOUR PROJECT. OUR UNDEAD INTERNET.</h2><p class="zc-ad-promo-copy">Put your project in front of the ZombieCash community. Contact the crew to discuss a sponsorship.</p><a class="zc-ad-promo-link" href="https://t.me/ZombieCashCTO" target="_blank" rel="noopener noreferrer">CONTACT THE CREW ↗</a></div></div>';
+    }
 
     // The 728x90 creative belongs in a full-width sponsor strip, not in the
     // narrow hero side column. Keep it directly below the hero and before video.
@@ -1501,20 +1503,11 @@
       window.addEventListener('resize', fitBanner, {passive:true});
     }
 
-    if (!unit.dataset.adsterraLoaded) {
-      window.atOptions = {
-        key: '08a70f8414101d6c6b04e25aa232f436',
-        format: 'iframe',
-        height: 90,
-        width: 728,
-        params: {}
-      };
-      const script = document.createElement('script');
-      script.src = adScriptUrl;
-      script.async = true;
-      script.dataset.zcAdsterra = 'true';
-      unit.dataset.adsterraLoaded = 'true';
-      unit.appendChild(script);
+    // The Adsterra embed is present as parser-executed script markup in each
+    // localized homepage. Do not inject it dynamically: ad providers may use
+    // document.write and must execute while the HTML parser is active.
+    if (!unit.querySelector('script[src*="bauval.org/22/08/"]')) {
+      unit.dataset.adsterraMissingCode = 'true';
     }
   };
 
