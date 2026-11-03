@@ -1,3 +1,4 @@
+// Gallery cards reserve their intrinsic dimensions to prevent layout shifts.
 (() => {
   const grid = document.getElementById("gallery-grid");
   const count = document.getElementById("gallery-count");
