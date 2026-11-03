@@ -88,3 +88,8 @@ Both tables must have RLS enabled, direct browser-role grants revoked, and expli
 - Edit window, duplicate reports and per-account rate limits.
 - Admin moderation allow/deny cases and audit trail.
 - Database RLS/grants and function EXECUTE privileges reviewed with Supabase security advisors.
+
+
+## Supabase key migration note
+
+The active backend currently reads the legacy SUPABASE_SERVICE_ROLE_KEY. Supabase's current documentation says the legacy service_role key is being deprecated by the end of 2026 in favor of the modern secret key. Before that deadline, migrate the server to SUPABASE_SECRET_KEY with the correct Data API header handling; do not blindly place the non-JWT secret key in an Authorization Bearer header. Keep all elevated keys server-side and re-verify service-role RPC/table grants after rotation.
