@@ -26,6 +26,7 @@ on:
       - "tests/gallery-discovery-smoke.cjs"
       - ".github/workflows/gallery-discovery-smoke.yml"
       - ".github/workflows/sync-zombie-gallery.yml"
+      - ".github/workflows/sync-gallery-image-seo.yml"
   workflow_dispatch:
 
 permissions:
@@ -99,6 +100,9 @@ jobs:
           sync_workflow = Path(".github/workflows/sync-zombie-gallery.yml").read_text(encoding="utf-8")
           assert "scripts/export_pinterest_queue.py" in sync_workflow
           assert "pinterest-queue.json" in sync_workflow
+          seo_workflow = Path(".github/workflows/sync-gallery-image-seo.yml").read_text(encoding="utf-8")
+          assert "scripts/generate_localized_gallery_pages.py" in seo_workflow
+          assert "sitemap-gallery-pages.xml" in seo_workflow
           PY
       - name: Build and validate rights-gated Pinterest queue
         run: |
