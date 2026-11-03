@@ -96,7 +96,7 @@ For every image:
 - Add tests for XSS, unauthorized edits/deletes, duplicate submissions, rate limits and cross-account access.
 
 ## Phase 5 — Pinterest distribution
-- Connect the ZombieCash Pinterest business/account using the user-selected integration service (confirm exact provider and authorized account before any publishing).
+- [x] Identify the selected connector as Zernio and confirm the Pinterest account is signed in.\n- [ ] Complete Zernio's default-board selection using a dedicated ZombieCash board; existing unrelated boards should not be used.\n- Connect the ZombieCash Pinterest business/account using Zernio only after board setup is complete.
 - Audit all gallery assets for ownership/permission and platform eligibility.
 - Create boards aligned with taxonomy, e.g. Zombie Memes, Zombie Horror Art, Undead Characters & Avatars, Apocalypse Survival Art, Crypto Apocalypse.
 - Prepare each Pin with vertical 2:3 creative where appropriate, unique title, natural description, relevant tags, canonical destination URL and image alt text.
