@@ -119,7 +119,7 @@
   // Use a short timeout so a stalled data request never leaves the spinner forever.
   const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("Gallery data request timed out")), 12000));
   Promise.race([
-    fetch("gallery-data.json?v=gallery-data-v1-20261016", { cache: "no-store" }).then(response => {
+    fetch("gallery-data.json?v=gallery-data-v2-undead-reach-20261103", { cache: "no-store" }).then(response => {
       if (!response.ok) throw new Error("Gallery data request failed: " + response.status);
       return response.json();
     }),
@@ -201,7 +201,7 @@
     const renderGallery = () => {
       let visible = items.filter(item => {
         const matchesCategory = selectedCategory === "all" || (Array.isArray(item.category_ids) && item.category_ids.includes(selectedCategory));
-        const haystack = [item.title,item.description,item.caption,...(item.tags||[])].join(" ").toLocaleLowerCase(galleryLang);
+        const haystack = [item.title,item.description,item.caption,item.series,...(item.category_ids||[]),...(item.tags||[])].join(" ").toLocaleLowerCase(galleryLang);
         return matchesCategory && (!searchTerm || haystack.includes(searchTerm));
       });
       visible.sort((a,b) => {
