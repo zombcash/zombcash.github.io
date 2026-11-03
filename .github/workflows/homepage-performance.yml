@@ -1,0 +1,93 @@
+name: Homepage performance regression audit
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "shared-nav.js"
+      - "script.js"
+      - "homepage-ad-layout.css"
+      - ".github/workflows/homepage-performance.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: homepage-performance-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate homepage source and scripts
+        run: |
+          node --check shared-nav.js
+          node --check script.js
+          node <<'NODE'
+          const fs = require('fs');
+          const html = fs.readFileSync('index.html', 'utf8');
+          const checks = [
+            ['homepage layout class is static', /<body class="zc-homepage-ad-enabled">/.test(html)],
+            ['right stack exists before runtime scripts', /<div class="zc-home-right-stack"[^>]*>[\s\S]*?<section class="aads-ad-section/.test(html)],
+            ['ad promo content is reserved in HTML', /<div class="zc-ad-promo-fill">/.test(html)],
+            ['ad iframe is lazy-loaded', /<iframe[^>]+data-aa="2460185"[^>]+loading="lazy"/.test(html)],
+            ['Jupiter script is deferred', /plugin\.jup\.ag\/plugin-v1\.js" defer/.test(html)],
+            ['homepage layout CSS is preloaded from head', /homepage-ad-layout\.css[^>]*data-zsh-home-ad-responsive-style/.test(html)]
+          ];
+          for (const [label, ok] of checks) console.log((ok ? 'PASS ' : 'FAIL ') + label);
+          if (checks.some(([, ok]) => !ok)) process.exit(1);
+          NODE
+      - name: Install pinned Lighthouse
+        run: npm install --no-save lighthouse@13.6.0
+      - name: Start local candidate site
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/zombcash-http.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/zombcash-http.log
+          exit 1
+      - name: Run mobile and desktop homepage audits
+        run: |
+          mkdir -p lighthouse-reports
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          for device in mobile desktop; do
+            preset=""
+            if [ "$device" = "desktop" ]; then preset="--preset=desktop"; fi
+            npx lighthouse http://127.0.0.1:4173/ --quiet $preset --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/candidate-home-${device}.json" --max-wait-for-load=30000
+            npx lighthouse https://zombcash.github.io/ --quiet $preset --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/production-home-${device}.json" --max-wait-for-load=30000
+          done
+      - name: Summarize performance metrics
+        if: always()
+        run: |
+          node <<'NODE' >> "$GITHUB_STEP_SUMMARY"
+          const fs = require('fs');
+          console.log('| Page | Device | Performance | LCP (s) | CLS | TBT (ms) |');
+          console.log('|---|---|---:|---:|---:|---:|');
+          if (fs.existsSync('lighthouse-reports')) for (const file of fs.readdirSync('lighthouse-reports').sort()) {
+            const r = JSON.parse(fs.readFileSync('lighthouse-reports/' + file, 'utf8'));
+            const a = r.audits || {};
+            const score = r.categories?.performance?.score;
+            const metric = (id, scale=1) => a[id]?.numericValue == null ? 'n/a' : (a[id].numericValue / scale).toFixed(2);
+            console.log(`|${file.replace('.json','')}|${file.includes('mobile')?'Mobile':'Desktop'}|${score==null?'n/a':Math.round(score*100)}|${metric('largest-contentful-paint',1000)}|${metric('cumulative-layout-shift')}|${metric('total-blocking-time')}|`);
+          }
+          console.log('');
+          console.log('Lighthouse lab metrics; production field CrUX/Core Web Vitals are separate.');
+          NODE
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-cwv-reports
+          path: lighthouse-reports/
+          if-no-files-found: warn
+          retention-days: 14
