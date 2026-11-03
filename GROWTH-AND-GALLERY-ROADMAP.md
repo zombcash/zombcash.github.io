@@ -108,6 +108,10 @@ For every image:
 - Add tests for XSS, unauthorized edits/deletes, duplicate submissions, rate limits and cross-account access.
 
 ## Phase 5 — Pinterest distribution
+- [x] Add stable per-image gallery anchors and Pinterest destination URLs for all 50 current images.
+- [x] Add a local queue exporter that includes an image only when rights are project-owned/permission-confirmed, ALT has been visually reviewed, a Pinterest board ID is assigned, and the pin is explicitly marked ready.
+- [x] Generate the initial queue: 0 eligible, 50 blocked. No publishing occurs from this exporter.
+- [ ] Create dedicated ZombieCash boards in Zernio/Pinterest and assign their IDs; unrelated existing boards are not acceptable.
 - [x] Identify the selected connector as Zernio and confirm the Pinterest account is signed in.\n- [ ] Complete Zernio's default-board selection using a dedicated ZombieCash board; existing unrelated boards should not be used.\n- Connect the ZombieCash Pinterest business/account using Zernio only after board setup is complete.
 - Audit all gallery assets for ownership/permission and platform eligibility.
 - Create boards aligned with taxonomy, e.g. Zombie Memes, Zombie Horror Art, Undead Characters & Avatars, Apocalypse Survival Art, Crypto Apocalypse.
