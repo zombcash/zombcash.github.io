@@ -30,6 +30,8 @@ Add fields without deleting the original:
 - `title`: concise unique display title, preferably 3–8 words.
 - `description`: useful human-written one/two-sentence description; retain the original joke/story.
 - `alt_text`: image-specific accessibility description; describe visible content, not SEO keyword lists.
+- `alt_review_status`: `visual-reviewed` only after inspecting the source image; otherwise `caption-derived-pending-visual-review`.
+- `alt_reviewed_at` and `alt_review_method`: audit trail for manually reviewed ALT text; preserve through scheduled Telegram sync.
 - `category_ids`: array of one or more category IDs.
 - `series`: stable recurring-series ID or null.
 - `tags`: 3–8 natural descriptive tags, no repetitive keyword stuffing.
