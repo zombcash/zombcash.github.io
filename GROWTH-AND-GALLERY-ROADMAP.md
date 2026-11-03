@@ -4,6 +4,17 @@
 **Branch:** growth-gallery-roadmap-2026-11
 **Scope guard:** Do not modify `zombcash-world`. Preserve the current visual identity, responsive layout, nine locales (en, de, fr, it, ja, zh-CN, ru, tr, hi), canonical/hreflang behavior, existing gallery sync and image SEO workflows. No news-image generation; keep the existing three-hour community posting cadence.
 
+
+## Analytics refresh — 2026-11-03 (Windsor.ai / GA4 + Search Console)
+
+- GA4, last 28 days: **941 sessions**.
+- Acquisition mix: **847 Direct / none (90.0%)**, **40 Google organic (4.3%)**, **3 Bing organic (0.3%)**, **14 Telegram bot**, **2 Telegram social**, **13 ChatGPT referrals**, **9 AADS referrals**, **5 CoinScope referrals**, plus small GitHub/X/other sources. Organic search remains a small share; do not interpret Direct as confirmed human traffic.
+- GA4 page sessions: / 497, /index.html 147, /gallery.html 115, /arcade.html 110, /outbreak-transmission.html 93, /survivor-field-manual.html 86, /zombie-maker.html 78. The homepage root and /index.html split 644 sessions across two URL forms; keep canonical/redirect behavior under audit.
+- Engagement-quality warning: weighted average engagement time per session is anomalously high on 2026-10-29 (~4,791 seconds) and 2026-10-30 (~2,916 seconds). These days should be reviewed for idle tabs, instrumentation errors or automated traffic before using engagement duration as a KPI.
+- Search Console, last 28 days: **97 impressions / 10 clicks** total (web: 87 / 8; image: 10 / 2). Most visible queries are branded or near-branded (zombie cash, zombie ethereum, zombcash); non-brand query coverage is not yet demonstrated by the surfaced rows.
+- Search Console sitemap connector fields currently return null/0 for submitted/indexed/last-downloaded values. Treat this as missing connector reporting, not proof that Google has not fetched the sitemap. Verify directly in Search Console before making indexing claims.
+- Current priority: increase non-brand impressions with useful research/safety and gallery/category landing pages; maintain image sitemap and translated gallery URLs; use UTMs for Telegram/X/Pinterest; validate bot/internal traffic and attribution before setting growth targets.
+
 ## Mission
 Increase qualified search discovery and returning visitors by turning the existing ZombieCash gallery into a structured, searchable, community-participation visual archive, then distribute its eligible artwork to Pinterest and other discovery channels. Improve measurement so growth is based on real engaged users rather than raw or potentially automated sessions.
 
