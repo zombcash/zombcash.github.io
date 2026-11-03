@@ -2,6 +2,7 @@
 """Build a safe Pinterest export queue; never publishes pins."""
 import json
 from pathlib import Path
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = ROOT / "gallery-data.json"
@@ -9,6 +10,18 @@ OUTPUT_PATH = ROOT / "pinterest-queue.json"
 APPROVED_RIGHTS = {"project-owned", "permission-confirmed"}
 APPROVED_ALT = {"visual-reviewed"}
 CANONICAL_PREFIX = "https://zombcash.github.io/gallery.html#"
+
+
+def pinterest_tracking_url(canonical_url, stable_id):
+    parts = urlsplit(canonical_url)
+    query = dict(parse_qsl(parts.query, keep_blank_values=True))
+    query.update({
+        "utm_source": "pinterest",
+        "utm_medium": "social",
+        "utm_campaign": "undead_reach_2026",
+        "utm_content": stable_id.replace("/", "-").replace(":", "-"),
+    })
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment))
 
 
 def build_queue(data):
@@ -72,7 +85,8 @@ def build_queue(data):
                 "description": pin_description,
                 "alt_text": pin_alt,
                 "image_url": image,
-                "destination_url": destination,
+                "canonical_url": destination,
+                "destination_url": pinterest_tracking_url(destination, stable_id),
                 "board_id": str(item["pinterest_board_id"]),
                 "category_id": item.get("pinterest_board_category"),
             })
