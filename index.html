@@ -1867,10 +1867,10 @@ body > main#home > section.hero .zc-hero-sponsor {
 }
 body > main#home > section.hero .zc-hero-sponsor-label { flex: 0 0 auto !important; min-height: 14px !important; width: 100% !important; }
 body > main#home > section.hero .zc-hero-ad-stage {
-  box-sizing: border-box !important; display: flex !important; flex: 0 0 90px !important;
-  align-items: center !important; justify-content: center !important; width: 100% !important; max-width: 728px !important;
-  height: 90px !important; min-height: 90px !important; max-height: 90px !important;
-  margin: 0 auto !important; overflow: hidden !important; transform: none !important;
+  box-sizing: border-box !important; display: flex !important;
+  align-items: flex-start !important; justify-content: center !important; max-width: 728px !important;
+  min-width: 0 !important; margin: 0 auto !important; overflow: hidden !important;
+  /* Width and height are set together by shared-nav.js to preserve the native banner ratio. */
 }
 body > main#home > section.hero .zc-hero-ad-unit { flex-shrink: 0 !important; height: 90px !important; max-height: 90px !important; }
 body > main#home > section.hero .zc-hero-sponsor-promo {
@@ -1882,7 +1882,6 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
   body > main#home > section.hero .zc-hero-sponsor-panel { min-height: 390px !important; padding: 12px !important; }
   body > main#home > section.hero .zc-hero-sponsor { gap: 10px !important; }
   body > main#home > section.hero .zc-hero-ad-stage {
-    flex-basis: 50px !important; height: 50px !important; min-height: 50px !important; max-height: 50px !important;
     max-width: 320px !important;
   }
   body > main#home > section.hero .zc-hero-ad-unit {
@@ -1896,8 +1895,6 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
     flex: 1 0 230px !important; min-height: 230px !important; padding: 22px 16px !important;
   }
 }
-@media (max-width: 360px) {
-  body > main#home > section.hero .zc-hero-ad-unit { transform: scale(.86) !important; transform-origin: center center !important; }
-}
+/* shared-nav.js owns the responsive banner scale at every viewport width. */
 </style>
 </body></html>
