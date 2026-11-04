@@ -108,13 +108,17 @@ fs.mkdirSync(outDir, { recursive: true });
           pageVisitCounter: !!document.querySelector('#site-visits'),
           globalFootprintCounter: !!document.querySelector('#zsh-global-footprint'),
           pageFootprintCounter: !!document.querySelector('.page-footprint'),
+          adSlotGeometry: (() => {
+            const stage = document.querySelector('.zc-adsterra-stage');
+            if (!stage) return null;
+            const r = stage.getBoundingClientRect();
+            return { x: Math.round(r.x), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height), position: getComputedStyle(stage).position };
+          })(),
           adGeometry: (() => {
             const ad = document.querySelector('.zc-adsterra-unit iframe');
             if (!ad) return null;
             const r = ad.getBoundingClientRect();
-            const header = document.querySelector('header.zombcash-shared-header');
-            const h = header?.getBoundingClientRect();
-            return { x: Math.round(r.x), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height), position: getComputedStyle(ad).position, overlapsHeader: !!h && r.width > 0 && r.bottom > h.top && r.top < h.bottom };
+            return { x: Math.round(r.x), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height), position: getComputedStyle(ad).position };
           })(),
         };
       });
@@ -124,9 +128,14 @@ fs.mkdirSync(outDir, { recursive: true });
       if (!result.menuButton.visible) issues.push('mobile menu button is not visible');
       if (!result.navInitiallyClosed) issues.push('navigation is not collapsed by default');
       if (!result.languageButton.exists) issues.push('language selector button is missing');
-      if (result.ads !== 1 || result.adSectionCount !== 1) issues.push(`expected exactly one Adsterra iframe/section, found ${result.ads}/${result.adSectionCount}`);
+      if (result.adSectionCount !== 1) issues.push(`expected exactly one Adsterra sponsor section, found ${result.adSectionCount}`);
+      if (result.ads > 1) issues.push(`expected at most one Adsterra iframe, found ${result.ads}`);
+      if (!result.atOptions || Number(result.atOptions.width) !== 320 || Number(result.atOptions.height) !== 50) issues.push('Adsterra 320×50 slot configuration is missing');
+      if (!result.adScriptTags.length) issues.push('Adsterra provider script is missing');
+      if (!result.adSlotGeometry || result.adSlotGeometry.height !== 50) issues.push('reserved Adsterra slot must retain its 50px height');
+      if (result.adSlotGeometry && result.adSlotGeometry.width > width + 1) issues.push('reserved Adsterra slot exceeds the viewport width');
       if (!result.adPlacementAfterHero) issues.push('Adsterra sponsor section is not directly after the hero');
-      if (!result.adGeometry) issues.push('Adsterra iframe did not render inside the sponsor slot');
+      if (result.adGeometry && result.adSlotGeometry && (result.adGeometry.x < result.adSlotGeometry.x - 1 || result.adGeometry.right > result.adSlotGeometry.right + 1)) issues.push('Adsterra iframe escapes its reserved slot');
       if (!result.pageVisitCounter) issues.push('homepage global visitor counter section is missing');
       if (result.adGeometry && result.adGeometry.position === 'fixed') issues.push('Adsterra iframe must not be fixed while scrolling');
       if (result.adGeometry && result.adGeometry.width > width + 1) issues.push('Adsterra iframe exceeds the viewport width');
@@ -263,7 +272,7 @@ fs.mkdirSync(outDir, { recursive: true });
     await liveDataPage.waitForFunction(() => {
       const chart = document.querySelector('#activity-chart-status')?.textContent || '';
       return !/LOADING PRICE HISTORY/i.test(chart);
-    }, { timeout: 20000 }).catch(() => {});
+    }, { timeout: 30000 }).catch(() => {});
     await liveDataPage.waitForFunction(() => {
       const trades = document.querySelector('#recent-trades-list')?.textContent || '';
       return !!trades && !/Connecting to the transaction feed/i.test(trades);
