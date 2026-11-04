@@ -668,7 +668,7 @@ if (zomMarket) {
       zomCap.textContent = zomMoney(data.marketCap || data.fdv);
       const sourceTime = Number(data.updatedAt || 0) * 1000;
       const hasPrice = data.priceUsd != null && data.priceUsd !== '' && Number.isFinite(Number(data.priceUsd)) && Number(data.priceUsd) > 0;
-      if (zomStatus) zomStatus.textContent = data.stale ? 'LAST KNOWN DATA' : (!hasPrice ? 'MARKET DATA UNAVAILABLE' : (data.activityAvailable === false ? 'PRICE AVAILABLE · ACTIVITY UNAVAILABLE' : 'TOKEN FEED ONLINE'));
+      if (zomStatus) zomStatus.textContent = !hasPrice ? 'MARKET DATA UNAVAILABLE' : (data.stale ? 'LAST KNOWN DATA' : (data.activityAvailable === false ? 'PRICE AVAILABLE · ACTIVITY UNAVAILABLE' : 'TOKEN FEED ONLINE'));
       if (zomUpdated) zomUpdated.textContent = (data.stale ? 'LAST SOURCE UPDATE ' : 'SOURCE UPDATED ') + (sourceTime ? new Date(sourceTime).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) : 'UNKNOWN');
     } catch (error) {
       console.warn('ZombieCash token market update failed:', error);
@@ -1087,8 +1087,8 @@ if (zomMarket) {
   }
   async function loadPriceChart() {
     if(!chartEl)return;if(chartStatus)chartStatus.textContent=activityJapaneseUI?'価格履歴を読み込み中…':'LOADING PRICE HISTORY…';
-    try {const response=await fetch(apiBase+'/api/price-history?period='+encodeURIComponent(chartPeriod),{cache:'no-store',signal:AbortSignal.timeout(12000)});if(!response.ok)throw new Error('HTTP '+response.status);renderPriceChart(await response.json());}
-    catch(error){chartMessage(activityJapaneseUI?'価格履歴の取得に失敗しました':'Price history request failed');if(chartStatus)chartStatus.textContent=(activityJapaneseUI?'APIエラー · ':'API ERROR · ')+String(error&&error.message||'REQUEST FAILED').slice(0,45);}
+    try {const response=await fetch(apiBase+'/api/price-history?period='+encodeURIComponent(chartPeriod),{cache:'no-store',signal:AbortSignal.timeout(25000)});if(!response.ok)throw new Error('HTTP '+response.status);renderPriceChart(await response.json());}
+    catch(error){const detail=String(error&&error.message||'REQUEST FAILED').slice(0,80);chartMessage(activityJapaneseUI?'価格履歴は一時的に利用できません':'Price history is temporarily unavailable');if(chartStatus){chartStatus.textContent=activityJapaneseUI?'価格履歴を利用できません':'PRICE HISTORY UNAVAILABLE';chartStatus.dataset.error=detail;}console.warn('ZombieCash price history unavailable:',detail);}
   }
   document.querySelectorAll('.activity-chart-tab').forEach(button=>button.addEventListener('click',()=>{chartPeriod=button.dataset.chartPeriod||'24h';document.querySelectorAll('.activity-chart-tab').forEach(tab=>tab.classList.toggle('active',tab===button));loadPriceChart();}));
   async function loadRecentTrades() {
