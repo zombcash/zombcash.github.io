@@ -13,6 +13,11 @@ on:
         required: false
         default: "0"
         type: string
+      url_list:
+        description: "Optional JSON array of exact sitemap URLs to inspect instead of a range"
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: read
@@ -30,6 +35,7 @@ jobs:
           GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
           START_INDEX: ${{ inputs.start_index }}
           URL_LIMIT: ${{ inputs.limit }}
+          URL_LIST: ${{ inputs.url_list }}
         run: |
           python - <<'PY'
           import json
@@ -100,10 +106,25 @@ jobs:
           records = []
           start_index = max(0, int(os.environ.get("START_INDEX", "0") or "0"))
           url_limit = max(0, int(os.environ.get("URL_LIMIT", "0") or "0"))
-          selected_urls = urls[start_index:] if url_limit == 0 else urls[start_index:start_index + url_limit]
+          raw_url_list = os.environ.get("URL_LIST", "").strip()
+          if raw_url_list:
+              try:
+                  requested_urls = json.loads(raw_url_list)
+              except json.JSONDecodeError as exc:
+                  raise SystemExit(f"ERROR: URL_LIST must be a JSON array: {exc}")
+              if not isinstance(requested_urls, list) or not all(isinstance(url, str) for url in requested_urls):
+                  raise SystemExit("ERROR: URL_LIST must be a JSON array of URL strings.")
+              selected_urls = list(dict.fromkeys(requested_urls))
+              unknown_urls = [url for url in selected_urls if url not in urls]
+              if unknown_urls:
+                  raise SystemExit("ERROR: URL_LIST contains URLs absent from the current robots.txt sitemaps: " + json.dumps(unknown_urls))
+              batch_label = "explicit URL list"
+          else:
+              selected_urls = urls[start_index:] if url_limit == 0 else urls[start_index:start_index + url_limit]
+              batch_label = f"starting at sitemap index {start_index}"
           if not selected_urls:
-              raise SystemExit(f"ERROR: No URLs selected from index {start_index} with limit {url_limit}.")
-          print(f"URLs selected in this batch: {len(selected_urls)} (starting at sitemap index {start_index}).")
+              raise SystemExit("ERROR: No URLs selected for this batch.")
+          print(f"URLs selected in this batch: {len(selected_urls)} ({batch_label}).")
 
           for number, url in enumerate(selected_urls, start=start_index + 1):
               print("\\n" + "=" * 78)
@@ -192,7 +213,7 @@ jobs:
           print("\\n" + "=" * 78)
           print("SUMMARY")
           print(f"Total unique sitemap URLs: {len(urls)}")
-          print(f"URLs selected in this batch: {len(selected_urls)} (start index {start_index})")
+          print(f"URLs selected in this batch: {len(selected_urls)} ({batch_label})")
           for state, count in sorted(counts.items()):
               print(f"{state}: {count}")
           print(f"API errors: {len(errors)}")
