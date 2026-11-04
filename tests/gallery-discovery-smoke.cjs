@@ -97,6 +97,9 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
       fallbacks: images.filter(image => image.dataset.fallbackApplied).length,
       missingDimensions: images.filter(image => !image.hasAttribute("width") || !image.hasAttribute("height")).length
     }));
+    if (imageLoadAudit.originalLoaded !== imageLoadAudit.total || imageLoadAudit.fallbacks > 0) {
+      throw new Error("All gallery images must load without fallback: " + JSON.stringify(imageLoadAudit));
+    }
     await page.screenshot({ path: "gallery-desktop-smoke.png", fullPage: true });
     await Promise.all(imageResponseTasks);
     const pendingDimensionCount = galleryData.items.filter(item => item.alt_review_status === "caption-derived-pending-visual-review" && (!item.image_width || !item.image_height)).length;
