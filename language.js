@@ -1405,6 +1405,283 @@ const getRequestedLanguage=()=>{try{const pathLocale=location.pathname.split('/'
 let current=getRequestedLanguage()||'en';const originals=new WeakMap(),translatedValues=new WeakMap(),attributeOriginals=new WeakMap(),translatedAttributes=new WeakMap();
 function translateAttributes(root=document.body){const map=langs[current].map,attrs=['placeholder','title','aria-label','alt'],nodes=[];if(root&&root.nodeType===1)nodes.push(root);if(root&&root.querySelectorAll)root.querySelectorAll('*').forEach(el=>nodes.push(el));nodes.forEach(el=>attrs.forEach(attr=>{if(!el.hasAttribute(attr))return;let originalsFor=attributeOriginals.get(el);if(!originalsFor){originalsFor={};attributeOriginals.set(el,originalsFor);}let translatedFor=translatedAttributes.get(el);if(!translatedFor){translatedFor={};translatedAttributes.set(el,translatedFor);}const live=el.getAttribute(attr);if(Object.prototype.hasOwnProperty.call(originalsFor,attr)&&Object.prototype.hasOwnProperty.call(translatedFor,attr)&&live!==translatedFor[attr])originalsFor[attr]=live;else if(!Object.prototype.hasOwnProperty.call(originalsFor,attr))originalsFor[attr]=live;const original=originalsFor[attr],next=map[norm(original)]||original;if(live!==next)el.setAttribute(attr,next);translatedFor[attr]=next;}));}
 function translate(root=document.body){const map=langs[current].map,walk=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),nodes=[];if(root.nodeType===3)nodes.push(root);while(walk.nextNode())nodes.push(walk.currentNode);nodes.forEach(n=>{if(!n.parentElement||n.parentElement.closest('script,style,textarea,code,pre,.language-switcher,[data-no-translate]'))return;const live=n.nodeValue;if(originals.has(n)&&translatedValues.has(n)&&live!==translatedValues.get(n))originals.set(n,live);else if(!originals.has(n))originals.set(n,live);const o=originals.get(n),normalized=norm(o);let v=map[normalized];if(!v&&normalized.startsWith('TRANSMISSION DATE: ')){const label=map['TRANSMISSION DATE:'];if(label)v=label+' '+normalized.slice('TRANSMISSION DATE:'.length).trim();}if(!v&&normalized.startsWith('SOURCE UPDATED ')){const label=map['SOURCE UPDATED'];if(label)v=label+' '+normalized.slice('SOURCE UPDATED'.length).trim();}if(!v&&normalized.startsWith('UPDATED ')&&normalized.includes(' · 60 DAY RETENTION')){const label=map['UPDATED … · 60 DAY RETENTION'];if(label){const time=normalized.slice('UPDATED '.length,normalized.indexOf(' · 60 DAY RETENTION')).trim();v=label.replace('…',time);}}if(!v&&normalized.startsWith('DAILY RESET · ')){const label=map['DAILY RESET'];if(label)v=label+' · '+normalized.slice('DAILY RESET · '.length).trim();}if(!v&&normalized.startsWith('RECORD · ')){const label=map['RECORD'];if(label)v=label+' · '+normalized.slice('RECORD · '.length).trim();}if(!v&&/^\d+\s+PTS$/.test(normalized)){const m=normalized.match(/^(\d+)\s+PTS$/),label=map['PTS'];if(m&&label)v=m[1]+' '+label;}if(!v&&normalized.startsWith('UTC DAY · UPDATED ')){const label=map['UTC DAY · UPDATED'];if(label)v=label+' '+normalized.slice('UTC DAY · UPDATED'.length).trim();}if(!v&&/\[\s*ON[\-‐‑‒–—\s]+CHAIN[\-‐‑‒–—\s]+FEED\s*\]/i.test(normalized)){const label=map['[ ON-CHAIN-FEED ]']||map['[ ON-CHAIN FEED ]'];if(label)v=normalized.replace(/\[\s*ON[\-‐‑‒–—\s]+CHAIN[\-‐‑‒–—\s]+FEED\s*\]/i,label);}const a=(o.match(/^\s*/)||[''])[0],b=(o.match(/\s*$/)||[''])[0],next=v?a+v+b:o;if(live!==next)n.nodeValue=next;translatedValues.set(n,next);});translateAttributes(root);translateGalleryHeadings();}
+
+
+// Additional translations for Arcade, Crew Vote and Zombie Maker pages.
+const additionalCorePageTranslations={
+  "Checking account…": {
+    "ru": "Проверка аккаунта…",
+    "de": "Konto wird geprüft…",
+    "fr": "Vérification du compte…",
+    "it": "Verifica dell’account…",
+    "ja": "アカウントを確認中…",
+    "zh-CN": "正在检查账户…",
+    "tr": "Hesap kontrol ediliyor…",
+    "hi": "अकाउंट की जाँच हो रही है…"
+  },
+  "Log in with Telegram to save progress across devices.": {
+    "ru": "Войди через Telegram, чтобы сохранять прогресс на разных устройствах.",
+    "de": "Melde dich mit Telegram an, um deinen Fortschritt geräteübergreifend zu speichern.",
+    "fr": "Connecte-toi avec Telegram pour sauvegarder ta progression sur plusieurs appareils.",
+    "it": "Accedi con Telegram per salvare i progressi su più dispositivi.",
+    "ja": "Telegramでログインすると、複数の端末で進行状況を保存できます。",
+    "zh-CN": "使用 Telegram 登录，即可在不同设备间保存进度。",
+    "tr": "İlerlemeni farklı cihazlarda kaydetmek için Telegram ile giriş yap.",
+    "hi": "अलग-अलग डिवाइस पर प्रगति सहेजने के लिए Telegram से लॉग इन करें।"
+  },
+  "MORE WAYS TO SURVIVE": {
+    "ru": "БОЛЬШЕ СПОСОБОВ ВЫЖИТЬ",
+    "de": "MEHR WEGE ZUM ÜBERLEBEN",
+    "fr": "PLUS DE FAÇONS DE SURVIVRE",
+    "it": "ALTRI MODI PER SOPRAVVIVERE",
+    "ja": "生き延びるための新たな方法",
+    "zh-CN": "更多生存方式",
+    "tr": "HAYATTA KALMANIN DAHA FAZLA YOLU",
+    "hi": "जीवित रहने के और तरीके"
+  },
+  "Take on a timed community challenge or test your luck in the outbreak.": {
+    "ru": "Прими участие в соревновании сообщества на время или испытай удачу во время вспышки.",
+    "de": "Stelle dich einer zeitlich begrenzten Community-Challenge oder versuche dein Glück während des Ausbruchs.",
+    "fr": "Relève un défi communautaire chronométré ou tente ta chance pendant l’épidémie.",
+    "it": "Affronta una sfida a tempo della community o tenta la fortuna durante l’epidemia.",
+    "ja": "時間制限付きのコミュニティチャレンジに挑戦するか、アウトブレイクで運試しをしよう。",
+    "zh-CN": "参加限时社区挑战，或在疫情爆发中试试运气。",
+    "tr": "Süreli bir topluluk mücadelesine katıl veya salgında şansını dene.",
+    "hi": "समय-सीमित समुदाय चुनौती लें या प्रकोप के दौरान अपनी किस्मत आज़माएँ।"
+  },
+  "SURVIVOR CHALLENGE #001 ↗": {
+    "ru": "ИСПЫТАНИЕ ВЫЖИВШИХ №001 ↗",
+    "de": "ÜBERLEBENDEN-CHALLENGE #001 ↗",
+    "fr": "DÉFI DES SURVIVANTS N°001 ↗",
+    "it": "SFIDA DEI SOPRAVVISSUTI N.001 ↗",
+    "ja": "サバイバーチャレンジ #001 ↗",
+    "zh-CN": "幸存者挑战 #001 ↗",
+    "tr": "HAYATTA KALANLAR MÜCADELESİ #001 ↗",
+    "hi": "सर्वाइवर चुनौती #001 ↗"
+  },
+  "SPIN THE OUTBREAK ↗": {
+    "ru": "ЗАПУСТИТЬ РУЛЕТКУ ВСПЫШКИ ↗",
+    "de": "AUSBRUCH-ROULETTE STARTEN ↗",
+    "fr": "LANCER LA ROULETTE DE L’ÉPIDÉMIE ↗",
+    "it": "AVVIA LA ROULETTE DELL’EPIDEMIA ↗",
+    "ja": "アウトブレイクルーレットを回す ↗",
+    "zh-CN": "转动疫情轮盘 ↗",
+    "tr": "SALGIN ÇARKINI ÇEVİR ↗",
+    "hi": "प्रकोप रूलेट घुमाएँ ↗"
+  },
+  "Your vote helps choose what the ZombieCash crew builds and does next. This page is the dedicated home for community polls and future voting features.": {
+    "ru": "Твой голос помогает решить, что команда ZombieCash будет создавать и делать дальше. Здесь проходят опросы сообщества и появятся будущие функции голосования.",
+    "de": "Deine Stimme entscheidet mit, was das ZombieCash-Team als Nächstes entwickelt und unternimmt. Hier finden Community-Umfragen und künftige Abstimmungsfunktionen ihren Platz.",
+    "fr": "Ton vote aide à décider des prochains projets et actions de l’équipe ZombieCash. Cette page accueille les sondages communautaires et les futures fonctions de vote.",
+    "it": "Il tuo voto aiuta a decidere cosa realizzerà e farà il team ZombieCash. Questa pagina ospita i sondaggi della community e le future funzioni di voto.",
+    "ja": "あなたの投票が、ZombieCashチームの次の開発や活動を決める手助けになります。ここはコミュニティ投票と今後の投票機能の専用ページです。",
+    "zh-CN": "你的投票将帮助决定 ZombieCash 团队下一步的建设和行动。本页面专门用于社区投票及未来的投票功能。",
+    "tr": "Oyun, ZombieCash ekibinin sırada ne geliştireceğini ve yapacağını belirlemeye yardımcı olur. Bu sayfa topluluk anketleri ve gelecekteki oylama özellikleri içindir.",
+    "hi": "आपका वोट तय करने में मदद करता है कि ZombieCash टीम आगे क्या बनाएगी और करेगी। यह पेज समुदाय के सर्वे और भविष्य की वोटिंग सुविधाओं के लिए है।"
+  },
+  "01 / ONE DAILY VOTE": {
+    "ru": "01 / ОДИН ГОЛОС В ДЕНЬ",
+    "de": "01 / EINE STIMME PRO TAG",
+    "fr": "01 / UN VOTE PAR JOUR",
+    "it": "01 / UN VOTO AL GIORNO",
+    "ja": "01 / 1日1票",
+    "zh-CN": "01 / 每日一票",
+    "tr": "01 / GÜNDE BİR OY",
+    "hi": "01 / प्रतिदिन एक वोट"
+  },
+  "Vote once per browser per UTC day. The poll resets on the next UTC date.": {
+    "ru": "Один голос с одного браузера в сутки по UTC. Опрос сбрасывается с наступлением следующей даты UTC.",
+    "de": "Eine Stimme pro Browser und UTC-Tag. Die Umfrage wird am nächsten UTC-Kalendertag zurückgesetzt.",
+    "fr": "Un vote par navigateur et par jour UTC. Le sondage est réinitialisé au prochain jour UTC.",
+    "it": "Un voto per browser al giorno UTC. Il sondaggio si azzera al successivo giorno UTC.",
+    "ja": "UTCの1日につき、ブラウザーごとに1票投票できます。投票は次のUTC日付にリセットされます。",
+    "zh-CN": "每个浏览器每天（UTC）可投票一次。投票将在下一个 UTC 日期重置。",
+    "tr": "Her tarayıcıdan UTC gününde bir kez oy kullanabilirsin. Anket bir sonraki UTC gününde sıfırlanır.",
+    "hi": "प्रति UTC दिन, हर ब्राउज़र से एक बार वोट दें। अगले UTC दिन पर पोल रीसेट हो जाता है।"
+  },
+  "02 / LIVE RESULTS": {
+    "ru": "02 / РЕЗУЛЬТАТЫ В РЕАЛЬНОМ ВРЕМЕНИ",
+    "de": "02 / LIVE-ERGEBNISSE",
+    "fr": "02 / RÉSULTATS EN DIRECT",
+    "it": "02 / RISULTATI IN DIRETTA",
+    "ja": "02 / リアルタイム結果",
+    "zh-CN": "02 / 实时结果",
+    "tr": "02 / CANLI SONUÇLAR",
+    "hi": "02 / लाइव परिणाम"
+  },
+  "Vote totals and percentages are loaded from the ZombieCash community API.": {
+    "ru": "Общее число голосов и проценты загружаются из API сообщества ZombieCash.",
+    "de": "Stimmenzahlen und Prozentwerte werden über die ZombieCash-Community-API geladen.",
+    "fr": "Le nombre de votes et les pourcentages sont chargés depuis l’API de la communauté ZombieCash.",
+    "it": "Il totale dei voti e le percentuali vengono caricati dall’API della community ZombieCash.",
+    "ja": "投票数と割合はZombieCashコミュニティAPIから読み込まれます。",
+    "zh-CN": "投票总数和百分比由 ZombieCash 社区 API 加载。",
+    "tr": "Oy toplamları ve yüzdeler ZombieCash topluluk API'sinden yüklenir.",
+    "hi": "वोटों की कुल संख्या और प्रतिशत ZombieCash समुदाय API से लोड होते हैं。"
+  },
+  "03 / MORE TO COME": {
+    "ru": "03 / ДАЛЬШЕ — БОЛЬШЕ",
+    "de": "03 / WEITERE FUNKTIONEN FOLGEN",
+    "fr": "03 / D’AUTRES FONCTIONS À VENIR",
+    "it": "03 / ALTRE NOVITÀ IN ARRIVO",
+    "ja": "03 / 今後さらに追加予定",
+    "zh-CN": "03 / 更多功能即将推出",
+    "tr": "03 / DAHA FAZLASI YOLDA",
+    "hi": "03 / और सुविधाएँ जल्द आएँगी"
+  },
+  "This page is designed to expand with proposals, mission history, and additional community decisions.": {
+    "ru": "Страница будет расширяться: здесь появятся предложения, история миссий и дополнительные решения сообщества.",
+    "de": "Diese Seite wird um Vorschläge, Missionsverlauf und weitere Community-Entscheidungen erweitert.",
+    "fr": "Cette page évoluera avec des propositions, l’historique des missions et d’autres décisions communautaires.",
+    "it": "Questa pagina si arricchirà con proposte, cronologia delle missioni e altre decisioni della community.",
+    "ja": "このページには、提案、ミッション履歴、その他のコミュニティ決定機能が順次追加されます。",
+    "zh-CN": "本页面计划增加提案、任务历史记录和更多社区决策功能。",
+    "tr": "Bu sayfa öneriler, görev geçmişi ve ek topluluk kararlarıyla genişletilecek.",
+    "hi": "इस पेज में प्रस्ताव, मिशन इतिहास और समुदाय के अतिरिक्त निर्णय शामिल किए जाएँगे।"
+  },
+  "[ COMMUNITY RESOURCES ]": {
+    "ru": "[ РЕСУРСЫ СООБЩЕСТВА ]",
+    "de": "[ COMMUNITY-RESSOURCEN ]",
+    "fr": "[ RESSOURCES COMMUNAUTAIRES ]",
+    "it": "[ RISORSE DELLA COMMUNITY ]",
+    "ja": "[ コミュニティリソース ]",
+    "zh-CN": "[ 社区资源 ]",
+    "tr": "[ TOPLULUK KAYNAKLARI ]",
+    "hi": "[ समुदाय संसाधन ]"
+  },
+  "PARTNERS": {
+    "ru": "ПАРТНЁРЫ",
+    "de": "PARTNER",
+    "fr": "PARTENAIRES",
+    "it": "PARTNER",
+    "ja": "パートナー",
+    "zh-CN": "合作伙伴",
+    "tr": "ORTAKLAR",
+    "hi": "साझेदार"
+  },
+  "Useful tools, community projects and related resources. Listings are provided for discovery and do not automatically imply endorsement.": {
+    "ru": "Полезные инструменты, проекты сообщества и связанные ресурсы. Список создан для ознакомления и не означает автоматической рекомендации.",
+    "de": "Nützliche Tools, Community-Projekte und verwandte Ressourcen. Die Einträge dienen der Orientierung und bedeuten keine automatische Empfehlung.",
+    "fr": "Des outils utiles, des projets communautaires et des ressources associées. Ces liens sont proposés à titre informatif et ne constituent pas une approbation.",
+    "it": "Strumenti utili, progetti della community e risorse correlate. Le voci sono presentate a scopo informativo e non implicano un'approvazione.",
+    "ja": "便利なツール、コミュニティプロジェクト、関連リソースを紹介します。掲載は情報提供を目的としており、推奨を意味するものではありません。",
+    "zh-CN": "实用工具、社区项目及相关资源。此处列出仅供发现和了解，并不代表 ZombieCash 对其背书。",
+    "tr": "Yararlı araçlar, topluluk projeleri ve ilgili kaynaklar. Listeleme keşif amaçlıdır ve otomatik olarak onay anlamına gelmez.",
+    "hi": "उपयोगी टूल्स, समुदाय प्रोजेक्ट और संबंधित संसाधन। ये सूचियाँ खोज में मदद के लिए हैं, इन्हें समर्थन की गारंटी न समझें।"
+  },
+  "CRYPTO TOOLS DIRECTORY": {
+    "ru": "КАТАЛОГ КРИПТОИНСТРУМЕНТОВ",
+    "de": "VERZEICHNIS FÜR KRYPTO-TOOLS",
+    "fr": "ANNUAIRE DES OUTILS CRYPTO",
+    "it": "ELENCO DI STRUMENTI CRYPTO",
+    "ja": "暗号資産ツール一覧",
+    "zh-CN": "加密工具目录",
+    "tr": "KRİPTO ARAÇLARI DİZİNİ",
+    "hi": "क्रिप्टो टूल निर्देशिका"
+  },
+  "Discover crypto tools and project resources in the PolyMart directory.": {
+    "ru": "Находи криптоинструменты и ресурсы проектов в каталоге PolyMart.",
+    "de": "Entdecke Krypto-Tools und Projektre­ssourcen im PolyMart-Verzeichnis.",
+    "fr": "Découvre des outils crypto et des ressources de projets dans l’annuaire PolyMart.",
+    "it": "Scopri strumenti crypto e risorse di progetto nella directory PolyMart.",
+    "ja": "PolyMartディレクトリで暗号資産ツールやプロジェクトのリソースを見つけよう。",
+    "zh-CN": "在 PolyMart 目录中发现加密工具和项目资源。",
+    "tr": "PolyMart dizininde kripto araçlarını ve proje kaynaklarını keşfet.",
+    "hi": "PolyMart डायरेक्टरी में क्रिप्टो टूल और प्रोजेक्ट संसाधन खोजें।"
+  },
+  "PolyMart — Crypto Tools ↗": {
+    "ru": "PolyMart — криптоинструменты ↗",
+    "de": "PolyMart — Krypto-Tools ↗",
+    "fr": "PolyMart — outils crypto ↗",
+    "it": "PolyMart — strumenti crypto ↗",
+    "ja": "PolyMart — 暗号資産ツール ↗",
+    "zh-CN": "PolyMart — 加密工具 ↗",
+    "tr": "PolyMart — Kripto Araçları ↗",
+    "hi": "PolyMart — क्रिप्टो टूल ↗"
+  },
+  "ZOMBIECASH GUIDES": {
+    "ru": "РУКОВОДСТВА ZOMBIECASH",
+    "de": "ZOMBIECASH-LEITFÄDEN",
+    "fr": "GUIDES ZOMBIECASH",
+    "it": "GUIDE ZOMBIECASH",
+    "ja": "ZOMBIECASHガイド",
+    "zh-CN": "ZOMBIECASH 指南",
+    "tr": "ZOMBIECASH REHBERLERİ",
+    "hi": "ZOMBIECASH गाइड"
+  },
+  "Practical guides to researching Solana tokens and understanding common risk signals.": {
+    "ru": "Практические руководства по исследованию токенов Solana и распознаванию распространённых сигналов риска.",
+    "de": "Praktische Leitfäden zur Recherche von Solana-Token und zum Erkennen gängiger Risikosignale.",
+    "fr": "Des guides pratiques pour étudier les tokens Solana et comprendre les principaux signaux de risque.",
+    "it": "Guide pratiche per analizzare i token Solana e comprendere i segnali di rischio più comuni.",
+    "ja": "Solanaトークンの調査方法や一般的なリスクシグナルを理解するための実践ガイド。",
+    "zh-CN": "关于研究 Solana 代币及识别常见风险信号的实用指南。",
+    "tr": "Solana tokenlarını araştırmak ve yaygın risk işaretlerini anlamak için pratik rehberler.",
+    "hi": "Solana टोकन की जाँच और आम जोखिम संकेतों को समझने के लिए व्यावहारिक गाइड।"
+  },
+  "Survivor Field Manual →": {
+    "ru": "Полевое руководство выжившего →",
+    "de": "Feldhandbuch der Überlebenden →",
+    "fr": "Manuel de survie →",
+    "it": "Manuale di sopravvivenza →",
+    "ja": "サバイバー手帳 →",
+    "zh-CN": "幸存者手册 →",
+    "tr": "Hayatta Kalanlar Saha Rehberi →",
+    "hi": "सर्वाइवर फील्ड मैनुअल →"
+  },
+  "Read ZombieCash news, project updates and field reports.": {
+    "ru": "Читай новости ZombieCash, обновления проекта и полевые сводки.",
+    "de": "Lies ZombieCash-Nachrichten, Projektupdates und Feldberichte.",
+    "fr": "Lis les actualités de ZombieCash, les mises à jour du projet et les rapports de terrain.",
+    "it": "Leggi le notizie ZombieCash, gli aggiornamenti del progetto e i rapporti dal campo.",
+    "ja": "ZombieCashのニュース、プロジェクト更新、現地レポートを読もう。",
+    "zh-CN": "阅读 ZombieCash 新闻、项目更新和现场报告。",
+    "tr": "ZombieCash haberlerini, proje güncellemelerini ve saha raporlarını oku.",
+    "hi": "ZombieCash समाचार, प्रोजेक्ट अपडेट और फील्ड रिपोर्ट पढ़ें।"
+  },
+  "Outbreak Transmission →": {
+    "ru": "Трансляция вспышки →",
+    "de": "Ausbruch-Übertragung →",
+    "fr": "Transmission de l’épidémie →",
+    "it": "Trasmissione dell’epidemia →",
+    "ja": "アウトブレイク通信 →",
+    "zh-CN": "疫情播报 →",
+    "tr": "Salgın Yayını →",
+    "hi": "प्रकोप प्रसारण →"
+  },
+  "We process the image for this request and do not intentionally save it to ZombieCash storage. The AI provider receives the photo to create the edit. Avoid uploading sensitive or private images.": {
+    "ru": "Мы обрабатываем изображение для этого запроса и намеренно не сохраняем его в хранилище ZombieCash. Фото получает поставщик ИИ для создания результата. Не загружай конфиденциальные или личные изображения.",
+    "de": "Wir verarbeiten das Bild für diese Anfrage und speichern es nicht absichtlich im ZombieCash-Speicher. Der KI-Anbieter erhält das Foto zur Bearbeitung. Lade keine sensiblen oder privaten Bilder hoch.",
+    "fr": "Nous traitons l’image pour cette demande sans l’enregistrer volontairement dans le stockage ZombieCash. Le fournisseur d’IA reçoit la photo pour effectuer la modification. N’envoie pas d’images sensibles ou privées.",
+    "it": "Elaboriamo l’immagine per questa richiesta e non la salviamo intenzionalmente nello spazio di archiviazione ZombieCash. Il fornitore IA riceve la foto per creare la modifica. Evita di caricare immagini sensibili o private.",
+    "ja": "このリクエストのために画像を処理しますが、ZombieCashのストレージに意図的に保存することはありません。編集を行うため、AIプロバイダーに写真が送信されます。機密性の高い画像や個人的な写真はアップロードしないでください。",
+    "zh-CN": "我们会为本次请求处理图片，不会主动将其保存到 ZombieCash 存储空间。AI 服务提供商会接收照片以生成编辑结果。请勿上传敏感或私人图片。",
+    "tr": "Görseli bu istek için işleriz ve ZombieCash depolama alanına bilerek kaydetmeyiz. Düzenlemeyi oluşturmak için fotoğrafı yapay zekâ sağlayıcısı alır. Hassas veya özel görseller yüklemekten kaçın.",
+    "hi": "हम इस अनुरोध के लिए तस्वीर प्रोसेस करते हैं और इसे जानबूझकर ZombieCash स्टोरेज में सेव नहीं करते। एडिट बनाने के लिए AI प्रदाता को फोटो मिलती है। संवेदनशील या निजी तस्वीरें अपलोड न करें।"
+  },
+  "Edit the message yourself or ask ZombieCash AI for a fun caption. Use the group-send button to post the photo and caption to our Telegram community. Downloads remain image-only.": {
+    "ru": "Отредактируй сообщение сам или попроси ZombieCash AI придумать подпись. Кнопка отправки в группу публикует фото и подпись в нашем сообществе Telegram. При скачивании сохраняется только изображение.",
+    "de": "Bearbeite die Nachricht selbst oder bitte ZombieCash AI um eine passende Bildunterschrift. Über die Gruppen-Schaltfläche veröffentlichst du Foto und Text in unserer Telegram-Community. Downloads enthalten nur das Bild.",
+    "fr": "Modifie le message toi-même ou demande à ZombieCash AI une légende amusante. Le bouton d’envoi au groupe publie la photo et sa légende dans notre communauté Telegram. Les téléchargements ne contiennent que l’image.",
+    "it": "Modifica il messaggio o chiedi a ZombieCash AI una didascalia divertente. Il pulsante di invio al gruppo pubblica foto e didascalia nella nostra community Telegram. I download contengono solo l’immagine.",
+    "ja": "メッセージを自分で編集するか、ZombieCash AIに楽しいキャプションを依頼できます。グループ送信ボタンを使うと、写真とキャプションがTelegramコミュニティに投稿されます。ダウンロードされるのは画像のみです。",
+    "zh-CN": "你可以自行编辑文字，或让 ZombieCash AI 生成有趣的说明。使用发送到群组按钮，可将照片和说明发布到我们的 Telegram 社区。下载内容仅包含图片。",
+    "tr": "Mesajı kendin düzenle veya ZombieCash AI'dan eğlenceli bir açıklama iste. Gruba gönder düğmesi fotoğrafı ve açıklamayı Telegram topluluğumuza yollar. İndirmeler yalnızca görseli içerir.",
+    "hi": "मैसेज को खुद एडिट करें या मज़ेदार कैप्शन के लिए ZombieCash AI से कहें। ग्रुप में भेजें बटन फोटो और कैप्शन को हमारे Telegram समुदाय में पोस्ट करता है। डाउनलोड में केवल तस्वीर रहती है।"
+  },
+  "Group sharing sends the generated photo and your caption to the ZombieCash Telegram group. X opens a separate post draft; attach the downloaded image there yourself.": {
+    "ru": "Отправка в группу публикует созданное фото и твою подпись в Telegram-группе ZombieCash. X открывает отдельный черновик публикации — прикрепи к нему скачанное изображение самостоятельно.",
+    "de": "Beim Teilen in der Gruppe werden das erstellte Foto und deine Bildunterschrift an die ZombieCash-Telegram-Gruppe gesendet. X öffnet einen separaten Beitragsentwurf; füge das heruntergeladene Bild dort selbst hinzu.",
+    "fr": "Le partage dans le groupe envoie la photo générée et ta légende au groupe Telegram ZombieCash. X ouvre un brouillon séparé ; ajoute toi-même l’image téléchargée.",
+    "it": "La condivisione nel gruppo invia la foto generata e la didascalia al gruppo Telegram ZombieCash. X apre una bozza separata: aggiungi lì l’immagine scaricata.",
+    "ja": "グループ共有では、生成した写真とキャプションがZombieCashのTelegramグループに送信されます。Xでは別の投稿下書きが開くため、ダウンロードした画像を自分で添付してください。",
+    "zh-CN": "分享到群组会将生成的照片和说明发送到 ZombieCash Telegram 群组。X 会打开单独的帖子草稿，请自行在其中附加下载的图片。",
+    "tr": "Grup paylaşımı, oluşturulan fotoğrafı ve açıklamanı ZombieCash Telegram grubuna gönderir. X ayrı bir gönderi taslağı açar; indirilen görseli oraya kendin ekle.",
+    "hi": "ग्रुप शेयरिंग जनरेट की गई तस्वीर और आपका कैप्शन ZombieCash Telegram ग्रुप में भेजती है। X अलग पोस्ट ड्राफ्ट खोलता है; डाउनलोड की गई तस्वीर वहाँ खुद जोड़ें。"
+  }
+};
+Object.entries(additionalCorePageTranslations).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
 function set(code){if(!langs[code])return;current=code;try{localStorage.setItem(key,code)}catch(_){}document.documentElement.lang=code;document.querySelectorAll('.language-option').forEach(b=>{b.classList.toggle('active',b.dataset.lang===code);b.setAttribute('aria-pressed',String(b.dataset.lang===code))});const trigger=document.querySelector('.language-trigger');if(trigger)trigger.textContent=langs[code].f+' '+(code==='zh-CN'?'ZH':code.toUpperCase());translate();document.dispatchEvent(new CustomEvent('zombcash:languagechange',{detail:{language:code}}));}
 window.addEventListener('message',event=>{if(new URLSearchParams(location.search).get('arcadeSnake')!=='1'||event.origin!==location.origin||event.data?.type!=='zombcash-arcade-language')return;const code=event.data.language;if(supportedLanguages.includes(code))set(code);});
 function init(){const existingSwitcher=document.querySelector('.language-switcher');if(existingSwitcher&&existingSwitcher.querySelector('.language-trigger')&&existingSwitcher.querySelector('.language-menu'))return;if(existingSwitcher)existingSwitcher.remove();const w=document.createElement('div');w.className='language-switcher';const b=document.createElement('button');b.className='language-trigger';b.type='button';b.setAttribute('aria-label','Choose language');const menu=document.createElement('div');menu.className='language-menu';menu.hidden=true;Object.entries(langs).forEach(([code,l])=>{const o=document.createElement('button');o.type='button';o.className='language-option';o.dataset.lang=code;o.textContent=l.f+'  '+l.n;o.addEventListener('click',()=>{const path=location.pathname;const parts=path.split('/').filter(Boolean);const file=(parts.length===1&&langs[parts[0]]?'index.html':(parts.pop()||'index.html')).toLowerCase();if(file==='arcade.html'||file==='survivor-hub.html'||file==='crew-vote.html'){set(code);menu.hidden=true;const target=new URL(location.href);if(code==='en')target.searchParams.delete('lang');else target.searchParams.set('lang',code);location.href=target.pathname+target.search+target.hash;return;}const localeFiles={"de":["about.html","memecoin-promotion-platforms-comparison.html","avoid-fake-token-websites-wallet-scams.html","buy-zombcash.html","check-liquidity-holder-distribution-solana.html","how-to-research-solana-meme-coins.html","index.html","whitepaper.html","gallery.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","zombcash-buying-guide.html","transmission-last-backup-ai-apocalypse.html","transmission-zombie-fiction-rpg-guide.html"],"fr":["about.html","memecoin-promotion-platforms-comparison.html","avoid-fake-token-websites-wallet-scams.html","buy-zombcash.html","check-liquidity-holder-distribution-solana.html","how-to-research-solana-meme-coins.html","index.html","whitepaper.html","gallery.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","zombcash-buying-guide.html","transmission-last-backup-ai-apocalypse.html","transmission-zombie-fiction-rpg-guide.html"],"it":["about.html","memecoin-promotion-platforms-comparison.html","buy-zombcash.html","index.html","whitepaper.html","gallery.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","zombcash-buying-guide.html","transmission-last-backup-ai-apocalypse.html","transmission-zombie-fiction-rpg-guide.html"],"ja":["about.html","memecoin-promotion-platforms-comparison.html","buy-zombcash.html","index.html","whitepaper.html","gallery.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","zombcash-buying-guide.html","transmission-last-backup-ai-apocalypse.html","transmission-zombie-fiction-rpg-guide.html"],"zh-CN":["about.html","memecoin-promotion-platforms-comparison.html","buy-zombcash.html","index.html","whitepaper.html","gallery.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","zombcash-buying-guide.html","transmission-last-backup-ai-apocalypse.html","transmission-zombie-fiction-rpg-guide.html"],"ru":["about.html","memecoin-promotion-platforms-comparison.html","avoid-fake-token-websites-wallet-scams.html","buy-zombcash.html","check-liquidity-holder-distribution-solana.html","how-to-research-solana-meme-coins.html","index.html","whitepaper.html","gallery.html","outbreak-transmission.html","solana-memecoin-research-guide.html","solana-token-safety-checklist.html","survivor-field-manual.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","zombcash-buying-guide.html","transmission-last-backup-ai-apocalypse.html","transmission-zombie-fiction-rpg-guide.html"],"tr":["about.html","memecoin-promotion-platforms-comparison.html","buy-zombcash.html","index.html","whitepaper.html","gallery.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","zombcash-buying-guide.html","transmission-last-backup-ai-apocalypse.html","transmission-zombie-fiction-rpg-guide.html"],"hi":["about.html","memecoin-promotion-platforms-comparison.html","buy-zombcash.html","index.html","whitepaper.html","gallery.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","zombcash-buying-guide.html","transmission-last-backup-ai-apocalypse.html","transmission-zombie-fiction-rpg-guide.html"],"en":["about.html","memecoin-promotion-platforms-comparison.html","avoid-fake-token-websites-wallet-scams.html","buy-zombcash.html","check-liquidity-holder-distribution-solana.html","how-to-research-solana-meme-coins.html","index.html","whitepaper.html","gallery.html","outbreak-transmission.html","solana-memecoin-research-guide.html","solana-token-safety-checklist.html","survivor-field-manual.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","zombcash-buying-guide.html"]};if(file==='zombie-maker.html'){set(code);const target=new URL(location.href);if(code==='en')target.searchParams.delete('lang');else target.searchParams.set('lang',code);history.replaceState(null,'',target.pathname+target.search+target.hash);menu.hidden=true;return;}const pageIsLocalized=Object.values(localeFiles).some(files=>files.includes(file));if(pageIsLocalized){let targetFile=file;if(!localeFiles[code].includes(targetFile)){const fallbackPath='/'+targetFile;if(path!==fallbackPath){const fallback=new URL(location.href);fallback.pathname=fallbackPath;fallback.searchParams.delete('lang');location.href=fallback.pathname+fallback.search+fallback.hash;return;}set(code);menu.hidden=true;return;}const prefix=code==='en'?'':'/'+code;const next=(prefix+'/'+targetFile);if(path!==next){const target=new URL(location.href);target.pathname=next;target.searchParams.delete('lang');location.href=target.pathname+target.search+target.hash;return;}}set(code);menu.hidden=true});menu.append(o)});b.addEventListener('click',()=>{menu.hidden=!menu.hidden;if(!menu.hidden&&window.matchMedia('(max-width:760px)').matches){const r=b.getBoundingClientRect();const set=(k,v)=>menu.style.setProperty(k,v,'important');set('position','fixed');set('top',Math.max(8,Math.min(r.bottom+7,window.innerHeight-menu.offsetHeight-10))+'px');set('right',Math.max(10,window.innerWidth-r.right)+'px');set('left','auto');set('width','180px');set('max-width','calc(100vw - 20px)');set('z-index','10050');}});document.addEventListener('click',e=>{if(!w.contains(e.target))menu.hidden=true});w.append(b,menu);const placeLanguageSwitcher=()=>{const slot=document.querySelector('.zombcash-shared-header .zsh-language-slot');if(slot){slot.append(w);w.classList.remove('language-floating');return true;}const actions=document.querySelector('.zombcash-shared-header .zsh-actions');if(actions){const home=actions.querySelector('.zsh-home');actions.insertBefore(w,home?home.nextSibling:actions.firstChild);return true;}const header=document.querySelector('body > header:not(.hero)');if(header){const nav=header.querySelector('nav');if(nav)nav.after(w);else header.append(w);return false;}const nav=document.querySelector('nav');if(nav){nav.after(w);return false;}w.classList.add('language-floating');document.body.append(w);return false;};placeLanguageSwitcher();const placementObserver=new MutationObserver(()=>{const slot=document.querySelector('.zombcash-shared-header .zsh-language-slot');if(slot&&w.parentElement!==slot){slot.append(w);w.classList.remove('language-floating');placementObserver.disconnect();}});placementObserver.observe(document.body,{childList:true,subtree:true});const style=document.createElement('style');style.textContent='.language-switcher{position:relative;display:inline-flex;z-index:10001;margin-left:10px}.language-switcher.language-floating{position:fixed;top:124px;right:18px;margin:0}.language-trigger{padding:9px 11px;border:1px solid #42613a;background:#0b120c;color:#b8f992;font:700 10px Orbitron,sans-serif;cursor:pointer;white-space:nowrap}.language-menu{position:absolute;top:calc(100% + 7px);right:0;width:190px;max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain;padding:6px;border:1px solid #355136;background:#07100a;box-shadow:0 12px 32px #000b}.language-menu[hidden]{display:none}.language-option{display:block;width:100%;padding:10px;border:0;background:transparent;color:#c5d5c4;text-align:left;font:500 14px Arial,\'Microsoft YaHei\',\'Noto Sans SC\',Rajdhani,sans-serif;cursor:pointer}.language-option:hover,.language-option.active{background:#9bff4514;color:#baff8b}.language-option[data-lang="zh-CN"]{font-family:\'Noto Sans SC\',\'Microsoft YaHei\',\'PingFang SC\',sans-serif!important;font-weight:500}@media(max-width:760px){.language-switcher{margin-left:4px}.language-switcher.language-floating{top:118px;right:10px}.language-trigger{padding:7px}.language-menu{width:170px;max-height:calc(100dvh - 24px)}.language-option{padding:7px 8px;font-size:13px;white-space:nowrap}}';document.head.append(style);const pathParts=location.pathname.split('/').filter(Boolean);
