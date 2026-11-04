@@ -220,7 +220,114 @@ fs.mkdirSync(outDir, { recursive: true });
     if (localeIssues.length) failures.push({ mode: 'localized-root', issues: localeIssues });
     await localePage.close();
 
-    // Regression: every localized Whitepaper page must translate the shared navigation.
+    
+    // Sponsor Zone fallback must remain visible when the ad provider is blocked.
+    // The reserved banner footprint is a layout contract, not a dependency on an ad creative.
+    for (const width of [320, 390, 1440]) {
+      const blockedPage = await browser.newPage({
+        viewport: { width, height: 844 },
+        deviceScaleFactor: 1,
+        isMobile: width <= 900,
+        hasTouch: width <= 900,
+      });
+      const blockedProviderRequests = [];
+      blockedPage.on('requestfailed', request => {
+        if (request.url().includes('bauval.org')) blockedProviderRequests.push(request.url());
+      });
+      await blockedPage.route('https://bauval.org/**', route => route.abort());
+      await blockedPage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+      await blockedPage.waitForSelector('.zc-hero-sponsor-panel .zc-hero-ad-stage', { timeout: 20000 });
+      await blockedPage.waitForTimeout(500);
+      const blockedResult = await blockedPage.evaluate(() => {
+        const stage = document.querySelector('.zc-hero-ad-stage');
+        const promo = document.querySelector('.zc-hero-sponsor-promo');
+        const panel = document.querySelector('.zc-hero-sponsor-panel');
+        const hero = document.querySelector('.hero');
+        const rect = el => {
+          if (!el) return null;
+          const r = el.getBoundingClientRect();
+          return { x: Math.round(r.x), right: Math.round(r.right), top: Math.round(r.top), bottom: Math.round(r.bottom), width: Math.round(r.width), height: Math.round(r.height) };
+        };
+        return {
+          viewportWidth: window.innerWidth,
+          documentWidth: document.documentElement.scrollWidth,
+          stage: rect(stage),
+          promo: rect(promo),
+          panel: rect(panel),
+          promoVisible: !!promo && getComputedStyle(promo).display !== 'none' && promo.getBoundingClientRect().height > 0,
+          panelInsideHero: !!hero && !!panel && hero.contains(panel),
+          iframeCount: stage?.querySelectorAll('iframe').length || 0,
+        };
+      });
+      const blockedIssues = [];
+      const expectedHeight = width <= 900 ? 50 : 90;
+      if (!blockedResult.stage || blockedResult.stage.height < expectedHeight * 0.85) {
+        blockedIssues.push(`reserved banner area collapsed at ${width}px viewport`);
+      }
+      if (blockedResult.stage && blockedResult.stage.width > width + 1) blockedIssues.push('reserved banner area exceeds viewport width');
+      if (blockedResult.documentWidth > width + 1) blockedIssues.push('blocked-ad page has horizontal overflow');
+      if (!blockedResult.promoVisible) blockedIssues.push('Sponsor Zone disappeared when ad provider was blocked');
+      if (blockedResult.stage && blockedResult.promo && blockedResult.promo.top < blockedResult.stage.bottom) {
+        blockedIssues.push('Sponsor Zone overlaps the reserved banner area');
+      }
+      if (!blockedResult.panelInsideHero) blockedIssues.push('Sponsor Zone left the original Hero layout');
+      if (blockedResult.iframeCount !== 0) blockedIssues.push('blocked-ad test unexpectedly loaded an ad iframe');
+      fs.writeFileSync(path.join(outDir, `blocked-ad-${width}.json`), JSON.stringify({
+        result: blockedResult,
+        issues: blockedIssues,
+        providerRequestsFailed: blockedProviderRequests.length,
+      }, null, 2));
+      console.log(JSON.stringify({
+        mode: 'blocked-ad-fallback',
+        width,
+        result: blockedResult,
+        issues: blockedIssues,
+        providerRequestsFailed: blockedProviderRequests.length,
+      }, null, 2));
+      if (blockedIssues.length) failures.push({ mode: 'blocked-ad-fallback', width, issues: blockedIssues });
+      await blockedPage.close();
+    }
+
+    // Every localized homepage must translate the complete Sponsor Zone fallback.
+    const sponsorZoneLabels = {
+      de: ['DEIN PROJEKT.', 'UNSER INTERNET DER UNTOTEN.', 'TEAM KONTAKTIEREN ↗'],
+      fr: ['VOTRE PROJET.', 'NOTRE INTERNET DES MORTS.', 'CONTACTER L’ÉQUIPE ↗'],
+      it: ['IL TUO PROGETTO.', 'IL NOSTRO INTERNET DEI NON-MORTI.', 'CONTATTA IL TEAM ↗'],
+      ja: ['あなたのプロジェクト。', '私たちのアンデッド・インターネット。', 'チームに連絡 ↗'],
+      'zh-CN': ['您的项目。', '我们的亡者互联网。', '联系团队 ↗'],
+      ru: ['ТВОЙ ПРОЕКТ.', 'НАШ ИНТЕРНЕТ НЕЖИТИ.', 'СВЯЗАТЬСЯ С КОМАНДОЙ ↗'],
+      tr: ['PROJENİZ.', 'BİZİM YAŞAYAN ÖLÜLER İNTERNETİMİZ.', 'EKİPLE İLETİŞİME GEÇ ↗'],
+      hi: ['आपका प्रोजेक्ट।', 'हमारा अनडेड इंटरनेट।', 'टीम से संपर्क करें ↗'],
+    };
+    for (const [locale, expected] of Object.entries(sponsorZoneLabels)) {
+      const localizedHome = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+      const localizedErrors = [];
+      localizedHome.on('pageerror', error => localizedErrors.push(error.message));
+      await localizedHome.goto(new URL(`${locale}/`, BASE_URL).href, { waitUntil: 'domcontentloaded', timeout: 60000 });
+      await localizedHome.waitForFunction(
+        () => document.querySelector('.zc-hero-sponsor-promo h2')?.innerText.trim().length > 0 &&
+              document.querySelector('.zc-hero-sponsor-promo a')?.textContent.trim().length > 0,
+        null,
+        { timeout: 20000 }
+      );
+      const actual = await localizedHome.evaluate(() => ({
+        lang: document.documentElement.lang,
+        heading: Array.from(document.querySelector('.zc-hero-sponsor-promo h2')?.childNodes || []).filter(node => node.nodeType === 3).map(node => node.textContent.trim()).filter(Boolean),
+        cta: document.querySelector('.zc-hero-sponsor-promo a')?.textContent.trim() || '',
+      }));
+      const issues = [];
+      if (actual.lang !== locale) issues.push(`html lang is ${actual.lang}, expected ${locale}`);
+      if (actual.heading[0] !== expected[0] || actual.heading[1] !== expected[1]) {
+        issues.push(`Sponsor Zone heading mismatch: ${JSON.stringify(actual.heading)}`);
+      }
+      if (actual.cta !== expected[2]) issues.push(`Sponsor Zone CTA is "${actual.cta}", expected "${expected[2]}"`);
+      if (localizedErrors.length) issues.push('browser JavaScript errors: ' + localizedErrors.join(' | '));
+      console.log(JSON.stringify({ mode: 'localized-sponsor-zone', locale, actual, expected, issues }));
+      if (issues.length) failures.push({ mode: 'localized-sponsor-zone', locale, issues });
+      await localizedHome.close();
+    }
+
+// Regression: every localized Whitepaper page must translate the shared navigation.
     // This catches missing shared-nav dictionary keys and stale language.js cache URLs.
     const whitepaperLabels = {
       de: 'WHITEPAPER',
