@@ -108,7 +108,7 @@ def main():
                     item[key] = value
             continue
 
-        caption = re.sub(r"\\s+", " ", str(item.get("caption") or "")).strip()
+        caption = re.sub(r"\s+", " ", str(item.get("caption") or "")).strip()
         slug = re.sub(r"[^a-z0-9]+", "-", str(item.get("id") or "gallery-item").lower()).strip("-")
         item.update({
             "rights_status": "review-required",
