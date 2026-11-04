@@ -82,7 +82,7 @@ jobs:
               assert item.get("alt_text")
               assert item.get("alt_review_status") in ("visual-reviewed", "caption-derived-pending-visual-review")
               if item.get("alt_review_status") == "visual-reviewed":
-                  assert item.get("alt_reviewed_at") and item.get("alt_review_method") == "manual-contact-sheet-review"
+                  assert item.get("alt_reviewed_at") and item.get("alt_review_method") in ("manual-contact-sheet-review", "manual-visual-review")
               assert item.get("rights_status") == "review-required"
           html = Path("gallery.html").read_text(encoding="utf-8")
           assert html.count('data-gallery-id=') == len(items), "generated HTML card count mismatch"
