@@ -102,7 +102,17 @@ fs.mkdirSync(outDir, { recursive: true });
           await page.locator('header.zombcash-shared-header .language-trigger').click();
           await page.locator('.language-option[data-lang="en"]').click();
           await page.waitForURL(url => url.pathname === '/survivor-field-manual.html', { timeout: 25000 });
-          await page.waitForFunction(() => document.documentElement.lang === 'en', { timeout: 15000 });
+          await page.waitForLoadState('domcontentloaded', { timeout: 15000 }).catch(() => {});
+          await page.waitForFunction(() => document.documentElement.lang === 'en', null, { timeout: 15000 }).catch(async error => {
+            const diagnostic = await page.evaluate(() => ({
+              url: location.href,
+              readyState: document.readyState,
+              lang: document.documentElement.lang,
+              title: document.title,
+              manualCards: document.querySelectorAll('#manual-articles .article-card').length,
+            }));
+            throw new Error('English Field Manual fallback did not finish loading: ' + JSON.stringify(diagnostic) + '; ' + error.message);
+          });
 
           // Every distinct English article-card destination must return HTTP 2xx/3xx.
           const destinations = await page.locator('#manual-articles .article-card h2 a, #manual-articles .article-card .article-link')
