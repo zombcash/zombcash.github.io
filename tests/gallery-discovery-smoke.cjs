@@ -39,7 +39,7 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
         imageNetworkEvents.push({ type: "http-error", status: response.status(), url });
         return;
       }
-      const imageId = imageIdByUrl.get(url);
+      const imageId = imageIdByUrl.get(url) || imageIdByUrl.get(url.split("?")[0]);
       if (imageId && response.status() === 200) {
         imageResponseTasks.push((async () => {
           try {
