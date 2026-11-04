@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const BASE_URL = process.env.SITE_URL || 'https://zombcash.github.io/';
-const widths = [390, 375, 430];
+const widths = [320, 360, 375, 390, 430, 768, 1024, 1440];
 const outDir = path.join(process.cwd(), 'mobile-test-results');
 fs.mkdirSync(outDir, { recursive: true });
 
@@ -48,18 +48,26 @@ fs.mkdirSync(outDir, { recursive: true });
           languageButton: { exists: !!languageButton, rect: rect(languageButton) },
           languageMenuExists: !!languageMenu,
           languageMenuRect: rect(languageMenu),
-          ads: document.querySelectorAll('[data-aa="2460185"], [data-aa=\'2460185\']').length,
-          adSectionCount: document.querySelectorAll('.aads-ad-section').length,
+          ads: (() => {
+            const section = document.querySelector('.zc-adsterra-section');
+            return section ? section.querySelectorAll('.zc-adsterra-unit iframe').length : 0;
+          })(),
+          adSectionCount: document.querySelectorAll('.zc-adsterra-section').length,
+          adPlacementAfterHero: (() => {
+            const hero = document.querySelector('main#home .hero, main .hero, body > .hero');
+            const ad = document.querySelector('.zc-adsterra-section');
+            return !!hero && !!ad && hero.nextElementSibling === ad;
+          })(),
           pageVisitCounter: !!document.querySelector('#site-visits'),
           globalFootprintCounter: !!document.querySelector('#zsh-global-footprint'),
           pageFootprintCounter: !!document.querySelector('.page-footprint'),
           adGeometry: (() => {
-            const ad = document.querySelector('.aads-ad-section iframe[data-aa="2460185"], .aads-ad-section iframe[data-aa=\'2460185\']');
+            const ad = document.querySelector('.zc-adsterra-unit iframe');
             if (!ad) return null;
             const r = ad.getBoundingClientRect();
             const header = document.querySelector('header.zombcash-shared-header');
             const h = header?.getBoundingClientRect();
-            return { x: Math.round(r.x), right: Math.round(r.right), width: Math.round(r.width), position: getComputedStyle(ad).position, overlapsHeader: !!h && r.width > 0 && r.bottom > h.top && r.top < h.bottom };
+            return { x: Math.round(r.x), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height), position: getComputedStyle(ad).position, overlapsHeader: !!h && r.width > 0 && r.bottom > h.top && r.top < h.bottom };
           })(),
         };
       });
@@ -69,12 +77,14 @@ fs.mkdirSync(outDir, { recursive: true });
       if (!result.menuButton.visible) issues.push('mobile menu button is not visible');
       if (!result.navInitiallyClosed) issues.push('navigation is not collapsed by default');
       if (!result.languageButton.exists) issues.push('language selector button is missing');
-      if (result.ads !== 1 || result.adSectionCount !== 1) issues.push(`expected exactly one AADS unit/section, found ${result.ads}/${result.adSectionCount}`);
+      if (result.ads !== 1 || result.adSectionCount !== 1) issues.push(`expected exactly one Adsterra iframe/section, found ${result.ads}/${result.adSectionCount}`);
+      if (!result.adPlacementAfterHero) issues.push('Adsterra sponsor section is not directly after the hero');
+      if (!result.adGeometry) issues.push('Adsterra iframe did not render inside the sponsor slot');
       if (!result.pageVisitCounter) issues.push('homepage global visitor counter section is missing');
-      if (result.adGeometry && result.adGeometry.position === 'fixed') issues.push('AADS iframe must not be fixed while scrolling');
-      if (result.adGeometry && result.adGeometry.width > width + 1) issues.push('AADS iframe exceeds the viewport width');
-      if (result.adGeometry && result.adGeometry.x < -1) issues.push('AADS iframe starts outside the left viewport edge');
-      if (result.adGeometry && result.adGeometry.right > width + 1) issues.push('AADS iframe extends beyond the right viewport edge');
+      if (result.adGeometry && result.adGeometry.position === 'fixed') issues.push('Adsterra iframe must not be fixed while scrolling');
+      if (result.adGeometry && result.adGeometry.width > width + 1) issues.push('Adsterra iframe exceeds the viewport width');
+      if (result.adGeometry && result.adGeometry.x < -1) issues.push('Adsterra iframe starts outside the left viewport edge');
+      if (result.adGeometry && result.adGeometry.right > width + 1) issues.push('Adsterra iframe extends beyond the right viewport edge');
 
       if (result.menuButton.visible) {
         await page.locator('header.zombcash-shared-header .zsh-menu-toggle').click();
