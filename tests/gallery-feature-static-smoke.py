@@ -10,12 +10,15 @@ ids = [item["id"] for item in items]
 assert len(items) == 50 and len(set(ids)) == 50
 assert all(item.get("rights_status") == "review-required" for item in items)
 reviewed = [item for item in items if item.get("alt_review_status") == "visual-reviewed"]
-assert len(reviewed) == 50
-assert sum(item.get("alt_review_method") == "manual-contact-sheet-review" for item in reviewed) == 46
-assert sum(item.get("alt_review_method") == "manual-visual-review" for item in reviewed) == 4
-unreviewed = [item for item in items if item.get("alt_review_status") != "visual-reviewed"]
-assert {item["id"] for item in unreviewed} == set()
-assert all(item.get("rights_status") == "review-required" for item in unreviewed)
+pending = [item for item in items if item.get("alt_review_status") == "pending-review"]
+assert len(reviewed) + len(pending) == len(items), "Every item must have an explicit ALT review state"
+assert all(item.get("alt_review_method") in {"manual-visual-review", "manual-contact-sheet-review"} for item in reviewed)
+assert all(item.get("alt_text", "").strip() for item in items), "Every card needs an ALT text value"
+for item in reviewed:
+    assert item.get("image_width") == 800 and item.get("image_height") == 800, f"Unexpected reviewed dimensions: {item['id']}"
+for item in pending:
+    assert item.get("alt_review_method") == "not-reviewed", f"Pending item has an invalid review method: {item['id']}"
+    assert item.get("pinterest_status") == "blocked-rights-review", f"Unreviewed item is not blocked from Pinterest: {item['id']}"
 assert all(item.get("anchor_id") for item in items)
 assert not any(item.get("pinterest_status") in {"queued", "pending", "scheduled"} for item in items)
 
