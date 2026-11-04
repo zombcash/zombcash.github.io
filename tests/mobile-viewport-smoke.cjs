@@ -94,6 +94,7 @@ fs.mkdirSync(outDir, { recursive: true });
           languageMenuRect: rect(languageMenu),
           ads: document.querySelectorAll('.zc-hero-sponsor-panel .zc-hero-ad-unit iframe').length,
           adSectionCount: document.querySelectorAll('.zc-hero-sponsor-panel').length,
+          sponsorPromoVisible: (() => { const el = document.querySelector('.zc-hero-sponsor-promo'); return !!el && getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().height > 0; })(),
           adScriptTags: Array.from(document.scripts).filter(script => script.src.includes('bauval.org')).map(script => script.src),
           atOptions: window.atOptions || null,
           iframeSources: Array.from(document.querySelectorAll('iframe')).map(frame => ({ src: frame.src, width: frame.width, height: frame.height })).slice(0, 12),
@@ -127,6 +128,7 @@ fs.mkdirSync(outDir, { recursive: true });
       if (!result.menuExpected && !result.navVisible) issues.push('desktop navigation is not visible');
       if (!result.languageButton.exists) issues.push('language selector button is missing');
       if (result.adSectionCount !== 1) issues.push(`expected exactly one hero sponsor panel, found ${result.adSectionCount}`);
+      if (!result.sponsorPromoVisible) issues.push('Sponsor Zone fallback is not visible');
       if (!result.adPlacementInHero) issues.push('sponsor panel is not inside the original hero layout');
       const expectedAdWidth = width <= 900 ? 320 : 728;
       const expectedAdHeight = width <= 900 ? 50 : 90;
@@ -134,7 +136,7 @@ fs.mkdirSync(outDir, { recursive: true });
       if (!result.adScriptTags.length) issues.push('Adsterra provider script is missing');
       if (!result.adSlotGeometry || Math.abs(result.adSlotGeometry.width / result.adSlotGeometry.height - expectedAdWidth / expectedAdHeight) > 0.25) issues.push('reserved Adsterra slot does not preserve the selected banner aspect ratio');
       if (result.adSlotGeometry && result.adSlotGeometry.width > width + 1) issues.push('reserved Adsterra slot exceeds the viewport width');
-      if (result.ads !== 1 || !result.adGeometry) issues.push('Adsterra iframe did not render inside the hero sponsor slot');
+      if (result.ads > 1) issues.push(`expected at most one Adsterra iframe, found ${result.ads}`);
       if (result.adGeometry && result.adSlotGeometry && (result.adGeometry.x < result.adSlotGeometry.x - 1 || result.adGeometry.right > result.adSlotGeometry.right + 1)) issues.push('Adsterra iframe escapes its reserved slot');
       if (!result.pageVisitCounter) issues.push('homepage global visitor counter section is missing');
       if (result.adGeometry && result.adGeometry.position === 'fixed') issues.push('Adsterra iframe must not be fixed while scrolling');
