@@ -17,6 +17,7 @@ assert(!index.includes("player.src=safeUrl(item.src);player.load();"), "Promo vi
 assert(shared.includes("window.gtag('config', 'G-2FZH07QTR7')"), "GA4 config must remain queued");
 assert(shared.includes("requestIdleCallback(loadGaScript"), "GA4 script must be delayed until idle");
 assert(shared.includes("display=optional"), "Shared fonts must use optional display");
+assert(shared.includes("stage.style.minHeight = reservedHeight + 'px';") && shared.includes("unit.style.flexShrink = '0';"), "Adsterra reserved slot layout must remain intact");
 assert(shared.includes("Noto+Sans+SC") && shared.includes("Noto+Sans+JP") && shared.includes("Noto+Sans+Devanagari"),
   "Chinese, Japanese and Hindi font fallbacks must remain available");
 
