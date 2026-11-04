@@ -39,12 +39,51 @@ function safe(value) {
             hasTouch: viewport.mobile,
           });
           const pageErrors = [];
+          const consoleErrors = [];
+          const failedRequests = [];
+          const sharedNavResponses = [];
           page.on('pageerror', error => pageErrors.push(error.message));
+          page.on('console', message => {
+            if (message.type() === 'error') consoleErrors.push(message.text());
+          });
+          page.on('requestfailed', request => failedRequests.push({
+            url: request.url(),
+            error: request.failure()?.errorText || 'request failed',
+          }));
+          page.on('response', response => {
+            if (response.url().includes('/shared-nav.js')) {
+              sharedNavResponses.push({ url: response.url(), status: response.status() });
+            }
+          });
           const response = await page.goto(new URL(pathName, BASE).href, {
             waitUntil: 'domcontentloaded',
             timeout: 60000,
           });
-          await page.waitForSelector('header.zombcash-shared-header', { timeout: 25000 });
+          try {
+            await page.waitForSelector('header.zombcash-shared-header', { timeout: 25000 });
+          } catch (error) {
+            const diagnostics = await page.evaluate(() => ({
+              readyState: document.readyState,
+              bodyClass: document.body?.className || '',
+              sharedNavScripts: [...document.scripts]
+                .filter(script => script.src.includes('/shared-nav.js'))
+                .map(script => ({ src: script.src, defer: script.defer, async: script.async })),
+              navigationPresent: !!document.getElementById('zsh-navigation'),
+              headers: [...document.querySelectorAll('body > header, body > .wrap > header, body > main header')]
+                .map(header => ({ className: header.className, text: header.innerText.slice(0, 120) })),
+              resourceEntries: performance.getEntriesByType('resource')
+                .filter(entry => entry.name.includes('/shared-nav.js'))
+                .map(entry => ({ name: entry.name, duration: Math.round(entry.duration), transferSize: entry.transferSize })),
+            }));
+            const report = {
+              page: pathName, locale, viewport: viewport.name,
+              responseStatus: response?.status() ?? null,
+              diagnostics, pageErrors, consoleErrors, failedRequests, sharedNavResponses,
+              selectorError: error.message,
+            };
+            fs.writeFileSync(path.join(out, 'shared-nav-failure-' + safe(item.kind + '-' + locale + '-' + viewport.name) + '.json'), JSON.stringify(report, null, 2));
+            throw new Error('Shared navigation did not initialize: ' + JSON.stringify(report));
+          }
           await page.waitForTimeout(800);
 
           // Wait for the latest published content before judging the deployment.
