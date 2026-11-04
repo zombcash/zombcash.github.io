@@ -6,13 +6,16 @@ on:
     paths:
       - "gallery.html"
       - "gallery.css"
+      - "shared-nav.js"
       - ".github/workflows/gallery-lighthouse-preview.yml"
+  push:
+    branches: [fix-gallery-font-layout-shift-20261104]
 
 permissions:
   contents: read
 
 concurrency:
-  group: gallery-lighthouse-preview-${{ github.event.pull_request.number }}
+  group: gallery-lighthouse-preview-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
