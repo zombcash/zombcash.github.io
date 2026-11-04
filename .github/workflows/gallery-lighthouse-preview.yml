@@ -1,0 +1,71 @@
+name: Gallery font layout-shift Lighthouse preview
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "gallery.html"
+      - ".github/workflows/gallery-lighthouse-preview.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gallery-lighthouse-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  gallery-lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install pinned Lighthouse
+        run: npm install --no-save lighthouse@13.6.0
+      - name: Start candidate site
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/zombcash-gallery.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/gallery.html >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/zombcash-gallery.log
+          exit 1
+      - name: Audit candidate and production gallery
+        run: |
+          mkdir -p lighthouse-reports
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          test -n "$CHROME_PATH"
+          for target in candidate production; do
+            if [ "$target" = candidate ]; then url="http://127.0.0.1:4173/gallery.html"; else url="https://zombcash.github.io/gallery.html"; fi
+            npx lighthouse "$url" --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/${target}-mobile.json" --max-wait-for-load=45000
+            npx lighthouse "$url" --quiet --preset=desktop --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/${target}-desktop.json" --max-wait-for-load=45000
+          done
+      - name: Publish comparison
+        if: always()
+        run: |
+          node <<'NODE' >> "$GITHUB_STEP_SUMMARY"
+          const fs = require('fs');
+          console.log('| Version | Device | Performance | LCP (s) | CLS | TBT (ms) | SEO | Accessibility |');
+          console.log('|---|---|---:|---:|---:|---:|---:|---:|');
+          if (fs.existsSync('lighthouse-reports')) for (const file of fs.readdirSync('lighthouse-reports').sort()) {
+            const r = JSON.parse(fs.readFileSync('lighthouse-reports/' + file, 'utf8'));
+            const a = r.audits || {};
+            const score = id => r.categories?.[id]?.score == null ? 'n/a' : Math.round(r.categories[id].score * 100);
+            const metric = (id, scale=1) => a[id]?.numericValue == null ? 'n/a' : (a[id].numericValue / scale).toFixed(3);
+            console.log(`|${file.replace('.json','')}|${file.includes('mobile')?'Mobile':'Desktop'}|${score('performance')}|${metric('largest-contentful-paint',1000)}|${metric('cumulative-layout-shift')}|${metric('total-blocking-time')}|${score('seo')}|${score('accessibility')}|`);
+          }
+          console.log('');
+          console.log('Lab measurements only; they are not field CrUX data.');
+          NODE
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gallery-font-layout-lighthouse
+          path: lighthouse-reports/
+          if-no-files-found: warn
+          retention-days: 14
