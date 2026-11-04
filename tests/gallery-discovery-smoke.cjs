@@ -14,7 +14,7 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
       const timer = setInterval(async () => {
         try {
           const response = await fetch("http://127.0.0.1:4173/gallery.html");
-          if (response.ok) { clearInterval(timer); resolve(); }
+          if (response.ok) { await response.arrayBuffer(); clearInterval(timer); resolve(); }
         } catch (_) {
           if (Date.now() - started > 15000) { clearInterval(timer); reject(new Error("Local static server did not start")); }
         }
