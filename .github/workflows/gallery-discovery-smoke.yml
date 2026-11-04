@@ -23,7 +23,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: gallery-discovery-${{ github.ref }}
+  group: gallery-discovery-v2-${{ github.event.pull_request.head.ref || github.ref }}
   cancel-in-progress: true
 
 jobs:
