@@ -2,8 +2,21 @@ name: Gallery discovery smoke tests
 # Preview-only validation for the clean gallery rebuild branch.
 
 on:
-  push:
-    branches: [undead-reach-gallery-rebuild-20261104]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+    paths:
+      - "gallery.html"
+      - "gallery.js"
+      - "gallery.css"
+      - "gallery-data.json"
+      - "language.js"
+      - "script.js"
+      - "shared-nav.js"
+      - "scripts/generate_localized_gallery_pages.py"
+      - "scripts/sync_gallery_image_seo.py"
+      - "tests/gallery-discovery-smoke.cjs"
+      - ".github/workflows/gallery-discovery-smoke.yml"
   workflow_dispatch:
 
 permissions:
@@ -20,7 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
