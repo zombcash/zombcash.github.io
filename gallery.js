@@ -410,12 +410,24 @@
           image.dataset.originalAlt = image.alt;
         }
         image?.addEventListener("error", () => {
+          if (!image.dataset.retryAttempted) {
+            image.dataset.retryAttempted = "true";
+            const originalSrc = image.dataset.originalSrc || image.src;
+            try {
+              const retryUrl = new URL(originalSrc);
+              retryUrl.searchParams.set("zcretry", "1");
+              window.setTimeout(() => { image.src = retryUrl.toString(); }, 350);
+            } catch (_) {
+              window.setTimeout(() => { image.src = originalSrc; }, 350);
+            }
+            return;
+          }
           if (image.dataset.fallbackApplied) return;
           image.dataset.fallbackApplied = "true";
           image.dataset.originalLoadFailed = "true";
           image.src = "/zombcash-hand-logo.svg";
           image.alt = "Gallery image temporarily unavailable";
-        }, { once: true });
+        });
         const likeButton = card.querySelector(".gallery-like-button");
         likeButton?.addEventListener("click", event => { event.preventDefault(); event.stopPropagation(); handleGalleryLike?.(card); });
         const sourceLink = card.querySelector(".gallery-caption a");
