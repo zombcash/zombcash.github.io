@@ -1,0 +1,25 @@
+name: Gallery metadata reconciliation smoke
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "gallery-data.json"
+      - "tests/gallery-metadata-reconcile-smoke.py"
+      - ".github/workflows/gallery-metadata-reconcile-smoke.yml"
+  push:
+    branches: [gallery-metadata-main-reconciled-20261104]
+
+permissions:
+  contents: read
+
+jobs:
+  gallery-metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate current archive and editorial metadata
+        run: python tests/gallery-metadata-reconcile-smoke.py
