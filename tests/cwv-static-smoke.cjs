@@ -4,7 +4,7 @@ const assert = require("assert");
 const index = fs.readFileSync("index.html", "utf8");
 const shared = fs.readFileSync("shared-nav.js", "utf8");
 
-assert(!/<script\\s+src=["']https:\/\/plugin\\.jup\\.ag\/plugin-v1\\.js["'][^>]*><\/script>/i.test(index),
+assert(!/<script\s+src=["']https:\/\/plugin\.jup\.ag\/plugin-v1\.js["'][^>]*><\/script>/i.test(index),
   "Jupiter plugin must not be parser-blocking in the document head");
 assert(index.includes("new IntersectionObserver"), "Jupiter must load on proximity to the swap panel");
 assert(index.includes("script.async = true"), "Jupiter plugin must load asynchronously");
