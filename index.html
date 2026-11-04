@@ -1886,9 +1886,10 @@ body > main#home > section.hero .zc-hero-sponsor {
 body > main#home > section.hero .zc-hero-sponsor-label { flex: 0 0 auto !important; min-height: 14px !important; width: 100% !important; }
 body > main#home > section.hero .zc-hero-ad-stage {
   box-sizing: border-box !important; display: flex !important;
-  align-items: flex-start !important; justify-content: center !important; max-width: 728px !important;
-  min-width: 0 !important; margin: 0 auto !important; overflow: hidden !important;
-  /* Width and height are set together by shared-nav.js to preserve the native banner ratio. */
+  align-items: flex-start !important; justify-content: center !important;
+  width: 100% !important; max-width: 728px !important; aspect-ratio: 728 / 90 !important;
+  height: auto !important; min-height: 0 !important; min-width: 0 !important;
+  margin: 0 auto !important; overflow: hidden !important;
 }
 body > main#home > section.hero .zc-hero-ad-unit { flex-shrink: 0 !important; height: 90px !important; max-height: 90px !important; }
 body > main#home > section.hero .zc-hero-sponsor-promo {
@@ -1900,7 +1901,7 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
   body > main#home > section.hero .zc-hero-sponsor-panel { min-height: 390px !important; padding: 12px !important; }
   body > main#home > section.hero .zc-hero-sponsor { gap: 10px !important; }
   body > main#home > section.hero .zc-hero-ad-stage {
-    max-width: 320px !important;
+    max-width: 320px !important; aspect-ratio: 320 / 50 !important;
   }
   body > main#home > section.hero .zc-hero-ad-unit {
     flex: 0 0 320px !important; width: 320px !important; min-width: 320px !important;
