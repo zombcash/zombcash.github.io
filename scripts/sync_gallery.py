@@ -129,7 +129,7 @@ def main():
             "language": "en",
             "pinterest_status": "blocked-rights-review",
             "slug": slug,
-            "anchor_id": "gallery-" + slug,
+            "anchor_id": "gallery-image-" + re.sub(r"[^0-9:]", "", str(item.get("id") or "")).replace(":", "-"),
             "metadata_version": 2,
             "alt_review_status": "pending-review",
             "alt_review_method": "not-reviewed",
