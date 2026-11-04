@@ -6,6 +6,8 @@ on:
     branches: [main]
     paths:
       - 'sitemap.xml'
+      - 'sitemap-*.xml'
+      - 'robots.txt'
       - '*.html'
       - '**/*.html'
       - 'tests/sitemap-live-smoke.py'
