@@ -110,13 +110,21 @@ def main():
 
         caption = re.sub(r"\s+", " ", str(item.get("caption") or "")).strip()
         slug = re.sub(r"[^a-z0-9]+", "-", str(item.get("id") or "gallery-item").lower()).strip("-")
+        if re.search(r"\bNIGHTMARE\s+DROP\b", caption, re.I):
+            category = "nightmare-horror"
+        elif re.search(r"\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b", caption, re.I):
+            category = "zombie-memes"
+        elif re.search(r"\bUNDEAD\s+AFTER\s+DARK\b", caption, re.I):
+            category = "undead-after-dark"
+        else:
+            category = "community-creations"
         item.update({
             "rights_status": "review-required",
             "title": caption[:100] or "ZombieCash gallery artwork",
             "description": caption or "New artwork from the ZombieCash Telegram channel.",
             "alt_text": "ZombieCash gallery artwork — visual ALT review pending.",
-            "category_ids": [],
-            "series": "unclassified",
+            "category_ids": [category],
+            "series": category,
             "tags": [],
             "language": "en",
             "pinterest_status": "blocked-rights-review",
