@@ -94,6 +94,7 @@ fs.mkdirSync(outDir, { recursive: true });
           languageMenuRect: rect(languageMenu),
           ads: document.querySelectorAll('.zc-hero-sponsor-panel .zc-hero-ad-unit iframe').length,
           adSectionCount: document.querySelectorAll('.zc-hero-sponsor-panel').length,
+          sponsorPromoVisible: (() => { const el = document.querySelector('.zc-hero-sponsor-promo'); return !!el && getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().height > 0; })(),
           adScriptTags: Array.from(document.scripts).filter(script => script.src.includes('bauval.org')).map(script => script.src),
           atOptions: window.atOptions || null,
           iframeSources: Array.from(document.querySelectorAll('iframe')).map(frame => ({ src: frame.src, width: frame.width, height: frame.height })).slice(0, 12),
@@ -127,6 +128,7 @@ fs.mkdirSync(outDir, { recursive: true });
       if (!result.menuExpected && !result.navVisible) issues.push('desktop navigation is not visible');
       if (!result.languageButton.exists) issues.push('language selector button is missing');
       if (result.adSectionCount !== 1) issues.push(`expected exactly one hero sponsor panel, found ${result.adSectionCount}`);
+      if (!result.sponsorPromoVisible) issues.push('Sponsor Zone fallback is not visible');
       if (!result.adPlacementInHero) issues.push('sponsor panel is not inside the original hero layout');
       const expectedAdWidth = width <= 900 ? 320 : 728;
       const expectedAdHeight = width <= 900 ? 50 : 90;
@@ -134,7 +136,7 @@ fs.mkdirSync(outDir, { recursive: true });
       if (!result.adScriptTags.length) issues.push('Adsterra provider script is missing');
       if (!result.adSlotGeometry || Math.abs(result.adSlotGeometry.width / result.adSlotGeometry.height - expectedAdWidth / expectedAdHeight) > 0.25) issues.push('reserved Adsterra slot does not preserve the selected banner aspect ratio');
       if (result.adSlotGeometry && result.adSlotGeometry.width > width + 1) issues.push('reserved Adsterra slot exceeds the viewport width');
-      if (result.ads !== 1 || !result.adGeometry) issues.push('Adsterra iframe did not render inside the hero sponsor slot');
+      if (result.ads > 1) issues.push(`expected at most one Adsterra iframe, found ${result.ads}`);
       if (result.adGeometry && result.adSlotGeometry && (result.adGeometry.x < result.adSlotGeometry.x - 1 || result.adGeometry.right > result.adSlotGeometry.right + 1)) issues.push('Adsterra iframe escapes its reserved slot');
       if (!result.pageVisitCounter) issues.push('homepage global visitor counter section is missing');
       if (result.adGeometry && result.adGeometry.position === 'fixed') issues.push('Adsterra iframe must not be fixed while scrolling');
@@ -220,7 +222,227 @@ fs.mkdirSync(outDir, { recursive: true });
     if (localeIssues.length) failures.push({ mode: 'localized-root', issues: localeIssues });
     await localePage.close();
 
-    // Regression: every localized Whitepaper page must translate the shared navigation.
+    
+    // Sponsor Zone fallback must remain visible when the ad provider is blocked.
+    // The reserved banner footprint is a layout contract, not a dependency on an ad creative.
+    for (const width of [320, 390, 1440]) {
+      const blockedPage = await browser.newPage({
+        viewport: { width, height: 844 },
+        deviceScaleFactor: 1,
+        isMobile: width <= 900,
+        hasTouch: width <= 900,
+      });
+      const blockedProviderRequests = [];
+      blockedPage.on('requestfailed', request => {
+        if (request.url().includes('bauval.org')) blockedProviderRequests.push(request.url());
+      });
+      await blockedPage.route('https://bauval.org/**', route => route.abort());
+      await blockedPage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+      await blockedPage.waitForSelector('.zc-hero-sponsor-panel .zc-hero-ad-stage', { timeout: 20000 });
+      await blockedPage.waitForTimeout(500);
+      const blockedResult = await blockedPage.evaluate(() => {
+        const stage = document.querySelector('.zc-hero-ad-stage');
+        const promo = document.querySelector('.zc-hero-sponsor-promo');
+        const panel = document.querySelector('.zc-hero-sponsor-panel');
+        const hero = document.querySelector('.hero');
+        const rect = el => {
+          if (!el) return null;
+          const r = el.getBoundingClientRect();
+          return { x: Math.round(r.x), right: Math.round(r.right), top: Math.round(r.top), bottom: Math.round(r.bottom), width: Math.round(r.width), height: Math.round(r.height) };
+        };
+        return {
+          viewportWidth: window.innerWidth,
+          documentWidth: document.documentElement.scrollWidth,
+          stage: rect(stage),
+          containerWidth: stage?.parentElement ? Math.round(stage.parentElement.getBoundingClientRect().width) : 0,
+          promo: rect(promo),
+          panel: rect(panel),
+          promoVisible: !!promo && getComputedStyle(promo).display !== 'none' && promo.getBoundingClientRect().height > 0,
+          panelInsideHero: !!hero && !!panel && hero.contains(panel),
+          iframeCount: stage?.querySelectorAll('iframe').length || 0,
+        };
+      });
+      const blockedIssues = [];
+      const nativeWidth = width <= 900 ? 320 : 728;
+      const nativeHeight = width <= 900 ? 50 : 90;
+      const expectedHeight = nativeHeight * Math.min(1, blockedResult.containerWidth / nativeWidth);
+      if (!blockedResult.stage || blockedResult.stage.height < expectedHeight * 0.9) {
+        blockedIssues.push(`reserved banner area collapsed at ${width}px viewport`);
+      }
+      if (blockedResult.stage && blockedResult.stage.width > width + 1) blockedIssues.push('reserved banner area exceeds viewport width');
+      if (blockedResult.documentWidth > width + 1) blockedIssues.push('blocked-ad page has horizontal overflow');
+      if (!blockedResult.promoVisible) blockedIssues.push('Sponsor Zone disappeared when ad provider was blocked');
+      if (blockedResult.stage && blockedResult.promo && blockedResult.promo.top < blockedResult.stage.bottom) {
+        blockedIssues.push('Sponsor Zone overlaps the reserved banner area');
+      }
+      if (!blockedResult.panelInsideHero) blockedIssues.push('Sponsor Zone left the original Hero layout');
+      if (blockedResult.iframeCount !== 0) blockedIssues.push('blocked-ad test unexpectedly loaded an ad iframe');
+      fs.writeFileSync(path.join(outDir, `blocked-ad-${width}.json`), JSON.stringify({
+        result: blockedResult,
+        issues: blockedIssues,
+        providerRequestsFailed: blockedProviderRequests.length,
+      }, null, 2));
+      console.log(JSON.stringify({
+        mode: 'blocked-ad-fallback',
+        width,
+        result: blockedResult,
+        issues: blockedIssues,
+        providerRequestsFailed: blockedProviderRequests.length,
+      }, null, 2));
+      if (blockedIssues.length) failures.push({ mode: 'blocked-ad-fallback', width, issues: blockedIssues });
+
+      // Exercise both directions across the breakpoint; the scaled slot must
+      // use the sponsor container's new width rather than its previous width.
+      if (width === 320 || width === 1440) {
+        const resizedWidth = width === 320 ? 1440 : 390;
+        await blockedPage.setViewportSize({ width: resizedWidth, height: 844 });
+        await blockedPage.waitForTimeout(350);
+        const resized = await blockedPage.evaluate(() => {
+          const stage = document.querySelector('.zc-hero-ad-stage');
+          const r = stage?.getBoundingClientRect();
+          return {
+            viewportWidth: window.innerWidth,
+            containerWidth: stage?.parentElement ? Math.round(stage.parentElement.getBoundingClientRect().width) : 0,
+            stageWidth: r ? Math.round(r.width) : 0,
+            stageHeight: r ? Math.round(r.height) : 0,
+            documentWidth: document.documentElement.scrollWidth,
+          };
+        });
+        const nativeWidth = resizedWidth <= 900 ? 320 : 728;
+        const nativeHeight = resizedWidth <= 900 ? 50 : 90;
+        const expectedHeight = nativeHeight * Math.min(1, resized.containerWidth / nativeWidth);
+        const resizeIssues = [];
+        if (resized.stageHeight < expectedHeight * 0.9) {
+          resizeIssues.push(`reserved slot retained an undersized previous scale after resize: ${resized.stageWidth}×${resized.stageHeight}`);
+        }
+        if (resized.documentWidth > resizedWidth + 1) resizeIssues.push('resized page has horizontal overflow');
+        console.log(JSON.stringify({ mode: 'ad-breakpoint-resize', from: width, to: resizedWidth, result: resized, issues: resizeIssues }));
+        if (resizeIssues.length) failures.push({ mode: 'ad-breakpoint-resize', from: width, to: resizedWidth, issues: resizeIssues });
+      }
+      await blockedPage.close();
+    }
+
+    // Every localized homepage must translate the complete Sponsor Zone fallback.
+    const sponsorZoneLabels = {
+      de: ['DEIN PROJEKT.', 'UNSER INTERNET DER UNTOTEN.', 'TEAM KONTAKTIEREN ↗'],
+      fr: ['VOTRE PROJET.', 'NOTRE INTERNET DES MORTS.', 'CONTACTER L’ÉQUIPE ↗'],
+      it: ['IL TUO PROGETTO.', 'IL NOSTRO INTERNET DEI NON-MORTI.', 'CONTATTA IL TEAM ↗'],
+      ja: ['あなたのプロジェクト。', '私たちのアンデッド・インターネット。', 'チームに連絡 ↗'],
+      'zh-CN': ['您的项目。', '我们的亡者互联网。', '联系团队 ↗'],
+      ru: ['ТВОЙ ПРОЕКТ.', 'НАШ ИНТЕРНЕТ НЕЖИТИ.', 'СВЯЗАТЬСЯ С КОМАНДОЙ ↗'],
+      tr: ['PROJENİZ.', 'BİZİM YAŞAYAN ÖLÜLER İNTERNETİMİZ.', 'EKİPLE İLETİŞİME GEÇ ↗'],
+      hi: ['आपका प्रोजेक्ट।', 'हमारा अनडेड इंटरनेट।', 'टीम से संपर्क करें ↗'],
+    };
+    for (const [locale, expected] of Object.entries(sponsorZoneLabels)) {
+      const localizedHome = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+      const localizedErrors = [];
+      localizedHome.on('pageerror', error => localizedErrors.push(error.message));
+      await localizedHome.goto(new URL(`${locale}/`, BASE_URL).href, { waitUntil: 'domcontentloaded', timeout: 60000 });
+      await localizedHome.waitForFunction(
+        () => document.querySelector('.zc-hero-sponsor-promo h2')?.innerText.trim().length > 0 &&
+              document.querySelector('.zc-hero-sponsor-promo a')?.textContent.trim().length > 0,
+        null,
+        { timeout: 20000 }
+      );
+      const actual = await localizedHome.evaluate(() => ({
+        lang: document.documentElement.lang,
+        heading: Array.from(document.querySelector('.zc-hero-sponsor-promo h2')?.childNodes || []).filter(node => node.nodeType === 3).map(node => node.textContent.trim()).filter(Boolean),
+        cta: document.querySelector('.zc-hero-sponsor-promo a')?.textContent.trim() || '',
+      }));
+      const issues = [];
+      if (actual.lang !== locale) issues.push(`html lang is ${actual.lang}, expected ${locale}`);
+      if (actual.heading[0] !== expected[0] || actual.heading[1] !== expected[1]) {
+        issues.push(`Sponsor Zone heading mismatch: ${JSON.stringify(actual.heading)}`);
+      }
+      if (actual.cta !== expected[2]) issues.push(`Sponsor Zone CTA is "${actual.cta}", expected "${expected[2]}"`);
+      if (localizedErrors.length) issues.push('browser JavaScript errors: ' + localizedErrors.join(' | '));
+      console.log(JSON.stringify({ mode: 'localized-sponsor-zone', locale, actual, expected, issues }));
+      if (issues.length) failures.push({ mode: 'localized-sponsor-zone', locale, issues });
+      await localizedHome.close();
+    }
+
+
+    // Zombie Snake must expose touch controls on touch devices and forward
+    // pointer presses into the embedded same-origin game frame.
+    const arcadeMobile = await browser.newPage({
+      viewport: { width: 390, height: 844 },
+      deviceScaleFactor: 1,
+      isMobile: true,
+      hasTouch: true,
+    });
+    const arcadeErrors = [];
+    arcadeMobile.on('pageerror', error => arcadeErrors.push(error.message));
+    await arcadeMobile.goto(new URL('arcade.html?game=snake', BASE_URL).href, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await arcadeMobile.waitForSelector('#snake-frame', { timeout: 20000 });
+    await arcadeMobile.waitForFunction(() => {
+      const tab = document.querySelector('[data-game="snake"]');
+      const frame = document.querySelector('#snake-frame');
+      const controls = document.querySelector('#touch-controls');
+      return tab?.getAttribute('aria-selected') === 'true' &&
+        frame && getComputedStyle(frame).display !== 'none' &&
+        controls && getComputedStyle(controls).display !== 'none' &&
+        frame.contentDocument?.readyState === 'complete';
+    }, null, { timeout: 20000 });
+    await arcadeMobile.evaluate(() => {
+      const frame = document.querySelector('#snake-frame');
+      window.__snakeTouchMessages = [];
+      frame.contentWindow.addEventListener('message', event => {
+        if (event.data?.type?.startsWith('zombcash-arcade-snake-')) window.__snakeTouchMessages.push(event.data);
+      });
+    });
+    await arcadeMobile.locator('#start').click();
+    await arcadeMobile.waitForFunction(() => window.__snakeTouchMessages?.some(message => message.type === 'zombcash-arcade-snake-start'), null, { timeout: 10000 });
+    await arcadeMobile.locator('#touch-controls [data-key="left"]').dispatchEvent('pointerdown', {
+      pointerId: 71, pointerType: 'touch', isPrimary: true, button: 0, buttons: 1,
+    });
+    await arcadeMobile.locator('#touch-controls [data-key="left"]').dispatchEvent('pointerup', {
+      pointerId: 71, pointerType: 'touch', isPrimary: true, button: 0, buttons: 0,
+    });
+    const arcadeTouchResult = await arcadeMobile.evaluate(() => ({
+      viewportWidth: window.innerWidth,
+      documentWidth: document.documentElement.scrollWidth,
+      selectedGame: document.querySelector('[data-game="snake"]')?.getAttribute('aria-selected'),
+      frameVisible: getComputedStyle(document.querySelector('#snake-frame')).display !== 'none',
+      touchControlsVisible: getComputedStyle(document.querySelector('#touch-controls')).display !== 'none',
+      messages: window.__snakeTouchMessages || [],
+    }));
+    const arcadeTouchIssues = [];
+    if (arcadeTouchResult.documentWidth > 391) arcadeTouchIssues.push('Arcade Snake has horizontal overflow on mobile');
+    if (arcadeTouchResult.selectedGame !== 'true') arcadeTouchIssues.push('Zombie Snake tab did not activate');
+    if (!arcadeTouchResult.frameVisible) arcadeTouchIssues.push('embedded Snake game frame is hidden');
+    if (!arcadeTouchResult.touchControlsVisible) arcadeTouchIssues.push('Snake touch controls are hidden on a touch device');
+    if (!arcadeTouchResult.messages.some(message => message.type === 'zombcash-arcade-snake-key' && message.key === 'ArrowLeft' && message.down === true)) {
+      arcadeTouchIssues.push('left touch press was not forwarded to the Snake iframe');
+    }
+    if (!arcadeTouchResult.messages.some(message => message.type === 'zombcash-arcade-snake-key' && message.key === 'ArrowLeft' && message.down === false)) {
+      arcadeTouchIssues.push('left touch release was not forwarded to the Snake iframe');
+    }
+    if (arcadeErrors.length) arcadeTouchIssues.push('Arcade browser JavaScript errors: ' + arcadeErrors.join(' | '));
+    fs.writeFileSync(path.join(outDir, 'arcade-snake-touch.json'), JSON.stringify({
+      result: arcadeTouchResult, issues: arcadeTouchIssues, pageErrors: arcadeErrors,
+    }, null, 2));
+    console.log(JSON.stringify({ mode: 'arcade-snake-touch', result: arcadeTouchResult, issues: arcadeTouchIssues }));
+    if (arcadeTouchIssues.length) failures.push({ mode: 'arcade-snake-touch', issues: arcadeTouchIssues });
+    await arcadeMobile.close();
+
+
+    // A desktop browser resized to a narrow viewport must also reveal Snake
+    // touch controls; visibility is delegated to responsive CSS, not stale inline styles.
+    const arcadeResize = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    await arcadeResize.goto(new URL('arcade.html?game=snake', BASE_URL).href, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await arcadeResize.waitForFunction(() => document.querySelector('[data-game="snake"]')?.getAttribute('aria-selected') === 'true', null, { timeout: 20000 });
+    const desktopControlsDisplay = await arcadeResize.locator('#touch-controls').evaluate(el => getComputedStyle(el).display);
+    await arcadeResize.setViewportSize({ width: 390, height: 844 });
+    await arcadeResize.waitForFunction(() => getComputedStyle(document.querySelector('#touch-controls')).display !== 'none', null, { timeout: 10000 });
+    const resizedControlsDisplay = await arcadeResize.locator('#touch-controls').evaluate(el => getComputedStyle(el).display);
+    const resizeIssues = [];
+    if (desktopControlsDisplay !== 'none') resizeIssues.push('Snake touch controls should be hidden on ordinary desktop');
+    if (resizedControlsDisplay === 'none') resizeIssues.push('Snake touch controls did not appear after resizing desktop to mobile');
+    console.log(JSON.stringify({ mode: 'arcade-snake-touch-resize', desktopControlsDisplay, resizedControlsDisplay, issues: resizeIssues }));
+    if (resizeIssues.length) failures.push({ mode: 'arcade-snake-touch-resize', issues: resizeIssues });
+    await arcadeResize.close();
+
+// Regression: every localized Whitepaper page must translate the shared navigation.
     // This catches missing shared-nav dictionary keys and stale language.js cache URLs.
     const whitepaperLabels = {
       de: 'WHITEPAPER',
