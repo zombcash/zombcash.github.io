@@ -1249,7 +1249,7 @@
       if (file === 'survivor-hub.html') {
         loginControl.textContent = language === 'en' ? 'LOGIN WITH TELEGRAM' : (loginLabels[language] || 'LOGIN WITH TELEGRAM');
       } else {
-        loginControl.textContent = language === 'en' ? 'REGISTER WITH TELEGRAM' : (translated ? translated[12] : 'JOIN THE SURVIVORS');
+        loginControl.textContent = language === 'en' ? 'REGISTER WITH TELEGRAM' : (translated ? translated[13] : 'JOIN THE SURVIVORS');
       }
     }
   }
