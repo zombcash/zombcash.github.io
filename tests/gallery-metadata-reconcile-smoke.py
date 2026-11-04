@@ -25,10 +25,16 @@ for item in pending:
     assert item.get("alt_review_method") == "not-reviewed", f"Pending item has an invalid review method: {item['id']}"
     assert item.get("pinterest_status") == "blocked-rights-review", f"Unreviewed item is not blocked from Pinterest: {item['id']}"
 
+for item in items:
+    width = item.get("image_width")
+    height = item.get("image_height")
+    assert isinstance(width, int) and 0 < width <= 10000, f"Missing/invalid intrinsic image width: {item['id']}"
+    assert isinstance(height, int) and 0 < height <= 10000, f"Missing/invalid intrinsic image height: {item['id']}"
+
 statuses = {item.get("pinterest_status") for item in items if item.get("pinterest_status")}
 assert statuses <= {"published", "blocked-rights-review"}, f"Unexpected Pinterest queue state: {statuses}"
 assert not any(item.get("pinterest_status") in {"queued", "pending", "scheduled"} for item in items)
 published = [item for item in items if item.get("pinterest_status") == "published"]
 assert all(item.get("pinterest_pin_id") and item.get("pinterest_pin_url") for item in published), "Published pin record lacks historical pin identifiers"
 
-print("PASS: 50 current archive items preserved; all 50 have visual ALT review (46 contact-sheet, 4 individual); all rights remain review-required; no Pinterest queue entries.")
+print("PASS: 50 archive items preserved; 45 ALT-reviewed (41 contact-sheet, 4 individual), 5 pending; all 50 have intrinsic dimensions; rights review remains required; no Pinterest queue entries.")

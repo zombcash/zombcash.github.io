@@ -28,6 +28,45 @@ def is_gallery_artwork(caption):
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; ZombieCashGalleryBot/1.0)"}
 
 
+def jpeg_dimensions(url):
+    """Read JPEG dimensions from the header so new gallery cards reserve space."""
+    try:
+        response = requests.get(url, headers=HEADERS, timeout=20, stream=True)
+        response.raise_for_status()
+        data = response.raw.read(200_000)
+    except requests.RequestException:
+        return None
+    if not data.startswith(b"\xff\xd8"):
+        return None
+    sof_markers = {0xC0, 0xC1, 0xC2, 0xC3, 0xC5, 0xC6, 0xC7, 0xC9, 0xCA, 0xCB, 0xCD, 0xCE, 0xCF}
+    offset = 2
+    while offset + 4 < len(data):
+        if data[offset] != 0xFF:
+            offset += 1
+            continue
+        while offset < len(data) and data[offset] == 0xFF:
+            offset += 1
+        if offset >= len(data):
+            break
+        marker = data[offset]
+        offset += 1
+        if marker in (0xD8, 0xD9, 0x01) or 0xD0 <= marker <= 0xD7:
+            continue
+        if offset + 2 > len(data):
+            break
+        segment_length = int.from_bytes(data[offset:offset + 2], "big")
+        if segment_length < 2 or offset + segment_length > len(data):
+            break
+        if marker in sof_markers and segment_length >= 7:
+            height = int.from_bytes(data[offset + 3:offset + 5], "big")
+            width = int.from_bytes(data[offset + 5:offset + 7], "big")
+            if 0 < width <= 10000 and 0 < height <= 10000:
+                return width, height
+            return None
+        offset += segment_length
+    return None
+
+
 def image_urls(message):
     found = []
     for node in message.select(".tgme_widget_message_photo_wrap, .tgme_widget_message_video_thumb"):
@@ -118,6 +157,10 @@ def main():
             category = "undead-after-dark"
         else:
             category = "community-creations"
+        dimensions = jpeg_dimensions(str(item.get("image") or ""))
+        if dimensions:
+            item["image_width"], item["image_height"] = dimensions
+
         item.update({
             "rights_status": "review-required",
             "title": caption[:100] or "ZombieCash gallery artwork",
