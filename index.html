@@ -105,7 +105,7 @@
 <title>ZombieCash ($ZOMBCASH) on Solana — The Undead Internet</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=optional" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=news-panel-bottom-align-20261021-2">
 <style id="zombcash-hero-v8-inline">
 /* V8 emergency inline hero override: intentionally distinct from cached external CSS */
@@ -545,7 +545,7 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 @media(max-width:560px){.jupiter-buy-section{padding:48px 5%}.jupiter-buy-layout{margin-top:20px;gap:16px}.jupiter-buy-copy{padding:19px}.jupiter-terminal-top{padding:0 11px;font-size:7px}#jupiter-zombcash-terminal{min-height:560px}}
 </style>
 <!-- Current official Jupiter Plugin (replaces deprecated Jupiter Terminal v4). -->
-<script src="https://plugin.jup.ag/plugin-v1.js"></script>
+
 
 <link rel="stylesheet" href="site-polish.css?v=20261103-noir2">
 
@@ -883,7 +883,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
     </div>
     <div class="zc-promo-player-wrap">
       <div class="zc-promo-player-top"><span><i></i> ZC // PROMO TRANSMISSION</span><span id="zc-promo-version">ARCHIVE</span></div>
-      <video id="zc-promo-player" controls playsinline preload="metadata" aria-label="ZombieCash promotional video">
+      <video id="zc-promo-player" controls playsinline preload="none" aria-label="ZombieCash promotional video">
         <p>Your browser cannot play this video. <a href="https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10">Open the video release instead.</a></p>
       </video>
       <div class="zc-promo-player-foot"><span>PLAY ON DEMAND · SOUND ON</span><a id="zc-promo-download" href="https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10" target="_blank" rel="noopener noreferrer">OPEN / DOWNLOAD ↗</a></div>
@@ -1014,8 +1014,8 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
   </div>
   <div class="jupiter-terminal-shell">
     <div class="jupiter-terminal-top"><span><i></i> SWAP TERMINAL</span><span>POWERED BY JUPITER</span></div>
-    <div id="jupiter-zombcash-terminal" aria-label="Jupiter swap interface"><div class="jupiter-terminal-loading"><span class="jupiter-loader"></span><strong>INITIALIZING SWAP TERMINAL</strong><small>Connecting to Jupiter…</small></div></div>
-    <p class="jupiter-terminal-note" id="jupiter-terminal-status" aria-live="polite">Loading the official Jupiter interface…</p>
+    <div id="jupiter-zombcash-terminal" aria-label="Jupiter swap interface"><div class="jupiter-terminal-loading"><span class="jupiter-loader"></span><strong>JUPITER TERMINAL READY</strong><small>Interface loads when this panel is near view.</small></div></div>
+    <p class="jupiter-terminal-note" id="jupiter-terminal-status" aria-live="polite">The official Jupiter interface will load as you approach this panel.</p>
   </div>
 </article>
     <section class="crew-card activity-chart-panel" aria-label="ZombieCash price chart">
@@ -1427,9 +1427,9 @@ footer {
 }
 </style>
 
-<script src="runtime-fixes.js?v=20261027-2"></script>
-<script src="script.js?v=market-status-fix-20261029-1"></script>
-<script src="living-world-recovery.js?v=news-commentary-sync-20261021-2"></script>
+<script src="runtime-fixes.js?v=20261027-2" defer></script>
+<script src="script.js?v=market-status-fix-20261029-1" defer></script>
+<script src="living-world-recovery.js?v=news-commentary-sync-20261021-2" defer></script>
 <script id="jupiter-zombcash-init">
 (() => {
   const terminal = document.getElementById('jupiter-zombcash-terminal');
@@ -1462,14 +1462,31 @@ footer {
       fallback();
     }
   };
-  if (window.Jupiter && typeof window.Jupiter.init === 'function') init();
-  else {
-    const script = document.querySelector('script[src*="plugin.jup.ag/plugin-v1.js"]');
-    if (script) {
-      script.addEventListener('load', init, {once:true});
-      script.addEventListener('error', fallback, {once:true});
-      setTimeout(() => { if (!window.Jupiter) fallback(); }, 12000);
-    } else fallback();
+  let jupiterLoadStarted = false;
+  const loadJupiter = () => {
+    if (jupiterLoadStarted) return;
+    jupiterLoadStarted = true;
+    if (window.Jupiter && typeof window.Jupiter.init === 'function') { init(); return; }
+    const script = document.createElement('script');
+    script.src = 'https://plugin.jup.ag/plugin-v1.js';
+    script.async = true;
+    script.fetchPriority = 'low';
+    script.addEventListener('load', init, {once:true});
+    script.addEventListener('error', fallback, {once:true});
+    document.head.appendChild(script);
+    setTimeout(() => { if (!window.Jupiter) fallback(); }, 12000);
+  };
+  if (status) status.textContent = 'The official Jupiter interface will load as you approach this panel.';
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        observer.disconnect();
+        loadJupiter();
+      }
+    }, {rootMargin:'650px 0px'});
+    observer.observe(terminal);
+  } else {
+    loadJupiter();
   }
 })();
 </script>
@@ -1715,7 +1732,7 @@ section.section.community-console #jupiter-zombcash-terminal #jupiter-terminal-i
   function render(){
     if(!videos.length){status.textContent='The video library is temporarily unavailable.';count.textContent='NO VIDEOS';return}
     const item=videos[index];
-    player.pause();player.src=safeUrl(item.src);player.load();
+    player.pause();player.src=safeUrl(item.src);
     count.textContent=String(index+1).padStart(2,'0')+' / '+String(videos.length).padStart(2,'0');
     version.textContent=item.tag||'ARCHIVE';
     status.textContent=item.date?'TRANSMISSION DATE: '+item.date:'OFFICIAL ZOMBIECASH VIDEO';
@@ -1868,10 +1885,11 @@ body > main#home > section.hero .zc-hero-sponsor {
 }
 body > main#home > section.hero .zc-hero-sponsor-label { flex: 0 0 auto !important; min-height: 14px !important; width: 100% !important; }
 body > main#home > section.hero .zc-hero-ad-stage {
-  box-sizing: border-box !important; display: flex !important; flex: 0 0 90px !important;
-  align-items: center !important; justify-content: center !important; width: 100% !important; max-width: 728px !important;
-  height: 90px !important; min-height: 90px !important; max-height: 90px !important;
-  margin: 0 auto !important; overflow: hidden !important; transform: none !important;
+  box-sizing: border-box !important; display: flex !important;
+  align-items: flex-start !important; justify-content: center !important;
+  width: 100% !important; max-width: 728px !important; aspect-ratio: 728 / 90 !important;
+  height: auto !important; min-height: 0 !important; min-width: 0 !important;
+  margin: 0 auto !important; overflow: hidden !important;
 }
 body > main#home > section.hero .zc-hero-ad-unit { flex-shrink: 0 !important; height: 90px !important; max-height: 90px !important; }
 body > main#home > section.hero .zc-hero-sponsor-promo {
@@ -1883,8 +1901,7 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
   body > main#home > section.hero .zc-hero-sponsor-panel { min-height: 390px !important; padding: 12px !important; }
   body > main#home > section.hero .zc-hero-sponsor { gap: 10px !important; }
   body > main#home > section.hero .zc-hero-ad-stage {
-    flex-basis: 50px !important; height: 50px !important; min-height: 50px !important; max-height: 50px !important;
-    max-width: 320px !important;
+    max-width: 320px !important; aspect-ratio: 320 / 50 !important;
   }
   body > main#home > section.hero .zc-hero-ad-unit {
     flex: 0 0 320px !important; width: 320px !important; min-width: 320px !important;
@@ -1897,8 +1914,6 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
     flex: 1 0 230px !important; min-height: 230px !important; padding: 22px 16px !important;
   }
 }
-@media (max-width: 360px) {
-  body > main#home > section.hero .zc-hero-ad-unit { transform: scale(.86) !important; transform-origin: center center !important; }
-}
+/* shared-nav.js owns the responsive banner scale at every viewport width. */
 </style>
 </body></html>
