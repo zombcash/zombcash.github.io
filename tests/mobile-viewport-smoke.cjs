@@ -135,7 +135,7 @@ fs.mkdirSync(outDir, { recursive: true });
       if (result.ads > 1) issues.push(`expected at most one Adsterra iframe, found ${result.ads}`);
       if (!result.atOptions || Number(result.atOptions.width) !== 320 || Number(result.atOptions.height) !== 50) issues.push('Adsterra 320×50 slot configuration is missing');
       if (!result.adScriptTags.length) issues.push('Adsterra provider script is missing');
-      if (!result.adSlotGeometry || result.adSlotGeometry.height !== 50) issues.push('reserved Adsterra slot must retain its 50px height');
+      if (!result.adSlotGeometry || result.adSlotGeometry.height < 45 || Math.abs(result.adSlotGeometry.width / result.adSlotGeometry.height - 6.4) > 0.2) issues.push('reserved Adsterra slot must preserve its responsive 320×50 aspect ratio');
       if (result.adSlotGeometry && result.adSlotGeometry.width > width + 1) issues.push('reserved Adsterra slot exceeds the viewport width');
       if (!result.adPlacementAfterHero) issues.push('Adsterra sponsor section is not directly after the hero');
       if (result.adGeometry && result.adSlotGeometry && (result.adGeometry.x < result.adSlotGeometry.x - 1 || result.adGeometry.right > result.adSlotGeometry.right + 1)) issues.push('Adsterra iframe escapes its reserved slot');
