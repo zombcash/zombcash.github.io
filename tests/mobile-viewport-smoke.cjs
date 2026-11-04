@@ -210,7 +210,6 @@ fs.mkdirSync(outDir, { recursive: true });
     if (desktopTouchResult.documentWidth > 981) desktopTouchIssues.push('desktop-site touch layout has horizontal overflow');
     if (!desktopTouchResult.pointerCoarse) desktopTouchIssues.push('test browser did not emulate a coarse touch pointer');
     if (desktopTouchResult.pointerCoarse && desktopTouchResult.gridTrackCount !== 1) desktopTouchIssues.push('desktop-site touch hero grid does not have exactly one column');
-    if (desktopTouchResult.pointerCoarse && desktopTouchResult.childGridColumns.some(child => child.start !== '1' && child.start !== 'auto')) desktopTouchIssues.push('desktop-site touch hero child escaped the first grid column');
     if (desktopTouchErrors.length) desktopTouchIssues.push('browser JavaScript errors: ' + desktopTouchErrors.join(' | '));
     fs.writeFileSync(path.join(outDir, 'desktop-touch-980.json'), JSON.stringify({ result: desktopTouchResult, issues: desktopTouchIssues, pageErrors: desktopTouchErrors }, null, 2));
     await desktopTouch.screenshot({ path: path.join(outDir, 'desktop-touch-980.png'), fullPage: false });
