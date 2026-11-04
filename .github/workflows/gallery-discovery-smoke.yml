@@ -4,6 +4,18 @@ name: Gallery discovery smoke tests
 on:
   push:
     branches: [undead-reach-gallery-rebuild-20261104]
+  pull_request:
+    branches: [main]
+    paths:
+      - "gallery.html"
+      - "gallery.js"
+      - "gallery.css"
+      - "gallery-data.json"
+      - "language.js"
+      - "scripts/generate_localized_gallery_pages.py"
+      - "scripts/sync_gallery_image_seo.py"
+      - "tests/gallery-discovery-smoke.cjs"
+      - ".github/workflows/gallery-discovery-smoke.yml"
   workflow_dispatch:
 
 permissions:
