@@ -89,6 +89,8 @@ fs.mkdirSync(outDir, { recursive: true });
           header: rect(header),
           menuButton: { visible: !!menuButton && getComputedStyle(menuButton).display !== 'none', rect: rect(menuButton) },
           navInitiallyClosed: !!nav && !nav.classList.contains('zsh-open'),
+          navVisible: !!nav && getComputedStyle(nav).display !== 'none' && nav.getBoundingClientRect().height > 0,
+          menuExpected: window.innerWidth <= 1199,
           languageButton: { exists: !!languageButton, rect: rect(languageButton) },
           languageMenuExists: !!languageMenu,
           languageMenuRect: rect(languageMenu),
@@ -125,8 +127,9 @@ fs.mkdirSync(outDir, { recursive: true });
 
       const issues = [];
       if (result.documentWidth > width + 1) issues.push(`horizontal overflow: document width ${result.documentWidth}px at viewport ${width}px`);
-      if (!result.menuButton.visible) issues.push('mobile menu button is not visible');
-      if (!result.navInitiallyClosed) issues.push('navigation is not collapsed by default');
+      if (result.menuExpected && !result.menuButton.visible) issues.push('mobile menu button is not visible');
+      if (result.menuExpected && !result.navInitiallyClosed) issues.push('mobile navigation is not collapsed by default');
+      if (!result.menuExpected && !result.navVisible) issues.push('desktop navigation is not visible');
       if (!result.languageButton.exists) issues.push('language selector button is missing');
       if (result.adSectionCount !== 1) issues.push(`expected exactly one Adsterra sponsor section, found ${result.adSectionCount}`);
       if (result.ads > 1) issues.push(`expected at most one Adsterra iframe, found ${result.ads}`);
