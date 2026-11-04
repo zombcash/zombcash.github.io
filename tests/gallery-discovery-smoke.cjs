@@ -321,6 +321,9 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
       const images = Array.from(document.querySelectorAll("#gallery-grid .gallery-card img"));
       return images.length === 50 && images.every(image => image.complete && image.naturalWidth === 800);
     }, null, { timeout: 45000 });
+    await russian.locator("#gallery-grid .gallery-card img").evaluateAll(async images => {
+      await Promise.all(images.map(image => image.decode().catch(() => {})));
+    });
     await russian.screenshot({ path: "gallery-russian-smoke.png", fullPage: true });
     const russianLang = await russian.locator("html").getAttribute("lang");
     if (russianLang !== "ru") throw new Error("Russian gallery html lang is incorrect");
