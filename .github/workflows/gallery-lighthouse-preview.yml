@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "gallery.html"
+      - "gallery.css"
       - ".github/workflows/gallery-lighthouse-preview.yml"
 
 permissions:
