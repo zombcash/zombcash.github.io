@@ -2,6 +2,8 @@ name: IndexNow Full Sitemap Refresh
 
 on:
   workflow_dispatch:
+  push:
+    branches: [indexnow-full-sitemap-refresh-20261104]
 
 permissions:
   contents: read
