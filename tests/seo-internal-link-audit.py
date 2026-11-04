@@ -29,8 +29,11 @@ def normalize(url: str) -> str | None:
         if p.scheme not in ("http", "https") or (p.hostname or "").lower() != HOST:
             return None
         path = unquote(p.path or "/")
-        if path != "/" and path.endswith("/"):
-            path = path[:-1] + "/"
+        # GitHub Pages serves /index.html as the canonical directory URL.
+        if path == "/index.html":
+            path = "/"
+        elif path.endswith("/index.html"):
+            path = path[:-len("index.html")]
         return urlunsplit(("https", HOST, path, "", ""))
     except Exception:
         return None
