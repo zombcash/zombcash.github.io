@@ -68,9 +68,7 @@ fs.mkdirSync(outDir, { recursive: true });
       await page.waitForSelector('header.zombcash-shared-header', { timeout: 20000 });
       // Give shared ad/counter insertion scripts a chance to run before measuring.
       await page.waitForTimeout(1200);
-      if (width === widths[0]) {
-        await page.waitForSelector('.zc-hero-ad-unit iframe', { timeout: 10000 }).catch(() => {});
-      }
+      await page.waitForSelector('.zc-hero-ad-unit iframe', { timeout: 10000 }).catch(() => {});
 
       const result = await page.evaluate(() => {
         const header = document.querySelector('header.zombcash-shared-header');
@@ -119,18 +117,6 @@ fs.mkdirSync(outDir, { recursive: true });
           pageVisitCounter: !!document.querySelector('#site-visits'),
           globalFootprintCounter: !!document.querySelector('#zsh-global-footprint'),
           pageFootprintCounter: !!document.querySelector('.page-footprint'),
-          adSlotGeometry: (() => {
-            const stage = document.querySelector('.zc-hero-ad-stage');
-            if (!stage) return null;
-            const r = stage.getBoundingClientRect();
-            return { x: Math.round(r.x), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height), position: getComputedStyle(stage).position };
-          })(),
-          adGeometry: (() => {
-            const ad = document.querySelector('.zc-hero-ad-unit iframe');
-            if (!ad) return null;
-            const r = ad.getBoundingClientRect();
-            return { x: Math.round(r.x), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height), position: getComputedStyle(ad).position };
-          })(),
         };
       });
 
