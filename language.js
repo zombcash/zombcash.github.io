@@ -1348,6 +1348,56 @@ Object.entries(sharedNavigationTranslations).forEach(([source, translations]) =>
   });
 });
 
+
+/* Sponsor Zone copy: keep the fallback sponsorship panel localized on every homepage. */
+const sponsorZoneTranslations = {
+  "ZOMBCASH // SPONSOR ZONE": {
+    de:"ZOMBCASH // SPONSORENBEREICH",fr:"ZOMBCASH // ESPACE SPONSOR",it:"ZOMBCASH // AREA SPONSOR",
+    ja:"ZOMBCASH // スポンサーゾーン","zh-CN":"ZOMBCASH // 赞助专区",ru:"ZOMBCASH // ЗОНА СПОНСОРОВ",
+    tr:"ZOMBCASH // SPONSOR ALANI",hi:"ZOMBCASH // प्रायोजक क्षेत्र"
+  },
+  "YOUR PROJECT.": {
+    de:"DEIN PROJEKT.",fr:"VOTRE PROJET.",it:"IL TUO PROGETTO.",
+    ja:"あなたのプロジェクト。","zh-CN":"您的项目。",ru:"ТВОЙ ПРОЕКТ.",
+    tr:"PROJENİZ.",hi:"आपका प्रोजेक्ट।"
+  },
+  "OUR UNDEAD INTERNET.": {
+    de:"UNSER INTERNET DER UNTOTEN.",fr:"NOTRE INTERNET DES MORTS.",it:"IL NOSTRO INTERNET DEI NON-MORTI.",
+    ja:"私たちのアンデッド・インターネット。","zh-CN":"我们的亡者互联网。",ru:"НАШ ИНТЕРНЕТ НЕЖИТИ.",
+    tr:"BİZİM YAŞAYAN ÖLÜLER İNTERNETİMİZ.",hi:"हमारा अनडेड इंटरनेट।"
+  },
+  "Put your project in front of the ZombieCash community. Contact the crew to discuss a sponsorship.": {
+    de:"Präsentiere dein Projekt der ZombieCash-Community. Kontaktiere das Team, um eine Sponsoring-Möglichkeit zu besprechen.",
+    fr:"Présentez votre projet à la communauté ZombieCash. Contactez l’équipe pour discuter d’un partenariat sponsorisé.",
+    it:"Presenta il tuo progetto alla community ZombieCash. Contatta il team per discutere una sponsorizzazione.",
+    ja:"ZombieCashコミュニティにあなたのプロジェクトを紹介しましょう。スポンサーシップについてはチームにお問い合わせください。",
+    "zh-CN":"向 ZombieCash 社区展示您的项目。请联系团队讨论赞助合作。",
+    ru:"Представь свой проект сообществу ZombieCash. Свяжись с командой, чтобы обсудить спонсорство.",
+    tr:"Projenizi ZombieCash topluluğuna tanıtın. Sponsorluk seçeneklerini görüşmek için ekiple iletişime geçin.",
+    hi:"अपने प्रोजेक्ट को ZombieCash समुदाय के सामने प्रस्तुत करें। प्रायोजन पर चर्चा करने के लिए टीम से संपर्क करें।"
+  },
+  "CONTACT THE CREW ↗": {
+    de:"TEAM KONTAKTIEREN ↗",fr:"CONTACTER L’ÉQUIPE ↗",it:"CONTATTA IL TEAM ↗",
+    ja:"チームに連絡 ↗","zh-CN":"联系团队 ↗",ru:"СВЯЗАТЬСЯ С КОМАНДОЙ ↗",
+    tr:"EKİPLE İLETİŞİME GEÇ ↗",hi:"टीम से संपर्क करें ↗"
+  },
+  "ZombieCash sponsor placement": {
+    de:"ZombieCash-Sponsorenbereich",fr:"Espace sponsor ZombieCash",it:"Spazio sponsor ZombieCash",
+    ja:"ZombieCashスポンサー枠","zh-CN":"ZombieCash 赞助展示位",ru:"Спонсорский блок ZombieCash",
+    tr:"ZombieCash sponsor alanı",hi:"ZombieCash प्रायोजन स्थान"
+  },
+  "Responsive Adsterra banner": {
+    de:"Responsives Adsterra-Banner",fr:"Bannière Adsterra adaptative",it:"Banner Adsterra adattivo",
+    ja:"レスポンシブ Adsterra バナー","zh-CN":"自适应 Adsterra 横幅",ru:"Адаптивный баннер Adsterra",
+    tr:"Duyarlı Adsterra banner'ı",hi:"रेस्पॉन्सिव Adsterra बैनर"
+  }
+};
+Object.entries(sponsorZoneTranslations).forEach(([source, translations]) => {
+  Object.entries(translations).forEach(([lang, value]) => {
+    if (langs[lang]) langs[lang].map[source] = value;
+  });
+});
+
 const key='zombcash-language', norm=s=>(s||'').replace(/\s+/g,' ').trim();
 const supportedLanguages=['en','de','fr','it','ja','zh-CN','ru','tr','hi'];
 const getRequestedLanguage=()=>{try{const pathLocale=location.pathname.split('/').filter(Boolean)[0];if(pathLocale&&supportedLanguages.includes(pathLocale)&&pathLocale!=='en')return pathLocale;const q=new URLSearchParams(location.search).get('lang');if(q&&supportedLanguages.includes(q))return q;}catch(_){}return null;};
