@@ -287,6 +287,38 @@ fs.mkdirSync(outDir, { recursive: true });
         providerRequestsFailed: blockedProviderRequests.length,
       }, null, 2));
       if (blockedIssues.length) failures.push({ mode: 'blocked-ad-fallback', width, issues: blockedIssues });
+
+      // Exercise both directions across the breakpoint; the scaled slot must
+      // use the sponsor container's new width rather than its previous width.
+      if (width === 320 || width === 1440) {
+        const resizedWidth = width === 320 ? 1440 : 390;
+        await blockedPage.setViewportSize({ width: resizedWidth, height: 844 });
+        await blockedPage.waitForTimeout(350);
+        const resized = await blockedPage.evaluate(() => {
+          const stage = document.querySelector('.zc-hero-ad-stage');
+          const r = stage?.getBoundingClientRect();
+          return {
+            viewportWidth: window.innerWidth,
+            configuredWidth: Number(window.atOptions?.width || 0),
+            configuredHeight: Number(window.atOptions?.height || 0),
+            stageWidth: r ? Math.round(r.width) : 0,
+            stageHeight: r ? Math.round(r.height) : 0,
+            documentWidth: document.documentElement.scrollWidth,
+          };
+        });
+        const expectedWidth = resizedWidth <= 900 ? 320 : 728;
+        const expectedHeight = resizedWidth <= 900 ? 50 : 90;
+        const resizeIssues = [];
+        if (resized.configuredWidth !== expectedWidth || resized.configuredHeight !== expectedHeight) {
+          resizeIssues.push(`ad config did not switch to ${expectedWidth}×${expectedHeight} after resize`);
+        }
+        if (resized.stageHeight < expectedHeight * 0.75) {
+          resizeIssues.push(`reserved slot retained an undersized previous scale after resize: ${resized.stageWidth}×${resized.stageHeight}`);
+        }
+        if (resized.documentWidth > resizedWidth + 1) resizeIssues.push('resized page has horizontal overflow');
+        console.log(JSON.stringify({ mode: 'ad-breakpoint-resize', from: width, to: resizedWidth, result: resized, issues: resizeIssues }));
+        if (resizeIssues.length) failures.push({ mode: 'ad-breakpoint-resize', from: width, to: resizedWidth, issues: resizeIssues });
+      }
       await blockedPage.close();
     }
 
