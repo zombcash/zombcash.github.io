@@ -13,6 +13,15 @@ ROBOTS_FILE = ROOT / "robots.txt"
 START = "<!-- GALLERY_IMAGE_CARDS_START -->"
 END = "<!-- GALLERY_IMAGE_CARDS_END -->"
 SITEMAP_URL = "https://zombcash.github.io/sitemap-gallery-images.xml"
+CATEGORY_LABELS = {
+    "zombie-memes": "Zombie Memes",
+    "nightmare-horror": "Nightmare & Horror",
+    "undead-after-dark": "Undead After Dark",
+    "zombie-characters": "Zombie Characters",
+    "apocalypse-survival": "Apocalypse & Survival",
+    "crypto-apocalypse": "Crypto Apocalypse",
+    "community-creations": "Community Creations",
+}
 
 
 def clean_caption(value):
@@ -30,14 +39,33 @@ def make_cards(items):
         caption_raw = str(item.get("caption", ""))
         caption = clean_caption(caption_raw)
         post = html.escape(str(item.get("post_url") or "https://t.me/ZOMBCASH"), quote=True)
+        title = str(item.get("title") or caption).strip()
+        description = str(item.get("description") or caption).strip()
+        alt_text = str(item.get("alt_text") or "").strip() or ("ZombieCash gallery artwork accompanying the story: " + description)
         esc_caption = html.escape(caption, quote=True)
         esc_raw = html.escape(caption_raw, quote=True)
+        esc_title = html.escape(title, quote=True)
+        esc_description = html.escape(description, quote=True)
+        esc_alt = html.escape(alt_text, quote=True)
+        gallery_id = html.escape(str(item.get("id") or ""), quote=True)
+        anchor_id = html.escape(str(item.get("anchor_id") or ""), quote=True)
+        categories = html.escape(" ".join(item.get("category_ids") or []), quote=True)
+        try:
+            image_width = int(item.get("image_width") or 0)
+            image_height = int(item.get("image_height") or 0)
+        except (TypeError, ValueError):
+            image_width = image_height = 0
+        dimension_attributes = (
+            f' width="{image_width}" height="{image_height}"'
+            if 0 < image_width <= 10000 and 0 < image_height <= 10000
+            else ""
+        )
         if not image.startswith(("https://", "http://")):
             continue
         cards.append(
-            '      <article class="gallery-card" tabindex="0" role="button" aria-label="Open image: ' + esc_caption + '">\n'
-            '        <img src="' + image + '" alt="ZombieCash gallery image: ' + esc_caption + '" title="' + esc_caption + '" loading="lazy" decoding="async">\n'
-            '        <div class="gallery-caption"><p data-original-caption="' + esc_raw + '">' + esc_caption + '</p><a href="' + post + '" target="_blank" rel="noreferrer">SOURCE ↗</a></div>\n'
+            '      <article class="gallery-card" id="' + anchor_id + '" data-gallery-id="' + gallery_id + '" data-categories="' + categories + '" data-gallery-title="' + esc_title + '" data-gallery-description="' + esc_description + '" tabindex="0" role="group" aria-label="Open image: ' + esc_title + '">\n'
+            '        <img' + dimension_attributes + ' src="' + image + '" alt="' + esc_alt + '" title="' + esc_title + '" loading="lazy" decoding="async">\n'
+            '        <div class="gallery-caption"><p data-original-caption="' + esc_raw + '" data-original-title="' + esc_title + '">' + esc_title + '</p><div class="gallery-card-tags">' + "".join('<span class="gallery-category-tag">' + html.escape(CATEGORY_LABELS.get(category, category), quote=True) + '</span>' for category in (item.get("category_ids") or [])) + '</div><a href="' + post + '" target="_blank" rel="noreferrer">SOURCE ↗</a></div>\n'
             '      </article>'
         )
     return "\n".join(cards)
@@ -57,7 +85,7 @@ def make_sitemap(items):
         if not image.startswith(("https://", "http://")) or image in seen:
             continue
         seen.add(image)
-        caption = clean_caption(item.get("caption", "ZombieCash gallery image"))
+        caption = str(item.get("description") or item.get("title") or clean_caption(item.get("caption", "ZombieCash gallery image"))).strip()
         rows.extend([
             '    <image:image>',
             '      <image:loc>' + html.escape(image, quote=False) + '</image:loc>',
