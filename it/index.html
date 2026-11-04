@@ -1690,4 +1690,32 @@ section.section.community-console #jupiter-zombcash-terminal #jupiter-terminal-i
 })();
 </script>
 
+
+<style id="zc-sponsor-panel-geometry-fix">
+/* ZC sponsor panel geometry fix 2026-11-04 */
+/* Keep the ad and lower sponsor card inside one naturally-sized right column. */
+.hero-layout{align-items:stretch!important}
+.hero-layout>.zc-hero-sponsor-panel,
+.hero .zc-hero-sponsor-panel{
+ box-sizing:border-box!important;align-self:stretch!important;width:100%!important;
+ min-width:0!important;min-height:clamp(420px,48vh,560px)!important;
+ height:auto!important;max-height:none!important;aspect-ratio:auto!important;overflow:hidden!important
+}
+.hero .zc-hero-sponsor{box-sizing:border-box!important;width:100%!important;min-width:0!important;min-height:0!important;height:100%!important}
+.hero .zc-hero-sponsor-promo{box-sizing:border-box!important;flex:1 0 auto!important;min-height:230px!important;width:100%!important}
+@media(max-width:760px){
+ .hero-layout{align-items:stretch!important}
+ .hero .zc-hero-sponsor-panel{min-height:0!important;height:auto!important;max-height:none!important;aspect-ratio:auto!important}
+ .hero .zc-hero-sponsor{height:auto!important}
+ .hero .zc-hero-sponsor-promo{min-height:190px!important}
+}
+@media(max-width:1100px) and (pointer:coarse){
+ .hero-layout{align-items:stretch!important}
+ .hero-layout>.zc-hero-sponsor-panel,.hero .zc-hero-sponsor-panel{
+  height:auto!important;min-height:0!important;max-height:none!important;aspect-ratio:auto!important;overflow:hidden!important
+ }
+ .hero .zc-hero-sponsor{height:auto!important}
+}
+</style>
+
 </body></html>
