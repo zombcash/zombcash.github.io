@@ -34,7 +34,7 @@ def clean_caption(value):
 
 def make_cards(items):
     cards = []
-    for item in items:
+    for index, item in enumerate(items):
         image = html.escape(str(item.get("image", "")).strip(), quote=True)
         caption_raw = str(item.get("caption", ""))
         caption = clean_caption(caption_raw)
@@ -64,8 +64,8 @@ def make_cards(items):
             continue
         cards.append(
             '      <article class="gallery-card" id="' + anchor_id + '" data-gallery-id="' + gallery_id + '" data-categories="' + categories + '" data-gallery-title="' + esc_title + '" data-gallery-description="' + esc_description + '" tabindex="0" role="group" aria-label="Open image: ' + esc_title + '">\n'
-            '        <img' + dimension_attributes + ' src="' + image + '" alt="' + esc_alt + '" title="' + esc_title + '" loading="lazy" decoding="async">\n'
-            '        <div class="gallery-caption"><p data-original-caption="' + esc_raw + '" data-original-title="' + esc_title + '">' + esc_title + '</p><div class="gallery-card-tags">' + "".join('<span class="gallery-category-tag">' + html.escape(CATEGORY_LABELS.get(category, category), quote=True) + '</span>' for category in (item.get("category_ids") or [])) + '</div><a href="' + post + '" target="_blank" rel="noreferrer">SOURCE ↗</a></div>\n'
+            '        <img' + dimension_attributes + ' src="' + image + '" alt="' + esc_alt + '" title="' + esc_title + '" loading="' + ("eager" if index < 2 else "lazy") + '" fetchpriority="' + ("high" if index < 2 else "auto") + '" decoding="async">\n'
+            '        <div class="gallery-caption"><p data-original-caption="' + esc_raw + '" data-original-title="' + esc_title + '">' + esc_title + '</p><div class="gallery-card-tags">' + "".join('<span class="gallery-category-tag">' + html.escape(CATEGORY_LABELS.get(category, category), quote=True) + '</span>' for category in (item.get("category_ids") or [])) + '</div><div class="gallery-card-actions"><button class="gallery-like-button" type="button" aria-pressed="false" title="Log in with Telegram to like"><span class="gallery-like-heart" aria-hidden="true">♡</span><span class="gallery-like-count">0</span></button></div><a href="' + post + '" target="_blank" rel="noreferrer">SOURCE ↗</a></div>\n'
             '      </article>'
         )
     return "\n".join(cards)
@@ -101,6 +101,7 @@ def main():
     items = data.get("items", [])
     if not isinstance(items, list):
         raise SystemExit("gallery-data.json: expected an items array")
+    items = sorted(items, key=lambda item: str(item.get("date") or ""), reverse=True)
 
     gallery = GALLERY_FILE.read_text(encoding="utf-8")
     if START not in gallery or END not in gallery:
