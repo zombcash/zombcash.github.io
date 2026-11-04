@@ -389,3 +389,38 @@ body:has(.zc-hero-sponsor-panel) .field-manual-status{
     font-size:clamp(19px,6vw,25px)!important;
   }
 }
+
+@media(max-width:760px){
+  body:has(.zc-hero-sponsor-panel) .topbar .top-cta{
+    display:inline-flex!important;
+    flex:0 1 auto;
+    min-width:0;
+    max-width:clamp(112px,36vw,176px);
+    white-space:normal;
+    text-align:center;
+    justify-content:center;
+    line-height:1.2;
+    padding:9px 8px;
+    font-size:clamp(6px,1.7vw,8px);
+    letter-spacing:.02em;
+  }
+  body:has(.zc-hero-sponsor-panel) .topbar .top-cta span{
+    margin-left:4px;
+    flex:0 0 auto;
+  }
+}
+@media(max-width:420px){
+  body:has(.zc-hero-sponsor-panel) .topbar{
+    gap:7px;
+    padding-inline:12px;
+  }
+  body:has(.zc-hero-sponsor-panel) .topbar .top-cta{
+    max-width:34vw;
+    padding:8px 6px;
+    font-size:6px;
+  }
+  body:has(.zc-hero-sponsor-panel) .topbar .menu-toggle{
+    min-width:36px;
+    min-height:36px;
+  }
+}
