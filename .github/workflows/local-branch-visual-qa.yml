@@ -31,6 +31,7 @@ jobs:
           node --check tests/localized-article-visual.cjs
           node --check tests/survivor-field-manual-smoke.cjs
           node --check tests/memecoin-platforms-article-smoke.cjs
+          node --check tests/language-persistence-smoke.cjs
 
       - name: Install Playwright and Chromium
         run: |
@@ -71,6 +72,11 @@ jobs:
         env:
           SITE_URL: http://127.0.0.1:4173/
         run: node tests/memecoin-platforms-article-smoke.cjs
+
+      - name: Test language preference persistence and fallback routing
+        env:
+          SITE_URL: http://127.0.0.1:4173/
+        run: node tests/language-persistence-smoke.cjs
 
       - name: Upload screenshots and diagnostics
         if: always()
