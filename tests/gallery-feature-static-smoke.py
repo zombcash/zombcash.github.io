@@ -41,7 +41,10 @@ html = Path("gallery.html").read_text(encoding="utf-8")
 parser = Cards()
 parser.feed(html)
 assert len(parser.cards) == 50, f"Expected 50 static crawlable cards, got {len(parser.cards)}"
-assert {card["id"] for card in parser.cards} == set(ids)
+actual_ids = {card["id"] for card in parser.cards}
+missing_ids = sorted(set(ids) - actual_ids)
+extra_ids = sorted(actual_ids - set(ids))
+assert actual_ids == set(ids), f"Gallery card ID mismatch: missing={missing_ids}, extra={extra_ids}, cards={len(parser.cards)}"
 assert all(card["anchor"] for card in parser.cards)
 assert all(len(card["images"]) == 1 for card in parser.cards)
 assert all(card["images"][0].get("alt", "").strip() for card in parser.cards)
