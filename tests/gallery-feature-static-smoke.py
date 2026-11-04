@@ -65,6 +65,8 @@ for locale in ("de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"):
     assert 'hreflang="x-default"' in page
     assert page.count('rel="alternate" hreflang=') == 10
     assert "AI-generated artwork from our Telegram channel" not in page, f"{locale} hero subtitle remained in English"
+    assert "display=optional" in page, f"{locale} gallery fonts must not swap late"
+assert "display=optional" in html, "Root gallery fonts must not swap late"
 robots = Path("robots.txt").read_text(encoding="utf-8")
 assert "https://zombcash.github.io/sitemap-gallery-pages.xml" in robots
 language = Path("language.js").read_text(encoding="utf-8")
