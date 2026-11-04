@@ -7,8 +7,6 @@ on:
       - "gallery-data.json"
       - "tests/gallery-metadata-reconcile-smoke.py"
       - ".github/workflows/gallery-metadata-reconcile-smoke.yml"
-  push:
-    branches: [gallery-metadata-main-reconciled-20261104]
 
 permissions:
   contents: read
