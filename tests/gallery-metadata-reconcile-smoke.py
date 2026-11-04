@@ -14,14 +14,21 @@ for required in ("ZOMBCASH/4176:0", "ZOMBCASH/4165:0", "ZOMBCASH/4146:0", "ZOMBC
 
 assert all(item.get("rights_status") == "review-required" for item in items), "Rights review must remain required for every item"
 reviewed = [item for item in items if item.get("alt_review_status") == "visual-reviewed"]
-assert len(reviewed) == 48, f"Expected 48 manually reviewed overlapping items, got {len(reviewed)}"
+assert len(reviewed) == 48, f"Expected 48 visually reviewed overlapping items, got {len(reviewed)}"
+methods = {item.get("alt_review_method") for item in reviewed}
+assert methods == {"manual-visual-review", "manual-contact-sheet-review"}, methods
+assert sum(item.get("alt_review_method") == "manual-visual-review" for item in reviewed) == 2
+assert sum(item.get("alt_review_method") == "manual-contact-sheet-review" for item in reviewed) == 46
 for item in reviewed:
-    assert item.get("alt_review_method") == "manual-visual-review", item["id"]
     assert item.get("alt_text", "").strip(), f"Missing reviewed ALT text: {item['id']}"
     assert item.get("image_width") == 800 and item.get("image_height") == 800, f"Unexpected reviewed dimensions: {item['id']}"
 
-unreviewed = [item for item in items if item not in reviewed]
+individual = {item["id"] for item in reviewed if item.get("alt_review_method") == "manual-visual-review"}
+assert individual == {"ZOMBCASH/4146:0", "ZOMBCASH/4125:0"}, individual
+
+unreviewed = [item for item in items if item.get("alt_review_status") != "visual-reviewed"]
 assert len(unreviewed) == 2, f"Expected two newer items awaiting visual ALT review, got {len(unreviewed)}"
+assert {item["id"] for item in unreviewed} == {"ZOMBCASH/4176:0", "ZOMBCASH/4165:0"}
 assert all(item.get("rights_status") == "review-required" for item in unreviewed)
 
 statuses = {item.get("pinterest_status") for item in items if item.get("pinterest_status")}
@@ -30,4 +37,4 @@ assert not any(item.get("pinterest_status") in {"queued", "pending", "scheduled"
 published = [item for item in items if item.get("pinterest_status") == "published"]
 assert all(item.get("pinterest_pin_id") and item.get("pinterest_pin_url") for item in published), "Published pin record lacks historical pin identifiers"
 
-print("PASS: 50 current archive items preserved; 48 reviewed metadata records reconciled by stable ID; 2 newer items remain unreviewed; all rights remain review-required; no Pinterest queue entries.")
+print("PASS: 50 current archive items preserved; 48 reviewed metadata records reconciled by stable ID (46 contact-sheet, 2 individual); 2 newer items remain unreviewed; all rights remain review-required; no Pinterest queue entries.")
