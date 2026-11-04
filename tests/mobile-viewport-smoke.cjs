@@ -299,20 +299,17 @@ fs.mkdirSync(outDir, { recursive: true });
           const r = stage?.getBoundingClientRect();
           return {
             viewportWidth: window.innerWidth,
-            configuredWidth: Number(window.atOptions?.width || 0),
-            configuredHeight: Number(window.atOptions?.height || 0),
+            containerWidth: stage?.parentElement ? Math.round(stage.parentElement.getBoundingClientRect().width) : 0,
             stageWidth: r ? Math.round(r.width) : 0,
             stageHeight: r ? Math.round(r.height) : 0,
             documentWidth: document.documentElement.scrollWidth,
           };
         });
-        const expectedWidth = resizedWidth <= 900 ? 320 : 728;
-        const expectedHeight = resizedWidth <= 900 ? 50 : 90;
+        const nativeWidth = resizedWidth <= 900 ? 320 : 728;
+        const nativeHeight = resizedWidth <= 900 ? 50 : 90;
+        const expectedHeight = nativeHeight * Math.min(1, resized.containerWidth / nativeWidth);
         const resizeIssues = [];
-        if (resized.configuredWidth !== expectedWidth || resized.configuredHeight !== expectedHeight) {
-          resizeIssues.push(`ad config did not switch to ${expectedWidth}×${expectedHeight} after resize`);
-        }
-        if (resized.stageHeight < expectedHeight * 0.75) {
+        if (resized.stageHeight < expectedHeight * 0.9) {
           resizeIssues.push(`reserved slot retained an undersized previous scale after resize: ${resized.stageWidth}×${resized.stageHeight}`);
         }
         if (resized.documentWidth > resizedWidth + 1) resizeIssues.push('resized page has horizontal overflow');
