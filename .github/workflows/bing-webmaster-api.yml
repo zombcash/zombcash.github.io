@@ -6,6 +6,9 @@ on:
       - main
     paths:
       - ".github/workflows/bing-webmaster-api.yml"
+      - "robots.txt"
+      - "sitemap.xml"
+      - "sitemap-*.xml"
   workflow_dispatch:
   schedule:
     - cron: "17 6 * * *"
@@ -42,6 +45,48 @@ jobs:
           key = os.environ["BING_WEBMASTER_API_KEY"]
           site = os.environ["BING_SITE_URL"]
           base = "https://ssl.bing.com/webmaster/api.svc/json/"
+          # Discover every sitemap declared by the live robots.txt and submit
+          # each feed to Bing. GetFeeds alone only reports feeds already known to Bing.
+          robots_url = urllib.parse.urljoin(site, "robots.txt")
+          robots_request = urllib.request.Request(
+              robots_url, headers={"User-Agent": "ZombieCash-Bing-Webmaster-Report/1.0"}
+          )
+          with urllib.request.urlopen(robots_request, timeout=25) as response:
+              robots_text = response.read().decode("utf-8", "replace")
+          sitemap_urls = list(dict.fromkeys(
+              line.split(":", 1)[1].strip()
+              for line in robots_text.splitlines()
+              if line.lower().startswith("sitemap:")
+          ))
+          if not sitemap_urls:
+              raise SystemExit("ERROR: robots.txt contains no Sitemap directives.")
+          if any(not url.startswith(site) for url in sitemap_urls):
+              raise SystemExit("ERROR: robots.txt references a sitemap outside the configured site.")
+
+          submissions = []
+          for feed_url in sitemap_urls:
+              params = urllib.parse.urlencode({"apikey": key})
+              body = json.dumps({"siteUrl": site, "feedUrl": feed_url}).encode("utf-8")
+              request = urllib.request.Request(
+                  base + "SubmitFeed?" + params,
+                  data=body,
+                  headers={
+                      "Accept": "application/json",
+                      "Content-Type": "application/json; charset=utf-8",
+                      "User-Agent": "ZombieCash-Bing-Webmaster-Report/1.0",
+                  },
+                  method="POST",
+              )
+              try:
+                  with urllib.request.urlopen(request, timeout=25) as response:
+                      response.read()
+                      submissions.append({"url": feed_url, "http_status": response.status})
+                      print(f"SubmitFeed: HTTP {response.status}; {feed_url}")
+              except urllib.error.HTTPError as exc:
+                  error_body = exc.read().decode("utf-8", "replace")[:1000]
+                  print(f"::error::SubmitFeed failed for {feed_url}: HTTP {exc.code}. {error_body}")
+                  sys.exit(1)
+
           calls = {
               "rank_and_traffic": "GetRankAndTrafficStats",
               "query_stats": "GetQueryStats",
@@ -50,6 +95,7 @@ jobs:
               "sitemaps": "GetFeeds",
           }
           report = {
+              "sitemap_submissions": submissions,
               "site": site,
               "generated_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
               "source": "Bing Webmaster API",
