@@ -22,6 +22,8 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     });
     browser = await chromium.launch({ headless: true });
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+    const likeToggleCalls = [];
+    await page.addInitScript(() => localStorage.setItem("zombcash-survivor-token", "smoke-survivor-session"));
     page.on("pageerror", error => console.error("[pageerror]", error.stack || String(error)));
     page.on("console", message => { if (message.type() === "error") console.error("[console]", message.text()); });
     page.on("requestfailed", request => console.error("[requestfailed]", request.url(), request.failure()?.errorText || "unknown"));
@@ -64,6 +66,21 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
         liked: false
       }));
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ stats }) });
+    });
+    await page.route("https://zombcash-bot.fadehost.app/api/gallery/like", async route => {
+      const request = route.request();
+      const payload = request.postDataJSON() || {};
+      const authorization = request.headers()["authorization"] || "";
+      likeToggleCalls.push({ authorization, imageId: payload.imageId, liked: payload.liked });
+      if (authorization !== "Bearer smoke-survivor-session" || payload.imageId !== "ZOMBCASH/4146:0" || typeof payload.liked !== "boolean") {
+        await route.fulfill({ status: 401, contentType: "application/json", body: JSON.stringify({ ok: false, error: "invalid smoke session or payload" }) });
+        return;
+      }
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ ok: true, stats: { image_id: payload.imageId, like_count: payload.liked ? 101 : 100, liked: payload.liked } })
+      });
     });
     await page.goto("http://127.0.0.1:4173/gallery.html", { waitUntil: "domcontentloaded" });
     await page.waitForSelector(".gallery-toolbar");
@@ -166,6 +183,16 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     if (initial !== 50) throw new Error("Expected 50 gallery cards, got " + initial);
     const likeButtons = await page.locator("#gallery-grid .gallery-like-button").count();
     if (likeButtons !== 50) throw new Error("Expected 50 card like controls, got " + likeButtons);
+    const firstCard = page.locator("#gallery-grid .gallery-card").first();
+    const firstLikeButton = firstCard.locator(".gallery-like-button");
+    await page.waitForFunction(() => document.querySelector("#gallery-grid .gallery-card .gallery-like-count")?.textContent === "100");
+    await firstLikeButton.click();
+    await page.waitForFunction(() => document.querySelector("#gallery-grid .gallery-card .gallery-like-button")?.getAttribute("aria-pressed") === "true" && document.querySelector("#gallery-grid .gallery-card .gallery-like-count")?.textContent === "101");
+    if (!await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_like"))) throw new Error("Authenticated gallery like event was not recorded");
+    await firstLikeButton.click();
+    await page.waitForFunction(() => document.querySelector("#gallery-grid .gallery-card .gallery-like-button")?.getAttribute("aria-pressed") === "false" && document.querySelector("#gallery-grid .gallery-card .gallery-like-count")?.textContent === "100");
+    if (!await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_unlike"))) throw new Error("Authenticated gallery unlike event was not recorded");
+    if (likeToggleCalls.length !== 2 || likeToggleCalls[0].liked !== true || likeToggleCalls[1].liked !== false) throw new Error("Like/unlike API payload sequence was incorrect: " + JSON.stringify(likeToggleCalls));
     await page.locator("#gallery-grid .gallery-card").first().click({ position: { x: 20, y: 20 } });
     await page.waitForSelector(".gallery-lightbox.is-open .gallery-lightbox-like");
     const openTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_image_open"));
