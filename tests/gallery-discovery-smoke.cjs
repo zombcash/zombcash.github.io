@@ -86,6 +86,12 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     await page.waitForSelector(".gallery-toolbar");
     try {
       await page.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50, null, { timeout: 12000 });
+    const initialLoadingHints = await page.locator("#gallery-grid img").evaluateAll(images => images.map(image => ({ loading: image.loading, priority: image.fetchPriority })));
+    if (initialLoadingHints.length !== 50 ||
+        initialLoadingHints[0].loading !== "eager" || initialLoadingHints[0].priority !== "high" ||
+        initialLoadingHints.slice(1).some(item => item.loading !== "lazy" || item.priority !== "auto")) {
+      throw new Error("Only the first gallery image should be eager/high priority; remaining images must be lazy/auto: " + JSON.stringify(initialLoadingHints.slice(0, 4)));
+    }
     } catch (error) {
       console.error("[gallery-diagnostics]", await page.evaluate(() => ({
         lang: document.documentElement.lang,
@@ -181,8 +187,6 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     });
     const initial = await page.locator("#gallery-grid .gallery-card").count();
     if (initial !== 50) throw new Error("Expected 50 gallery cards, got " + initial);
-    const lcpHints = await page.locator("#gallery-grid img").evaluateAll(images => images.slice(0, 2).map(image => ({ loading: image.loading, priority: image.fetchPriority })));
-    if (lcpHints.length !== 2 || lcpHints.some(item => item.loading !== "eager" || item.priority !== "high")) throw new Error("First two gallery images must be eager/high priority: " + JSON.stringify(lcpHints));
     const likeButtons = await page.locator("#gallery-grid .gallery-like-button").count();
     if (likeButtons !== 50) throw new Error("Expected 50 card like controls, got " + likeButtons);
     const firstCard = page.locator("#gallery-grid .gallery-card[data-gallery-id=\"ZOMBCASH/4146:0\"]");
