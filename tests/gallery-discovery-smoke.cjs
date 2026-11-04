@@ -99,14 +99,14 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     }
     await page.waitForFunction(() => typeof window.ZombieCashTrack === "function");
     await page.locator("#gallery-grid img").evaluateAll(images => images.forEach(image => { image.loading = "eager"; }));
-    await page.evaluate(async () => {
+    await page.waitForFunction(() => {
       const images = Array.from(document.querySelectorAll("#gallery-grid img"));
-      await Promise.all(images.map(image => new Promise(resolve => {
-        if (image.complete) return resolve();
-        image.addEventListener("load", resolve, { once: true });
-        image.addEventListener("error", resolve, { once: true });
-        setTimeout(resolve, 15000);
-      })));
+      return images.length === 50 && images.every(image =>
+        image.complete && (image.naturalWidth > 0 || image.dataset.fallbackApplied === "true")
+      );
+    }, null, { timeout: 45000 });
+    await page.locator("#gallery-grid img").evaluateAll(async images => {
+      await Promise.all(images.map(image => image.decode().catch(() => {})));
     });
     const imageLoadAudit = await page.locator("#gallery-grid img").evaluateAll(images => ({
       total: images.length,
@@ -272,14 +272,14 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     await mobile.waitForSelector(".gallery-toolbar");
     await mobile.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50);
     await mobile.locator("#gallery-grid img").evaluateAll(images => images.forEach(image => { image.loading = "eager"; }));
-    await mobile.evaluate(async () => {
+    await mobile.waitForFunction(() => {
       const images = Array.from(document.querySelectorAll("#gallery-grid img"));
-      await Promise.all(images.map(image => new Promise(resolve => {
-        if (image.complete) return resolve();
-        image.addEventListener("load", resolve, { once: true });
-        image.addEventListener("error", resolve, { once: true });
-        setTimeout(resolve, 15000);
-      })));
+      return images.length === 50 && images.every(image =>
+        image.complete && (image.naturalWidth > 0 || image.dataset.fallbackApplied === "true")
+      );
+    }, null, { timeout: 45000 });
+    await mobile.locator("#gallery-grid img").evaluateAll(async images => {
+      await Promise.all(images.map(image => image.decode().catch(() => {})));
     });
     await mobile.screenshot({ path: "gallery-mobile-smoke.png", fullPage: true });
     const overflow = await mobile.evaluate(() => ({
