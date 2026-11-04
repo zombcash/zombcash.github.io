@@ -5,20 +5,16 @@ on:
     branches: [main]
     types: [opened, synchronize, reopened]
     paths:
-      - "gallery.html"
       - "gallery.js"
       - "gallery.css"
       - "gallery-data.json"
       - "language.js"
       - "script.js"
-      - "robots.txt"
       - "scripts/sync_gallery_image_seo.py"
       - "scripts/generate_localized_gallery_pages.py"
       - "tests/gallery-discovery-smoke.cjs"
       - "tests/gallery-feature-static-smoke.py"
       - ".github/workflows/gallery-discovery-feature-preview.yml"
-  push:
-    branches: [gallery-metadata-main-reconciled-20261104]
 
 permissions:
   contents: write
