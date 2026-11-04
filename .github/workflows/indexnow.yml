@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -44,13 +45,9 @@ jobs:
           KEY="${INDEXNOW_KEY:-zomcash-indexnow-2026-10-24-a7f93c12}"
           BEFORE="${{ github.event.before }}"
           AFTER="${{ github.sha }}"
-          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
-            echo "No previous commit to compare; skipping URL submission."
-            exit 0
-          fi
-
           URLS_FILE="$(mktemp)"
-          while IFS= read -r path; do
+          if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
+            while IFS= read -r path; do
             case "$path" in
               *.html|*/index.html)
                 if [ "$path" = "index.html" ]; then
@@ -62,7 +59,45 @@ jobs:
                 fi
                 ;;
             esac
-          done < <(git diff --name-only --diff-filter=AMDR "$BEFORE" "$AFTER")
+            done < <(git diff --name-only --diff-filter=AMDR "$BEFORE" "$AFTER")
+          fi
+
+          if [ ! -s "$URLS_FILE" ] && [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            echo "Manual run with no changed HTML: submitting every URL from robots.txt sitemaps."
+            python3 - "$URLS_FILE" <<'PY'
+          import sys
+          import urllib.request
+          import xml.etree.ElementTree as ET
+
+          site = "https://zombcash.github.io/"
+          with urllib.request.urlopen(site + "robots.txt", timeout=30) as response:
+              robots = response.read().decode("utf-8")
+          sitemap_urls = [
+              line.split(":", 1)[1].strip()
+              for line in robots.splitlines()
+              if line.lower().startswith("sitemap:")
+          ]
+          urls = set()
+          ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+          for sitemap_url in sitemap_urls:
+              with urllib.request.urlopen(sitemap_url, timeout=30) as response:
+                  root = ET.fromstring(response.read())
+              if root.tag.endswith("urlset"):
+                  urls.update((node.text or "").strip() for node in root.findall("sm:url/sm:loc", ns))
+              elif root.tag.endswith("sitemapindex"):
+                  for node in root.findall("sm:sitemap/sm:loc", ns):
+                      child_url = (node.text or "").strip()
+                      with urllib.request.urlopen(child_url, timeout=30) as response:
+                          child_root = ET.fromstring(response.read())
+                      urls.update((item.text or "").strip() for item in child_root.findall("sm:url/sm:loc", ns))
+          urls = sorted(url for url in urls if url.startswith(site))
+          if not urls:
+              raise SystemExit("No valid site URLs found in robots.txt sitemaps.")
+          with open(sys.argv[1], "w", encoding="utf-8") as output:
+              output.write("\\n".join(urls) + "\\n")
+          print(f"Collected {len(urls)} unique URL(s) from all sitemaps.")
+          PY
+          fi
 
           sort -u "$URLS_FILE" -o "$URLS_FILE"
           if [ ! -s "$URLS_FILE" ]; then
