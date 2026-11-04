@@ -1,8 +1,6 @@
 name: Gallery discovery feature preview
 
 on:
-  push:
-    branches: [gallery-metadata-main-reconciled-20261104]
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened]
