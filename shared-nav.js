@@ -195,7 +195,7 @@
   const ensureZshFonts = () => {
     const lang = (document.documentElement.lang || 'en').toLowerCase();
     const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
-    const hasBrandFonts = links.some(link => /fonts\\.googleapis\\.com\\/css2/.test(link.href) && /Orbitron/.test(link.href) && /Rajdhani/.test(link.href));
+    const hasBrandFonts = links.some(link => /fonts\.googleapis\.com\/css2/.test(link.href) && /Orbitron/.test(link.href) && /Rajdhani/.test(link.href));
     const loaded = new Set(Array.from(document.querySelectorAll('link[data-zsh-font-family]')).map(link => link.dataset.zshFontFamily));
     const addFont = (family, familyName) => {
       if (loaded.has(familyName)) return;
