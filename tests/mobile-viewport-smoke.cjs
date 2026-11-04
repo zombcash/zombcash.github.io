@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const BASE_URL = process.env.SITE_URL || 'https://zombcash.github.io/';
+const isLocalPreview = ['localhost', '127.0.0.1'].includes(new URL(BASE_URL).hostname);
 const widths = [320, 360, 375, 390, 430, 768, 1024, 1440];
 const outDir = path.join(process.cwd(), 'mobile-test-results');
 fs.mkdirSync(outDir, { recursive: true });
@@ -324,14 +325,14 @@ fs.mkdirSync(outDir, { recursive: true });
 
     // Every localized homepage must translate the complete Sponsor Zone fallback.
     const sponsorZoneLabels = {
-      de: ['DEIN PROJEKT.', 'UNSER INTERNET DER UNTOTEN.', 'TEAM KONTAKTIEREN ↗'],
-      fr: ['VOTRE PROJET.', 'NOTRE INTERNET DES MORTS.', 'CONTACTER L’ÉQUIPE ↗'],
-      it: ['IL TUO PROGETTO.', 'IL NOSTRO INTERNET DEI NON-MORTI.', 'CONTATTA IL TEAM ↗'],
-      ja: ['あなたのプロジェクト。', '私たちのアンデッド・インターネット。', 'チームに連絡 ↗'],
-      'zh-CN': ['您的项目。', '我们的亡者互联网。', '联系团队 ↗'],
-      ru: ['ТВОЙ ПРОЕКТ.', 'НАШ ИНТЕРНЕТ НЕЖИТИ.', 'СВЯЗАТЬСЯ С КОМАНДОЙ ↗'],
-      tr: ['PROJENİZ.', 'BİZİM YAŞAYAN ÖLÜLER İNTERNETİMİZ.', 'EKİPLE İLETİŞİME GEÇ ↗'],
-      hi: ['आपका प्रोजेक्ट।', 'हमारा अनडेड इंटरनेट।', 'टीम से संपर्क करें ↗'],
+      de: ['DEIN PROJEKT.', 'UNSERE UNTOTEN COMMUNITY.', 'TEAM KONTAKTIEREN ↗'],
+      fr: ['TON PROJET.', 'NOTRE COMMUNAUTÉ.', 'CONTACTER L’ÉQUIPE ↗'],
+      it: ['IL TUO PROGETTO.', 'LA NOSTRA COMMUNITY.', 'CONTATTA IL TEAM ↗'],
+      ja: ['あなたのプロジェクトを。', '私たちのコミュニティへ。', 'チームに問い合わせる ↗'],
+      'zh-CN': ['你的项目。', '我们的社区。', '联系团队 ↗'],
+      ru: ['ТВОЙ ПРОЕКТ.', 'НАША АУДИТОРИЯ.', 'СВЯЗАТЬСЯ С КОМАНДОЙ ↗'],
+      tr: ['PROJENİ TANIT.', 'TOPLULUĞUMUZA ULAŞ.', 'EKİPLE İLETİŞİME GEÇ ↗'],
+      hi: ['आपका प्रोजेक्ट।', 'हमारा समुदाय।', 'टीम से संपर्क करें ↗'],
     };
     for (const [locale, expected] of Object.entries(sponsorZoneLabels)) {
       const localizedHome = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
@@ -482,6 +483,9 @@ fs.mkdirSync(outDir, { recursive: true });
     }
 
     // Verify that the main live-data panels recover from their initial loading states.
+    if (isLocalPreview) {
+      console.log('Skipping external FadeHost live-data assertions on local preview origin; production smoke tests cover those APIs.');
+    } else {
     const liveDataPage = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     const liveDataErrors = [];
     liveDataPage.on('pageerror', error => liveDataErrors.push(error.message));
@@ -534,6 +538,7 @@ fs.mkdirSync(outDir, { recursive: true });
     console.log(JSON.stringify({ liveDataResult, liveDataIssues }, null, 2));
     if (liveDataIssues.length) failures.push({ mode: 'live-data-panels', issues: liveDataIssues });
     await liveDataPage.close();
+    }
   } finally {
     await browser.close();
   }

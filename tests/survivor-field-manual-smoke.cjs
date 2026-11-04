@@ -2,7 +2,7 @@ const { chromium } = require('playwright');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const BASE = 'https://zombcash.github.io/';
+const BASE = process.env.SITE_URL || 'https://zombcash.github.io/';
 const locales = [
   { code: 'en', path: 'survivor-field-manual.html' },
   { code: 'ru', path: 'ru/survivor-field-manual.html' },

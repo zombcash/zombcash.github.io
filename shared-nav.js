@@ -64,6 +64,7 @@
     ['HOME', '/', 'home'],
     ['FIELD MANUAL', '/survivor-field-manual.html', 'manual'],
     ['WHITEPAPER', '/whitepaper.html', 'whitepaper'],
+    ['MARKET DATA', '/zombcash-market-data.html', 'market-data'],
     ['TRANSMISSION', '/outbreak-transmission.html', 'transmission'],
     ['CREW VOTE', '/crew-vote.html', 'vote'],
     ['SURVIVOR HUB', '/survivor-hub.html', 'hub'],
@@ -77,8 +78,10 @@
   // (for example, article breadcrumbs and their language links) and must remain untouched.
   // Support the legacy top-level wrappers used by older page templates without selecting
   // headers nested inside .article, article, or main content.
+  // Do not mistake a semantic article header inside <main class="wrap"> for the
+  // global site header. Market Data and other content pages use this exact layout.
   let header = document.querySelector(
-    'body > header:not(.hero), body > .wrap > header:not(.hero), body > .container > header:not(.hero), body > .page-wrap > header:not(.hero)'
+    'body > header:not(.hero), body > .wrap:not(main) > header:not(.hero), body > .container:not(main) > header:not(.hero), body > .page-wrap:not(main) > header:not(.hero)'
   );
   if (!header) {
     header = document.createElement('header');
@@ -102,14 +105,14 @@
   // For other destinations preserve the active locale with ?lang= rather than
   // constructing a path to a file that may not exist.
   const localizedPagesByLocale = {
-    de: new Set(["about.html","memecoin-promotion-platforms-comparison.html","avoid-fake-token-websites-wallet-scams.html","buy-zombcash.html","check-liquidity-holder-distribution-solana.html","how-to-research-solana-meme-coins.html","index.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-last-backup-ai-apocalypse.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","transmission-zombie-fiction-rpg-guide.html","zombcash-buying-guide.html","whitepaper.html"]),
-    fr: new Set(["about.html","memecoin-promotion-platforms-comparison.html","avoid-fake-token-websites-wallet-scams.html","buy-zombcash.html","check-liquidity-holder-distribution-solana.html","how-to-research-solana-meme-coins.html","index.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-last-backup-ai-apocalypse.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","transmission-zombie-fiction-rpg-guide.html","zombcash-buying-guide.html","whitepaper.html"]),
-    it: new Set(["about.html","memecoin-promotion-platforms-comparison.html","buy-zombcash.html","index.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-last-backup-ai-apocalypse.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","transmission-zombie-fiction-rpg-guide.html","zombcash-buying-guide.html","whitepaper.html"]),
-    ja: new Set(["about.html","memecoin-promotion-platforms-comparison.html","buy-zombcash.html","index.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-last-backup-ai-apocalypse.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","transmission-zombie-fiction-rpg-guide.html","zombcash-buying-guide.html","whitepaper.html"]),
-    'zh-CN': new Set(["about.html","memecoin-promotion-platforms-comparison.html","buy-zombcash.html","index.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-last-backup-ai-apocalypse.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","transmission-zombie-fiction-rpg-guide.html","zombcash-buying-guide.html","whitepaper.html"]),
-    ru: new Set(["about.html","memecoin-promotion-platforms-comparison.html","avoid-fake-token-websites-wallet-scams.html","buy-zombcash.html","check-liquidity-holder-distribution-solana.html","how-to-research-solana-meme-coins.html","index.html","outbreak-transmission.html","solana-memecoin-research-guide.html","solana-token-safety-checklist.html","survivor-field-manual.html","transmission-last-backup-ai-apocalypse.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","transmission-zombie-fiction-rpg-guide.html","zombcash-buying-guide.html","whitepaper.html"]),
-    tr: new Set(["about.html","memecoin-promotion-platforms-comparison.html","buy-zombcash.html","index.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-last-backup-ai-apocalypse.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","transmission-zombie-fiction-rpg-guide.html","zombcash-buying-guide.html","whitepaper.html"]),
-    hi: new Set(["about.html","memecoin-promotion-platforms-comparison.html","buy-zombcash.html","index.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-last-backup-ai-apocalypse.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-wallet-security-red-flags.html","transmission-zombie-fiction-rpg-guide.html","zombcash-buying-guide.html","transmission-trump-family-memecoins.html","whitepaper.html"])
+    de: new Set(["about.html","memecoin-promotion-platforms-comparison.html","avoid-fake-token-websites-wallet-scams.html","buy-zombcash.html","check-liquidity-holder-distribution-solana.html","how-to-research-solana-meme-coins.html","index.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-last-backup-ai-apocalypse.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","transmission-zombie-fiction-rpg-guide.html","zombcash-buying-guide.html","whitepaper.html","gallery.html","zombcash-market-data.html","transmission-liquidity-is-not-market-cap.html"]),
+    fr: new Set(["about.html","memecoin-promotion-platforms-comparison.html","avoid-fake-token-websites-wallet-scams.html","buy-zombcash.html","check-liquidity-holder-distribution-solana.html","how-to-research-solana-meme-coins.html","index.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-last-backup-ai-apocalypse.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","transmission-zombie-fiction-rpg-guide.html","zombcash-buying-guide.html","whitepaper.html","gallery.html","zombcash-market-data.html","transmission-liquidity-is-not-market-cap.html"]),
+    it: new Set(["about.html","memecoin-promotion-platforms-comparison.html","buy-zombcash.html","index.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-last-backup-ai-apocalypse.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","transmission-zombie-fiction-rpg-guide.html","zombcash-buying-guide.html","whitepaper.html","gallery.html","zombcash-market-data.html","transmission-liquidity-is-not-market-cap.html"]),
+    ja: new Set(["about.html","memecoin-promotion-platforms-comparison.html","buy-zombcash.html","index.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-last-backup-ai-apocalypse.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","transmission-zombie-fiction-rpg-guide.html","zombcash-buying-guide.html","whitepaper.html","gallery.html","zombcash-market-data.html","transmission-liquidity-is-not-market-cap.html"]),
+    'zh-CN': new Set(["about.html","memecoin-promotion-platforms-comparison.html","buy-zombcash.html","index.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-last-backup-ai-apocalypse.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","transmission-zombie-fiction-rpg-guide.html","zombcash-buying-guide.html","whitepaper.html","gallery.html","zombcash-market-data.html","transmission-liquidity-is-not-market-cap.html"]),
+    ru: new Set(["about.html","memecoin-promotion-platforms-comparison.html","avoid-fake-token-websites-wallet-scams.html","buy-zombcash.html","check-liquidity-holder-distribution-solana.html","how-to-research-solana-meme-coins.html","index.html","outbreak-transmission.html","solana-memecoin-research-guide.html","solana-token-safety-checklist.html","survivor-field-manual.html","transmission-last-backup-ai-apocalypse.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","transmission-zombie-fiction-rpg-guide.html","zombcash-buying-guide.html","whitepaper.html","gallery.html","zombcash-market-data.html","transmission-liquidity-is-not-market-cap.html"]),
+    tr: new Set(["about.html","memecoin-promotion-platforms-comparison.html","buy-zombcash.html","index.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-last-backup-ai-apocalypse.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-trump-family-memecoins.html","transmission-wallet-security-red-flags.html","transmission-zombie-fiction-rpg-guide.html","zombcash-buying-guide.html","whitepaper.html","gallery.html","zombcash-market-data.html","transmission-liquidity-is-not-market-cap.html"]),
+    hi: new Set(["about.html","memecoin-promotion-platforms-comparison.html","buy-zombcash.html","index.html","outbreak-transmission.html","solana-memecoin-research-guide.html","survivor-field-manual.html","transmission-last-backup-ai-apocalypse.html","transmission-memecoin-graveyard.html","transmission-memecoin-knowledge-business.html","transmission-rug-pull-check.html","transmission-solana-memecoin-warning-signs.html","transmission-wallet-security-red-flags.html","transmission-zombie-fiction-rpg-guide.html","zombcash-buying-guide.html","transmission-trump-family-memecoins.html","whitepaper.html","gallery.html","zombcash-market-data.html","transmission-liquidity-is-not-market-cap.html"])
   };
   const target = (href) => {
     const parts = location.pathname.split('/').filter(Boolean);
@@ -158,6 +161,7 @@
           : target(href);
         const active = (id === 'manual' && file === 'survivor-field-manual.html') ||
           (id === 'whitepaper' && file === 'whitepaper.html') ||
+          (id === 'market-data' && file === 'zombcash-market-data.html') ||
           (id === 'vote' && file === 'crew-vote.html') ||
           (id === 'arcade' && file === 'arcade.html') ||
           (id === 'gallery' && file === 'gallery.html') ||
@@ -1208,14 +1212,14 @@
 
   // Keep the generated navigation labels in sync with the existing nine-language selector.
   const navDictionary = {
-    de:['STARTSEITE','FELDHANDBUCH','WHITEPAPER','ÜBERTRAGUNGEN','CREW-ABSTIMMUNG','ÜBERLEBENDEN-ZENTRUM','ARCADE','ZOMBIE-GALERIE','ZOMBIE-GENERATOR','LOTTERIE','$ZOMBCASH KAUFEN','ZURÜCK ZUR STARTSEITE','MIT TELEGRAM REGISTRIEREN','TELEGRAM ÖFFNEN','MENÜ'],
-    fr:['ACCUEIL','MANUEL DE TERRAIN','LIVRE BLANC','TRANSMISSIONS','VOTE DE L’ÉQUIPE','CENTRE DES SURVIVANTS','ARCADE','GALERIE ZOMBIE','CRÉATEUR DE ZOMBIES','LOTERIE','ACHETER $ZOMBCASH','RETOUR À L’ACCUEIL','S’INSCRIRE AVEC TELEGRAM','OUVRIR TELEGRAM','MENU'],
-    it:['HOME','MANUALE DA CAMPO','WHITEPAPER','TRASMISSIONI','VOTO DELLA CREW','CENTRO DEI SOPRAVVISSUTI','ARCADE','GALLERIA ZOMBIE','CREA ZOMBIE','LOTTERIA','COMPRA $ZOMBCASH','TORNA ALLA HOME','REGISTRATI CON TELEGRAM','APRI TELEGRAM','MENU'],
-    ja:['ホーム','サバイバルガイド','ホワイトペーパー','ニュース配信','クルー投票','サバイバーハブ','アーケード','ゾンビギャラリー','ゾンビメーカー','宝くじ','$ZOMBCASHを購入','ホームに戻る','TELEGRAMで登録','Telegramを開く','メニュー'],
-    'zh-CN':['首页','生存指南','白皮书','疫情快讯','团队投票','幸存者中心','街机游戏','僵尸画廊','僵尸制作器','抽奖','购买 $ZOMBCASH','返回首页','使用 TELEGRAM 注册','打开 Telegram','菜单'],
-    ru:['ГЛАВНАЯ','ПОЛЕВОЕ РУКОВОДСТВО','ДОКУМЕНТ ПРОЕКТА','ТРАНСЛЯЦИЯ','ГОЛОСОВАНИЕ КОМАНДЫ','ЦЕНТР ВЫЖИВШИХ','АРКАДА','ГАЛЕРЕЯ ЗОМБИ','СОЗДАТЕЛЬ ЗОМБИ','ЛОТЕРЕЯ','КУПИТЬ $ZOMBCASH','НА ГЛАВНУЮ','РЕГИСТРАЦИЯ ЧЕРЕЗ TELEGRAM','ОТКРЫТЬ TELEGRAM','МЕНЮ'],
-    tr:['ANA SAYFA','SAHA REHBERİ','PROJE TANITIM BELGESİ','YAYINLAR','EKİP OYLAMASI','HAYATTA KALANLAR MERKEZİ','ARCADE','ZOMBİ GALERİSİ','ZOMBİ OLUŞTURUCU','ÇEKİLİŞ','$ZOMBCASH SATIN AL','ANA SAYFAYA DÖN','TELEGRAM İLE KAYIT OL','TELEGRAM’I AÇ','MENÜ'],
-    hi:['होम','जीवन रक्षा मार्गदर्शिका','व्हाइटपेपर','प्रसारण','टीम मतदान','सर्वाइवर केंद्र','आर्केड','ज़ॉम्बी गैलरी','ज़ॉम्बी मेकर','लॉटरी','$ZOMBCASH खरीदें','होम पर लौटें','TELEGRAM से पंजीकरण करें','TELEGRAM खोलें','मेन्यू']
+    de:['STARTSEITE','FELDHANDBUCH','WHITEPAPER','MARKTDATEN','ÜBERTRAGUNGEN','CREW-ABSTIMMUNG','ÜBERLEBENDEN-ZENTRUM','ARCADE','ZOMBIE-GALERIE','ZOMBIE-GENERATOR','LOTTERIE','$ZOMBCASH KAUFEN','ZURÜCK ZUR STARTSEITE','MIT TELEGRAM REGISTRIEREN','TELEGRAM ÖFFNEN','MENÜ'],
+    fr:['ACCUEIL','MANUEL DE TERRAIN','LIVRE BLANC','DONNÉES DE MARCHÉ','TRANSMISSIONS','VOTE DE L’ÉQUIPE','CENTRE DES SURVIVANTS','ARCADE','GALERIE ZOMBIE','CRÉATEUR DE ZOMBIES','LOTERIE','ACHETER $ZOMBCASH','RETOUR À L’ACCUEIL','S’INSCRIRE AVEC TELEGRAM','OUVRIR TELEGRAM','MENU'],
+    it:['HOME','MANUALE DA CAMPO','WHITEPAPER','DATI DI MERCATO','TRASMISSIONI','VOTO DELLA CREW','CENTRO DEI SOPRAVVISSUTI','ARCADE','GALLERIA ZOMBIE','CREA ZOMBIE','LOTTERIA','COMPRA $ZOMBCASH','TORNA ALLA HOME','REGISTRATI CON TELEGRAM','APRI TELEGRAM','MENU'],
+    ja:['ホーム','サバイバルガイド','ホワイトペーパー','マーケットデータ','ニュース配信','クルー投票','サバイバーハブ','アーケード','ゾンビギャラリー','ゾンビメーカー','宝くじ','$ZOMBCASHを購入','ホームに戻る','TELEGRAMで登録','Telegramを開く','メニュー'],
+    'zh-CN':['首页','生存指南','白皮书','市场数据','疫情快讯','团队投票','幸存者中心','街机游戏','僵尸画廊','僵尸制作器','抽奖','购买 $ZOMBCASH','返回首页','使用 TELEGRAM 注册','打开 Telegram','菜单'],
+    ru:['ГЛАВНАЯ','ПОЛЕВОЕ РУКОВОДСТВО','ДОКУМЕНТ ПРОЕКТА','РЫНОЧНЫЕ ДАННЫЕ','ТРАНСЛЯЦИЯ','ГОЛОСОВАНИЕ КОМАНДЫ','ЦЕНТР ВЫЖИВШИХ','АРКАДА','ГАЛЕРЕЯ ЗОМБИ','СОЗДАТЕЛЬ ЗОМБИ','ЛОТЕРЕЯ','КУПИТЬ $ZOMBCASH','НА ГЛАВНУЮ','РЕГИСТРАЦИЯ ЧЕРЕЗ TELEGRAM','ОТКРЫТЬ TELEGRAM','МЕНЮ'],
+    tr:['ANA SAYFA','SAHA REHBERİ','PROJE TANITIM BELGESİ','PİYASA VERİLERİ','YAYINLAR','EKİP OYLAMASI','HAYATTA KALANLAR MERKEZİ','ARCADE','ZOMBİ GALERİSİ','ZOMBİ OLUŞTURUCU','ÇEKİLİŞ','$ZOMBCASH SATIN AL','ANA SAYFAYA DÖN','TELEGRAM İLE KAYIT OL','TELEGRAM’I AÇ','MENÜ'],
+    hi:['होम','जीवन रक्षा मार्गदर्शिका','व्हाइटपेपर','बाज़ार डेटा','प्रसारण','टीम मतदान','सर्वाइवर केंद्र','आर्केड','ज़ॉम्बी गैलरी','ज़ॉम्बी मेकर','लॉटरी','$ZOMBCASH खरीदें','होम पर लौटें','TELEGRAM से पंजीकरण करें','TELEGRAM खोलें','मेन्यू']
   };
   function localizeNav(language) {
     const translated = navDictionary[language];
@@ -1226,10 +1230,10 @@
       links[index].href = target(item[1]);
     });
     const back = header.querySelector('.zsh-actions > .zsh-home');
-    if (back) back.innerHTML = '<span aria-hidden="true">←</span> ' + (translated ? translated[11] : 'BACK TO HOME');
+    if (back) back.innerHTML = '<span aria-hidden="true">←</span> ' + (translated ? translated[12] : 'BACK TO HOME');
     /* Keep the global CTA as JOIN THE SURVIVORS; the Survivor Hub's actual login control remains LOGIN WITH TELEGRAM. */
     const menuLabel = header.querySelector('.zsh-menu-label');
-    if (menuLabel) menuLabel.textContent = translated ? translated[14] : 'MENU';
+    if (menuLabel) menuLabel.textContent = translated ? translated[15] : 'MENU';
     const brandSmall = header.querySelector('.zsh-brand-copy small');
     const brandLabels = {de:'DAS INTERNET DER UNTOTEN',fr:'L’INTERNET DES MORTS-VIVANTS',it:'INTERNET DEI NON MORTI',ja:'アンデッド・インターネット','zh-CN':'不死者互联网',ru:'ИНТЕРНЕТ НЕЖИТИ',tr:'YAŞAYAN ÖLÜLERİN İNTERNETİ',hi:'मरे हुओं का इंटरनेट'};
     if (brandSmall) brandSmall.textContent = language === 'en' ? 'THE UNDEAD INTERNET' : (brandLabels[language] || 'THE UNDEAD INTERNET');
@@ -1245,7 +1249,7 @@
       if (file === 'survivor-hub.html') {
         loginControl.textContent = language === 'en' ? 'LOGIN WITH TELEGRAM' : (loginLabels[language] || 'LOGIN WITH TELEGRAM');
       } else {
-        loginControl.textContent = language === 'en' ? 'REGISTER WITH TELEGRAM' : (translated ? translated[11] : 'JOIN THE SURVIVORS');
+        loginControl.textContent = language === 'en' ? 'REGISTER WITH TELEGRAM' : (translated ? translated[12] : 'JOIN THE SURVIVORS');
       }
     }
   }
@@ -1460,14 +1464,18 @@
     unit.style.flexBasis = nativeWidth + 'px';
     unit.style.transform = 'scale(' + scale + ')';
     unit.style.transformOrigin = 'top center';
-    stage.style.width = (nativeWidth * scale) + 'px';
+    const reservedWidth = nativeWidth * scale;
     const reservedHeight = nativeHeight * scale;
-    // The ad slot must keep its footprint even when Adsterra is blocked,
-    // returns no creative, or never inserts an iframe. Do not let the
-    // Sponsor Zone below flex upward into the empty banner area.
-    stage.style.height = reservedHeight + 'px';
-    stage.style.minHeight = reservedHeight + 'px';
-    stage.style.flex = '0 0 ' + reservedHeight + 'px';
+    // The homepage CSS uses !important to preserve the native 728x90/320x50
+    // banner footprint. Apply the scaled dimensions with the same priority so
+    // narrow hero columns keep the exact banner aspect ratio instead of being
+    // forced back to a fixed 90px/50px height.
+    stage.style.setProperty('width', reservedWidth + 'px', 'important');
+    stage.style.setProperty('height', reservedHeight + 'px', 'important');
+    stage.style.setProperty('min-height', reservedHeight + 'px', 'important');
+    stage.style.setProperty('max-height', reservedHeight + 'px', 'important');
+    stage.style.setProperty('flex', '0 0 ' + reservedHeight + 'px', 'important');
+    stage.style.setProperty('flex-basis', reservedHeight + 'px', 'important');
     unit.style.flexShrink = '0';
   };
 
