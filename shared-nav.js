@@ -1477,7 +1477,7 @@
     const stage = document.querySelector('.zc-hero-ad-stage');
     if (stage && window.ResizeObserver && !stage.dataset.zcAdResizeObserver) {
       const observer = new ResizeObserver(fitHeroAd);
-      observer.observe(stage);
+      observer.observe(stage.parentElement || stage);
       stage.dataset.zcAdResizeObserver = 'true';
     }
     if (!window.__zcHeroAdResizeBound) {
