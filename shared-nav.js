@@ -1457,7 +1457,14 @@
     unit.style.transform = 'scale(' + scale + ')';
     unit.style.transformOrigin = 'top center';
     stage.style.width = (nativeWidth * scale) + 'px';
-    stage.style.height = (nativeHeight * scale) + 'px';
+    const reservedHeight = nativeHeight * scale;
+    // The ad slot must keep its footprint even when Adsterra is blocked,
+    // returns no creative, or never inserts an iframe. Do not let the
+    // Sponsor Zone below flex upward into the empty banner area.
+    stage.style.height = reservedHeight + 'px';
+    stage.style.minHeight = reservedHeight + 'px';
+    stage.style.flex = '0 0 ' + reservedHeight + 'px';
+    unit.style.flexShrink = '0';
   };
 
   const run = () => {
