@@ -1430,7 +1430,7 @@
   'use strict';
   const path = location.pathname;
   const isHomepage = path === '/' || path === '/index.html' ||
-    /^\\/(?:de|fr|it|ja|zh-CN|ru|tr|hi)(?:\\/index\\.html)?\\/?$/.test(path);
+    /^\/(?:de|fr|it|ja|zh-CN|ru|tr|hi)(?:\/index\.html)?\/?$/.test(path);
   const legacyWrappers = '.aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, .gallery-ad-unit, .field-manual-ad, .maker-ad-unit, [data-zombcash-ad-slot]';
 
   const removeLegacyAds = () => {
