@@ -64,6 +64,7 @@ for locale in ("de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"):
     assert 'id="gallery-collection-jsonld"' in page
     assert 'hreflang="x-default"' in page
     assert page.count('rel="alternate" hreflang=') == 10
+    assert "AI-generated artwork from our Telegram channel" not in page, f"{locale} hero subtitle remained in English"
 robots = Path("robots.txt").read_text(encoding="utf-8")
 assert "https://zombcash.github.io/sitemap-gallery-pages.xml" in robots
 language = Path("language.js").read_text(encoding="utf-8")
