@@ -94,7 +94,7 @@ jobs:
           if not urls:
               raise SystemExit("No valid site URLs found in robots.txt sitemaps.")
           with open(sys.argv[1], "w", encoding="utf-8") as output:
-              output.write("\\n".join(urls) + "\\n")
+              output.write("\n".join(urls) + "\n")
           print(f"Collected {len(urls)} unique URL(s) from all sitemaps.")
           PY
           fi
