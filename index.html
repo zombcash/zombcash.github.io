@@ -104,7 +104,7 @@
 <title>ZombieCash ($ZOMBCASH) on Solana — The Undead Internet</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=optional" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=news-panel-bottom-align-20261021-2">
 <style id="zombcash-hero-v8-inline">
 /* V8 emergency inline hero override: intentionally distinct from cached external CSS */
@@ -544,7 +544,7 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 @media(max-width:560px){.jupiter-buy-section{padding:48px 5%}.jupiter-buy-layout{margin-top:20px;gap:16px}.jupiter-buy-copy{padding:19px}.jupiter-terminal-top{padding:0 11px;font-size:7px}#jupiter-zombcash-terminal{min-height:560px}}
 </style>
 <!-- Current official Jupiter Plugin (replaces deprecated Jupiter Terminal v4). -->
-<script src="https://plugin.jup.ag/plugin-v1.js"></script>
+
 
 <link rel="stylesheet" href="site-polish.css?v=20261103-noir2">
 
@@ -1013,8 +1013,8 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
   </div>
   <div class="jupiter-terminal-shell">
     <div class="jupiter-terminal-top"><span><i></i> SWAP TERMINAL</span><span>POWERED BY JUPITER</span></div>
-    <div id="jupiter-zombcash-terminal" aria-label="Jupiter swap interface"><div class="jupiter-terminal-loading"><span class="jupiter-loader"></span><strong>INITIALIZING SWAP TERMINAL</strong><small>Connecting to Jupiter…</small></div></div>
-    <p class="jupiter-terminal-note" id="jupiter-terminal-status" aria-live="polite">Loading the official Jupiter interface…</p>
+    <div id="jupiter-zombcash-terminal" aria-label="Jupiter swap interface"><div class="jupiter-terminal-loading"><span class="jupiter-loader"></span><strong>JUPITER TERMINAL READY</strong><small>Interface loads when this panel is near view.</small></div></div>
+    <p class="jupiter-terminal-note" id="jupiter-terminal-status" aria-live="polite">The official Jupiter interface will load as you approach this panel.</p>
   </div>
 </article>
     <section class="crew-card activity-chart-panel" aria-label="ZombieCash price chart">
@@ -1461,14 +1461,31 @@ footer {
       fallback();
     }
   };
-  if (window.Jupiter && typeof window.Jupiter.init === 'function') init();
-  else {
-    const script = document.querySelector('script[src*="plugin.jup.ag/plugin-v1.js"]');
-    if (script) {
-      script.addEventListener('load', init, {once:true});
-      script.addEventListener('error', fallback, {once:true});
-      setTimeout(() => { if (!window.Jupiter) fallback(); }, 12000);
-    } else fallback();
+  let jupiterLoadStarted = false;
+  const loadJupiter = () => {
+    if (jupiterLoadStarted) return;
+    jupiterLoadStarted = true;
+    if (window.Jupiter && typeof window.Jupiter.init === 'function') { init(); return; }
+    const script = document.createElement('script');
+    script.src = 'https://plugin.jup.ag/plugin-v1.js';
+    script.async = true;
+    script.fetchPriority = 'low';
+    script.addEventListener('load', init, {once:true});
+    script.addEventListener('error', fallback, {once:true});
+    document.head.appendChild(script);
+    setTimeout(() => { if (!window.Jupiter) fallback(); }, 12000);
+  };
+  if (status) status.textContent = 'The official Jupiter interface will load as you approach this panel.';
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        observer.disconnect();
+        loadJupiter();
+      }
+    }, {rootMargin:'650px 0px'});
+    observer.observe(terminal);
+  } else {
+    loadJupiter();
   }
 })();
 </script>
