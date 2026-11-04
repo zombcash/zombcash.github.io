@@ -1362,7 +1362,7 @@ const sponsorZoneTranslations = {
     tr:"PROJENİZ.",hi:"आपका प्रोजेक्ट।"
   },
   "OUR UNDEAD INTERNET.": {
-    de:"UNSER UNTOTes INTERNET.",fr:"NOTRE INTERNET DES MORTS.",it:"IL NOSTRO INTERNET DEI NON-MORTI.",
+    de:"UNSER INTERNET DER UNTOTEN.",fr:"NOTRE INTERNET DES MORTS.",it:"IL NOSTRO INTERNET DEI NON-MORTI.",
     ja:"私たちのアンデッド・インターネット。","zh-CN":"我们的亡者互联网。",ru:"НАШ ИНТЕРНЕТ НЕЖИТИ.",
     tr:"BİZİM YAŞAYAN ÖLÜLER İNTERNETİMİZ.",hi:"हमारा अनडेड इंटरनेट।"
   },
