@@ -67,6 +67,8 @@ jobs:
           assert data.get("schema_version") == 2
           items = data.get("items")
           assert isinstance(items, list) and len(items) == 50
+          assert all(item.get("alt_review_status") == "visual-reviewed" for item in items), "all release gallery images require visual ALT review"
+          assert all(isinstance(item.get("image_width"), int) and item["image_width"] > 0 and isinstance(item.get("image_height"), int) and item["image_height"] > 0 for item in items), "all gallery images require intrinsic dimensions"
           ids = [item.get("id") for item in items]
           images = [item.get("image") for item in items]
           anchors = [item.get("anchor_id") for item in items]
