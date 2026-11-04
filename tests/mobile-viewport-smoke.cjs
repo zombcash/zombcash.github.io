@@ -307,11 +307,12 @@ fs.mkdirSync(outDir, { recursive: true });
       await localizedHome.waitForFunction(
         () => document.querySelector('.zc-hero-sponsor-promo h2')?.innerText.trim().length > 0 &&
               document.querySelector('.zc-hero-sponsor-promo a')?.textContent.trim().length > 0,
+        null,
         { timeout: 20000 }
       );
       const actual = await localizedHome.evaluate(() => ({
         lang: document.documentElement.lang,
-        heading: document.querySelector('.zc-hero-sponsor-promo h2')?.innerText.split('\\n').map(s => s.trim()).filter(Boolean) || [],
+        heading: Array.from(document.querySelector('.zc-hero-sponsor-promo h2')?.childNodes || []).filter(node => node.nodeType === 3).map(node => node.textContent.trim()).filter(Boolean),
         cta: document.querySelector('.zc-hero-sponsor-promo a')?.textContent.trim() || '',
       }));
       const issues = [];
