@@ -16,6 +16,11 @@ assert all(item.get("alt_review_method") in {"manual-visual-review", "manual-con
 assert all(item.get("alt_text", "").strip() for item in items), "Every card needs an ALT text value"
 for item in reviewed:
     assert item.get("image_width") == 800 and item.get("image_height") == 800, f"Unexpected reviewed dimensions: {item['id']}"
+for item in items:
+    width = item.get("image_width")
+    height = item.get("image_height")
+    assert isinstance(width, int) and 0 < width <= 10000, f"Missing/invalid image width: {item['id']}"
+    assert isinstance(height, int) and 0 < height <= 10000, f"Missing/invalid image height: {item['id']}"
 for item in pending:
     assert item.get("alt_review_method") == "not-reviewed", f"Pending item has an invalid review method: {item['id']}"
     assert item.get("pinterest_status") == "blocked-rights-review", f"Unreviewed item is not blocked from Pinterest: {item['id']}"
@@ -52,11 +57,12 @@ assert all(card["anchor"] for card in parser.cards)
 assert all(len(card["images"]) == 1 for card in parser.cards)
 assert all(card["images"][0].get("alt", "").strip() for card in parser.cards)
 assert all(card["likes"] == 1 for card in parser.cards)
-reviewed_ids = {item["id"] for item in reviewed}
-reviewed_cards = [card for card in parser.cards if card["id"] in reviewed_ids]
-assert len(reviewed_cards) == len(reviewed_ids)
-assert all(card["images"][0].get("width") == "800" and card["images"][0].get("height") == "800" for card in reviewed_cards)
-assert sum(1 for card in parser.cards if card["images"][0].get("width") == "800" and card["images"][0].get("height") == "800") == len(reviewed_ids)
+item_by_id = {item["id"]: item for item in items}
+for card in parser.cards:
+    item = item_by_id[card["id"]]
+    image = card["images"][0]
+    assert image.get("width") == str(item["image_width"]), f"Static card width mismatch: {card['id']}"
+    assert image.get("height") == str(item["image_height"]), f"Static card height mismatch: {card['id']}"
 assert any(".gallery-card img{" in line and "aspect-ratio:1 / 1" in line for line in Path("gallery.css").read_text(encoding="utf-8").splitlines())
 
 NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9", "im": "http://www.google.com/schemas/sitemap-image/1.1"}
