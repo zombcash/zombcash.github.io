@@ -425,6 +425,23 @@ fs.mkdirSync(outDir, { recursive: true });
     if (arcadeTouchIssues.length) failures.push({ mode: 'arcade-snake-touch', issues: arcadeTouchIssues });
     await arcadeMobile.close();
 
+
+    // A desktop browser resized to a narrow viewport must also reveal Snake
+    // touch controls; visibility is delegated to responsive CSS, not stale inline styles.
+    const arcadeResize = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    await arcadeResize.goto(new URL('arcade.html?game=snake', BASE_URL).href, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await arcadeResize.waitForFunction(() => document.querySelector('[data-game="snake"]')?.getAttribute('aria-selected') === 'true', null, { timeout: 20000 });
+    const desktopControlsDisplay = await arcadeResize.locator('#touch-controls').evaluate(el => getComputedStyle(el).display);
+    await arcadeResize.setViewportSize({ width: 390, height: 844 });
+    await arcadeResize.waitForFunction(() => getComputedStyle(document.querySelector('#touch-controls')).display !== 'none', null, { timeout: 10000 });
+    const resizedControlsDisplay = await arcadeResize.locator('#touch-controls').evaluate(el => getComputedStyle(el).display);
+    const resizeIssues = [];
+    if (desktopControlsDisplay !== 'none') resizeIssues.push('Snake touch controls should be hidden on ordinary desktop');
+    if (resizedControlsDisplay === 'none') resizeIssues.push('Snake touch controls did not appear after resizing desktop to mobile');
+    console.log(JSON.stringify({ mode: 'arcade-snake-touch-resize', desktopControlsDisplay, resizedControlsDisplay, issues: resizeIssues }));
+    if (resizeIssues.length) failures.push({ mode: 'arcade-snake-touch-resize', issues: resizeIssues });
+    await arcadeResize.close();
+
 // Regression: every localized Whitepaper page must translate the shared navigation.
     // This catches missing shared-nav dictionary keys and stale language.js cache URLs.
     const whitepaperLabels = {
