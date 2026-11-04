@@ -10,6 +10,8 @@ on:
       - "sitemap.xml"
       - "tests/seo-internal-link-fixes-smoke.py"
       - ".github/workflows/seo-internal-link-fixes-smoke.yml"
+  push:
+    branches: [seo-internal-link-discovery-fixes-20261104]
 
 permissions:
   contents: read
