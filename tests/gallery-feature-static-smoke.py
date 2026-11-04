@@ -52,7 +52,11 @@ assert all(card["anchor"] for card in parser.cards)
 assert all(len(card["images"]) == 1 for card in parser.cards)
 assert all(card["images"][0].get("alt", "").strip() for card in parser.cards)
 assert all(card["likes"] == 1 for card in parser.cards)
-assert sum(1 for c in parser.cards if c["images"][0].get("width") == "800" and c["images"][0].get("height") == "800") == 50
+reviewed_ids = {item["id"] for item in reviewed}
+reviewed_cards = [card for card in parser.cards if card["id"] in reviewed_ids]
+assert len(reviewed_cards) == len(reviewed_ids)
+assert all(card["images"][0].get("width") == "800" and card["images"][0].get("height") == "800" for card in reviewed_cards)
+assert sum(1 for card in parser.cards if card["images"][0].get("width") == "800" and card["images"][0].get("height") == "800") == len(reviewed_ids)
 assert any(".gallery-card img{" in line and "aspect-ratio:1 / 1" in line for line in Path("gallery.css").read_text(encoding="utf-8").splitlines())
 
 NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9", "im": "http://www.google.com/schemas/sitemap-image/1.1"}
@@ -80,4 +84,4 @@ for marker in ("gallery-toolbar", "gallery-lightbox-share", "/api/gallery/likes"
     assert marker in js, marker
 assert "window.ZombieCashTrack = send;" in Path("script.js").read_text(encoding="utf-8")
 
-print("PASS: 50 static gallery cards, all 50 visually reviewed, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")
+print(f"PASS: 50 static gallery cards, {len(reviewed)} visually reviewed, {len(pending)} pending review and Pinterest-blocked, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")
