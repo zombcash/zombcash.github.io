@@ -882,7 +882,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
     </div>
     <div class="zc-promo-player-wrap">
       <div class="zc-promo-player-top"><span><i></i> ZC // PROMO TRANSMISSION</span><span id="zc-promo-version">ARCHIVE</span></div>
-      <video id="zc-promo-player" controls playsinline preload="metadata" aria-label="ZombieCash promotional video">
+      <video id="zc-promo-player" controls playsinline preload="none" aria-label="ZombieCash promotional video">
         <p>Your browser cannot play this video. <a href="https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10">Open the video release instead.</a></p>
       </video>
       <div class="zc-promo-player-foot"><span>PLAY ON DEMAND · SOUND ON</span><a id="zc-promo-download" href="https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10" target="_blank" rel="noopener noreferrer">OPEN / DOWNLOAD ↗</a></div>
@@ -1731,7 +1731,7 @@ section.section.community-console #jupiter-zombcash-terminal #jupiter-terminal-i
   function render(){
     if(!videos.length){status.textContent='The video library is temporarily unavailable.';count.textContent='NO VIDEOS';return}
     const item=videos[index];
-    player.pause();player.src=safeUrl(item.src);player.load();
+    player.pause();player.src=safeUrl(item.src);
     count.textContent=String(index+1).padStart(2,'0')+' / '+String(videos.length).padStart(2,'0');
     version.textContent=item.tag||'ARCHIVE';
     status.textContent=item.date?'TRANSMISSION DATE: '+item.date:'OFFICIAL ZOMBIECASH VIDEO';
