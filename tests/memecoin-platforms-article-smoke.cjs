@@ -2,7 +2,7 @@ const { chromium } = require('playwright');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const BASE = 'https://zombcash.github.io/';
+const BASE = process.env.SITE_URL || 'https://zombcash.github.io/';
 const locales = ['en','de','fr','it','ja','zh-CN','ru','tr','hi'];
 const paths = {
   en: 'memecoin-promotion-platforms-comparison.html',

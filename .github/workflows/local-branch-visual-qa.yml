@@ -2,6 +2,27 @@ name: Local branch visual QA
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+    paths:
+      - "index.html"
+      - "de/index.html"
+      - "fr/index.html"
+      - "it/index.html"
+      - "ja/index.html"
+      - "zh-CN/index.html"
+      - "ru/index.html"
+      - "tr/index.html"
+      - "hi/index.html"
+      - "shared-nav.js"
+      - "language.js"
+      - "tests/mobile-viewport-smoke.cjs"
+      - "tests/localized-article-visual.cjs"
+      - "tests/survivor-field-manual-smoke.cjs"
+      - "tests/memecoin-platforms-article-smoke.cjs"
+      - "tests/language-persistence-smoke.cjs"
+      - ".github/workflows/local-branch-visual-qa.yml"
 
 permissions:
   contents: read
