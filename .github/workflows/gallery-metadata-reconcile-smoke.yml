@@ -1,6 +1,8 @@
 name: Gallery metadata reconciliation smoke
 
 on:
+  push:
+    branches: [gallery-metadata-main-reconciled-20261104]
   pull_request:
     branches: [main]
     paths:
