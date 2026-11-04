@@ -1938,4 +1938,24 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
   syncAdScale();
 })();
 </script>
+
+<style id="zc-hero-sponsor-compact-alignment">
+/* Keep the sponsor card compact instead of stretching it to the full hero row. */
+@media (min-width: 1101px) {
+  body > main#home > section.hero .zc-hero-sponsor-panel {
+    align-self: start !important;
+    height: auto !important;
+    min-height: 460px !important;
+    max-height: none !important;
+  }
+  body > main#home > section.hero .zc-hero-sponsor {
+    height: auto !important;
+    flex: 0 0 auto !important;
+  }
+  body > main#home > section.hero .zc-hero-sponsor-promo {
+    flex: 0 0 auto !important;
+    min-height: 270px !important;
+  }
+}
+</style>
 </body></html>
