@@ -2,6 +2,8 @@ name: Search Console URL Inspection
 
 on:
   workflow_dispatch:
+  push:
+    branches: [gsc-full-sitemap-inspection-20261104]
 
 permissions:
   contents: read
@@ -9,7 +11,7 @@ permissions:
 jobs:
   inspect:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 45 # allow the full 186-URL sitemap inspection to finish
     steps:
       - name: Install Google API client
         run: python -m pip install --disable-pip-version-check requests google-api-python-client google-auth
