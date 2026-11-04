@@ -87,7 +87,52 @@ def main():
         before = next_before
         time.sleep(0.35)
     items = sorted(all_items.values(), key=lambda item: (item.get("date") or "", item.get("post_id") or ""), reverse=True)[:MAX_ITEMS]
-    payload = {"source": f"https://t.me/{CHANNEL}", "updated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "items": items}
+
+    # Preserve editorial review, ALT text, rights and Pinterest safeguards for
+    # posts that remain in the rolling archive. New posts are never treated as
+    # visually reviewed or cleared for distribution automatically.
+    previous = {}
+    if OUTPUT.exists():
+        try:
+            previous_data = json.loads(OUTPUT.read_text(encoding="utf-8"))
+            previous = {str(item.get("id")): item for item in previous_data.get("items", []) if item.get("id")}
+        except (OSError, ValueError, TypeError):
+            previous = {}
+
+    source_keys = {"id", "image", "caption", "post_url", "date", "post_id"}
+    for item in items:
+        prior = previous.get(str(item.get("id")))
+        if prior:
+            for key, value in prior.items():
+                if key not in source_keys:
+                    item[key] = value
+            continue
+
+        caption = re.sub(r"\\s+", " ", str(item.get("caption") or "")).strip()
+        slug = re.sub(r"[^a-z0-9]+", "-", str(item.get("id") or "gallery-item").lower()).strip("-")
+        item.update({
+            "rights_status": "review-required",
+            "title": caption[:100] or "ZombieCash gallery artwork",
+            "description": caption or "New artwork from the ZombieCash Telegram channel.",
+            "alt_text": "ZombieCash gallery artwork — visual ALT review pending.",
+            "category_ids": [],
+            "series": "unclassified",
+            "tags": [],
+            "language": "en",
+            "pinterest_status": "blocked-rights-review",
+            "slug": slug,
+            "anchor_id": "gallery-" + slug,
+            "metadata_version": 2,
+            "alt_review_status": "pending-review",
+            "alt_review_method": "not-reviewed",
+        })
+
+    payload = {
+        "schema_version": 2,
+        "source": f"https://t.me/{CHANNEL}",
+        "updated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "items": items,
+    }
     OUTPUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Synced {len(items)} image entries from @{CHANNEL} into {OUTPUT} (limit: {MAX_ITEMS})")
 
