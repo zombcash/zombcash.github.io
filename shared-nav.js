@@ -1448,7 +1448,11 @@
     const mobile = window.matchMedia('(max-width: 900px)').matches;
     const nativeWidth = mobile ? 320 : 728;
     const nativeHeight = mobile ? 50 : 90;
-    const available = Math.max(1, stage.clientWidth || nativeWidth);
+    // Measure the sponsor container, not the stage itself: the stage width is
+    // set by this function, so reading it on resize would preserve the old
+    // scaled width when moving between mobile and desktop breakpoints.
+    const container = stage.parentElement;
+    const available = Math.max(1, container ? container.clientWidth : nativeWidth);
     const scale = Math.min(1, available / nativeWidth);
     unit.style.width = nativeWidth + 'px';
     unit.style.minWidth = nativeWidth + 'px';
