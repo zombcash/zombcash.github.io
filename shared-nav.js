@@ -1425,98 +1425,55 @@
 })();
 
 
-/* One Adsterra 320x50 banner on all localized homepages; legacy ad placements are removed. */
+/* Responsive Adsterra slot stays inside the original right-hand hero panel. */
 (() => {
   'use strict';
   const path = location.pathname;
   const isHomepage = path === '/' || path === '/index.html' ||
     /^\/(?:de|fr|it|ja|zh-CN|ru|tr|hi)(?:\/index\.html)?\/?$/.test(path);
-  const legacyWrappers = '.aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, .gallery-ad-unit, .field-manual-ad, .maker-ad-unit, [data-zombcash-ad-slot]';
 
   const removeLegacyAds = () => {
     document.querySelectorAll('iframe[data-aa], iframe[src*="acceptable.a-ads.com"], script[src*="acceptable.a-ads.com"]').forEach(node => node.remove());
     if (!isHomepage) {
-      document.querySelectorAll(legacyWrappers + ', .zc-adsterra-section').forEach(node => node.remove());
+      document.querySelectorAll('.aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, .gallery-ad-unit, .field-manual-ad, .maker-ad-unit, .zc-adsterra-section, [data-zombcash-ad-slot]').forEach(node => node.remove());
       document.querySelectorAll('script[src*="bauval.org"]').forEach(node => node.remove());
-      return;
     }
-    document.querySelectorAll('.outbreak-ad-unit, .arcade-ad-unit, .gallery-ad-unit, .field-manual-ad, .maker-ad-unit, .zsh-shared-ad').forEach(node => node.remove());
   };
 
-  const addAdStyles = () => {
-    if (document.getElementById('zc-adsterra-responsive-style')) return;
-    const style = document.createElement('style');
-    style.id = 'zc-adsterra-responsive-style';
-    style.textContent = `
-      .zc-adsterra-section{display:block;position:relative;box-sizing:border-box;width:100%;max-width:100%;min-width:0;margin:0;padding:16px clamp(10px,3vw,32px) 18px;background:#080b11;border-top:1px solid #9bff4522;border-bottom:1px solid #9bff4522;overflow:hidden}
-      .zc-adsterra-inner{display:flex;flex-direction:column;align-items:center;gap:9px;box-sizing:border-box;width:100%;max-width:1120px;min-width:0;margin:0 auto;text-align:center}
-      .zc-adsterra-label{margin:0;color:#9bff45;font:600 9px/1.5 Orbitron,Arial,sans-serif;letter-spacing:1.6px}
-      .zc-adsterra-stage{display:flex;align-items:flex-start;justify-content:center;position:relative;box-sizing:border-box;width:min(100%,320px);height:50px;min-width:0;margin:0 auto;overflow:hidden}
-      .zc-adsterra-unit{display:block;position:relative;flex:0 0 320px;width:320px;height:50px;min-width:320px;transform-origin:top center;margin:0 auto;overflow:visible}
-      .zc-adsterra-unit iframe{display:block!important;width:320px!important;height:50px!important;max-width:none!important;min-width:320px!important;border:0!important;margin:0!important;padding:0!important}
-      .zc-ad-promo-fill{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;width:100%;max-width:520px;margin:2px auto 0;padding:10px 14px;box-sizing:border-box;border:1px solid #9bff4528;background:linear-gradient(120deg,#0b140d,#090d12);text-align:center}
-      .zc-ad-promo-kicker{margin:0;color:#9bff45;font:700 9px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.14em}
-      .zc-ad-promo-title{margin:0;color:#edf5e5;font:700 clamp(13px,2vw,17px)/1.2 Orbitron,Arial,sans-serif}
-      .zc-ad-promo-copy{margin:0;color:#a4b4a0;font:500 13px/1.4 Rajdhani,Arial,sans-serif}
-      .zc-ad-promo-link{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 14px;border:1px solid #9bff45;background:#9bff45;color:#071006;text-decoration:none;font:700 9px/1.4 Orbitron,Arial,sans-serif;letter-spacing:.04em}
-      .zc-ad-promo-link:hover{background:#c5ff8a;border-color:#c5ff8a}
-      @media(max-width:600px){.zc-adsterra-section{padding:12px 8px 14px}.zc-adsterra-inner{gap:7px}.zc-adsterra-label{font-size:8px}.zc-ad-promo-fill{padding:9px 8px}.zc-ad-promo-copy{font-size:12px}}
-    `;
-    document.head.appendChild(style);
-  };
-
-  const mountAd = () => {
-    if (!isHomepage || !document.body) return;
-    const hero = document.querySelector('main#home .hero, main .hero, body > .hero');
-    if (!hero) return;
-
-    const candidates = Array.from(document.querySelectorAll('.zc-adsterra-section, .aads-ad-section, [data-zombcash-ad-slot]'));
-    let section = candidates.shift() || document.createElement('section');
-    candidates.forEach(node => node.remove());
-    section.className = 'zc-adsterra-section';
-    section.setAttribute('data-zombcash-ad-slot', 'adsterra-320x50');
-    section.setAttribute('aria-label', 'Sponsored advertisement');
-    if (!section.querySelector('.zc-adsterra-unit')) {
-      section.innerHTML = '<div class="zc-adsterra-inner"><div class="zc-adsterra-label">COMMUNITY SUPPORT / SPONSORED</div><div class="zc-adsterra-stage"><div class="zc-adsterra-unit" aria-label="Adsterra 320 by 50 banner"></div></div><div class="zc-ad-promo-fill"><p class="zc-ad-promo-kicker">ZOMBCASH // SPONSOR ZONE</p><h2 class="zc-ad-promo-title">YOUR PROJECT. OUR UNDEAD INTERNET.</h2><p class="zc-ad-promo-copy">Put your project in front of the ZombieCash community. Contact the crew to discuss a sponsorship.</p><a class="zc-ad-promo-link" href="https://t.me/ZombieCashCTO" target="_blank" rel="noopener noreferrer">CONTACT THE CREW ↗</a></div></div>';
-    }
-
-    // Move the single sponsor unit outside the hero content so it cannot disturb
-    // the hero grid, radar art, or mobile hero positioning.
-    hero.insertAdjacentElement('afterend', section);
-    addAdStyles();
-
-    const stage = section.querySelector('.zc-adsterra-stage');
-    const unit = section.querySelector('.zc-adsterra-unit');
+  const fitHeroAd = () => {
+    if (!isHomepage) return;
+    const stage = document.querySelector('.zc-hero-ad-stage');
+    const unit = document.querySelector('.zc-hero-ad-unit');
     if (!stage || !unit) return;
-
-    const fitBanner = () => {
-      const available = Math.max(1, Math.min(320, stage.clientWidth || 320));
-      const scale = available / 320;
-      unit.style.transform = 'scale(' + scale + ')';
-      unit.style.transformOrigin = 'top center';
-      stage.style.height = (50 * scale) + 'px';
-    };
-    fitBanner();
-    if (window.ResizeObserver && !stage.dataset.resizeObserved) {
-      const observer = new ResizeObserver(fitBanner);
-      observer.observe(stage);
-      stage.dataset.resizeObserved = 'true';
-    } else if (!window.__zcAdsterraResizeBound) {
-      window.__zcAdsterraResizeBound = true;
-      window.addEventListener('resize', fitBanner, {passive:true});
-    }
-
-    // Adsterra's official embed is parser-executed static markup in each homepage.
-    // Never create the provider script dynamically; that can break document.write embeds.
-    if (!unit.querySelector('script[src*="bauval.org/22/fbb2658d8dcb4503b358387f042869d1"]')) {
-      unit.dataset.adsterraMissingCode = 'true';
-    }
+    const mobile = window.matchMedia('(max-width: 900px)').matches;
+    const nativeWidth = mobile ? 320 : 728;
+    const nativeHeight = mobile ? 50 : 90;
+    const available = Math.max(1, stage.clientWidth || nativeWidth);
+    const scale = Math.min(1, available / nativeWidth);
+    unit.style.width = nativeWidth + 'px';
+    unit.style.minWidth = nativeWidth + 'px';
+    unit.style.height = nativeHeight + 'px';
+    unit.style.flexBasis = nativeWidth + 'px';
+    unit.style.transform = 'scale(' + scale + ')';
+    unit.style.transformOrigin = 'top center';
+    stage.style.height = (nativeHeight * scale) + 'px';
   };
 
   const run = () => {
     removeLegacyAds();
-    mountAd();
+    fitHeroAd();
+    const stage = document.querySelector('.zc-hero-ad-stage');
+    if (stage && window.ResizeObserver && !stage.dataset.zcAdResizeObserver) {
+      const observer = new ResizeObserver(fitHeroAd);
+      observer.observe(stage);
+      stage.dataset.zcAdResizeObserver = 'true';
+    }
+    if (!window.__zcHeroAdResizeBound) {
+      window.__zcHeroAdResizeBound = true;
+      window.addEventListener('resize', fitHeroAd, {passive:true});
+    }
   };
+
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run, {once:true});
   else run();
 })();
