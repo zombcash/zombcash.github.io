@@ -12,7 +12,7 @@ assert all(item.get("rights_status") == "review-required" for item in items)
 reviewed = [item for item in items if item.get("alt_review_status") == "visual-reviewed"]
 assert len(reviewed) == 50
 assert sum(item.get("alt_review_method") == "manual-contact-sheet-review" for item in reviewed) == 46
-assert sum(item.get("alt_review_method") == "manual-visual-review" for item in reviewed) == 2
+assert sum(item.get("alt_review_method") == "manual-visual-review" for item in reviewed) == 4
 unreviewed = [item for item in items if item.get("alt_review_status") != "visual-reviewed"]
 assert {item["id"] for item in unreviewed} == set()
 assert all(item.get("rights_status") == "review-required" for item in unreviewed)
@@ -49,7 +49,7 @@ assert all(card["anchor"] for card in parser.cards)
 assert all(len(card["images"]) == 1 for card in parser.cards)
 assert all(card["images"][0].get("alt", "").strip() for card in parser.cards)
 assert all(card["likes"] == 1 for card in parser.cards)
-assert sum(1 for c in parser.cards if c["images"][0].get("width") == "800" and c["images"][0].get("height") == "800") == 48
+assert sum(1 for c in parser.cards if c["images"][0].get("width") == "800" and c["images"][0].get("height") == "800") == 50
 assert any(".gallery-card img{" in line and "aspect-ratio:1 / 1" in line for line in Path("gallery.css").read_text(encoding="utf-8").splitlines())
 
 NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9", "im": "http://www.google.com/schemas/sitemap-image/1.1"}
