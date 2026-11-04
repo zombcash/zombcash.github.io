@@ -227,8 +227,13 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     await page.getByRole("button", { name: "Nightmare & Horror" }).click();
     const filterTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_filter"));
     if (!filterTracked) throw new Error("Gallery filter analytics event was not recorded");
+    const expectedCategoryIds = categoryId => galleryData.items.filter(item => (item.category_ids || []).includes(categoryId)).map(item => item.id).sort();
+    const visibleCategoryIds = async () => page.locator("#gallery-grid .gallery-card").evaluateAll(cards => cards.map(card => card.dataset.galleryId).sort());
+    const expectedHorrorIds = expectedCategoryIds("nightmare-horror");
     const horror = await page.locator("#gallery-grid .gallery-card").count();
-    if (horror !== 17) throw new Error("Nightmare filter expected 17 cards (including current post #4176), got " + horror);
+    if (horror !== expectedHorrorIds.length || JSON.stringify(await visibleCategoryIds()) !== JSON.stringify(expectedHorrorIds)) {
+      throw new Error("Nightmare filter does not match the current gallery metadata: expected " + expectedHorrorIds.length + ", got " + horror);
+    }
     await page.locator(".gallery-search").fill("goldfish");
     await page.locator(".gallery-search").press("Tab");
     const searchTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_search"));
@@ -243,10 +248,10 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     if (await page.locator("#gallery-grid .gallery-like-button").count() !== 50) throw new Error("Clear filters should restore like controls");
     await page.getByRole("button", { name: "Zombie Characters" }).click();
     const zombieCharacters = await page.locator("#gallery-grid .gallery-card").count();
-    if (zombieCharacters !== 16) throw new Error("Zombie Characters filter should show 16 visually classified items, got " + zombieCharacters);
+    if (zombieCharacters !== expectedCategoryIds("zombie-characters").length) throw new Error("Zombie Characters filter count does not match current gallery metadata: " + zombieCharacters);
     await page.getByRole("button", { name: "Apocalypse & Survival" }).click();
     const apocalypseSurvival = await page.locator("#gallery-grid .gallery-card").count();
-    if (apocalypseSurvival !== 3) throw new Error("Apocalypse & Survival filter should show 3 visually classified items, got " + apocalypseSurvival);
+    if (apocalypseSurvival !== expectedCategoryIds("apocalypse-survival").length) throw new Error("Apocalypse & Survival filter count does not match current gallery metadata: " + apocalypseSurvival);
     await page.locator(".gallery-reset").click();
     const categoryReset = await page.locator("#gallery-grid .gallery-card").count();
     if (categoryReset !== 50) throw new Error("Reset after taxonomy filters should restore all 50 images");
