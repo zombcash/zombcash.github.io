@@ -1772,9 +1772,7 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
     flex: 1 0 230px !important; min-height: 230px !important; padding: 22px 16px !important;
   }
 }
-@media (max-width: 360px) {
-  body > main#home > section.hero .zc-hero-ad-unit { transform: scale(.86) !important; transform-origin: center center !important; }
-}
+
 </style>
 
 <style id="zc-home-locale-typography">
@@ -1784,4 +1782,53 @@ html[lang="ja"] .hero-content h1,html[lang="zh-CN"] .hero-content h1{line-height
 html[lang="hi"] .hero-content h1{line-height:1.45;letter-spacing:0;font-family:"Noto Sans Devanagari",sans-serif;}
 @media(max-width:760px){html[lang] .hero-content h1{font-size:clamp(28px,7.2vw,44px);line-height:1.2;}}
 </style>
+<style id="zc-hero-sponsor-compact-alignment">
+/* Keep the sponsor card compact and aligned consistently across every locale. */
+@media (min-width: 1101px) {
+  body > main#home > section.hero .zc-hero-sponsor-panel {
+    align-self: start !important;
+    height: auto !important;
+    min-height: 460px !important;
+    max-height: none !important;
+  }
+  body > main#home > section.hero .zc-hero-sponsor {
+    height: auto !important;
+    flex: 0 0 auto !important;
+  }
+  body > main#home > section.hero .zc-hero-sponsor-promo {
+    flex: 0 0 auto !important;
+    min-height: 270px !important;
+  }
+}
+</style>
+<script id="zc-responsive-ad-scale-fix">
+/* Match the ad creative to the available banner slot on every localized homepage. */
+(function () {
+  var stage = document.querySelector('.zc-hero-sponsor-panel .zc-hero-ad-stage');
+  var unit = stage && stage.querySelector('.zc-hero-ad-unit');
+  if (!stage || !unit) return;
+  var mobileQuery = window.matchMedia('(max-width: 900px)');
+  function syncAdScale() {
+    var bannerWidth = mobileQuery.matches ? 320 : 728;
+    var bannerHeight = mobileQuery.matches ? 50 : 90;
+    var availableWidth = stage.clientWidth;
+    if (!availableWidth) return;
+    var scale = Math.min(1, availableWidth / bannerWidth);
+    var scaledHeight = Math.round(bannerHeight * scale * 100) / 100;
+    unit.style.setProperty('--zc-ad-scale', String(scale));
+    stage.style.setProperty('height', scaledHeight + 'px', 'important');
+    stage.style.setProperty('min-height', scaledHeight + 'px', 'important');
+    stage.style.setProperty('max-height', scaledHeight + 'px', 'important');
+    stage.style.setProperty('flex-basis', scaledHeight + 'px', 'important');
+  }
+  if ('ResizeObserver' in window) {
+    var observer = new ResizeObserver(syncAdScale);
+    observer.observe(stage.parentElement || stage);
+  }
+  if (mobileQuery.addEventListener) mobileQuery.addEventListener('change', syncAdScale);
+  else if (mobileQuery.addListener) mobileQuery.addListener(syncAdScale);
+  window.addEventListener('resize', syncAdScale, { passive: true });
+  syncAdScale();
+})();
+</script>
 </body></html>
