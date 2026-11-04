@@ -44,6 +44,8 @@ jobs:
           npm init -y
           npm install --no-save playwright
           npx playwright install --with-deps chromium
+      - name: Refresh Telegram archive and image dimensions
+        run: python scripts/sync_gallery.py
       - name: Validate Python scripts
         run: python -m py_compile scripts/sync_gallery.py scripts/sync_gallery_image_seo.py scripts/generate_localized_gallery_pages.py scripts/build_gallery_visual_contact_sheet.py
       - name: Validate gallery JSON and generated index
@@ -147,7 +149,7 @@ jobs:
         run: node tests/gallery-discovery-smoke.cjs
       - name: Commit generated gallery preview assets
         run: |
-          files="gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html"
+          files="gallery-data.json gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html"
           if git diff --quiet -- $files; then
             echo "Generated gallery assets are current."
             exit 0
