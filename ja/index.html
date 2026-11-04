@@ -733,7 +733,35 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 </style>
 
 <meta name="38200f66893a4042799616bc41b0aa824be9a7b0" content="38200f66893a4042799616bc41b0aa824be9a7b0" />
-<style id="zc-home-ad-consistency">body>main#home>section.zc-adsterra-section{margin:0!important;padding:12px 5% 18px!important}body>main#home>section.zc-adsterra-section .zc-adsterra-inner{max-width:1120px!important}@media(max-width:680px){body>main#home>section.zc-adsterra-section{padding:10px 4% 16px!important}}</style></head>
+<style id="zc-home-ad-consistency">body>main#home>section.zc-adsterra-section{margin:0!important;padding:12px 5% 18px!important}body>main#home>section.zc-adsterra-section .zc-adsterra-inner{max-width:1120px!important}@media(max-width:680px){body>main#home>section.zc-adsterra-section{padding:10px 4% 16px!important}}</style><style id="zc-hero-sponsor-responsive">
+.zc-hero-sponsor-panel{display:flex!important;align-items:stretch!important;justify-content:center!important;min-width:0!important;min-height:clamp(420px,48vh,590px)!important;padding:clamp(14px,1.6vw,24px)!important;overflow:hidden!important;background:linear-gradient(145deg,#0a120d,#070b09 62%,#0d1010)!important;border:1px solid #9bff4540!important;box-shadow:0 20px 70px #0008,inset 0 0 55px #9bff4508!important}
+.zc-hero-sponsor{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:14px;width:100%;min-width:0}
+.zc-hero-sponsor-label{width:100%;text-align:center;color:#829481;font:600 9px/1.5 Orbitron,Arial,sans-serif;letter-spacing:1.5px}
+.zc-hero-ad-stage{display:flex;align-items:flex-start;justify-content:center;position:relative;width:100%;max-width:728px;height:90px;min-width:0;margin:0 auto;overflow:hidden}
+.zc-hero-ad-unit{display:block;position:relative;flex:0 0 728px;width:728px;height:90px;min-width:728px;transform:scale(var(--zc-ad-scale,1));transform-origin:top center;margin:0 auto;overflow:visible}
+.zc-hero-ad-unit iframe{display:block!important;width:728px!important;height:90px!important;max-width:none!important;min-width:728px!important;border:0!important;margin:0!important;padding:0!important}
+.zc-hero-sponsor-promo{display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:14px;width:100%;min-height:270px;padding:28px 20px;box-sizing:border-box;border:1px solid #9bff4528;background:radial-gradient(ellipse at 50% 30%,#9bff4510,transparent 65%),linear-gradient(145deg,#08100b,#090d11);text-align:center}
+.zc-hero-sponsor-kicker{margin:0;color:#9bff45;font:700 9px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.14em}
+.zc-hero-sponsor-promo h2{margin:0;color:#edf5e5;font:800 clamp(21px,2.3vw,34px)/1.15 Orbitron,Arial,sans-serif;letter-spacing:-.04em}
+.zc-hero-sponsor-promo p:not(.zc-hero-sponsor-kicker){max-width:420px;margin:0;color:#a4b4a0;font:500 15px/1.5 Rajdhani,Arial,sans-serif}
+.zc-hero-sponsor-promo a{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 18px;border:1px solid #9bff45;background:#9bff45;color:#071006;text-decoration:none;font:700 9px/1.4 Orbitron,Arial,sans-serif;letter-spacing:.04em}
+.zc-hero-sponsor-promo a:hover{background:#c5ff8a;border-color:#c5ff8a}
+@media(max-width:900px){
+ .zc-hero-sponsor-panel{min-height:0!important;height:auto!important}
+ .zc-hero-ad-stage{max-width:320px;height:50px}
+ .zc-hero-ad-unit{flex-basis:320px;width:320px;height:50px;min-width:320px}
+ .zc-hero-ad-unit iframe{width:320px!important;height:50px!important;min-width:320px!important}
+ .zc-hero-sponsor-promo{min-height:210px;padding:22px 16px}
+ .zc-hero-sponsor-promo h2{font-size:clamp(20px,4vw,28px)}
+}
+@media(max-width:680px){
+ .zc-hero-sponsor-panel{width:100%!important;margin:0!important;padding:12px!important}
+ .zc-hero-sponsor{gap:10px}
+ .zc-hero-sponsor-promo{min-height:190px;padding:20px 12px}
+ .zc-hero-sponsor-promo p:not(.zc-hero-sponsor-kicker){font-size:13px}
+}
+</style>
+</head>
 <body>
 <div class="scanlines"></div>
 <header class="topbar">
@@ -753,87 +781,48 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
     <div class="hero-actions"><a class="btn btn-primary" href="#radar">⌁ レーダーを開く</a><a class="btn btn-ghost" href="#lab">☣ ゾンビラボへ</a></div><section class="field-manual-spotlight" aria-labelledby="field-manual-title"><div class="field-manual-copy"><span class="field-manual-kicker">サバイバー情報／実践ガイド</span><h2 id="field-manual-title">情報・サバイバルガイド</h2><p>Solanaトークンを調査し、市場シグナルを読み解き、ウォレットを守り、よくある詐欺を見抜きましょう。テーマや日付から検索できる実践ガイドを掲載しています。</p><a class="field-manual-link" href="/ja/survivor-field-manual.html">フィールドマニュアルを開く <span aria-hidden="true">↗</span></a></div><div class="field-manual-status"><span class="field-manual-dot"></span><span>フィールドアーカイブ</span><strong>利用可能なガイド：3件</strong><small>資料を順次追加</small></div></section>
     <div class="hero-stats"><div><strong>24/7</strong><span>感染状況：ライブ</span></div><i></i><div><strong>3</strong><span>Solanaセクター</span></div><i></i><div><strong>0</strong><span>クルーのみ</span></div></div>
   </div>
-  <aside class="outbreak-panel zc-hero-art-panel" aria-label="ZombieCash cinematic outbreak radar artwork">
-    <div class="zc-radar-art" role="img" aria-label="A neon green biohazard radar scanning a ruined city at night">
-      <svg class="zc-radar-scene" viewBox="0 0 900 650" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <linearGradient id="zcSky" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#050907"/><stop offset=".56" stop-color="#0c1b10"/><stop offset="1" stop-color="#070910"/></linearGradient>
-          <radialGradient id="zcGlow"><stop stop-color="#8dff36" stop-opacity=".26"/><stop offset=".6" stop-color="#5aff22" stop-opacity=".07"/><stop offset="1" stop-color="#5aff22" stop-opacity="0"/></radialGradient>
-          <linearGradient id="zcGround" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#18371d" stop-opacity=".55"/><stop offset="1" stop-color="#030605"/></linearGradient>
-          <pattern id="zcGrid" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M36 0H0V36" fill="none" stroke="#9bff45" stroke-opacity=".14" stroke-width=".7"/></pattern>
-          <filter id="zcSoftGlow"><feGaussianBlur stdDeviation="8"/></filter>
-        </defs>
-        <rect width="900" height="650" fill="url(#zcSky)"/>
-        <circle cx="650" cy="215" r="235" fill="url(#zcGlow)"/>
-        <circle cx="720" cy="155" r="66" fill="#8aff54" opacity=".08"/>
-        <circle cx="720" cy="155" r="54" fill="none" stroke="#9bff45" stroke-opacity=".16"/>
-        <g fill="#020504" opacity=".9">
-          <path d="M0 425V355h26v-28h12v46h26V302h15v-35h9v35h17v98h24v-65h19v-48h12v-23h8v23h18v130h34v-82h19v-53h11v-31h8v31h16v139h28v-48h19v-84h14v-37h9v37h14v132h22v-93h17v-42h11v-21h8v21h14v135h35v-76h15v-56h14v-27h8v27h13v132h32v-110h17v-47h13v-22h8v22h14v157h27v-73h17v-41h12v-25h8v25h15v114h30v-87h18v-47h13v-24h8v24h14v134h32v-60h17v-53h14v-29h8v29h17v113h34v-97h16v-38h10v-22h8v22h16v135h30v-68h16v-41h12v-25h8v25h16v109h40v225H0Z"/>
-          <path d="M0 515 72 475l35 20 40-61 33 32 50-70 31 27 35-50 40 42 47-18 41 44 45-59 37 36 45-21 37 29 37-47 35 23 42-56 30 20 39-30 34 31 35-49 35 32 38-19 50 41 40-14v203H0Z" fill="url(#zcGround)"/>
-        </g>
-        <rect width="900" height="650" fill="url(#zcGrid)"/>
-        <g stroke="#9bff45" fill="none" stroke-width="1" opacity=".42">
-          <path d="M0 96H900M0 325H900M0 552H900M90 0V650M450 0V650M810 0V650"/>
-          <path d="M55 50h40m-20-20v40M820 65h28m-14-14v28M72 570h34m-17-17v34"/>
-        </g>
-        <g transform="translate(510 302)" fill="none" stroke="#9bff45">
-          <circle r="195" stroke-opacity=".25" stroke-dasharray="3 8"/>
-          <circle r="163" stroke-opacity=".65" stroke-width="1.5"/>
-          <circle r="135" stroke="#d9ffb0" stroke-opacity=".65" stroke-width="1.2"/>
-          <circle r="102" stroke-opacity=".55" stroke-dasharray="7 7"/>
-          <circle r="68" stroke-opacity=".9" stroke-width="1.5"/>
-          <path d="M0-225V-58M0 58V225M-225 0H-58M58 0H225" stroke-width="2"/>
-          <path d="M-112-112 112 112M112-112-112 112" stroke-opacity=".14"/>
-          <path d="M-165-52A173 173 0 0 1 -90-147" stroke-width="5" stroke-linecap="round" opacity=".9"/>
-          <path d="M145 84l42 22-16 44" stroke-width="2" opacity=".6"/>
-          <circle cx="-110" cy="-116" r="5" fill="#a7ff45" stroke="none"/>
-          <circle cx="85" cy="105" r="4" fill="#a7ff45" stroke="none"/>
-          <circle cx="155" cy="-32" r="3" fill="#a7ff45" stroke="none"/>
-          <circle cx="-80" cy="158" r="3" fill="#a7ff45" stroke="none"/>
-        </g>
-        <circle cx="510" cy="302" r="45" fill="#9bff45" opacity=".08" filter="url(#zcSoftGlow)"/>
-        <g transform="translate(510 302)" stroke="#aaff58" stroke-width="4" stroke-linejoin="round" fill="none">
-          <circle r="26" stroke-opacity=".9"/>
-          <path d="M-8-5 0-20 8-5 24 4 8 13 0 28-8 13-24 4Z" fill="#9bff45" fill-opacity=".12"/>
-          <circle r="5" fill="#cfff9a" stroke="none"/>
-        </g>
-        <g fill="#aaff58"><rect x="330" y="122" width="6" height="6"/><rect x="685" y="426" width="6" height="6"/><rect x="286" y="405" width="4" height="4"/><rect x="753" y="238" width="5" height="5"/></g>
-        <g stroke="#9bff45" stroke-opacity=".8" fill="none"><path d="M510 77v-24h64M705 302h96l28-28"/><path d="M510 526v31h-88M315 302h-76l-20 20"/></g>
-        <g fill="#c7e9b4" font-family="monospace" font-size="11" letter-spacing="2"><text x="45" y="52">ZC // OUTBREAK MONITOR</text><text x="45" y="70" fill="#9bff45">SECTOR 06 · SOLANA</text><text x="705" y="585">SIGNAL: UNDEAD</text><text x="45" y="610" opacity=".65">SCANNING FOR SIGNS OF LIFE...</text></g>
-        <rect width="900" height="650" fill="none" stroke="#9bff45" stroke-opacity=".28"/>
-        <rect width="900" height="650" fill="#000" opacity=".06"/>
-        <path d="M0 8H900M0 642H900" stroke="#aaff58" stroke-opacity=".22"/>
-      </svg>
-      <div class="zc-art-scanlines" aria-hidden="true"></div>
-      <div class="zc-art-corner zc-art-corner-tl"></div><div class="zc-art-corner zc-art-corner-br"></div>
-      <div class="zc-art-caption"><span class="zc-art-live-dot"></span><span>OUTBREAK RADAR</span><b>LIVE / 24·7</b></div>
+  <aside class="outbreak-panel zc-hero-art-panel zc-hero-sponsor-panel" aria-label="ZombieCash sponsor placement">
+    <div class="zc-hero-sponsor">
+      <div class="zc-hero-sponsor-label">COMMUNITY SUPPORT / SPONSORED</div>
+      <div class="zc-hero-ad-stage">
+        <div class="zc-hero-ad-unit" data-zombcash-ad-slot="adsterra-responsive" aria-label="Responsive Adsterra banner">
+          <script>
+            (function () {
+              var useMobile = window.matchMedia && window.matchMedia('(max-width: 900px)').matches;
+              if (useMobile) {
+                window.atOptions = {
+                  'key': 'fbb2658d8dcb4503b358387f042869d1',
+                  'format': 'iframe',
+                  'height': 50,
+                  'width': 320,
+                  'params': {}
+                };
+                document.write('<scr' + 'ipt src="https://bauval.org/22/fbb2658d8dcb4503b358387f042869d1"></scr' + 'ipt>');
+              } else {
+                window.atOptions = {
+                  'key': '08a70f8414101d6c6b04e25aa232f436',
+                  'format': 'iframe',
+                  'height': 90,
+                  'width': 728,
+                  'params': {}
+                };
+                document.write('<scr' + 'ipt src="https://bauval.org/22/08/08a70f8414101d6c6b04e25aa232f436"></scr' + 'ipt>');
+              }
+            })();
+          </script>
+        </div>
+      </div>
+      <div class="zc-hero-sponsor-promo">
+        <p class="zc-hero-sponsor-kicker">ZOMBCASH // SPONSOR ZONE</p>
+        <h2>YOUR PROJECT.<br>OUR UNDEAD INTERNET.</h2>
+        <p>Put your project in front of the ZombieCash community. Contact the crew to discuss a sponsorship.</p>
+        <a href="https://t.me/ZombieCashCTO" target="_blank" rel="noopener noreferrer">CONTACT THE CREW ↗</a>
+      </div>
     </div>
   </aside>  </div>
   <div class="hero-bottom"><span>SCANNING FOR SIGNS OF LIFE...</span><span>SYS.STATUS: <b>UNDEAD</b></span><span>COORD: 6C-CB-F9</span></div>
 </section>
-<section class="zc-adsterra-section" aria-label="Sponsored advertisement" data-zombcash-ad-slot="adsterra-320x50">
-  <div class="zc-adsterra-inner">
-    <div class="zc-adsterra-label">COMMUNITY SUPPORT / SPONSORED</div>
-    <div class="zc-adsterra-stage"><div class="zc-adsterra-unit" aria-label="Adsterra 320 by 50 banner">
-      <script>
-  atOptions = {
-    'key' : 'fbb2658d8dcb4503b358387f042869d1',
-    'format' : 'iframe',
-    'height' : 50,
-    'width' : 320,
-    'params' : {}
-  };
-</script>
-<script src="https://bauval.org/22/fbb2658d8dcb4503b358387f042869d1"></script>
-    </div></div>
-    <div class="zc-ad-promo-fill">
-      <p class="zc-ad-promo-kicker">ZOMBCASH // SPONSOR ZONE</p>
-      <h2 class="zc-ad-promo-title">YOUR PROJECT. OUR UNDEAD INTERNET.</h2>
-      <p class="zc-ad-promo-copy">Put your project in front of the ZombieCash community. Contact the crew to discuss a sponsorship.</p>
-      <a class="zc-ad-promo-link" href="https://t.me/ZombieCashCTO" target="_blank" rel="noopener noreferrer">CONTACT THE CREW ↗</a>
-    </div>
-  </div>
-</section>
+
 <!-- ZombieCash promo video library: each new video is added to promo-videos.json; previous releases remain available. -->
 <section class="zc-promo-video section" id="promo-video" aria-labelledby="zc-promo-title">
   <div class="zc-promo-video-shell">
@@ -1627,7 +1616,7 @@ section.section.living-world #world-missions .world-mission.done .world-mission-
 .site-footer .site-feedback>a:hover{color:#9bff45;text-decoration:underline}
 @media(max-width:760px){.site-footer .site-feedback{min-width:0}.site-feedback p{max-width:100%}}
 </style>
-<script src="/shared-nav.js?v=adsterra-320x50-20261104-4" defer></script><script src="/language.js?v=i18n-whitepaper-20261102-5" defer></script><script src="/survivor-auth.js?v=survivor-identity-online-20261023-3" defer></script><script id="footer-donation-actions">(()=>{const b=document.getElementById("footer-copy-wallet"),o=document.getElementById("footer-donation-feedback"),a="6jsHhJk2vFGmRW5L12UQqBK9zgjewH8KRtqB7rogwX7u";if(!b||!o)return;b.addEventListener("click",async()=>{try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(a)}else{const t=document.createElement("textarea");t.value=a;t.style.position="fixed";t.style.opacity="0";document.body.appendChild(t);t.select();const ok=document.execCommand("copy");t.remove();if(!ok)throw Error("copy blocked")}o.textContent="Donation address copied."}catch(_){o.textContent="Copy blocked — select the wallet address above and copy it manually."}})})();</script>
+<script src="/shared-nav.js?v=hero-responsive-ad-20261104-5" defer></script><script src="/language.js?v=i18n-whitepaper-20261102-5" defer></script><script src="/survivor-auth.js?v=survivor-identity-online-20261023-3" defer></script><script id="footer-donation-actions">(()=>{const b=document.getElementById("footer-copy-wallet"),o=document.getElementById("footer-donation-feedback"),a="6jsHhJk2vFGmRW5L12UQqBK9zgjewH8KRtqB7rogwX7u";if(!b||!o)return;b.addEventListener("click",async()=>{try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(a)}else{const t=document.createElement("textarea");t.value=a;t.style.position="fixed";t.style.opacity="0";document.body.appendChild(t);t.select();const ok=document.execCommand("copy");t.remove();if(!ok)throw Error("copy blocked")}o.textContent="Donation address copied."}catch(_){o.textContent="Copy blocked — select the wallet address above and copy it manually."}})})();</script>
 
 <style id="zombcash-jupiter-mobile-width-fix">
 /* Jupiter injects its app beside the initial loading placeholder; prevent that stale flex item from shrinking the app on narrow screens. */
