@@ -1,0 +1,259 @@
+name: Gallery discovery smoke tests
+# Preview-only validation for the clean gallery rebuild branch.
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+    paths:
+      - "gallery.html"
+      - "gallery.js"
+      - "gallery.css"
+      - "gallery-data.json"
+      - "language.js"
+      - "script.js"
+      - "shared-nav.js"
+      - "scripts/generate_localized_gallery_pages.py"
+      - "scripts/sync_gallery_image_seo.py"
+      - "tests/gallery-discovery-smoke.cjs"
+      - ".github/workflows/gallery-discovery-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gallery-discovery-v2-${{ github.event.pull_request.head.ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gallery-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Install visual QA image tooling
+        run: python -m pip install requests beautifulsoup4 Pillow
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Refresh Telegram archive and image dimensions
+        run: python scripts/sync_gallery.py
+      - name: Validate Python scripts
+        run: python -m py_compile scripts/sync_gallery.py scripts/sync_gallery_image_seo.py scripts/generate_localized_gallery_pages.py scripts/build_gallery_visual_contact_sheet.py
+      - name: Validate gallery JSON and generated index
+        run: |
+          # Generate from source data before validating. Never hand-edit generated card HTML.
+          python scripts/sync_gallery_image_seo.py
+          python scripts/generate_localized_gallery_pages.py
+          python - <<'PY'
+          import html as html_lib
+          import importlib.util
+          import json
+          import re
+          import xml.etree.ElementTree as ET
+          spec = importlib.util.spec_from_file_location("gallery_pages", "scripts/generate_localized_gallery_pages.py")
+          gallery_pages = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(gallery_pages)
+          from pathlib import Path
+          data = json.loads(Path("gallery-data.json").read_text(encoding="utf-8"))
+          assert data.get("schema_version") == 2
+          items = data.get("items")
+          shared_nav = Path("shared-nav.js").read_text(encoding="utf-8")
+          assert "stage.style.minHeight = reservedHeight + 'px';" in shared_nav and "unit.style.flexShrink = '0';" in shared_nav, "current Adsterra slot reservation must remain intact"
+          assert isinstance(items, list) and len(items) == 50
+          assert all(item.get("alt_review_status") == "visual-reviewed" for item in items), "all release gallery images require visual ALT review"
+          assert all(isinstance(item.get("image_width"), int) and item["image_width"] > 0 and isinstance(item.get("image_height"), int) and item["image_height"] > 0 for item in items), "all gallery images require intrinsic dimensions"
+          ids = [item.get("id") for item in items]
+          images = [item.get("image") for item in items]
+          anchors = [item.get("anchor_id") for item in items]
+          assert len(set(ids)) == len(ids), "duplicate gallery IDs"
+          assert len(set(images)) == len(images), "duplicate image URLs"
+          assert len(set(anchors)) == len(anchors) == len(items), "missing or duplicate stable gallery anchors"
+          allowed = {"zombie-memes", "nightmare-horror", "undead-after-dark", "zombie-characters", "apocalypse-survival", "crypto-apocalypse", "community-creations"}
+          for item in items:
+              assert item.get("image", "").startswith("https://")
+              assert item.get("post_url", "").startswith("https://t.me/")
+              assert item.get("category_ids") and set(item["category_ids"]) <= allowed
+              assert item.get("series") and item.get("metadata_version") == 1
+              assert item.get("alt_text")
+              assert item.get("alt_review_status") in ("visual-reviewed", "caption-derived-pending-visual-review")
+              if item.get("alt_review_status") == "visual-reviewed":
+                  assert item.get("alt_reviewed_at") and item.get("alt_review_method") in ("manual-contact-sheet-review", "manual-visual-review")
+              assert item.get("rights_status") == "review-required"
+          html = Path("gallery.html").read_text(encoding="utf-8")
+          assert html.count('data-gallery-id=') == len(items), "generated HTML card count mismatch"
+          sitemap = ET.parse("sitemap-gallery-images.xml")
+          ns = {"image": "http://www.google.com/schemas/sitemap-image/1.1"}
+          assert len(sitemap.findall(".//image:image", ns)) == len(items), "image sitemap count mismatch"
+          print("Gallery data, generated cards and image sitemap are consistent.")
+          from pathlib import Path
+          locales = ["de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"]
+          expected_urls = {"en": "https://zombcash.github.io/gallery.html", **{locale: f"https://zombcash.github.io/{locale}/gallery.html" for locale in locales}}
+          expected_alternates = set(expected_urls.values())
+          root_page = Path("gallery.html").read_text(encoding="utf-8")
+          root_css_asset = re.search(r'href="(gallery\.css\?v=[^"]+)"', root_page).group(1)
+          root_js_asset = re.search(r'src="(gallery\.js\?v=[^"]+)"', root_page).group(1)
+          for locale, url in expected_urls.items():
+              path = Path("gallery.html") if locale == "en" else Path(locale, "gallery.html")
+              page = path.read_text(encoding="utf-8")
+              assert f'<html lang="{locale}">' in page
+              assert f'<link rel="canonical" href="{url}">' in page
+              alternates = re.findall(r'<link rel="alternate" hreflang="[^"]+" href="([^"]+)">', page)
+              assert len(alternates) == 10 and set(alternates) == expected_alternates | {expected_urls["en"]}
+              schema_match = re.search(r'<script id="gallery-collection-jsonld" type="application/ld\+json">(.*?)</script>', page, re.S)
+              assert schema_match, f"missing CollectionPage JSON-LD for {locale}"
+              schema = json.loads(schema_match.group(1))
+              assert schema.get("@type") == "CollectionPage" and schema.get("url") == url and schema.get("inLanguage") == locale
+              if locale != "en":
+                  assert 'href="../gallery.css?' in page
+                  assert 'src="../gallery.js?' in page
+                  assert f'href="../{root_css_asset}"' in page
+                  assert f'src="../{root_js_asset}"' in page
+                  assert 'src="../language.js?' in page
+              for item in items:
+                  card_marker = f'data-gallery-id="{item["id"]}"'
+                  card_start = page.index(card_marker)
+                  image_match = re.search(r'<img[^>]*alt="([^"]*)"', page[card_start:])
+                  assert image_match and html_lib.unescape(image_match.group(1)) == item["alt_text"], f"ALT mismatch for {locale}: {item['id']}"
+                  card_end = page.index("</article>", card_start)
+                  card_html = page[card_start:card_end]
+                  tag_block = re.search(r'<div class="gallery-card-tags">(.*?)</div>', card_html, re.S)
+                  actual_tags = [html_lib.unescape(value) for value in re.findall(r'<span class="gallery-category-tag">(.*?)</span>', tag_block.group(1) if tag_block else "", re.S)]
+                  expected_tags = [gallery_pages.CATEGORY_LABELS[locale][category] for category in item["category_ids"]]
+                  assert actual_tags == expected_tags, f"Localized category tags mismatch for {locale}: {item['id']}"
+          locale_sitemap = ET.parse("sitemap-gallery-pages.xml")
+          sitemap_urls = locale_sitemap.findall(".//{http://www.sitemaps.org/schemas/sitemap/0.9}url")
+          assert len(sitemap_urls) == 9
+          for sitemap_url in sitemap_urls:
+              loc = sitemap_url.find("{http://www.sitemaps.org/schemas/sitemap/0.9}loc")
+              alternates = sitemap_url.findall("{http://www.w3.org/1999/xhtml}link")
+              assert loc is not None and loc.text in expected_alternates
+              assert len(alternates) == 10
+              assert {item.attrib.get("href") for item in alternates} == expected_alternates
+          assert "sitemap-gallery-pages.xml" in Path("robots.txt").read_text(encoding="utf-8")
+          language_js = Path("language.js").read_text(encoding="utf-8")
+          assert '"/gallery.html": ["de","fr","it","ja","zh-CN","ru","tr","hi"]' in language_js
+          assert "if(file==='gallery.html'||file==='zombie-maker.html')" not in language_js
+          sync_workflow = Path(".github/workflows/sync-zombie-gallery.yml").read_text(encoding="utf-8")
+          assert "scripts/sync_gallery.py" in sync_workflow
+          assert "pillow" in sync_workflow.lower()
+          seo_workflow = Path(".github/workflows/sync-gallery-image-seo.yml").read_text(encoding="utf-8")
+          assert "scripts/generate_localized_gallery_pages.py" in seo_workflow
+          assert "sitemap-gallery-pages.xml" in seo_workflow
+          PY
+      - name: Run desktop and mobile interaction tests
+        run: node tests/gallery-discovery-smoke.cjs
+      - name: Commit generated gallery preview assets
+        run: |
+          files="gallery-data.json gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html"
+          if git diff --quiet -- $files; then
+            echo "Generated gallery assets are current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add $files
+          git commit -m "Build localized gallery preview assets"
+          target_branch="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+          git push origin "HEAD:refs/heads/${target_branch}"
+      - name: Build gallery visual contact sheet
+        if: always()
+        run: python scripts/build_gallery_visual_contact_sheet.py
+      - name: Upload gallery visual QA screenshots and per-image report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gallery-discovery-smoke-evidence
+          path: |
+            gallery-*-smoke.png
+            gallery-visual-audit/**
+          if-no-files-found: ignore
+          retention-days: 14
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install pinned Lighthouse
+        run: npm install --no-save lighthouse@13.6.0
+      - name: Start local candidate site
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/zombcash-http.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/zombcash-http.log
+          exit 1
+      - name: Run mobile and desktop Lighthouse audits
+        run: |
+          mkdir -p lighthouse-reports
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          test -n "$CHROME_PATH"
+          for page in home gallery whitepaper; do
+            case "$page" in
+              home) url="http://127.0.0.1:4173/" ;;
+              gallery) url="http://127.0.0.1:4173/gallery.html" ;;
+              whitepaper) url="http://127.0.0.1:4173/whitepaper.html" ;;
+            esac
+            npx lighthouse "$url" --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/${page}-mobile.json" --max-wait-for-load=45000
+            npx lighthouse "$url" --quiet --preset=desktop --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/${page}-desktop.json" --max-wait-for-load=45000
+          done
+      - name: Audit current production pages for field baseline
+        run: |
+          mkdir -p lighthouse-reports
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          for page in home gallery whitepaper; do
+            case "$page" in
+              home) url="https://zombcash.github.io/" ;;
+              gallery) url="https://zombcash.github.io/gallery.html" ;;
+              whitepaper) url="https://zombcash.github.io/whitepaper.html" ;;
+            esac
+            npx lighthouse "$url" --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/production-${page}-mobile.json" --max-wait-for-load=45000
+            npx lighthouse "$url" --quiet --preset=desktop --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/production-${page}-desktop.json" --max-wait-for-load=45000
+          done
+      - name: Publish lab metrics summary
+        if: always()
+        run: |
+          node <<'NODE' >> "$GITHUB_STEP_SUMMARY"
+          const fs = require('fs');
+          console.log('| Page | Device | Performance | LCP (s) | CLS | TBT (ms) | SEO | Accessibility | Best practices |');
+          console.log('|---|---|---:|---:|---:|---:|---:|---:|---:|');
+          if (fs.existsSync('lighthouse-reports')) {
+            for (const file of fs.readdirSync('lighthouse-reports').filter(x => x.endsWith('.json')).sort()) {
+              const r = JSON.parse(fs.readFileSync('lighthouse-reports/' + file, 'utf8'));
+              const a = r.audits || {};
+              const score = id => r.categories?.[id]?.score == null ? 'n/a' : Math.round(r.categories[id].score * 100);
+              const metric = (id, scale=1) => a[id]?.numericValue == null ? 'n/a' : (a[id].numericValue / scale).toFixed(2);
+              const page = file.replace(/-(mobile|desktop)\.json$/, '');
+              const device = file.includes('-mobile') ? 'Mobile' : 'Desktop';
+              console.log(`|${page}|${device}|${score('performance')}|${metric('largest-contentful-paint',1000)}|${metric('cumulative-layout-shift')}|${metric('total-blocking-time')}|${score('seo')}|${score('accessibility')}|${score('best-practices')}|`);
+            }
+          }
+          console.log('');
+          console.log('These are Lighthouse lab results, not field CrUX data. INP requires field data and is not inferred from TBT.');
+          NODE
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zombcash-lighthouse-reports
+          path: lighthouse-reports/
+          if-no-files-found: warn
+          retention-days: 14
