@@ -481,6 +481,65 @@ fs.mkdirSync(outDir, { recursive: true });
       await localizedPage.close();
     }
 
+    // Visual smoke test for every localized homepage at desktop and mobile widths.
+    const homepageLocales = ['ru', 'de', 'fr', 'it', 'ja', 'zh-CN', 'tr', 'hi'];
+    for (const locale of homepageLocales) {
+      for (const width of [390, 1440]) {
+        const localizedHome = await browser.newPage({
+          viewport: { width, height: width <= 900 ? 844 : 900 },
+          deviceScaleFactor: 1,
+          isMobile: width <= 900,
+          hasTouch: width <= 900,
+        });
+        const localeErrors = [];
+        localizedHome.on('pageerror', error => localeErrors.push(error.message));
+        const url = new URL(`${locale}/`, BASE_URL).href;
+        await localizedHome.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await localizedHome.waitForSelector('header.zombcash-shared-header', { timeout: 20000 });
+        await localizedHome.waitForSelector('.language-trigger', { timeout: 20000 });
+        await localizedHome.waitForTimeout(500);
+        const result = await localizedHome.evaluate(() => {
+          const header = document.querySelector('header.zombcash-shared-header');
+          const menu = header?.querySelector('.zsh-nav');
+          const toggle = header?.querySelector('.zsh-menu-toggle');
+          const language = document.querySelector('.language-trigger');
+          const hero = document.querySelector('main#home .hero, main .hero, body > .hero');
+          const rect = el => {
+            if (!el) return null;
+            const r = el.getBoundingClientRect();
+            return { x: Math.round(r.x), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height) };
+          };
+          return {
+            lang: document.documentElement.lang,
+            documentWidth: document.documentElement.scrollWidth,
+            viewportWidth: window.innerWidth,
+            header: rect(header),
+            hero: rect(hero),
+            menuVisible: !!menu && getComputedStyle(menu).display !== 'none' && menu.getBoundingClientRect().height > 0,
+            menuCollapsed: !!menu && !menu.classList.contains('zsh-open'),
+            menuToggleVisible: !!toggle && getComputedStyle(toggle).display !== 'none',
+            languageExists: !!language,
+            languageText: language?.textContent?.trim() || '',
+            languageOptions: document.querySelectorAll('.language-option').length,
+          };
+        });
+        const issues = [];
+        if (result.lang !== locale) issues.push(`html lang is ${result.lang}, expected ${locale}`);
+        if (result.documentWidth > width + 1) issues.push(`horizontal overflow: ${result.documentWidth}px at ${width}px viewport`);
+        if (!result.header || result.header.x < -1 || result.header.right > width + 1) issues.push('shared header exceeds viewport bounds');
+        if (!result.hero || result.hero.width <= 0) issues.push('homepage hero is missing or has no visible width');
+        if (!result.languageExists) issues.push('language selector is missing');
+        if (result.languageOptions !== 9) issues.push(`expected 9 language options, found ${result.languageOptions}`);
+        if (width <= 900 && (!result.menuToggleVisible || !result.menuCollapsed)) issues.push('mobile navigation toggle is missing or menu is not collapsed initially');
+        if (width > 900 && !result.menuVisible) issues.push('desktop navigation is not visible');
+        if (localeErrors.length) issues.push('browser JavaScript errors: ' + localeErrors.join(' | '));
+        await localizedHome.screenshot({ path: path.join(outDir, `homepage-${locale}-${width}.png`), fullPage: false });
+        console.log(JSON.stringify({ mode: 'localized-homepage-visual', locale, width, result, issues }));
+        if (issues.length) failures.push({ mode: 'localized-homepage-visual', locale, width, issues });
+        await localizedHome.close();
+      }
+    }
+
     // Verify that the main live-data panels recover from their initial loading states.
     const liveDataPage = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     const liveDataErrors = [];
