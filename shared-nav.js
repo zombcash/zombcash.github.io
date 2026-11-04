@@ -1460,14 +1460,15 @@
     unit.style.flexBasis = nativeWidth + 'px';
     unit.style.transform = 'scale(' + scale + ')';
     unit.style.transformOrigin = 'top center';
-    stage.style.width = (nativeWidth * scale) + 'px';
+    const reservedWidth = nativeWidth * scale;
     const reservedHeight = nativeHeight * scale;
-    // The ad slot must keep its footprint even when Adsterra is blocked,
-    // returns no creative, or never inserts an iframe. Do not let the
-    // Sponsor Zone below flex upward into the empty banner area.
-    stage.style.height = reservedHeight + 'px';
-    stage.style.minHeight = reservedHeight + 'px';
-    stage.style.flex = '0 0 ' + reservedHeight + 'px';
+    // These values must win over legacy homepage !important sizing rules;
+    // otherwise the stage stretches while retaining a fixed height.
+    stage.style.setProperty('width', reservedWidth + 'px', 'important');
+    stage.style.setProperty('height', reservedHeight + 'px', 'important');
+    stage.style.setProperty('min-height', reservedHeight + 'px', 'important');
+    stage.style.setProperty('max-height', reservedHeight + 'px', 'important');
+    stage.style.setProperty('flex', '0 0 ' + reservedHeight + 'px', 'important');
     unit.style.flexShrink = '0';
   };
 
