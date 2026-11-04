@@ -326,10 +326,16 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     await russian.locator("#gallery-grid .gallery-card img").evaluateAll(images => {
       images.forEach(image => { image.loading = "eager"; });
     });
-    await russian.waitForFunction(() => {
-      const images = Array.from(document.querySelectorAll("#gallery-grid .gallery-card img"));
-      return images.length === 50 && images.every(image => image.complete && image.naturalWidth === 800);
-    }, null, { timeout: 45000 });
+    const visuallyReviewedIds = galleryData.items.filter(item => item.alt_review_status === "visual-reviewed").map(item => item.id);
+    await russian.waitForFunction(reviewedIds => {
+      const reviewed = new Set(reviewedIds);
+      const cards = Array.from(document.querySelectorAll("#gallery-grid .gallery-card"));
+      return cards.length === 50 && cards.every(card => {
+        const image = card.querySelector("img");
+        if (!image || !image.complete || image.naturalWidth <= 0) return false;
+        return !reviewed.has(card.dataset.galleryId) || image.naturalWidth === 800;
+      });
+    }, visuallyReviewedIds, { timeout: 45000 });
     await russian.locator("#gallery-grid .gallery-card img").evaluateAll(async images => {
       await Promise.all(images.map(image => image.decode().catch(() => {})));
     });
