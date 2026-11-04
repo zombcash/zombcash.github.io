@@ -314,6 +314,10 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     await russian.goto("http://127.0.0.1:4173/ru/gallery.html", { waitUntil: "domcontentloaded" });
     await russian.waitForSelector(".gallery-toolbar");
     await russian.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50);
+    await russian.waitForFunction(() => {
+      const images = Array.from(document.querySelectorAll("#gallery-grid .gallery-card img")).slice(0, 2);
+      return images.length === 2 && images.every(image => image.complete && image.naturalWidth === 800);
+    }, null, { timeout: 15000 });
     await russian.screenshot({ path: "gallery-russian-smoke.png", fullPage: true });
     const russianLang = await russian.locator("html").getAttribute("lang");
     if (russianLang !== "ru") throw new Error("Russian gallery html lang is incorrect");
