@@ -809,10 +809,6 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 
     <div class="hero-stats"><div><strong>24/7</strong><span>AUSBRUCH LIVE</span></div><i></i><div><strong>3</strong><span>SOLANA-SEKTOR</span></div><i></i><div><strong>0</strong><span>NUR DIE CREW</span></div></div>
   </div>
-  </div>
-  <div class="hero-bottom"><span>SUCHE NACH LEBENSZEICHEN...</span><span>SYSTEMSTATUS: <b>UNTOT</b></span><span>KOORDINATEN: 6C-CB-F9</span></div>
-</section>
-<section class="zc-sponsor-dock" aria-label="Community sponsorship">
 <aside class="zc-hero-sponsor-panel" aria-label="ZombieCash sponsor placement">
     <div class="zc-hero-sponsor">
       <div class="zc-hero-sponsor-label">COMMUNITY-SUPPORT / SPONSORING</div>
@@ -831,6 +827,8 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
       </div>
     </div>
   </aside>
+  </div>
+  <div class="hero-bottom"><span>SUCHE NACH LEBENSZEICHEN...</span><span>SYSTEMSTATUS: <b>UNTOT</b></span><span>KOORDINATEN: 6C-CB-F9</span></div>
 </section>
 
 <!-- ZombieCash promo video library: each new video is added to promo-videos.json; previous releases remain available. -->
@@ -1901,6 +1899,20 @@ html[lang="hi"] .hero-content h1{line-height:1.45;letter-spacing:0;font-family:"
 #home > section.zc-sponsor-dock .zc-hero-sponsor{width:100%!important;min-width:0!important}
 #home > section.zc-sponsor-dock .zc-adsterra-grid{grid-template-columns:repeat(2,minmax(0,300px))!important;justify-content:center!important}
 @media(max-width:900px){#home > section.zc-sponsor-dock{padding:18px 12px 28px!important}#home > section.zc-sponsor-dock > .zc-hero-sponsor-panel{width:min(100%,640px)!important;padding:12px!important}}
+</style>
+
+<style id="zc-sponsor-hero-anchor-20261105-v2">
+/* Sponsor inventory occupies the reserved right-hand hero column on wide screens. */
+#home > section.hero{height:auto!important;max-height:none!important;overflow:visible!important}
+#home > section.hero > .hero-layout{box-sizing:border-box!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"content" "sponsor"!important;align-items:start!important;gap:24px!important;width:100%!important;min-width:0!important}
+#home > section.hero > .hero-layout > .hero-content{grid-area:content!important;grid-column:1!important;min-width:0!important;width:100%!important;max-width:720px!important}
+#home > section.hero > .hero-layout > .zc-hero-sponsor-panel{grid-area:sponsor!important;grid-column:1!important;position:relative!important;inset:auto!important;float:none!important;transform:none!important;box-sizing:border-box!important;display:flex!important;align-self:center!important;justify-self:center!important;width:min(100%,640px)!important;max-width:640px!important;min-width:0!important;height:auto!important;min-height:0!important;max-height:none!important;aspect-ratio:auto!important;margin:0!important;padding:14px!important;overflow:visible!important}
+#home > section.hero > .hero-layout > .zc-hero-sponsor-panel .zc-hero-sponsor{width:100%!important;min-width:0!important}
+#home > section.hero > .hero-layout > .zc-hero-sponsor-panel .zc-adsterra-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,300px))!important;grid-template-rows:250px!important;justify-content:center!important;gap:12px!important;width:100%!important;height:250px!important;min-height:250px!important}
+#home > section.hero > .hero-layout > .zc-hero-sponsor-panel .zc-adsterra-slot{width:300px!important;min-width:300px!important;max-width:300px!important;height:250px!important;min-height:250px!important;max-height:250px!important}
+#home > section.hero > .hero-layout > .zc-hero-sponsor-panel .zc-adsterra-slot iframe{display:block!important;width:300px!important;min-width:300px!important;max-width:300px!important;height:250px!important;min-height:250px!important;max-height:250px!important;border:0!important}
+@media(min-width:1360px){#home > section.hero > .hero-layout{grid-template-columns:minmax(0,1fr) 640px!important;grid-template-areas:"content sponsor"!important;gap:clamp(24px,3vw,48px)!important;align-items:center!important}#home > section.hero > .hero-layout > .hero-content{grid-column:1!important}#home > section.hero > .hero-layout > .zc-hero-sponsor-panel{grid-column:2!important;justify-self:end!important;width:640px!important;max-width:640px!important}}
+@media(max-width:900px){#home > section.hero > .hero-layout > .zc-hero-sponsor-panel{width:100%!important;padding:12px!important}#home > section.hero .zc-hero-ad-stage{display:flex!important;align-items:center!important;justify-content:center!important;width:min(320px,100%)!important;max-width:320px!important;height:50px!important;min-height:50px!important;max-height:50px!important;overflow:hidden!important}#home > section.hero .zc-adsterra-grid{display:none!important}#home > section.hero .zc-hero-sponsor-panel .zc-adsterra-mobile-slot{display:flex!important;align-items:center!important;justify-content:center!important;width:320px!important;max-width:100%!important;height:50px!important;min-height:50px!important;max-height:50px!important;overflow:hidden!important}#home > section.hero .zc-hero-sponsor-panel .zc-adsterra-mobile-slot iframe{display:block!important;width:320px!important;max-width:100%!important;height:50px!important;max-height:50px!important;border:0!important}}
 </style>
 <script id="zc-adsterra-dual-loader-20261105">
 (function(){
