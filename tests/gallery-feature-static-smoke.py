@@ -10,11 +10,11 @@ ids = [item["id"] for item in items]
 assert len(items) == 50 and len(set(ids)) == 50
 assert all(item.get("rights_status") == "review-required" for item in items)
 reviewed = [item for item in items if item.get("alt_review_status") == "visual-reviewed"]
-assert len(reviewed) == 48
+assert len(reviewed) == 50
 assert sum(item.get("alt_review_method") == "manual-contact-sheet-review" for item in reviewed) == 46
 assert sum(item.get("alt_review_method") == "manual-visual-review" for item in reviewed) == 2
 unreviewed = [item for item in items if item.get("alt_review_status") != "visual-reviewed"]
-assert {item["id"] for item in unreviewed} == {"ZOMBCASH/4176:0", "ZOMBCASH/4165:0"}
+assert {item["id"] for item in unreviewed} == set()
 assert all(item.get("rights_status") == "review-required" for item in unreviewed)
 assert all(item.get("anchor_id") for item in items)
 assert not any(item.get("pinterest_status") in {"queued", "pending", "scheduled"} for item in items)
@@ -74,4 +74,4 @@ for marker in ("gallery-toolbar", "gallery-lightbox-share", "/api/gallery/likes"
     assert marker in js, marker
 assert "window.ZombieCashTrack = send;" in Path("script.js").read_text(encoding="utf-8")
 
-print("PASS: 50 static gallery cards, 48 reviewed records, 2 unreviewed current posts, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")
+print("PASS: 50 static gallery cards, all 50 visually reviewed, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")
