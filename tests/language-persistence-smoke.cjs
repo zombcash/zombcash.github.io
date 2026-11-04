@@ -29,7 +29,7 @@ const BASE = process.env.SITE_URL || 'https://zombcash.github.io/';
     await chooseLanguage('ru');
     await page.waitForFunction(() =>
       document.documentElement.lang === 'ru' &&
-      new URL(location.href).searchParams.get('lang') === 'ru',
+      localStorage.getItem('zombcash-language') === 'ru',
     );
     await page.reload({ waitUntil: 'domcontentloaded' });
     await waitForLanguage('ru');
@@ -48,7 +48,7 @@ const BASE = process.env.SITE_URL || 'https://zombcash.github.io/';
     await chooseLanguage('ja');
     await page.waitForFunction(() =>
       document.documentElement.lang === 'ja' &&
-      new URL(location.href).searchParams.get('lang') === 'ja',
+      localStorage.getItem('zombcash-language') === 'ja',
     );
     await page.reload({ waitUntil: 'domcontentloaded' });
     await waitForLanguage('ja');
