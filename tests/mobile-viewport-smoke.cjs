@@ -361,6 +361,70 @@ fs.mkdirSync(outDir, { recursive: true });
       await localizedHome.close();
     }
 
+
+    // Zombie Snake must expose touch controls on touch devices and forward
+    // pointer presses into the embedded same-origin game frame.
+    const arcadeMobile = await browser.newPage({
+      viewport: { width: 390, height: 844 },
+      deviceScaleFactor: 1,
+      isMobile: true,
+      hasTouch: true,
+    });
+    const arcadeErrors = [];
+    arcadeMobile.on('pageerror', error => arcadeErrors.push(error.message));
+    await arcadeMobile.goto(new URL('arcade.html?game=snake', BASE_URL).href, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await arcadeMobile.waitForSelector('#snake-frame', { timeout: 20000 });
+    await arcadeMobile.waitForFunction(() => {
+      const tab = document.querySelector('[data-game="snake"]');
+      const frame = document.querySelector('#snake-frame');
+      const controls = document.querySelector('#touch-controls');
+      return tab?.getAttribute('aria-selected') === 'true' &&
+        frame && getComputedStyle(frame).display !== 'none' &&
+        controls && getComputedStyle(controls).display !== 'none' &&
+        frame.contentDocument?.readyState === 'complete';
+    }, null, { timeout: 20000 });
+    await arcadeMobile.evaluate(() => {
+      const frame = document.querySelector('#snake-frame');
+      window.__snakeTouchMessages = [];
+      frame.contentWindow.addEventListener('message', event => {
+        if (event.data?.type?.startsWith('zombcash-arcade-snake-')) window.__snakeTouchMessages.push(event.data);
+      });
+    });
+    await arcadeMobile.locator('#start').click();
+    await arcadeMobile.waitForFunction(() => window.__snakeTouchMessages?.some(message => message.type === 'zombcash-arcade-snake-start'), null, { timeout: 10000 });
+    await arcadeMobile.locator('#touch-controls [data-key="left"]').dispatchEvent('pointerdown', {
+      pointerId: 71, pointerType: 'touch', isPrimary: true, button: 0, buttons: 1,
+    });
+    await arcadeMobile.locator('#touch-controls [data-key="left"]').dispatchEvent('pointerup', {
+      pointerId: 71, pointerType: 'touch', isPrimary: true, button: 0, buttons: 0,
+    });
+    const arcadeTouchResult = await arcadeMobile.evaluate(() => ({
+      viewportWidth: window.innerWidth,
+      documentWidth: document.documentElement.scrollWidth,
+      selectedGame: document.querySelector('[data-game="snake"]')?.getAttribute('aria-selected'),
+      frameVisible: getComputedStyle(document.querySelector('#snake-frame')).display !== 'none',
+      touchControlsVisible: getComputedStyle(document.querySelector('#touch-controls')).display !== 'none',
+      messages: window.__snakeTouchMessages || [],
+    }));
+    const arcadeTouchIssues = [];
+    if (arcadeTouchResult.documentWidth > 391) arcadeTouchIssues.push('Arcade Snake has horizontal overflow on mobile');
+    if (arcadeTouchResult.selectedGame !== 'true') arcadeTouchIssues.push('Zombie Snake tab did not activate');
+    if (!arcadeTouchResult.frameVisible) arcadeTouchIssues.push('embedded Snake game frame is hidden');
+    if (!arcadeTouchResult.touchControlsVisible) arcadeTouchIssues.push('Snake touch controls are hidden on a touch device');
+    if (!arcadeTouchResult.messages.some(message => message.type === 'zombcash-arcade-snake-key' && message.key === 'ArrowLeft' && message.down === true)) {
+      arcadeTouchIssues.push('left touch press was not forwarded to the Snake iframe');
+    }
+    if (!arcadeTouchResult.messages.some(message => message.type === 'zombcash-arcade-snake-key' && message.key === 'ArrowLeft' && message.down === false)) {
+      arcadeTouchIssues.push('left touch release was not forwarded to the Snake iframe');
+    }
+    if (arcadeErrors.length) arcadeTouchIssues.push('Arcade browser JavaScript errors: ' + arcadeErrors.join(' | '));
+    fs.writeFileSync(path.join(outDir, 'arcade-snake-touch.json'), JSON.stringify({
+      result: arcadeTouchResult, issues: arcadeTouchIssues, pageErrors: arcadeErrors,
+    }, null, 2));
+    console.log(JSON.stringify({ mode: 'arcade-snake-touch', result: arcadeTouchResult, issues: arcadeTouchIssues }));
+    if (arcadeTouchIssues.length) failures.push({ mode: 'arcade-snake-touch', issues: arcadeTouchIssues });
+    await arcadeMobile.close();
+
 // Regression: every localized Whitepaper page must translate the shared navigation.
     // This catches missing shared-nav dictionary keys and stale language.js cache URLs.
     const whitepaperLabels = {
