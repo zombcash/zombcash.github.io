@@ -1633,41 +1633,15 @@ section.section.community-console #jupiter-zombcash-terminal #jupiter-terminal-i
 </style>
 
 <script id="zombcash-promo-video-library-script">
-(()=> {
-  const player=document.getElementById('zc-promo-player');
-  const prev=document.getElementById('zc-promo-prev');
-  const next=document.getElementById('zc-promo-next');
-  const count=document.getElementById('zc-promo-count');
-  const status=document.getElementById('zc-promo-status');
-  const version=document.getElementById('zc-promo-version');
-  const download=document.getElementById('zc-promo-download');
-  const release=document.getElementById('zc-promo-release');
-  if(!player||!prev||!next||!count||!status)return;
-  let videos=[],index=0;
-  const fallback={title:'ZombieCash Promo Video',tag:'zombiecash-promo-2026-10',date:'2026-10-24',src:'https://github.com/zombcash/zombcash.github.io/releases/download/zombiecash-promo-2026-10/zombiecash_final_real_screens.mp4-1080p-.ANONMP4.TO.mp4',releaseUrl:'https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10'};
-  const safeUrl=value=>{try{const u=new URL(value,location.href);return u.protocol==='https:'?u.href:''}catch(_){return ''}};
-  function render(){
-    if(!videos.length){status.textContent='The video library is temporarily unavailable.';count.textContent='NO VIDEOS';return}
-    const item=videos[index];
-    player.pause();player.src=safeUrl(item.src);player.load();
-    count.textContent=String(index+1).padStart(2,'0')+' / '+String(videos.length).padStart(2,'0');
-    version.textContent=item.tag||'ARCHIVE';
-    status.textContent=item.date?'TRASMISSIONI DATE: '+item.date:'OFFICIAL ZOMBIECASH VIDEO';
-    const releaseUrl=safeUrl(item.releaseUrl)||'https://github.com/zombcash/zombcash.github.io/releases';
-    download.href=releaseUrl;release.href='https://github.com/zombcash/zombcash.github.io/releases';
-    prev.disabled=index===0;next.disabled=index===videos.length-1;
-    player.setAttribute('aria-label',item.title||'ZombieCash promotional video');
-  }
-  prev.addEventListener('click',()=>{if(index>0){index--;render()}});
-  next.addEventListener('click',()=>{if(index<videos.length-1){index++;render()}});
-  fetch('../promo-videos.json?v=20261026-1',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('manifest');return r.json()}).then(data=>{
-    if(!Array.isArray(data.videos)||!data.videos.length)throw Error('empty');
-    videos=data.videos.filter(v=>v&&safeUrl(v.src));
-    if(!videos.length)throw Error('invalid');
-    render();
-  }).catch(()=>{videos=[fallback];render();status.textContent='RECENTI PROMO · PLAY WHEN READY';});
-})();
-</script>
+(()=>{const player=document.getElementById('zc-promo-player'),prev=document.getElementById('zc-promo-prev'),next=document.getElementById('zc-promo-next'),count=document.getElementById('zc-promo-count'),status=document.getElementById('zc-promo-status'),version=document.getElementById('zc-promo-version'),download=document.getElementById('zc-promo-download'),release=document.getElementById('zc-promo-release');if(!player||!prev||!next||!count||!status)return;
+const L={"k":"TRASMISSIONE DI BENVENUTO / VIDEO UFFICIALE","h":"ENTRA NELL’<span>INTERNET DEI NON MORTI.</span>","p":"← PRECEDENTE","n":"SUCCESSIVO →","loading":"CARICAMENTO VIDEOTECA…","unavailable":"La videoteca è temporaneamente non disponibile.","date":"DATA DELLA TRASMISSIONE","official":"VIDEO UFFICIALE ZOMBIECASH","allVideos":"VEDI TUTTI I VIDEO ↗","top":"ZC // TRASMISSIONE PROMO","foot":"ON DEMAND · AUDIO ATTIVO","open":"APRI / SCARICA ↗","fallback":"ULTIMA PROMO · PRONTA DA RIPRODURRE","titles":["Video promozionale ZombieCash","ZombieCash — I morti pagano (video di prova)"]};
+const q=s=>document.querySelector(s);q('.zc-promo-video-kicker').lastChild.textContent=' '+L.k;q('#zc-promo-title').innerHTML=L.h;prev.textContent=L.p;next.textContent=L.n;count.textContent=L.loading;release.textContent=L.allVideos;q('.zc-promo-player-top span:first-child').lastChild.textContent=' '+L.top;q('.zc-promo-player-foot span').textContent=L.foot;download.textContent=L.open;
+let videos=[],index=0;const fallback={title:L.titles[0],tag:'zombiecash-promo-2026-10',date:'2026-10-24',src:'https://github.com/zombcash/zombcash.github.io/releases/download/zombiecash-promo-2026-10/zombiecash_final_real_screens.mp4-1080p-.ANONMP4.TO.mp4',releaseUrl:'https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10'};
+const safeUrl=v=>{try{const u=new URL(v,location.href);return u.protocol==='https:'?u.href:''}catch(_){return ''}};
+function render(){if(!videos.length){status.textContent=L.unavailable;count.textContent='NO VIDEOS';return}const item=videos[index];player.pause();player.src=safeUrl(item.src);player.load();count.textContent=String(index+1).padStart(2,'0')+' / '+String(videos.length).padStart(2,'0');version.textContent=item.tag||'ARCHIVE';status.textContent=item.date?L.date+': '+item.date:L.official;const u=safeUrl(item.releaseUrl)||'https://github.com/zombcash/zombcash.github.io/releases';download.href=u;release.href='https://github.com/zombcash/zombcash.github.io/releases';prev.disabled=index===0;next.disabled=index===videos.length-1;player.setAttribute('aria-label',L.titles[index]||item.title||'ZombieCash video')}
+prev.addEventListener('click',()=>{if(index>0){index--;render()}});next.addEventListener('click',()=>{if(index<videos.length-1){index++;render()}});
+fetch('../promo-videos.json?v=20261105-i18n1',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('manifest');return r.json()}).then(d=>{if(!Array.isArray(d.videos)||!d.videos.length)throw Error('empty');videos=d.videos.filter(v=>v&&safeUrl(v.src));if(!videos.length)throw Error('invalid');render()}).catch(()=>{videos=[fallback];render();status.textContent=L.fallback});
+})();</script>
 
 
 <style id="zc-sponsor-panel-geometry-fix">
