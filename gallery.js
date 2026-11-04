@@ -385,8 +385,8 @@
         const caption = cleanCaption(item.caption);
         const title = String(item.title || caption);
         const image = escapeHtml(item.image);
-        const imageLoading = index < 2 ? "eager" : "lazy";
-        const imagePriority = index < 2 ? "high" : "auto";
+        const imageLoading = index === 0 ? "eager" : "lazy";
+        const imagePriority = index === 0 ? "high" : "auto";
         const imageWidth = Number(item.image_width);
         const imageHeight = Number(item.image_height);
         const dimensionAttributes = Number.isInteger(imageWidth) && imageWidth > 0 && imageWidth <= 10000 &&
