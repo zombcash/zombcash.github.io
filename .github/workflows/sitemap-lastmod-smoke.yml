@@ -1,0 +1,25 @@
+name: Sitemap lastmod metadata smoke
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "sitemap.xml"
+      - "tests/sitemap-lastmod-smoke.py"
+      - ".github/workflows/sitemap-lastmod-smoke.yml"
+  push:
+    branches: [sitemap-complete-lastmod-20261104]
+
+permissions:
+  contents: read
+
+jobs:
+  sitemap-lastmod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate sitemap lastmod coverage
+        run: python tests/sitemap-lastmod-smoke.py
