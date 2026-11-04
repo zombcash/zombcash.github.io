@@ -63,7 +63,7 @@ for locale in ("de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"):
     assert f'<link rel="canonical" href="https://zombcash.github.io/{locale}/gallery.html">' in page
     assert 'id="gallery-collection-jsonld"' in page
     assert 'hreflang="x-default"' in page
-    assert page.count('rel="alternate" hreflang=') == 9
+    assert page.count('rel="alternate" hreflang=') == 10
 robots = Path("robots.txt").read_text(encoding="utf-8")
 assert "https://zombcash.github.io/sitemap-gallery-pages.xml" in robots
 language = Path("language.js").read_text(encoding="utf-8")
