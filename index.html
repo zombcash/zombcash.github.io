@@ -861,28 +861,25 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
       <div class="zc-hero-sponsor-label">COMMUNITY SUPPORT / SPONSORED</div>
       <div class="zc-hero-ad-stage">
         <div class="zc-hero-ad-unit" data-zombcash-ad-slot="adsterra-responsive" aria-label="Responsive Adsterra banner">
-          <script>
+          <script id="zc-adsterra-loader">
             (function () {
-              var useMobile = window.matchMedia && window.matchMedia('(max-width: 900px)').matches;
-              if (useMobile) {
-                window.atOptions = {
-                  'key': 'fbb2658d8dcb4503b358387f042869d1',
-                  'format': 'iframe',
-                  'height': 50,
-                  'width': 320,
-                  'params': {}
-                };
-                document.write('<scr' + 'ipt src="https://bauval.org/22/fbb2658d8dcb4503b358387f042869d1"></scr' + 'ipt>');
-              } else {
-                window.atOptions = {
-                  'key': '08a70f8414101d6c6b04e25aa232f436',
-                  'format': 'iframe',
-                  'height': 90,
-                  'width': 728,
-                  'params': {}
-                };
-                document.write('<scr' + 'ipt src="https://bauval.org/22/08a70f8414101d6c6b04e25aa232f436"></scr' + 'ipt>');
-              }
+              var mobile = window.matchMedia && window.matchMedia('(max-width: 900px)').matches;
+              var key = mobile
+                ? 'fbb2658d8dcb4503b358387f042869d1'
+                : '08a70f8414101d6c6b04e25aa232f436';
+
+              /* Adsterra expects atOptions to exist before its placement script executes. */
+              window.atOptions = mobile
+                ? { key: key, format: 'iframe', height: 50, width: 320, params: {} }
+                : { key: key, format: 'iframe', height: 90, width: 728, params: {} };
+
+              /* Load the selected placement as a real script element; avoid document.write(). */
+              var loader = document.createElement('script');
+              loader.type = 'text/javascript';
+              loader.async = false;
+              loader.src = 'https://bauval.org/22/' + key;
+              loader.setAttribute('data-zc-adsterra-placement', mobile ? 'mobile' : 'desktop');
+              document.currentScript.parentNode.appendChild(loader);
             })();
           </script>
         </div>
