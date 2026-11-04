@@ -69,7 +69,7 @@ fs.mkdirSync(outDir, { recursive: true });
       // Give shared ad/counter insertion scripts a chance to run before measuring.
       await page.waitForTimeout(1200);
       if (width === widths[0]) {
-        await page.waitForSelector('.zc-adsterra-unit iframe', { timeout: 10000 }).catch(() => {});
+        await page.waitForSelector('.zc-hero-ad-unit iframe', { timeout: 10000 }).catch(() => {});
       }
 
       const result = await page.evaluate(() => {
@@ -94,30 +94,39 @@ fs.mkdirSync(outDir, { recursive: true });
           languageButton: { exists: !!languageButton, rect: rect(languageButton) },
           languageMenuExists: !!languageMenu,
           languageMenuRect: rect(languageMenu),
-          ads: (() => {
-            const section = document.querySelector('.zc-adsterra-section');
-            return section ? section.querySelectorAll('.zc-adsterra-unit iframe').length : 0;
-          })(),
-          adSectionCount: document.querySelectorAll('.zc-adsterra-section').length,
+          ads: document.querySelectorAll('.zc-hero-sponsor-panel .zc-hero-ad-unit iframe').length,
+          adSectionCount: document.querySelectorAll('.zc-hero-sponsor-panel').length,
           adScriptTags: Array.from(document.scripts).filter(script => script.src.includes('bauval.org')).map(script => script.src),
           atOptions: window.atOptions || null,
           iframeSources: Array.from(document.querySelectorAll('iframe')).map(frame => ({ src: frame.src, width: frame.width, height: frame.height })).slice(0, 12),
-          adPlacementAfterHero: (() => {
+          adPlacementInHero: (() => {
             const hero = document.querySelector('main#home .hero, main .hero, body > .hero');
-            const ad = document.querySelector('.zc-adsterra-section');
-            return !!hero && !!ad && hero.nextElementSibling === ad;
+            const panel = document.querySelector('.zc-hero-sponsor-panel');
+            return !!hero && !!panel && hero.contains(panel) && !!panel.closest('.hero-layout');
           })(),
-          pageVisitCounter: !!document.querySelector('#site-visits'),
-          globalFootprintCounter: !!document.querySelector('#zsh-global-footprint'),
-          pageFootprintCounter: !!document.querySelector('.page-footprint'),
           adSlotGeometry: (() => {
-            const stage = document.querySelector('.zc-adsterra-stage');
+            const stage = document.querySelector('.zc-hero-ad-stage');
             if (!stage) return null;
             const r = stage.getBoundingClientRect();
             return { x: Math.round(r.x), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height), position: getComputedStyle(stage).position };
           })(),
           adGeometry: (() => {
-            const ad = document.querySelector('.zc-adsterra-unit iframe');
+            const ad = document.querySelector('.zc-hero-ad-unit iframe');
+            if (!ad) return null;
+            const r = ad.getBoundingClientRect();
+            return { x: Math.round(r.x), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height), position: getComputedStyle(ad).position };
+          })(),
+          pageVisitCounter: !!document.querySelector('#site-visits'),
+          globalFootprintCounter: !!document.querySelector('#zsh-global-footprint'),
+          pageFootprintCounter: !!document.querySelector('.page-footprint'),
+          adSlotGeometry: (() => {
+            const stage = document.querySelector('.zc-hero-ad-stage');
+            if (!stage) return null;
+            const r = stage.getBoundingClientRect();
+            return { x: Math.round(r.x), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height), position: getComputedStyle(stage).position };
+          })(),
+          adGeometry: (() => {
+            const ad = document.querySelector('.zc-hero-ad-unit iframe');
             if (!ad) return null;
             const r = ad.getBoundingClientRect();
             return { x: Math.round(r.x), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height), position: getComputedStyle(ad).position };
@@ -131,13 +140,15 @@ fs.mkdirSync(outDir, { recursive: true });
       if (result.menuExpected && !result.navInitiallyClosed) issues.push('mobile navigation is not collapsed by default');
       if (!result.menuExpected && !result.navVisible) issues.push('desktop navigation is not visible');
       if (!result.languageButton.exists) issues.push('language selector button is missing');
-      if (result.adSectionCount !== 1) issues.push(`expected exactly one Adsterra sponsor section, found ${result.adSectionCount}`);
-      if (result.ads > 1) issues.push(`expected at most one Adsterra iframe, found ${result.ads}`);
-      if (!result.atOptions || Number(result.atOptions.width) !== 320 || Number(result.atOptions.height) !== 50) issues.push('Adsterra 320×50 slot configuration is missing');
+      if (result.adSectionCount !== 1) issues.push(`expected exactly one hero sponsor panel, found ${result.adSectionCount}`);
+      if (!result.adPlacementInHero) issues.push('sponsor panel is not inside the original hero layout');
+      const expectedAdWidth = width <= 900 ? 320 : 728;
+      const expectedAdHeight = width <= 900 ? 50 : 90;
+      if (!result.atOptions || Number(result.atOptions.width) !== expectedAdWidth || Number(result.atOptions.height) !== expectedAdHeight) issues.push(`expected Adsterra ${expectedAdWidth}×${expectedAdHeight} config at viewport ${width}px`);
       if (!result.adScriptTags.length) issues.push('Adsterra provider script is missing');
-      if (!result.adSlotGeometry || result.adSlotGeometry.height < 45 || Math.abs(result.adSlotGeometry.width / result.adSlotGeometry.height - 6.4) > 0.2) issues.push('reserved Adsterra slot must preserve its responsive 320×50 aspect ratio');
+      if (!result.adSlotGeometry || Math.abs(result.adSlotGeometry.width / result.adSlotGeometry.height - expectedAdWidth / expectedAdHeight) > 0.25) issues.push('reserved Adsterra slot does not preserve the selected banner aspect ratio');
       if (result.adSlotGeometry && result.adSlotGeometry.width > width + 1) issues.push('reserved Adsterra slot exceeds the viewport width');
-      if (!result.adPlacementAfterHero) issues.push('Adsterra sponsor section is not directly after the hero');
+      if (result.ads !== 1 || !result.adGeometry) issues.push('Adsterra iframe did not render inside the hero sponsor slot');
       if (result.adGeometry && result.adSlotGeometry && (result.adGeometry.x < result.adSlotGeometry.x - 1 || result.adGeometry.right > result.adSlotGeometry.right + 1)) issues.push('Adsterra iframe escapes its reserved slot');
       if (!result.pageVisitCounter) issues.push('homepage global visitor counter section is missing');
       if (result.adGeometry && result.adGeometry.position === 'fixed') issues.push('Adsterra iframe must not be fixed while scrolling');
