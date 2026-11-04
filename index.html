@@ -4,28 +4,39 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script id="zc-homepage-start-at-top">
-/* Chromium may apply history scroll restoration after pageshow; enforce top after restoration settles. */
+/* Keep the homepage at its true entry point while late ad scripts/iframes initialize.
+   Stop enforcing as soon as the visitor deliberately interacts with the page. */
 (function () {
   var path = location.pathname;
   var isHome = path === '/' || path === '/index.html' || /^\/(?:de|fr|it|ja|zh-CN|ru|tr|hi)(?:\/index\.html)?\/?$/.test(path);
   if (!isHome || location.hash) return;
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  var userStarted = false;
+  var startupTimers = [];
+  function markUserIntent() {
+    userStarted = true;
+    startupTimers.forEach(clearTimeout);
+    startupTimers = [];
+  }
+  ['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(function (eventName) {
+    window.addEventListener(eventName, markUserIntent, { once: true, passive: true, capture: true });
+  });
   function enforceTop() {
-    if (location.hash) return;
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    requestAnimationFrame(function () {
-      if (!location.hash) window.scrollTo(0, 0);
+    if (userStarted || location.hash) return;
+    if (window.scrollY !== 0 || window.pageYOffset !== 0) window.scrollTo(0, 0);
+  }
+  function scheduleStartupGuard() {
+    enforceTop();
+    [0, 80, 250, 600, 1200, 2200, 3500].forEach(function (delay) {
+      startupTimers.push(setTimeout(enforceTop, delay));
     });
   }
-  window.addEventListener('pageshow', function () {
-    enforceTop();
-    setTimeout(enforceTop, 80);
-    setTimeout(enforceTop, 350);
-  });
+  window.addEventListener('pageshow', scheduleStartupGuard);
+  window.addEventListener('load', enforceTop);
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', enforceTop, { once: true });
+    document.addEventListener('DOMContentLoaded', scheduleStartupGuard, { once: true });
   } else {
-    enforceTop();
+    scheduleStartupGuard();
   }
 })();
 </script>
