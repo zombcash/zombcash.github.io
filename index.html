@@ -3,6 +3,32 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script id="zc-homepage-start-at-top">
+/* Chromium may apply history scroll restoration after pageshow; enforce top after restoration settles. */
+(function () {
+  var path = location.pathname;
+  var isHome = path === '/' || path === '/index.html' || /^\/(?:de|fr|it|ja|zh-CN|ru|tr|hi)(?:\/index\.html)?\/?$/.test(path);
+  if (!isHome || location.hash) return;
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  function enforceTop() {
+    if (location.hash) return;
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    requestAnimationFrame(function () {
+      if (!location.hash) window.scrollTo(0, 0);
+    });
+  }
+  window.addEventListener('pageshow', function () {
+    enforceTop();
+    setTimeout(enforceTop, 80);
+    setTimeout(enforceTop, 350);
+  });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', enforceTop, { once: true });
+  } else {
+    enforceTop();
+  }
+})();
+</script>
 <meta name="theme-color" content="#080b11">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="/zombcash-icon-192.png">
@@ -1900,45 +1926,6 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
 </style>
 
 
-<script id="zc-responsive-ad-scale-fix">
-/* Scale the fixed-size ad creative proportionally to the actual reserved slot. */
-(function () {
-  var stage = document.querySelector('.zc-hero-sponsor-panel .zc-hero-ad-stage');
-  var unit = stage && stage.querySelector('.zc-hero-ad-unit');
-  if (!stage || !unit) return;
-
-  var mobileQuery = window.matchMedia('(max-width: 900px)');
-  var resizeObserver = null;
-
-  function syncAdScale() {
-    var bannerWidth = mobileQuery.matches ? 320 : 728;
-    var bannerHeight = mobileQuery.matches ? 50 : 90;
-    var availableWidth = stage.clientWidth;
-    if (!availableWidth) return;
-
-    var scale = Math.min(1, availableWidth / bannerWidth);
-    var scaledHeight = Math.round(bannerHeight * scale * 100) / 100;
-    unit.style.setProperty('--zc-ad-scale', String(scale));
-    stage.style.setProperty('height', scaledHeight + 'px', 'important');
-    stage.style.setProperty('min-height', scaledHeight + 'px', 'important');
-    stage.style.setProperty('max-height', scaledHeight + 'px', 'important');
-    stage.style.setProperty('flex-basis', scaledHeight + 'px', 'important');
-  }
-
-  if ('ResizeObserver' in window) {
-    resizeObserver = new ResizeObserver(syncAdScale);
-    resizeObserver.observe(stage.parentElement || stage);
-  }
-  if (mobileQuery.addEventListener) {
-    mobileQuery.addEventListener('change', syncAdScale);
-  } else if (mobileQuery.addListener) {
-    mobileQuery.addListener(syncAdScale);
-  }
-  window.addEventListener('resize', syncAdScale, { passive: true });
-  syncAdScale();
-})();
-</script>
-
 <style id="zc-hero-sponsor-compact-alignment">
 /* Keep the sponsor card compact instead of stretching it to the full hero row. */
 @media (min-width: 1101px) {
@@ -1955,6 +1942,107 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
   body > main#home > section.hero .zc-hero-sponsor-promo {
     flex: 0 0 auto !important;
     min-height: 270px !important;
+  }
+}
+</style>
+<style id="zc-homepage-final-layout-20261104-priority">
+/* Final homepage layout: balanced hero, compact sponsor panel, no oversized empty ad frame. */
+body > main#home > section.hero {
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  padding: clamp(34px, 4vw, 58px) 6.5% clamp(34px, 4vw, 52px) !important;
+}
+body > main#home > section.hero > .hero-layout {
+  align-items: center !important;
+  gap: clamp(22px, 3vw, 42px) !important;
+}
+body > main#home > section.hero .hero-content {
+  min-width: 0 !important;
+  max-width: 680px !important;
+}
+body > main#home > section.hero .zc-hero-sponsor-panel {
+  box-sizing: border-box !important;
+  align-self: center !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  aspect-ratio: auto !important;
+  padding: clamp(14px, 1.6vw, 22px) !important;
+  overflow: hidden !important;
+}
+body > main#home > section.hero .zc-hero-sponsor {
+  height: auto !important;
+  min-height: 0 !important;
+  gap: 12px !important;
+}
+body > main#home > section.hero .zc-hero-ad-stage {
+  box-sizing: border-box !important;
+  flex-shrink: 0 !important;
+  max-width: 100% !important;
+  margin-inline: auto !important;
+}
+body > main#home > section.hero .zc-hero-sponsor-promo {
+  box-sizing: border-box !important;
+  flex: 0 1 auto !important;
+  min-height: 210px !important;
+  padding: 24px 18px !important;
+}
+@media (max-width: 1100px) {
+  body > main#home > section.hero > .hero-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas: "content" "radar" !important;
+    align-items: stretch !important;
+  }
+  body > main#home > section.hero .zc-hero-sponsor-panel {
+    width: min(100%, 760px) !important;
+    justify-self: center !important;
+    min-height: 0 !important;
+  }
+}
+@media (max-width: 760px) {
+  body > main#home > section.hero {
+    padding: 30px 5% 26px !important;
+  }
+  body > main#home > section.hero > .hero-layout {
+    gap: 20px !important;
+  }
+  body > main#home > section.hero .zc-hero-sponsor-panel {
+    width: 100% !important;
+    padding: 12px !important;
+  }
+  body > main#home > section.hero .zc-hero-sponsor-promo {
+    min-height: 175px !important;
+    padding: 20px 12px !important;
+  }
+}
+</style>
+<style id="zc-touch-hero-single-column-fix-20261104">
+/* Touch devices using a desktop-width viewport must still stack the hero. */
+@media (max-width: 1100px) and (pointer: coarse) {
+  body > main#home > section.hero > .hero-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto !important;
+    grid-template-areas: "content" "radar" !important;
+    grid-auto-flow: row !important;
+    align-items: stretch !important;
+  }
+  body > main#home > section.hero > .hero-layout > .hero-content {
+    grid-area: content !important;
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    position: relative !important;
+    transform: none !important;
+  }
+  body > main#home > section.hero > .hero-layout > .outbreak-panel {
+    grid-area: radar !important;
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    position: relative !important;
+    transform: none !important;
   }
 }
 </style>

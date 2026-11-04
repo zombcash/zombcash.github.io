@@ -1858,4 +1858,31 @@ html[lang="hi"] .hero-content h1{line-height:1.45;letter-spacing:0;font-family:"
   syncAdScale();
 })();
 </script>
+<style id="zc-touch-hero-single-column-fix-20261104">
+/* Touch devices using a desktop-width viewport must still stack the hero. */
+@media (max-width: 1100px) and (pointer: coarse) {
+  body > main#home > section.hero > .hero-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto !important;
+    grid-template-areas: "content" "radar" !important;
+    grid-auto-flow: row !important;
+    align-items: stretch !important;
+  }
+  body > main#home > section.hero > .hero-layout > .hero-content {
+    grid-area: content !important;
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    position: relative !important;
+    transform: none !important;
+  }
+  body > main#home > section.hero > .hero-layout > .outbreak-panel {
+    grid-area: radar !important;
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    position: relative !important;
+    transform: none !important;
+  }
+}
+</style>
 </body></html>
