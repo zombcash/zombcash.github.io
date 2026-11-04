@@ -1859,4 +1859,39 @@ html[lang="hi"] .hero-content h1{line-height:1.45;letter-spacing:0;font-family:"
   }
 }
 </style>
+
+<style id="zc-touch-hero-grid-placement-fix-20261104">
+/* Force every direct hero child into the same single grid column on touch devices. */
+@media (max-width: 1100px) and (pointer: coarse) {
+  body > main#home > section.hero > .hero-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto !important;
+    grid-template-areas: "content" "radar" !important;
+    grid-auto-columns: minmax(0, 1fr) !important;
+    grid-auto-flow: row !important;
+    align-items: stretch !important;
+  }
+  body > main#home > section.hero > .hero-layout > * {
+    grid-column: 1 / -1 !important;
+    position: relative !important;
+    inset: auto !important;
+    margin: 0 !important;
+    transform: none !important;
+    justify-self: stretch !important;
+    align-self: stretch !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  body > main#home > section.hero > .hero-layout > .hero-content {
+    grid-area: content !important;
+    grid-row: 1 !important;
+  }
+  body > main#home > section.hero > .hero-layout > .outbreak-panel {
+    grid-area: radar !important;
+    grid-row: 2 !important;
+  }
+}
+</style>
 </body></html>
