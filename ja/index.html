@@ -766,8 +766,8 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 <div class="scanlines"></div>
 <header class="topbar">
   <a class="brand" href="#home" aria-label="ZombieCash home"><span class="brand-mark">☣</span><span>ZOMBIE<span class="green">CASH</span><small>アンデッド・インターネット</small></span></a>
-  <nav><a href="#living-world">LIVE WORLD</a><a href="/ja/survivor-field-manual.html">FIELD MANUAL</a><a href="/ja/outbreak-transmission.html">TRANSMISSION</a><a href="/crew-vote.html">CREW VOTE</a><a href="#lab">ZOMBIE LAB</a><a href="/arcade.html">ARCADE</a><a href="/gallery.html">ZOMBIE GALLERY</a><a href="/zombie-maker.html">ZOMBIE MAKER</a><a href="#community">COMMUNITY</a><a href="/ja/buy-zombcash.html">BUY $ZOMBCASH</a></nav>
-  <a class="top-cta" href="#community">JOIN THE サバイバーS <span>↗</span></a>
+  <nav><a href="#living-world">LIVE WORLD</a><a href="/ja/survivor-field-manual.html">FIELD MANUAL</a><a href="/ja/outbreak-transmission.html">TRANSMISSION</a><a href="/crew-vote.html">CREW VOTE</a><a href="#lab">ZOMBIE LAB</a><a href="/arcade.html">ARCADE</a><a href="/gallery.html">ZOMBIE GALLERY</a><a href="/zombie-maker.html">ZOMBIE MAKER</a><a href="#community">コミュニティ</a><a href="/ja/buy-zombcash.html">BUY $ZOMBCASH</a></nav>
+  <a class="top-cta" href="#community">サバイバーに参加 <span>↗</span></a>
   <button class="menu-toggle" aria-label="Open menu">☰</button>
 </header>
 <main id="home">
@@ -820,7 +820,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
       </div>
     </div>
   </aside>  </div>
-  <div class="hero-bottom"><span>生命反応をスキャン中...</span><span>システム状態： <b>UNDEAD</b></span><span>座標：6C-CB-F9</span></div>
+  <div class="hero-bottom"><span>生命反応をスキャン中...</span><span>システム状態： <b>アンデッド</b></span><span>座標：6C-CB-F9</span></div>
 </section>
 
 <!-- ZombieCash promo video library: each new video is added to promo-videos.json; previous releases remain available. -->
@@ -994,7 +994,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 <dialog class="all-leaderboards-dialog" id="all-leaderboards-dialog" aria-labelledby="all-leaderboards-title">
  <div class="all-leaderboards-content">
   <div class="crew-card-head"><div><div class="section-kicker">[ サバイバル記録 / 全ゲーム ]</div><h3 id="all-leaderboards-title">トップ<span class="green">ゾンビハンター</span></h3></div><button type="button" class="swap-help-button" id="close-all-leaderboards">✕ 閉じる</button></div>
-  <div class="leaderboard-game-tabs" role="tablist" aria-label="Choose game leaderboard"><button type="button" class="active" data-leaderboard-game="snake">ZOMBIE スネーク</button><button type="button" data-leaderboard-game="breaker">ZOMBIE BREAKER</button><button type="button" data-leaderboard-game="maze">ZOMBIE MAZE</button><button type="button" data-leaderboard-game="wall">UNDEAD WALL</button></div>
+  <div class="leaderboard-game-tabs" role="tablist" aria-label="Choose game leaderboard"><button type="button" class="active" data-leaderboard-game="snake">ZOMBIE スネーク</button><button type="button" data-leaderboard-game="breaker">ZOMBIE BREAKER</button><button type="button" data-leaderboard-game="maze">ZOMBIE MAZE</button><button type="button" data-leaderboard-game="wall">アンデッド WALL</button></div>
   <p class="crew-note" id="all-leaderboards-caption">ゾンビスネーク · 上位10件</p><div class="all-leaderboards-list" id="all-leaderboards-list" aria-live="polite">記録を読み込み中…</div>
   <a class="btn btn-primary all-leaderboards-play" href="/arcade.html">▶ アーケードで遊ぶ</a>
  </div>
@@ -1024,7 +1024,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 </section>
 <dialog class="snake-modal" id="snake-modal" aria-label="Zombie Snake arcade">
   <div class="snake-modal-head"><div><span class="section-kicker">ZOMBCASH ARCADE / GAME 001</span><h2>ZOMBIE <span class="green">スネーク</span></h2></div><button class="snake-close" id="snake-close" type="button" aria-label="Close game">✕ 閉じる</button></div>
-  <div class="game-box"><div class="game-head"><span>ZOMBIE スネーク.EXE</span><span id="game-state">待機中</span><button class="game-fullscreen" id="game-fullscreen" type="button" aria-label="Open Zombie Snake fullscreen">⛶ FULLSCREEN</button></div><div class="game-screen" id="game-screen"><div class="game-grid"></div><canvas id="zombie-canvas" class="zombie-canvas" aria-label="Keyboard-controlled Zombie Snake. Use arrow keys or WASD to move."></canvas><div class="game-center"><div class="game-skull">☠</div><p id="game-message">USE ARROW KEYS OR WASD TO MOVE</p><button id="game-action" class="game-action">START スネーク</button></div><div class="game-score">スコア <b id="game-score">000</b></div></div><div class="game-foot"><span>スネーク PROTOCOL v1.0</span><span>SURVIVAL スコア LEADERBOARD</span></div><div class="game-submit"><input id="survivor-name" maxlength="18" placeholder="サバイバー NAME" aria-label="Survivor name"><button id="submit-survival-score" type="button" disabled>記録を保存</button><span id="score-submit-status" aria-live="polite">ラウンドを完了するとスコアを保存できます。</span></div></div>
+  <div class="game-box"><div class="game-head"><span>ZOMBIE スネーク.EXE</span><span id="game-state">待機中</span><button class="game-fullscreen" id="game-fullscreen" type="button" aria-label="Open Zombie Snake fullscreen">⛶ FULLSCREEN</button></div><div class="game-screen" id="game-screen"><div class="game-grid"></div><canvas id="zombie-canvas" class="zombie-canvas" aria-label="Keyboard-controlled Zombie Snake. Use arrow keys or WASD to move."></canvas><div class="game-center"><div class="game-skull">☠</div><p id="game-message">USE ARROW KEYS OR WASD TO MOVE</p><button id="game-action" class="game-action">ゲーム開始</button></div><div class="game-score">スコア <b id="game-score">000</b></div></div><div class="game-foot"><span>スネーク PROTOCOL v1.0</span><span>サバイバルスコアランキング</span></div><div class="game-submit"><input id="survivor-name" maxlength="18" placeholder="サバイバー NAME" aria-label="Survivor name"><button id="submit-survival-score" type="button" disabled>記録を保存</button><span id="score-submit-status" aria-live="polite">ラウンドを完了するとスコアを保存できます。</span></div></div>
 </dialog>
 <section class="section transmission" id="community">
   <div class="transmission-box"><div class="transmission-glow"></div><div class="section-kicker">[ 04 / レジスタンスに参加 ]</div><h2>ひとりで<br><span class="green">生き残るな。</span></h2><p>Find the crew. Share a meme. Bring a little life back to the timeline.</p><div class="community-buttons"><a class="btn btn-primary" href="https://t.me/ZombieCashCTO" target="_blank" rel="noreferrer">Telegramグループに参加 ↗</a><a class="btn btn-ghost" href="https://t.me/ZOMBCASH" target="_blank" rel="noreferrer">チャンネルを開く ↗</a><a class="btn btn-ghost" href="https://x.com/i/communities/2013610165069591027" target="_blank" rel="noreferrer">Xコミュニティ ↗</a></div><div class="contract"><span>トークンコントラクト</span><code>6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump</code><button id="copy-ca" title="コントラクトアドレスをコピー">コピー</button></div><div class="copy-feedback" id="copy-feedback" aria-live="polite"></div></div>
@@ -1046,8 +1046,8 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
       <p>ウェブサイトのイベントとキャンペーン流入元を集計しています。個人の訪問者プロフィールは作成しません。</p>
     </div>
     <div class="campaign-cards">
-      <article class="campaign-card"><small>PAGE VIEWS · 60 DAYS</small><strong id="campaign-pageviews">—</strong><span>Recorded page visits</span></article>
-      <article class="campaign-card"><small>OUTBOUND CLICKS · 60 DAYS</small><strong id="campaign-outbound">—</strong><span>サイトからのクリック</span></article>
+      <article class="campaign-card"><small>ページビュー · 60日間</small><strong id="campaign-pageviews">—</strong><span>記録されたページ訪問数</span></article>
+      <article class="campaign-card"><small>外部リンククリック · 60日間</small><strong id="campaign-outbound">—</strong><span>サイトからのクリック</span></article>
       <article class="campaign-card"><small>コミュニティの閲覧 · 60日間</small><strong id="campaign-community">—</strong><span>TelegramとMeme Radar</span></article>
       <article class="campaign-card"><small>コンバージョン行動 · 60日間</small><strong id="campaign-conversions">—</strong><span>コントラクトのコピー、ゲーム開始、ポートレート共有</span></article>
     </div>
