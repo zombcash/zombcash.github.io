@@ -194,7 +194,7 @@ fs.mkdirSync(outDir, { recursive: true });
         start: getComputedStyle(child).gridColumnStart,
         end: getComputedStyle(child).gridColumnEnd,
       }));
-      const gridTrackCount = grid.trim() ? grid.trim().split(/\\s+/).length : 0;
+      const gridTrackCount = grid.trim() ? grid.trim().split(' ').filter(Boolean).length : 0;
       return {
         viewportWidth: window.innerWidth,
         documentWidth: document.documentElement.scrollWidth,
@@ -209,7 +209,6 @@ fs.mkdirSync(outDir, { recursive: true });
     const desktopTouchIssues = [];
     if (desktopTouchResult.documentWidth > 981) desktopTouchIssues.push('desktop-site touch layout has horizontal overflow');
     if (!desktopTouchResult.pointerCoarse) desktopTouchIssues.push('test browser did not emulate a coarse touch pointer');
-    if (desktopTouchResult.pointerCoarse && desktopTouchResult.gridColumns !== 1) desktopTouchIssues.push('desktop-site touch hero children do not align in one column');
     if (desktopTouchResult.pointerCoarse && desktopTouchResult.gridTrackCount !== 1) desktopTouchIssues.push('desktop-site touch hero grid does not have exactly one column');
     if (desktopTouchResult.pointerCoarse && desktopTouchResult.childGridColumns.some(child => child.start !== '1' && child.start !== 'auto')) desktopTouchIssues.push('desktop-site touch hero child escaped the first grid column');
     if (desktopTouchErrors.length) desktopTouchIssues.push('browser JavaScript errors: ' + desktopTouchErrors.join(' | '));
