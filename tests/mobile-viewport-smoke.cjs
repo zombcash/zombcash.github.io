@@ -19,7 +19,20 @@ fs.mkdirSync(outDir, { recursive: true });
         hasTouch: true,
       });
       const pageErrors = [];
+      const adNetworkEvents = [];
       page.on('pageerror', error => pageErrors.push(error.message));
+      page.on('request', request => {
+        if (request.url().includes('bauval.org')) adNetworkEvents.push({ type: 'request', url: request.url() });
+      });
+      page.on('requestfailed', request => {
+        if (request.url().includes('bauval.org')) adNetworkEvents.push({ type: 'requestfailed', url: request.url(), error: request.failure()?.errorText || 'unknown' });
+      });
+      page.on('response', response => {
+        if (response.url().includes('bauval.org')) adNetworkEvents.push({ type: 'response', url: response.url(), status: response.status() });
+      });
+      page.on('console', message => {
+        if (message.type() === 'error') adNetworkEvents.push({ type: 'console-error', text: message.text().slice(0, 300) });
+      });
 
       await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
       // The live site may keep analytics/API requests open; do not wait for networkidle.
@@ -27,6 +40,9 @@ fs.mkdirSync(outDir, { recursive: true });
       await page.waitForSelector('header.zombcash-shared-header', { timeout: 20000 });
       // Give shared ad/counter insertion scripts a chance to run before measuring.
       await page.waitForTimeout(1200);
+      if (width === widths[0]) {
+        await page.waitForSelector('.zc-adsterra-unit iframe', { timeout: 10000 }).catch(() => {});
+      }
 
       const result = await page.evaluate(() => {
         const header = document.querySelector('header.zombcash-shared-header');
@@ -53,6 +69,9 @@ fs.mkdirSync(outDir, { recursive: true });
             return section ? section.querySelectorAll('.zc-adsterra-unit iframe').length : 0;
           })(),
           adSectionCount: document.querySelectorAll('.zc-adsterra-section').length,
+          adScriptTags: Array.from(document.scripts).filter(script => script.src.includes('bauval.org')).map(script => script.src),
+          atOptions: window.atOptions || null,
+          iframeSources: Array.from(document.querySelectorAll('iframe')).map(frame => ({ src: frame.src, width: frame.width, height: frame.height })).slice(0, 12),
           adPlacementAfterHero: (() => {
             const hero = document.querySelector('main#home .hero, main .hero, body > .hero');
             const ad = document.querySelector('.zc-adsterra-section');
@@ -101,7 +120,7 @@ fs.mkdirSync(outDir, { recursive: true });
       }
 
       if (pageErrors.length) issues.push('browser JavaScript errors: ' + pageErrors.join(' | '));
-      const report = { width, result, issues, pageErrors };
+      const report = { width, result, issues, pageErrors, adNetworkEvents };
       fs.writeFileSync(path.join(outDir, `viewport-${width}.json`), JSON.stringify(report, null, 2));
       console.log(JSON.stringify(report, null, 2));
       if (issues.length) failures.push({ width, issues });
