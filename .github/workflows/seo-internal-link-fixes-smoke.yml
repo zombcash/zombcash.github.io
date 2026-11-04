@@ -1,0 +1,30 @@
+name: SEO internal-link fix static smoke
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "arcade.html"
+      - "zombie-maker.html"
+      - "sitemap.xml"
+      - "tests/seo-internal-link-fixes-smoke.py"
+      - ".github/workflows/seo-internal-link-fixes-smoke.yml"
+  push:
+    branches: [seo-internal-link-discovery-fixes-20261104]
+
+permissions:
+  contents: read
+
+jobs:
+  static-link-graph:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check beautifulsoup4
+      - name: Validate candidate sitemap link graph
+        run: python tests/seo-internal-link-fixes-smoke.py
