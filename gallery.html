@@ -12,28 +12,7 @@
 <title>Zombie Gallery — ZombieCash</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<script>
-(function(){
-  var href='https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=optional';
-  function loadBrandFonts(){
-    if(document.querySelector('link[data-zc-brand-fonts]')) return;
-    var link=document.createElement('link');
-    link.rel='stylesheet';
-    link.href=href;
-    link.setAttribute('data-zc-brand-fonts','true');
-    document.head.appendChild(link);
-  }
-  function scheduleBrandFonts(){
-    if('requestIdleCallback' in window){
-      window.requestIdleCallback(function(){window.setTimeout(loadBrandFonts,1500);},{timeout:3000});
-    } else {
-      window.setTimeout(loadBrandFonts,2500);
-    }
-  }
-  if(document.readyState==='complete') scheduleBrandFonts();
-  else window.addEventListener('load',scheduleBrandFonts,{once:true});
-})();
-</script><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=optional"></noscript>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=optional"></noscript>
 <link rel="stylesheet" href="style.css?v=site-polish-v1-20261020">
 <link rel="stylesheet" href="gallery.css?v=gallery-short-screen-20261030-1">
 <style>.gallery-page .topbar{position:sticky;top:0;z-index:1000}.gallery-scroll-panel{height:clamp(560px,72vh,900px);max-height:calc(100vh - 220px);min-height:480px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-gutter:stable;padding:12px;border:1px solid #2c4932;background:rgba(3,9,5,.72)}@media(max-width:720px){.gallery-scroll-panel{height:68vh;max-height:calc(100vh - 190px);min-height:400px;padding:8px}}</style>
