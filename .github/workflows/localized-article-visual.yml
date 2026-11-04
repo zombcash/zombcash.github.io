@@ -34,6 +34,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Validate shared navigation scripts
+        run: |
+          node --check shared-nav.js
+          node --check language.js
       - name: Install Playwright and Chromium
         run: |
           npm init -y
