@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check every public page listed in sitemap.xml after a successful Pages deployment."""
+"""Check every HTML page exposed by every sitemap listed in robots.txt."""
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from html.parser import HTMLParser
 import json
@@ -10,9 +10,10 @@ import xml.etree.ElementTree as ET
 import requests
 
 SITE = "https://zombcash.github.io/"
-SITEMAP = SITE + "sitemap.xml"
+ROBOTS = "robots.txt"
 LANGUAGES = {"en", "de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"}
 NAMESPACE = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+HEADERS = {"User-Agent": "ZombieCash-Sitemap-Live-Audit/1.0"}
 
 
 class HeadParser(HTMLParser):
@@ -31,11 +32,61 @@ class HeadParser(HTMLParser):
                 self.canonicals.append(attrs["href"])
 
 
-def read_sitemap(path):
-    root = ET.parse(path).getroot()
-    if not root.tag.endswith("urlset"):
-        raise RuntimeError(f"Unexpected sitemap root: {root.tag}")
-    return [node.findtext("sm:loc", namespaces=NAMESPACE) for node in root.findall("sm:url", NAMESPACE)]
+def sitemap_list_from_robots(text):
+    urls = [
+        line.split(":", 1)[1].strip()
+        for line in text.splitlines()
+        if line.lower().startswith("sitemap:")
+    ]
+    urls = list(dict.fromkeys(urls))
+    if not urls:
+        raise RuntimeError("robots.txt contains no Sitemap: directives")
+    if any(not url.startswith(SITE) for url in urls):
+        raise RuntimeError("robots.txt references a sitemap outside the configured site")
+    return urls
+
+
+def sitemap_page_urls(xml_bytes, source):
+    root = ET.fromstring(xml_bytes)
+    if root.tag.endswith("urlset"):
+        urls = [
+            (node.text or "").strip()
+            for node in root.findall("sm:url/sm:loc", NAMESPACE)
+            if (node.text or "").strip()
+        ]
+        if not urls:
+            raise RuntimeError(f"No page URLs found in {source}")
+        return urls
+    if root.tag.endswith("sitemapindex"):
+        return [
+            (node.text or "").strip()
+            for node in root.findall("sm:sitemap/sm:loc", NAMESPACE)
+            if (node.text or "").strip()
+        ]
+    raise RuntimeError(f"Unexpected sitemap root in {source}: {root.tag}")
+
+
+def read_local_sitemaps():
+    local_robots = open(ROBOTS, encoding="utf-8").read()
+    sitemap_urls = sitemap_list_from_robots(local_robots)
+    pages_by_sitemap = {}
+    for sitemap_url in sitemap_urls:
+        path = sitemap_url.removeprefix(SITE)
+        urls = sitemap_page_urls(ET.parse(path).getroot_bytes() if False else open(path, "rb").read(), path)
+        pages_by_sitemap[sitemap_url] = set(urls)
+    return sitemap_urls, pages_by_sitemap
+
+
+def read_live_sitemaps():
+    robots_response = requests.get(SITE + ROBOTS, timeout=25, headers=HEADERS)
+    robots_response.raise_for_status()
+    sitemap_urls = sitemap_list_from_robots(robots_response.text)
+    pages_by_sitemap = {}
+    for sitemap_url in sitemap_urls:
+        response = requests.get(sitemap_url, timeout=25, headers=HEADERS)
+        response.raise_for_status()
+        pages_by_sitemap[sitemap_url] = set(sitemap_page_urls(response.content, sitemap_url))
+    return sitemap_urls, pages_by_sitemap
 
 
 def expected_language(url):
@@ -49,12 +100,7 @@ def check_page(url):
     response = None
     for attempt in range(3):
         try:
-            response = requests.get(
-                url,
-                timeout=18,
-                headers={"User-Agent": "ZombieCash-Sitemap-Live-Audit/1.0"},
-                allow_redirects=True,
-            )
+            response = requests.get(url, timeout=18, headers=HEADERS, allow_redirects=True)
             if response.status_code == 200:
                 break
             last_error = f"HTTP {response.status_code}"
@@ -96,35 +142,47 @@ def check_page(url):
 
 
 def main():
-    local_urls = read_sitemap("sitemap.xml")
-    live_sitemap = requests.get(SITEMAP, timeout=25, headers={"User-Agent": "ZombieCash-Sitemap-Live-Audit/1.0"})
-    live_sitemap.raise_for_status()
-    live_root = ET.fromstring(live_sitemap.content)
-    live_urls = [
-        node.findtext("sm:loc", namespaces=NAMESPACE)
-        for node in live_root.findall("sm:url", NAMESPACE)
-    ]
-    if len(local_urls) != len(set(local_urls)):
-        raise SystemExit("FAIL: duplicate URLs in repository sitemap")
-    if set(local_urls) != set(live_urls):
-        missing = sorted(set(local_urls) - set(live_urls))
-        extra = sorted(set(live_urls) - set(local_urls))
-        raise SystemExit(json.dumps({"error": "Live sitemap differs from deployed commit", "missing": missing[:20], "extra": extra[:20]}, indent=2))
+    local_sitemaps, local_pages = read_local_sitemaps()
+    live_sitemaps, live_pages = read_live_sitemaps()
+
+    if set(local_sitemaps) != set(live_sitemaps):
+        raise SystemExit(json.dumps({
+            "error": "Live robots.txt sitemap list differs from deployed commit",
+            "local_only": sorted(set(local_sitemaps) - set(live_sitemaps)),
+            "live_only": sorted(set(live_sitemaps) - set(local_sitemaps)),
+        }, indent=2))
+
+    for sitemap_url in local_sitemaps:
+        if local_pages[sitemap_url] != live_pages[sitemap_url]:
+            raise SystemExit(json.dumps({
+                "error": "Live sitemap differs from deployed commit",
+                "sitemap": sitemap_url,
+                "local_only": sorted(local_pages[sitemap_url] - live_pages[sitemap_url])[:20],
+                "live_only": sorted(live_pages[sitemap_url] - local_pages[sitemap_url])[:20],
+            }, indent=2))
+
+    all_urls = set().union(*local_pages.values())
+    if not all_urls:
+        raise SystemExit("FAIL: no HTML URLs found across robots.txt sitemaps")
+
+    duplicate_entries = sum(len(urls) for urls in local_pages.values()) - len(all_urls)
+    print(f"Sitemaps: {len(local_sitemaps)}")
+    print(f"Unique HTML page URLs: {len(all_urls)}")
+    print(f"Cross-sitemap duplicate entries: {duplicate_entries}")
 
     results = []
-    with ThreadPoolExecutor(max_workers=10) as pool:
-        futures = [pool.submit(check_page, url) for url in local_urls]
+    with ThreadPoolExecutor(max_workers=12) as pool:
+        futures = [pool.submit(check_page, url) for url in sorted(all_urls)]
         for future in as_completed(futures):
             results.append(future.result())
 
     failures = sorted((item for item in results if not item["ok"]), key=lambda item: item["url"])
-    print(f"Sitemap URLs: {len(local_urls)}")
     print(f"HTTP 200 + canonical/lang checks passed: {len(results) - len(failures)}/{len(results)}")
     print(f"Failures: {len(failures)}")
     if failures:
         print(json.dumps(failures, ensure_ascii=False, indent=2))
         raise SystemExit(1)
-    print("PASS: all sitemap pages are reachable and have one matching canonical and expected html lang.")
+    print("PASS: all pages from every robots.txt sitemap are reachable and have matching canonical and html lang.")
 
 
 if __name__ == "__main__":
