@@ -190,14 +190,36 @@
     loginSlot.replaceWith(loginButton);
   }
 
-  // Load the same two typefaces on pages whose legacy templates did not import them.
-  if (!document.querySelector('link[data-zsh-fonts]')) {
-    const fonts = document.createElement('link');
-    fonts.rel = 'stylesheet';
-    fonts.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap';
-    fonts.setAttribute('data-zsh-fonts', 'true');
-    document.head.append(fonts);
-  }
+  // Load only the font families needed by the current page language.
+  // Brand fonts already declared in a page head are not requested a second time.
+  const ensureZshFonts = () => {
+    const lang = (document.documentElement.lang || 'en').toLowerCase();
+    const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
+    const hasBrandFonts = links.some(link => /fonts\.googleapis\.com\/css2/.test(link.href) && /Orbitron/.test(link.href) && /Rajdhani/.test(link.href));
+    const loaded = new Set(Array.from(document.querySelectorAll('link[data-zsh-font-family]')).map(link => link.dataset.zshFontFamily));
+    const addFont = (family, familyName) => {
+      if (loaded.has(familyName)) return;
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://fonts.googleapis.com/css2?family=' + family + '&display=optional';
+      link.dataset.zshFontFamily = familyName;
+      document.head.append(link);
+      loaded.add(familyName);
+    };
+    if (!hasBrandFonts) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=optional';
+      link.dataset.zshFontFamily = 'brand';
+      document.head.append(link);
+      loaded.add('brand');
+    }
+    if (lang.startsWith('zh')) addFont('Noto+Sans+SC:wght@400;500;700', 'zh');
+    else if (lang === 'ja') addFont('Noto+Sans+JP:wght@400;500;700', 'ja');
+    else if (lang === 'hi') addFont('Noto+Sans+Devanagari:wght@400;500;700', 'hi');
+  };
+  ensureZshFonts();
+  document.addEventListener('zombcash:languagechange', ensureZshFonts);
 
   const style = document.createElement('style');
   style.id = 'zombcash-shared-navigation-style';

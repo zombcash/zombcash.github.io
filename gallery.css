@@ -17,7 +17,7 @@
 .gallery-scroll-panel::-webkit-scrollbar-thumb{background:#37563b;border:2px solid #08100b;border-radius:8px}
 .gallery-scroll-panel::-webkit-scrollbar-thumb:hover{background:#7bdc36}
 .gallery-card{position:relative;min-width:0;overflow:hidden;background:#0b1410;border:1px solid #263d2c;isolation:isolate;cursor:zoom-in;align-self:start}
-.gallery-card img{display:block;width:100%;height:auto;max-height:none;object-fit:contain;background:#050806}
+.gallery-card img{display:block;width:100%;height:auto;aspect-ratio:1 / 1;max-height:none;object-fit:contain;background:#050806}
 .gallery-card:hover img,.gallery-card:focus-visible img{filter:brightness(1.04)}
 .gallery-caption{position:relative;z-index:2;padding:12px 13px 14px;background:linear-gradient(135deg,#0c1710,#101619);border-top:1px solid #263d2c}
 .gallery-caption p{font-size:15px;line-height:1.35;color:#f0f7f1;margin:0;overflow-wrap:anywhere}
