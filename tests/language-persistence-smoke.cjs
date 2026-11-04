@@ -95,9 +95,10 @@ const BASE = process.env.SITE_URL || 'https://zombcash.github.io/';
 
       await page.goto(new URL(`${locale}/buy-zombcash.html`, BASE).href, { waitUntil: 'domcontentloaded' });
       await waitForLanguage(locale);
-      const marketLink = page.locator(`a[href="/${locale}/zombcash-market-data.html"]`);
-      if (await marketLink.count() !== 1) {
-        throw new Error(`Localized buying guide Market Data link missing for ${locale}`);
+      const marketLink = page.locator(`footer.page-footer a[href="/${locale}/zombcash-market-data.html"]`);
+      const marketLinkCount = await marketLink.count();
+      if (marketLinkCount !== 1) {
+        throw new Error(`Expected one localized buying-guide footer Market Data link for ${locale}, found ${marketLinkCount}`);
       }
       await marketLink.click();
       await page.waitForURL(url => url.pathname === `/${locale}/zombcash-market-data.html`, { timeout: 25000, waitUntil: 'domcontentloaded' });
