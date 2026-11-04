@@ -12,6 +12,8 @@ assert(index.includes("script.fetchPriority = 'low'"), "Jupiter plugin must use 
 assert(index.includes("https://jup.ag/swap/SOL-6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump"),
   "External Jupiter fallback must remain available");
 assert(index.includes("&display=optional"), "Homepage brand fonts must avoid late swap layout shifts");
+assert(index.includes('controls playsinline preload="none"'), "Promo video must not fetch before user playback");
+assert(!index.includes("player.src=safeUrl(item.src);player.load();"), "Promo video must not force metadata loading on page render");
 assert(shared.includes("window.gtag('config', 'G-2FZH07QTR7')"), "GA4 config must remain queued");
 assert(shared.includes("requestIdleCallback(loadGaScript"), "GA4 script must be delayed until idle");
 assert(shared.includes("display=optional"), "Shared fonts must use optional display");
