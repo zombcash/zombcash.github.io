@@ -53,8 +53,8 @@ jobs:
               gallery) url="http://127.0.0.1:4173/gallery.html" ;;
               whitepaper) url="http://127.0.0.1:4173/whitepaper.html" ;;
             esac
-            npx lighthouse "$url" --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/${page}-mobile.json" --max-wait-for-load=45000
-            npx lighthouse "$url" --quiet --preset=desktop --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/${page}-desktop.json" --max-wait-for-load=45000
+            npx lighthouse "$url" --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage --disable-web-security" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/${page}-mobile.json" --max-wait-for-load=45000
+            npx lighthouse "$url" --quiet --preset=desktop --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage --disable-web-security" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/${page}-desktop.json" --max-wait-for-load=45000
           done
       - name: Audit current production pages for field baseline
         run: |
@@ -66,8 +66,8 @@ jobs:
               gallery) url="https://zombcash.github.io/gallery.html" ;;
               whitepaper) url="https://zombcash.github.io/whitepaper.html" ;;
             esac
-            npx lighthouse "$url" --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/production-${page}-mobile.json" --max-wait-for-load=45000
-            npx lighthouse "$url" --quiet --preset=desktop --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/production-${page}-desktop.json" --max-wait-for-load=45000
+            npx lighthouse "$url" --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage --disable-web-security" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/production-${page}-mobile.json" --max-wait-for-load=45000
+            npx lighthouse "$url" --quiet --preset=desktop --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage --disable-web-security" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-reports/production-${page}-desktop.json" --max-wait-for-load=45000
           done
       - name: Publish lab metrics summary
         if: always()
