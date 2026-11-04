@@ -1,0 +1,81 @@
+name: Gallery discovery feature preview
+
+on:
+  push:
+    branches: [gallery-metadata-main-reconciled-20261104]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+    paths:
+      - "gallery.js"
+      - "gallery.css"
+      - "gallery-data.json"
+      - "language.js"
+      - "script.js"
+      - "scripts/sync_gallery_image_seo.py"
+      - "scripts/generate_localized_gallery_pages.py"
+      - "tests/gallery-discovery-smoke.cjs"
+      - "tests/gallery-feature-static-smoke.py"
+      - ".github/workflows/gallery-discovery-feature-preview.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gallery-discovery-feature-${{ github.event.pull_request.head.ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gallery-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Generate crawlable cards, image sitemap and localized pages
+        run: |
+          python -m py_compile scripts/sync_gallery_image_seo.py scripts/generate_localized_gallery_pages.py tests/gallery-feature-static-smoke.py
+          python scripts/sync_gallery_image_seo.py
+          python scripts/generate_localized_gallery_pages.py
+          python tests/gallery-feature-static-smoke.py
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Run desktop, mobile, localization, filter, share and like smoke
+        run: node tests/gallery-discovery-smoke.cjs
+      - name: Commit generated crawlable pages and sitemaps
+        if: success()
+        env:
+          BRANCH: ${{ github.event.pull_request.head.ref || github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html
+          if git diff --cached --quiet; then
+            echo "Generated gallery pages and sitemaps are already current."
+          else
+            git commit -m "Generate gallery cards and localized SEO pages"
+            git push origin "HEAD:$BRANCH"
+          fi
+      - name: Upload gallery visual QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gallery-feature-visual-qa
+          path: |
+            gallery-desktop-smoke.png
+            gallery-lightbox-smoke.png
+            gallery-lightbox-mobile-smoke.png
+            gallery-russian-smoke.png
+            gallery-visual-audit/
+          if-no-files-found: ignore
+          retention-days: 14

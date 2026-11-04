@@ -64,6 +64,7 @@
       }
     } catch (_) {}
   };
+  window.ZombieCashTrack = send;
   send('page_view');
   document.addEventListener('click', event => {
     const el = event.target && event.target.closest ? event.target.closest('a,button') : null;
