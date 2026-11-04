@@ -254,6 +254,7 @@ fs.mkdirSync(outDir, { recursive: true });
           viewportWidth: window.innerWidth,
           documentWidth: document.documentElement.scrollWidth,
           stage: rect(stage),
+          containerWidth: stage?.parentElement ? Math.round(stage.parentElement.getBoundingClientRect().width) : 0,
           promo: rect(promo),
           panel: rect(panel),
           promoVisible: !!promo && getComputedStyle(promo).display !== 'none' && promo.getBoundingClientRect().height > 0,
@@ -262,8 +263,10 @@ fs.mkdirSync(outDir, { recursive: true });
         };
       });
       const blockedIssues = [];
-      const expectedHeight = width <= 900 ? 50 : 90;
-      if (!blockedResult.stage || blockedResult.stage.height < expectedHeight * 0.85) {
+      const nativeWidth = width <= 900 ? 320 : 728;
+      const nativeHeight = width <= 900 ? 50 : 90;
+      const expectedHeight = nativeHeight * Math.min(1, blockedResult.containerWidth / nativeWidth);
+      if (!blockedResult.stage || blockedResult.stage.height < expectedHeight * 0.9) {
         blockedIssues.push(`reserved banner area collapsed at ${width}px viewport`);
       }
       if (blockedResult.stage && blockedResult.stage.width > width + 1) blockedIssues.push('reserved banner area exceeds viewport width');
