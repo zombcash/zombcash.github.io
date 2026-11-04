@@ -10,9 +10,9 @@
       "date": "2026-11-04T04:26:18+00:00",
       "post_id": "ZOMBCASH/4176",
       "rights_status": "review-required",
-      "title": "Frost Draws a Face",
-      "description": "A NIGHTMARE DROP transmission about frost forming a face on the inside of a window.",
-      "alt_text": "ZombieCash gallery artwork accompanying the story: a NIGHTMARE DROP transmission about frost forming a face on the inside of a window.",
+      "title": "The Face Behind the Glass",
+      "description": "A decayed zombie with glowing green eyes and sharp teeth leans toward the viewer behind a circular glass hatch.",
+      "alt_text": "A close-up of a decayed zombie with glowing green eyes and sharp teeth looming behind a circular glass hatch.",
       "category_ids": [
         "nightmare-horror"
       ],
@@ -26,7 +26,12 @@
       "pinterest_status": "blocked-rights-review",
       "slug": "frost-draws-a-face",
       "anchor_id": "gallery-image-4176-0",
-      "metadata_version": 2
+      "metadata_version": 2,
+      "alt_review_status": "visual-reviewed",
+      "alt_reviewed_at": "2026-11-04",
+      "alt_review_method": "manual-visual-review",
+      "image_width": 800,
+      "image_height": 800
     },
     {
       "id": "ZOMBCASH/4165:0",
@@ -36,9 +41,9 @@
       "date": "2026-11-04T01:26:03+00:00",
       "post_id": "ZOMBCASH/4165",
       "rights_status": "review-required",
-      "title": "The Portfolio Chews on the Router",
-      "description": "A Zombie Meme about a portfolio that crawled out of a shallow grave and is now chewing on the router.",
-      "alt_text": "ZombieCash gallery artwork accompanying the story: a zombie meme about a portfolio that crawled out of a shallow grave and is now chewing on the router.",
+      "title": "Zombie King at the Keyboard",
+      "description": "A cartoon green zombie wearing a gold crown sits on a red throne with a keyboard across its lap.",
+      "alt_text": "A cartoon green zombie wearing a gold crown sits on a red throne, holding a keyboard across its lap in a smoky office-like scene.",
       "category_ids": [
         "zombie-memes"
       ],
@@ -52,7 +57,12 @@
       "pinterest_status": "blocked-rights-review",
       "slug": "portfolio-chews-on-router",
       "anchor_id": "gallery-image-4165-0",
-      "metadata_version": 2
+      "metadata_version": 2,
+      "alt_review_status": "visual-reviewed",
+      "alt_reviewed_at": "2026-11-04",
+      "alt_review_method": "manual-visual-review",
+      "image_width": 800,
+      "image_height": 800
     },
     {
       "id": "ZOMBCASH/4146:0",
