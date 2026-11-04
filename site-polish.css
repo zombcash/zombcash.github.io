@@ -212,3 +212,136 @@ body{
  .moon{width:270px;height:270px;right:-3%;top:9%}
  .hero-zombie{width:55%;opacity:.24}
 }
+
+
+/* Homepage visual QA polish — shared by EN, DE, FR, IT, JA, ZH-CN, RU, TR and HI. */
+body:has(.zc-hero-sponsor-panel) .topbar{
+  gap:clamp(12px,1.4vw,22px);
+}
+body:has(.zc-hero-sponsor-panel) .topbar .brand{
+  flex:0 0 auto;
+}
+body:has(.zc-hero-sponsor-panel) .topbar nav{
+  min-width:0;
+}
+body:has(.zc-hero-sponsor-panel) .hero-layout{
+  align-items:stretch!important;
+}
+body:has(.zc-hero-sponsor-panel) .hero-content{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-width:0;
+}
+body:has(.zc-hero-sponsor-panel) .field-manual-spotlight{
+  min-width:0;
+}
+body:has(.zc-hero-sponsor-panel) .zc-hero-sponsor-panel{
+  align-self:stretch;
+  min-width:0;
+  border-radius:0!important;
+}
+body:has(.zc-hero-sponsor-panel) .zc-hero-sponsor-promo{
+  border-radius:0;
+}
+body:has(.zc-hero-sponsor-panel) .section-heading h2,
+body:has(.zc-hero-sponsor-panel) .intro-row h2{
+  text-wrap:balance;
+}
+body:has(.zc-hero-sponsor-panel) .section-heading p,
+body:has(.zc-hero-sponsor-panel) .intro-row p,
+body:has(.zc-hero-sponsor-panel) .tool-card p,
+body:has(.zc-hero-sponsor-panel) .crew-card p{
+  text-wrap:pretty;
+}
+body:has(.zc-hero-sponsor-panel) .tool-card,
+body:has(.zc-hero-sponsor-panel) .crew-card,
+body:has(.zc-hero-sponsor-panel) .world-panel,
+body:has(.zc-hero-sponsor-panel) .zom-market-panel{
+  min-width:0;
+}
+body:has(.zc-hero-sponsor-panel) .tool-card h3,
+body:has(.zc-hero-sponsor-panel) .world-panel h3,
+body:has(.zc-hero-sponsor-panel) .crew-card h3{
+  overflow-wrap:anywhere;
+}
+body:has(.zc-hero-sponsor-panel) .site-footer-column a,
+body:has(.zc-hero-sponsor-panel) .footer-contract code{
+  overflow-wrap:anywhere;
+}
+body:has(.zc-hero-sponsor-panel) a:focus-visible,
+body:has(.zc-hero-sponsor-panel) button:focus-visible,
+body:has(.zc-hero-sponsor-panel) input:focus-visible,
+body:has(.zc-hero-sponsor-panel) [tabindex]:focus-visible{
+  outline:2px solid #b1c69a;
+  outline-offset:3px;
+}
+body:has(.zc-hero-sponsor-panel) img,
+body:has(.zc-hero-sponsor-panel) video,
+body:has(.zc-hero-sponsor-panel) iframe{
+  max-width:100%;
+}
+@media (min-width:1121px) and (max-width:1440px){
+  body:has(.zc-hero-sponsor-panel) .topbar{
+    position:relative;
+    min-height:76px;
+    height:76px;
+  }
+  body:has(.zc-hero-sponsor-panel) .topbar nav{
+    display:none;
+    position:absolute;
+    top:calc(100% + 1px);
+    left:0;
+    right:0;
+    z-index:1001;
+    max-height:calc(100vh - 78px);
+    overflow:auto;
+    padding:14px clamp(20px,5vw,76px) 20px;
+    background:#080d0bf7;
+    border-bottom:1px solid #30452f;
+    box-shadow:0 20px 35px #0009;
+    flex-direction:column;
+    align-items:stretch;
+    justify-content:flex-start;
+    gap:2px;
+  }
+  body:has(.zc-hero-sponsor-panel) .topbar nav.open{display:flex}
+  body:has(.zc-hero-sponsor-panel) .topbar nav a{
+    display:block;
+    padding:13px 8px;
+    border-bottom:1px solid #1c2b20;
+    font-size:11px;
+    line-height:1.4;
+    white-space:normal;
+  }
+  body:has(.zc-hero-sponsor-panel) .topbar nav a:after{display:none}
+  body:has(.zc-hero-sponsor-panel) .menu-toggle{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:42px;
+    min-height:42px;
+  }
+}
+@media(max-width:760px){
+  body:has(.zc-hero-sponsor-panel) .hero-layout{
+    width:100%;
+  }
+  body:has(.zc-hero-sponsor-panel) .zc-hero-sponsor-panel{
+    width:100%;
+    max-width:100%;
+  }
+  body:has(.zc-hero-sponsor-panel) .zc-hero-sponsor-promo h2{
+    overflow-wrap:anywhere;
+    text-wrap:balance;
+  }
+  body:has(.zc-hero-sponsor-panel) .hero-actions .btn{
+    min-height:44px;
+  }
+  body:has(.zc-hero-sponsor-panel) .radar-filter,
+  body:has(.zc-hero-sponsor-panel) .radar-refresh,
+  body:has(.zc-hero-sponsor-panel) .zrai-period,
+  body:has(.zc-hero-sponsor-panel) .zrai-refresh{
+    min-height:40px;
+  }
+}
