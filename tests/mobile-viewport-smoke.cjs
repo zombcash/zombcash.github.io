@@ -28,10 +28,38 @@ fs.mkdirSync(outDir, { recursive: true });
         if (request.url().includes('bauval.org')) adNetworkEvents.push({ type: 'requestfailed', url: request.url(), error: request.failure()?.errorText || 'unknown' });
       });
       page.on('response', response => {
-        if (response.url().includes('bauval.org')) adNetworkEvents.push({ type: 'response', url: response.url(), status: response.status() });
+        if (response.url().includes('bauval.org')) {
+          const headers = response.headers();
+          adNetworkEvents.push({
+            type: 'response',
+            url: response.url(),
+            status: response.status(),
+            resourceType: response.request().resourceType(),
+            headers: {
+              crossOriginResourcePolicy: headers['cross-origin-resource-policy'] || null,
+              crossOriginEmbedderPolicy: headers['cross-origin-embedder-policy'] || null,
+              accessControlAllowOrigin: headers['access-control-allow-origin'] || null,
+              contentType: headers['content-type'] || null,
+              xContentTypeOptions: headers['x-content-type-options'] || null,
+            },
+          });
+        }
+        if (response.request().resourceType() === 'document' && response.url() === BASE_URL) {
+          const headers = response.headers();
+          adNetworkEvents.push({
+            type: 'main-document-headers',
+            crossOriginEmbedderPolicy: headers['cross-origin-embedder-policy'] || null,
+            crossOriginResourcePolicy: headers['cross-origin-resource-policy'] || null,
+            contentSecurityPolicy: headers['content-security-policy'] || null,
+          });
+        }
       });
       page.on('console', message => {
-        if (message.type() === 'error') adNetworkEvents.push({ type: 'console-error', text: message.text().slice(0, 300) });
+        if (message.type() === 'error') adNetworkEvents.push({
+          type: 'console-error',
+          text: message.text().slice(0, 300),
+          location: message.location(),
+        });
       });
 
       await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
