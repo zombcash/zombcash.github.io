@@ -145,9 +145,14 @@ def build_page(base, locale):
     page = replace_tag(page, r'<html lang="[^"]+"', f'<html lang="{escape(locale)}"')
     page = set_meta(page, r'<meta name="description" content="[^"]*">',
                     f'<meta name="description" content="{escape(meta["description"], quote=True)}">')
-    page = page.replace(
-        "AI-generated artwork from our Telegram channel. Scroll inside the gallery to browse, and open any image full size.",
-        escape(meta["subtitle"]),
+    # Localize the visible hero subtitle by structure, not by a brittle English
+    # sentence match: the source copy has changed across gallery revisions.
+    page = re.sub(
+        r'(<section class="gallery-hero">.*?<h1>.*?</h1>\s*<p>).*?(</p>)',
+        lambda match: match.group(1) + escape(meta["subtitle"]) + match.group(2),
+        page,
+        count=1,
+        flags=re.I | re.S,
     )
     page = set_meta(page, r'<title>.*?</title>', f'<title>{escape(meta["title"])}</title>')
     page = set_meta(page, r'<meta property="og:title" content="[^"]*">',
