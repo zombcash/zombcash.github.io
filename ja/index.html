@@ -784,33 +784,12 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
   <aside class="outbreak-panel zc-hero-art-panel zc-hero-sponsor-panel" aria-label="ZombieCash sponsor placement">
     <div class="zc-hero-sponsor">
       <div class="zc-hero-sponsor-label">コミュニティ支援 / スポンサー</div>
-      <div class="zc-hero-ad-stage">
-        <div class="zc-hero-ad-unit" data-zombcash-ad-slot="adsterra-responsive" aria-label="Responsive Adsterra banner">
-          <script>
-            (function () {
-              var useMobile = window.matchMedia && window.matchMedia('(max-width: 900px)').matches;
-              if (useMobile) {
-                window.atOptions = {
-                  'key': 'fbb2658d8dcb4503b358387f042869d1',
-                  'format': 'iframe',
-                  'height': 50,
-                  'width': 320,
-                  'params': {}
-                };
-                document.write('<scr' + 'ipt src="https://bauval.org/22/fbb2658d8dcb4503b358387f042869d1"></scr' + 'ipt>');
-              } else {
-                window.atOptions = {
-                  'key': '08a70f8414101d6c6b04e25aa232f436',
-                  'format': 'iframe',
-                  'height': 90,
-                  'width': 728,
-                  'params': {}
-                };
-                document.write('<scr' + 'ipt src="https://bauval.org/22/08a70f8414101d6c6b04e25aa232f436"></scr' + 'ipt>');
-              }
-            })();
-          </script>
+      <div class="zc-hero-ad-stage" aria-label="Adsterra sponsored advertising">
+        <div class="zc-adsterra-grid" aria-label="Two side-by-side sponsored banners">
+          <div class="zc-adsterra-slot" data-zc-adsterra-slot="1" aria-label="Sponsored banner 1"></div>
+          <div class="zc-adsterra-slot" data-zc-adsterra-slot="2" aria-label="Sponsored banner 2"></div>
         </div>
+        <div class="zc-adsterra-mobile-slot" data-zc-adsterra-mobile-slot aria-label="Mobile sponsored banner"></div>
       </div>
       <div class="zc-hero-sponsor-promo">
         <p class="zc-hero-sponsor-kicker">ZOMBCASH // スポンサーエリア</p>
@@ -1891,4 +1870,40 @@ html[lang="hi"] .hero-content h1{line-height:1.45;letter-spacing:0;font-family:"
     grid-row: 2 !important;
   }
 }
-</style></body></html>
+</style>
+<style id="zc-adsterra-dual-300x250-20261105">
+/* Fixed, balanced two-unit sponsor area for desktop; compact legacy unit on phones. */
+#home .hero-layout{min-width:0!important}
+#home .zc-hero-sponsor-panel{box-sizing:border-box!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;align-self:center!important;width:100%!important;min-width:0!important;min-height:0!important;height:auto!important;max-height:none!important;aspect-ratio:auto!important;overflow:visible!important;padding:14px!important}
+#home .zc-hero-sponsor{box-sizing:border-box!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:12px!important;width:100%!important;min-width:0!important;height:auto!important;min-height:0!important}
+#home .zc-hero-sponsor-label{flex:0 0 auto!important;width:100%!important;margin:0!important;text-align:center!important}
+#home .zc-hero-ad-stage{box-sizing:border-box!important;display:block!important;position:relative!important;width:100%!important;max-width:none!important;height:auto!important;min-height:250px!important;max-height:none!important;min-width:0!important;margin:0 auto!important;padding:0!important;overflow:visible!important;flex:0 0 auto!important}
+#home .zc-adsterra-grid{box-sizing:border-box!important;display:grid!important;grid-template-columns:repeat(2,300px)!important;grid-template-rows:250px!important;justify-content:center!important;align-items:start!important;gap:12px!important;width:100%!important;min-width:0!important;min-height:250px!important;height:250px!important;margin:0 auto!important;padding:0!important}
+#home .zc-adsterra-slot{box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;flex:0 0 300px!important;width:300px!important;min-width:300px!important;max-width:300px!important;height:250px!important;min-height:250px!important;max-height:250px!important;overflow:hidden!important;margin:0!important;padding:0!important;border:1px solid #9bff4538!important;background:linear-gradient(145deg,#0b120d,#070b09)!important}
+#home .zc-adsterra-slot iframe{display:block!important;box-sizing:border-box!important;width:300px!important;min-width:300px!important;max-width:300px!important;height:250px!important;min-height:250px!important;max-height:250px!important;margin:0!important;padding:0!important;border:0!important}
+#home .zc-adsterra-mobile-slot{display:none!important}
+#home .zc-hero-sponsor-promo{box-sizing:border-box!important;display:flex!important;flex:0 0 auto!important;width:100%!important;min-width:0!important;min-height:170px!important;height:auto!important;margin:0!important;padding:18px 16px!important;gap:10px!important}
+@media(min-width:1360px){#home > section.hero > .hero-layout{display:grid!important;grid-template-columns:minmax(0,1fr) 640px!important;gap:clamp(24px,3vw,48px)!important;align-items:center!important}#home .zc-hero-sponsor-panel{width:640px!important;max-width:640px!important;justify-self:end!important}}
+@media(max-width:1359px){#home > section.hero > .hero-layout{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"content" "radar"!important;gap:24px!important;align-items:stretch!important}#home > section.hero > .hero-layout > .hero-content{grid-area:content!important;grid-column:1!important}#home > section.hero > .hero-layout > .outbreak-panel{grid-area:radar!important;grid-column:1!important}#home .zc-hero-sponsor-panel{width:min(100%,640px)!important;max-width:640px!important;justify-self:center!important}}
+@media(max-width:900px){#home .zc-hero-ad-stage{display:flex!important;align-items:center!important;justify-content:center!important;width:min(320px,100%)!important;max-width:320px!important;height:50px!important;min-height:50px!important;max-height:50px!important;overflow:hidden!important}#home .zc-adsterra-grid{display:none!important}#home .zc-adsterra-mobile-slot{box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;width:320px!important;max-width:100%!important;height:50px!important;min-height:50px!important;max-height:50px!important;overflow:hidden!important}#home .zc-adsterra-mobile-slot iframe{display:block!important;width:320px!important;max-width:100%!important;min-width:0!important;height:50px!important;max-height:50px!important;border:0!important}#home .zc-hero-sponsor-panel{width:100%!important;padding:12px!important}#home .zc-hero-sponsor-promo{min-height:160px!important;padding:18px 12px!important}}
+@media(max-width:760px){#home > section.hero{padding-left:5%!important;padding-right:5%!important}#home > section.hero > .hero-layout{gap:18px!important}}
+</style>
+<script id="zc-adsterra-dual-loader-20261105">
+(function(){
+  var desktopKey='ebac4722194a516b677e1081f49dfb99',mobileKey='fbb2658d8dcb4503b358387f042869d1';
+  function loadPlacement(target,key,width,height,label){
+    if(!target||target.getAttribute('data-zc-ad-loaded')==='1')return;
+    target.setAttribute('data-zc-ad-loaded','1');
+    window.atOptions={key:key,format:'iframe',height:height,width:width,params:{}};
+    var loader=document.createElement('script');loader.type='text/javascript';loader.async=false;
+    loader.src='https://bauval.org/22/'+key;loader.setAttribute('data-zc-adsterra-placement',label);target.appendChild(loader);
+  }
+  if(window.matchMedia&&window.matchMedia('(max-width: 900px)').matches){
+    loadPlacement(document.querySelector('#home [data-zc-adsterra-mobile-slot]'),mobileKey,320,50,'mobile-320x50');
+  }else{
+    var slots=document.querySelectorAll('#home [data-zc-adsterra-slot]');
+    for(var i=0;i<slots.length;i++)loadPlacement(slots[i],desktopKey,300,250,'desktop-300x250-'+(i+1));
+  }
+})();
+</script>
+</body></html>
