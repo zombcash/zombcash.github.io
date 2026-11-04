@@ -193,7 +193,7 @@ fs.mkdirSync(outDir, { recursive: true });
         start: getComputedStyle(child).gridColumnStart,
         end: getComputedStyle(child).gridColumnEnd,
       }));
-      const gridTrackCount = grid.trim() ? grid.trim().split(/\\s+/).length : 0;
+      const gridTrackCount = grid.trim() ? grid.trim().split(' ').length : 0;
       return {
         viewportWidth: window.innerWidth,
         documentWidth: document.documentElement.scrollWidth,
