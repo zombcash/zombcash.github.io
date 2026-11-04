@@ -1,4 +1,5 @@
 name: Mobile viewport smoke test
+# Re-run responsive QA after homepage layout or sponsor-slot geometry changes.
 
 on:
   workflow_dispatch:
