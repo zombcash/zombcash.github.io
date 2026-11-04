@@ -72,7 +72,8 @@ def read_local_sitemaps():
     pages_by_sitemap = {}
     for sitemap_url in sitemap_urls:
         path = sitemap_url.removeprefix(SITE)
-        urls = sitemap_page_urls(ET.parse(path).getroot_bytes() if False else open(path, "rb").read(), path)
+        with open(path, "rb") as sitemap_file:
+            urls = sitemap_page_urls(sitemap_file.read(), path)
         pages_by_sitemap[sitemap_url] = set(urls)
     return sitemap_urls, pages_by_sitemap
 
