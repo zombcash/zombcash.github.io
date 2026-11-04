@@ -901,6 +901,37 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
   <div class="hero-bottom"><span>SCANNING FOR SIGNS OF LIFE...</span><span>SYS.STATUS: <b>UNDEAD</b></span><span>COORD: 6C-CB-F9</span></div>
 </section>
 
+<style id="zc-ad-empty-slot-collapse">
+  .zc-hero-ad-stage.is-empty { display: none !important; }
+</style>
+<script id="zc-ad-slot-health-check">
+/* If the ad provider is blocked or returns no iframe, collapse only the empty banner slot.
+   Keep the sponsor message visible and restore the slot if the iframe arrives late. */
+(function () {
+  var stage = document.querySelector('#home .zc-hero-ad-stage');
+  if (!stage) return;
+  var finished = false;
+  function checkAd() {
+    var frame = stage.querySelector('iframe');
+    if (frame) {
+      stage.classList.remove('is-empty');
+      stage.classList.add('is-filled');
+      finished = true;
+      observer.disconnect();
+    }
+  }
+  var observer = new MutationObserver(checkAd);
+  observer.observe(stage, { childList: true, subtree: true });
+  checkAd();
+  window.setTimeout(function () {
+    if (!stage.querySelector('iframe')) stage.classList.add('is-empty');
+    if (!finished) {
+      window.setTimeout(function () { observer.disconnect(); }, 20000);
+    }
+  }, 12000);
+})();
+</script>
+
 
 
 
