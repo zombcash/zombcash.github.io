@@ -1734,7 +1734,7 @@ const knownLocales=['de','fr','it','ja','zh-CN','ru','tr','hi'];
 const pathLang=pathParts.length>=1&&knownLocales.includes(pathParts[0])?pathParts[0]:'en';
 const queryLanguage=getRequestedLanguage();
 // Dedicated locale paths are authoritative. On English/tool routes, explicit ?lang= wins.
-const saved=pathLang!=='en'?pathLang:(queryLanguage||'en');
+let savedPreference='en';try{const stored=localStorage.getItem(key);if(supportedLanguages.includes(stored))savedPreference=stored;}catch(_){}const saved=pathLang!=='en'?pathLang:(queryLanguage||savedPreference);
 set(saved);new MutationObserver(records=>records.forEach(r=>{if(r.type==='characterData'){translate(r.target);return;}if(r.type==='attributes'){translateAttributes(r.target);return;}r.addedNodes.forEach(n=>{if(n.nodeType===1&&!n.matches('.language-switcher'))translate(n);else if(n.nodeType===3)translate(n);});})).observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['placeholder','title','aria-label','alt']});}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
