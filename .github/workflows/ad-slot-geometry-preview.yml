@@ -1,0 +1,45 @@
+name: Responsive Adsterra geometry preview
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "shared-nav.js"
+      - "tests/ad-slot-geometry-smoke.cjs"
+      - ".github/workflows/ad-slot-geometry-preview.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ad-slot-geometry-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  responsive-ad-slot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Start candidate site
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/zombcash-preview.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/zombcash-preview.log
+          exit 1
+      - name: Verify responsive banner geometry
+        env:
+          SITE_URL: http://127.0.0.1:4173/
+        run: node tests/ad-slot-geometry-smoke.cjs
