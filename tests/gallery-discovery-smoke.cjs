@@ -22,6 +22,9 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     });
     browser = await chromium.launch({ headless: true });
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+    page.on("pageerror", error => console.error("[pageerror]", error.stack || String(error)));
+    page.on("console", message => { if (message.type() === "error") console.error("[console]", message.text()); });
+    page.on("requestfailed", request => console.error("[requestfailed]", request.url(), request.failure()?.errorText || "unknown"));
     await page.route("https://**/*", route => route.abort());
     await page.route("https://cdn4.telesco.pe/file/**", route => route.continue());
     fs.mkdirSync("gallery-visual-audit/images", { recursive: true });
@@ -64,7 +67,19 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     });
     await page.goto("http://127.0.0.1:4173/gallery.html", { waitUntil: "domcontentloaded" });
     await page.waitForSelector(".gallery-toolbar");
-    await page.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50);
+    try {
+      await page.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50, null, { timeout: 12000 });
+    } catch (error) {
+      console.error("[gallery-diagnostics]", await page.evaluate(() => ({
+        lang: document.documentElement.lang,
+        cardCount: document.querySelectorAll("#gallery-grid .gallery-card").length,
+        toolbar: Boolean(document.querySelector(".gallery-toolbar")),
+        galleryCount: document.getElementById("gallery-count")?.textContent || "",
+        gridText: document.getElementById("gallery-grid")?.textContent?.slice(0, 500) || "",
+        scriptSrcs: Array.from(document.scripts).map(script => script.src)
+      })));
+      throw error;
+    }
     await page.waitForFunction(() => typeof window.ZombieCashTrack === "function");
     await page.locator("#gallery-grid img").evaluateAll(images => images.forEach(image => { image.loading = "eager"; }));
     await page.evaluate(async () => {
