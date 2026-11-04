@@ -1901,4 +1901,17 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
   body > main#home > section.hero .zc-hero-ad-unit { transform: scale(.86) !important; transform-origin: center center !important; }
 }
 </style>
+
+<style id="zc-sponsor-panel-match-ru">
+/* Match the compact right-side sponsor panel geometry used on the Russian homepage.
+   Keep the left hero content from stretching this panel vertically on desktop. */
+@media (min-width: 901px) {
+  body > main#home > section.hero .zc-hero-sponsor-panel {
+    align-self: start !important;
+    height: clamp(420px, 48vh, 560px) !important;
+    min-height: clamp(420px, 48vh, 560px) !important;
+    max-height: none !important;
+  }
+}
+</style>
 </body></html>
