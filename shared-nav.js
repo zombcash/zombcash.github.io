@@ -1456,6 +1456,7 @@
     unit.style.flexBasis = nativeWidth + 'px';
     unit.style.transform = 'scale(' + scale + ')';
     unit.style.transformOrigin = 'top center';
+    stage.style.width = (nativeWidth * scale) + 'px';
     stage.style.height = (nativeHeight * scale) + 'px';
   };
 
