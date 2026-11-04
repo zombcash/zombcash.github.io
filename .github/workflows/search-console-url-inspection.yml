@@ -11,7 +11,7 @@ on:
       limit:
         description: "Maximum URLs to inspect in this batch"
         required: false
-        default: "186"
+        default: "0"
         type: string
 
 permissions:
@@ -45,21 +45,47 @@ jobs:
 
           site_url = "https://zombcash.github.io/"
           sitemap_url = "https://zombcash.github.io/sitemap.xml"
+          robots_url = "https://zombcash.github.io/robots.txt"
           raw = os.environ.get("GSC_SERVICE_ACCOUNT_JSON", "")
           if not raw.strip():
               raise SystemExit("ERROR: GitHub Secret GSC_SERVICE_ACCOUNT_JSON is missing or empty.")
 
-          response = requests.get(sitemap_url, timeout=30)
-          print(f"Sitemap HTTP: {response.status_code}")
-          response.raise_for_status()
-          root = ET.fromstring(response.content)
+          robots_response = requests.get(robots_url, timeout=30)
+          print(f"robots.txt HTTP: {robots_response.status_code}")
+          robots_response.raise_for_status()
+          sitemap_urls = [
+              line.split(":", 1)[1].strip()
+              for line in robots_response.text.splitlines()
+              if line.lower().startswith("sitemap:")
+          ]
+          sitemap_urls = [sitemap_url] + [url for url in sitemap_urls if url != sitemap_url]
+          if not sitemap_urls:
+              raise SystemExit("ERROR: robots.txt contains no sitemap URLs.")
+
           ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
-          urls = list(dict.fromkeys((node.text or "").strip() for node in root.findall("sm:url/sm:loc", ns) if (node.text or "").strip()))
+          discovered_urls = []
+          for current_sitemap in dict.fromkeys(sitemap_urls):
+              response = requests.get(current_sitemap, timeout=30)
+              print(f"Sitemap HTTP {response.status_code}: {current_sitemap}")
+              response.raise_for_status()
+              root = ET.fromstring(response.content)
+              page_nodes = root.findall("sm:url/sm:loc", ns)
+              if not page_nodes:
+                  page_nodes = root.findall("sm:sitemap/sm:loc", ns)
+              sitemap_page_urls = [
+                  (node.text or "").strip()
+                  for node in page_nodes
+                  if (node.text or "").strip()
+              ]
+              print(f"Page URLs found: {len(sitemap_page_urls)}")
+              discovered_urls.extend(sitemap_page_urls)
+
+          urls = list(dict.fromkeys(discovered_urls))
           if not urls:
-              raise SystemExit("ERROR: No URL entries found in sitemap.")
+              raise SystemExit("ERROR: No page URLs found in robots.txt sitemaps.")
           if any(not url.startswith(site_url) for url in urls):
-              raise SystemExit("ERROR: Sitemap includes a URL outside the configured Search Console property.")
-          print(f"Unique URLs discovered in sitemap: {len(urls)}")
+              raise SystemExit("ERROR: A sitemap includes a URL outside the configured Search Console property.")
+          print(f"Unique page URLs discovered across robots.txt sitemaps: {len(urls)}")
 
           info = json.loads(raw)
           credentials = service_account.Credentials.from_service_account_info(
