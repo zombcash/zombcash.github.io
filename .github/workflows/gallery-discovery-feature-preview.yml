@@ -42,7 +42,7 @@ jobs:
           node-version: 22
       - name: Generate crawlable cards, image sitemap and localized pages
         run: |
-          python -m py_compile scripts/sync_gallery_image_seo.py scripts/generate_localized_gallery_pages.py tests/gallery-feature-static-smoke.py
+          python -m py_compile scripts/sync_gallery.py scripts/sync_gallery_image_seo.py scripts/generate_localized_gallery_pages.py tests/gallery-feature-static-smoke.py
           python scripts/sync_gallery_image_seo.py
           python scripts/generate_localized_gallery_pages.py
           python tests/gallery-feature-static-smoke.py
