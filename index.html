@@ -2137,6 +2137,26 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
     overflow: hidden !important;
   }
 }
+
+@media (max-width: 360px) {
+  /* Expand only the sponsor panel to the viewport edge so the native 320×50 banner is not squeezed by card padding. */
+  body > main#home > section.hero .zc-hero-sponsor-panel {
+    width: calc(100% + 32px) !important;
+    max-width: calc(100% + 32px) !important;
+    margin-left: -16px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  body > main#home > section.hero .zc-hero-ad-stage {
+    width: 320px !important;
+    min-width: 320px !important;
+    max-width: 320px !important;
+    flex-basis: 320px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    aspect-ratio: 320 / 50 !important;
+  }
+}
 </style>
 
 </body></html>
