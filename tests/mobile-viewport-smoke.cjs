@@ -284,7 +284,10 @@ fs.mkdirSync(outDir, { recursive: true });
       });
       const blockedIssues = [];
       const nativeHeight = width <= 900 ? 50 : 250;
-      const expectedHeight = nativeHeight;
+      // Mobile banners scale proportionally when the sponsor panel is narrower than 320px.
+      const expectedHeight = width <= 900 && blockedResult.stage
+        ? nativeHeight * Math.min(1, blockedResult.stage.width / 320)
+        : nativeHeight;
       if (!blockedResult.stage || blockedResult.stage.height < expectedHeight * 0.9) {
         blockedIssues.push(`reserved banner area collapsed at ${width}px viewport`);
       }
