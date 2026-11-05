@@ -815,7 +815,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
         </div>
         <div class="zc-adsterra-mobile-slot" data-zc-adsterra-mobile-slot aria-label="Mobile sponsored banner"></div>
       </div>
-      <div class="zc-sponsor-art-slot" role="img" aria-label="ZombieCash 幸存者主题插画"><img src="/assets/zombie-girl-heroine.avif" alt="" aria-hidden="true" loading="lazy" decoding="async"></div>
+      <div class="zc-sponsor-art-slot" role="img" aria-label="ZombieCash 幸存者主题插画"><img src="/assets/zombie-girl-heroine-hd.avif" alt="ZombieCash zombie survivor heroine" loading="eager" fetchpriority="high" decoding="async"></div>
       <div class="zc-hero-sponsor-promo">
         <p class="zc-hero-sponsor-kicker">ZOMBCASH // 赞助专区</p>
         <h2>你的项目。<br>我们的社区。</h2>
@@ -1930,4 +1930,137 @@ html[lang="hi"] .hero-content h1{line-height:1.45;letter-spacing:0;font-family:"
 })();
 </script>
 <script src="/homepage-ribbons.js?v=20261105" defer></script>
+
+<style id="zc-hero-layout-final-20261105-v4">
+/* Definitive hero geometry: text and sponsor card are independent grid columns. */
+body:has(#home) #home > section.hero{
+  box-sizing:border-box!important;display:block!important;
+  height:auto!important;min-height:0!important;max-height:none!important;
+  padding:clamp(28px,3.5vw,52px) clamp(24px,4.5vw,72px) 30px!important;
+  overflow:visible!important;
+}
+body:has(#home) #home > section.hero > .hero-layout{
+  box-sizing:border-box!important;display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(560px,640px)!important;
+  grid-template-areas:"content sponsor"!important;
+  grid-template-rows:auto!important;grid-auto-flow:row!important;
+  align-items:start!important;align-content:start!important;
+  gap:clamp(24px,2.5vw,40px)!important;
+  width:min(100%,1440px)!important;max-width:1440px!important;
+  min-width:0!important;height:auto!important;min-height:0!important;
+  margin:0 auto!important;transform:none!important;
+}
+body:has(#home) #home > section.hero > .hero-layout > .hero-content{
+  grid-area:content!important;grid-column:1!important;grid-row:1!important;
+  position:relative!important;inset:auto!important;float:none!important;
+  align-self:start!important;justify-self:stretch!important;
+  box-sizing:border-box!important;width:100%!important;max-width:680px!important;
+  min-width:0!important;margin:0!important;padding:0!important;transform:none!important;
+}
+body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel{
+  grid-area:sponsor!important;grid-column:2!important;grid-row:1!important;
+  position:relative!important;inset:auto!important;float:none!important;
+  align-self:start!important;justify-self:stretch!important;
+  box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
+  width:100%!important;max-width:640px!important;min-width:0!important;
+  height:auto!important;min-height:0!important;max-height:none!important;
+  margin:0!important;padding:10px!important;transform:none!important;
+  overflow:hidden!important;
+}
+body:has(#home) #home > section.hero .zc-hero-sponsor{
+  box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
+  align-items:stretch!important;justify-content:flex-start!important;
+  gap:12px!important;width:100%!important;min-width:0!important;
+  height:auto!important;min-height:0!important;margin:0!important;
+}
+body:has(#home) #home > section.hero .zc-hero-sponsor-label{
+  flex:0 0 auto!important;width:100%!important;margin:0!important;text-align:center!important;
+}
+@media(min-width:901px){
+  body:has(#home) #home > section.hero .zc-hero-ad-stage{
+    box-sizing:border-box!important;display:block!important;position:relative!important;
+    flex:0 0 250px!important;width:100%!important;max-width:100%!important;
+    height:250px!important;min-height:250px!important;max-height:250px!important;
+    margin:0 auto!important;padding:0!important;overflow:hidden!important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-grid{
+    box-sizing:border-box!important;display:grid!important;
+    grid-template-columns:repeat(2,300px)!important;grid-template-rows:250px!important;
+    justify-content:center!important;align-items:start!important;gap:12px!important;
+    width:100%!important;min-width:0!important;height:250px!important;min-height:250px!important;
+    margin:0 auto!important;padding:0!important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-slot{
+    box-sizing:border-box!important;display:flex!important;align-items:center!important;
+    justify-content:center!important;flex:0 0 300px!important;width:300px!important;
+    min-width:300px!important;max-width:300px!important;height:250px!important;
+    min-height:250px!important;max-height:250px!important;overflow:hidden!important;
+    margin:0!important;padding:0!important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-mobile-slot{display:none!important}
+}
+body:has(#home) #home > section.hero .zc-sponsor-art-slot{
+  box-sizing:border-box!important;position:relative!important;display:block!important;
+  flex:0 0 auto!important;width:100%!important;min-width:0!important;
+  height:clamp(260px,22vw,340px)!important;min-height:260px!important;max-height:340px!important;
+  margin:0!important;padding:0!important;overflow:hidden!important;
+  border:1px solid #9bff4560!important;border-radius:5px!important;background:#080d0a!important;
+}
+body:has(#home) #home > section.hero .zc-sponsor-art-slot:before{content:none!important;display:none!important}
+body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
+  position:absolute!important;inset:0!important;display:block!important;
+  width:100%!important;height:100%!important;max-width:none!important;
+  object-fit:cover!important;object-position:center 32%!important;
+  filter:saturate(.96) contrast(1.04)!important;z-index:1!important;
+}
+body:has(#home) #home > section.hero .zc-hero-sponsor-promo{
+  box-sizing:border-box!important;display:flex!important;flex:0 0 auto!important;
+  flex-direction:column!important;justify-content:center!important;gap:10px!important;
+  width:100%!important;min-width:0!important;min-height:190px!important;height:auto!important;
+  margin:0!important;padding:22px 18px!important;
+}
+body:has(#home) #home > section.hero .hero-bottom{
+  position:relative!important;inset:auto!important;display:flex!important;
+  width:min(100%,1440px)!important;margin:20px auto 0!important;
+}
+@media(max-width:1359px){
+  body:has(#home) #home > section.hero > .hero-layout{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"content" "sponsor"!important;
+    gap:26px!important;
+  }
+  body:has(#home) #home > section.hero > .hero-layout > .hero-content,
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel{
+    grid-column:1!important;grid-row:auto!important;
+    width:min(100%,900px)!important;max-width:900px!important;
+    justify-self:center!important;
+  }
+}
+@media(max-width:900px){
+  body:has(#home) #home > section.hero .zc-hero-ad-stage{
+    box-sizing:border-box!important;display:flex!important;align-items:center!important;
+    justify-content:center!important;flex:0 0 50px!important;
+    width:min(320px,100%)!important;max-width:320px!important;
+    height:50px!important;min-height:50px!important;max-height:50px!important;
+    margin:0 auto!important;overflow:hidden!important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-grid{display:none!important}
+  body:has(#home) #home > section.hero .zc-adsterra-mobile-slot{
+    box-sizing:border-box!important;display:flex!important;align-items:center!important;
+    justify-content:center!important;width:320px!important;max-width:100%!important;
+    height:50px!important;min-height:50px!important;max-height:50px!important;overflow:hidden!important;
+  }
+  body:has(#home) #home > section.hero .zc-sponsor-art-slot{
+    height:clamp(210px,46vw,300px)!important;min-height:210px!important;max-height:300px!important;
+  }
+}
+@media(max-width:760px){
+  body:has(#home) #home > section.hero{padding:26px 5% 24px!important}
+  body:has(#home) #home > section.hero > .hero-layout{gap:20px!important}
+  body:has(#home) #home > section.hero .zc-hero-sponsor-panel{padding:9px!important}
+  body:has(#home) #home > section.hero .zc-hero-sponsor-promo{min-height:170px!important;padding:18px 14px!important}
+  body:has(#home) #home > section.hero .hero-stats{flex-wrap:wrap!important;gap:12px!important}
+}
+</style>
+
 </body></html>
