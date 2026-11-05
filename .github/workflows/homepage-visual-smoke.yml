@@ -17,8 +17,6 @@ on:
       - 'homepage-ribbons.js'
       - 'assets/zombcash-survivor-v13.jpg'
       - 'docs/DESIGN-STYLE-GUIDE.md'
-      - 'assets/zombcash-survivor-v13.jpg'
-      - 'docs/DESIGN-STYLE-GUIDE.md'
       - '.github/workflows/homepage-visual-smoke.yml'
 
 permissions:
