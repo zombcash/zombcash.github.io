@@ -22,6 +22,9 @@ on:
       - "tests/survivor-field-manual-smoke.cjs"
       - "tests/memecoin-platforms-article-smoke.cjs"
       - "tests/language-persistence-smoke.cjs"
+      - "script.js"
+      - "living-world-recovery.js"
+      - "tests/living-world-single-loader-smoke.cjs"
       - ".github/workflows/local-branch-visual-qa.yml"
 
 permissions:
@@ -53,6 +56,10 @@ jobs:
           node --check tests/survivor-field-manual-smoke.cjs
           node --check tests/memecoin-platforms-article-smoke.cjs
           node --check tests/language-persistence-smoke.cjs
+          node --check tests/living-world-single-loader-smoke.cjs
+
+      - name: Verify single-loader recovery contract
+        run: node tests/living-world-single-loader-smoke.cjs
 
       - name: Install Playwright and Chromium
         run: |
