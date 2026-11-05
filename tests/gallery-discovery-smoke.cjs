@@ -218,6 +218,16 @@ const expectedGalleryCount = galleryData.items.length;
         value: async payload => { window.__sharedPayload = payload; }
       });
     });
+    const imageOnlyButton = page.locator(".gallery-lightbox-image-only");
+    if (!await imageOnlyButton.isVisible()) throw new Error("Image-only viewing control must be visible in detail mode");
+    await imageOnlyButton.click();
+    await page.waitForFunction(() => document.querySelector(".gallery-lightbox")?.classList.contains("is-image-only"));
+    if (await page.locator(".gallery-lightbox figcaption").isVisible()) throw new Error("Image-only mode must hide the caption");
+    if (await page.locator(".gallery-lightbox-prev").isVisible() || await page.locator(".gallery-lightbox-next").isVisible()) throw new Error("Image-only mode must hide navigation arrows");
+    if (!await page.locator(".gallery-lightbox-close").isVisible()) throw new Error("Image-only mode must keep the close control visible");
+    await page.keyboard.press("Escape");
+    await page.waitForFunction(() => !document.querySelector(".gallery-lightbox")?.classList.contains("is-image-only"));
+    if (!await page.locator(".gallery-lightbox figcaption").isVisible()) throw new Error("Escape should return to the detail view, not close the gallery");
     await page.screenshot({ path: "gallery-lightbox-smoke.png" });
     await page.locator(".gallery-lightbox-share").click();
     await page.waitForFunction(() => Boolean(window.__sharedPayload));
