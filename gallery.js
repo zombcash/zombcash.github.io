@@ -295,13 +295,22 @@
       const headers = {};
       if (token) headers.Authorization = "Bearer " + token;
       try {
-        const response = await fetch(GALLERY_API + "/api/gallery/likes?ids=" + encodeURIComponent(ids.join(",")), {
-          headers,
-          cache: "no-store"
-        });
-        if (!response.ok) return;
-        const payload = await response.json();
-        (Array.isArray(payload.stats) ? payload.stats : []).forEach(row => {
+        // The API deliberately accepts at most 50 IDs per request. A 150-image
+        // archive therefore loads its like stats in three bounded batches.
+        const batches = [];
+        for (let index = 0; index < ids.length; index += 50) {
+          batches.push(ids.slice(index, index + 50));
+        }
+        const batchStats = await Promise.all(batches.map(async batch => {
+          const response = await fetch(GALLERY_API + "/api/gallery/likes?ids=" + encodeURIComponent(batch.join(",")), {
+            headers,
+            cache: "no-store"
+          });
+          if (!response.ok) return [];
+          const payload = await response.json();
+          return Array.isArray(payload.stats) ? payload.stats : [];
+        }));
+        batchStats.flat().forEach(row => {
           if (!row || !row.image_id) return;
           galleryLikeStats.set(row.image_id, {
             like_count: Number(row.like_count || 0),
