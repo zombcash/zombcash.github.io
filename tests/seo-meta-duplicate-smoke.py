@@ -65,8 +65,8 @@ def main():
             if len(values) > 1:
                 page_duplicates.append((key, values))
         style_meta = []
-        for match in re.finditer(r"<style\\b[^>]*>([\\s\\S]*?)</style\\s*>", html, re.I):
-            if re.search(r"<meta\\b", match.group(1), re.I):
+        for match in re.finditer(r"<style\b[^>]*>([\s\S]*?)</style\s*>", html, re.I):
+            if re.search(r"<meta\b", match.group(1), re.I):
                 style_meta.append(match.start())
         if page_duplicates or style_meta:
             duplicate_pages += 1
@@ -83,7 +83,7 @@ def main():
     print(f"Pages with duplicate/misplaced social metadata: {duplicate_pages}")
     print(f"Findings: {len(errors)}")
     if errors:
-        raise SystemExit("\\n".join(errors))
+        raise SystemExit("\n".join(errors))
     print("PASS: no duplicate or misplaced Open Graph/Twitter meta tags.")
 
 if __name__ == "__main__":
