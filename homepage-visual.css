@@ -45,3 +45,15 @@ body > main#home > section.hero .zc-sponsor-art-slot{position:relative!important
 body > main#home > section.hero .zc-sponsor-art-slot:before{content:none!important;display:none!important}
 body > main#home > section.hero .zc-sponsor-art-slot img{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;max-width:none!important;object-fit:cover!important;object-position:center 38%!important;filter:saturate(.78) contrast(1.06)!important;z-index:1!important}
 body > main#home > section.hero .zc-sponsor-art-slot:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#05090788,transparent 45%,#05090744),linear-gradient(0deg,#05090777,transparent 55%);pointer-events:none;z-index:2}
+
+/* 2026-11-05: prevent animated ribbon copy from sliding underneath fixed labels. */
+body:has(#home) .zc-ribbon{isolation:isolate!important}
+body:has(#home) .zc-ribbon-label{
+  position:relative!important;z-index:3!important;flex:0 0 auto!important;
+  background:linear-gradient(90deg,var(--ribbon-tint),#101810 92%)!important;
+  box-shadow:8px 0 14px #050907a8!important;
+}
+body:has(#home) .zc-ribbon-track{position:relative!important;z-index:1!important;flex:0 1 auto!important}
+@media(max-width:760px){
+  body:has(#home) .zc-ribbon-label{padding-inline:9px!important}
+}
