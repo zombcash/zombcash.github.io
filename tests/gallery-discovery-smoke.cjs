@@ -264,7 +264,7 @@ const expectedGalleryCount = galleryData.items.length;
     const oldestFirst = await page.locator("#gallery-grid .gallery-card").first().getAttribute("data-gallery-id");
     if (!oldestFirst) throw new Error("Sorted cards must retain stable image IDs");
     await page.locator(".gallery-sort").selectOption("liked");
-    if (await page.locator("#gallery-grid .gallery-card").count() !== expectedGalleryCount) throw new Error("Most-liked sort should preserve all 150 gallery cards");
+    if (await page.locator("#gallery-grid .gallery-card").count() !== expectedGalleryCount) throw new Error("Most-liked sort should preserve all gallery cards");
     const mostLikedFirst = await page.locator("#gallery-grid .gallery-card").first().getAttribute("data-gallery-id");
     if (mostLikedFirst !== "ZOMBCASH/4146:0") throw new Error("Most-liked sort did not rank the highest-count image first: " + mostLikedFirst);
     const sortTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_sort"));
