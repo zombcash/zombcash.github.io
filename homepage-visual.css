@@ -31,3 +31,11 @@ body:has(#home) .world-panel-foot{background:#080e0deF}
  body:has(#home) .hero{background-position:58% center!important;background-image:linear-gradient(90deg,rgba(3,8,5,.93),rgba(3,8,5,.72)),linear-gradient(0deg,#050907 0%,transparent 55%),url("https://upload.wikimedia.org/wikipedia/commons/9/91/Overgrown_city%2C_post-apocalyptic.jpg")!important}
 }
 @media(prefers-reduced-motion:reduce){body:has(#home) .zc-ribbon-track{animation:none!important;transform:none!important}body:has(#home) .zc-ribbon-copy:nth-child(n+2){display:none}}
+
+
+/* Keep the real reserved ad formats visible; legacy 90px rules must not clip 300x250 desktop slots. */
+@media (min-width:901px){
+ body:has(#home) .zc-hero-ad-stage{box-sizing:border-box!important;display:block!important;width:100%!important;height:250px!important;min-height:250px!important;max-height:250px!important;flex:0 0 250px!important;overflow:hidden!important}
+ body:has(#home) .zc-adsterra-grid{box-sizing:border-box!important;display:grid!important;grid-template-columns:repeat(2,300px)!important;grid-template-rows:250px!important;justify-content:center!important;gap:12px!important;width:100%!important;height:250px!important;min-height:250px!important}
+ body:has(#home) .zc-adsterra-slot{box-sizing:border-box!important;display:flex!important;width:300px!important;min-width:300px!important;height:250px!important;min-height:250px!important}
+}
