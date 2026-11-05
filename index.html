@@ -2325,4 +2325,45 @@ body:has(#home) #home > section.hero .hero-bottom{
 }
 </style>
 
+
+<style id="zc-narrow-phone-ad-fit-20261105">
+/* Final narrow-phone correction: keep the 320×50 sponsor footprint inside the actual 260px content column. */
+@media (max-width: 360px) {
+  body > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel > .zc-hero-sponsor > .zc-hero-ad-stage {
+    box-sizing: border-box !important;
+    display: flex !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    flex: 0 1 auto !important;
+    aspect-ratio: 320 / 50 !important;
+    overflow: hidden !important;
+  }
+  body > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel > .zc-hero-sponsor > .zc-hero-ad-stage > .zc-adsterra-mobile-slot {
+    box-sizing: border-box !important;
+    display: flex !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    aspect-ratio: 320 / 50 !important;
+    overflow: hidden !important;
+  }
+  body > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel > .zc-hero-sponsor > .zc-hero-ad-stage > .zc-adsterra-mobile-slot iframe {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+  }
+}
+</style>
+
 </body></html>
