@@ -1654,10 +1654,10 @@
   function initSitewideAd() {
     if (document.querySelector('#home .zc-adsterra-native-slot, #home .zc-adsterra-mobile-slot')) return;
     if (document.querySelector('.zc-sitewide-adsterra')) return;
-    const main = document.querySelector('main');
+    const main = document.querySelector('main') || document.querySelector('.page-shell') || document.body;
     if (!main) return;
-    // Respect any page-specific Adsterra slot already authored in the page.
-    if (main.querySelector('.zc-adsterra-native-slot, .zc-adsterra-mobile-slot, [data-zc-adsterra-slot], [data-zc-adsterra-placement]')) return;
+    // Respect any page-specific Adsterra slot already authored anywhere in the page.
+    if (document.querySelector('.zc-adsterra-native-slot, .zc-adsterra-mobile-slot, [data-zc-adsterra-slot], [data-zc-adsterra-placement]')) return;
     const lang = (document.documentElement.lang || 'en').toLowerCase();
     const locale = lang === 'zh-cn' ? 'zh-CN' : (lang.split('-')[0] || 'en');
     const label = copy[locale] || copy.en;
@@ -1669,8 +1669,9 @@
       '<div class="zc-sitewide-adsterra-native"><div id="' + nativeContainerId + '"></div></div>' +
       '<div class="zc-sitewide-adsterra-mobile"></div>';
     aside.querySelector('.zc-sitewide-adsterra-label').textContent = label;
-    const footer = main.querySelector(':scope > footer, footer');
+    const footer = main.querySelector('footer');
     if (footer) main.insertBefore(aside, footer);
+    else if (main === document.body) main.appendChild(aside);
     else main.insertAdjacentElement('afterend', aside);
     const style = document.createElement('style');
     style.id = 'zc-sitewide-adsterra-style-20261105';
