@@ -106,7 +106,7 @@ const expectedGalleryCount = galleryData.items.length;
     }
     await page.waitForFunction(() => typeof window.ZombieCashTrack === "function");
     await page.locator("#gallery-grid img").evaluateAll(images => images.forEach(image => { image.loading = "eager"; }));
-    await page.waitForFunction(() => {
+    await page.waitForFunction(expected => {
       const images = Array.from(document.querySelectorAll("#gallery-grid img"));
       return images.length === expected && images.every(image =>
         image.complete && (image.naturalWidth > 0 || image.dataset.fallbackApplied === "true")
@@ -282,7 +282,7 @@ const expectedGalleryCount = galleryData.items.length;
     await mobile.waitForSelector(".gallery-toolbar");
     await mobile.waitForFunction(expected => document.querySelectorAll("#gallery-grid .gallery-card").length === expected, expectedGalleryCount);
     await mobile.locator("#gallery-grid img").evaluateAll(images => images.forEach(image => { image.loading = "eager"; }));
-    await mobile.waitForFunction(() => {
+    await mobile.waitForFunction(expected => {
       const images = Array.from(document.querySelectorAll("#gallery-grid img"));
       return images.length === expected && images.every(image =>
         image.complete && (image.naturalWidth > 0 || image.dataset.fallbackApplied === "true")
@@ -328,10 +328,10 @@ const expectedGalleryCount = galleryData.items.length;
       images.forEach(image => { image.loading = "eager"; });
     });
     const visuallyReviewedIds = galleryData.items.filter(item => item.alt_review_status === "visual-reviewed").map(item => item.id);
-    await russian.waitForFunction(reviewedIds => {
-      const reviewed = new Set(reviewedIds);
+    await russian.waitForFunction(payload => {
+      const reviewed = new Set(payload.ids);
       const cards = Array.from(document.querySelectorAll("#gallery-grid .gallery-card"));
-      return cards.length === expected && cards.every(card => {
+      return cards.length === payload.expected && cards.every(card => {
         const image = card.querySelector("img");
         if (!image || !image.complete || image.naturalWidth <= 0) return false;
         return !reviewed.has(card.dataset.galleryId) || image.naturalWidth === 800;
