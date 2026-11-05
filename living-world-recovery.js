@@ -22,9 +22,10 @@
   const alertsLookUninitialized = !!(alertList && alertStatus &&
     (!alertList.children.length ||
      /CONNECTING|SCANNING|MONITORING|CONNECTION|ERROR|RETRY/i.test(alertStatus.textContent || '')));
-  const needsWorldRecovery = newsLooksUninitialized || alertsLookUninitialized;
+  const needsNewsRecovery = !window.__zombcashWorldNewsStarted && newsLooksUninitialized;
+  const needsAlertsRecovery = !window.__zombcashMarketAlarmsStarted && alertsLookUninitialized;
   const marketStatusAtStart = byId('zombcash-market-status');
-  const needsMarketRecovery = !!(marketRoot && marketStatusAtStart &&
+  const needsMarketRecovery = !window.__zombcashMarketCardStarted && !!(marketRoot && marketStatusAtStart &&
     (!byId('zombcash-price')?.textContent?.trim() ||
      /CONNECTING|LOADING|SCANNING|ERROR|RETRY/i.test(marketStatusAtStart.textContent || '')));
 
@@ -72,6 +73,7 @@
   };
 
   async function loadNews() {
+    window.__zombcashWorldNewsStarted = true;
     if (!newsList || !newsStatus) return;
     newsStatus.textContent = 'SYNCING RSS';
     try {
@@ -123,6 +125,7 @@
   }
 
   async function loadAlarms() {
+    window.__zombcashMarketAlarmsStarted = true;
     if (!alertList || !alertStatus) return;
     try {
       const data = await request('/api/zombcash');
@@ -150,6 +153,7 @@
   }
 
   async function loadMarketCard() {
+    window.__zombcashMarketCardStarted = true;
     if (!marketRoot) return;
     const status = byId('zombcash-market-status');
     try {
@@ -178,10 +182,12 @@
     }
   }
 
-  if (needsWorldRecovery) {
+  if (needsNewsRecovery) {
     loadNews();
-    loadAlarms();
     window.setInterval(loadNews, 300000);
+  }
+  if (needsAlertsRecovery) {
+    loadAlarms();
     window.setInterval(loadAlarms, 60000);
   }
   if (needsMarketRecovery) {
