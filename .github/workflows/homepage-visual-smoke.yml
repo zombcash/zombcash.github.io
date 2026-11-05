@@ -55,8 +55,9 @@ jobs:
               assert html.count('rel="canonical"') == 1, f"{filename}: canonical count changed"
               assert html.count('hreflang=') == 10, f"{filename}: hreflang count changed"
               assert '<main id="home">' in html, f"{filename}: homepage main element missing"
-              assert '/assets/zombcash-survivor-v13.jpg' in html, f"{filename}: project-owned survivor artwork missing"
-              assert '<img src="/assets/zombcash-survivor-v13.jpg"' in html, f"{filename}: survivor artwork image element missing"
+              assert 'class="zc-sponsor-art-slot"' in html, f"{filename}: survivor artwork panel missing"
+              assert '/assets/zombcash-survivor-realistic-520.avif' in html, f"{filename}: project-owned survivor artwork missing"
+              assert '<img src="/assets/zombcash-survivor-realistic-520.avif" alt="ZombieCash zombie survivor heroine"' in html, f"{filename}: accessible survivor artwork image missing"
               assert 'IMAGE SLOT' not in html and 'МЕСТО ДЛЯ ИЗОБРАЖЕНИЯ' not in html and 'Bildfeld' not in html, f"{filename}: unfinished hero artwork placeholder remains"
               print(f"OK {filename} ({lang})")
           PY
