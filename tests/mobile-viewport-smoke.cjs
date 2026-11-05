@@ -139,10 +139,12 @@ fs.mkdirSync(outDir, { recursive: true });
       const mobileAd = width <= 900;
       const expectedAdWidth = mobileAd ? 320 : 300;
       const expectedAdHeight = mobileAd ? 50 : 250;
+      const expectedStageWidth = mobileAd ? 320 : 612; // two 300px desktop banners plus 12px gap
+      const expectedStageHeight = expectedAdHeight * Math.min(1, (result.adSlotGeometry?.width || expectedStageWidth) / expectedStageWidth);
       const expectedIframeCount = mobileAd ? 1 : 2;
       if (!result.atOptions || Number(result.atOptions.width) !== expectedAdWidth || Number(result.atOptions.height) !== expectedAdHeight) issues.push(`expected Adsterra ${expectedAdWidth}×${expectedAdHeight} config at viewport ${width}px`);
       if (!result.adScriptTags.length) issues.push('Adsterra provider script is missing');
-      if (!result.adSlotGeometry || result.adSlotGeometry.height < expectedAdHeight * 0.9) issues.push('reserved Adsterra stage is shorter than the selected banner format');
+      if (!result.adSlotGeometry || result.adSlotGeometry.height < expectedStageHeight * 0.9) issues.push('reserved Adsterra stage is shorter than the selected banner format');
       if (mobileAd && result.adSlotGeometry && Math.abs(result.adSlotGeometry.width / result.adSlotGeometry.height - expectedAdWidth / expectedAdHeight) > 0.25) issues.push('reserved mobile Adsterra slot does not preserve the selected banner aspect ratio');
       if (result.adSlotGeometry && result.adSlotGeometry.width > width + 1) issues.push('reserved Adsterra slot exceeds the viewport width');
       if (!mobileAd && result.adBannerSlots.filter(slot => slot.visible && slot.width === 300 && slot.height === 250).length !== 2) issues.push('desktop layout must reserve two visible 300×250 Adsterra banners');
