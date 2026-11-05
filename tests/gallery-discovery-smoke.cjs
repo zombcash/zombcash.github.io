@@ -220,6 +220,11 @@ const expectedGalleryCount = galleryData.items.length;
     });
     const imageOnlyButton = page.locator(".gallery-lightbox-image-only");
     if (!await imageOnlyButton.isVisible()) throw new Error("Image-only viewing control must be visible in detail mode");
+    const imageOnlyBox = await imageOnlyButton.boundingBox();
+    const closeBox = await page.locator(".gallery-lightbox-close").boundingBox();
+    if (!imageOnlyBox || !closeBox || imageOnlyBox.x + imageOnlyBox.width > closeBox.x - 4) {
+      throw new Error("Image-only and close controls must not overlap in the lightbox toolbar");
+    }
     await imageOnlyButton.click();
     await page.waitForFunction(() => document.querySelector(".gallery-lightbox")?.classList.contains("is-image-only"));
     if (await page.locator(".gallery-lightbox figcaption").isVisible()) throw new Error("Image-only mode must hide the caption");
