@@ -842,36 +842,6 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 @media (max-width:900px){#home > section.hero .zc-hero-ad-stage{display:flex!important;width:min(320px,100%)!important;max-width:320px!important;height:auto!important;min-height:0!important;max-height:none!important;aspect-ratio:320/50!important;flex:0 0 auto!important;overflow:hidden!important}#home > section.hero .zc-adsterra-mobile-slot{display:flex!important;width:100%!important;max-width:320px!important;height:100%!important;min-height:0!important;aspect-ratio:320/50!important}#home > section.hero .zc-adsterra-grid{display:none!important}}
 </style>
 
-<style id="zc-adsterra-reserved-stage-cascade-fix-20261105">
-/* Override the older high-specificity 90px reservation with the actual active banner format. */
-@media (min-width: 901px) {
-  body > main#home > section.hero .zc-hero-ad-stage {
-    display: block !important;
-    width: 100% !important;
-    height: 250px !important;
-    min-height: 250px !important;
-    max-height: 250px !important;
-    flex: 0 0 250px !important;
-    overflow: hidden !important;
-  }
-}
-@media (max-width: 900px) {
-  body > main#home > section.hero .zc-hero-ad-stage {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: min(320px, 100%) !important;
-    max-width: 320px !important;
-    height: 50px !important;
-    min-height: 50px !important;
-    max-height: 50px !important;
-    flex: 0 0 50px !important;
-    aspect-ratio: auto !important;
-    overflow: hidden !important;
-  }
-}
-</style>
-
 </head>
 <body>
 <div class="scanlines"></div>
@@ -2138,4 +2108,35 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
   }
 })();
 </script>
+
+<style id="zc-adsterra-reserved-stage-cascade-fix-20261105">
+/* Must remain after the legacy in-body styles: reserve the real active Adsterra format. */
+@media (min-width: 901px) {
+  body > main#home > section.hero .zc-hero-ad-stage {
+    display: block !important;
+    width: 100% !important;
+    height: 250px !important;
+    min-height: 250px !important;
+    max-height: 250px !important;
+    flex: 0 0 250px !important;
+    overflow: hidden !important;
+  }
+}
+@media (max-width: 900px) {
+  body > main#home > section.hero .zc-hero-ad-stage {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: min(320px, 100%) !important;
+    max-width: 320px !important;
+    height: 50px !important;
+    min-height: 50px !important;
+    max-height: 50px !important;
+    flex: 0 0 50px !important;
+    aspect-ratio: auto !important;
+    overflow: hidden !important;
+  }
+}
+</style>
+
 </body></html>
