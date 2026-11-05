@@ -16,7 +16,7 @@ on:
       - 'hi/index.html'
       - 'homepage-visual.css'
       - 'homepage-ribbons.js'
-      - 'assets/zombcash-survivor-v13.jpg'
+      - 'assets/zombcash-survivor-realistic-520.avif'
       - 'docs/DESIGN-STYLE-GUIDE.md'
       - '.github/workflows/homepage-visual-smoke.yml'
 
@@ -64,7 +64,7 @@ jobs:
 
       - name: Verify project-owned artwork and accessibility hooks
         run: |
-          test -s assets/zombcash-survivor-v13.jpg
+          test -s assets/zombcash-survivor-realistic-520.avif
           grep -q "setAttribute('role','region')" homepage-ribbons.js
           grep -q "setAttribute('aria-hidden','true')" homepage-ribbons.js
           grep -q 'prefers-reduced-motion' homepage-visual.css
