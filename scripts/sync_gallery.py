@@ -14,17 +14,23 @@ CHANNEL = "ZOMBCASH"
 BASE_URL = f"https://t.me/s/{CHANNEL}"
 OUTPUT = Path("gallery-data.json")
 MAX_PAGES = 100
-MAX_ITEMS = 50
+MAX_PER_CATEGORY = 50
+CATEGORY_PATTERNS = {
+    "nightmare-horror": re.compile(r"\bNIGHTMARE\s+DROP\b", re.I),
+    "zombie-memes": re.compile(r"\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b", re.I),
+    "undead-after-dark": re.compile(r"\bUNDEAD\s+AFTER\s+DARK\b", re.I),
+}
 
-# The gallery is an artwork archive, not a general feed. Keep only the three
-# recurring visual series and continue paging backward until we have 50 images.
-def is_gallery_artwork(caption):
+# The archive limit is per recurring series, not one 50-image global cap.
+def category_for_caption(caption):
     text = str(caption or "")
-    return bool(
-        re.search(r"\bNIGHTMARE\s+DROP\b", text, re.I)
-        or re.search(r"\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b", text, re.I)
-        or re.search(r"\bUNDEAD\s+AFTER\s+DARK\b", text, re.I)
-    )
+    for category, pattern in CATEGORY_PATTERNS.items():
+        if pattern.search(text):
+            return category
+    return None
+
+def is_gallery_artwork(caption):
+    return category_for_caption(caption) is not None
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; ZombieCashGalleryBot/1.0)"}
 
 
