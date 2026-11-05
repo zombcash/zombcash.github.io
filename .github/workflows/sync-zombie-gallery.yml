@@ -1,5 +1,10 @@
 name: Sync Zombie Gallery
 on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/sync_gallery.py"
+      - ".github/workflows/sync-zombie-gallery.yml"
   workflow_dispatch:
   schedule:
     - cron: "17 * * * *"
