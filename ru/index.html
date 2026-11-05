@@ -815,7 +815,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
         </div>
         <div class="zc-adsterra-mobile-slot" data-zc-adsterra-mobile-slot aria-label="Mobile sponsored banner"></div>
       </div>
-      <div class="zc-sponsor-art-slot" role="img" aria-label="Иллюстрация выжившего ZombieCash"><img src="/assets/zombie-girl-heroine-hd.avif" alt="ZombieCash zombie survivor heroine" loading="eager" fetchpriority="high" decoding="async"></div>
+      <div class="zc-sponsor-art-slot" role="img" aria-label="Иллюстрация выжившего ZombieCash"><img src="/assets/zombcash-survivor-640.avif" alt="ZombieCash zombie survivor heroine" loading="eager" fetchpriority="high" decoding="async"></div>
       <div class="zc-hero-sponsor-promo">
         <p class="zc-hero-sponsor-kicker">ZOMBCASH // ЗОНА СПОНСОРОВ</p>
         <h2>ТВОЙ ПРОЕКТ.<br>НАША АУДИТОРИЯ.</h2>
@@ -2060,6 +2060,39 @@ body:has(#home) #home > section.hero .hero-bottom{
   body:has(#home) #home > section.hero .zc-hero-sponsor-panel{padding:9px!important}
   body:has(#home) #home > section.hero .zc-hero-sponsor-promo{min-height:170px!important;padding:18px 14px!important}
   body:has(#home) #home > section.hero .hero-stats{flex-wrap:wrap!important;gap:12px!important}
+}
+</style>
+
+
+<style id="zc-final-marquee-art-fix-20261105">
+/* Equal-width ribbon headers across every translated homepage. */
+body:has(#home) .zc-ribbon-label{
+  box-sizing:border-box!important;flex:0 0 clamp(118px,9.6vw,154px)!important;
+  width:clamp(118px,9.6vw,154px)!important;min-width:clamp(118px,9.6vw,154px)!important;
+  max-width:clamp(118px,9.6vw,154px)!important;justify-content:center!important;
+  padding:0 7px!important;white-space:nowrap!important;overflow:hidden!important;
+  text-overflow:ellipsis!important;font-size:clamp(7px,.66vw,10px)!important;
+  letter-spacing:.25px!important;text-align:center!important;
+}
+/* Real 640x360 survivor artwork; override the old placeholder/fallback geometry. */
+body:has(#home) #home > section.hero .zc-sponsor-art-slot{
+  box-sizing:border-box!important;position:relative!important;display:block!important;
+  width:100%!important;height:clamp(240px,22vw,340px)!important;
+  min-height:240px!important;max-height:340px!important;padding:0!important;
+  overflow:hidden!important;border:1px solid #9bff4570!important;
+  border-radius:5px!important;background:#080d0a!important;
+}
+body:has(#home) #home > section.hero .zc-sponsor-art-slot:before,
+body:has(#home) #home > section.hero .zc-sponsor-art-slot:after{content:none!important;display:none!important}
+body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
+  position:absolute!important;inset:0!important;display:block!important;
+  width:100%!important;height:100%!important;max-width:none!important;
+  object-fit:cover!important;object-position:center 30%!important;
+  filter:saturate(1.04) contrast(1.04)!important;opacity:1!important;z-index:1!important;
+}
+@media(max-width:760px){
+ body:has(#home) .zc-ribbon-label{flex-basis:118px!important;width:118px!important;min-width:118px!important;max-width:118px!important;font-size:7px!important;letter-spacing:0!important;padding:0 5px!important}
+ body:has(#home) #home > section.hero .zc-sponsor-art-slot{height:clamp(210px,62vw,290px)!important;min-height:210px!important;max-height:290px!important}
 }
 </style>
 
