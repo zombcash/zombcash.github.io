@@ -3232,6 +3232,8 @@
       "slug": "zombcash-3324-0",
       "anchor_id": "gallery-image-3324-0",
       "metadata_version": 2,
+      "image_width": 800,
+      "image_height": 800,
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed"
     },
@@ -3464,6 +3466,8 @@
       "slug": "zombcash-3281-0",
       "anchor_id": "gallery-image-3281-0",
       "metadata_version": 2,
+      "image_width": 800,
+      "image_height": 800,
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed"
     },

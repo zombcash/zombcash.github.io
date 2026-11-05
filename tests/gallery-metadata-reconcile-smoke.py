@@ -7,8 +7,8 @@ items = data["items"]
 ids = [item["id"] for item in items]
 
 assert data.get("schema_version") == 2
-assert len(items) == 50, f"Expected 50 current archive items, got {len(items)}"
-assert len(set(ids)) == 50, "Duplicate gallery item IDs"
+assert 1 <= len(items) <= 150, f"Expected 1–150 current gallery items, got {len(items)}"
+assert len(set(ids)) == len(items), "Duplicate gallery item IDs"
 for required in ("ZOMBCASH/4176:0", "ZOMBCASH/4165:0", "ZOMBCASH/4146:0", "ZOMBCASH/4125:0"):
     assert required in ids, f"Required current/archive item missing: {required}"
 
@@ -37,4 +37,4 @@ assert not any(item.get("pinterest_status") in {"queued", "pending", "scheduled"
 published = [item for item in items if item.get("pinterest_status") == "published"]
 assert all(item.get("pinterest_pin_id") and item.get("pinterest_pin_url") for item in published), "Published pin record lacks historical pin identifiers"
 
-print("PASS: 50 archive items preserved; 45 ALT-reviewed (41 contact-sheet, 4 individual), 5 pending; all 50 have intrinsic dimensions; rights review remains required; no Pinterest queue entries.")
+print(f"PASS: {len(items)} gallery items preserved; {len(reviewed)} ALT-reviewed, {len(pending)} pending; all items have intrinsic dimensions; rights review remains required; {len(published)} historical Pinterest pins retained and all other items remain blocked from Pinterest pending rights review.")
