@@ -3,6 +3,7 @@
 import json
 import re
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urljoin
@@ -164,6 +165,7 @@ def main():
             previous = {}
 
     source_keys = {"id", "image", "caption", "post_url", "date", "post_id"}
+    new_items_for_dimensions = []
     for item in items:
         prior = previous.get(str(item.get("id")))
         if prior:
@@ -182,10 +184,7 @@ def main():
             category = "undead-after-dark"
         else:
             category = "community-creations"
-        dimensions = jpeg_dimensions(str(item.get("image") or ""))
-        if dimensions:
-            item["image_width"], item["image_height"] = dimensions
-
+        new_items_for_dimensions.append(item)
         item.update({
             "rights_status": "review-required",
             "title": caption[:100] or "ZombieCash gallery artwork",
@@ -202,6 +201,22 @@ def main():
             "alt_review_status": "pending-review",
             "alt_review_method": "not-reviewed",
         })
+
+    # Probe image dimensions concurrently so a 150-image archive does not
+    # serialize dozens of CDN requests and hold the hourly sync open.
+    with ThreadPoolExecutor(max_workers=12) as executor:
+        dimension_jobs = {
+            executor.submit(jpeg_dimensions, str(item.get("image") or "")): item
+            for item in new_items_for_dimensions
+        }
+        for future in as_completed(dimension_jobs):
+            item = dimension_jobs[future]
+            try:
+                dimensions = future.result()
+            except Exception:
+                dimensions = None
+            if dimensions:
+                item["image_width"], item["image_height"] = dimensions
 
     payload = {
         "schema_version": 2,
