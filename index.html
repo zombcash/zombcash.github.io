@@ -2180,13 +2180,36 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
   }
   body > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel > .zc-hero-sponsor > .zc-hero-ad-stage {
     box-sizing: border-box !important;
-    width: 320px !important;
-    min-width: 320px !important;
-    max-width: 320px !important;
-    flex: 0 0 320px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    flex: 0 1 auto !important;
     align-self: center !important;
     margin: 0 auto !important;
     aspect-ratio: 320 / 50 !important;
+  }
+  body > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel > .zc-hero-sponsor > .zc-hero-ad-stage > .zc-adsterra-mobile-slot {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    aspect-ratio: 320 / 50 !important;
+    overflow: hidden !important;
+  }
+  body > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel > .zc-hero-sponsor > .zc-hero-ad-stage > .zc-adsterra-mobile-slot iframe {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
   }
 }
 </style>
