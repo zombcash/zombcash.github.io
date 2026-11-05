@@ -1618,7 +1618,7 @@
   window.__zcSitewideAdsterraInit = true;
   const NATIVE_ID = '4420dadadbd2f0727c322cd6c632be3e';
   const MOBILE_KEY = 'fbb2658d8dcb4503b358387f042869d1';
-  const nativeContainerId = 'container-zc-sitewide-native-20261105';
+  const nativeContainerId = 'container-4420dadadbd2f0727c322cd6c632be3e';
   const copy = {
     en: 'COMMUNITY SUPPORT / SPONSORED',
     de: 'COMMUNITY-UNTERSTÜTZUNG / ANZEIGE',
