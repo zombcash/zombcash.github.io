@@ -2331,27 +2331,30 @@ body:has(#home) #home > section.hero .hero-bottom{
 @media (max-width: 360px) {
   body > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel > .zc-hero-sponsor > .zc-hero-ad-stage {
     box-sizing: border-box !important;
-    display: flex !important;
+    display: block !important;
+    position: relative !important;
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
     height: auto !important;
     min-height: 0 !important;
     max-height: none !important;
-    flex: 0 1 auto !important;
+    flex: 0 0 auto !important;
     aspect-ratio: 320 / 50 !important;
     overflow: hidden !important;
   }
   body > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel > .zc-hero-sponsor > .zc-hero-ad-stage > .zc-adsterra-mobile-slot {
     box-sizing: border-box !important;
     display: flex !important;
+    position: absolute !important;
+    inset: 0 !important;
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
     height: 100% !important;
     min-height: 0 !important;
     max-height: 100% !important;
-    aspect-ratio: 320 / 50 !important;
+    aspect-ratio: auto !important;
     overflow: hidden !important;
   }
   body > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel > .zc-hero-sponsor > .zc-hero-ad-stage > .zc-adsterra-mobile-slot iframe {
