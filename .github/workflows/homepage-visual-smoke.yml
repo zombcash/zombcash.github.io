@@ -1,6 +1,8 @@
 name: Homepage visual refresh smoke checks
 
 on:
+  push:
+    branches: [homepage-visual-refresh-clean-2026-11]
   pull_request:
     branches: [main]
     paths:
