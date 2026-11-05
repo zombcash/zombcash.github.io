@@ -5,7 +5,8 @@ on:
     branches: [main]
     paths:
       - "gallery-data.json"
-      - "scripts/sync_gallery_image_seo.py"\n      - "scripts/generate_localized_gallery_pages.py"
+      - "scripts/sync_gallery_image_seo.py"
+      - "scripts/generate_localized_gallery_pages.py"\n      - "scripts/generate_localized_gallery_pages.py"
       - ".github/workflows/sync-gallery-image-seo.yml"
   workflow_dispatch:
   schedule:
@@ -30,9 +31,11 @@ jobs:
           python-version: "3.x"
       - name: Regenerate crawlable gallery and image sitemap
         run: python scripts/sync_gallery_image_seo.py
+      - name: Generate localized gallery pages
+        run: python scripts/generate_localized_gallery_pages.py
       - name: Commit generated SEO assets when changed
         run: |
-          if git diff --quiet -- gallery.html sitemap-gallery-images.xml robots.txt; then
+          if git diff --quiet -- gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html; then
             echo "Gallery SEO assets are already current."
             exit 0
           fi
@@ -63,10 +66,11 @@ jobs:
           git fetch origin main
           git reset --hard origin/main
           python scripts/sync_gallery_image_seo.py
-          if git diff --quiet -- gallery.html sitemap-gallery-images.xml robots.txt; then
+          python scripts/generate_localized_gallery_pages.py
+          if git diff --quiet -- gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html; then
             echo "Gallery SEO assets are current after syncing latest main."
             exit 0
           fi
-          git add gallery.html sitemap-gallery-images.xml robots.txt
+          git add gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html
           git commit -m "SEO: sync gallery image index (retry)"
           git push
