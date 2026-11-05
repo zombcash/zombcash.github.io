@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - "gallery-data.json"
+      - "gallery.html"
+      - "gallery.css"
+      - "gallery.js"
       - "scripts/sync_gallery_image_seo.py"
       - "scripts/generate_localized_gallery_pages.py"
       - ".github/workflows/sync-gallery-image-seo.yml"

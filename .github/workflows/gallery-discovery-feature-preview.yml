@@ -2,13 +2,15 @@ name: Gallery discovery feature preview
 
 on:
   push:
-    branches: [gallery-metadata-main-reconciled-20261104]
+    branches: [main, gallery-metadata-main-reconciled-20261104]
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened]
     paths:
       - "gallery.js"
       - "gallery.css"
+      - "gallery.html"
+      - "**/gallery.html"
       - "gallery-data.json"
       - "language.js"
       - "script.js"
@@ -53,7 +55,7 @@ jobs:
       - name: Run desktop, mobile, localization, filter, share and like smoke
         run: node tests/gallery-discovery-smoke.cjs
       - name: Commit generated crawlable pages and sitemaps
-        if: success()
+        if: success() && (github.event_name == 'pull_request' || github.ref_name != 'main')
         env:
           BRANCH: ${{ github.event.pull_request.head.ref || github.ref_name }}
         run: |

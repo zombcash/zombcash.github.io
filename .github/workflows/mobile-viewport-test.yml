@@ -45,11 +45,11 @@ on:
 permissions:
   contents: read
 
-# Keep only the newest validation run for a burst of related commits.
-# Older runs are cancelled instead of producing duplicate failure emails.
+# Run validation to completion. Batch related edits into one commit instead of
+# turning valid checks into red cancelled results during rapid pushes.
 concurrency:
   group: mobile-viewport-smoke-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   responsive-smoke:
