@@ -783,6 +783,34 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 </style>
 
 <link rel="stylesheet" href="/homepage-visual.css?v=20261105-hero3">
+<style id="zc-adsterra-native-layout-20261105">
+@media (min-width: 768px) {
+  body:has(#home) #home > section.hero .zc-hero-ad-stage {
+    box-sizing:border-box!important;display:block!important;width:100%!important;
+    height:auto!important;min-height:320px!important;max-height:none!important;
+    flex:0 0 auto!important;overflow:visible!important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-native-slot {
+    box-sizing:border-box!important;display:block!important;position:relative!important;
+    width:100%!important;max-width:640px!important;min-width:0!important;
+    min-height:300px!important;height:auto!important;margin:0 auto!important;overflow:visible!important;
+  }
+  body:has(#home) #home > section.hero #container-4420dadadbd2f0727c322cd6c632be3e {
+    width:100%!important;max-width:640px!important;min-height:300px!important;margin:0 auto!important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-mobile-slot,
+  body:has(#home) #home > section.hero .zc-adsterra-grid {display:none!important}
+}
+@media (max-width: 767px) {
+  body:has(#home) #home > section.hero .zc-adsterra-native-slot {display:none!important}
+  body:has(#home) #home > section.hero .zc-adsterra-mobile-slot {display:flex!important}
+  body:has(#home) #home > section.hero .zc-hero-ad-stage {
+    display:flex!important;align-items:center!important;justify-content:center!important;
+    width:min(320px,100%)!important;max-width:320px!important;height:50px!important;
+    min-height:50px!important;max-height:50px!important;flex:0 0 50px!important;overflow:hidden!important;
+  }
+}
+</style>
 </head>
 <body>
 <div class="scanlines"></div>
@@ -808,10 +836,8 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
     <div class="zc-hero-sponsor">
       <div class="zc-hero-sponsor-label">社区支持 / 赞助内容</div>
       <div class="zc-hero-ad-stage" aria-label="Adsterra sponsored advertising">
-        <div class="zc-adsterra-grid" aria-label="Two side-by-side sponsored banners">
-          <div class="zc-adsterra-slot" data-zc-adsterra-slot="1" aria-label="Sponsored banner 1"></div>
-      
-          <div class="zc-adsterra-slot" data-zc-adsterra-slot="2" aria-label="Sponsored banner 2"></div>
+        <div class="zc-adsterra-native-slot" aria-label="Native sponsored content">
+          <div id="container-4420dadadbd2f0727c322cd6c632be3e"></div>
         </div>
         <div class="zc-adsterra-mobile-slot" data-zc-adsterra-mobile-slot aria-label="Mobile sponsored banner"></div>
       </div>
@@ -1911,22 +1937,34 @@ html[lang="hi"] .hero-content h1{line-height:1.45;letter-spacing:0;font-family:"
 @media(max-width:1099px){#home > section.hero > .hero-layout{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"content" "sponsor"!important;gap:24px!important}#home > section.hero > .hero-layout > .hero-content{grid-column:1!important;grid-row:1!important;max-width:760px!important}#home > section.hero > .hero-layout > .zc-hero-sponsor-panel{grid-column:1!important;grid-row:2!important;justify-self:center!important;align-self:start!important;width:min(100%,640px)!important;max-width:640px!important}}
 @media(max-width:900px){#home > section.hero .zc-hero-ad-stage{display:flex!important;align-items:center!important;justify-content:center!important;width:min(320px,100%)!important;max-width:320px!important;height:50px!important;min-height:50px!important;max-height:50px!important;overflow:hidden!important;flex:0 0 50px!important}#home > section.hero .zc-adsterra-grid{display:none!important}#home > section.hero .zc-adsterra-mobile-slot{box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;width:320px!important;max-width:100%!important;height:50px!important;min-height:50px!important;max-height:50px!important;overflow:hidden!important}#home > section.hero .zc-adsterra-mobile-slot iframe{display:block!important;width:320px!important;max-width:100%!important;min-width:0!important;height:50px!important;max-height:50px!important;border:0!important}#home > section.hero .zc-sponsor-art-slot{height:140px!important;min-height:140px!important;max-height:140px!important}}
 </style>
-<script id="zc-adsterra-dual-loader-20261105">
+<script id="zc-adsterra-native-loader-20261105">
 (function(){
-  var desktopKey='ebac4722194a516b677e1081f49dfb99',mobileKey='fbb2658d8dcb4503b358387f042869d1';
-  function loadPlacement(target,key,width,height,label){
+  var mobileKey='fbb2658d8dcb4503b358387f042869d1';
+  var mobileQuery=window.matchMedia('(max-width: 767px)');
+  function loadMobile(){
+    var target=document.querySelector('#home [data-zc-adsterra-mobile-slot]');
     if(!target||target.getAttribute('data-zc-ad-loaded')==='1')return;
     target.setAttribute('data-zc-ad-loaded','1');
-    window.atOptions={key:key,format:'iframe',height:height,width:width,params:{}};
-    var loader=document.createElement('script');loader.type='text/javascript';loader.async=false;
-    loader.src='https://bauval.org/22/'+key;loader.setAttribute('data-zc-adsterra-placement',label);target.appendChild(loader);
+    window.atOptions={key:mobileKey,format:'iframe',height:50,width:320,params:{}};
+    var script=document.createElement('script');
+    script.type='text/javascript';script.async=false;
+    script.src='https://bauval.org/22/'+mobileKey;
+    script.setAttribute('data-zc-adsterra-placement','mobile-320x50');
+    target.appendChild(script);
   }
-  if(window.matchMedia&&window.matchMedia('(max-width: 900px)').matches){
-    loadPlacement(document.querySelector('#home [data-zc-adsterra-mobile-slot]'),mobileKey,320,50,'mobile-320x50');
-  }else{
-    var slots=document.querySelectorAll('#home [data-zc-adsterra-slot]');
-    for(var i=0;i<slots.length;i++)loadPlacement(slots[i],desktopKey,300,250,'desktop-300x250-'+(i+1));
+  function loadDesktopNative(){
+    var target=document.querySelector('#home .zc-adsterra-native-slot');
+    if(!target||target.getAttribute('data-zc-native-loaded')==='1')return;
+    target.setAttribute('data-zc-native-loaded','1');
+    var script=document.createElement('script');
+    script.async=true;script.setAttribute('data-cfasync','false');
+    script.src='https://bauval.org/21/4420dadadbd2f0727c322cd6c632be3e';
+    document.head.appendChild(script);
   }
+  function syncPlacement(){if(mobileQuery.matches)loadMobile();else loadDesktopNative();}
+  syncPlacement();
+  if(typeof mobileQuery.addEventListener==='function')mobileQuery.addEventListener('change',syncPlacement);
+  else if(typeof mobileQuery.addListener==='function')mobileQuery.addListener(syncPlacement);
 })();
 </script>
 <script src="/homepage-ribbons.js?v=20261105" defer></script>
