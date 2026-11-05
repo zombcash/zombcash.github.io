@@ -82,9 +82,13 @@
   const closeButton = lightbox.querySelector(".gallery-lightbox-close");
   const imageOnlyButton = lightbox.querySelector(".gallery-lightbox-image-only");
   imageOnlyButton.addEventListener("click", () => {
-    lightbox.classList.add("is-image-only");
-    imageOnlyButton.setAttribute("aria-pressed", "true");
-    fullImage.focus?.();
+    const enteringImageOnly = !lightbox.classList.contains("is-image-only");
+    lightbox.classList.toggle("is-image-only", enteringImageOnly);
+    imageOnlyButton.setAttribute("aria-pressed", enteringImageOnly ? "true" : "false");
+    imageOnlyButton.setAttribute("aria-label", enteringImageOnly ? "Return to image details" : "View image only");
+    imageOnlyButton.setAttribute("title", enteringImageOnly ? "Return to image details" : "View image only");
+    if (enteringImageOnly) fullImage.focus?.();
+    else imageOnlyButton.focus();
   });
   const updateCloseLabel = () => {
     const locale = galleryLocale[galleryLang] || galleryLocale.en;
@@ -212,6 +216,8 @@
       if (lightbox.classList.contains("is-image-only")) {
         lightbox.classList.remove("is-image-only");
         imageOnlyButton.setAttribute("aria-pressed", "false");
+        imageOnlyButton.setAttribute("aria-label", "View image only");
+        imageOnlyButton.setAttribute("title", "View image only");
         imageOnlyButton.focus();
       } else closeImage();
     }
