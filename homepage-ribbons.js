@@ -14,16 +14,16 @@
  'zh-CN':[['疫情警报','ZombieCash 生态持续发展','幸存者新任务与新游戏','保持警惕，努力生存'],['社区动态','表情包','游戏','活动','幸存者任务','加入社区'],['市场情报','$ZOMBCASH（Solana）','市场信号与代币数据','雷达与代币数据','追踪疫情动态']],
  ru:[['ТРЕВОГА: ВСПЫШКА','Экосистема ZombieCash развивается','Новые миссии и игры для выживших','Будь начеку. Выживай.'],['ЛЕНТА СООБЩЕСТВА','Мемы','Игры','События','Миссии выживших','Присоединяйся к сообществу'],['РЫНОЧНАЯ РАЗВЕДКА','$ZOMBCASH в Solana','Рыночные сигналы и данные токена','Радар и данные токена','Следи за вспышкой']],
  tr:[['SALGIN ALARMI','ZombieCash ekosistemi büyüyor','Hayatta kalanlar için yeni görevler ve oyunlar','Dikkatli ol. Hayatta kal.'],['TOPLULUK AKIŞI','Meme’ler','Oyunlar','Etkinlikler','Hayatta kalan görevleri','Topluluğa katıl'],['PİYASA İSTİHBARATI','Solana üzerinde $ZOMBCASH','Piyasa sinyalleri ve token verileri','Radar ve token verileri','Salgını takip et']],
- hi:[['प्रकोप चेतावनी','ZombieCash इकोसिस्टम बढ़ रहा है','सर्वाइवर्स के लिए नए मिशन और गेम','सतर्क रहें। जीवित रहें।'],['कम्युनिटी फ़ीड','मीम्स','गेम्स','इवेंट्स','सर्वाइवर मिशन','समुदाय से जुड़ें'],['मार्केट इंटेल','$ZOMBCASH on Solana','बाज़ार संकेत और टोकन डेटा','रडार और टोकन डेटा','प्रकोप पर नज़र रखें']]
+ hi:[['प्रकोप चेतावनी','ZombieCash इकोसिस्टम बढ़ रहा है','सर्वाइवर्स के लिए नए मिशन और गेम','सतर्क रहें। जीवित रहें।'],['कम्युनिटी फ़ीड','मीम्स','गेम्स','इवेंट्स','सर्वाइवर मिशन','समुदाय से जुड़ें'],['मार्केट इंटेल','Solana पर $ZOMBCASH','बाज़ार संकेत और टोकन डेटा','रडार और टोकन डेटा','प्रकोप पर नज़र रखें']]
  };
  var themes=['alert','community','market'],icons=['☣','◉','▥'];
- var wrap=document.createElement('div');wrap.className='zc-outbreak-ribbons';wrap.setAttribute('aria-label','ZombieCash project highlights');
+ var wrap=document.createElement('div');wrap.className='zc-outbreak-ribbons';wrap.setAttribute('role','region');wrap.setAttribute('aria-label','ZombieCash project highlights');
  (copy[lang]||copy.en).forEach(function(row,i){
   var band=document.createElement('div');band.className='zc-ribbon zc-ribbon--'+themes[i];
   var label=document.createElement('span');label.className='zc-ribbon-label';label.textContent=icons[i]+' '+row[0];
   var track=document.createElement('div');track.className='zc-ribbon-track';
   for(var repeat=0;repeat<2;repeat++){
-   var line=document.createElement('span');line.className='zc-ribbon-copy';
+   var line=document.createElement('span');line.className='zc-ribbon-copy';if(repeat===1)line.setAttribute('aria-hidden','true');
    row.slice(1).forEach(function(item){var text=document.createElement('span');text.textContent=item;line.appendChild(text);var sep=document.createElement('b');sep.textContent='•';line.appendChild(sep);});
    track.appendChild(line);
   }
