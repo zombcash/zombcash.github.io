@@ -861,8 +861,8 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 
 <link rel="stylesheet" href="/homepage-visual.css?v=20261105-hero3">
 <style id="zc-adsterra-native-layout-20261105">
-/* Native Banner replaces the awkward scaled 728x90 creative; existing hero/sponsor layout is preserved. */
-@media (min-width: 901px) {
+/* Use the native placement on desktop/tablet landscape widths; retain 320x50 only on phone-sized viewports. */
+@media (min-width: 768px) {
   body:has(#home) #home > section.hero .zc-hero-ad-stage {
     box-sizing:border-box!important;display:block!important;width:100%!important;
     height:auto!important;min-height:320px!important;max-height:none!important;
@@ -877,9 +877,12 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
   body:has(#home) #home > section.hero #container-4420dadadbd2f0727c322cd6c632be3e {
     width:100%!important;max-width:640px!important;min-height:300px!important;margin:0 auto!important;
   }
+  body:has(#home) #home > section.hero .zc-adsterra-mobile-slot,
+  body:has(#home) #home > section.hero .zc-adsterra-grid {display:none!important}
 }
-@media (max-width: 900px) {
+@media (max-width: 767px) {
   body:has(#home) #home > section.hero .zc-adsterra-native-slot {display:none!important}
+  body:has(#home) #home > section.hero .zc-adsterra-mobile-slot {display:flex!important}
   body:has(#home) #home > section.hero .zc-hero-ad-stage {
     display:flex!important;align-items:center!important;justify-content:center!important;
     width:min(320px,100%)!important;max-width:320px!important;height:50px!important;
@@ -2136,6 +2139,7 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
 <script id="zc-adsterra-native-loader-20261105">
 (function(){
   var mobileKey='fbb2658d8dcb4503b358387f042869d1';
+  var mobileQuery=window.matchMedia('(max-width: 767px)');
   function loadMobile(){
     var target=document.querySelector('#home [data-zc-adsterra-mobile-slot]');
     if(!target||target.getAttribute('data-zc-ad-loaded')==='1')return;
@@ -2157,8 +2161,13 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
     loader.src='https://bauval.org/21/4420dadadbd2f0727c322cd6c632be3e';
     document.head.appendChild(loader);
   }
-  if(window.matchMedia&&window.matchMedia('(max-width: 900px)').matches)loadMobile();
-  else loadDesktopNative();
+  function syncPlacement(){
+    if(mobileQuery.matches)loadMobile();
+    else loadDesktopNative();
+  }
+  syncPlacement();
+  if(typeof mobileQuery.addEventListener==='function')mobileQuery.addEventListener('change',syncPlacement);
+  else if(typeof mobileQuery.addListener==='function')mobileQuery.addListener(syncPlacement);
 })();
 </script>
 
