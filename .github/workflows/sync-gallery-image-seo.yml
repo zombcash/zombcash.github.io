@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - "gallery-data.json"
-      - "scripts/sync_gallery_image_seo.py"
+      - "scripts/sync_gallery_image_seo.py"\n      - "scripts/generate_localized_gallery_pages.py"
       - ".github/workflows/sync-gallery-image-seo.yml"
   workflow_dispatch:
   schedule:
@@ -38,7 +38,7 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add gallery.html sitemap-gallery-images.xml robots.txt
+          git add gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html
           git commit -m "SEO: sync gallery image index"
 
           # Another workflow or manual edit can advance main while this job
