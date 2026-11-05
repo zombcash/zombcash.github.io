@@ -8,10 +8,7 @@ import xml.etree.ElementTree as ET
 
 SITE = "https://zombcash.github.io/"
 NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
-TRACKED = {
-    "og:type", "og:site_name", "og:title", "og:description", "og:url", "og:image",
-    "twitter:card", "twitter:title", "twitter:description", "twitter:image",
-}
+TRACKED_PREFIXES = ("og:", "twitter:")
 EXCLUDED_DIRS = {".git", "node_modules", ".venv", "venv", "dist", "_site"}
 
 class MetaParser(HTMLParser):
@@ -23,7 +20,7 @@ class MetaParser(HTMLParser):
             return
         a = dict(attrs)
         key = (a.get("property") or a.get("name") or "").strip().lower()
-        if key in TRACKED:
+        if key.startswith(TRACKED_PREFIXES):
             self.tags[key].append((a.get("content") or "").strip())
 
 def sitemap_urls():
