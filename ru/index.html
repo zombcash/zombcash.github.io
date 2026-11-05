@@ -2096,4 +2096,53 @@ body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
 }
 </style>
 
+
+<style id="zc-adsterra-mobile-proportional-fit-20261105">
+/* Keep the 320x50 provider creative's display footprint proportional inside narrow sponsor panels. */
+@media (max-width: 900px) {
+  body:has(#home) #home > section.hero .zc-hero-ad-stage {
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: min(320px, 100%) !important;
+    min-width: 0 !important;
+    max-width: 320px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    aspect-ratio: 320 / 50 !important;
+    flex: 0 0 auto !important;
+    margin: 0 auto !important;
+    overflow: hidden !important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-mobile-slot {
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    aspect-ratio: auto !important;
+    overflow: hidden !important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-mobile-slot iframe,
+  body:has(#home) #home > section.hero .zc-hero-ad-unit iframe {
+    box-sizing: border-box !important;
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    aspect-ratio: 320 / 50 !important;
+    border: 0 !important;
+  }
+}
+</style>
 </body></html>
