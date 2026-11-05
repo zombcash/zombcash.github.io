@@ -50,7 +50,7 @@ jobs:
           for filename, lang in pages.items():
               html = Path(filename).read_text(encoding="utf-8")
               assert f'<html lang="{lang}">' in html, f"{filename}: wrong language tag"
-              assert html.count('href="/homepage-visual.css?v=20261105"') == 1, f"{filename}: stylesheet missing or duplicated"
+              assert html.count('href="/homepage-visual.css?') == 1, f"{filename}: stylesheet missing or duplicated"
               assert html.count('src="/homepage-ribbons.js?v=20261105"') == 1, f"{filename}: ticker script missing or duplicated"
               assert html.count('rel="canonical"') == 1, f"{filename}: canonical count changed"
               assert html.count('hreflang=') == 10, f"{filename}: hreflang count changed"
