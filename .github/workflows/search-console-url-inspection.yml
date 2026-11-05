@@ -25,7 +25,7 @@ permissions:
 jobs:
   inspect:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 60
     steps:
       - name: Install Google API client
         run: python -m pip install --disable-pip-version-check requests google-api-python-client google-auth
@@ -104,6 +104,21 @@ jobs:
           counts = {}
           errors = []
           records = []
+          fields = [
+              "url", "verdict", "coverageState", "indexingState", "robotsTxtState",
+              "pageFetchState", "lastCrawlTime", "googleCanonical", "userCanonical",
+              "sitemap", "referringUrls", "apiError",
+          ]
+          def write_reports():
+              # Persist a checkpoint after each inspected URL so a timeout never discards completed work.
+              with open("search-console-url-inspection.csv", "w", encoding="utf-8-sig", newline="") as handle:
+                  writer = csv.DictWriter(handle, fieldnames=fields)
+                  writer.writeheader()
+                  writer.writerows(records)
+              with open("search-console-url-inspection.json", "w", encoding="utf-8") as handle:
+                  json.dump({"property": site_url, "sitemap": sitemap_url, "totalUniqueUrls": len(urls),
+                             "inspectedOrRecorded": len(records), "coverageStateCounts": counts,
+                             "apiErrorCount": len(errors), "records": records}, handle, ensure_ascii=False, indent=2)
           start_index = max(0, int(os.environ.get("START_INDEX", "0") or "0"))
           url_limit = max(0, int(os.environ.get("URL_LIMIT", "0") or "0"))
           raw_url_list = os.environ.get("URL_LIST", "").strip()
@@ -168,6 +183,7 @@ jobs:
                       "lastCrawlTime": "", "googleCanonical": "", "userCanonical": "",
                       "sitemap": "", "referringUrls": "", "apiError": errors[-1][1] if errors else "No response",
                   })
+                  write_reports()
                   if errors and ("API is not enabled" in errors[-1][1] or "PERMISSION_DENIED" in errors[-1][1] or "insufficient authentication scopes" in errors[-1][1]):
                       print("Stopping early because the inspection service or credentials are not authorized; remaining URLs will be marked NOT_RUN.")
                       for remaining in urls[number:]:
@@ -197,6 +213,7 @@ jobs:
                   "referringUrls": "; ".join(index.get("referringUrls", [])) if isinstance(index.get("referringUrls", []), list) else index.get("referringUrls", ""),
                   "apiError": "",
               })
+              write_reports()
               print(f"Verdict: {verdict}")
               print(f"Coverage state: {state}")
               print(f"Indexing state: {index.get('indexingState', 'NOT_RETURNED')}")
@@ -221,19 +238,7 @@ jobs:
               print("URLS WITH API ERRORS:")
               for url, error in errors:
                   print(f"- {url}: {error}")
-          fields = [
-              "url", "verdict", "coverageState", "indexingState", "robotsTxtState",
-              "pageFetchState", "lastCrawlTime", "googleCanonical", "userCanonical",
-              "sitemap", "referringUrls", "apiError",
-          ]
-          with open("search-console-url-inspection.csv", "w", encoding="utf-8-sig", newline="") as handle:
-              writer = csv.DictWriter(handle, fieldnames=fields)
-              writer.writeheader()
-              writer.writerows(records)
-          with open("search-console-url-inspection.json", "w", encoding="utf-8") as handle:
-              json.dump({"property": site_url, "sitemap": sitemap_url, "totalUniqueUrls": len(urls),
-                         "inspectedOrRecorded": len(records), "coverageStateCounts": counts,
-                         "apiErrorCount": len(errors), "records": records}, handle, ensure_ascii=False, indent=2)
+          write_reports()
           print("Inspection is a snapshot of Google's available data; it does not itself request indexing.")
           PY
 
