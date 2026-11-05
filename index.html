@@ -2155,14 +2155,25 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
   }
 }
 @media (max-width: 360px) {
-  /* Recover the card's 16px side padding for the fixed-width native 320×50 placement. */
+  /* Center the native 320px slot in the available viewport, even when the hero grid column is narrower. */
   body > main#home > section.hero .zc-hero-sponsor-panel {
     box-sizing: border-box !important;
-    width: calc(100% + 32px) !important;
-    max-width: calc(100% + 32px) !important;
-    margin-left: -16px !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    width: 320px !important;
+    min-width: 320px !important;
+    max-width: 320px !important;
+    flex: 0 0 320px !important;
+    margin-left: calc((100% - 320px) / 2) !important;
+    margin-right: 0 !important;
+    padding: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+  }
+  body > main#home > section.hero .zc-hero-sponsor {
+    width: 320px !important;
+    min-width: 320px !important;
+    max-width: 320px !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
   body > main#home > section.hero .zc-hero-ad-stage {
     box-sizing: border-box !important;
@@ -2170,8 +2181,7 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
     min-width: 320px !important;
     max-width: 320px !important;
     flex: 0 0 320px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    margin: 0 !important;
     aspect-ratio: 320 / 50 !important;
   }
 }
