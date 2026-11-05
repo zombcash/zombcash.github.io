@@ -68,7 +68,7 @@ body:has(#home) #home > section.hero{
 body:has(#home) #home > section.hero > .hero-layout{
   box-sizing:border-box!important;
   display:grid!important;
-  grid-template-columns:minmax(0,1fr) minmax(0,620px)!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,640px)!important;
   grid-template-areas:"content sponsor"!important;
   align-items:stretch!important;
   align-content:start!important;
@@ -88,9 +88,9 @@ body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel{
   position:relative!important;inset:auto!important;float:none!important;transform:none!important;
   box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
   align-self:stretch!important;justify-self:stretch!important;
-  width:100%!important;max-width:620px!important;min-width:0!important;
+  width:100%!important;max-width:640px!important;min-width:0!important;
   height:auto!important;min-height:0!important;max-height:none!important;
-  margin:0!important;padding:14px!important;overflow:hidden!important;
+  margin:0!important;padding:10px!important;overflow:hidden!important;
 }
 body:has(#home) #home > section.hero .zc-hero-sponsor{
   display:flex!important;flex-direction:column!important;align-items:stretch!important;
