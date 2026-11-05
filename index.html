@@ -860,6 +860,33 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 </style>
 
 <link rel="stylesheet" href="/homepage-visual.css?v=20261105-hero3">
+<style id="zc-adsterra-native-layout-20261105">
+/* Native Banner replaces the awkward scaled 728x90 creative; existing hero/sponsor layout is preserved. */
+@media (min-width: 901px) {
+  body:has(#home) #home > section.hero .zc-hero-ad-stage {
+    box-sizing:border-box!important;display:block!important;width:100%!important;
+    height:auto!important;min-height:320px!important;max-height:none!important;
+    flex:0 0 auto!important;overflow:visible!important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-native-slot {
+    box-sizing:border-box!important;display:block!important;position:relative!important;
+    width:100%!important;max-width:640px!important;min-width:0!important;
+    min-height:300px!important;height:auto!important;margin:0 auto!important;
+    overflow:visible!important;
+  }
+  body:has(#home) #home > section.hero #container-4420dadadbd2f0727c322cd6c632be3e {
+    width:100%!important;max-width:640px!important;min-height:300px!important;margin:0 auto!important;
+  }
+}
+@media (max-width: 900px) {
+  body:has(#home) #home > section.hero .zc-adsterra-native-slot {display:none!important}
+  body:has(#home) #home > section.hero .zc-hero-ad-stage {
+    display:flex!important;align-items:center!important;justify-content:center!important;
+    width:min(320px,100%)!important;max-width:320px!important;height:50px!important;
+    min-height:50px!important;max-height:50px!important;flex:0 0 50px!important;overflow:hidden!important;
+  }
+}
+</style>
 </head>
 <body>
 <div class="scanlines"></div>
@@ -886,10 +913,8 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
     <div class="zc-hero-sponsor">
       <div class="zc-hero-sponsor-label">COMMUNITY SUPPORT / SPONSORED</div>
       <div class="zc-hero-ad-stage" aria-label="Adsterra sponsored advertising">
-        <div class="zc-adsterra-grid" aria-label="Two side-by-side sponsored banners">
-          <div class="zc-adsterra-slot" data-zc-adsterra-slot="1" aria-label="Sponsored banner 1"></div>
-      
-          <div class="zc-adsterra-slot" data-zc-adsterra-slot="2" aria-label="Sponsored banner 2"></div>
+        <div class="zc-adsterra-native-slot" aria-label="Native sponsored content">
+          <div id="container-4420dadadbd2f0727c322cd6c632be3e"></div>
         </div>
         <div class="zc-adsterra-mobile-slot" data-zc-adsterra-mobile-slot aria-label="Mobile sponsored banner"></div>
       </div>
@@ -2108,22 +2133,32 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
 @media(max-width:1099px){#home > section.hero > .hero-layout{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"content" "sponsor"!important;gap:24px!important}#home > section.hero > .hero-layout > .hero-content{grid-column:1!important;grid-row:1!important;max-width:760px!important}#home > section.hero > .hero-layout > .zc-hero-sponsor-panel{grid-column:1!important;grid-row:2!important;justify-self:center!important;align-self:start!important;width:min(100%,640px)!important;max-width:640px!important}}
 @media(max-width:900px){#home > section.hero .zc-hero-ad-stage{display:flex!important;align-items:center!important;justify-content:center!important;width:min(320px,100%)!important;max-width:320px!important;height:50px!important;min-height:50px!important;max-height:50px!important;overflow:hidden!important;flex:0 0 50px!important}#home > section.hero .zc-adsterra-grid{display:none!important}#home > section.hero .zc-adsterra-mobile-slot{box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;width:320px!important;max-width:100%!important;height:50px!important;min-height:50px!important;max-height:50px!important;overflow:hidden!important}#home > section.hero .zc-adsterra-mobile-slot iframe{display:block!important;width:320px!important;max-width:100%!important;min-width:0!important;height:50px!important;max-height:50px!important;border:0!important}#home > section.hero .zc-sponsor-art-slot{height:140px!important;min-height:140px!important;max-height:140px!important}}
 </style>
-<script id="zc-adsterra-dual-loader-20261105">
+<script id="zc-adsterra-native-loader-20261105">
 (function(){
-  var desktopKey='08a70f8414101d6c6b04e25aa232f436',mobileKey='fbb2658d8dcb4503b358387f042869d1';
-  function loadPlacement(target,key,width,height,label){
+  var mobileKey='fbb2658d8dcb4503b358387f042869d1';
+  function loadMobile(){
+    var target=document.querySelector('#home [data-zc-adsterra-mobile-slot]');
     if(!target||target.getAttribute('data-zc-ad-loaded')==='1')return;
     target.setAttribute('data-zc-ad-loaded','1');
-    window.atOptions={key:key,format:'iframe',height:height,width:width,params:{}};
-    var loader=document.createElement('script');loader.type='text/javascript';loader.async=false;
-    loader.src='https://bauval.org/22/'+key;loader.setAttribute('data-zc-adsterra-placement',label);target.appendChild(loader);
+    window.atOptions={key:mobileKey,format:'iframe',height:50,width:320,params:{}};
+    var loader=document.createElement('script');
+    loader.type='text/javascript';loader.async=false;
+    loader.src='https://bauval.org/22/'+mobileKey;
+    loader.setAttribute('data-zc-adsterra-placement','mobile-320x50');
+    target.appendChild(loader);
   }
-  if(window.matchMedia&&window.matchMedia('(max-width: 900px)').matches){
-    loadPlacement(document.querySelector('#home [data-zc-adsterra-mobile-slot]'),mobileKey,320,50,'mobile-320x50');
-  }else{
-    var desktopTarget=document.querySelector('#home [data-zc-adsterra-slot="1"]');
-    loadPlacement(desktopTarget,desktopKey,728,90,'desktop-728x90');
+  function loadDesktopNative(){
+    if(document.querySelector('[data-zc-native-loaded="1"]'))return;
+    var target=document.querySelector('#home .zc-adsterra-native-slot');
+    if(!target)return;
+    target.setAttribute('data-zc-native-loaded','1');
+    var loader=document.createElement('script');
+    loader.async=true;loader.setAttribute('data-cfasync','false');
+    loader.src='https://bauval.org/21/4420dadadbd2f0727c322cd6c632be3e';
+    document.head.appendChild(loader);
   }
+  if(window.matchMedia&&window.matchMedia('(max-width: 900px)').matches)loadMobile();
+  else loadDesktopNative();
 })();
 </script>
 
@@ -2408,59 +2443,6 @@ body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
 }
 </style>
 
-<style id="zc-adsterra-desktop-728x90-fit-20261105">
-/* Replace the two 300x250 requests with one real 728x90 unit.
-   Keep the existing 250px stage and sponsor-panel layout unchanged. */
-@media (min-width: 901px) {
-  body:has(#home) #home > section.hero .zc-hero-ad-stage {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    height: 250px !important;
-    min-height: 250px !important;
-    max-height: 250px !important;
-    overflow: hidden !important;
-  }
-  body:has(#home) #home > section.hero .zc-adsterra-grid {
-    display: grid !important;
-    grid-template-columns: 728px !important;
-    grid-template-rows: 250px !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 0 !important;
-    width: 100% !important;
-    height: 250px !important;
-    min-height: 250px !important;
-    overflow: hidden !important;
-  }
-  body:has(#home) #home > section.hero .zc-adsterra-slot {
-    box-sizing: border-box !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 728px !important;
-    min-width: 728px !important;
-    max-width: 728px !important;
-    height: 90px !important;
-    min-height: 90px !important;
-    max-height: 90px !important;
-    transform: scale(.82) !important;
-    transform-origin: center center !important;
-  }
-  body:has(#home) #home > section.hero .zc-adsterra-slot iframe {
-    display: block !important;
-    width: 728px !important;
-    min-width: 728px !important;
-    max-width: 728px !important;
-    height: 90px !important;
-    min-height: 90px !important;
-    max-height: 90px !important;
-    border: 0 !important;
-  }
-  body:has(#home) #home > section.hero .zc-adsterra-slot[data-zc-adsterra-slot="2"] {
-    display: none !important;
-  }
-}
-</style>
+
 
 </body></html>
