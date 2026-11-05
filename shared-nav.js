@@ -1,3 +1,93 @@
+/* ZombieCash site-wide Adsterra placement — shared across every language/page. */
+(() => {
+  'use strict';
+  if (window.__zcSitewideAdsterraInit) return;
+  window.__zcSitewideAdsterraInit = true;
+  const NATIVE_ID = '4420dadadbd2f0727c322cd6c632be3e';
+  const MOBILE_KEY = 'fbb2658d8dcb4503b358387f042869d1';
+  const nativeContainerId = 'container-4420dadadbd2f0727c322cd6c632be3e';
+  const copy = {
+    en: 'COMMUNITY SUPPORT / SPONSORED',
+    de: 'COMMUNITY-UNTERSTÜTZUNG / ANZEIGE',
+    fr: 'SOUTIEN DE LA COMMUNAUTÉ / SPONSORISÉ',
+    it: 'SUPPORTO ALLA COMMUNITY / SPONSORIZZATO',
+    ja: 'コミュニティ支援 / 広告',
+    'zh-CN': '社区支持 / 赞助内容',
+    ru: 'ПОДДЕРЖКА СООБЩЕСТВА / РЕКЛАМА',
+    tr: 'TOPLULUK DESTEĞİ / SPONSORLU',
+    hi: 'समुदाय सहयोग / प्रायोजित'
+  };
+  const mobileQuery = window.matchMedia('(max-width: 767px)');
+  function loadNative(slot) {
+    if (!slot || slot.dataset.loaded === '1') return;
+    slot.dataset.loaded = '1';
+    const script = document.createElement('script');
+    script.async = true;
+    script.setAttribute('data-cfasync', 'false');
+    script.src = 'https://bauval.org/21/' + NATIVE_ID;
+    slot.appendChild(script);
+  }
+  function loadMobile(slot) {
+    if (!slot || slot.dataset.loaded === '1') return;
+    slot.dataset.loaded = '1';
+    window.atOptions = { key: MOBILE_KEY, format: 'iframe', height: 50, width: 320, params: {} };
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.async = false;
+    script.src = 'https://bauval.org/22/' + MOBILE_KEY;
+    script.setAttribute('data-zc-adsterra-placement', 'mobile-320x50');
+    slot.appendChild(script);
+  }
+  function initSitewideAd() {
+    if (document.querySelector('#home .zc-adsterra-native-slot, #home .zc-adsterra-mobile-slot')) return;
+    if (document.querySelector('.zc-sitewide-adsterra')) return;
+    const main = document.querySelector('main') || document.querySelector('.page-shell') || document.body;
+    if (!main) return;
+    // Respect any page-specific Adsterra slot already authored anywhere in the page.
+    if (document.querySelector('.zc-adsterra-native-slot, .zc-adsterra-mobile-slot, [data-zc-adsterra-slot], [data-zc-adsterra-placement]')) return;
+    const lang = (document.documentElement.lang || 'en').toLowerCase();
+    const locale = lang === 'zh-cn' ? 'zh-CN' : (lang.split('-')[0] || 'en');
+    const label = copy[locale] || copy.en;
+    const aside = document.createElement('aside');
+    aside.className = 'zc-sitewide-adsterra';
+    aside.setAttribute('aria-label', 'Sponsored content');
+    aside.innerHTML =
+      '<div class="zc-sitewide-adsterra-label"></div>' +
+      '<div class="zc-sitewide-adsterra-native"><div id="' + nativeContainerId + '"></div></div>' +
+      '<div class="zc-sitewide-adsterra-mobile"></div>';
+    aside.querySelector('.zc-sitewide-adsterra-label').textContent = label;
+    const footer = main.querySelector('footer');
+    if (footer) main.insertBefore(aside, footer);
+    else if (main === document.body) main.appendChild(aside);
+    else main.insertAdjacentElement('afterend', aside);
+    const style = document.createElement('style');
+    style.id = 'zc-sitewide-adsterra-style-20261105';
+    style.textContent = [
+      '.zc-sitewide-adsterra{box-sizing:border-box;width:min(100% - 32px,1080px);margin:30px auto 26px;padding:16px 18px;border:1px solid #9bff4540;border-radius:5px;background:linear-gradient(145deg,#0a120d,#070b09 65%,#0d1010);box-shadow:0 12px 36px #0005;text-align:center;overflow:hidden}',
+      '.zc-sitewide-adsterra-label{margin:0 0 12px;color:#829481;font:600 9px/1.5 Orbitron,Arial,sans-serif;letter-spacing:1.5px}',
+      '.zc-sitewide-adsterra-native{display:block;width:100%;max-width:640px;min-height:300px;margin:0 auto}',
+      '.zc-sitewide-adsterra-native>div{width:100%;max-width:640px;min-height:300px;margin:0 auto}',
+      '.zc-sitewide-adsterra-mobile{display:none;width:320px;max-width:100%;height:50px;min-height:50px;margin:0 auto;overflow:hidden}',
+      '.zc-sitewide-adsterra-mobile iframe{display:block;width:320px;max-width:100%;height:50px;border:0}',
+      '@media(max-width:767px){.zc-sitewide-adsterra{width:calc(100% - 20px);margin:22px auto;padding:12px 8px}.zc-sitewide-adsterra-label{margin-bottom:8px}.zc-sitewide-adsterra-native{display:none}.zc-sitewide-adsterra-mobile{display:block}}',
+      '@media(min-width:768px){.zc-sitewide-adsterra-native{display:block}.zc-sitewide-adsterra-mobile{display:none}}'
+    ].join('');
+    document.head.appendChild(style);
+    const nativeSlot = aside.querySelector('.zc-sitewide-adsterra-native');
+    const mobileSlot = aside.querySelector('.zc-sitewide-adsterra-mobile');
+    function syncAd() {
+      if (mobileQuery.matches) loadMobile(mobileSlot);
+      else loadNative(nativeSlot);
+    }
+    syncAd();
+    if (typeof mobileQuery.addEventListener === 'function') mobileQuery.addEventListener('change', syncAd);
+    else if (typeof mobileQuery.addListener === 'function') mobileQuery.addListener(syncAd);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initSitewideAd, { once: true });
+  else initSitewideAd();
+})();
+
+
 /* ZombieCash shared navigation — one source of truth for every public page.
  * Keep page-specific styling below the header; header layout is owned here.
  */
@@ -1611,91 +1701,3 @@
   }
 })();
 
-/* ZombieCash site-wide Adsterra placement — shared across every language/page. */
-(() => {
-  'use strict';
-  if (window.__zcSitewideAdsterraInit) return;
-  window.__zcSitewideAdsterraInit = true;
-  const NATIVE_ID = '4420dadadbd2f0727c322cd6c632be3e';
-  const MOBILE_KEY = 'fbb2658d8dcb4503b358387f042869d1';
-  const nativeContainerId = 'container-4420dadadbd2f0727c322cd6c632be3e';
-  const copy = {
-    en: 'COMMUNITY SUPPORT / SPONSORED',
-    de: 'COMMUNITY-UNTERSTÜTZUNG / ANZEIGE',
-    fr: 'SOUTIEN DE LA COMMUNAUTÉ / SPONSORISÉ',
-    it: 'SUPPORTO ALLA COMMUNITY / SPONSORIZZATO',
-    ja: 'コミュニティ支援 / 広告',
-    'zh-CN': '社区支持 / 赞助内容',
-    ru: 'ПОДДЕРЖКА СООБЩЕСТВА / РЕКЛАМА',
-    tr: 'TOPLULUK DESTEĞİ / SPONSORLU',
-    hi: 'समुदाय सहयोग / प्रायोजित'
-  };
-  const mobileQuery = window.matchMedia('(max-width: 767px)');
-  function loadNative(slot) {
-    if (!slot || slot.dataset.loaded === '1') return;
-    slot.dataset.loaded = '1';
-    const script = document.createElement('script');
-    script.async = true;
-    script.setAttribute('data-cfasync', 'false');
-    script.src = 'https://bauval.org/21/' + NATIVE_ID;
-    slot.appendChild(script);
-  }
-  function loadMobile(slot) {
-    if (!slot || slot.dataset.loaded === '1') return;
-    slot.dataset.loaded = '1';
-    window.atOptions = { key: MOBILE_KEY, format: 'iframe', height: 50, width: 320, params: {} };
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.async = false;
-    script.src = 'https://bauval.org/22/' + MOBILE_KEY;
-    script.setAttribute('data-zc-adsterra-placement', 'mobile-320x50');
-    slot.appendChild(script);
-  }
-  function initSitewideAd() {
-    if (document.querySelector('#home .zc-adsterra-native-slot, #home .zc-adsterra-mobile-slot')) return;
-    if (document.querySelector('.zc-sitewide-adsterra')) return;
-    const main = document.querySelector('main') || document.querySelector('.page-shell') || document.body;
-    if (!main) return;
-    // Respect any page-specific Adsterra slot already authored anywhere in the page.
-    if (document.querySelector('.zc-adsterra-native-slot, .zc-adsterra-mobile-slot, [data-zc-adsterra-slot], [data-zc-adsterra-placement]')) return;
-    const lang = (document.documentElement.lang || 'en').toLowerCase();
-    const locale = lang === 'zh-cn' ? 'zh-CN' : (lang.split('-')[0] || 'en');
-    const label = copy[locale] || copy.en;
-    const aside = document.createElement('aside');
-    aside.className = 'zc-sitewide-adsterra';
-    aside.setAttribute('aria-label', 'Sponsored content');
-    aside.innerHTML =
-      '<div class="zc-sitewide-adsterra-label"></div>' +
-      '<div class="zc-sitewide-adsterra-native"><div id="' + nativeContainerId + '"></div></div>' +
-      '<div class="zc-sitewide-adsterra-mobile"></div>';
-    aside.querySelector('.zc-sitewide-adsterra-label').textContent = label;
-    const footer = main.querySelector('footer');
-    if (footer) main.insertBefore(aside, footer);
-    else if (main === document.body) main.appendChild(aside);
-    else main.insertAdjacentElement('afterend', aside);
-    const style = document.createElement('style');
-    style.id = 'zc-sitewide-adsterra-style-20261105';
-    style.textContent = [
-      '.zc-sitewide-adsterra{box-sizing:border-box;width:min(100% - 32px,1080px);margin:30px auto 26px;padding:16px 18px;border:1px solid #9bff4540;border-radius:5px;background:linear-gradient(145deg,#0a120d,#070b09 65%,#0d1010);box-shadow:0 12px 36px #0005;text-align:center;overflow:hidden}',
-      '.zc-sitewide-adsterra-label{margin:0 0 12px;color:#829481;font:600 9px/1.5 Orbitron,Arial,sans-serif;letter-spacing:1.5px}',
-      '.zc-sitewide-adsterra-native{display:block;width:100%;max-width:640px;min-height:300px;margin:0 auto}',
-      '.zc-sitewide-adsterra-native>div{width:100%;max-width:640px;min-height:300px;margin:0 auto}',
-      '.zc-sitewide-adsterra-mobile{display:none;width:320px;max-width:100%;height:50px;min-height:50px;margin:0 auto;overflow:hidden}',
-      '.zc-sitewide-adsterra-mobile iframe{display:block;width:320px;max-width:100%;height:50px;border:0}',
-      '@media(max-width:767px){.zc-sitewide-adsterra{width:calc(100% - 20px);margin:22px auto;padding:12px 8px}.zc-sitewide-adsterra-label{margin-bottom:8px}.zc-sitewide-adsterra-native{display:none}.zc-sitewide-adsterra-mobile{display:block}}',
-      '@media(min-width:768px){.zc-sitewide-adsterra-native{display:block}.zc-sitewide-adsterra-mobile{display:none}}'
-    ].join('');
-    document.head.appendChild(style);
-    const nativeSlot = aside.querySelector('.zc-sitewide-adsterra-native');
-    const mobileSlot = aside.querySelector('.zc-sitewide-adsterra-mobile');
-    function syncAd() {
-      if (mobileQuery.matches) loadMobile(mobileSlot);
-      else loadNative(nativeSlot);
-    }
-    syncAd();
-    if (typeof mobileQuery.addEventListener === 'function') mobileQuery.addEventListener('change', syncAd);
-    else if (typeof mobileQuery.addListener === 'function') mobileQuery.addListener(syncAd);
-  }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initSitewideAd, { once: true });
-  else initSitewideAd();
-})();
