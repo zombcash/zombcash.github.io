@@ -2110,7 +2110,7 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
 </style>
 <script id="zc-adsterra-dual-loader-20261105">
 (function(){
-  var desktopKey='ebac4722194a516b677e1081f49dfb99',mobileKey='fbb2658d8dcb4503b358387f042869d1';
+  var desktopKey='08a70f8414101d6c6b04e25aa232f436',mobileKey='fbb2658d8dcb4503b358387f042869d1';
   function loadPlacement(target,key,width,height,label){
     if(!target||target.getAttribute('data-zc-ad-loaded')==='1')return;
     target.setAttribute('data-zc-ad-loaded','1');
@@ -2121,8 +2121,8 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
   if(window.matchMedia&&window.matchMedia('(max-width: 900px)').matches){
     loadPlacement(document.querySelector('#home [data-zc-adsterra-mobile-slot]'),mobileKey,320,50,'mobile-320x50');
   }else{
-    var slots=document.querySelectorAll('#home [data-zc-adsterra-slot]');
-    for(var i=0;i<slots.length;i++)loadPlacement(slots[i],desktopKey,300,250,'desktop-300x250-'+(i+1));
+    var desktopTarget=document.querySelector('#home [data-zc-adsterra-slot="1"]');
+    loadPlacement(desktopTarget,desktopKey,728,90,'desktop-728x90');
   }
 })();
 </script>
@@ -2407,4 +2407,60 @@ body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
   }
 }
 </style>
+
+<style id="zc-adsterra-desktop-728x90-fit-20261105">
+/* Replace the two 300x250 requests with one real 728x90 unit.
+   Keep the existing 250px stage and sponsor-panel layout unchanged. */
+@media (min-width: 901px) {
+  body:has(#home) #home > section.hero .zc-hero-ad-stage {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 250px !important;
+    min-height: 250px !important;
+    max-height: 250px !important;
+    overflow: hidden !important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-grid {
+    display: grid !important;
+    grid-template-columns: 728px !important;
+    grid-template-rows: 250px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0 !important;
+    width: 100% !important;
+    height: 250px !important;
+    min-height: 250px !important;
+    overflow: hidden !important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-slot {
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 728px !important;
+    min-width: 728px !important;
+    max-width: 728px !important;
+    height: 90px !important;
+    min-height: 90px !important;
+    max-height: 90px !important;
+    transform: scale(.82) !important;
+    transform-origin: center center !important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-slot iframe {
+    display: block !important;
+    width: 728px !important;
+    min-width: 728px !important;
+    max-width: 728px !important;
+    height: 90px !important;
+    min-height: 90px !important;
+    max-height: 90px !important;
+    border: 0 !important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-slot[data-zc-adsterra-slot="2"] {
+    display: none !important;
+  }
+}
+</style>
+
 </body></html>
