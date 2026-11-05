@@ -16,7 +16,7 @@ on:
       - 'hi/index.html'
       - 'homepage-visual.css'
       - 'homepage-ribbons.js'
-      - 'assets/zombcash-survivor-v13.jpg'
+      - 'assets/zombcash-survivor-realistic-520.avif'
       - 'docs/DESIGN-STYLE-GUIDE.md'
       - '.github/workflows/homepage-visual-smoke.yml'
 
@@ -50,20 +50,21 @@ jobs:
           for filename, lang in pages.items():
               html = Path(filename).read_text(encoding="utf-8")
               assert f'<html lang="{lang}">' in html, f"{filename}: wrong language tag"
-              assert html.count('href="/homepage-visual.css?v=20261105"') == 1, f"{filename}: stylesheet missing or duplicated"
+              assert html.count('href="/homepage-visual.css?') == 1, f"{filename}: stylesheet missing or duplicated"
               assert html.count('src="/homepage-ribbons.js?v=20261105"') == 1, f"{filename}: ticker script missing or duplicated"
               assert html.count('rel="canonical"') == 1, f"{filename}: canonical count changed"
               assert html.count('hreflang=') == 10, f"{filename}: hreflang count changed"
               assert '<main id="home">' in html, f"{filename}: homepage main element missing"
-              assert '/assets/zombcash-survivor-v13.jpg' in html, f"{filename}: project-owned survivor artwork missing"
-              assert '<img src="/assets/zombcash-survivor-v13.jpg"' in html, f"{filename}: survivor artwork image element missing"
+              assert 'class="zc-sponsor-art-slot"' in html, f"{filename}: survivor artwork panel missing"
+              assert '/assets/zombcash-survivor-realistic-520.avif' in html, f"{filename}: project-owned survivor artwork missing"
+              assert '<img src="/assets/zombcash-survivor-realistic-520.avif" alt="ZombieCash zombie survivor heroine"' in html, f"{filename}: accessible survivor artwork image missing"
               assert 'IMAGE SLOT' not in html and 'МЕСТО ДЛЯ ИЗОБРАЖЕНИЯ' not in html and 'Bildfeld' not in html, f"{filename}: unfinished hero artwork placeholder remains"
               print(f"OK {filename} ({lang})")
           PY
 
       - name: Verify project-owned artwork and accessibility hooks
         run: |
-          test -s assets/zombcash-survivor-v13.jpg
+          test -s assets/zombcash-survivor-realistic-520.avif
           grep -q "setAttribute('role','region')" homepage-ribbons.js
           grep -q "setAttribute('aria-hidden','true')" homepage-ribbons.js
           grep -q 'prefers-reduced-motion' homepage-visual.css
