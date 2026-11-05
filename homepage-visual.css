@@ -1,0 +1,41 @@
+/* ZombieCash homepage visual refresh — additive, homepage-scoped styles only. */
+body:has(#home) .zc-outbreak-ribbons{position:relative;z-index:19;display:grid;gap:5px;padding:7px clamp(10px,2vw,28px);background:#050907;border-bottom:1px solid #25382a}
+body:has(#home) .zc-ribbon{height:34px;display:flex;align-items:center;overflow:hidden;position:relative;border:1px solid var(--ribbon-color);border-radius:9px;background:linear-gradient(90deg,var(--ribbon-tint),#080d0b 52%,#080d0b);box-shadow:0 0 18px color-mix(in srgb,var(--ribbon-color) 16%,transparent),inset 0 0 18px color-mix(in srgb,var(--ribbon-color) 8%,transparent)}
+body:has(#home) .zc-ribbon-label{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:0 14px;height:100%;color:var(--ribbon-color);font:800 10px/1 Orbitron,Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;border-right:1px solid color-mix(in srgb,var(--ribbon-color) 40%,transparent);white-space:nowrap}
+body:has(#home) .zc-ribbon-track{display:flex;align-items:center;min-width:max-content;animation:zcRibbonMove var(--ribbon-speed,34s) linear infinite}
+body:has(#home) .zc-ribbon-copy{display:inline-flex;align-items:center;gap:26px;padding-left:26px;color:#d7e3d8;font:600 14px/1.1 Rajdhani,Arial,sans-serif;white-space:nowrap}
+body:has(#home) .zc-ribbon-copy b{color:var(--ribbon-color);font:700 12px Orbitron,Arial,sans-serif}
+body:has(#home) .zc-ribbon:hover .zc-ribbon-track,body:has(#home) .zc-ribbon:focus-within .zc-ribbon-track{animation-play-state:paused}
+body:has(#home) .zc-ribbon--alert{--ribbon-color:#a8ff55;--ribbon-tint:#17321a;--ribbon-speed:38s}
+body:has(#home) .zc-ribbon--community{--ribbon-color:#d28cff;--ribbon-tint:#281636;--ribbon-speed:46s}
+body:has(#home) .zc-ribbon--market{--ribbon-color:#ffc46b;--ribbon-tint:#382713;--ribbon-speed:42s}
+@keyframes zcRibbonMove{to{transform:translateX(-50%)}}
+body:has(#home) .hero{background-image:linear-gradient(90deg,rgba(3,8,5,.96) 0%,rgba(3,8,5,.82) 43%,rgba(3,8,5,.42) 100%),linear-gradient(0deg,#050907 0%,transparent 38%),url("https://upload.wikimedia.org/wikipedia/commons/9/91/Overgrown_city%2C_post-apocalyptic.jpg")!important;background-size:cover!important;background-position:center 48%!important}
+body:has(#home) .hero:before{background:radial-gradient(ellipse at 78% 42%,#9bff4522 0,transparent 32%),linear-gradient(90deg,#03060522,transparent 60%)!important;pointer-events:none}
+body:has(#home) .hero-grid{opacity:.22!important}
+body:has(#home) .hero-content{position:relative;z-index:4}
+body:has(#home) .zc-hero-sponsor-panel{position:relative;z-index:4}
+body:has(#home) .field-manual-spotlight{backdrop-filter:blur(5px);background:linear-gradient(110deg,#0b1710ed,#10121ae8)!important;border-color:#527342!important;box-shadow:0 12px 38px #0008,0 0 24px #9bff4510}
+body:has(#home) .zc-promo-video{position:relative;isolation:isolate;background:linear-gradient(90deg,#070b09f2,#080d0be8),url("https://upload.wikimedia.org/wikipedia/commons/9/91/Overgrown_city%2C_post-apocalyptic.jpg") center 55%/cover}
+body:has(#home) .zombie-maker-promo{background-image:linear-gradient(90deg,#07100df2,#09110be8),url("https://upload.wikimedia.org/wikipedia/commons/b/b2/Post-apocalyptic_scenery.jpg")!important;background-size:cover!important;background-position:center 60%!important}
+body:has(#home) .living-world{position:relative;isolation:isolate;background:linear-gradient(180deg,#080d0cf2,#080d0cf5),url("https://upload.wikimedia.org/wikipedia/commons/b/b2/Post-apocalyptic_scenery.jpg") center/cover}
+body:has(#home) .world-panel{box-shadow:0 18px 50px #0008,0 0 22px #9bff4508}
+body:has(#home) .world-panel-head{background:linear-gradient(100deg,#16251bd9,#0a1014e8)}
+body:has(#home) .world-panel:nth-child(2) .world-panel-head{background:linear-gradient(100deg,#321722e8,#0a1014e8)}
+body:has(#home) .world-panel-foot{background:#080e0deF}
+@media(max-width:760px){
+ body:has(#home) .zc-outbreak-ribbons{gap:4px;padding:6px 8px}
+ body:has(#home) .zc-ribbon{height:31px;border-radius:7px}
+ body:has(#home) .zc-ribbon-label{padding:0 9px;font-size:8px;letter-spacing:.55px}
+ body:has(#home) .zc-ribbon-copy{font-size:12px;gap:17px;padding-left:17px}
+ body:has(#home) .hero{background-position:58% center!important;background-image:linear-gradient(90deg,rgba(3,8,5,.93),rgba(3,8,5,.72)),linear-gradient(0deg,#050907 0%,transparent 55%),url("https://upload.wikimedia.org/wikipedia/commons/9/91/Overgrown_city%2C_post-apocalyptic.jpg")!important}
+}
+@media(prefers-reduced-motion:reduce){body:has(#home) .zc-ribbon-track{animation:none!important;transform:none!important}body:has(#home) .zc-ribbon-copy:nth-child(n+2){display:none}}
+
+
+/* Keep the real reserved ad formats visible; legacy 90px rules must not clip 300x250 desktop slots. */
+@media (min-width:901px){
+ body:has(#home) .zc-hero-ad-stage{box-sizing:border-box!important;display:block!important;width:100%!important;height:250px!important;min-height:250px!important;max-height:250px!important;flex:0 0 250px!important;overflow:hidden!important}
+ body:has(#home) .zc-adsterra-grid{box-sizing:border-box!important;display:grid!important;grid-template-columns:repeat(2,300px)!important;grid-template-rows:250px!important;justify-content:center!important;gap:12px!important;width:100%!important;height:250px!important;min-height:250px!important}
+ body:has(#home) .zc-adsterra-slot{box-sizing:border-box!important;display:flex!important;width:300px!important;min-width:300px!important;height:250px!important;min-height:250px!important}
+}
