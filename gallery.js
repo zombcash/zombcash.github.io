@@ -129,7 +129,8 @@
     fullImage.alt = image.alt || "";
     const card = cards[activeIndex];
     const title = card.dataset.galleryTitle || card.querySelector(".gallery-caption p")?.textContent || "";
-    const originalCaption = card.querySelector(".gallery-caption p")?.dataset.originalCaption || "";\n    const description = card.dataset.galleryDescription || cleanCaption(originalCaption) || title;
+    const originalCaption = card.querySelector(".gallery-caption p")?.dataset.originalCaption || "";
+    const description = card.dataset.galleryDescription || cleanCaption(originalCaption) || title;
     const categories = Array.from(card.querySelectorAll(".gallery-category-tag"))
       .map(tag => tag.textContent.trim()).filter(Boolean).join(" · ");
     const sourceUrl = card.querySelector(".gallery-caption a")?.href || "https://t.me/ZOMBCASH";
