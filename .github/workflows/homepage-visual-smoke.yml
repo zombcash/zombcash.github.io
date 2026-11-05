@@ -1,0 +1,57 @@
+name: Homepage visual refresh smoke checks
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'de/index.html'
+      - 'fr/index.html'
+      - 'it/index.html'
+      - 'ja/index.html'
+      - 'zh-CN/index.html'
+      - 'ru/index.html'
+      - 'tr/index.html'
+      - 'hi/index.html'
+      - 'homepage-visual.css'
+      - 'homepage-ribbons.js'
+      - '.github/workflows/homepage-visual-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  homepage-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check ticker script syntax
+        run: node --check homepage-ribbons.js
+      - name: Verify all localized homepages
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          pages = {
+              "index.html": "en",
+              "de/index.html": "de",
+              "fr/index.html": "fr",
+              "it/index.html": "it",
+              "ja/index.html": "ja",
+              "zh-CN/index.html": "zh-CN",
+              "ru/index.html": "ru",
+              "tr/index.html": "tr",
+              "hi/index.html": "hi",
+          }
+          for filename, lang in pages.items():
+              html = Path(filename).read_text(encoding="utf-8")
+              assert f'<html lang="{lang}">' in html, f"{filename}: wrong language tag"
+              assert html.count('href="/homepage-visual.css?v=20261105"') == 1, f"{filename}: stylesheet missing or duplicated"
+              assert html.count('src="/homepage-ribbons.js?v=20261105"') == 1, f"{filename}: ticker script missing or duplicated"
+              assert html.count('rel="canonical"') == 1, f"{filename}: canonical count changed"
+              assert html.count('hreflang=') == 10, f"{filename}: hreflang count changed"
+              assert '<main id="home">' in html, f"{filename}: homepage main element missing"
+              print(f"OK {filename} ({lang})")
+          PY
