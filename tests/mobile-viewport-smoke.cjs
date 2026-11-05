@@ -147,6 +147,7 @@ fs.mkdirSync(outDir, { recursive: true });
       if (!result.adSlotGeometry || result.adSlotGeometry.height < expectedStageHeight * 0.9) issues.push('reserved Adsterra stage is shorter than the selected banner format');
       if (mobileAd && result.adSlotGeometry && Math.abs(result.adSlotGeometry.width / result.adSlotGeometry.height - expectedAdWidth / expectedAdHeight) > 0.25) issues.push('reserved mobile Adsterra slot does not preserve the selected banner aspect ratio');
       if (result.adSlotGeometry && result.adSlotGeometry.width > width + 1) issues.push('reserved Adsterra slot exceeds the viewport width');
+      if (result.adSlotGeometry && (result.adSlotGeometry.x < -1 || result.adSlotGeometry.right > width + 1)) issues.push('reserved Adsterra slot is clipped by viewport bounds');
       if (!mobileAd && result.adBannerSlots.filter(slot => slot.visible && slot.width === 300 && slot.height === 250).length !== 2) issues.push('desktop layout must reserve two visible 300×250 Adsterra banners');
       if (result.ads > expectedIframeCount) issues.push(`expected at most ${expectedIframeCount} Adsterra iframe(s), found ${result.ads}`);
       if (result.adGeometry && result.adSlotGeometry && (result.adGeometry.x < result.adSlotGeometry.x - 1 || result.adGeometry.right > result.adSlotGeometry.right + 1)) issues.push('Adsterra iframe escapes its reserved slot');
@@ -288,6 +289,7 @@ fs.mkdirSync(outDir, { recursive: true });
         blockedIssues.push(`reserved banner area collapsed at ${width}px viewport`);
       }
       if (blockedResult.stage && blockedResult.stage.width > width + 1) blockedIssues.push('reserved banner area exceeds viewport width');
+      if (blockedResult.stage && (blockedResult.stage.x < -1 || blockedResult.stage.right > width + 1)) blockedIssues.push('reserved banner area is clipped by viewport bounds');
       if (blockedResult.documentWidth > width + 1) blockedIssues.push('blocked-ad page has horizontal overflow');
       if (!blockedResult.promoVisible) blockedIssues.push('Sponsor Zone disappeared when ad provider was blocked');
       if (blockedResult.stage && blockedResult.promo && blockedResult.promo.top < blockedResult.stage.bottom) {
