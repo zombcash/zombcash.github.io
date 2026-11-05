@@ -57,3 +57,91 @@ body:has(#home) .zc-ribbon-track{position:relative!important;z-index:1!important
 @media(max-width:760px){
   body:has(#home) .zc-ribbon-label{padding-inline:9px!important}
 }
+
+/* HERO REFINEMENT — centered content frame, balanced sponsor panel, responsive across all locales. */
+body:has(#home) #home > section.hero{
+  box-sizing:border-box!important;
+  height:auto!important;min-height:0!important;max-height:none!important;
+  padding:clamp(28px,3.2vw,52px) clamp(22px,4.5vw,72px) 30px!important;
+  overflow:visible!important;
+}
+body:has(#home) #home > section.hero > .hero-layout{
+  box-sizing:border-box!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,620px)!important;
+  grid-template-areas:"content sponsor"!important;
+  align-items:stretch!important;
+  align-content:start!important;
+  gap:clamp(24px,3vw,44px)!important;
+  width:min(100%,1440px)!important;
+  min-width:0!important;height:auto!important;
+  margin-inline:auto!important;
+}
+body:has(#home) #home > section.hero > .hero-layout > .hero-content{
+  grid-area:content!important;grid-column:1!important;grid-row:1!important;
+  align-self:center!important;justify-self:stretch!important;
+  width:100%!important;max-width:760px!important;min-width:0!important;
+  margin:0!important;padding:0!important;transform:none!important;
+}
+body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel{
+  grid-area:sponsor!important;grid-column:2!important;grid-row:1!important;
+  position:relative!important;inset:auto!important;float:none!important;transform:none!important;
+  box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
+  align-self:stretch!important;justify-self:stretch!important;
+  width:100%!important;max-width:620px!important;min-width:0!important;
+  height:auto!important;min-height:0!important;max-height:none!important;
+  margin:0!important;padding:14px!important;overflow:hidden!important;
+}
+body:has(#home) #home > section.hero .zc-hero-sponsor{
+  display:flex!important;flex-direction:column!important;align-items:stretch!important;
+  justify-content:flex-start!important;gap:12px!important;width:100%!important;
+  min-width:0!important;height:auto!important;min-height:0!important;
+}
+body:has(#home) #home > section.hero .zc-hero-ad-stage{max-width:100%!important}
+body:has(#home) #home > section.hero .zc-sponsor-art-slot{
+  width:100%!important;height:clamp(220px,22vw,310px)!important;
+  min-height:220px!important;max-height:310px!important;
+  border-radius:4px!important;
+}
+body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
+  object-fit:cover!important;object-position:center 28%!important;
+}
+body:has(#home) #home > section.hero .zc-hero-sponsor-promo{
+  flex:0 0 auto!important;min-height:0!important;height:auto!important;
+  padding:clamp(18px,2vw,26px)!important;gap:10px!important;
+}
+body:has(#home) #home > section.hero .hero-stats{
+  width:min(100%,1440px)!important;margin:clamp(22px,2.5vw,34px) auto 0!important;
+}
+body:has(#home) #home > section.hero .hero-bottom{
+  position:relative!important;inset:auto!important;
+  width:min(100%,1440px)!important;margin:18px auto 0!important;
+}
+@media(max-width:1359px){
+  body:has(#home) #home > section.hero > .hero-layout{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"content" "sponsor"!important;
+    gap:24px!important;
+  }
+  body:has(#home) #home > section.hero > .hero-layout > .hero-content,
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel{
+    grid-column:1!important;grid-row:auto!important;
+    width:min(100%,900px)!important;max-width:900px!important;
+    justify-self:center!important;
+  }
+  body:has(#home) #home > section.hero .zc-sponsor-art-slot{
+    height:clamp(220px,30vw,340px)!important;max-height:340px!important;
+  }
+}
+@media(max-width:760px){
+  body:has(#home) #home > section.hero{
+    padding:28px 5% 24px!important;
+  }
+  body:has(#home) #home > section.hero > .hero-layout{gap:18px!important}
+  body:has(#home) #home > section.hero .zc-hero-sponsor-panel{padding:10px!important}
+  body:has(#home) #home > section.hero .zc-sponsor-art-slot{
+    height:clamp(190px,62vw,260px)!important;min-height:190px!important;max-height:260px!important;
+  }
+  body:has(#home) #home > section.hero .zc-hero-sponsor-promo{padding:18px 14px!important}
+  body:has(#home) #home > section.hero .hero-stats{margin-top:22px!important}
+}
