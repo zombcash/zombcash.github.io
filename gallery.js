@@ -71,6 +71,7 @@
   lightbox.setAttribute("aria-modal", "true");
   lightbox.setAttribute("aria-label", "Expanded gallery image");
   lightbox.innerHTML = '<button class="gallery-lightbox-close" type="button" aria-label="Close fullscreen image">✕ <span>CLOSE</span></button>' +
+    '<button class="gallery-lightbox-image-only" type="button" aria-label="View image only" title="View image only">⛶</button>' +
     '<button class="gallery-lightbox-prev" type="button" aria-label="Previous image">‹</button>' +
     '<figure><img alt=""><figcaption></figcaption></figure>' +
     '<button class="gallery-lightbox-next" type="button" aria-label="Next image">›</button>';
@@ -79,6 +80,12 @@
   const fullImage = lightbox.querySelector("img");
   const fullCaption = lightbox.querySelector("figcaption");
   const closeButton = lightbox.querySelector(".gallery-lightbox-close");
+  const imageOnlyButton = lightbox.querySelector(".gallery-lightbox-image-only");
+  imageOnlyButton.addEventListener("click", () => {
+    lightbox.classList.add("is-image-only");
+    imageOnlyButton.setAttribute("aria-pressed", "true");
+    fullImage.focus?.();
+  });
   const updateCloseLabel = () => {
     const locale = galleryLocale[galleryLang] || galleryLocale.en;
     closeButton.setAttribute("aria-label", locale.closeAria || galleryLocale.en.closeAria);
@@ -127,6 +134,8 @@
     const image = cards[activeIndex].querySelector("img");
     fullImage.src = image.currentSrc || image.src;
     fullImage.alt = image.alt || "";
+    lightbox.classList.remove("is-image-only");
+    imageOnlyButton.setAttribute("aria-pressed", "false");
     const card = cards[activeIndex];
     const title = card.dataset.galleryTitle || card.querySelector(".gallery-caption p")?.textContent || "";
     const originalCaption = card.querySelector(".gallery-caption p")?.dataset.originalCaption || "";
@@ -157,6 +166,7 @@
     refreshGalleryForLikes();
   };
   closeButton.addEventListener("click", closeImage);
+  fullImage.tabIndex = 0;
   lightbox.querySelector(".gallery-lightbox-prev").addEventListener("click", () => showImage(activeIndex - 1));
   lightbox.querySelector(".gallery-lightbox-next").addEventListener("click", () => showImage(activeIndex + 1));
   lightbox.addEventListener("click", async event => {
@@ -198,7 +208,13 @@
   });
   document.addEventListener("keydown", event => {
     if (!lightbox.classList.contains("is-open")) return;
-    if (event.key === "Escape") closeImage();
+    if (event.key === "Escape") {
+      if (lightbox.classList.contains("is-image-only")) {
+        lightbox.classList.remove("is-image-only");
+        imageOnlyButton.setAttribute("aria-pressed", "false");
+        imageOnlyButton.focus();
+      } else closeImage();
+    }
     if (event.key === "ArrowLeft") showImage(activeIndex - 1);
     if (event.key === "ArrowRight") showImage(activeIndex + 1);
   });
