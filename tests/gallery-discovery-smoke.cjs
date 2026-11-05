@@ -85,9 +85,9 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     await page.goto("http://127.0.0.1:4173/gallery.html", { waitUntil: "domcontentloaded" });
     await page.waitForSelector(".gallery-toolbar");
     try {
-      await page.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50, null, { timeout: 12000 });
+      await page.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 150, null, { timeout: 12000 });
     const initialLoadingHints = await page.locator("#gallery-grid img").evaluateAll(images => images.map(image => ({ loading: image.loading, priority: image.fetchPriority })));
-    if (initialLoadingHints.length !== 50 ||
+    if (initialLoadingHints.length !== 150 ||
         initialLoadingHints[0].loading !== "eager" || initialLoadingHints[0].priority !== "high" ||
         initialLoadingHints.slice(1).some(item => item.loading !== "lazy" || item.priority !== "auto")) {
       throw new Error("Only the first gallery image should be eager/high priority; remaining images must be lazy/auto: " + JSON.stringify(initialLoadingHints.slice(0, 4)));
@@ -107,7 +107,7 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     await page.locator("#gallery-grid img").evaluateAll(images => images.forEach(image => { image.loading = "eager"; }));
     await page.waitForFunction(() => {
       const images = Array.from(document.querySelectorAll("#gallery-grid img"));
-      return images.length === 50 && images.every(image =>
+      return images.length === 150 && images.every(image =>
         image.complete && (image.naturalWidth > 0 || image.dataset.fallbackApplied === "true")
       );
     }, null, { timeout: 45000 });
@@ -186,9 +186,9 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
       };
     });
     const initial = await page.locator("#gallery-grid .gallery-card").count();
-    if (initial !== 50) throw new Error("Expected 50 gallery cards, got " + initial);
+    if (initial !== 150) throw new Error("Expected 150 gallery cards, got " + initial);
     const likeButtons = await page.locator("#gallery-grid .gallery-like-button").count();
-    if (likeButtons !== 50) throw new Error("Expected 50 card like controls, got " + likeButtons);
+    if (likeButtons !== 150) throw new Error("Expected 150 card like controls, got " + likeButtons);
     const firstCard = page.locator("#gallery-grid .gallery-card[data-gallery-id=\"ZOMBCASH/4146:0\"]");
     const firstLikeButton = firstCard.locator(".gallery-like-button");
     await page.waitForFunction(() => document.querySelector("#gallery-grid .gallery-card[data-gallery-id=" + JSON.stringify("ZOMBCASH/4146:0") + "] .gallery-like-count")?.textContent === "100");
@@ -244,8 +244,8 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     const resetTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_filter_reset"));
     if (!resetTracked) throw new Error("Gallery reset analytics event was not recorded");
     const reset = await page.locator("#gallery-grid .gallery-card").count();
-    if (reset !== 50) throw new Error("Clear filters should restore 50 cards, got " + reset);
-    if (await page.locator("#gallery-grid .gallery-like-button").count() !== 50) throw new Error("Clear filters should restore like controls");
+    if (reset !== 150) throw new Error("Clear filters should restore 150 cards, got " + reset);
+    if (await page.locator("#gallery-grid .gallery-like-button").count() !== 150) throw new Error("Clear filters should restore like controls");
     await page.getByRole("button", { name: "Zombie Characters" }).click();
     const zombieCharacters = await page.locator("#gallery-grid .gallery-card").count();
     if (zombieCharacters !== expectedCategoryIds("zombie-characters").length) throw new Error("Zombie Characters filter count does not match current gallery metadata: " + zombieCharacters);
@@ -254,7 +254,7 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     if (apocalypseSurvival !== expectedCategoryIds("apocalypse-survival").length) throw new Error("Apocalypse & Survival filter count does not match current gallery metadata: " + apocalypseSurvival);
     await page.locator(".gallery-reset").click();
     const categoryReset = await page.locator("#gallery-grid .gallery-card").count();
-    if (categoryReset !== 50) throw new Error("Reset after taxonomy filters should restore all 50 images");
+    if (categoryReset !== 150) throw new Error("Reset after taxonomy filters should restore all 150 images");
     await page.locator(".gallery-search").fill("goldfish");
     const matching = await page.locator("#gallery-grid .gallery-card").count();
     if (matching !== 1) throw new Error("Search expected one goldfish caption, got " + matching);
@@ -263,7 +263,7 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     const oldestFirst = await page.locator("#gallery-grid .gallery-card").first().getAttribute("data-gallery-id");
     if (!oldestFirst) throw new Error("Sorted cards must retain stable image IDs");
     await page.locator(".gallery-sort").selectOption("liked");
-    if (await page.locator("#gallery-grid .gallery-card").count() !== 50) throw new Error("Most-liked sort should preserve all gallery cards");
+    if (await page.locator("#gallery-grid .gallery-card").count() !== 150) throw new Error("Most-liked sort should preserve all 150 gallery cards");
     const mostLikedFirst = await page.locator("#gallery-grid .gallery-card").first().getAttribute("data-gallery-id");
     if (mostLikedFirst !== "ZOMBCASH/4146:0") throw new Error("Most-liked sort did not rank the highest-count image first: " + mostLikedFirst);
     const sortTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_sort"));
@@ -279,11 +279,11 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     await mobile.route("https://cdn4.telesco.pe/file/**", route => route.continue());
     await mobile.goto("http://127.0.0.1:4173/gallery.html", { waitUntil: "domcontentloaded" });
     await mobile.waitForSelector(".gallery-toolbar");
-    await mobile.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50);
+    await mobile.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 150);
     await mobile.locator("#gallery-grid img").evaluateAll(images => images.forEach(image => { image.loading = "eager"; }));
     await mobile.waitForFunction(() => {
       const images = Array.from(document.querySelectorAll("#gallery-grid img"));
-      return images.length === 50 && images.every(image =>
+      return images.length === 150 && images.every(image =>
         image.complete && (image.naturalWidth > 0 || image.dataset.fallbackApplied === "true")
       );
     }, null, { timeout: 45000 });
@@ -322,7 +322,7 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     await russian.route("https://cdn4.telesco.pe/file/**", route => route.continue());
     await russian.goto("http://127.0.0.1:4173/ru/gallery.html", { waitUntil: "domcontentloaded" });
     await russian.waitForSelector(".gallery-toolbar");
-    await russian.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50);
+    await russian.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 150);
     await russian.locator("#gallery-grid .gallery-card img").evaluateAll(images => {
       images.forEach(image => { image.loading = "eager"; });
     });
@@ -330,7 +330,7 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
     await russian.waitForFunction(reviewedIds => {
       const reviewed = new Set(reviewedIds);
       const cards = Array.from(document.querySelectorAll("#gallery-grid .gallery-card"));
-      return cards.length === 50 && cards.every(card => {
+      return cards.length === 150 && cards.every(card => {
         const image = card.querySelector("img");
         if (!image || !image.complete || image.naturalWidth <= 0) return false;
         return !reviewed.has(card.dataset.galleryId) || image.naturalWidth === 800;
@@ -364,7 +364,7 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
       await localized.route("https://cdn4.telesco.pe/file/**", route => route.continue());
       await localized.goto("http://127.0.0.1:4173/" + locale + "/gallery.html", { waitUntil: "domcontentloaded" });
       await localized.waitForSelector(".gallery-toolbar");
-      await localized.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 50);
+      await localized.waitForFunction(() => document.querySelectorAll("#gallery-grid .gallery-card").length === 150);
       const lang = await localized.locator("html").getAttribute("lang");
       const canonical = await localized.locator('link[rel="canonical"]').getAttribute("href");
       const alternates = await localized.locator('link[rel="alternate"][hreflang]').count();
@@ -382,7 +382,7 @@ const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]
       const shareLabel = (await localized.locator(".gallery-lightbox-share").textContent()).trim();
       if (!shareLabel || shareLabel === "SHARE") throw new Error(locale + " gallery share control is not localized");
       await localized.locator(".gallery-lightbox-close").click();
-      localeAudit.push({ locale, lang, alternates, cards: 50, title, shareLabel });
+      localeAudit.push({ locale, lang, alternates, cards: 150, title, shareLabel });
       await localized.close();
     }
 
