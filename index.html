@@ -2155,23 +2155,36 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
   }
 }
 @media (max-width: 360px) {
-  /* Recover the card's 16px side padding for the fixed-width native 320×50 placement. */
-  body > main#home > section.hero .zc-hero-sponsor-panel {
+  /* Extend the sponsor panel to the viewport edges; the 320×50 unit must never be clipped by the narrow hero grid track. */
+  body > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel {
     box-sizing: border-box !important;
-    width: calc(100% + 32px) !important;
-    max-width: calc(100% + 32px) !important;
-    margin-left: -16px !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    width: 100vw !important;
+    min-width: 100vw !important;
+    max-width: 100vw !important;
+    justify-self: start !important;
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: 0 !important;
+    padding: 0 0 12px !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    overflow: visible !important;
   }
-  body > main#home > section.hero .zc-hero-ad-stage {
+  body > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel > .zc-hero-sponsor {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  body > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel > .zc-hero-sponsor > .zc-hero-ad-stage {
     box-sizing: border-box !important;
     width: 320px !important;
     min-width: 320px !important;
     max-width: 320px !important;
     flex: 0 0 320px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    align-self: center !important;
+    margin: 0 auto !important;
     aspect-ratio: 320 / 50 !important;
   }
 }
