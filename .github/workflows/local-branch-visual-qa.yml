@@ -1,6 +1,8 @@
 name: Local branch visual QA
 
 on:
+  push:
+    branches: [homepage-visual-refinements-2026-11]
   workflow_dispatch:
   pull_request:
     branches: [main]
@@ -17,6 +19,10 @@ on:
       - "hi/index.html"
       - "shared-nav.js"
       - "language.js"
+      - "homepage-visual.css"
+      - "homepage-ribbons.js"
+      - "assets/zombcash-survivor-v13.jpg"
+      - "docs/DESIGN-STYLE-GUIDE.md"
       - "tests/mobile-viewport-smoke.cjs"
       - "tests/localized-article-visual.cjs"
       - "tests/survivor-field-manual-smoke.cjs"
