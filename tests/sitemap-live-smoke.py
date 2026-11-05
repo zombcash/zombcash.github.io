@@ -166,10 +166,25 @@ def main():
     if not all_urls:
         raise SystemExit("FAIL: no HTML URLs found across robots.txt sitemaps")
 
-    duplicate_entries = sum(len(urls) for urls in local_pages.values()) - len(all_urls)
+    owners = {}
+    for sitemap_url, urls in local_pages.items():
+        for url in urls:
+            owners.setdefault(url, []).append(sitemap_url)
+    duplicates = {url: sorted(sources) for url, sources in owners.items() if len(sources) > 1}
+    duplicate_entries = sum(len(sources) - 1 for sources in duplicates.values())
+    allowed_gallery_overlap = "https://zombcash.github.io/gallery.html"
+    expected_gallery_sources = {
+        "https://zombcash.github.io/sitemap-gallery-images.xml",
+        "https://zombcash.github.io/sitemap-gallery-pages.xml",
+    }
+    if duplicates != {allowed_gallery_overlap: sorted(expected_gallery_sources)}:
+        raise SystemExit(json.dumps({
+            "error": "Unexpected cross-sitemap duplicate entries",
+            "duplicates": duplicates,
+        }, ensure_ascii=False, indent=2))
     print(f"Sitemaps: {len(local_sitemaps)}")
     print(f"Unique HTML page URLs: {len(all_urls)}")
-    print(f"Cross-sitemap duplicate entries: {duplicate_entries}")
+    print(f"Cross-sitemap duplicate entries: {duplicate_entries} (one intentional gallery image/page context)")
 
     results = []
     with ThreadPoolExecutor(max_workers=12) as pool:
