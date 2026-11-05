@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "index.html"
+      - "**/*.html"
       - "arcade.html"
       - "zombie-maker.html"
       - "sitemap.xml"
