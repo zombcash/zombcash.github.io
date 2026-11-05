@@ -721,6 +721,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 .zc-promo-video-release:hover{color:#9bff45;text-decoration:underline}
 .zc-promo-player-wrap{min-width:0;border:1px solid #47633a;background:#050806;box-shadow:0 20px 60px #0007,0 0 35px #9bff450a}
 .zc-promo-player-top,.zc-promo-player-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 15px;color:#8da287;font:700 8px Orbitron,sans-serif;letter-spacing:.6px}
+.zc-promo-player-top,.zc-promo-player-foot{flex-wrap:wrap;min-width:0}.zc-promo-player-top span,.zc-promo-player-foot span{min-width:0;overflow-wrap:anywhere}.zc-promo-player-foot a{min-height:40px;display:inline-flex;align-items:center;padding:4px 2px}.zc-promo-video-controls button{min-height:44px;touch-action:manipulation}
 .zc-promo-player-top{border-bottom:1px solid #293b28}
 .zc-promo-player-top span:first-child{display:flex;align-items:center;gap:8px}
 #zc-promo-version{color:#9bff45;white-space:nowrap}
@@ -1740,7 +1741,8 @@ let videos=[],index=0;const fallback={title:L.titles[0],tag:'zombiecash-promo-20
 const safeUrl=v=>{try{const u=new URL(v,location.href);return u.protocol==='https:'?u.href:''}catch(_){return ''}};
 function render(){if(!videos.length){status.textContent=L.unavailable;count.textContent='NO VIDEOS';return}const item=videos[index];player.pause();player.src=safeUrl(item.src);player.load();count.textContent=String(index+1).padStart(2,'0')+' / '+String(videos.length).padStart(2,'0');version.textContent=item.tag||'ARCHIVE';status.textContent=item.date?L.date+': '+item.date:L.official;const u=safeUrl(item.releaseUrl)||'https://github.com/zombcash/zombcash.github.io/releases';download.href=u;release.href='https://github.com/zombcash/zombcash.github.io/releases';prev.disabled=index===0;next.disabled=index===videos.length-1;player.setAttribute('aria-label',L.titles[index]||item.title||'ZombieCash video')}
 prev.addEventListener('click',()=>{if(index>0){index--;render()}});next.addEventListener('click',()=>{if(index<videos.length-1){index++;render()}});
-fetch('../promo-videos.json?v=20261105-i18n1',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('manifest');return r.json()}).then(d=>{if(!Array.isArray(d.videos)||!d.videos.length)throw Error('empty');videos=d.videos.filter(v=>v&&safeUrl(v.src));if(!videos.length)throw Error('invalid');render()}).catch(()=>{videos=[fallback];render();status.textContent=L.fallback});
+player.addEventListener('error',()=>{status.textContent=L.unavailable;player.removeAttribute('src');});
+fetch('../promo-videos.json?v=20261105-i18n1',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('manifest');return r.json()}).then(d=>{if(!Array.isArray(d.videos)||!d.videos.length)throw Error('empty');videos=d.videos.filter(v=>v&&safeUrl(v.src));if(!videos.length)throw Error('invalid');render()}).catch(()=>{videos=[fallback];render();status.textContent=L.unavailable});
 })();</script>
 
 
