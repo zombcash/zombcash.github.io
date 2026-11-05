@@ -9,6 +9,8 @@ on:
       - 'shared-nav.js'
       - 'language.js'
       - 'index.html'
+      - 'homepage-visual.css'
+      - 'tests/homepage-locales-layout-smoke.cjs'
       - 'de/index.html'
       - 'fr/index.html'
       - 'it/index.html'
@@ -69,6 +71,8 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Test live mobile layouts
         run: node tests/mobile-viewport-smoke.cjs
+      - name: Test homepage layout across all locales and viewports
+        run: node tests/homepage-locales-layout-smoke.cjs
       - name: Test Survivor Field Manual across locales and viewports
         run: node tests/survivor-field-manual-smoke.cjs
       - name: Test multilingual comparison article visually across locales and viewports
@@ -80,6 +84,7 @@ jobs:
           name: mobile-viewport-evidence
           path: |
             mobile-test-results/
+            homepage-locale-results/
             survivor-field-manual-results/
             memecoin-article-results/
           if-no-files-found: ignore
