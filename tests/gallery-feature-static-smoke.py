@@ -7,7 +7,7 @@ from pathlib import Path
 data = json.loads(Path("gallery-data.json").read_text(encoding="utf-8"))
 items = data["items"]
 ids = [item["id"] for item in items]
-assert len(items) == 50 and len(set(ids)) == 50
+assert 1 <= len(items) <= 150 and len(set(ids)) == len(items)\nprimary_categories = {"zombie-memes", "nightmare-horror", "undead-after-dark"}\ncategory_counts = {category: sum(1 for item in items if category in item.get("category_ids", [])) for category in primary_categories}\nassert all(count <= 50 for count in category_counts.values()), f"Per-category gallery cap exceeded: {category_counts}"
 assert all(item.get("rights_status") == "review-required" for item in items)
 reviewed = [item for item in items if item.get("alt_review_status") == "visual-reviewed"]
 pending = [item for item in items if item.get("alt_review_status") == "pending-review"]
@@ -48,7 +48,7 @@ class Cards(HTMLParser):
 html = Path("gallery.html").read_text(encoding="utf-8")
 parser = Cards()
 parser.feed(html)
-assert len(parser.cards) == 50, f"Expected 50 static crawlable cards, got {len(parser.cards)}"
+assert len(parser.cards) == len(items), f"Expected {len(items)} static crawlable cards, got {len(parser.cards)}"
 actual_ids = {card["id"] for card in parser.cards}
 missing_ids = sorted(set(ids) - actual_ids)
 extra_ids = sorted(actual_ids - set(ids))
@@ -68,7 +68,7 @@ assert any(".gallery-card img{" in line and "aspect-ratio:1 / 1" in line for lin
 NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9", "im": "http://www.google.com/schemas/sitemap-image/1.1"}
 sitemap = ET.parse("sitemap-gallery-images.xml").getroot()
 images = [node.text for node in sitemap.findall(".//im:loc", NS)]
-assert len(images) == 50 and len(set(images)) == 50
+assert len(images) == len(set(images)) == len({item["image"] for item in items})
 
 for locale in ("de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"):
     page = Path(locale, "gallery.html").read_text(encoding="utf-8")
@@ -90,4 +90,4 @@ for marker in ("gallery-toolbar", "gallery-lightbox-share", "/api/gallery/likes"
     assert marker in js, marker
 assert "window.ZombieCashTrack = send;" in Path("script.js").read_text(encoding="utf-8")
 
-print(f"PASS: 50 static gallery cards, {len(reviewed)} visually reviewed, {len(pending)} pending review and Pinterest-blocked, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")
+print(f"PASS: {len(items)} static gallery cards (up to 50 per primary category: {category_counts}), {len(reviewed)} visually reviewed, {len(pending)} pending review and Pinterest-blocked, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")
