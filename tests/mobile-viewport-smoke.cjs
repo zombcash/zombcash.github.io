@@ -287,7 +287,7 @@ fs.mkdirSync(outDir, { recursive: true });
       const expectedHeight = width <= 900 && blockedResult.stage
         ? nativeHeight * Math.min(1, blockedResult.stage.width / 320)
         : nativeHeight;
-      if (!blockedResult.stage || blockedResult.stage.height < expectedHeight * 0.9)
+      if (!blockedResult.stage || blockedResult.stage.height < expectedHeight * 0.9) {
         blockedIssues.push(`reserved banner area collapsed at ${width}px viewport`);
       }
       if (blockedResult.stage && blockedResult.stage.width > width + 1) blockedIssues.push('reserved banner area exceeds viewport width');
