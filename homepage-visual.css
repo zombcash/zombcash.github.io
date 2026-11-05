@@ -145,3 +145,22 @@ body:has(#home) #home > section.hero .hero-bottom{
   body:has(#home) #home > section.hero .zc-hero-sponsor-promo{padding:18px 14px!important}
   body:has(#home) #home > section.hero .hero-stats{margin-top:22px!important}
 }
+
+/* Narrow-phone banner safety: scale the fixed 320x50 ad into the actual 260px content width. */
+@media(max-width:340px){
+  body:has(#home) #home > section.hero .zc-hero-ad-stage{
+    box-sizing:border-box!important;display:flex!important;
+    flex:0 1 auto!important;width:100%!important;min-width:0!important;
+    max-width:100%!important;height:auto!important;min-height:0!important;
+    max-height:none!important;aspect-ratio:320 / 50!important;
+    overflow:hidden!important;
+  }
+  body:has(#home) #home > section.hero .zc-hero-ad-unit{
+    flex:0 0 320px!important;width:320px!important;min-width:320px!important;
+    margin-inline:auto!important;transform:scale(.8125)!important;
+    transform-origin:center center!important;
+  }
+  body:has(#home) #home > section.hero .zc-hero-ad-unit iframe{
+    width:320px!important;min-width:320px!important;height:50px!important;
+  }
+}
