@@ -110,6 +110,10 @@ fs.mkdirSync(outDir, { recursive: true });
             const r = stage.getBoundingClientRect();
             return { x: Math.round(r.x), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height), position: getComputedStyle(stage).position };
           })(),
+          adBannerSlots: Array.from(document.querySelectorAll('.zc-adsterra-slot')).map(slot => {
+            const r = slot.getBoundingClientRect();
+            return { width: Math.round(r.width), height: Math.round(r.height), visible: getComputedStyle(slot).display !== 'none' && r.width > 0 && r.height > 0 };
+          }),
           adGeometry: (() => {
             const ad = document.querySelector('.zc-hero-ad-unit iframe');
             if (!ad) return null;
@@ -131,13 +135,18 @@ fs.mkdirSync(outDir, { recursive: true });
       if (result.adSectionCount !== 1) issues.push(`expected exactly one hero sponsor panel, found ${result.adSectionCount}`);
       if (!result.sponsorPromoVisible) issues.push('Sponsor Zone fallback is not visible');
       if (!result.adPlacementInHero) issues.push('sponsor panel is not inside the original hero layout');
-      const expectedAdWidth = width <= 900 ? 320 : 728;
-      const expectedAdHeight = width <= 900 ? 50 : 90;
+      // Current placements: one 320×50 mobile banner, or two 300×250 desktop banners.
+      const mobileAd = width <= 900;
+      const expectedAdWidth = mobileAd ? 320 : 300;
+      const expectedAdHeight = mobileAd ? 50 : 250;
+      const expectedIframeCount = mobileAd ? 1 : 2;
       if (!result.atOptions || Number(result.atOptions.width) !== expectedAdWidth || Number(result.atOptions.height) !== expectedAdHeight) issues.push(`expected Adsterra ${expectedAdWidth}×${expectedAdHeight} config at viewport ${width}px`);
       if (!result.adScriptTags.length) issues.push('Adsterra provider script is missing');
-      if (!result.adSlotGeometry || Math.abs(result.adSlotGeometry.width / result.adSlotGeometry.height - expectedAdWidth / expectedAdHeight) > 0.25) issues.push('reserved Adsterra slot does not preserve the selected banner aspect ratio');
+      if (!result.adSlotGeometry || result.adSlotGeometry.height < expectedAdHeight * 0.9) issues.push('reserved Adsterra stage is shorter than the selected banner format');
+      if (mobileAd && result.adSlotGeometry && Math.abs(result.adSlotGeometry.width / result.adSlotGeometry.height - expectedAdWidth / expectedAdHeight) > 0.25) issues.push('reserved mobile Adsterra slot does not preserve the selected banner aspect ratio');
       if (result.adSlotGeometry && result.adSlotGeometry.width > width + 1) issues.push('reserved Adsterra slot exceeds the viewport width');
-      if (result.ads > 1) issues.push(`expected at most one Adsterra iframe, found ${result.ads}`);
+      if (!mobileAd && result.adBannerSlots.filter(slot => slot.visible && slot.width === 300 && slot.height === 250).length !== 2) issues.push('desktop layout must reserve two visible 300×250 Adsterra banners');
+      if (result.ads > expectedIframeCount) issues.push(`expected at most ${expectedIframeCount} Adsterra iframe(s), found ${result.ads}`);
       if (result.adGeometry && result.adSlotGeometry && (result.adGeometry.x < result.adSlotGeometry.x - 1 || result.adGeometry.right > result.adSlotGeometry.right + 1)) issues.push('Adsterra iframe escapes its reserved slot');
       if (!result.pageVisitCounter) issues.push('homepage global visitor counter section is missing');
       if (result.adGeometry && result.adGeometry.position === 'fixed') issues.push('Adsterra iframe must not be fixed while scrolling');
@@ -271,9 +280,8 @@ fs.mkdirSync(outDir, { recursive: true });
         };
       });
       const blockedIssues = [];
-      const nativeWidth = width <= 900 ? 320 : 728;
-      const nativeHeight = width <= 900 ? 50 : 90;
-      const expectedHeight = nativeHeight * Math.min(1, blockedResult.containerWidth / nativeWidth);
+      const nativeHeight = width <= 900 ? 50 : 250;
+      const expectedHeight = nativeHeight;
       if (!blockedResult.stage || blockedResult.stage.height < expectedHeight * 0.9) {
         blockedIssues.push(`reserved banner area collapsed at ${width}px viewport`);
       }
