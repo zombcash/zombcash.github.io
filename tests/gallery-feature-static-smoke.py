@@ -7,7 +7,10 @@ from pathlib import Path
 data = json.loads(Path("gallery-data.json").read_text(encoding="utf-8"))
 items = data["items"]
 ids = [item["id"] for item in items]
-assert 1 <= len(items) <= 150 and len(set(ids)) == len(items)\nprimary_categories = {"zombie-memes", "nightmare-horror", "undead-after-dark"}\ncategory_counts = {category: sum(1 for item in items if category in item.get("category_ids", [])) for category in primary_categories}\nassert all(count <= 50 for count in category_counts.values()), f"Per-category gallery cap exceeded: {category_counts}"
+assert 1 <= len(items) <= 150 and len(set(ids)) == len(items)
+primary_categories = {"zombie-memes", "nightmare-horror", "undead-after-dark"}
+category_counts = {category: sum(1 for item in items if category in item.get("category_ids", [])) for category in primary_categories}
+assert all(count <= 50 for count in category_counts.values()), f"Per-category gallery cap exceeded: {category_counts}"
 assert all(item.get("rights_status") == "review-required" for item in items)
 reviewed = [item for item in items if item.get("alt_review_status") == "visual-reviewed"]
 pending = [item for item in items if item.get("alt_review_status") == "pending-review"]
