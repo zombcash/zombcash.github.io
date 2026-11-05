@@ -15,6 +15,8 @@ on:
       - 'hi/index.html'
       - 'homepage-visual.css'
       - 'homepage-ribbons.js'
+      - 'assets/zombcash-survivor-v13.jpg'
+      - 'docs/DESIGN-STYLE-GUIDE.md'
       - '.github/workflows/homepage-visual-smoke.yml'
 
 permissions:
@@ -52,5 +54,19 @@ jobs:
               assert html.count('rel="canonical"') == 1, f"{filename}: canonical count changed"
               assert html.count('hreflang=') == 10, f"{filename}: hreflang count changed"
               assert '<main id="home">' in html, f"{filename}: homepage main element missing"
+              if filename == "index.html":
+                  assert '/assets/zombcash-survivor-v13.jpg' in html, "project-owned survivor artwork missing"
+                  assert 'TACTICAL VISUAL / IMAGE SLOT' not in html, "unfinished hero art placeholder remains"
               print(f"OK {filename} ({lang})")
+          PY
+      - name: Verify project-owned artwork and accessibility hooks
+        run: |
+          test -s assets/zombcash-survivor-v13.jpg
+          grep -q 'aria-hidden.*true' homepage-ribbons.js
+          grep -q 'prefers-reduced-motion' homepage-visual.css
+          python - <<'PY'
+          from pathlib import Path
+          css = Path('homepage-visual.css').read_text(encoding='utf-8')
+          assert css.count('{') == css.count('}'), 'homepage-visual.css has unbalanced braces'
+          print('OK artwork asset, ticker accessibility, reduced motion and CSS structure')
           PY
