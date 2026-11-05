@@ -652,6 +652,7 @@ if (zomMarket) {
   };
   async function loadZomMarket() {
     if (zomBusy) return;
+    window.__zombcashMarketCardStarted = true;
     zomBusy = true;
     if (zomStatus) zomStatus.textContent = 'SCANNING TOKEN…';
     if (zomRefresh) zomRefresh.disabled = true;
@@ -730,6 +731,7 @@ if (zomMarket) {
   }
 
   async function loadWorldNews() {
+    window.__zombcashWorldNewsStarted = true;
     if (newsStatus) newsStatus.textContent = 'SYNCING RSS';
     try {
       const response = await fetch(apiBase + '/api/news', {cache:'no-store'});
