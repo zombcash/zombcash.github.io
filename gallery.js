@@ -134,12 +134,15 @@
 
   const showImage = index => {
     if (!cards.length) return;
+    const preserveImageOnly = lightbox.classList.contains("is-open") && lightbox.classList.contains("is-image-only");
     activeIndex = (index + cards.length) % cards.length;
     const image = cards[activeIndex].querySelector("img");
     fullImage.src = image.currentSrc || image.src;
     fullImage.alt = image.alt || "";
-    lightbox.classList.remove("is-image-only");
-    imageOnlyButton.setAttribute("aria-pressed", "false");
+    lightbox.classList.toggle("is-image-only", preserveImageOnly);
+    imageOnlyButton.setAttribute("aria-pressed", preserveImageOnly ? "true" : "false");
+    imageOnlyButton.setAttribute("aria-label", preserveImageOnly ? "Return to image details" : "View image only");
+    imageOnlyButton.setAttribute("title", preserveImageOnly ? "Return to image details" : "View image only");
     const card = cards[activeIndex];
     const title = card.dataset.galleryTitle || card.querySelector(".gallery-caption p")?.textContent || "";
     const originalCaption = card.querySelector(".gallery-caption p")?.dataset.originalCaption || "";
