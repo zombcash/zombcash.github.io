@@ -220,6 +220,17 @@ const expectedGalleryCount = galleryData.items.length;
     });
     const imageOnlyButton = page.locator(".gallery-lightbox-image-only");
     if (!await imageOnlyButton.isVisible()) throw new Error("Image-only viewing control must be visible in detail mode");
+    const controlGeometry = await page.evaluate(() => {
+      const close = document.querySelector(".gallery-lightbox-close").getBoundingClientRect();
+      const imageOnly = document.querySelector(".gallery-lightbox-image-only").getBoundingClientRect();
+      return { close: { left: close.left, right: close.right, top: close.top, bottom: close.bottom },
+        imageOnly: { left: imageOnly.left, right: imageOnly.right, top: imageOnly.top, bottom: imageOnly.bottom } };
+    });
+    const overlaps = controlGeometry.imageOnly.left < controlGeometry.close.right &&
+      controlGeometry.imageOnly.right > controlGeometry.close.left &&
+      controlGeometry.imageOnly.top < controlGeometry.close.bottom &&
+      controlGeometry.imageOnly.bottom > controlGeometry.close.top;
+    if (overlaps) throw new Error("Image-only and close controls overlap: " + JSON.stringify(controlGeometry));
     await imageOnlyButton.click();
     await page.waitForFunction(() => document.querySelector(".gallery-lightbox")?.classList.contains("is-image-only"));
     if (await page.locator(".gallery-lightbox figcaption").isVisible()) throw new Error("Image-only mode must hide the caption");
