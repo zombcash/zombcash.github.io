@@ -129,7 +129,7 @@
     fullImage.alt = image.alt || "";
     const card = cards[activeIndex];
     const title = card.dataset.galleryTitle || card.querySelector(".gallery-caption p")?.textContent || "";
-    const description = card.dataset.galleryDescription || "";
+    const originalCaption = card.querySelector(".gallery-caption p")?.dataset.originalCaption || "";\n    const description = card.dataset.galleryDescription || cleanCaption(originalCaption) || title;
     const categories = Array.from(card.querySelectorAll(".gallery-category-tag"))
       .map(tag => tag.textContent.trim()).filter(Boolean).join(" · ");
     const sourceUrl = card.querySelector(".gallery-caption a")?.href || "https://t.me/ZOMBCASH";
@@ -137,7 +137,7 @@
     trackGalleryEvent("gallery_image_open", "image_" + String(card.dataset.galleryId || "").replace(/[^0-9]/g, "_"));
     fullCaption.innerHTML =
       '<strong class="gallery-lightbox-title">' + escapeHtml(title) + '</strong>' +
-      (description ? '<span class="gallery-lightbox-description">' + escapeHtml(description) + '</span>' : '') +
+      (description && description !== title ? '<span class="gallery-lightbox-description">' + escapeHtml(description) + '</span>' : '') +
       (categories ? '<span class="gallery-lightbox-categories">' + escapeHtml(categories) + '</span>' : '') +
       '<span class="gallery-lightbox-actions">' +
       '<button class="gallery-lightbox-like" type="button" aria-pressed="false"></button>' +
