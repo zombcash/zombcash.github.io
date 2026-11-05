@@ -1,6 +1,7 @@
 /* ZombieCash site-wide Adsterra placement — shared across every language/page. */
 (() => {
   'use strict';
+  try {
   if (window.__zcSitewideAdsterraInit) return;
   window.__zcSitewideAdsterraInit = true;
   const NATIVE_ID = '4420dadadbd2f0727c322cd6c632be3e';
@@ -83,8 +84,10 @@
     if (typeof mobileQuery.addEventListener === 'function') mobileQuery.addEventListener('change', syncAd);
     else if (typeof mobileQuery.addListener === 'function') mobileQuery.addListener(syncAd);
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initSitewideAd, { once: true });
-  else initSitewideAd();
+  const safeInitSitewideAd = () => { try { initSitewideAd(); } catch (error) { console.warn('[ZombieCash] Optional ad placement failed:', error); } };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', safeInitSitewideAd, { once: true });
+  else safeInitSitewideAd();
+  } catch (error) { console.warn('[ZombieCash] Optional ad initializer skipped:', error); }
 })();
 
 
@@ -94,7 +97,7 @@
 (() => {
   'use strict';
   /* Anonymous site-wide presence heartbeat. This shared file runs on every public page. */
-  (() => {
+  try { (() => {
     // The arcade game embeds index.html in an iframe; do not count that embedded document as a separate visit.
     if (new URLSearchParams(location.search).get('arcadeSnake') === '1') return;
     const api = 'https://zombcash-bot.fadehost.app/api/visits';
@@ -126,10 +129,11 @@
     heartbeat();
     setInterval(heartbeat, 20000);
     document.addEventListener('visibilitychange', heartbeat);
-  })();
+  })(); } catch (error) { console.warn('[ZombieCash] Optional presence heartbeat skipped:', error); }
 
 
   // ZombieCash GA4: centralized measurement tag for pages loading shared-nav.js.
+  try {
   // Keep the measurement ID in one place to avoid duplicate tags across HTML pages.
   if (new URLSearchParams(location.search).get('arcadeSnake') !== '1' && !window.__zombcashGa4Loaded) {
     window.__zombcashGa4Loaded = true;
@@ -143,6 +147,7 @@
     gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-2FZH07QTR7';
     document.head.appendChild(gaScript);
   }
+  } catch (error) { console.warn('[ZombieCash] Optional analytics initialization skipped:', error); }
   const file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   const isHome = file === 'index.html';
   const isGermanPage = location.pathname === '/de/' || location.pathname.startsWith('/de/');
