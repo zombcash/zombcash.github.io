@@ -108,6 +108,6 @@ Supported homepage locales: English, German, French, Italian, Japanese, Simplifi
 Observed on the Russian homepage screenshots at 1440×900 and 390×844:
 - The dark survival-world base, lime accents, shared navigation and three categorized signal ribbons are visually consistent with the direction above.
 - Desktop hero composition is two-column; mobile hero stacks the copy and actions.
-- The right-side sponsor area still contains a tactical-image placeholder. Replace it with a real, licensed or project-owned asset before treating the hero as visually complete.
+- The sponsor area now uses the existing project-owned `/assets/zombcash-survivor-v13.jpg` artwork, with a dark overlay for legibility.
 - Ad reservation behavior needs a clean passing regression run at mobile, tablet and desktop widths. Do not merge the visual refresh until that check passes.
 - This guide describes requirements; it does not claim the outstanding visual QA has passed.
