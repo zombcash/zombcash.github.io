@@ -271,7 +271,7 @@
     '<div class="zsh-actions">' +
       (!isHome ? '<a class="zsh-home home-return-button" href="' + target('/') + '"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
       '<div class="zsh-language-slot"></div>' +
-      (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<button class="zsh-login-button" type="button" data-zsh-login>JOIN THE SURVIVORS</button>') +
+      (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<button class="zsh-login-button" type="button" data-zsh-login>LOGIN WITH TELEGRAM</button>') +
     '</div>';
 
   const actions = header.querySelector('.zsh-actions');
@@ -1326,7 +1326,7 @@
     });
     const back = header.querySelector('.zsh-actions > .zsh-home');
     if (back) back.innerHTML = '<span aria-hidden="true">←</span> ' + (translated ? translated[12] : 'BACK TO HOME');
-    /* Keep the global CTA as JOIN THE SURVIVORS; the Survivor Hub's actual login control remains LOGIN WITH TELEGRAM. */
+    /* The approved site-wide account action is LOGIN WITH TELEGRAM on every page. */
     const menuLabel = header.querySelector('.zsh-menu-label');
     if (menuLabel) menuLabel.textContent = translated ? translated[15] : 'MENU';
     const brandSmall = header.querySelector('.zsh-brand-copy small');
@@ -1341,11 +1341,7 @@
     const loginControl = header.querySelector('.zsh-login-button');
     if (loginControl) {
       const loginLabels = {de:'MIT TELEGRAM ANMELDEN',fr:'SE CONNECTER AVEC TELEGRAM',it:'ACCEDI CON TELEGRAM',ja:'TELEGRAMでログイン','zh-CN':'使用 TELEGRAM 登录',ru:'ВОЙТИ ЧЕРЕЗ TELEGRAM',tr:'TELEGRAM İLE GİRİŞ',hi:'TELEGRAM से लॉग इन करें'};
-      if (file === 'survivor-hub.html') {
-        loginControl.textContent = language === 'en' ? 'LOGIN WITH TELEGRAM' : (loginLabels[language] || 'LOGIN WITH TELEGRAM');
-      } else {
-        loginControl.textContent = language === 'en' ? 'REGISTER WITH TELEGRAM' : (translated ? translated[13] : 'JOIN THE SURVIVORS');
-      }
+      loginControl.textContent = language === 'en' ? 'LOGIN WITH TELEGRAM' : (loginLabels[language] || 'LOGIN WITH TELEGRAM');
     }
   }
   const readLanguage = () => {
