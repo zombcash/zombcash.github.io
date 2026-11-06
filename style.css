@@ -1193,3 +1193,19 @@ button,a{ -webkit-tap-highlight-color:transparent }
 @media(prefers-reduced-motion:reduce){
  .tools#radar .tool-card,.tools#radar .zc-art-photo,.tools#radar .card-link{transition:none!important}
 }
+
+/* Match the reference composition: titles sit over the lower edge of the artwork. */
+.tools#radar .tool-card h3{
+  margin-top:-82px;
+  margin-bottom:20px;
+  padding:0 12px;
+  min-height:66px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  text-shadow:0 3px 18px #000,0 0 12px #000;
+}
+.tools#radar .tool-card h3 span{display:block}
+@media(max-width:680px){
+  .tools#radar .tool-card h3{margin-top:-82px;margin-bottom:18px;padding:0 10px;min-height:66px}
+}
