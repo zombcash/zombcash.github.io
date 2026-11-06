@@ -1326,8 +1326,8 @@ button,a{ -webkit-tap-highlight-color:transparent }
 .tools#radar .tool-card .card-link span{position:absolute!important;right:14px!important;font-size:22px!important}
 .tools#radar .tool-card:hover{transform:translateY(-3px);filter:drop-shadow(0 0 12px color-mix(in srgb,var(--card-accent) 30%,transparent))}
 .tools#radar .live-radar{margin-top:54px!important}
-@media(max-width:980px){
-  .tools#radar .tool-grid{gap:12px!important}
+@media(max-width:900px){
+  .tools#radar .tool-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important}
   .tools#radar .tool-card{padding:14px!important}
   .tools#radar .tool-card .tool-art{height:180px!important;min-height:180px!important}
   .tools#radar .tool-card p{min-height:110px!important;font-size:13px!important}
