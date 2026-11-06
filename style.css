@@ -964,70 +964,47 @@ button,a{ -webkit-tap-highlight-color:transparent }
 }
 
 
-/* ZOMBCASH TOOLS — cinematic gallery artwork + hover-only micro-animations */
-.tools .tool-grid{gap:20px;align-items:stretch}
-.tools .tool-card{display:flex;flex-direction:column;min-width:0;padding:20px;background:linear-gradient(155deg,#10191a 0%,#080d12 72%);border-color:#293a31;transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease}
-.tools .tool-card:hover,.tools .tool-card:focus-within{transform:translateY(-7px);border-color:var(--card-accent,#9bff45);box-shadow:0 18px 55px #000b,0 0 28px color-mix(in srgb,var(--card-accent,#9bff45) 17%,transparent)}
-.tools .radar-card{--card-accent:#9bff45}
-.tools .lab-card{--card-accent:#c46aff}
-.tools .network-card{--card-accent:#ff525c}
-.tools .tool-art.zc-hover-art{height:clamp(205px,17vw,270px);margin:14px 0 22px;border:1px solid color-mix(in srgb,var(--card-accent) 45%,#23372c);background:#080d11;isolation:isolate}
-.zc-art-photo{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:center 34%;transform:scale(1.015);transition:transform .9s cubic-bezier(.2,.75,.2,1),filter .8s ease;z-index:-2}
-.zc-art-vignette{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,#05090a18 0%,#05090a05 42%,#05090ad9 100%),linear-gradient(90deg,#05090a30,transparent 55%,#05090a35);pointer-events:none}
-.zc-art-stamp{position:absolute;left:12px;bottom:10px;padding:6px 8px;border:1px solid color-mix(in srgb,var(--card-accent) 60%,transparent);background:#05090ad9;color:#e7f4e8;font:600 8px Orbitron,sans-serif;letter-spacing:1.1px;opacity:.9}
-.tools .radar-art{--card-accent:#9bff45}
-.tools .lab-art{--card-accent:#c46aff;background:radial-gradient(ellipse at 50% 70%,#44205b,#080d14 72%)}
-.tools .network-art{--card-accent:#ff525c;background:#101016}
-.zc-radar-photo{object-position:center 28%;filter:saturate(.92) contrast(1.06)}
-.zc-hair{position:absolute;top:7%;height:74%;width:22%;border-radius:50%;border-left:2px solid #a9ff7b99;border-right:1px solid #e5ffcb55;filter:blur(.8px);opacity:0;transition:opacity .35s ease}
-.hair-left{left:4%;transform:rotate(18deg);border-left-width:3px}
-.hair-right{right:4%;transform:rotate(-16deg);border-right-width:3px}
-.radar-ring,.radar-sweep{z-index:2;opacity:.72;pointer-events:none}
-.radar-ring.ring-a{width:min(64%,190px);border-color:#9bff45a0;box-shadow:0 0 18px #9bff4530}
-.radar-ring.ring-b{width:min(39%,116px);border-color:#9bff4580}
-.radar-sweep{width:min(64%,190px);height:auto;aspect-ratio:1;animation:spin 4.2s linear infinite;animation-play-state:paused;background:conic-gradient(from 0deg,transparent 0 72%,#9bff4590 94%,transparent 96%)}
-.radar-cross{z-index:3;color:#d5ffad;text-shadow:0 0 14px #9bff45;font-size:26px}
-.blip{z-index:3;opacity:.45;transition:opacity .3s,transform .3s}
-.zc-lab-photo{object-position:center 26%;filter:saturate(.86) contrast(1.08)}
-.zc-lab-glass{position:absolute;left:50%;top:8%;width:31%;height:84%;transform:translateX(-50%);border:2px solid #d49aff9c;border-radius:46% 46% 22% 22% / 22% 22% 12% 12%;background:linear-gradient(90deg,#c48aff0c,#b7fffa18 45%,#d18cff10);box-shadow:inset 0 0 24px #c46aff30,0 0 22px #c46aff35;opacity:.0;transition:opacity .35s ease;pointer-events:none}
-.zc-lab-glass:before{content:"";position:absolute;inset:8px 7px 12px;border:1px solid #d8b5ff55;border-radius:inherit}
-.zc-lab-zombie-mouth{position:absolute;left:50%;top:42%;width:14px;height:5px;border-radius:50%;background:#250b2d;transform:translateX(-50%);box-shadow:0 0 8px #e0aaff}
-.zc-bubble{position:absolute;bottom:12%;width:8px;height:8px;border:1px solid #c9faff;border-radius:50%;background:#c8faff40;opacity:0}
-.zc-bubble.b1{left:28%}.zc-bubble.b2{left:49%;width:5px;height:5px}.zc-bubble.b3{right:27%;width:11px;height:11px}.zc-bubble.b4{left:65%;width:4px;height:4px}
-.zc-network-photo{object-position:center 42%;filter:saturate(.8) contrast(1.12)}
-.zc-walker{position:absolute;bottom:10%;width:13px;height:43px;background:#05080b;opacity:0;filter:drop-shadow(0 0 5px #ff525c66);border-radius:45% 45% 12% 12%;transform-origin:50% 100%}
-.zc-walker:before{content:"";position:absolute;width:14px;height:14px;left:0;top:-12px;border-radius:50%;background:#05080b}
-.zc-walker:after{content:"";position:absolute;left:1px;top:23px;width:19px;height:25px;border-left:3px solid #05080b;border-right:3px solid #05080b;transform:rotate(8deg)}
-.walker-one{left:22%;transform:scale(1.05)}.walker-two{left:43%;transform:scale(.78)}.walker-three{right:17%;transform:scale(1.18)}
-.zc-survivor-flag{position:absolute;right:5%;top:12%;width:36%;height:24%;transform-origin:left center;transform:rotate(-2deg);opacity:.85;filter:drop-shadow(0 4px 8px #000)}
-.zc-survivor-flag:before{content:"";position:absolute;left:0;top:0;width:2px;height:170%;background:#d2d6c7}
-.zc-survivor-flag span{display:flex;align-items:center;justify-content:center;width:100%;height:100%;padding:4px;background:linear-gradient(100deg,#8d151d,#e02d37 45%,#7b1018);clip-path:polygon(0 0,100% 5%,94% 100%,0 88%);color:#fff;font:800 clamp(7px,.75vw,11px) Orbitron,sans-serif;letter-spacing:.5px;text-shadow:0 2px 3px #39070b}
-.tools .tool-card h3{margin-top:0}
-.tools .tool-card p{flex:1}
-.tools .tool-card .card-link{margin-top:auto}
-.tools .tool-card:hover .zc-art-photo,.tools .tool-card:focus-within .zc-art-photo{transform:scale(1.09);filter:saturate(1.15) contrast(1.1)}
-.tools .radar-card:hover .zc-radar-photo,.tools .radar-card:focus-within .zc-radar-photo{transform:scale(1.12) translateX(-1%);filter:saturate(1.25) contrast(1.1)}
+/* Hover animation layers only — preserve the approved tools block layout */
+.tools .tool-art.zc-hover-art{position:relative}
+.tools .zc-art-photo{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:center 34%;transform:scale(1);transition:transform .65s ease,filter .65s ease;z-index:0}
+.tools .zc-art-vignette{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,#05090a08 0%,transparent 50%,#05090a30 100%)}
+.tools .zc-art-stamp{display:none}
+.tools .zc-hair,.tools .zc-lab-glass,.tools .zc-walker,.tools .zc-survivor-flag{opacity:0;pointer-events:none}
+.tools .zc-hair{position:absolute;top:7%;height:74%;width:22%;border-radius:50%;border-left:2px solid #d7ffc099;border-right:1px solid #e5ffcb55;filter:blur(.8px);z-index:2}
+.tools .hair-left{left:4%}.tools .hair-right{right:4%}
+.tools .radar-ring,.tools .radar-sweep,.tools .radar-cross,.tools .blip{z-index:2;opacity:0;pointer-events:none}
+.tools .zc-lab-glass{position:absolute;left:50%;top:8%;width:31%;height:84%;transform:translateX(-50%);border:2px solid #d49aff9c;border-radius:46% 46% 22% 22% / 22% 22% 12% 12%;background:linear-gradient(90deg,#c48aff0c,#b7fffa18 45%,#d18cff10);box-shadow:inset 0 0 24px #c46aff30,0 0 22px #c46aff35;z-index:2}
+.tools .zc-lab-glass:before{content:"";position:absolute;inset:8px 7px 12px;border:1px solid #d8b5ff55;border-radius:inherit}
+.tools .zc-lab-zombie-mouth{position:absolute;left:50%;top:42%;width:14px;height:5px;border-radius:50%;background:#250b2d;transform:translateX(-50%);box-shadow:0 0 8px #e0aaff}
+.tools .zc-bubble{position:absolute;bottom:12%;width:8px;height:8px;border:1px solid #c9faff;border-radius:50%;background:#c8faff40;opacity:0}
+.tools .zc-bubble.b1{left:28%}.tools .zc-bubble.b2{left:49%;width:5px;height:5px}.tools .zc-bubble.b3{right:27%;width:11px;height:11px}.tools .zc-bubble.b4{left:65%;width:4px;height:4px}
+.tools .zc-walker{position:absolute;bottom:10%;width:13px;height:43px;background:#05080b;filter:drop-shadow(0 0 5px #ff525c66);border-radius:45% 45% 12% 12%;transform-origin:50% 100%;z-index:2}
+.tools .zc-walker:before{content:"";position:absolute;width:14px;height:14px;left:0;top:-12px;border-radius:50%;background:#05080b}
+.tools .zc-walker:after{content:"";position:absolute;left:1px;top:23px;width:19px;height:25px;border-left:3px solid #05080b;border-right:3px solid #05080b;transform:rotate(8deg)}
+.tools .walker-one{left:22%;transform:scale(1.05)}.tools .walker-two{left:43%;transform:scale(.78)}.tools .walker-three{right:17%;transform:scale(1.18)}
+.tools .zc-survivor-flag{position:absolute;right:5%;top:12%;width:36%;height:24%;transform-origin:left center;z-index:2;filter:drop-shadow(0 4px 8px #000)}
+.tools .zc-survivor-flag:before{content:"";position:absolute;left:0;top:0;width:2px;height:170%;background:#d2d6c7}
+.tools .zc-survivor-flag span{display:flex;align-items:center;justify-content:center;width:100%;height:100%;padding:4px;background:linear-gradient(100deg,#8d151d,#e02d37 45%,#7b1018);clip-path:polygon(0 0,100% 5%,94% 100%,0 88%);color:#fff;font:800 9px Orbitron,sans-serif;letter-spacing:.5px;text-shadow:0 2px 3px #39070b}
+.tools .radar-card:hover .zc-art-photo,.tools .radar-card:focus-within .zc-art-photo{transform:scale(1.06)}
 .tools .radar-card:hover .zc-hair,.tools .radar-card:focus-within .zc-hair{opacity:1;animation:zc-hair-drift 1.9s ease-in-out infinite alternate}
-.tools .radar-card:hover .radar-sweep,.tools .radar-card:focus-within .radar-sweep{animation-play-state:running}
-.tools .radar-card:hover .blip,.tools .radar-card:focus-within .blip{opacity:1;transform:scale(1.5)}
-.tools .lab-card:hover .zc-lab-photo,.tools .lab-card:focus-within .zc-lab-photo{transform:scale(1.1) translateY(-1%);filter:saturate(1.2) contrast(1.15)}
+.tools .radar-card:hover .radar-ring,.tools .radar-card:hover .radar-sweep,.tools .radar-card:hover .radar-cross,.tools .radar-card:hover .blip,.tools .radar-card:focus-within .radar-ring,.tools .radar-card:focus-within .radar-sweep,.tools .radar-card:focus-within .radar-cross,.tools .radar-card:focus-within .blip{opacity:.8}
+.tools .radar-card:hover .radar-sweep,.tools .radar-card:focus-within .radar-sweep{animation:spin 4.2s linear infinite}
+.tools .lab-card:hover .zc-art-photo,.tools .lab-card:focus-within .zc-art-photo{transform:scale(1.06)}
 .tools .lab-card:hover .zc-lab-glass,.tools .lab-card:focus-within .zc-lab-glass{opacity:1}
 .tools .lab-card:hover .zc-lab-zombie-mouth,.tools .lab-card:focus-within .zc-lab-zombie-mouth{animation:zc-mouth-talk .32s ease-in-out infinite alternate}
 .tools .lab-card:hover .zc-bubble,.tools .lab-card:focus-within .zc-bubble{animation:zc-bubble-rise 1.7s ease-in infinite}
 .tools .lab-card:hover .zc-bubble.b2,.tools .lab-card:focus-within .zc-bubble.b2{animation-delay:.35s}
 .tools .lab-card:hover .zc-bubble.b3,.tools .lab-card:focus-within .zc-bubble.b3{animation-delay:.7s}
 .tools .lab-card:hover .zc-bubble.b4,.tools .lab-card:focus-within .zc-bubble.b4{animation-delay:1.05s}
-.tools .network-card:hover .zc-network-photo,.tools .network-card:focus-within .zc-network-photo{transform:scale(1.12) translateY(-1%);filter:saturate(1.15) contrast(1.15)}
+.tools .network-card:hover .zc-art-photo,.tools .network-card:focus-within .zc-art-photo{transform:scale(1.06)}
 .tools .network-card:hover .zc-walker,.tools .network-card:focus-within .zc-walker{opacity:.8;animation:zc-zombie-walk .85s ease-in-out infinite alternate}
 .tools .network-card:hover .walker-two,.tools .network-card:focus-within .walker-two{animation-delay:.18s}
 .tools .network-card:hover .walker-three,.tools .network-card:focus-within .walker-three{animation-delay:.32s}
-.tools .network-card:hover .zc-survivor-flag,.tools .network-card:focus-within .zc-survivor-flag{animation:zc-flag-wave .75s ease-in-out infinite alternate}
+.tools .network-card:hover .zc-survivor-flag,.tools .network-card:focus-within .zc-survivor-flag{opacity:1;animation:zc-flag-wave .75s ease-in-out infinite alternate}
 @keyframes zc-hair-drift{from{transform:translateX(-5px) rotate(14deg)}to{transform:translateX(9px) rotate(25deg)}}
 @keyframes zc-mouth-talk{from{height:3px;width:9px}to{height:12px;width:16px;border-radius:35%}}
 @keyframes zc-bubble-rise{0%{opacity:0;transform:translateY(0) scale(.6)}15%{opacity:.9}85%{opacity:.75}100%{opacity:0;transform:translateY(-115px) scale(1.25)}}
 @keyframes zc-zombie-walk{from{translate:0 0;rotate:-5deg}to{translate:5px -4px;rotate:7deg}}
 @keyframes zc-flag-wave{from{transform:rotate(-4deg) skewY(-2deg)}to{transform:rotate(3deg) skewY(3deg)}}
-@media(max-width:900px){.tools .tool-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tools .network-card{grid-column:1/-1}.tools .tool-art.zc-hover-art{height:240px}}
-@media(max-width:600px){.tools .tool-grid{grid-template-columns:1fr}.tools .network-card{grid-column:auto}.tools .tool-art.zc-hover-art{height:230px}.tools .tool-card{padding:17px}.zc-art-stamp{font-size:7px}}
-@media(hover:none){.tools .tool-card:active .zc-art-photo{transform:scale(1.1)}.tools .tool-card:active .zc-hair{opacity:1;animation:zc-hair-drift 1.9s ease-in-out infinite alternate}.tools .tool-card:active .radar-sweep{animation-play-state:running}.tools .lab-card:active .zc-lab-glass{opacity:1}.tools .lab-card:active .zc-bubble{animation:zc-bubble-rise 1.7s ease-in infinite}.tools .lab-card:active .zc-lab-zombie-mouth{animation:zc-mouth-talk .32s ease-in-out infinite alternate}.tools .network-card:active .zc-walker{opacity:.8;animation:zc-zombie-walk .85s ease-in-out infinite alternate}.tools .network-card:active .zc-survivor-flag{animation:zc-flag-wave .75s ease-in-out infinite alternate}}
-@media(prefers-reduced-motion:reduce){.tools .tool-card,.tools .zc-art-photo,.tools .zc-hair,.tools .zc-survivor-flag{transition:none!important;animation:none!important}.tools .radar-sweep{animation:none!important}.tools .zc-walker,.tools .zc-bubble{animation:none!important;opacity:0!important}}
+@media(hover:none){.tools .radar-card:active .zc-hair{opacity:1;animation:zc-hair-drift 1.9s ease-in-out infinite alternate}.tools .radar-card:active .radar-sweep{opacity:.8;animation:spin 4.2s linear infinite}.tools .lab-card:active .zc-lab-glass{opacity:1}.tools .lab-card:active .zc-bubble{animation:zc-bubble-rise 1.7s ease-in infinite}.tools .lab-card:active .zc-lab-zombie-mouth{animation:zc-mouth-talk .32s ease-in-out infinite alternate}.tools .network-card:active .zc-walker{opacity:.8;animation:zc-zombie-walk .85s ease-in-out infinite alternate}.tools .network-card:active .zc-survivor-flag{opacity:1;animation:zc-flag-wave .75s ease-in-out infinite alternate}}
+@media(prefers-reduced-motion:reduce){.tools .zc-art-photo,.tools .zc-hair,.tools .zc-survivor-flag{transition:none!important;animation:none!important}.tools .radar-sweep,.tools .zc-walker,.tools .zc-bubble{animation:none!important}}
