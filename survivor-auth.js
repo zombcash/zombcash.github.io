@@ -45,8 +45,8 @@
     const cta = document.querySelector('header.zombcash-shared-header .zsh-actions .zsh-login-button, header.zombcash-shared-header .zsh-actions .survivor-entry-button, .top-cta, .survivor-entry-button');
     if (!cta) return;
     const p = readProfile();
-    const isHubLogin = (location.pathname.split('/').pop() || '').toLowerCase() === 'survivor-hub.html';
-    const unauthenticatedLabel = isHubLogin ? t('login') : t('join');
+    // The approved global header uses LOGIN WITH TELEGRAM on every page.
+    const unauthenticatedLabel = t('login');
     cta.textContent = p ? '☣ ' + (p.publicDisplayName || p.firstName || 'SURVIVOR') : unauthenticatedLabel;
     cta.classList.toggle('survivor-online', Boolean(p && presenceOnline && p.presenceVisible !== false));
     cta.setAttribute('aria-label', p ? t('profile') + (presenceOnline ? ' · ONLINE' : '') : unauthenticatedLabel);
