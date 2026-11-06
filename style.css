@@ -1322,3 +1322,53 @@ button,a{ -webkit-tap-highlight-color:transparent }
  .tools#radar .tool-card:before{clip-path:polygon(4% 0,96% 0,100% 3%,100% 97%,96% 100%,4% 100%,0 97%,0 3%)}
  .tools#radar .card-link{min-height:56px}
 }
+
+
+/* 2026-11-06: tools cards layout correction — no title/art overlap */
+.tools#radar{scroll-margin-top:148px!important;padding-top:58px!important}
+.tools#radar .tool-grid{align-items:stretch!important;gap:18px!important}
+.tools#radar .tool-card{
+  display:flex!important;flex-direction:column!important;min-width:0!important;
+  padding:18px!important;overflow:hidden!important;
+}
+.tools#radar .tool-card .card-top{min-height:24px!important;flex:0 0 auto!important}
+.tools#radar .tool-card .tool-art{
+  height:clamp(185px,17vw,235px)!important;min-height:185px!important;
+  width:100%!important;margin:12px 0 0!important;flex:0 0 auto!important;
+  overflow:hidden!important;position:relative!important;
+}
+.tools#radar .tool-card .zc-art-photo{
+  width:100%!important;height:100%!important;object-fit:cover!important;
+  object-position:center 27%!important;
+}
+.tools#radar .tool-card h3{
+  position:static!important;display:block!important;z-index:auto!important;
+  min-height:0!important;height:auto!important;margin:17px 0 12px!important;
+  padding:0 2px!important;font-size:clamp(20px,1.8vw,27px)!important;
+  line-height:1.04!important;letter-spacing:-.035em!important;
+  text-shadow:0 2px 10px #000!important;
+}
+.tools#radar .tool-card h3 span{display:block!important;font-size:1.08em!important}
+.tools#radar .tool-card p{
+  min-height:86px!important;margin:0 2px 14px!important;padding:0!important;
+  font-size:clamp(14px,1.02vw,16px)!important;line-height:1.48!important;
+}
+.tools#radar .tool-card ul{margin:0 2px 16px!important}
+.tools#radar .tool-card li{min-height:38px!important;font-size:10px!important;letter-spacing:.04em!important}
+.tools#radar .tool-card .card-link{margin-top:auto!important;min-height:52px!important}
+@media(max-width:900px){
+ .tools#radar .tool-card .tool-art{height:190px!important;min-height:190px!important}
+ .tools#radar .tool-card p{min-height:105px!important}
+}
+@media(max-width:680px){
+ .tools#radar{padding:44px 14px 56px!important}
+ .tools#radar .tool-grid{grid-template-columns:minmax(0,1fr)!important;max-width:520px!important;margin:0 auto!important;gap:20px!important}
+ .tools#radar .tool-card{padding:16px!important}
+ .tools#radar .tool-card .tool-art{height:230px!important;min-height:230px!important;margin-top:10px!important}
+ .tools#radar .tool-card h3{font-size:27px!important;margin:15px 0 10px!important}
+ .tools#radar .tool-card p{min-height:0!important;font-size:16px!important}
+ .tools#radar .tool-card li{min-height:40px!important;font-size:10px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .tools#radar .tool-card,.tools#radar .zc-art-photo,.tools#radar .card-link{transition:none!important}
+}
