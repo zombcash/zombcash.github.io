@@ -1346,3 +1346,34 @@ button,a{ -webkit-tap-highlight-color:transparent }
 @media(prefers-reduced-motion:reduce){
   .tools#radar .tool-card,.tools#radar .zc-art-photo,.tools#radar .card-link{transition:none!important}
 }
+
+
+/* APPROVED TOOLS REFERENCE — restore full-width desktop composition */
+.tools#radar{
+  width:100%!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+  padding:58px clamp(24px,9.7vw,156px) 76px!important;
+}
+.tools#radar .tool-grid{
+  width:100%!important;
+  max-width:none!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:clamp(16px,1.45vw,24px)!important;
+}
+.tools#radar .tool-card .tool-art{
+  height:clamp(210px,15.2vw,250px)!important;
+  min-height:210px!important;
+  max-height:250px!important;
+}
+@media(max-width:900px){
+  .tools#radar{padding:52px 24px 66px!important}
+  .tools#radar .tool-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:700px){
+  .tools#radar{padding:44px 14px 56px!important}
+  .tools#radar .tool-grid{grid-template-columns:minmax(0,1fr)!important;max-width:520px!important}
+  .tools#radar .tool-card .tool-art{height:230px!important;min-height:230px!important;max-height:230px!important}
+}
