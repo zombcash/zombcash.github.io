@@ -1238,3 +1238,88 @@ button,a{ -webkit-tap-highlight-color:transparent }
 .tools#radar .network-card .card-link{background:linear-gradient(90deg,#3a1016,#0c090c 55%,#3a1016)!important}
 @media(max-width:900px){.tools#radar .tool-card h3{margin-top:-78px!important}.tools#radar .tool-card p{min-height:88px!important}}
 @media(max-width:680px){.tools#radar{padding:48px 12px 58px!important}.tools#radar>.section-heading:before{width:72%;height:15px}.tools#radar>.section-heading p{letter-spacing:.2em!important}.tools#radar .tool-grid{max-width:500px!important;gap:20px!important}.tools#radar .tool-card{padding:17px!important}.tools#radar .tool-art{height:285px!important;width:calc(100% + 34px)!important;margin-left:-17px!important;margin-right:-17px!important}.tools#radar .tool-card h3{margin-top:-82px!important;min-height:78px!important;font-size:30px!important}.tools#radar .tool-card p{min-height:0!important;padding:0 6px!important}.tools#radar .tool-card li{font-size:10px!important}.tools#radar .card-link{min-height:58px!important}}
+
+
+/* Reference finishing pass: hazard header, clipped panels, icon rows and angular CTAs */
+.tools#radar{
+ background:
+  radial-gradient(ellipse at 0% 55%,#173d2b99 0,transparent 29%),
+  radial-gradient(ellipse at 52% 55%,#32104788 0,transparent 30%),
+  radial-gradient(ellipse at 100% 52%,#50151b99 0,transparent 30%),
+  radial-gradient(ellipse at 50% 115%,#d9e8e31c 0,transparent 34%),
+  linear-gradient(180deg,#050a0b 0%,#07100f 50%,#050809 100%);
+}
+.tools#radar>.section-heading{padding-top:5px}
+.tools#radar>.section-heading:before{
+ content:"";display:block;height:12px;width:min(1120px,92%);margin:0 auto 16px;
+ background:repeating-linear-gradient(115deg,#a6ff19 0 13px,transparent 13px 24px);
+ clip-path:polygon(0 0,100% 0,98% 100%,2% 100%);
+ opacity:.92;filter:drop-shadow(0 0 8px #9bff45);
+}
+.tools#radar>.section-heading:after{
+ height:3px;width:min(1120px,92%);
+ background:linear-gradient(90deg,transparent 0%,#9bff45 12%,#9bff45 34%,transparent 38%,transparent 62%,#9bff45 66%,#9bff45 88%,transparent 100%);
+ box-shadow:0 0 12px #9bff45a0;
+}
+.tools#radar>.section-heading p{
+ position:relative;letter-spacing:.42em;
+}
+.tools#radar .tool-card{
+ border:0;border-radius:0;
+ clip-path:polygon(3.2% 0,96.8% 0,100% 4.5%,100% 95.5%,96.8% 100%,3.2% 100%,0 95.5%,0 4.5%);
+ padding:clamp(17px,1.65vw,25px);
+}
+.tools#radar .tool-card:before{
+ inset:0;clip-path:polygon(3.2% 0,96.8% 0,100% 4.5%,100% 95.5%,96.8% 100%,3.2% 100%,0 95.5%,0 4.5%);
+ border:2px solid var(--card-accent);
+ background:linear-gradient(180deg,color-mix(in srgb,var(--card-accent) 8%,#08100e),#070b0e 56%,color-mix(in srgb,var(--card-accent) 5%,#070b0e));
+ box-shadow:inset 0 0 24px color-mix(in srgb,var(--card-accent) 13%,transparent);
+}
+.tools#radar .tool-card:after{left:12%;right:12%;height:3px}
+.tools#radar .tool-art{
+ border:0;border-top:1px solid color-mix(in srgb,var(--card-accent) 65%,transparent);
+ border-bottom:1px solid color-mix(in srgb,var(--card-accent) 65%,transparent);
+}
+.tools#radar .tool-card li{
+ min-height:39px;gap:0;
+ border-bottom:1px solid color-mix(in srgb,var(--card-accent) 27%,#202b2b);
+ font-size:clamp(9px,.8vw,12px);
+}
+.tools#radar .tool-card li:before{
+ width:27px;height:27px;flex-basis:27px;margin:0 14px 0 0;
+ background:none;box-shadow:none;transform:none;
+ color:var(--card-accent);font:900 22px/27px Arial,sans-serif;text-align:center;
+ content:"✣";text-shadow:0 0 10px var(--card-accent);
+}
+.tools#radar .radar-card li:nth-child(1):before{content:"▥"}
+.tools#radar .radar-card li:nth-child(2):before{content:"❖"}
+.tools#radar .radar-card li:nth-child(3):before{content:"♟"}
+.tools#radar .lab-card li:nth-child(1):before{content:"⚗"}
+.tools#radar .lab-card li:nth-child(2):before{content:"⌘"}
+.tools#radar .lab-card li:nth-child(3):before{content:"▱"}
+.tools#radar .network-card li:nth-child(1):before{content:"▤"}
+.tools#radar .network-card li:nth-child(2):before{content:"◉"}
+.tools#radar .network-card li:nth-child(3):before{content:"▱"}
+.tools#radar .card-link{
+ clip-path:polygon(5% 0,95% 0,100% 50%,95% 100%,5% 100%,0 50%);
+ border-width:2px;border-radius:0;min-height:58px;
+ justify-content:center;position:relative;
+}
+.tools#radar .card-link span{
+ position:absolute;right:18px;font-size:30px;line-height:1;
+}
+.tools#radar .tool-card h3{margin-top:-82px}
+.tools#radar .live-radar{
+ border-top:1px solid #a6ff1940;
+ box-shadow:0 -12px 45px #9bff4510;
+}
+@media(max-width:900px){
+ .tools#radar .tool-card{padding:15px}
+}
+@media(max-width:680px){
+ .tools#radar>.section-heading:before{height:8px}
+ .tools#radar>.section-heading p{letter-spacing:.22em}
+ .tools#radar .tool-card{clip-path:polygon(4% 0,96% 0,100% 3%,100% 97%,96% 100%,4% 100%,0 97%,0 3%)}
+ .tools#radar .tool-card:before{clip-path:polygon(4% 0,96% 0,100% 3%,100% 97%,96% 100%,4% 100%,0 97%,0 3%)}
+ .tools#radar .card-link{min-height:56px}
+}
