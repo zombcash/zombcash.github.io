@@ -1,0 +1,81 @@
+{
+  "programs": [
+    {
+      "channel": "news",
+      "title": "Liquidity Is Not Market Cap: Read the Exit, Not the Headline",
+      "date": "FIELD REPORT",
+      "description": "A published report on liquidity, market depth and why headline valuation is not the same as an executable exit.",
+      "url": "/transmission-liquidity-is-not-market-cap.html"
+    },
+    {
+      "channel": "news",
+      "title": "How to Check a Memecoin Before You Buy",
+      "date": "RESEARCH GUIDE",
+      "description": "A practical checklist for independently researching a Solana memecoin before interacting with it.",
+      "url": "/solana-memecoin-research-guide.html"
+    },
+    {
+      "channel": "news",
+      "title": "Wallet Security: Five Red Flags Before You Sign",
+      "date": "SECURITY BRIEF",
+      "description": "A published wallet-safety briefing focused on transaction approvals and signing risks.",
+      "url": "/transmission-wallet-security-red-flags.html"
+    },
+    {
+      "channel": "news",
+      "title": "Reading Solana Memecoin Signals Without Getting Baited",
+      "date": "FIELD REPORT",
+      "description": "A source-linked guide to interpreting market signals without treating them as guarantees.",
+      "url": "/transmission-solana-memecoin-warning-signs.html"
+    },
+    {
+      "channel": "meme",
+      "title": "ZombieCash Meme & Art Gallery",
+      "date": "COMMUNITY ARCHIVE",
+      "description": "Browse the existing community gallery and its published meme and art collections. Gallery assets remain in their original archive.",
+      "url": "/gallery.html"
+    },
+    {
+      "channel": "meme",
+      "title": "Join the Meme Transmission",
+      "date": "COMMUNITY CALL",
+      "description": "Share an apocalypse meme with the ZombieCash community through the official Telegram channel.",
+      "url": "https://t.me/ZOMBCASH"
+    },
+    {
+      "channel": "lab",
+      "title": "ZombieCash Meme Radar",
+      "date": "DISCOVERY TOOL",
+      "description": "Explore Solana token pairs and market activity. Verify token addresses and pool data independently.",
+      "url": "https://t.me/ZombieCashMemeRadarBot"
+    },
+    {
+      "channel": "lab",
+      "title": "AI Agent Hub",
+      "date": "AI TOOLS",
+      "description": "Open the directory of ZombieCash AI tools and review each tool’s current capabilities.",
+      "url": "/ai-agent-hub.html"
+    },
+    {
+      "channel": "lab",
+      "title": "Zombie Maker",
+      "date": "CREATION LAB",
+      "description": "Transform a portrait into a ZombieCash-inspired character.",
+      "url": "/zombie-maker.html"
+    },
+    {
+      "channel": "lab",
+      "title": "Zombie Arcade",
+      "date": "GAME ARCHIVE",
+      "description": "Explore the available ZombieCash games and interactive experiments.",
+      "url": "/arcade.html"
+    },
+    {
+      "channel": "lab",
+      "title": "Survivor Field Manual",
+      "date": "FIELD KNOWLEDGE",
+      "description": "Read practical guides on token research, market signals and wallet security.",
+      "url": "/survivor-field-manual.html"
+    }
+  ]
+}
