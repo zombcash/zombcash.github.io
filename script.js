@@ -746,10 +746,10 @@ if (zomMarket) {
         link.href = /^https?:\/\//i.test(article.link || '') ? article.link : '#living-world';
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
-        if (article.enriched && article.imageUrl) {
+        if (article.imageUrl) {
           const image = makeNode('img', 'world-news-image');
           image.src = /^https?:\/\//i.test(article.imageUrl) ? article.imageUrl : apiBase + article.imageUrl;
-          image.alt = 'ZombieCash editorial illustration for ' + (article.title || 'news');
+          image.alt = (article.imageSource === 'rss' || article.imageSource === 'publisher') ? 'Original publisher image for ' + (article.title || 'news') : 'ZombieCash news image for ' + (article.title || 'news');
           image.loading = 'lazy';
           image.referrerPolicy = 'no-referrer';
           link.append(image);
