@@ -1308,7 +1308,6 @@ button,a{ -webkit-tap-highlight-color:transparent }
 .tools#radar .card-link span{
  position:absolute;right:18px;font-size:30px;line-height:1;
 }
-.tools#radar .tool-card h3{margin-top:-82px}
 .tools#radar .live-radar{
  border-top:1px solid #a6ff1940;
  box-shadow:0 -12px 45px #9bff4510;
