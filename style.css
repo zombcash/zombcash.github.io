@@ -1458,7 +1458,7 @@ button,a{ -webkit-tap-highlight-color:transparent }
   animation:spin 5.5s linear infinite!important
 }
 .tools#radar .radar-cross{color:#e6ffca!important;text-shadow:0 0 14px #a6ff19}
-.tools#radar .blip{display:block!important;opacity:0!important;z-index:5!important;animation:zc-radar-blip 2.6s ease-out infinite!important}
+.tools#radar .blip{display:block!important;z-index:5!important;animation:zc-radar-blip 2.6s ease-out infinite!important}
 .tools#radar .blip-b{animation-delay:.86s!important}.tools#radar .blip-c{animation-delay:1.72s!important}
 
 /* Lab: animated containment field, no fake face overlay */
@@ -1470,7 +1470,7 @@ button,a{ -webkit-tap-highlight-color:transparent }
   box-shadow:inset 0 0 24px #c46aff35,0 0 20px #c46aff3b;
   animation:zc-lab-containment 3.4s ease-in-out infinite
 }
-.tools#radar .zc-bubble{display:block!important;z-index:5!important;opacity:0!important;border-color:#f0d9ff!important;background:#f0d9ff55!important;box-shadow:0 0 10px #d52cff70}
+.tools#radar .zc-bubble{display:block!important;z-index:6!important;border-color:#f0d9ff!important;background:#f0d9ff55!important;box-shadow:0 0 10px #d52cff70}
 .tools#radar .zc-bubble.b1{animation:zc-lab-bubble 3s linear .1s infinite!important}
 .tools#radar .zc-bubble.b2{animation:zc-lab-bubble 3.4s linear .9s infinite!important}
 .tools#radar .zc-bubble.b3{animation:zc-lab-bubble 2.8s linear 1.7s infinite!important}
@@ -1489,7 +1489,13 @@ button,a{ -webkit-tap-highlight-color:transparent }
   animation:zc-network-scan 5.2s linear infinite
 }
 .tools#radar .zc-hair,.tools#radar .zc-walker,.tools#radar .zc-survivor-flag,
-.tools#radar .zc-lab-zombie-mouth,.tools#radar .zc-lab-glass{display:none!important}
+.tools#radar .zc-lab-zombie-mouth{display:none!important}
+/* Keep the bubble layer alive while removing the obsolete glass/face artwork. */
+.tools#radar .zc-lab-glass{
+  display:block!important;opacity:1!important;left:0;top:0;width:100%;height:100%;
+  transform:none;border:0;border-radius:0;background:none;box-shadow:none;z-index:5
+}
+.tools#radar .zc-lab-glass:before{display:none!important}
 
 /* Hover adds intensity, it does not hide the idle animation */
 .tools#radar .tool-card{transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
