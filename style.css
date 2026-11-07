@@ -1421,81 +1421,97 @@ button,a{ -webkit-tap-highlight-color:transparent }
 }
 
 
-/* TOOLS MOTION REBUILD — cinematic, image-led animation; remove crude character overlays */
+/* TOOLS & OPERATIONS — final motion pass */
+.tools#radar .tool-art{isolation:isolate;contain:paint}
 .tools#radar .zc-art-photo{
-  transform:scale(1.025)!important;
   transform-origin:center center;
-  animation:zc-photo-drift 18s ease-in-out infinite alternate!important;
+  animation:zc-photo-camera 16s ease-in-out infinite alternate;
   will-change:transform,filter;
 }
-.tools#radar .tool-art{isolation:isolate}
-.tools#radar .zc-art-vignette{
-  z-index:2!important;
-  background:linear-gradient(180deg,#02060412 0%,transparent 42%,#02060475 100%),
-             linear-gradient(110deg,transparent 0%,#d9ffdf0a 42%,transparent 58%)!important;
+.tools#radar .radar-card .zc-art-photo{animation-duration:19s}
+.tools#radar .lab-card .zc-art-photo{animation-duration:15s;animation-delay:-4s}
+.tools#radar .network-card .zc-art-photo{animation-duration:18s;animation-delay:-8s}
+.tools#radar .zc-art-vignette{z-index:2!important;pointer-events:none}
+.tools#radar .tool-art:after{
+  content:"";position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.34;
+  background:linear-gradient(112deg,transparent 0%,#ffffff0b 42%,#ffffff20 49%,#ffffff08 53%,transparent 61%);
+  transform:translateX(-130%);
+  animation:zc-film-glint 9s ease-in-out infinite;
 }
-.tools#radar .zc-hair,
-.tools#radar .zc-walker,
-.tools#radar .zc-survivor-flag,
-.tools#radar .zc-lab-zombie-mouth,
-.tools#radar .zc-lab-glass{display:none!important}
-.tools#radar .radar-ring,
-.tools#radar .radar-sweep,
-.tools#radar .radar-cross,
-.tools#radar .blip{display:block!important;z-index:3!important;pointer-events:none!important}
-.tools#radar .radar-ring{border-color:#b8ff6d9c!important;box-shadow:0 0 14px #a6ff1938,inset 0 0 14px #a6ff191c}
-.tools#radar .radar-ring.ring-a{width:clamp(112px,13vw,164px)!important;animation:zc-hud-breathe 4.8s ease-in-out infinite!important}
-.tools#radar .radar-ring.ring-b{width:clamp(70px,8vw,104px)!important;animation:zc-hud-breathe 4.8s ease-in-out -2.4s infinite!important}
-.tools#radar .radar-sweep{width:clamp(112px,13vw,164px)!important;height:auto!important;aspect-ratio:1;border-radius:50%;opacity:.62!important;background:conic-gradient(from 0deg,transparent 0 72%,#a6ff1970 88%,#d9ffb9b8 94%,transparent 96%)!important;animation:spin 6.5s linear infinite!important}
-.tools#radar .radar-cross{color:#d8ffae!important;text-shadow:0 0 12px #a6ff19;font-size:22px!important}
-.tools#radar .blip{width:6px!important;height:6px!important;box-shadow:0 0 12px 3px #a6ff1970!important;animation:zc-signal-ping 2.4s ease-out infinite!important}
-.tools#radar .blip-b{animation-delay:.8s!important}.tools#radar .blip-c{animation-delay:1.6s!important}
+.tools#radar .radar-card .tool-art:after{animation-delay:0s}
+.tools#radar .lab-card .tool-art:after{animation-delay:2.7s}
+.tools#radar .network-card .tool-art:after{animation-delay:5.4s}
 
-/* Lab: a restrained containment glow and staggered rising specimen bubbles */
+/* Radar HUD: visible at rest, scanning continuously */
+.tools#radar .radar-ring,.tools#radar .radar-sweep,.tools#radar .radar-cross,.tools#radar .blip{
+  display:block!important;z-index:4!important;pointer-events:none!important
+}
+.tools#radar .radar-ring{
+  border-color:#c7ff8c!important;box-shadow:0 0 12px #a6ff1950,inset 0 0 12px #a6ff1920;
+  animation:zc-radar-ring 4s ease-in-out infinite!important
+}
+.tools#radar .radar-ring.ring-b{animation-delay:-2s!important}
+.tools#radar .radar-sweep{
+  width:clamp(118px,13vw,170px)!important;height:auto!important;aspect-ratio:1;
+  opacity:.58!important;border-radius:50%;
+  background:conic-gradient(from 0deg,transparent 0 72%,#a6ff1960 88%,#eaffd2c9 96%,transparent 98%)!important;
+  animation:spin 5.5s linear infinite!important
+}
+.tools#radar .radar-cross{color:#e6ffca!important;text-shadow:0 0 14px #a6ff19}
+.tools#radar .blip{display:block!important;opacity:0!important;z-index:5!important;animation:zc-radar-blip 2.6s ease-out infinite!important}
+.tools#radar .blip-b{animation-delay:.86s!important}.tools#radar .blip-c{animation-delay:1.72s!important}
+
+/* Lab: animated containment field, no fake face overlay */
 .tools#radar .lab-art:before{
-  content:"";position:absolute;z-index:3;pointer-events:none;
-  left:50%;top:8%;width:32%;height:84%;transform:translateX(-50%);
-  border:1px solid #e4b5ff9c;border-radius:48% 48% 24% 24% / 22% 22% 12% 12%;
-  background:linear-gradient(90deg,#dca4ff08,#e9d4ff20 48%,#dca4ff08);
-  box-shadow:inset 0 0 24px #c46aff30,0 0 24px #c46aff30;
-  animation:zc-containment-pulse 3.8s ease-in-out infinite;
+  content:"";position:absolute;z-index:3;pointer-events:none;left:50%;top:7%;
+  width:34%;height:86%;transform:translateX(-50%);
+  border:1px solid #e4b5ffb0;border-radius:48% 48% 22% 22% / 22% 22% 12% 12%;
+  background:linear-gradient(90deg,#dca4ff08,#f3ddff22 48%,#dca4ff08);
+  box-shadow:inset 0 0 24px #c46aff35,0 0 20px #c46aff3b;
+  animation:zc-lab-containment 3.4s ease-in-out infinite
 }
-.tools#radar .zc-bubble{display:block!important;z-index:4!important;opacity:0!important;border-color:#f0d9ff!important;background:#f0d9ff55!important;box-shadow:0 0 10px #d52cff70}
-.tools#radar .zc-bubble.b1{animation:zc-lab-rise 3.1s linear .1s infinite!important}
-.tools#radar .zc-bubble.b2{animation:zc-lab-rise 3.5s linear 1s infinite!important}
-.tools#radar .zc-bubble.b3{animation:zc-lab-rise 2.9s linear 1.8s infinite!important}
-.tools#radar .zc-bubble.b4{animation:zc-lab-rise 3.7s linear 2.4s infinite!important}
+.tools#radar .zc-bubble{display:block!important;z-index:5!important;opacity:0!important;border-color:#f0d9ff!important;background:#f0d9ff55!important;box-shadow:0 0 10px #d52cff70}
+.tools#radar .zc-bubble.b1{animation:zc-lab-bubble 3s linear .1s infinite!important}
+.tools#radar .zc-bubble.b2{animation:zc-lab-bubble 3.4s linear .9s infinite!important}
+.tools#radar .zc-bubble.b3{animation:zc-lab-bubble 2.8s linear 1.7s infinite!important}
+.tools#radar .zc-bubble.b4{animation:zc-lab-bubble 3.6s linear 2.4s infinite!important}
 
-/* Survivor Network: replace cartoon walkers with a moving perimeter beacon */
+/* Network: scanning perimeter and beacon, not cartoon figures */
 .tools#radar .network-art:before{
-  content:"";position:absolute;z-index:3;pointer-events:none;inset:12%;
-  border:1px solid #ff59645c;
-  background:radial-gradient(circle at 50% 50%,#ff344e1c 0 2%,transparent 3% 28%,#ff344e12 29% 30%,transparent 31% 54%,#ff344e0c 55% 56%,transparent 57%);
-  animation:zc-network-pulse 3.4s ease-out infinite;
+  content:"";position:absolute;z-index:3;pointer-events:none;inset:9%;
+  border:1px solid #ff68725c;
+  background:radial-gradient(circle at 50% 50%,#ff344e26 0 2%,transparent 3% 27%,#ff344e18 28% 29%,transparent 30% 53%,#ff344e10 54% 55%,transparent 56%);
+  animation:zc-network-beacon 3.6s ease-out infinite
 }
 .tools#radar .network-art:after{
-  content:"";position:absolute;z-index:3;pointer-events:none;left:0;right:0;top:-35%;height:28%;
-  background:linear-gradient(180deg,transparent,#ff667022 48%,#ff667055 50%,transparent);
-  animation:zc-network-scan 5.8s linear infinite;
+  content:"";position:absolute;z-index:4;pointer-events:none;left:0;right:0;top:-30%;height:24%;
+  background:linear-gradient(180deg,transparent,#ff667022 48%,#ff66705c 50%,transparent);
+  animation:zc-network-scan 5.2s linear infinite
 }
-.tools#radar .tool-card:hover .zc-art-photo{animation-play-state:paused!important;transform:scale(1.09)!important;filter:saturate(1.18) contrast(1.08)!important}
-.tools#radar .tool-card:focus-within .zc-art-photo{animation-play-state:paused!important;transform:scale(1.07)!important}
-.tools#radar .tool-card:hover .radar-sweep{animation-duration:3.8s!important}
-.tools#radar .tool-card:hover .lab-art:before{animation-duration:1.8s!important}
-.tools#radar .tool-card:hover .network-art:before{animation-duration:1.8s!important}
-.tools#radar .tool-card:hover .network-art:after{animation-duration:3.2s!important}
-@keyframes zc-photo-drift{0%{transform:scale(1.025) translate3d(-.35%,0,0)}100%{transform:scale(1.075) translate3d(.45%,-.35%,0)}}
-@keyframes zc-hud-breathe{0%,100%{opacity:.28;scale:.96}50%{opacity:.78;scale:1.035}}
-@keyframes zc-signal-ping{0%{opacity:0;scale:.55}18%{opacity:1}75%{opacity:.75}100%{opacity:0;scale:2.1}}
-@keyframes zc-containment-pulse{0%,100%{opacity:.42;box-shadow:inset 0 0 18px #c46aff20,0 0 12px #c46aff20}50%{opacity:.88;box-shadow:inset 0 0 30px #c46aff48,0 0 28px #c46aff55}}
-@keyframes zc-lab-rise{0%{opacity:0;transform:translateY(0) scale(.5)}14%{opacity:.85}80%{opacity:.65}100%{opacity:0;transform:translateY(-145px) scale(1.15)}}
-@keyframes zc-network-pulse{0%{transform:scale(.72);opacity:.05}45%{opacity:.72}100%{transform:scale(1.12);opacity:0}}
-@keyframes zc-network-scan{0%{top:-35%;opacity:0}12%{opacity:1}88%{opacity:.7}100%{top:110%;opacity:0}}
-@media(hover:none){
-  .tools#radar .tool-card:active .zc-art-photo{animation-play-state:paused!important;transform:scale(1.07)!important}
+.tools#radar .zc-hair,.tools#radar .zc-walker,.tools#radar .zc-survivor-flag,
+.tools#radar .zc-lab-zombie-mouth,.tools#radar .zc-lab-glass{display:none!important}
+
+/* Hover adds intensity, it does not hide the idle animation */
+.tools#radar .tool-card{transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
+.tools#radar .tool-card:hover .zc-art-photo{filter:saturate(1.2) contrast(1.08)}
+.tools#radar .radar-card:hover .radar-sweep{animation-duration:3.4s!important}
+.tools#radar .lab-card:hover .lab-art:before{animation-duration:1.7s}
+.tools#radar .network-card:hover .network-art:before{animation-duration:1.8s}
+.tools#radar .network-card:hover .network-art:after{animation-duration:3s}
+@keyframes zc-photo-camera{0%{transform:scale(1.04) translate3d(-.35%,.1%,0)}100%{transform:scale(1.13) translate3d(.55%,-.45%,0)}}
+@keyframes zc-film-glint{0%,20%{transform:translateX(-130%);opacity:0}34%{opacity:.5}58%,100%{transform:translateX(130%);opacity:0}}
+@keyframes zc-radar-ring{0%,100%{opacity:.28;scale:.94}50%{opacity:.8;scale:1.06}}
+@keyframes zc-radar-blip{0%{opacity:0;scale:.5}15%{opacity:1}75%{opacity:.8}100%{opacity:0;scale:2.3}}
+@keyframes zc-lab-containment{0%,100%{opacity:.36;box-shadow:inset 0 0 18px #c46aff20,0 0 12px #c46aff20}50%{opacity:.9;box-shadow:inset 0 0 30px #c46aff50,0 0 28px #c46aff65}}
+@keyframes zc-lab-bubble{0%{opacity:0;transform:translateY(0) scale(.55)}15%{opacity:.9}80%{opacity:.6}100%{opacity:0;transform:translateY(-145px) scale(1.2)}}
+@keyframes zc-network-beacon{0%{transform:scale(.7);opacity:0}35%{opacity:.8}100%{transform:scale(1.16);opacity:0}}
+@keyframes zc-network-scan{0%{top:-30%;opacity:0}12%{opacity:1}88%{opacity:.7}100%{top:110%;opacity:0}}
+@media(max-width:700px){
+  .tools#radar .zc-art-photo{animation-duration:22s}
 }
 @media(prefers-reduced-motion:reduce){
-  .tools#radar .zc-art-photo,.tools#radar .radar-ring,.tools#radar .radar-sweep,
-  .tools#radar .blip,.tools#radar .lab-art:before,.tools#radar .zc-bubble,
+  .tools#radar .zc-art-photo,.tools#radar .tool-art:after,
+  .tools#radar .radar-ring,.tools#radar .radar-sweep,.tools#radar .blip,
+  .tools#radar .lab-art:before,.tools#radar .zc-bubble,
   .tools#radar .network-art:before,.tools#radar .network-art:after{animation:none!important;transition:none!important}
 }
