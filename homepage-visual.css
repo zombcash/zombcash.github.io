@@ -164,3 +164,17 @@ body:has(#home) #home > section.hero .hero-bottom{
     width:320px!important;min-width:320px!important;height:50px!important;
   }
 }
+
+
+/* Responsive tool cards: preserve readable columns instead of squeezing three cards
+   into tablet and phone widths. Shared by all nine localized homepages. */
+.tools,.tools .tool-grid,.tools .tool-card{min-width:0;max-width:100%}
+.tools .tool-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch;gap:clamp(14px,1.6vw,24px)!important}
+.tools .tool-card{display:flex;flex-direction:column;width:100%;overflow:hidden}
+.tools .tool-card h3{font-size:clamp(16px,1.4vw,22px);line-height:1.15;overflow-wrap:anywhere}
+.tools .tool-card p{min-height:0;flex:1 1 auto;overflow-wrap:anywhere}
+.tools .tool-card ul{flex:0 0 auto}
+.tools .tool-card .card-link{min-width:0;margin-top:auto;overflow-wrap:anywhere}
+.tools .tool-video-shell{width:100%;min-width:0;height:auto;min-height:0!important;aspect-ratio:16/9}
+@media(max-width:1024px){.tools .tool-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:640px){.tools .tool-grid{grid-template-columns:minmax(0,1fr)!important;gap:18px!important}.tools .tool-card{padding-inline:clamp(12px,4vw,20px)}.tools .tool-card h3{font-size:clamp(19px,5vw,24px)}}
