@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+<defs>
+ <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#090d0c"/><stop offset=".5" stop-color="#10100e"/><stop offset="1" stop-color="#18090c"/></linearGradient>
+ <radialGradient id="red"><stop stop-color="#ff4054" stop-opacity=".5"/><stop offset="1" stop-color="#ff4054" stop-opacity="0"/></radialGradient>
+ <radialGradient id="green"><stop stop-color="#a1ff48" stop-opacity=".4"/><stop offset="1" stop-color="#a1ff48" stop-opacity="0"/></radialGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="1600" height="900" fill="url(#bg)"/><ellipse cx="300" cy="520" rx="470" ry="420" fill="url(#green)"/><ellipse cx="1300" cy="550" rx="480" ry="450" fill="url(#red)"/>
+<path d="M0 650 150 580 260 620 370 510 480 560 610 470 740 540 860 480 1000 580 1140 500 1270 590 1400 490 1600 580V900H0Z" fill="#050807"/>
+<g stroke="#ff5866" stroke-width="7" opacity=".5" fill="none"><path d="M1150 600V260m-90 340 90-340 90 340m-140-220h100m-120 90h140"/><path d="M1160 260q-120-120-250-60m250 60q130-125 260-70"/></g>
+<g transform="translate(1150 240)" filter="url(#glow)" fill="none" stroke="#ff5664"><circle r="42" stroke-width="9"/><path d="M0-40V-210M-30-190 0-235l30 45" stroke-width="9"/><path d="M-120-90q120-100 240 0M-190-145q190-180 380 0" stroke-width="5" opacity=".65"/></g>
+<g fill="#060909" stroke="#9bff45" stroke-width="5" opacity=".8">
+ <path d="M180 650q-25-100 0-180 18-48 52-48t50 48q25 80 0 180Z"/><circle cx="232" cy="390" r="56"/>
+ <path d="M330 660q-25-100 0-170 18-45 50-45t50 45q25 70 0 170Z"/><circle cx="380" cy="415" r="52"/>
+ <path d="M500 670q-25-110 0-180 18-45 55-45t55 45q25 70 0 180Z"/><circle cx="555" cy="400" r="58"/>
+</g>
+<g fill="#9bff45" opacity=".9"><circle cx="214" cy="392" r="8"/><circle cx="250" cy="392" r="8"/><circle cx="365" cy="418" r="7"/><circle cx="397" cy="418" r="7"/><circle cx="538" cy="402" r="8"/><circle cx="570" cy="402" r="8"/></g>
+<g stroke="#9bff45" stroke-width="5" opacity=".5" fill="none"><path d="M70 150h320v170H70zM95 185h260M95 220h180M95 255h220"/><path d="M1330 120h190v140h-190zM1360 155h130m-130 35h90"/></g>
+<g stroke="#ff5361" stroke-width="8" opacity=".35"><path d="M0 760h1600M0 785h1600"/></g>
+<g fill="#ff4f61" opacity=".4"><path d="M870 120l45 90 20-20-20-70zM950 160l45 110 20-35-30-90zM650 690l80-70 30 30-65 75z"/></g>
+</svg>
