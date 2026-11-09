@@ -18,6 +18,15 @@ hi:{log:"प्रसारण लॉग",now:"वर्तमान चयन",
 const t=copy[lang]||copy.en;
 const root=document.getElementById("zombcash-tv");
 if(!root)return;
+root.querySelector(".zctv-kicker").textContent=t.kicker;
+root.querySelector("#zctv-title").textContent=t.title;
+root.querySelector(".zctv-heading p:last-child").textContent=t.intro;
+root.querySelector(".zctv-screen-empty strong").textContent=t.empty;
+root.querySelector(".zctv-screen-empty span:last-child").textContent=t.emptyNote;
+root.querySelector(".zctv-now .zctv-label").textContent=t.now;
+root.querySelector(".zctv-archive-head .zctv-label").textContent=t.log;
+root.querySelector("#zctv-archive-title").textContent=t.recent;
+root.querySelector(".zctv-more").textContent=t.more;
 const video=root.querySelector("video"),empty=root.querySelector(".zctv-screen-empty"),status=root.querySelector(".zctv-status"),meta=root.querySelector(".zctv-meta"),list=root.querySelector(".zctv-episodes"),more=root.querySelector(".zctv-more"),count=root.querySelector(".zctv-count"),current=root.querySelector(".zctv-current-title"),desc=root.querySelector(".zctv-current-description");
 let page=1,totalPages=1,selected=null;
 const setStatus=(value,state="idle")=>{status.textContent=value;meta.dataset.state=state;};
