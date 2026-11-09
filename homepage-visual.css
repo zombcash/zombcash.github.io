@@ -456,6 +456,7 @@ html body section.section.tools#radar > .tool-grid{
   display:grid!important;
   grid-template-columns:minmax(0,1fr)!important;
   grid-auto-flow:row!important;
+  grid-auto-rows:300px!important;
   align-items:stretch!important;
   gap:20px!important;
   width:100%!important;
@@ -481,7 +482,7 @@ html body section.section.tools#radar > .tool-grid > article.tool-card{
   width:100%!important;
   min-width:0!important;
   min-height:300px!important;
-  height:auto!important;
+  height:300px!important;
   padding:15px clamp(15px,1.8vw,25px)!important;
   overflow:hidden!important;
   isolation:isolate!important;
@@ -502,7 +503,7 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:before{
   inset:0 0 0 35%!important;
   display:block!important;
   pointer-events:none!important;
-  opacity:.24!important;
+  opacity:.30!important;
   background-image:
     linear-gradient(90deg,#080d0c 0%,#080d0c80 28%,#080d0c12 100%),
     url("/assets/images/zombcash-outbreak-graffiti.svg")!important;
@@ -631,13 +632,14 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:hover{
   box-shadow:0 8px 28px #0008,0 0 18px color-mix(in srgb,var(--panel-accent) 12%,transparent)!important;
 }
 @media(max-width:760px){
-  html body section.section.tools#radar > .tool-grid{gap:14px!important}
+  html body section.section.tools#radar > .tool-grid{gap:14px!important;grid-auto-rows:auto!important}
   html body section.section.tools#radar > .tool-grid > article.tool-card{
     grid-template-columns:minmax(0,1fr)!important;
     grid-template-rows:22px auto auto auto auto 38px!important;
     grid-template-areas:"top" "video" "title" "copy" "features" "action"!important;
     gap:9px!important;
     min-height:0!important;
+    height:auto!important;
     padding:12px!important;
   }
   html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
