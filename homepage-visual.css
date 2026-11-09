@@ -725,3 +725,225 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:before{
   opacity:.88!important;
   filter:saturate(.86) contrast(.96)!important;
 }
+
+
+/* FINAL STRUCTURE PASS — equal-width, equal-rhythm mission rows with responsive media. */
+html body section.section.tools#radar{
+  width:min(100% - 40px,1320px)!important;
+  max-width:1320px!important;
+  margin-inline:auto!important;
+  padding-inline:0!important;
+}
+html body section.section.tools#radar > .tool-grid{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-auto-flow:row!important;
+  grid-auto-rows:auto!important;
+  align-items:stretch!important;
+  gap:18px!important;
+  width:100%!important;
+  max-width:100%!important;
+  margin:24px auto 30px!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card{
+  display:grid!important;
+  grid-template-columns:minmax(220px,34%) minmax(0,1fr)!important;
+  grid-template-rows:26px 42px minmax(58px,auto) minmax(54px,1fr) 38px!important;
+  grid-template-areas:
+    "top top"
+    "video title"
+    "video copy"
+    "video features"
+    "video action"!important;
+  align-items:stretch!important;
+  align-content:stretch!important;
+  column-gap:clamp(18px,2.4vw,34px)!important;
+  row-gap:8px!important;
+  box-sizing:border-box!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:292px!important;
+  height:auto!important;
+  padding:14px clamp(14px,1.8vw,24px)!important;
+  overflow:hidden!important;
+  position:relative!important;
+  isolation:isolate!important;
+  border-radius:10px!important;
+  transform:none!important;
+  background:#070b0a!important;
+  box-shadow:0 10px 28px #0007,inset 0 0 0 1px #ffffff08!important;
+}
+html body section.section.tools#radar > .tool-grid > article.radar-card{--panel-accent:#a3ff45}
+html body section.section.tools#radar > .tool-grid > article.lab-card{--panel-accent:#d46cff}
+html body section.section.tools#radar > .tool-grid > article.network-card{--panel-accent:#ff5969}
+html body section.section.tools#radar > .tool-grid > article.tool-card:before{
+  content:""!important;
+  position:absolute!important;
+  inset:0 0 0 34%!important;
+  z-index:0!important;
+  display:block!important;
+  pointer-events:none!important;
+  opacity:.52!important;
+  background-repeat:no-repeat!important;
+  background-size:cover!important;
+  background-position:center right!important;
+  mix-blend-mode:normal!important;
+  filter:saturate(.9) contrast(.95)!important;
+}
+html body section.section.tools#radar > .tool-grid > article.radar-card:before{
+  background-image:linear-gradient(90deg,#070b0a 0%,#070b0ac9 22%,#070b0a55 66%,#070b0a22 100%),url("/assets/images/tool-radar-outbreak.svg")!important;
+}
+html body section.section.tools#radar > .tool-grid > article.lab-card:before{
+  background-image:linear-gradient(90deg,#09070d 0%,#09070dc9 22%,#09070d55 66%,#09070d22 100%),url("/assets/images/tool-zombie-lab.svg")!important;
+}
+html body section.section.tools#radar > .tool-grid > article.network-card:before{
+  background-image:linear-gradient(90deg,#0c0709 0%,#0c0709c9 22%,#0c070955 66%,#0c070922 100%),url("/assets/images/tool-survivor-network.svg")!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card:after{
+  content:none!important;
+  display:none!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > *{
+  position:relative!important;
+  z-index:2!important;
+  min-width:0!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > .card-top{
+  grid-area:top!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  width:100%!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0 0 5px!important;
+  border-bottom:1px solid color-mix(in srgb,var(--panel-accent) 34%,transparent)!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
+  grid-area:video!important;
+  align-self:stretch!important;
+  justify-self:stretch!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-height:none!important;
+  aspect-ratio:auto!important;
+  margin:0!important;
+  overflow:hidden!important;
+  border:1px solid color-mix(in srgb,var(--panel-accent) 72%,transparent)!important;
+  border-radius:7px!important;
+  background:#050807!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell video{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:100%!important;
+  object-fit:cover!important;
+  object-position:center 42%!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > h3{
+  grid-area:title!important;
+  align-self:end!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:clamp(20px,1.65vw,26px)!important;
+  line-height:1.02!important;
+  letter-spacing:.2px!important;
+  text-shadow:0 2px 14px #000!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > p{
+  grid-area:copy!important;
+  align-self:start!important;
+  width:100%!important;
+  max-width:760px!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  color:#e0e6e1!important;
+  font-size:clamp(12px,.88vw,14px)!important;
+  line-height:1.48!important;
+  text-shadow:0 1px 8px #000!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > ul{
+  grid-area:features!important;
+  align-self:stretch!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  align-items:stretch!important;
+  gap:0 12px!important;
+  width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  border-top:1px solid color-mix(in srgb,var(--panel-accent) 42%,transparent)!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li{
+  display:flex!important;
+  align-items:center!important;
+  min-width:0!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:7px 4px!important;
+  border-bottom:1px solid color-mix(in srgb,var(--panel-accent) 25%,transparent)!important;
+  font-size:clamp(8px,.68vw,10px)!important;
+  line-height:1.3!important;
+  letter-spacing:.45px!important;
+  overflow-wrap:anywhere!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{
+  grid-area:action!important;
+  align-self:end!important;
+  justify-self:start!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  width:min(100%,340px)!important;
+  min-height:36px!important;
+  height:36px!important;
+  box-sizing:border-box!important;
+  margin:0!important;
+  padding:8px 13px!important;
+  border:1px solid color-mix(in srgb,var(--panel-accent) 65%,transparent)!important;
+  color:var(--panel-accent)!important;
+  background:#070c0beF!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card:hover{
+  border-color:var(--panel-accent)!important;
+  box-shadow:0 10px 30px #0009,0 0 18px color-mix(in srgb,var(--panel-accent) 12%,transparent)!important;
+}
+@media(max-width:900px){
+ html body section.section.tools#radar > .tool-grid > article.tool-card{
+  grid-template-columns:minmax(190px,32%) minmax(0,1fr)!important;
+  column-gap:16px!important;
+  min-height:276px!important;
+ }
+ html body section.section.tools#radar > .tool-grid > article.tool-card > ul{gap:0 7px!important}
+ html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li{font-size:8px!important;letter-spacing:.2px!important}
+}
+@media(max-width:640px){
+ html body section.section.tools#radar{width:calc(100% - 28px)!important}
+ html body section.section.tools#radar > .tool-grid{gap:14px!important;margin:18px auto 24px!important}
+ html body section.section.tools#radar > .tool-grid > article.tool-card{
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:26px auto auto auto auto 38px!important;
+  grid-template-areas:"top" "video" "title" "copy" "features" "action"!important;
+  gap:9px!important;
+  min-height:0!important;
+  height:auto!important;
+  padding:12px!important;
+ }
+ html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
+  width:100%!important;
+  height:auto!important;
+  aspect-ratio:16/9!important;
+ }
+ html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell video{height:100%!important}
+ html body section.section.tools#radar > .tool-grid > article.tool-card > h3{font-size:22px!important}
+ html body section.section.tools#radar > .tool-grid > article.tool-card > p{font-size:13px!important;line-height:1.45!important}
+ html body section.section.tools#radar > .tool-grid > article.tool-card > ul{grid-template-columns:1fr!important;gap:0!important}
+ html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li{font-size:9px!important;padding:7px 4px!important}
+ html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{width:100%!important}
+ html body section.section.tools#radar > .tool-grid > article.tool-card:before{inset:40% 0 0 0!important;opacity:.28!important;background-position:center!important}
+}
