@@ -18,6 +18,35 @@ hi:{log:"प्रसारण लॉग",now:"वर्तमान चयन",
 const t=copy[lang]||copy.en;
 const root=document.getElementById("zombcash-tv");
 if(!root)return;
+// The uploader is only rendered for the configured bot-owner identity. The API
+// independently verifies the signed Telegram session and administrator allow-list.
+try{
+const profile=JSON.parse(localStorage.getItem("zombcash-survivor-profile")||"null");
+const session=localStorage.getItem("zombcash-survivor-token")||"";
+if(session&&profile&&String(profile.telegramId)==="8461681081"){
+const panel=document.createElement("form");
+panel.className="zctv-admin-upload";
+panel.innerHTML='<details><summary>'+(lang==="ru"?"АДМИН: ОПУБЛИКОВАТЬ ВЫПУСК":"ADMIN: PUBLISH EPISODE")+'</summary><div class="zctv-upload-fields"><label>'+(lang==="ru"?"Название":"Title")+'<input name="title" maxlength="160" required></label><label>'+(lang==="ru"?"Описание":"Description")+'<textarea name="description" maxlength="1000" rows="2"></textarea></label><label>'+(lang==="ru"?"MP4-файл (до 250 МБ)":"MP4 file (up to 250 MB)")+'<input name="video" type="file" accept="video/mp4,.mp4" required></label><label>'+(lang==="ru"?"Длительность, сек. (необязательно)":"Duration in seconds (optional)")+'<input name="duration_seconds" type="number" min="1" max="86400"></label><button type="submit">'+(lang==="ru"?"ОПУБЛИКОВАТЬ В АРХИВ":"PUBLISH TO ARCHIVE")+'</button><p class="zctv-upload-status" role="status" aria-live="polite"></p></div></details>';
+const grid=root.querySelector(".zctv-grid");
+if(grid)root.insertBefore(panel,grid);
+panel.addEventListener("submit",async event=>{
+event.preventDefault();
+const button=panel.querySelector('button[type="submit"]'),status=panel.querySelector(".zctv-upload-status"),formData=new FormData(panel);
+const file=panel.querySelector('input[name="video"]').files[0];
+if(!file)return;
+if(file.size>250*1024*1024){status.textContent=lang==="ru"?"Файл больше 250 МБ":"File exceeds 250 MB";return;}
+button.disabled=true;status.textContent=lang==="ru"?"ЗАГРУЗКА В БУНКЕР...":"UPLOADING TO BUNKER...";
+try{
+const response=await fetch(API+"/api/tv/episodes/upload",{method:"POST",headers:{Authorization:"Bearer "+session},body:formData,cache:"no-store"});
+const result=await response.json().catch(()=>({}));
+if(!response.ok)throw new Error(result.error||("HTTP "+response.status));
+status.textContent=(lang==="ru"?"ОПУБЛИКОВАНО: ":"PUBLISHED: ")+(result.title||result.episode_id);
+await load();
+}catch(error){status.textContent=(lang==="ru"?"ОШИБКА: ":"ERROR: ")+(error.message||"Upload failed");}
+finally{button.disabled=false;}
+});
+}
+}catch(_){}
 root.querySelector(".zctv-kicker").textContent=t.kicker;
 root.querySelector("#zctv-title").textContent=t.title;
 root.querySelector(".zctv-heading p:last-child").textContent=t.intro;
