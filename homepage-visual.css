@@ -983,37 +983,37 @@ html body section.section.tools#radar > .tool-grid > article.network-card:before
 }
 
 
-/* REAL DROPBOX BACKGROUNDS — final artwork replacement */
+/* TOOL CARD ARTWORK — palette-matched backgrounds, balanced crop and readable copy */
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
   background-image:
-    linear-gradient(90deg,rgba(3,7,8,.97) 0%,rgba(3,7,8,.88) 24%,rgba(3,7,8,.48) 60%,rgba(3,7,8,.22) 100%),
-    url("/assets/images/tool-radar-outbreak.webp?v=20261109-drop-backgrounds")!important;
+    linear-gradient(90deg,rgba(3,7,8,.94) 0%,rgba(3,7,8,.76) 27%,rgba(3,7,8,.38) 62%,rgba(3,7,8,.12) 100%),
+    url("/assets/images/tool-survivor-network.webp?v=20261109-card-art-fix2")!important;
   background-size:cover!important;
-  background-position:center right!important;
+  background-position:center center!important;
   background-repeat:no-repeat!important;
   opacity:1!important;
   mix-blend-mode:normal!important;
-  filter:saturate(1.18) contrast(1.08)!important;
+  filter:saturate(1.08) contrast(1.04)!important;
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:before{
   background-image:
-    linear-gradient(90deg,rgba(5,3,9,.97) 0%,rgba(5,3,9,.88) 24%,rgba(5,3,9,.48) 60%,rgba(5,3,9,.20) 100%),
-    url("/assets/images/tool-zombie-lab.webp?v=20261109-drop-backgrounds")!important;
+    linear-gradient(90deg,rgba(5,3,9,.94) 0%,rgba(5,3,9,.74) 27%,rgba(5,3,9,.34) 62%,rgba(5,3,9,.10) 100%),
+    url("/assets/images/tool-zombie-lab.webp?v=20261109-card-art-fix2")!important;
   background-size:cover!important;
-  background-position:center right!important;
+  background-position:center center!important;
   background-repeat:no-repeat!important;
   opacity:1!important;
   mix-blend-mode:normal!important;
-  filter:saturate(1.22) contrast(1.08)!important;
+  filter:saturate(1.10) contrast(1.05)!important;
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:before{
   background-image:
-    linear-gradient(90deg,rgba(5,7,5,.97) 0%,rgba(5,7,5,.88) 24%,rgba(5,7,5,.48) 60%,rgba(5,7,5,.20) 100%),
-    url("/assets/images/tool-survivor-network.webp?v=20261109-drop-backgrounds")!important;
+    linear-gradient(90deg,rgba(5,4,7,.94) 0%,rgba(5,4,7,.76) 27%,rgba(5,4,7,.38) 62%,rgba(5,4,7,.12) 100%),
+    url("/assets/images/tool-radar-outbreak.webp?v=20261109-card-art-fix2")!important;
   background-size:cover!important;
-  background-position:center left!important;
+  background-position:center center!important;
   background-repeat:no-repeat!important;
   opacity:1!important;
   mix-blend-mode:normal!important;
-  filter:saturate(1.20) contrast(1.08)!important;
+  filter:saturate(1.10) contrast(1.05)!important;
 }
