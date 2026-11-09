@@ -1389,3 +1389,116 @@ html body section.section.tools#radar > .tool-grid > article.lab-card > .card-li
     grid-template-columns:1fr!important;
   }
 }
+
+
+/* HOTFIX 2026-11-10 — restore the original live video windows.
+   Keep the three selected banner artworks as a subdued backdrop on the text side;
+   never replace or hide the hover-to-play video panels. */
+html body section.section.tools#radar > .tool-grid > article.tool-card{
+  display:grid!important;
+  grid-template-columns:minmax(230px,32%) minmax(0,1fr)!important;
+  grid-template-rows:auto auto auto auto minmax(34px,auto)!important;
+  grid-template-areas:"top top" "video title" "video copy" "video features" "video action"!important;
+  align-items:center!important;
+  align-content:stretch!important;
+  column-gap:clamp(16px,2.2vw,32px)!important;
+  row-gap:5px!important;
+  min-height:0!important;
+  height:auto!important;
+  padding:clamp(12px,1.35vw,19px)!important;
+  background:#080d0c!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card:before{
+  content:""!important;
+  position:absolute!important;
+  inset:0 0 0 32%!important;
+  z-index:0!important;
+  display:block!important;
+  background-repeat:no-repeat!important;
+  background-size:cover!important;
+  background-position:center!important;
+  opacity:.30!important;
+  filter:saturate(1.08) contrast(1.04)!important;
+  mix-blend-mode:screen!important;
+  pointer-events:none!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card:after{
+  content:""!important;
+  position:absolute!important;
+  inset:0 0 0 32%!important;
+  z-index:0!important;
+  display:block!important;
+  pointer-events:none!important;
+  background:linear-gradient(90deg,rgba(5,9,8,.88),rgba(5,9,8,.52) 60%,rgba(5,9,8,.70))!important;
+}
+html body section.section.tools#radar > .tool-grid > article.lab-card:after{
+  background:linear-gradient(90deg,rgba(7,2,10,.82),rgba(7,2,10,.48) 60%,rgba(7,2,10,.68))!important;
+}
+html body section.section.tools#radar > .tool-grid > article.network-card:after{
+  background:linear-gradient(90deg,rgba(10,2,4,.84),rgba(10,2,4,.48) 60%,rgba(10,2,4,.70))!important;
+}
+html body section.section.tools#radar > .tool-grid > article.radar-card:before{
+  background-image:url("/assets/tools/meme-radar.jpg?v=video-panels-restored-20261110-4")!important;
+}
+html body section.section.tools#radar > .tool-grid > article.lab-card:before{
+  background-image:url("/assets/tools/zombie-lab.jpg?v=video-panels-restored-20261110-4")!important;
+}
+html body section.section.tools#radar > .tool-grid > article.network-card:before{
+  background-image:url("/assets/tools/survivor-network.jpg?v=video-panels-restored-20261110-4")!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
+  display:block!important;
+  grid-area:video!important;
+  position:relative!important;
+  z-index:2!important;
+  align-self:stretch!important;
+  justify-self:stretch!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  aspect-ratio:4/3!important;
+  margin:0!important;
+  overflow:hidden!important;
+  border:1px solid color-mix(in srgb,var(--card-accent) 70%,transparent)!important;
+  border-radius:2px!important;
+  box-shadow:0 0 18px #000b,inset 0 0 18px #0008!important;
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell video{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:center 40%!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > .card-top,
+html body section.section.tools#radar > .tool-grid > article.tool-card > h3,
+html body section.section.tools#radar > .tool-grid > article.tool-card > p,
+html body section.section.tools#radar > .tool-grid > article.tool-card > ul,
+html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{
+  position:relative!important;
+  z-index:2!important;
+  width:100%!important;
+  margin-left:0!important;
+  margin-right:0!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > .card-top{grid-area:top!important}
+html body section.section.tools#radar > .tool-grid > article.tool-card > h3{grid-area:title!important;align-self:end!important}
+html body section.section.tools#radar > .tool-grid > article.tool-card > p{grid-area:copy!important}
+html body section.section.tools#radar > .tool-grid > article.tool-card > ul{grid-area:features!important}
+html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{grid-area:action!important;justify-self:start!important;max-width:420px!important}
+@media(max-width:760px){
+  html body section.section.tools#radar > .tool-grid > article.tool-card{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:auto auto auto auto auto auto!important;
+    grid-template-areas:"top" "video" "title" "copy" "features" "action"!important;
+    gap:8px!important;
+  }
+  html body section.section.tools#radar > .tool-grid > article.tool-card:before,
+  html body section.section.tools#radar > .tool-grid > article.tool-card:after{inset:0!important}
+  html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{aspect-ratio:16/9!important}
+  html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{max-width:none!important;width:100%!important}
+}
