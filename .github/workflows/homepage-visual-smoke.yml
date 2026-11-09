@@ -84,7 +84,7 @@ jobs:
           import requests
           from PIL import Image
           base = "https://zombcash.github.io"
-          version = "fullbleed-banners-20261110-3"
+          version = "video-panels-restored-20261110-4"
           pages = ["index.html", "de/index.html", "fr/index.html", "it/index.html", "ja/index.html", "zh-CN/index.html", "tr/index.html", "hi/index.html", "ru/index.html"]
           for page in pages:
               response = requests.get(f"{base}/{page}?banner-check={version}", timeout=30)
