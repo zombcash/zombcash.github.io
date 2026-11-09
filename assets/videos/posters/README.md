@@ -1,9 +1,9 @@
-# Homepage video poster frames
+# Homepage video poster previews
 
-Upload the matching preview JPEGs into this folder:
+Optimized AVIF preview images for the three homepage tool cards. They are shown before playback and remain available as lightweight previews when video loading is deferred.
 
-- `zombcash-meme-radar.jpg`
-- `zombcash-zombie-lab.jpg`
-- `zombcash-survivor-network.jpg`
+- `zombcash-meme-radar.avif`
+- `zombcash-zombie-lab.avif`
+- `zombcash-survivor-network.avif`
 
-These are frames extracted from the corresponding uploaded videos and are shown only before playback.
+The same poster paths are referenced by all nine localized homepage versions.
