@@ -16,6 +16,9 @@ on:
       - "tr/index.html"
       - "hi/index.html"
       - "shared-nav.js"
+      - "zombcash-tv-player.css"
+      - "zombcash-tv-player.js"
+      - "tests/zombcash-tv-player-visual.cjs"
       - "language.js"
       - "homepage-visual.css"
       - "homepage-ribbons.js"
@@ -55,6 +58,8 @@ jobs:
       - name: Validate JavaScript syntax
         run: |
           node --check shared-nav.js
+          node --check zombcash-tv-player.js
+          node --check tests/zombcash-tv-player-visual.cjs
           node --check language.js
           node --check tests/mobile-viewport-smoke.cjs
           node --check tests/localized-article-visual.cjs
@@ -85,6 +90,11 @@ jobs:
           cat /tmp/zombcash-local-preview.log
           echo "::error::Local branch preview did not start."
           exit 1
+
+      - name: Test ZombieCash TV player across all locales and viewports
+        env:
+          SITE_URL: http://127.0.0.1:4173
+        run: node tests/zombcash-tv-player-visual.cjs
 
       - name: Test homepage across mobile, tablet and desktop widths
         env:
