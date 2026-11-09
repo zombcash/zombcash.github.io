@@ -424,3 +424,45 @@ body:has(.zc-hero-sponsor-panel) .field-manual-status{
     min-height:36px;
   }
 }
+
+
+/* ZOMBCASH cinematic tool cards — interactive video, no autoplay before intent. */
+.tools .tool-video-shell{
+  --video-accent:#9bff45;
+  position:relative;
+  display:block;
+  height:auto;
+  aspect-ratio:16/9;
+  min-height:210px;
+  margin:14px 0 22px;
+  overflow:hidden;
+  isolation:isolate;
+  border:1px solid color-mix(in srgb,var(--video-accent) 65%,transparent);
+  border-radius:3px;
+  background:radial-gradient(ellipse at 50% 45%,#17241d 0%,#080d0d 72%);
+  box-shadow:inset 0 0 32px #0009,0 0 18px color-mix(in srgb,var(--video-accent) 10%,transparent);
+  filter:none;
+}
+.tools .lab-video-shell{--video-accent:#d18aff;background:radial-gradient(ellipse at 50% 45%,#25152f 0%,#090b12 74%)}
+.tools .network-video-shell{--video-accent:#ff626d;background:radial-gradient(ellipse at 50% 45%,#291317 0%,#090b12 74%)}
+.tools .tool-card-video{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:center;opacity:0;transition:opacity .35s ease;z-index:0;background:#080b0d}
+.tools .tool-video-shell.is-playing .tool-card-video{opacity:1}
+.tools .tool-video-grid{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.62;background:linear-gradient(90deg,transparent 49.8%,color-mix(in srgb,var(--video-accent) 14%,transparent) 50%,transparent 50.2%),linear-gradient(0deg,transparent 49.8%,color-mix(in srgb,var(--video-accent) 14%,transparent) 50%,transparent 50.2%),repeating-linear-gradient(0deg,transparent 0 5px,#fff04 6px);background-size:48px 48px,48px 48px,100% 7px}
+.tools .tool-video-shell:after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(180deg,#020605a8 0%,transparent 24%,transparent 62%,#020605b8 100%);opacity:.86}
+.tools .tool-video-code,.tools .tool-video-state{position:absolute;z-index:3;font:700 8px/1.3 Orbitron,sans-serif;letter-spacing:.65px;color:var(--video-accent);text-shadow:0 1px 8px #000;pointer-events:none}
+.tools .tool-video-code{top:12px;left:13px}
+.tools .tool-video-state{right:12px;bottom:12px;color:#e3eee5;font-size:7px;letter-spacing:.5px}
+.tools .tool-video-trigger{position:absolute;z-index:4;inset:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;border:0;background:transparent;color:#f3f7f0;cursor:pointer;font:700 8px Orbitron,sans-serif;letter-spacing:1.15px}
+.tools .tool-video-play-icon{display:grid;place-items:center;width:52px;height:52px;border:1px solid var(--video-accent);border-radius:50%;background:#050909a8;box-shadow:0 0 22px color-mix(in srgb,var(--video-accent) 26%,transparent);transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+.tools .tool-video-play-icon:before{content:"";width:0;height:0;margin-left:4px;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:12px solid var(--video-accent)}
+.tools .tool-video-trigger-label{padding:7px 10px;border:1px solid #ffffff35;background:#050909b8}
+.tools .tool-video-shell.is-playing .tool-video-trigger{opacity:0;pointer-events:none}
+.tools .tool-video-shell:hover .tool-video-trigger,.tools .tool-video-shell:focus-within .tool-video-trigger{opacity:1}
+.tools .tool-video-shell:hover .tool-video-play-icon,.tools .tool-video-trigger:focus-visible .tool-video-play-icon{transform:scale(1.08);background:#101a15;box-shadow:0 0 28px color-mix(in srgb,var(--video-accent) 42%,transparent)}
+.tools .tool-video-trigger:focus-visible{outline:2px solid var(--video-accent);outline-offset:-4px}
+.tools .tool-video-shell.is-playing .tool-video-code{opacity:.85}
+.tools .tool-video-shell.is-playing .tool-video-state{color:var(--video-accent)}
+.tools .tool-video-shell.is-error .tool-video-state{color:#ff8b8b}
+@media(max-width:900px){.tools .tool-video-shell{min-height:190px}}
+@media(max-width:760px){.tools .tool-video-shell{min-height:0;aspect-ratio:16/9}.tools .tool-video-trigger{gap:8px}.tools .tool-video-play-icon{width:44px;height:44px}}
+@media(prefers-reduced-motion:reduce){.tools .tool-card-video,.tools .tool-video-play-icon{transition:none}}
