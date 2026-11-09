@@ -41,7 +41,7 @@ const locales = [
       const path = locale === "en" ? "/outbreak-transmission.html" : "/" + locale + "/outbreak-transmission.html";
       await page.goto(base + path, { waitUntil: "domcontentloaded" });
       await page.locator("#zombcash-tv").waitFor({ state: "visible" });
-      await page.waitForFunction(() => document.querySelector("#zctv-title")?.textContent?.trim().length > 0);
+      await page.waitForFunction(expected => document.querySelector("#zctv-title")?.textContent?.trim() === expected, expectedTitle);
       assert.equal((await page.locator("#zctv-title").textContent()).trim(), expectedTitle, "localized title: " + locale);
       await page.getByRole("button", { name: "TV visual QA episode" }).waitFor({ state: "visible" });
       await page.getByRole("button", { name: "TV visual QA episode" }).click();
