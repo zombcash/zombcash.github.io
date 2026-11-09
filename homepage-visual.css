@@ -1149,3 +1149,35 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > *{
    background:linear-gradient(180deg,rgba(5,9,8,.98) 0%,rgba(5,9,8,.88) 55%,rgba(5,9,8,.35) 100%)!important;
  }
 }
+
+
+/* CRITICAL FIX: remove inherited decorative rotations from the artwork pseudo-elements.
+   The old graffiti transforms were still rotating the new full-size background layers. */
+html body section.section.tools#radar > .tool-grid > article.tool-card:before{
+  transform:none!important;
+  rotate:none!important;
+  scale:1!important;
+  translate:none!important;
+  right:0!important;
+  top:0!important;
+  bottom:0!important;
+  left:0!important;
+  width:auto!important;
+  height:auto!important;
+  max-width:none!important;
+  max-height:none!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card:after{
+  transform:none!important;
+  rotate:none!important;
+  scale:1!important;
+  translate:none!important;
+  right:0!important;
+  top:0!important;
+  bottom:0!important;
+  left:0!important;
+  width:auto!important;
+  height:auto!important;
+  max-width:none!important;
+  max-height:none!important;
+}
