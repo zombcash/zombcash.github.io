@@ -16,7 +16,7 @@ async function play(card,locked){
   card.classList.add('is-playing');
   card.dataset.locked=locked?'1':'0';
   const button=card.querySelector('.tool-video-trigger');
-  if(button){button.setAttribute('aria-pressed','true');button.setAttribute('aria-label','Pause '+card.dataset.videoCard.replaceAll('-',' ')+' video');}
+  if(button){button.setAttribute('aria-pressed','true');button.setAttribute('aria-label','Pause '+card.dataset.videoCard.replaceAll('-',' ')+' video');const label=button.querySelector('.tool-video-trigger-label');if(label)label.textContent='TAP TO PAUSE';}
   setState(card,'LIVE TRANSMISSION // MUTED');
  }catch(error){
   card.classList.remove('is-playing');
@@ -28,7 +28,7 @@ function pause(card,reset=true){
  video.pause();if(reset&&video.readyState>0){try{video.currentTime=0;}catch(e){}}
  card.classList.remove('is-playing');card.dataset.locked='0';
  const button=card.querySelector('.tool-video-trigger');
- if(button){button.setAttribute('aria-pressed','false');button.setAttribute('aria-label','Play '+card.dataset.videoCard.replaceAll('-',' ')+' video');}
+ if(button){button.setAttribute('aria-pressed','false');button.setAttribute('aria-label','Play '+card.dataset.videoCard.replaceAll('-',' ')+' video');const label=button.querySelector('.tool-video-trigger-label');if(label)label.textContent='HOVER OR TAP TO PLAY';}
  setState(card,'VIDEO TRANSMISSION READY');
 }
 cards.forEach(card=>{
