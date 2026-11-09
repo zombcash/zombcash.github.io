@@ -52,6 +52,7 @@ const locales = [
         return box.width / box.height;
       });
       assert.ok(Math.abs(ratio - 16 / 9) < 0.08, "16:9 player ratio: " + locale);
+      assert.equal(await page.locator("#zombcash-tv video").evaluate(el => el.controls), true, "native accessible video controls: " + locale);
       await page.setViewportSize({ width: 1440, height: 900 });
       await page.waitForTimeout(100);
       await page.setViewportSize({ width: 768, height: 1024 });
