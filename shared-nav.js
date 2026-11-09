@@ -1700,5 +1700,23 @@
       }
     }, {capture:true, passive:true});
   }
+
+  // ZombieCash TV player — inject only on the existing Outbreak Transmission page.
+  // This keeps all locale variants in sync without duplicating page templates.
+  function addZombieCashTvPlayer() {
+    if (!/\/outbreak-transmission\.html$/i.test(location.pathname) || document.getElementById('zombcash-tv')) return;
+    const lead = document.querySelector('main .lead');
+    if (!lead) return;
+    const section = document.createElement('section');
+    section.className = 'zctv-panel';
+    section.id = 'zombcash-tv';
+    section.setAttribute('aria-labelledby', 'zctv-title');
+    section.innerHTML = '<div class="zctv-heading"><p class="zctv-kicker">THE OUTBREAK, ON AIR</p><h2 id="zctv-title">ZOMBCASH TV — LIVE FROM THE OUTBREAK</h2><p>Live transmissions, field briefings and the growing ZombieCash video archive. Select an episode to watch; the archive will appear here as new videos are published.</p></div><div class="zctv-grid"><div class="zctv-feature"><div class="zctv-screen"><video controls playsinline preload="metadata" hidden aria-label="ZombieCash TV video player"></video><div class="zctv-screen-empty"><span class="zctv-signal">☣</span><strong>NO TRANSMISSIONS YET</strong><span>Published episodes will appear here when the TV archive is connected.</span></div></div><div class="zctv-meta"><span class="zctv-live-dot"></span><span class="zctv-status" role="status" aria-live="polite">CONNECTING TO THE BUNKER...</span></div><div class="zctv-now"><span class="zctv-label">NOW SELECTED</span><h3 class="zctv-current-title">Choose an episode from the archive.</h3><p class="zctv-current-description"></p></div></div><aside class="zctv-archive" aria-labelledby="zctv-archive-title"><div class="zctv-archive-head"><div><span class="zctv-label">BROADCAST LOG</span><h3 id="zctv-archive-title">RECENT TRANSMISSIONS</h3></div><span class="zctv-count">—</span></div><div class="zctv-episodes" aria-live="polite"><p class="zctv-muted">CONNECTING TO THE BUNKER...</p></div><button class="zctv-more" type="button" hidden>LOAD MORE</button></aside></div>';
+    lead.insertAdjacentElement('afterend', section);
+    if (!document.querySelector('link[data-zctv-style]')) { const css=document.createElement('link'); css.rel='stylesheet'; css.href='/zombcash-tv-player.css?v=20261110-1'; css.dataset.zctvStyle='1'; document.head.append(css); }
+    const script=document.createElement('script'); script.src='/zombcash-tv-player.js?v=20261110-1'; script.defer=true; document.body.append(script);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addZombieCashTvPlayer, {once:true});
+  else addZombieCashTvPlayer();
 })();
 
