@@ -445,7 +445,7 @@ body:has(.zc-hero-sponsor-panel) .field-manual-status{
 }
 .tools .lab-video-shell{--video-accent:#d18aff;background:radial-gradient(ellipse at 50% 45%,#25152f 0%,#090b12 74%)}
 .tools .network-video-shell{--video-accent:#ff626d;background:radial-gradient(ellipse at 50% 45%,#291317 0%,#090b12 74%)}
-.tools .tool-card-video{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:center;opacity:0;transition:opacity .35s ease;z-index:0;background:#080b0d}
+.tools .tool-card-video{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:center;opacity:1;transition:opacity .35s ease;z-index:0;background:#080b0d}
 .tools .tool-video-shell.is-playing .tool-card-video{opacity:1}
 .tools .tool-video-grid{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.62;background:linear-gradient(90deg,transparent 49.8%,color-mix(in srgb,var(--video-accent) 14%,transparent) 50%,transparent 50.2%),linear-gradient(0deg,transparent 49.8%,color-mix(in srgb,var(--video-accent) 14%,transparent) 50%,transparent 50.2%),repeating-linear-gradient(0deg,transparent 0 5px,#fff04 6px);background-size:48px 48px,48px 48px,100% 7px}
 .tools .tool-video-shell:after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(180deg,#020605a8 0%,transparent 24%,transparent 62%,#020605b8 100%);opacity:.86}
@@ -457,7 +457,7 @@ body:has(.zc-hero-sponsor-panel) .field-manual-status{
 .tools .tool-video-play-icon:before{content:"";width:0;height:0;margin-left:4px;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:12px solid var(--video-accent)}
 .tools .tool-video-shell.is-playing .tool-video-play-icon:before{width:13px;height:16px;margin:0;border:0;background:linear-gradient(90deg,var(--video-accent) 0 34%,transparent 34% 66%,var(--video-accent) 66% 100%)}
 .tools .tool-video-trigger-label{padding:7px 10px;border:1px solid #ffffff35;background:#050909b8}
-.tools .tool-video-shell.is-playing .tool-video-trigger{opacity:0;pointer-events:auto}
+.tools .tool-video-shell.is-playing .tool-video-trigger{opacity:.45;pointer-events:auto}.tools .tool-video-shell.is-playing .tool-video-trigger:hover,.tools .tool-video-shell.is-playing .tool-video-trigger:focus-visible{opacity:1}.tools .tool-video-shell.is-playing .tool-video-trigger-label{display:none}
 .tools .tool-video-shell:hover .tool-video-trigger,.tools .tool-video-shell:focus-within .tool-video-trigger{opacity:1}
 .tools .tool-video-shell:hover .tool-video-play-icon,.tools .tool-video-trigger:focus-visible .tool-video-play-icon{transform:scale(1.08);background:#101a15;box-shadow:0 0 28px color-mix(in srgb,var(--video-accent) 42%,transparent)}
 .tools .tool-video-trigger:focus-visible{outline:2px solid var(--video-accent);outline-offset:-4px}
