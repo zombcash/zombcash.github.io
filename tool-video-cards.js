@@ -8,6 +8,7 @@ function ensureSource(video){
  if(!video.dataset.loaded){video.src=video.dataset.src;video.dataset.loaded='1';video.load();}
 }
 async function play(card,locked){
+ cards.filter(other=>other!==card).forEach(other=>pause(other));
  const video=card.querySelector('video');if(!video)return;
  ensureSource(video);
  try{
@@ -49,6 +50,6 @@ cards.forEach(card=>{
  });
 });
 document.addEventListener('visibilitychange',()=>{
- if(document.hidden)cards.forEach(card=>{if(card.dataset.locked!=='1')pause(card);});
+ if(document.hidden)cards.forEach(card=>pause(card,false));
 });
 })();
