@@ -1181,3 +1181,53 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:after{
   max-width:none!important;
   max-height:none!important;
 }
+
+/* FINAL FLAT ARTWORK ALIGNMENT — square, level image planes inside straight panels. */
+html body section.section.tools#radar > .tool-grid > article.tool-card{
+  clip-path:none!important;
+  border-radius:3px!important;
+  transform:none!important;
+  overflow:hidden!important;
+  border:1px solid color-mix(in srgb,var(--panel-accent,#9bff45) 68%,#17231b)!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card:before{
+  clip-path:none!important;
+  transform:none!important;
+  rotate:0deg!important;
+  scale:1!important;
+  translate:0 0!important;
+  inset:0 0 0 34%!important;
+  background-repeat:no-repeat!important;
+  background-size:cover!important;
+  background-position:center center!important;
+  background-attachment:scroll!important;
+  opacity:.72!important;
+  mix-blend-mode:normal!important;
+  filter:saturate(1.08) contrast(1.04)!important;
+}
+html body section.section.tools#radar > .tool-grid > article.radar-card:before{
+  background-image:url("/assets/images/tool-radar-outbreak.webp?v=20261109-flat1")!important;
+  background-position:center center!important;
+}
+html body section.section.tools#radar > .tool-grid > article.lab-card:before{
+  background-image:url("/assets/images/tool-zombie-lab.webp?v=20261109-flat1")!important;
+  background-position:center center!important;
+}
+html body section.section.tools#radar > .tool-grid > article.network-card:before{
+  background-image:url("/assets/images/tool-survivor-network.webp?v=20261109-flat1")!important;
+  background-position:center center!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card:after{
+  clip-path:none!important;
+  transform:none!important;
+  rotate:0deg!important;
+  scale:1!important;
+  translate:0 0!important;
+}
+@media(max-width:640px){
+ html body section.section.tools#radar > .tool-grid > article.tool-card:before{
+   inset:0!important;
+   background-size:cover!important;
+   background-position:center center!important;
+ }
+}
