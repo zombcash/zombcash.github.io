@@ -1231,3 +1231,34 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:after{
    background-position:center center!important;
  }
 }
+
+
+/* ZOMBCASH TOOL CARD PHOTO BACKGROUNDS — FINAL OVERRIDE 2026-11-10
+   This stylesheet loads after style.css. Replace the previous SVG artwork here,
+   in the last cascade layer, while preserving the left video panel and card content. */
+html body section.section.tools#radar > .tool-grid > article.tool-card:before{
+  inset:0 0 0 34%!important;
+  background-repeat:no-repeat!important;
+  background-position:center center,right bottom!important;
+  background-size:100% 100%,auto 82%!important;
+  background-attachment:scroll!important;
+  opacity:.88!important;
+  mix-blend-mode:normal!important;
+  filter:saturate(1.06) contrast(1.04)!important;
+}
+html body section.section.tools#radar > .tool-grid > article.radar-card:before{
+  background-image:linear-gradient(90deg,#070b0ef2 0%,#070b0ec9 28%,#070b0e45 70%,#070b0e12 100%),url("/assets/tools/meme-radar.jpg?v=20261110-final")!important;
+}
+html body section.section.tools#radar > .tool-grid > article.lab-card:before{
+  background-image:linear-gradient(90deg,#09070df2 0%,#09070dc9 28%,#09070d45 70%,#09070d12 100%),url("/assets/tools/zombie-lab.jpg?v=20261110-final")!important;
+}
+html body section.section.tools#radar > .tool-grid > article.network-card:before{
+  background-image:linear-gradient(90deg,#0c0709f2 0%,#0c0709c9 28%,#0c070945 70%,#0c070912 100%),url("/assets/tools/survivor-network.jpg?v=20261110-final")!important;
+}
+@media(max-width:640px){
+  html body section.section.tools#radar > .tool-grid > article.tool-card:before{
+    inset:0!important;
+    background-size:100% 100%,auto 48%!important;
+    background-position:center center,right bottom!important;
+  }
+}
