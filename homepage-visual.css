@@ -1262,3 +1262,5 @@ html body section.section.tools#radar > .tool-grid > article.network-card:before
     background-position:center center,right bottom!important;
   }
 }
+
+/* Deployment retry marker: tool card photo backgrounds are finalized above. */
