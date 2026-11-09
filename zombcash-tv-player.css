@@ -6,3 +6,14 @@
 .zctv-now{padding:15px 17px 18px}.zctv-now h3{margin:6px 0;color:#f0f5ed;font-size:19px;line-height:1.25}.zctv-now p{margin:6px 0 0;color:var(--tv-muted);font-size:13px;line-height:1.5}
 .zctv-archive{padding:15px}.zctv-archive-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1px solid rgba(168,255,77,.15)}.zctv-archive-head h3{margin:5px 0 0;color:#f1f6ee;font-size:15px;letter-spacing:.04em}.zctv-count{color:var(--tv-green);font:700 12px ui-monospace,Consolas,monospace}.zctv-episodes{display:grid;gap:8px;padding-top:12px}.zctv-episode{display:block;width:100%;padding:12px;border:1px solid #27382b;border-radius:8px;background:#0d1510;color:#edf5eb;text-align:left;cursor:pointer;transition:border-color .15s ease,background .15s ease}.zctv-episode:hover,.zctv-episode[aria-current="true"]{border-color:var(--tv-green);background:#152218}.zctv-episode strong{display:block;font-size:13px;line-height:1.35}.zctv-episode small{display:block;margin-top:6px;color:var(--tv-muted);font-size:11px}.zctv-muted{margin:4px 0;color:var(--tv-muted);font-size:12px;line-height:1.5}.zctv-more{width:100%;margin-top:12px;padding:10px;border:1px solid var(--tv-green);border-radius:7px;background:transparent;color:var(--tv-green);font:800 10px ui-monospace,Consolas,monospace;letter-spacing:.12em;cursor:pointer}.zctv-more:hover{background:rgba(168,255,77,.1)}.zctv-more[hidden]{display:none}
 @media(max-width:760px){.zctv-grid{grid-template-columns:1fr}.zctv-panel{padding:16px;margin:30px 0}.zctv-archive{padding:13px}}@media(prefers-reduced-motion:reduce){.zctv-episode{transition:none}}
+
+.zctv-admin-upload{margin:0 0 18px;border:1px solid #456c37;background:linear-gradient(135deg,#0d170f,#080d09);color:#dcebd6;font-family:Rajdhani,system-ui,sans-serif}
+.zctv-admin-upload details>summary{cursor:pointer;padding:12px 15px;color:#a8f66b;font:700 10px Orbitron,system-ui,sans-serif;letter-spacing:.08em}
+.zctv-upload-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0 15px 15px}
+.zctv-upload-fields label{display:grid;gap:6px;color:#a8b9a4;font-size:12px}
+.zctv-upload-fields input,.zctv-upload-fields textarea{box-sizing:border-box;width:100%;min-width:0;padding:10px;border:1px solid #344b35;background:#050a06;color:#eff8e9;font:500 14px Rajdhani,system-ui,sans-serif}
+.zctv-upload-fields input[type=file]{font-size:11px}
+.zctv-upload-fields button{justify-self:start;border:1px solid #a8f66b;background:#a8f66b;color:#071007;padding:11px 16px;font:700 10px Orbitron,system-ui,sans-serif;cursor:pointer}
+.zctv-upload-fields button:disabled{opacity:.55;cursor:wait}
+.zctv-upload-status{grid-column:1/-1;min-height:18px;margin:0;color:#a8f66b;font-size:12px;overflow-wrap:anywhere}
+@media(max-width:560px){.zctv-upload-fields{grid-template-columns:1fr}}
