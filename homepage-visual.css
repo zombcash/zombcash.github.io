@@ -676,17 +676,17 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:before{
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
   background-image:
    linear-gradient(90deg,rgba(4,9,7,.98) 0%,rgba(4,9,7,.90) 20%,rgba(4,9,7,.62) 56%,rgba(4,9,7,.40) 100%),
-   url("/assets/images/tool-radar-outbreak.svg")!important;
+   url("/assets/images/tool-radar-outbreak.svg?v=20261109-cinematic-art9")!important;
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:before{
   background-image:
    linear-gradient(90deg,rgba(7,5,11,.98) 0%,rgba(7,5,11,.90) 20%,rgba(7,5,11,.60) 56%,rgba(7,5,11,.38) 100%),
-   url("/assets/images/tool-zombie-lab.svg")!important;
+   url("/assets/images/tool-zombie-lab.svg?v=20261109-cinematic-art9")!important;
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:before{
   background-image:
    linear-gradient(90deg,rgba(9,5,7,.98) 0%,rgba(9,5,7,.90) 20%,rgba(9,5,7,.60) 56%,rgba(9,5,7,.38) 100%),
-   url("/assets/images/tool-survivor-network.svg")!important;
+   url("/assets/images/tool-survivor-network.svg?v=20261109-cinematic-art9")!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > *{
   position:relative!important;
@@ -783,7 +783,7 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:before{
   z-index:0!important;
   display:block!important;
   pointer-events:none!important;
-  opacity:.52!important;
+  opacity:.68!important;
   background-repeat:no-repeat!important;
   background-size:cover!important;
   background-position:center right!important;
@@ -791,13 +791,13 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:before{
   filter:saturate(.9) contrast(.95)!important;
 }
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-  background-image:linear-gradient(90deg,#070b0a 0%,#070b0ac9 22%,#070b0a55 66%,#070b0a22 100%),url("/assets/images/tool-radar-outbreak.svg")!important;
+  background-image:linear-gradient(90deg,#070b0a 0%,#070b0ac9 22%,#070b0a55 66%,#070b0a22 100%),url("/assets/images/tool-radar-outbreak.svg?v=20261109-cinematic-art9")!important;
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:before{
-  background-image:linear-gradient(90deg,#09070d 0%,#09070dc9 22%,#09070d55 66%,#09070d22 100%),url("/assets/images/tool-zombie-lab.svg")!important;
+  background-image:linear-gradient(90deg,#09070d 0%,#09070dc9 22%,#09070d55 66%,#09070d22 100%),url("/assets/images/tool-zombie-lab.svg?v=20261109-cinematic-art9")!important;
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:before{
-  background-image:linear-gradient(90deg,#0c0709 0%,#0c0709c9 22%,#0c070955 66%,#0c070922 100%),url("/assets/images/tool-survivor-network.svg")!important;
+  background-image:linear-gradient(90deg,#0c0709 0%,#0c0709c9 22%,#0c070955 66%,#0c070922 100%),url("/assets/images/tool-survivor-network.svg?v=20261109-cinematic-art9")!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:after{
   content:none!important;
@@ -946,4 +946,23 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:hover{
  html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li{font-size:9px!important;padding:7px 4px!important}
  html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{width:100%!important}
  html body section.section.tools#radar > .tool-grid > article.tool-card:before{inset:40% 0 0 0!important;opacity:.28!important;background-position:center!important}
+}
+
+/* Cinematic art visibility tune: distinct color signatures, controlled contrast behind text. */
+html body section.section.tools#radar > .tool-grid > article.radar-card:before{
+ opacity:.68!important;
+ filter:saturate(1.12) contrast(1.04)!important;
+}
+html body section.section.tools#radar > .tool-grid > article.lab-card:before{
+ opacity:.64!important;
+ filter:saturate(1.18) contrast(1.04)!important;
+}
+html body section.section.tools#radar > .tool-grid > article.network-card:before{
+ opacity:.66!important;
+ filter:saturate(1.14) contrast(1.04)!important;
+}
+@media(max-width:640px){
+ html body section.section.tools#radar > .tool-grid > article.tool-card:before{
+  opacity:.30!important;
+ }
 }
