@@ -718,3 +718,10 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li
   background-position:center!important;
  }
 }
+
+/* Keep the bespoke artwork atmospheric and behind readable copy. */
+html body section.section.tools#radar > .tool-grid > article.tool-card:before{
+  mix-blend-mode:normal!important;
+  opacity:.88!important;
+  filter:saturate(.86) contrast(.96)!important;
+}
