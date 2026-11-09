@@ -1704,7 +1704,7 @@
   // ZombieCash TV player — inject only on the existing Outbreak Transmission page.
   // This keeps all locale variants in sync without duplicating page templates.
   function addZombieCashTvPlayer() {
-    if (!/\\/outbreak-transmission\\.html$/i.test(location.pathname) || document.getElementById('zombcash-tv')) return;
+    if (!/\/outbreak-transmission\.html$/i.test(location.pathname) || document.getElementById('zombcash-tv')) return;
     const lead = document.querySelector('main .lead');
     if (!lead) return;
     const section = document.createElement('section');
