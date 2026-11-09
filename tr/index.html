@@ -943,46 +943,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 @media(max-width:1050px){.zctv-layout{grid-template-columns:minmax(180px,.75fr) minmax(0,1fr)}.zctv-host-art{grid-column:2;grid-row:1;height:390px}.zctv-player-column{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(240px,.8fr);align-items:start}.zctv-live-label{grid-column:1/-1}.zctv-player-mount{grid-column:1}.zctv-archive{grid-column:2;grid-row:2}}
 @media(max-width:680px){.zctv-channel-hub{padding:30px 5%}.zctv-layout{grid-template-columns:1fr;gap:16px}.zctv-intro{grid-column:1}.zctv-host-art{grid-column:1;grid-row:auto;height:360px}.zctv-player-column{grid-column:1;display:flex}.zctv-archive{width:100%;box-sizing:border-box}.zctv-channels{grid-template-columns:1fr;gap:10px}.zctv-channel-card{min-height:125px;padding:15px}.zctv-foot{flex-direction:column}.zctv-player-mount #zc-promo-player{max-height:none!important}}
 </style>
-<script id="zctv-studio-controller-v3">
-(function(){
- const root=document.getElementById('zctv-channel-hub');if(!root)return;
- const mount=root.querySelector('[data-zctv-player-mount]');
- const oldWrap=document.querySelector('#promo-video .zc-promo-player-wrap');
- if(mount&&oldWrap)mount.appendChild(oldWrap);
- const player=root.querySelector('#zc-promo-player'),list=root.querySelector('[data-zctv-episodes]'),cards=[...root.querySelectorAll('[data-channel]')],heading=root.querySelector('[data-zctv-archive-title]');
- const labels={all:'ALL PROGRAMS',news:'OUTBREAK NEWS',meme:'MEME SHOW',lab:'ZOMBIE LAB'};
- let videos=[],programs=[],active='all',feature=null;
- const featureBox=document.createElement('article');featureBox.className='zctv-feature-card';featureBox.hidden=true;
- featureBox.style.cssText='padding:18px;border:1px solid #526747;background:radial-gradient(ellipse at 90% 0,#24452b80,transparent 55%),linear-gradient(145deg,#101a13,#080d0b);color:#edf5e8;min-height:150px';
- if(mount)mount.appendChild(featureBox);
- function safe(v){try{const u=new URL(v,location.href);return (u.protocol==='https:'||u.origin===location.origin)?u.href:''}catch(_){return ''}}
- function clearVideo(){if(player){player.pause();player.removeAttribute('src');player.load();}if(oldWrap)oldWrap.style.display='none';}
- function showProgram(p){const url=safe(p.url);if(!url)return;feature=p;clearVideo();featureBox.hidden=false;featureBox.replaceChildren();
- const tag=document.createElement('div');tag.textContent='ZOMBCASH TV // '+String(p.date||'PROGRAM');tag.style.cssText='color:#9bff45;font:700 9px Orbitron,sans-serif;letter-spacing:1.5px';
- const title=document.createElement('h3');title.textContent=p.title||'ZombieCash program';title.style.cssText='margin:12px 0 8px;font:800 clamp(15px,1.4vw,20px) Orbitron,sans-serif;line-height:1.25';
- const desc=document.createElement('p');desc.textContent=p.description||'';desc.style.cssText='margin:0 0 16px;color:#aebda8;font:500 14px/1.5 Rajdhani,sans-serif';
- const link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener noreferrer';link.textContent='OPEN FULL TRANSMISSION ↗';link.style.cssText='display:inline-flex;padding:10px 12px;background:#9bff45;color:#071006;text-decoration:none;font:700 9px Orbitron,sans-serif;letter-spacing:.5px';
- featureBox.append(tag,title,desc,link);
- const status=document.getElementById('zc-promo-status');if(status)status.textContent='EDITORIAL TRANSMISSION · OPEN THE FULL REPORT';
- const version=document.getElementById('zc-promo-version');if(version)version.textContent='EDITORIAL';
- const dl=document.getElementById('zc-promo-download');if(dl){dl.href=url;dl.textContent='OPEN REPORT ↗'}
- }
- function playVideo(v,autoplay){const src=safe(v.src);if(!player||!src)return;featureBox.hidden=true;if(oldWrap)oldWrap.style.display='block';player.pause();player.src=src;player.load();const version=document.getElementById('zc-promo-version');if(version)version.textContent=v.tag||'ARCHIVE';const status=document.getElementById('zc-promo-status');if(status)status.textContent='RELEASED: '+(v.date||'—');const dl=document.getElementById('zc-promo-download');if(dl){dl.href=safe(v.releaseUrl)||'https://github.com/zombcash/zombcash.github.io/releases';dl.textContent='OPEN / DOWNLOAD ↗'}if(autoplay)player.play().catch(()=>{});}
- function records(){return (active==='all'?programs:programs.filter(p=>p.channel===active)).map(p=>({kind:'program',data:p})).concat((active==='all'?videos:videos.filter(v=>v.channel===active)).map(v=>({kind:'video',data:v})));}
- function render(){const shown=records();heading.textContent=labels[active]||labels.all;list.replaceChildren();
- if(!shown.length){clearVideo();featureBox.hidden=true;const empty=document.createElement('div');empty.className='zctv-empty';empty.textContent='No programs are published in this channel yet.';list.append(empty);return;}
- shown.forEach(item=>{const v=item.data,article=document.createElement('article');article.className='zctv-episode';const copy=document.createElement('div'),title=document.createElement('strong'),meta=document.createElement('span'),button=document.createElement('button');title.textContent=v.title||'ZombieCash transmission';meta.textContent=item.kind==='video'?(v.date||'VIDEO'):(v.date||'PROGRAM');copy.append(title,meta);button.type='button';button.textContent=item.kind==='video'?'PLAY':'OPEN';button.addEventListener('click',()=>item.kind==='video'?playVideo(v,true):showProgram(v));article.append(copy,button);list.append(article);});
- if(active!=='all'){const first=shown[0];if(first.kind==='program')showProgram(first.data);else playVideo(first.data,false);}
- else if(!feature&&videos.length)playVideo(videos[0],false);
- }
- cards.forEach(card=>card.addEventListener('click',()=>{active=card.dataset.channel;feature=null;cards.forEach(c=>c.setAttribute('aria-pressed',String(c===card)));render();}));
- Promise.all([
- fetch('/promo-videos.json?v=zctv-studio-3',{cache:'no-store'}).then(r=>r.ok?r.json():{videos:[]}),
- fetch('/zctv-programs.json?v=zctv-programs-1',{cache:'no-store'}).then(r=>r.ok?r.json():{programs:[]})
- ]).then(([v,p])=>{videos=(v.videos||[]).filter(x=>x&&safe(x.src));programs=(p.programs||[]).filter(x=>x&&['news','meme','lab'].includes(x.channel)&&safe(x.url));render();})
- .catch(()=>{const empty=document.createElement('div');empty.className='zctv-empty';empty.textContent='CHANNEL ARCHIVE TEMPORARILY UNAVAILABLE';list.replaceChildren(empty);});
-})();
-</script>
+<script src="/assets/js/zctv-player.js?v=4" defer></script>
 
 <section class="ticker" aria-label="Project motto"><div>PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. <b>☣</b> PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. <b>☣</b> PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.</div></section>
 <section class="zombie-maker-promo" aria-labelledby="zm-promo-title">
