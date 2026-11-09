@@ -1264,3 +1264,128 @@ html body section.section.tools#radar > .tool-grid > article.network-card:before
 }
 
 /* Deployment retry marker: tool card photo backgrounds are finalized above. */
+
+
+/* ZOMBCASH — FULL-BLEED TOOL BANNERS 2026-11-10
+   Three selected 1600x640 artworks now fill each card edge-to-edge.
+   Hide the old inset video window so no framed panel competes with the banner. */
+html body section.section.tools#radar > .tool-grid > article.tool-card{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:26px auto auto auto 38px!important;
+  grid-template-areas:"top" "title" "copy" "features" "action"!important;
+  align-content:stretch!important;
+  min-height:320px!important;
+  height:auto!important;
+  padding:16px 22px!important;
+  overflow:hidden!important;
+  border:1px solid color-mix(in srgb,var(--panel-accent) 34%,transparent)!important;
+  border-radius:4px!important;
+  background:#07090b!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card:before{
+  inset:0!important;
+  z-index:0!important;
+  background-repeat:no-repeat!important;
+  background-size:cover!important;
+  background-position:center center!important;
+  opacity:1!important;
+  filter:saturate(1.08) contrast(1.06)!important;
+  mix-blend-mode:normal!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card:after{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:1!important;
+  pointer-events:none!important;
+  background:linear-gradient(90deg,rgba(3,5,7,.20) 0%,rgba(3,5,7,.38) 42%,rgba(3,5,7,.82) 100%)!important;
+}
+html body section.section.tools#radar > .tool-grid > article.lab-card:after{
+  background:linear-gradient(90deg,rgba(5,2,9,.82) 0%,rgba(5,2,9,.46) 54%,rgba(5,2,9,.20) 100%)!important;
+}
+html body section.section.tools#radar > .tool-grid > article.network-card:after{
+  background:linear-gradient(90deg,rgba(8,1,3,.16) 0%,rgba(8,1,3,.40) 42%,rgba(8,1,3,.82) 100%)!important;
+}
+html body section.section.tools#radar > .tool-grid > article.radar-card:before{
+  background-image:url("/assets/tools/meme-radar.jpg?v=fullbleed-banners-20261110-3")!important;
+  background-position:center center!important;
+}
+html body section.section.tools#radar > .tool-grid > article.lab-card:before{
+  background-image:url("/assets/tools/zombie-lab.jpg?v=fullbleed-banners-20261110-3")!important;
+  background-position:center center!important;
+}
+html body section.section.tools#radar > .tool-grid > article.network-card:before{
+  background-image:url("/assets/tools/survivor-network.jpg?v=fullbleed-banners-20261110-3")!important;
+  background-position:center center!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
+  display:none!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > *{
+  position:relative!important;
+  z-index:2!important;
+  min-width:0!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > .card-top{
+  grid-area:top!important;
+  width:100%!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > h3{
+  grid-area:title!important;
+  width:min(62%,680px)!important;
+  margin:0 0 7px auto!important;
+  align-self:end!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > p{
+  grid-area:copy!important;
+  width:min(62%,680px)!important;
+  margin:0 0 10px auto!important;
+  min-height:0!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > ul{
+  grid-area:features!important;
+  width:min(62%,680px)!important;
+  margin:0 0 10px auto!important;
+}
+html body section.section.tools#radar > .tool-grid > article.lab-card > h3,
+html body section.section.tools#radar > .tool-grid > article.lab-card > p,
+html body section.section.tools#radar > .tool-grid > article.lab-card > ul{
+  margin-left:0!important;
+  margin-right:auto!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{
+  grid-area:action!important;
+  width:min(62%,420px)!important;
+  margin:0 0 0 auto!important;
+}
+html body section.section.tools#radar > .tool-grid > article.lab-card > .card-link{
+  margin-left:0!important;
+  margin-right:auto!important;
+}
+@media(max-width:640px){
+  html body section.section.tools#radar > .tool-grid > article.tool-card{
+    grid-template-rows:26px auto auto auto 38px!important;
+    min-height:390px!important;
+    padding:14px!important;
+  }
+  html body section.section.tools#radar > .tool-grid > article.tool-card:before{
+    background-position:center center!important;
+    opacity:.90!important;
+  }
+  html body section.section.tools#radar > .tool-grid > article.tool-card:after{
+    background:linear-gradient(180deg,rgba(0,0,0,.36) 0%,rgba(0,0,0,.62) 55%,rgba(0,0,0,.82) 100%)!important;
+  }
+  html body section.section.tools#radar > .tool-grid > article.tool-card > h3,
+  html body section.section.tools#radar > .tool-grid > article.tool-card > p,
+  html body section.section.tools#radar > .tool-grid > article.tool-card > ul,
+  html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{
+    width:100%!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+  html body section.section.tools#radar > .tool-grid > article.tool-card > ul{
+    grid-template-columns:1fr!important;
+  }
+}
