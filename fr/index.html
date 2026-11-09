@@ -885,7 +885,6 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 <div class="zctv-inner"><div class="zctv-kicker"><i></i> ZOMBIECASH TV // BROADCAST STUDIO</div>
 <div class="zctv-layout">
 <div class="zctv-intro"><span class="eyebrow">L’internet des morts-vivants — en direct</span><h2 id="zctv-title">TROIS CHAÎNES.<br><span>UN SEUL SIGNAL DES MORTS-VIVANTS.</span></h2><p>Rencontrez notre présentatrice et rejoignez le réseau de diffusion ZombieCash. Choisissez une chaîne ci-dessous — toutes les émissions sont lues sur le même écran.</p><div class="zctv-host-tag">☣ <div>VOTRE PRÉSENTATRICE ZOMBIECASH<small>En direct du studio de l’épidémie</small></div></div></div>
-<div class="zctv-host-art"><img src="/assets/zombie-girl-heroine-hd.avif" alt="Présentatrice ZombieCash dans un studio néon" loading="eager" fetchpriority="high" decoding="async"></div>
 <div class="zctv-player-column"><div class="zctv-live-label"><strong>● À L’AFFICHE</strong><span>ÉMISSIONS À LA DEMANDE</span></div><div class="zctv-player-mount" data-zctv-player-mount></div><div class="zctv-archive"><div class="zctv-archive-head"><span>ARCHIVES DES ÉPISODES</span><span data-zctv-archive-title>TOUS LES ÉPISODES</span></div><div class="zctv-episodes" data-zctv-episodes><div class="zctv-empty">Aucun épisode n’est encore publié sur cette chaîne.</div></div></div></div>
 </div>
 <div class="zctv-channels" role="group" aria-label="Chaînes ZombieCash TV">
@@ -895,53 +894,50 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 </div><div class="zctv-foot"><span>☣ ZOMBCASH BROADCAST NETWORK</span><span>ONE PLAYER · THREE CHANNELS · ON DEMAND</span></div>
 </div></section><style id="zctv-studio-v2">
 #promo-video{display:none!important}
-.zctv-channel-hub{position:relative;isolation:isolate;padding:clamp(30px,4vw,58px) 4.5%;overflow:hidden;border-block:1px solid #9bff4540;background:radial-gradient(ellipse at 48% 42%,#1c3b2080,transparent 42%),linear-gradient(120deg,#050807,#0a1010 55%,#100b16)}
-.zctv-inner{max-width:1500px;margin:auto}
-.zctv-kicker{display:flex;align-items:center;gap:10px;color:#b8ef9b;font:700 9px Orbitron,sans-serif;letter-spacing:2px}
+.zctv-channel-hub{position:relative;isolation:isolate;padding:clamp(24px,3vw,38px) clamp(16px,2.4vw,34px);overflow:hidden;border:1px solid #31452e;background:radial-gradient(ellipse at 70% 0,rgba(88,145,53,.13),transparent 42%),linear-gradient(145deg,#0b120d,#080c0a 68%,#0b1010);color:#edf5e8}
+.zctv-inner{width:100%;max-width:1380px;margin:0 auto}
+.zctv-kicker{display:flex;align-items:center;gap:10px;color:#a8c99b;font:700 9px Orbitron,sans-serif;letter-spacing:1.8px}
 .zctv-kicker i{width:7px;height:7px;border-radius:50%;background:#9bff45;box-shadow:0 0 12px #9bff45}
-.zctv-layout{display:grid;grid-template-columns:minmax(190px,.72fr) minmax(260px,1.08fr) minmax(330px,1.05fr);gap:clamp(16px,2vw,30px);align-items:center;margin:20px 0 26px}
-.zctv-intro{align-self:center;min-width:0}
-.zctv-intro .eyebrow{display:inline-block;color:#9bff45;font:700 9px Orbitron,sans-serif;letter-spacing:1.5px}
-.zctv-intro h2{margin:14px 0;color:#f1f6eb;font:800 clamp(25px,2.7vw,42px)/1.08 Orbitron,sans-serif;letter-spacing:-1px}
+.zctv-layout{display:grid;grid-template-columns:minmax(250px,.82fr) minmax(0,1.18fr);gap:clamp(16px,2vw,26px);align-items:stretch;margin:18px 0 22px;padding:16px;border:1px solid #293b2b;background:rgba(4,8,5,.55)}
+.zctv-intro{display:flex;flex-direction:column;justify-content:center;min-width:0;padding:clamp(16px,2vw,28px);border:1px solid #293b2b;background:linear-gradient(145deg,#101a12,#0a100c)}
+.zctv-intro .eyebrow{display:inline-block;color:#9bff45;font:700 9px Orbitron,sans-serif;letter-spacing:1.4px}
+.zctv-intro h2{margin:14px 0;color:#f1f6eb;font:800 clamp(25px,2.6vw,40px)/1.08 Orbitron,sans-serif;letter-spacing:-1px}
 .zctv-intro h2 span{color:#9bff45;text-shadow:0 0 25px #9bff4530}
-.zctv-intro p{max-width:360px;margin:0;color:#a9b7a5;font:500 16px/1.5 Rajdhani,sans-serif}
+.zctv-intro p{max-width:440px;margin:0;color:#a9b7a5;font:500 16px/1.55 Rajdhani,sans-serif}
 .zctv-host-tag{display:flex;align-items:center;gap:10px;margin-top:24px;padding-top:14px;border-top:1px solid #344333;color:#eaf3e4;font:700 10px Orbitron,sans-serif}
 .zctv-host-tag small{display:block;margin-top:5px;color:#8da18a;font:500 12px Rajdhani,sans-serif}
-.zctv-host-art{position:relative;min-width:0;height:clamp(340px,36vw,500px);display:flex;align-items:end;justify-content:center;overflow:hidden;border:1px solid #9bff4538;background:radial-gradient(ellipse at 50% 45%,#28552d8c,transparent 54%),linear-gradient(145deg,#111b13,#080c0d 72%);box-shadow:0 18px 60px #0008}
-.zctv-host-art:before{content:"";position:absolute;inset:14px;border:1px solid #9bff4525;pointer-events:none}
-.zctv-host-art:after{content:"ZC // STUDIO 01";position:absolute;top:25px;left:25px;color:#a5c498;font:700 8px Orbitron,sans-serif;letter-spacing:2px}
-.zctv-host-art img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;object-position:center 22%;mix-blend-mode:normal;filter:contrast(1.04) saturate(1.05);mask-image:linear-gradient(to bottom,#000 88%,transparent 100%)}
-.zctv-player-column{min-width:0;align-self:stretch;display:flex;flex-direction:column;gap:12px}
-.zctv-live-label{display:flex;justify-content:space-between;gap:10px;padding:11px 13px;border:1px solid #9bff4540;background:#080d0a;color:#aebda8;font:700 8px Orbitron,sans-serif;letter-spacing:1px}
+.zctv-player-column{min-width:0;display:flex;flex-direction:column;gap:12px}
+.zctv-live-label{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:38px;padding:10px 13px;border:1px solid #344b35;background:#080d0a;color:#aebda8;font:700 8px Orbitron,sans-serif;letter-spacing:1px}
 .zctv-live-label strong{color:#9bff45}
-.zctv-player-mount{min-width:0;padding:10px;border:1px solid #3d5338;background:#050807;box-shadow:0 14px 45px #0008}
+.zctv-player-mount{min-width:0;padding:10px;border:1px solid #344b35;background:#050807}
 .zctv-player-mount .zc-promo-player-wrap{display:block!important;width:100%!important;margin:0!important}
 .zctv-player-mount .zc-promo-player-top,.zctv-player-mount .zc-promo-player-foot{display:flex!important}
-.zctv-player-mount #zc-promo-player{display:block!important;width:100%!important;max-height:270px!important;aspect-ratio:16/9!important;background:#000;object-fit:contain}
-.zctv-archive{padding:12px;border:1px solid #293a2b;background:#080c0a}
+.zctv-player-mount #zc-promo-player{display:block!important;width:100%!important;max-height:390px!important;aspect-ratio:16/9!important;background:#000;object-fit:contain}
+.zctv-archive{min-width:0;padding:12px;border:1px solid #344b35;background:#080c0a}
 .zctv-archive-head{display:flex;justify-content:space-between;gap:10px;margin-bottom:10px;color:#9bff45;font:700 8px Orbitron,sans-serif;letter-spacing:1px}
-.zctv-episodes{display:grid;grid-template-columns:1fr;gap:7px;max-height:145px;overflow:auto}
-.zctv-episode{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px;border:1px solid #273629;background:#101711}
+.zctv-episodes{display:grid;grid-template-columns:1fr;gap:7px;max-height:180px;overflow:auto}
+.zctv-episode{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border:1px solid #273629;background:#101711}
 .zctv-episode strong{display:block;color:#edf5e8;font:700 9px Orbitron,sans-serif}
 .zctv-episode span{display:block;margin-top:4px;color:#879985;font:600 10px Rajdhani,sans-serif}
-.zctv-episode button{flex:0 0 auto;min-height:30px;padding:0 10px;border:1px solid #9bff45;background:#9bff45;color:#071006;font:700 8px Orbitron,sans-serif;cursor:pointer}
+.zctv-episode button{flex:0 0 auto;min-height:30px;padding:0 12px;border:1px solid #9bff45;background:#9bff45;color:#071006;font:700 8px Orbitron,sans-serif;cursor:pointer}
 .zctv-empty{padding:12px;color:#9eae9d;font:500 13px Rajdhani,sans-serif}
-.zctv-channels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.zctv-channel-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;min-height:154px;padding:18px;border:1px solid #43543e;background:linear-gradient(145deg,#111b12,#080c0a);text-align:left;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s}
-.zctv-channel-card:hover,.zctv-channel-card[aria-pressed=true]{transform:translateY(-3px);border-color:#9bff45;box-shadow:0 10px 32px #9bff4515}
-.zctv-channel-card[data-channel="meme"]{background:linear-gradient(145deg,#211127,#0b0b12);border-color:#73447b}
-.zctv-channel-card[data-channel="meme"]:hover,.zctv-channel-card[data-channel="meme"][aria-pressed=true]{border-color:#e879ff;box-shadow:0 10px 32px #e879ff18}
-.zctv-channel-card[data-channel="lab"]{background:linear-gradient(145deg,#0d211c,#080d0d);border-color:#286c5a}
-.zctv-channel-card[data-channel="lab"]:hover,.zctv-channel-card[data-channel="lab"][aria-pressed=true]{border-color:#38e8b5;box-shadow:0 10px 32px #38e8b518}
-.zctv-channel-card .num{color:#9bff45;font:700 9px Orbitron,sans-serif;letter-spacing:1.5px}
-.zctv-channel-card[data-channel="meme"] .num{color:#e879ff}.zctv-channel-card[data-channel="lab"] .num{color:#38e8b5}
+.zctv-channels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.zctv-channel-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;min-width:0;min-height:145px;padding:17px;border:1px solid #344b35;background:linear-gradient(145deg,#101a12,#080c0a);text-align:left;cursor:pointer;transition:border-color .2s,background .2s,box-shadow .2s}
+.zctv-channel-card:hover,.zctv-channel-card[aria-pressed=true]{border-color:#9bff45;background:linear-gradient(145deg,#142218,#080d0a);box-shadow:0 8px 26px #9bff4512}
+.zctv-channel-card[data-channel="meme"]{background:linear-gradient(145deg,#1b1420,#0b0b12);border-color:#59405f}
+.zctv-channel-card[data-channel="meme"]:hover,.zctv-channel-card[data-channel="meme"][aria-pressed=true]{border-color:#d78ae8;box-shadow:0 8px 26px #d78ae812}
+.zctv-channel-card[data-channel="lab"]{background:linear-gradient(145deg,#0d1c18,#080d0d);border-color:#286052}
+.zctv-channel-card[data-channel="lab"]:hover,.zctv-channel-card[data-channel="lab"][aria-pressed=true]{border-color:#38d8ad;box-shadow:0 8px 26px #38d8ad12}
+.zctv-channel-card .num{color:#9bff45;font:700 9px Orbitron,sans-serif;letter-spacing:1.4px}
+.zctv-channel-card[data-channel="meme"] .num{color:#d78ae8}.zctv-channel-card[data-channel="lab"] .num{color:#38d8ad}
 .zctv-channel-card strong{margin:12px 0 6px;color:#f0f5e9;font:800 clamp(14px,1.2vw,17px) Orbitron,sans-serif}
 .zctv-channel-card p{margin:0 0 15px;color:#9eae9d;font:500 13px Rajdhani,sans-serif}
 .zctv-channel-card .actions{display:flex;justify-content:space-between;gap:8px;width:100%;margin-top:auto;color:#a9bd9f;font:700 8px Orbitron,sans-serif;letter-spacing:.5px}
-.zctv-channel-card .actions b{color:#9bff45}.zctv-channel-card[data-channel="meme"] .actions b{color:#e879ff}.zctv-channel-card[data-channel="lab"] .actions b{color:#38e8b5}
-.zctv-foot{display:flex;justify-content:space-between;gap:12px;margin-top:18px;padding-top:12px;border-top:1px solid #344333;color:#647560;font:600 8px Orbitron,sans-serif;letter-spacing:1px}
-@media(max-width:1050px){.zctv-layout{grid-template-columns:minmax(180px,.75fr) minmax(0,1fr)}.zctv-host-art{grid-column:2;grid-row:1;height:390px}.zctv-player-column{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(240px,.8fr);align-items:start}.zctv-live-label{grid-column:1/-1}.zctv-player-mount{grid-column:1}.zctv-archive{grid-column:2;grid-row:2}}
-@media(max-width:680px){.zctv-channel-hub{padding:30px 5%}.zctv-layout{grid-template-columns:1fr;gap:16px}.zctv-intro{grid-column:1}.zctv-host-art{grid-column:1;grid-row:auto;height:360px}.zctv-player-column{grid-column:1;display:flex}.zctv-archive{width:100%;box-sizing:border-box}.zctv-channels{grid-template-columns:1fr;gap:10px}.zctv-channel-card{min-height:125px;padding:15px}.zctv-foot{flex-direction:column}.zctv-player-mount #zc-promo-player{max-height:none!important}}
+.zctv-channel-card .actions b{color:#9bff45}.zctv-channel-card[data-channel="meme"] .actions b{color:#d78ae8}.zctv-channel-card[data-channel="lab"] .actions b{color:#38d8ad}
+.zctv-foot{display:flex;justify-content:space-between;gap:12px;margin-top:16px;padding-top:12px;border-top:1px solid #344333;color:#748571;font:600 8px Orbitron,sans-serif;letter-spacing:1px}
+@media(max-width:900px){.zctv-layout{grid-template-columns:minmax(220px,.78fr) minmax(0,1.22fr);gap:12px;padding:12px}.zctv-intro{padding:18px}.zctv-intro h2{font-size:clamp(23px,3vw,32px)}.zctv-player-mount #zc-promo-player{max-height:320px!important}}
+@media(max-width:680px){.zctv-channel-hub{padding:22px 14px}.zctv-layout{grid-template-columns:1fr;gap:12px;padding:10px}.zctv-intro{padding:18px}.zctv-intro h2{font-size:clamp(25px,7vw,34px)}.zctv-player-column{grid-column:1}.zctv-channels{grid-template-columns:1fr;gap:9px}.zctv-channel-card{min-height:120px;padding:14px}.zctv-foot{flex-direction:column}.zctv-player-mount #zc-promo-player{max-height:none!important}}
+@media(prefers-reduced-motion:reduce){.zctv-channel-card{transition:none}}
 </style>
 <script id="zctv-studio-controller-v3">
 (function(){
