@@ -652,3 +652,69 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:hover{
   html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{width:100%!important}
   html body section.section.tools#radar > .tool-grid > article.tool-card:before{inset:32% 0 0 0!important;opacity:.18!important}
 }
+
+
+/* DISTINCT CINEMATIC ARTWORK: one original scene per ZombieCash tool panel. */
+html body section.section.tools#radar > .tool-grid > article.tool-card{
+  border-radius:12px!important;
+  background:#070b0a!important;
+  box-shadow:0 12px 32px #0008,0 0 0 1px #ffffff08 inset!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card:before{
+  content:""!important;
+  position:absolute!important;
+  inset:0 0 0 30%!important;
+  z-index:0!important;
+  display:block!important;
+  pointer-events:none!important;
+  opacity:1!important;
+  background-repeat:no-repeat!important;
+  background-size:cover!important;
+  background-position:center!important;
+  mix-blend-mode:screen!important;
+}
+html body section.section.tools#radar > .tool-grid > article.radar-card:before{
+  background-image:
+   linear-gradient(90deg,rgba(4,9,7,.98) 0%,rgba(4,9,7,.90) 20%,rgba(4,9,7,.62) 56%,rgba(4,9,7,.40) 100%),
+   url("/assets/images/tool-radar-outbreak.svg")!important;
+}
+html body section.section.tools#radar > .tool-grid > article.lab-card:before{
+  background-image:
+   linear-gradient(90deg,rgba(7,5,11,.98) 0%,rgba(7,5,11,.90) 20%,rgba(7,5,11,.60) 56%,rgba(7,5,11,.38) 100%),
+   url("/assets/images/tool-zombie-lab.svg")!important;
+}
+html body section.section.tools#radar > .tool-grid > article.network-card:before{
+  background-image:
+   linear-gradient(90deg,rgba(9,5,7,.98) 0%,rgba(9,5,7,.90) 20%,rgba(9,5,7,.60) 56%,rgba(9,5,7,.38) 100%),
+   url("/assets/images/tool-survivor-network.svg")!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > *{
+  position:relative!important;
+  z-index:2!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
+  border-radius:7px!important;
+}
+html body section.section.tools#radar > .tool-grid > article.radar-card{--panel-accent:#a3ff45}
+html body section.section.tools#radar > .tool-grid > article.lab-card{--panel-accent:#d46cff}
+html body section.section.tools#radar > .tool-grid > article.network-card{--panel-accent:#ff5969}
+html body section.section.tools#radar > .tool-grid > article.tool-card > .card-top{
+  letter-spacing:1.2px!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > h3{
+  text-shadow:0 2px 14px #000!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > p{
+  color:#d8ded9!important;
+  text-shadow:0 1px 8px #000!important;
+}
+html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li{
+  background:linear-gradient(90deg,color-mix(in srgb,var(--panel-accent) 8%,transparent),transparent)!important;
+}
+@media(max-width:760px){
+ html body section.section.tools#radar > .tool-grid > article.tool-card:before{
+  inset:34% 0 0 0!important;
+  opacity:.72!important;
+  background-position:center!important;
+ }
+}
