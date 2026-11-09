@@ -1521,3 +1521,37 @@ button,a{ -webkit-tap-highlight-color:transparent }
   .tools#radar .lab-art:before,.tools#radar .zc-bubble,
   .tools#radar .network-art:before,.tools#radar .network-art:after{animation:none!important;transition:none!important}
 }
+
+
+/* USER-APPROVED TOOL CARD BACKGROUNDS — 2026-11-10
+   Preserve the existing video panels, card layout, copy, controls and animations.
+   The supplied artwork sits only in the lower-right content area, under the text. */
+.tools#radar .tool-card{
+  background-repeat:no-repeat!important;
+  background-position:center, right bottom!important;
+  background-size:100% 100%, 48% 58%!important;
+}
+.tools#radar .radar-card{
+  background-image:
+    linear-gradient(90deg,#070b0ef5 0%,#070b0edb 48%,#070b0e78 76%,#070b0e48 100%),
+    url("/assets/tools/meme-radar.jpg")!important;
+}
+.tools#radar .lab-card{
+  background-image:
+    linear-gradient(90deg,#070b0ef5 0%,#070b0edb 48%,#070b0e78 76%,#070b0e48 100%),
+    url("/assets/tools/zombie-lab.jpg")!important;
+}
+.tools#radar .network-card{
+  background-image:
+    linear-gradient(90deg,#070b0ef5 0%,#070b0edb 48%,#070b0e78 76%,#070b0e48 100%),
+    url("/assets/tools/survivor-network.jpg")!important;
+}
+@media(max-width:700px){
+  .tools#radar .tool-card{
+    background-size:100% 100%, 52% 48%!important;
+    background-position:center, right bottom!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .tools#radar .tool-card{background-attachment:initial!important}
+}
