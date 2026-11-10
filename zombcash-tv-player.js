@@ -57,6 +57,7 @@ root.querySelector(".zctv-archive-head .zctv-label").textContent=t.log;
 root.querySelector("#zctv-archive-title").textContent=t.recent;
 root.querySelector(".zctv-more").textContent=t.more;
 const video=root.querySelector("video"),empty=root.querySelector(".zctv-screen-empty"),status=root.querySelector(".zctv-status"),meta=root.querySelector(".zctv-meta"),list=root.querySelector(".zctv-episodes"),more=root.querySelector(".zctv-more"),count=root.querySelector(".zctv-count"),current=root.querySelector(".zctv-current-title"),desc=root.querySelector(".zctv-current-description");
+current.textContent=t.choose;
 let page=1,totalPages=1,selected=null;
 const setStatus=(value,state="idle")=>{status.textContent=value;meta.dataset.state=state;};
 const date=value=>{const d=new Date(Number(value)*1000);return Number.isNaN(d.getTime())?"":new Intl.DateTimeFormat(lang,{year:"numeric",month:"short",day:"numeric"}).format(d);};
