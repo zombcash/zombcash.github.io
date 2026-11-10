@@ -1902,3 +1902,22 @@ body:has(#home) #home > section:not(.hero){
     max-width:none!important;
   }
 }
+
+
+/* Wide CSS viewports caused by browser zoom-out: scale both hero columns,
+   not only their outer wrapper. Preserve the established two-column design. */
+@media (min-width:1800px) {
+  body:has(#home) #home > section.hero > .hero-layout {
+    grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)!important;
+    gap:clamp(48px,3vw,180px)!important;
+  }
+  body:has(#home) #home > section.hero > .hero-layout > .hero-content {
+    width:100%!important;
+    max-width:none!important;
+  }
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel {
+    width:100%!important;
+    max-width:min(40vw,2400px)!important;
+    min-width:0!important;
+  }
+}
