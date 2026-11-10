@@ -2007,7 +2007,7 @@ html body section.section.tools#radar > .tool-grid{
   grid-auto-rows:1fr!important;
   align-items:stretch!important;
   gap:22px!important;
-  width:min(100%,1440px)!important;
+  width:min(calc(100% - 48px),1440px)!important;
   max-width:1440px!important;
   margin:26px auto 34px!important;
   padding:0!important;
@@ -2140,7 +2140,7 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:hover{
 }
 @media(max-width:760px){
   html body section.section.tools#radar > .tool-grid{
-    grid-template-columns:minmax(0,1fr)!important;gap:16px!important;width:100%!important;
+    grid-template-columns:minmax(0,1fr)!important;gap:16px!important;width:calc(100% - 24px)!important;margin-inline:auto!important;
   }
   html body section.section.tools#radar > .tool-grid > article.tool-card{
     grid-template-rows:auto auto auto minmax(4em,auto) minmax(72px,auto) 40px!important;
