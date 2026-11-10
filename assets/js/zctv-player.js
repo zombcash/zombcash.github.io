@@ -25,6 +25,12 @@
   const promoNext = document.getElementById('zc-promo-next');
   const promoRelease = document.getElementById('zc-promo-release');
   const liveLabel = root.querySelector('.zctv-live-label');
+  const promoControls = document.querySelector('#promo-video .zc-promo-video-controls');
+  const promoStatus = document.querySelector('#promo-video #zc-promo-status');
+  const promoRelease = document.querySelector('#promo-video #zc-promo-release');
+  if (column && mount) {
+    [promoControls, promoStatus, promoRelease].forEach(function (node) { if (node) column.insertBefore(node, mount); });
+  }
   const labels = { all: 'ALL EPISODES', news: 'OUTBREAK NEWS', meme: 'MEME SHOW', lab: 'ZOMBIE LAB' };
   const metaStream = document.querySelector('meta[name="zctv-live-stream"]');
   const liveUrl = (root.dataset.liveStream || (metaStream && metaStream.content) || '').trim();
@@ -163,6 +169,19 @@
       border-radius:18px!important;background:transparent!important;overflow:hidden!important;
       box-shadow:0 22px 65px #0009,0 0 35px #9bff4510!important;
     }
+    #zctv-channel-hub .zc-promo-video-controls{
+      display:flex!important;align-items:center!important;justify-content:space-between!important;
+      gap:8px!important;flex-wrap:wrap!important;width:100%!important;margin:0!important;
+    }
+    #zctv-channel-hub .zc-promo-video-controls button{
+      min-height:36px!important;padding:8px 12px!important;border:1px solid #526b45!important;
+      border-radius:8px!important;background:#0a120c!important;color:#c7e5ba!important;
+      font:700 8px Orbitron,sans-serif!important;cursor:pointer!important;
+    }
+    #zctv-channel-hub .zc-promo-video-controls button:disabled{opacity:.4!important;cursor:not-allowed!important}
+    #zctv-channel-hub #zc-promo-count{color:#9bff45!important;font:700 8px Orbitron,sans-serif!important}
+    #zctv-channel-hub #zc-promo-status{margin:0!important;color:#91a78a!important;font:600 11px Rajdhani,sans-serif!important}
+    #zctv-channel-hub #zc-promo-release{margin:0!important;color:#b9f58e!important;font:700 8px Orbitron,sans-serif!important}
     #zctv-channel-hub .zc-promo-player-wrap{
       display:block!important;width:100%!important;max-width:none!important;margin:0!important;
       overflow:hidden!important;border:1px solid #8fb97880!important;border-radius:18px!important;
