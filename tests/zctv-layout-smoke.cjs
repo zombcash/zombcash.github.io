@@ -1,3 +1,4 @@
+// CI verification branch: run the exact committed ZombieCash TV viewport checks.
 const { chromium } = require('playwright');
 
 (async () => {
