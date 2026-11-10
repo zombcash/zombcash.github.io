@@ -197,3 +197,15 @@ body.gallery-lightbox-open{overflow:hidden}
   .gallery-lightbox.is-image-only .gallery-lightbox-prev,
   .gallery-lightbox.is-image-only .gallery-lightbox-next{width:38px;height:52px;font-size:34px}
 }
+
+
+/* Mobile detail mode: give the caption enough of the viewport to show the full
+   source address and description without requiring hidden inner scrolling. */
+@media(max-width:720px){
+  .gallery-lightbox:not(.is-image-only) figure img{
+    max-height:min(58svh,calc(100svh - 330px));
+  }
+  .gallery-lightbox:not(.is-image-only) figcaption{
+    max-height:min(36svh,300px);
+  }
+}

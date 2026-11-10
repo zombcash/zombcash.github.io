@@ -358,6 +358,13 @@ const expectedGalleryCount = galleryData.items.length;
       const lightbox = document.querySelector(".gallery-lightbox");
       return lightbox?.classList.contains("is-open") && Number.parseFloat(getComputedStyle(lightbox).opacity) >= 0.99;
     });
+    const mobileCaptionMetrics = await mobile.locator(".gallery-lightbox figcaption").evaluate(element => ({
+      scrollHeight: element.scrollHeight,
+      clientHeight: element.clientHeight
+    }));
+    if (mobileCaptionMetrics.scrollHeight > mobileCaptionMetrics.clientHeight + 2) {
+      throw new Error("Mobile lightbox caption is clipped instead of fully visible: " + JSON.stringify(mobileCaptionMetrics));
+    }
     await mobile.screenshot({ path: "gallery-lightbox-mobile-smoke.png" });
     await mobile.locator(".gallery-lightbox-close").click();
     const russian = await browser.newPage({ viewport: { width: 390, height: 844 } });
