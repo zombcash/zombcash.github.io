@@ -1555,31 +1555,3 @@ button,a{ -webkit-tap-highlight-color:transparent }
 @media(prefers-reduced-motion:reduce){
   .tools#radar .tool-card{background-attachment:initial!important}
 }
-
-
-/* Place artwork on the card's existing inset layer, behind copy and CTA.
-   Keep image proportions; align each supplied image to the lower-right. */
-.tools#radar .tool-card{background-image:none!important}
-.tools#radar .tool-card:before{
-  background-repeat:no-repeat!important;
-  background-position:center, right bottom!important;
-  background-size:100% 100%, auto 58%!important;
-}
-.tools#radar .radar-card:before{
-  background-image:
-    linear-gradient(90deg,#070b0ef5 0%,#070b0ee8 43%,#070b0e9c 68%,#070b0e62 100%),
-    url("/assets/tools/meme-radar.jpg")!important;
-}
-.tools#radar .lab-card:before{
-  background-image:
-    linear-gradient(90deg,#070b0ef5 0%,#070b0ee8 43%,#070b0e9c 68%,#070b0e62 100%),
-    url("/assets/tools/zombie-lab.jpg")!important;
-}
-.tools#radar .network-card:before{
-  background-image:
-    linear-gradient(90deg,#070b0ef5 0%,#070b0ee8 43%,#070b0e9c 68%,#070b0e62 100%),
-    url("/assets/tools/survivor-network.jpg")!important;
-}
-@media(max-width:700px){
-  .tools#radar .tool-card:before{background-size:100% 100%, auto 48%!important}
-}

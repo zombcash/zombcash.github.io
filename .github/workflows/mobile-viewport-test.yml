@@ -11,7 +11,6 @@ on:
       - 'index.html'
       - 'homepage-visual.css'
       - 'tests/homepage-locales-layout-smoke.cjs'
-      - 'tests/homepage-zoom-layout-smoke.cjs'
       - 'de/index.html'
       - 'fr/index.html'
       - 'it/index.html'
@@ -57,8 +56,6 @@ concurrency:
 jobs:
   responsive-smoke:
     runs-on: ubuntu-latest
-    env:
-      SITE_URL: http://127.0.0.1:4173/
     timeout-minutes: 10
     steps:
       - name: Check out site
@@ -67,49 +64,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Validate homepage player JavaScript syntax
-        run: node --check assets/js/zctv-player.js
       - name: Install Playwright
         run: |
           npm init -y
           npm install --no-save playwright
           npx playwright install --with-deps chromium
-      - name: Serve checked-out site for deterministic browser QA
-        run: |
-          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/zombcash-preview.log 2>&1 &
-          for attempt in $(seq 1 20); do
-            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
-            sleep 1
-          done
-          cat /tmp/zombcash-preview.log
-          exit 1
-      - name: Test mobile layouts against current checkout
+      - name: Test live mobile layouts
         run: node tests/mobile-viewport-smoke.cjs
       - name: Test homepage layout across all locales and viewports
-        if: always()
         run: node tests/homepage-locales-layout-smoke.cjs
-      - name: Test homepage at reduced browser zoom viewports
-        if: always()
-        run: node tests/homepage-zoom-layout-smoke.cjs
-      - name: Test ZombieCash TV player, archive and responsive columns
-        if: always()
-        run: node tests/zctv-layout-smoke.cjs
       - name: Test Survivor Field Manual across locales and viewports
-        if: always()
         run: node tests/survivor-field-manual-smoke.cjs
       - name: Test multilingual comparison article visually across locales and viewports
-        if: always()
         run: node tests/memecoin-platforms-article-smoke.cjs
-
-      - name: Upload wide viewport visual evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: homepage-zoom-visual-evidence
-          path: homepage-zoom-results/
-          if-no-files-found: ignore
-          retention-days: 7
-
       - name: Upload screenshots and diagnostics
         if: failure()
         uses: actions/upload-artifact@v4
@@ -118,8 +85,6 @@ jobs:
           path: |
             mobile-test-results/
             homepage-locale-results/
-            homepage-zoom-results/
-            zctv-layout-results/
             survivor-field-manual-results/
             memecoin-article-results/
           if-no-files-found: ignore

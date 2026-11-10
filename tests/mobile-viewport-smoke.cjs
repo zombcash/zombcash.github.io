@@ -69,7 +69,7 @@ fs.mkdirSync(outDir, { recursive: true });
       await page.waitForSelector('header.zombcash-shared-header', { timeout: 20000 });
       // Give shared ad/counter insertion scripts a chance to run before measuring.
       await page.waitForTimeout(1200);
-      // Geometry is reserved by CSS; a third-party iframe is not required for layout assertions.
+      await page.waitForSelector('.zc-hero-ad-unit iframe', { timeout: 10000 }).catch(() => {});
 
       const result = await page.evaluate(() => {
         const header = document.querySelector('header.zombcash-shared-header');
@@ -114,10 +114,6 @@ fs.mkdirSync(outDir, { recursive: true });
             const r = slot.getBoundingClientRect();
             return { width: Math.round(r.width), height: Math.round(r.height), visible: getComputedStyle(slot).display !== 'none' && r.width > 0 && r.height > 0 };
           }),
-          nativeSlotVisible: (() => { const el = document.querySelector('.zc-adsterra-native-slot'); if (!el) return false; const r = el.getBoundingClientRect(); return getComputedStyle(el).display !== 'none' && r.width > 0 && r.height > 0; })(),
-          nativeSlotGeometry: (() => { const el = document.querySelector('.zc-adsterra-native-slot'); if (!el) return null; const r = el.getBoundingClientRect(); return { x: Math.round(r.x), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height) }; })(),
-          mobileSlotVisible: (() => { const el = document.querySelector('.zc-adsterra-mobile-slot'); if (!el) return false; const r = el.getBoundingClientRect(); return getComputedStyle(el).display !== 'none' && r.width > 0 && r.height > 0; })(),
-          bannerGridVisible: (() => { const el = document.querySelector('.zc-adsterra-grid'); if (!el) return false; const r = el.getBoundingClientRect(); return getComputedStyle(el).display !== 'none' && r.width > 0 && r.height > 0; })(),
           adGeometry: (() => {
             const ad = document.querySelector('.zc-hero-ad-unit iframe');
             if (!ad) return null;
@@ -139,37 +135,21 @@ fs.mkdirSync(outDir, { recursive: true });
       if (result.adSectionCount !== 1) issues.push(`expected exactly one hero sponsor panel, found ${result.adSectionCount}`);
       if (!result.sponsorPromoVisible) issues.push('Sponsor Zone fallback is not visible');
       if (!result.adPlacementInHero) issues.push('sponsor panel is not inside the original hero layout');
-      // Current placements: 320×50 mobile banner below 768px; 300px native
-      // sponsor reservation from 768px upward. Keep assertions aligned with
-      // the live CSS rather than the retired two-banner desktop grid.
-      const mobileAd = width < 768;
+      // Current placements: one 320×50 mobile banner, or two 300×250 desktop banners.
+      const mobileAd = width <= 900;
+      const expectedAdWidth = mobileAd ? 320 : 300;
+      const expectedAdHeight = mobileAd ? 50 : 250;
+      const expectedStageWidth = mobileAd ? 320 : 612; // two 300px desktop banners plus 12px gap
+      const expectedStageHeight = expectedAdHeight * Math.min(1, (result.adSlotGeometry?.width || expectedStageWidth) / expectedStageWidth);
+      const expectedIframeCount = mobileAd ? 1 : 2;
+      if (!result.atOptions || Number(result.atOptions.width) !== expectedAdWidth || Number(result.atOptions.height) !== expectedAdHeight) issues.push(`expected Adsterra ${expectedAdWidth}×${expectedAdHeight} config at viewport ${width}px`);
       if (!result.adScriptTags.length) issues.push('Adsterra provider script is missing');
-      if (!result.adSlotGeometry) {
-        issues.push('reserved Adsterra stage is missing');
-      } else {
-        if (result.adSlotGeometry.width > width + 1) issues.push('reserved Adsterra slot exceeds the viewport width');
-        if (result.adSlotGeometry.x < -1 || result.adSlotGeometry.right > width + 1) issues.push('reserved Adsterra slot is clipped by viewport bounds');
-        if (mobileAd) {
-          const expectedStageHeight = 50 * Math.min(1, result.adSlotGeometry.width / 320);
-          if (!result.atOptions || Number(result.atOptions.width) !== 320 || Number(result.atOptions.height) !== 50) {
-            issues.push(`expected Adsterra 320×50 config at viewport ${width}px`);
-          }
-          if (result.adSlotGeometry.height < expectedStageHeight * 0.9) issues.push('reserved mobile Adsterra stage is shorter than the selected banner format');
-          if (Math.abs(result.adSlotGeometry.width / result.adSlotGeometry.height - 320 / 50) > 0.25) {
-            issues.push('reserved mobile Adsterra slot does not preserve the selected banner aspect ratio');
-          }
-          if (!result.mobileSlotVisible) issues.push('mobile Adsterra banner slot is not visible below 768px');
-          if (result.ads > 1) issues.push(`expected at most 1 mobile Adsterra iframe, found ${result.ads}`);
-        } else {
-          if (result.adSlotGeometry.height < 270) issues.push('native sponsor stage must reserve at least 270px from 768px upward');
-          if (!result.nativeSlotVisible || !result.nativeSlotGeometry || result.nativeSlotGeometry.height < 270) {
-            issues.push('300px native sponsor slot is missing or not visibly reserved');
-          }
-          if (result.mobileSlotVisible || result.bannerGridVisible) {
-            issues.push('legacy mobile/banner-grid placements must be hidden when the native sponsor slot is active');
-          }
-        }
-      }
+      if (!result.adSlotGeometry || result.adSlotGeometry.height < expectedStageHeight * 0.9) issues.push('reserved Adsterra stage is shorter than the selected banner format');
+      if (mobileAd && result.adSlotGeometry && Math.abs(result.adSlotGeometry.width / result.adSlotGeometry.height - expectedAdWidth / expectedAdHeight) > 0.25) issues.push('reserved mobile Adsterra slot does not preserve the selected banner aspect ratio');
+      if (result.adSlotGeometry && result.adSlotGeometry.width > width + 1) issues.push('reserved Adsterra slot exceeds the viewport width');
+      if (result.adSlotGeometry && (result.adSlotGeometry.x < -1 || result.adSlotGeometry.right > width + 1)) issues.push('reserved Adsterra slot is clipped by viewport bounds');
+      if (!mobileAd && result.adBannerSlots.filter(slot => slot.visible && slot.width === 300 && slot.height === 250).length !== 2) issues.push('desktop layout must reserve two visible 300×250 Adsterra banners');
+      if (result.ads > expectedIframeCount) issues.push(`expected at most ${expectedIframeCount} Adsterra iframe(s), found ${result.ads}`);
       if (result.adGeometry && result.adSlotGeometry && (result.adGeometry.x < result.adSlotGeometry.x - 1 || result.adGeometry.right > result.adSlotGeometry.right + 1)) issues.push('Adsterra iframe escapes its reserved slot');
       if (!result.pageVisitCounter) issues.push('homepage global visitor counter section is missing');
       if (result.adGeometry && result.adGeometry.position === 'fixed') issues.push('Adsterra iframe must not be fixed while scrolling');

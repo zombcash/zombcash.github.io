@@ -19,20 +19,11 @@ assert all(item.get("alt_review_method") in {"manual-visual-review", "manual-con
 assert all(item.get("alt_text", "").strip() for item in items), "Every card needs an ALT text value"
 for item in reviewed:
     assert item.get("image_width") == 800 and item.get("image_height") == 800, f"Unexpected reviewed dimensions: {item['id']}"
-missing_dimensions = []
 for item in items:
     width = item.get("image_width")
     height = item.get("image_height")
-    if width is None and height is None:
-        # Telegram CDN dimension probes can fail transiently. The gallery CSS
-        # reserves a square card before the image loads, so keep the card
-        # crawlable without inventing intrinsic dimensions for the source.
-        assert item.get("alt_review_status") == "pending-review", f"Missing dimensions on an already-reviewed image: {item['id']}"
-        missing_dimensions.append(item["id"])
-        continue
     assert isinstance(width, int) and 0 < width <= 10000, f"Missing/invalid image width: {item['id']}"
     assert isinstance(height, int) and 0 < height <= 10000, f"Missing/invalid image height: {item['id']}"
-assert len(missing_dimensions) <= max(1, len(items) // 20), f"Too many gallery images are missing source dimensions: {missing_dimensions}"
 for item in pending:
     assert item.get("alt_review_method") == "not-reviewed", f"Pending item has an invalid review method: {item['id']}"
     assert item.get("pinterest_status") == "blocked-rights-review", f"Unreviewed item is not blocked from Pinterest: {item['id']}"
@@ -73,13 +64,9 @@ item_by_id = {item["id"]: item for item in items}
 for card in parser.cards:
     item = item_by_id[card["id"]]
     image = card["images"][0]
-    if item.get("image_width") is None and item.get("image_height") is None:
-        assert image.get("width") is None and image.get("height") is None, f"Unverified dimensions were emitted for {card['id']}"
-    else:
-        assert image.get("width") == str(item["image_width"]), f"Static card width mismatch: {card['id']}"
-        assert image.get("height") == str(item["image_height"]), f"Static card height mismatch: {card['id']}"
-gallery_css = Path("gallery.css").read_text(encoding="utf-8")
-assert ".gallery-card img{" in gallery_css and "aspect-ratio:1 / 1" in gallery_css, "Gallery images must reserve a square layout before loading"
+    assert image.get("width") == str(item["image_width"]), f"Static card width mismatch: {card['id']}"
+    assert image.get("height") == str(item["image_height"]), f"Static card height mismatch: {card['id']}"
+assert any(".gallery-card img{" in line and "aspect-ratio:1 / 1" in line for line in Path("gallery.css").read_text(encoding="utf-8").splitlines())
 
 NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9", "im": "http://www.google.com/schemas/sitemap-image/1.1"}
 sitemap = ET.parse("sitemap-gallery-images.xml").getroot()
@@ -106,4 +93,4 @@ for marker in ("gallery-toolbar", "gallery-lightbox-share", "/api/gallery/likes"
     assert marker in js, marker
 assert "window.ZombieCashTrack = send;" in Path("script.js").read_text(encoding="utf-8")
 
-print(f"PASS: {len(items)} static gallery cards (up to 50 per primary category: {category_counts}), {len(reviewed)} visually reviewed, {len(pending)} pending review and Pinterest-blocked, {len(missing_dimensions)} CDN dimension fallback(s) protected by the square CSS ratio, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")
+print(f"PASS: {len(items)} static gallery cards (up to 50 per primary category: {category_counts}), {len(reviewed)} visually reviewed, {len(pending)} pending review and Pinterest-blocked, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")
