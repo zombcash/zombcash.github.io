@@ -54,7 +54,7 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
   check(m.intro && m.intro.width >= 250, 'Desktop intro column is too narrow');
   check(m.host && m.host.width >= 280 && m.host.height >= 300, 'Desktop host artwork dimensions are incorrect');
   check(m.player && m.player.width >= 360, 'Desktop video/player column is too narrow');
-  check(m.intro.right < m.host.x && m.host.right < m.player.x, 'Desktop columns overlap or are out of order');
+  check(m.player.right < m.intro.x && m.intro.right < m.host.x, 'Desktop columns must be ordered player, intro, host from left to right');
   check(m.video && m.video.width > 0 && Math.abs(m.video.width / m.video.height - 16/9) < .08, 'Desktop video frame is not 16:9');
   check(m.videoSource.includes('zombiecash_final_real_screens.mp4'), 'Empty archive must fall back to the published promo video');
   check(m.promoControls && m.promoControls.width > 0 && m.promoControls.height > 0, 'Promo library controls must be visible inside the TV player column');
