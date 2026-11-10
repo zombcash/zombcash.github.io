@@ -1786,3 +1786,42 @@ body:has(#home) #home .zctv-player-column {
     display: block !important;
   }
 }
+
+/* 2026-11-10 verified responsive fix: override legacy !important TV grid rules at tablet widths. */
+@media (max-width: 1050px) {
+  body:has(#home) #zctv-channel-hub .zctv-layout {
+    display:grid!important;
+    width:100%!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:auto auto auto!important;
+    align-items:start!important;
+  }
+  body:has(#home) #zctv-channel-hub .zctv-player-column {
+    display:flex!important;
+    width:min(100%,760px)!important;
+    max-width:760px!important;
+    min-width:0!important;
+    grid-column:1!important;
+    grid-row:1!important;
+    justify-self:center!important;
+    align-self:start!important;
+    margin-inline:auto!important;
+  }
+  body:has(#home) #zctv-channel-hub .zctv-intro {
+    grid-column:1!important;
+    grid-row:2!important;
+  }
+  body:has(#home) #zctv-channel-hub .zctv-host-art {
+    grid-column:1!important;
+    grid-row:3!important;
+    width:100%!important;
+    max-width:760px!important;
+    justify-self:center!important;
+  }
+  body:has(#home) #zctv-channel-hub .zctv-player-mount,
+  body:has(#home) #zctv-channel-hub .zctv-archive {
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+  }
+}
