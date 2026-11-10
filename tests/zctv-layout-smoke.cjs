@@ -28,6 +28,7 @@ const { chromium } = require('playwright');
       host: box('#zctv-channel-hub .zctv-host-art'),
       player: box('#zctv-channel-hub .zctv-player-column'),
       video: box('#zctv-channel-hub #zc-promo-player'),
+      videoSource: document.querySelector('#zctv-channel-hub #zc-promo-player')?.currentSrc || document.querySelector('#zctv-channel-hub #zc-promo-player')?.src || '',
       archive: box('#zctv-channel-hub .zctv-archive'),
       channels: getComputedStyle(cards).gridTemplateColumns.split(' ').filter(Boolean).length,
       documentWidth: document.documentElement.scrollWidth,
@@ -42,6 +43,7 @@ const { chromium } = require('playwright');
   check(m.player && m.player.width >= 360, 'Desktop video/player column is too narrow');
   check(m.intro.right < m.host.x && m.host.right < m.player.x, 'Desktop columns overlap or are out of order');
   check(m.video && m.video.width > 0 && Math.abs(m.video.width / m.video.height - 16/9) < .08, 'Desktop video frame is not 16:9');
+  check(m.videoSource.includes('zombiecash_final_real_screens.mp4'), 'Empty archive must fall back to the published promo video');
   check(m.archive && Math.abs(m.archive.width - m.player.width) < 4, 'Episode archive must match the player width');
   check(m.channels === 3, 'Desktop channel cards must use three columns');
   check(m.documentWidth <= m.viewportWidth, 'Desktop page has horizontal overflow');
