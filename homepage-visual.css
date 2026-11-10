@@ -1875,3 +1875,30 @@ body:has(#home) #home > section:not(.hero){
     margin-inline:0!important;
   }
 }
+
+
+/* Responsive viewport compensation:
+   At reduced browser zoom the CSS viewport becomes very wide. Let capped homepage
+   content expand with it instead of collapsing to a tiny 1440px island. */
+@media (min-width:1800px) {
+  body:has(#home) #home > section.hero > .hero-layout,
+  body:has(#home) #home .zc-promo-video-shell,
+  body:has(#home) #zctv-channel-hub > .zctv-inner,
+  body:has(#home) #home .world-grid,
+  body:has(#home) #home .intro-row,
+  body:has(#home) #home .hero-stats,
+  body:has(#home) #home .hero-bottom {
+    width:90vw!important;
+    max-width:5600px!important;
+    margin-inline:auto!important;
+  }
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel {
+    max-width:min(40vw,2400px)!important;
+  }
+}
+@media (max-width:600px) {
+  body:has(#home) #zctv-channel-hub > .zctv-inner {
+    width:calc(100% - 8px)!important;
+    max-width:none!important;
+  }
+}
