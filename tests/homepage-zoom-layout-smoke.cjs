@@ -2,6 +2,8 @@ const { chromium } = require('playwright');
 
 const URL = process.env.SITE_URL || 'https://zombcash.github.io/';
 const widths = [1800, 3200, 6400];
+const outDir = 'homepage-zoom-results';
+require('node:fs').mkdirSync(outDir, { recursive: true });
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -45,6 +47,7 @@ const widths = [1800, 3200, 6400];
       if (!layout.player || layout.player.width < 420) issues.push('ZombieCash TV player column is too narrow');
       if (layout.documentWidth > width + 2) issues.push('horizontal overflow: ' + layout.documentWidth + 'px');
       if (errors.length) issues.push('JavaScript errors: ' + errors.join(' | '));
+      await page.screenshot({ path: `${outDir}/homepage-zoom-${width}.png`, fullPage: false });
       console.log(JSON.stringify({ width, layout, issues }));
       if (issues.length) failures.push({ width, issues, layout });
       await page.close();
