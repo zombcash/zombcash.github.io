@@ -1673,6 +1673,12 @@ body:has(#home) #home > #zctv-channel-hub {
   box-sizing:border-box!important;
   overflow:visible!important;
 }
+/* The original promo section is retained in the HTML as a source for the shared player,
+   but the player is moved into ZombieCash TV by zctv-player.js. Keep the empty
+   source section hidden; a broad homepage section rule must not resurrect it. */
+body:has(#home) #home > section#promo-video {
+  display:none!important;
+}
 body:has(#home) #zctv-channel-hub > .zctv-inner {
   display:block!important;
   width:100%!important;
@@ -1687,17 +1693,20 @@ body:has(#home) #zctv-channel-hub .zctv-layout {
   min-width:0!important;
   grid-template-columns:minmax(250px,.86fr) minmax(280px,1fr) minmax(360px,1.18fr)!important;
   grid-template-rows:auto!important;
+  grid-template-areas:"intro host player"!important;
+  grid-auto-flow:row!important;
   gap:clamp(16px,1.9vw,28px)!important;
   align-items:stretch!important;
   margin:20px 0 26px!important;
 }
 body:has(#home) #zctv-channel-hub .zctv-intro {
-  grid-column:1!important;grid-row:1!important;
-  min-width:0!important;align-self:center!important;
+  grid-area:intro!important;
+  min-width:0!important;
+  align-self:center!important;
 }
 body:has(#home) #zctv-channel-hub .zctv-host-art {
   display:flex!important;
-  grid-column:2!important;grid-row:1!important;
+  grid-area:host!important;
   width:100%!important;min-width:0!important;
   height:clamp(320px,31vw,420px)!important;
   min-height:300px!important;max-height:420px!important;
@@ -1708,7 +1717,7 @@ body:has(#home) #zctv-channel-hub .zctv-host-art img {
 }
 body:has(#home) #zctv-channel-hub .zctv-player-column {
   display:flex!important;
-  grid-column:3!important;grid-row:1!important;
+  grid-area:player!important;
   width:100%!important;max-width:none!important;min-width:0!important;
   margin:0!important;align-self:stretch!important;
   flex-direction:column!important;gap:12px!important;
@@ -1752,21 +1761,18 @@ body:has(#home) #zctv-channel-hub .zctv-channel-card {
   body:has(#home) #zctv-channel-hub .zctv-layout {
     grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
     grid-template-rows:auto auto!important;
+    grid-template-areas:"player player" "intro host"!important;
     gap:18px!important;
   }
   body:has(#home) #zctv-channel-hub .zctv-player-column {
-    grid-column:1 / -1!important;grid-row:1!important;
-    width:min(100%,900px)!important;max-width:900px!important;
+    grid-area:player!important;
+    width:min(100%,760px)!important;max-width:760px!important;
     justify-self:center!important;margin-inline:auto!important;
   }
-  body:has(#home) #zctv-channel-hub .zctv-intro {
-    grid-column:1!important;grid-row:2!important;
-  }
+  body:has(#home) #zctv-channel-hub .zctv-intro {grid-area:intro!important}
   body:has(#home) #zctv-channel-hub .zctv-host-art {
-    grid-column:2!important;grid-row:2!important;
-    width:100%!important;max-width:none!important;
-    height:clamp(260px,38vw,390px)!important;
-    min-height:250px!important;
+    grid-area:host!important;width:100%!important;max-width:none!important;
+    height:clamp(260px,38vw,390px)!important;min-height:250px!important;
   }
   body:has(#home) #zctv-channel-hub .zctv-channels {
     grid-template-columns:repeat(3,minmax(0,1fr))!important;
@@ -1776,18 +1782,15 @@ body:has(#home) #zctv-channel-hub .zctv-channel-card {
   body:has(#home) #zctv-channel-hub .zctv-layout {
     grid-template-columns:minmax(0,1fr)!important;
     grid-template-rows:auto auto auto!important;
+    grid-template-areas:"intro" "host" "player"!important;
+  }
+  body:has(#home) #zctv-channel-hub .zctv-intro {grid-area:intro!important}
+  body:has(#home) #zctv-channel-hub .zctv-host-art {
+    grid-area:host!important;width:100%!important;max-width:100%!important;
+    height:clamp(240px,65vw,390px)!important;
   }
   body:has(#home) #zctv-channel-hub .zctv-player-column {
-    grid-column:1!important;grid-row:1!important;
-    width:100%!important;max-width:100%!important;
-  }
-  body:has(#home) #zctv-channel-hub .zctv-intro {
-    grid-column:1!important;grid-row:2!important;
-  }
-  body:has(#home) #zctv-channel-hub .zctv-host-art {
-    grid-column:1!important;grid-row:3!important;
-    width:100%!important;max-width:100%!important;
-    height:clamp(240px,65vw,390px)!important;
+    grid-area:player!important;width:100%!important;max-width:100%!important;
   }
 }
 @media(max-width:600px) {
