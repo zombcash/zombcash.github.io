@@ -1,3 +1,4 @@
+// CI-only verification commit for the published TV layout and featured-video fallback.
 const { chromium } = require('playwright');
 
 (async () => {
