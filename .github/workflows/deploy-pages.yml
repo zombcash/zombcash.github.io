@@ -36,6 +36,23 @@ jobs:
         with:
           path: .
 
+      - name: Clear stale GitHub Pages deployment lock
+        uses: actions/github-script@v7
+        continue-on-error: true
+        with:
+          script: |
+            const staleSha = 'a4a75ee4be7e1d709267338e7263fc68e568b75f';
+            try {
+              await github.request('POST /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel', {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pages_deployment_id: staleSha
+              });
+              core.info('Requested cancellation of stale Pages deployment ' + staleSha);
+            } catch (error) {
+              core.warning('Stale Pages deployment cancellation returned: ' + error.message);
+            }
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
