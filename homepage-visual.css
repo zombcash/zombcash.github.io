@@ -1964,3 +1964,18 @@ body:has(#home) #home > section:not(.hero){
     margin-inline:auto!important;
   }
 }
+
+
+/* The global 1276px layout rule also offsets .hero-bottom. When the wide
+   viewport rule gives it a 90vw width, those old left/right offsets add to
+   the width and push the document beyond the viewport. Re-center it using
+   the exact same capped width as the hero layout. */
+@media (min-width:1800px) {
+  html body:has(main#home) > main#home > section.hero > .hero-bottom {
+    left:calc((100vw - min(90vw,5600px))/2)!important;
+    right:calc((100vw - min(90vw,5600px))/2)!important;
+    width:min(90vw,5600px)!important;
+    max-width:5600px!important;
+    margin-inline:0!important;
+  }
+}
