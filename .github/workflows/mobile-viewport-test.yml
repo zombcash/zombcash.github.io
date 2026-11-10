@@ -11,6 +11,7 @@ on:
       - 'index.html'
       - 'homepage-visual.css'
       - 'tests/homepage-locales-layout-smoke.cjs'
+      - 'tests/homepage-zoom-layout-smoke.cjs'
       - 'de/index.html'
       - 'fr/index.html'
       - 'it/index.html'
@@ -73,6 +74,8 @@ jobs:
         run: node tests/mobile-viewport-smoke.cjs
       - name: Test homepage layout across all locales and viewports
         run: node tests/homepage-locales-layout-smoke.cjs
+      - name: Test homepage at reduced browser zoom viewports
+        run: node tests/homepage-zoom-layout-smoke.cjs
       - name: Test Survivor Field Manual across locales and viewports
         run: node tests/survivor-field-manual-smoke.cjs
       - name: Test multilingual comparison article visually across locales and viewports
