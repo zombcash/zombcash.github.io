@@ -39,6 +39,10 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
       promoCount: document.querySelector('#zctv-channel-hub #zc-promo-count')?.textContent.trim() || '',
       archive: box('#zctv-channel-hub .zctv-archive'),
       channels: getComputedStyle(cards).gridTemplateColumns.split(' ').filter(Boolean).length,
+      overflowElements: [...document.body.querySelectorAll('*')].map(el => {
+        const r = el.getBoundingClientRect();
+        return { tag: el.tagName.toLowerCase(), id: el.id || '', className: typeof el.className === 'string' ? el.className.split(' ').slice(0,3).join('.') : '', left: Math.round(r.left), right: Math.round(r.right), width: Math.round(r.width), overflowX: getComputedStyle(el).overflowX };
+      }).filter(item => item.right > innerWidth || item.left < 0).sort((a,b) => b.right - a.right).slice(0,12),
       documentWidth: document.documentElement.scrollWidth,
       viewportWidth: innerWidth
     };
@@ -61,21 +65,24 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
   console.log('DESKTOP', JSON.stringify(m));
 
   await page.setViewportSize({ width: 1024, height: 900 });
+  await page.locator('#zctv-channel-hub').scrollIntoViewIfNeeded();
   await page.waitForTimeout(150);
   m = await measure();
   check(m.tracks === 2, 'Tablet must use two support columns below a full-width player');
   check(m.player && m.player.width <= 1040 && Math.abs((m.player.x + m.player.width/2) - 512) < 5, 'Tablet player must be centered and capped at 1040px');
   check(m.intro && m.host && m.intro.y < m.host.bottom && m.host.y < m.intro.bottom, 'Tablet intro and host artwork must share a row');
+  check(m.player && m.intro && m.host && m.player.y >= Math.max(m.intro.bottom, m.host.bottom) - 5, 'Tablet player must sit below the intro and host row');
   await page.screenshot({ path: 'zctv-layout-results/tablet.png' });
   check(m.video && Math.abs(m.video.width / m.video.height - 16/9) < .08, 'Tablet video frame is not 16:9');
   check(m.documentWidth <= m.viewportWidth, 'Tablet page has horizontal overflow');
   console.log('TABLET', JSON.stringify(m));
 
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.locator('#zctv-channel-hub').scrollIntoViewIfNeeded();
   await page.waitForTimeout(150);
   m = await measure();
   check(m.tracks === 1, 'Mobile TV content must stack in one column');
-  check(m.player && m.intro.y < m.host.y && m.host.y < m.player.y, 'Mobile order must be intro, host artwork, player and archive');
+  check(m.player && m.intro && m.host && m.intro.y < m.host.y && m.host.y < m.player.y, 'Mobile order must be intro, host artwork, player and archive');
   check(m.channels === 1, 'Mobile channel cards must stack in one column');
   check(m.documentWidth <= m.viewportWidth, 'Mobile page has horizontal overflow');
   await page.screenshot({ path: 'zctv-layout-results/mobile.png' });
