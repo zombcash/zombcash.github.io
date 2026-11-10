@@ -1593,3 +1593,50 @@ body:has(#home) #zctv-channel-hub .zctv-channel-card {
     grid-template-columns:minmax(0,1fr)!important;
   }
 }
+
+
+/* 2026-11-10: TV player must occupy the complete right column; archive stays compact. */
+body:has(#home) #zctv-channel-hub .zctv-layout {
+  grid-template-columns:minmax(245px,.34fr) minmax(0,1.66fr)!important;
+}
+body:has(#home) #zctv-channel-hub .zctv-player-column {
+  width:100%!important;min-width:0!important;max-width:none!important;
+  grid-column:2!important;grid-row:1 / span 2!important;
+}
+body:has(#home) #zctv-channel-hub .zctv-player-mount {
+  display:block!important;width:100%!important;min-width:0!important;
+  max-width:none!important;box-sizing:border-box!important;
+  padding:0!important;overflow:hidden!important;
+}
+body:has(#home) #zctv-channel-hub .zc-promo-player-wrap {
+  display:block!important;position:relative!important;
+  width:100%!important;min-width:0!important;max-width:none!important;
+  margin:0!important;box-sizing:border-box!important;
+}
+body:has(#home) #zctv-channel-hub #zc-promo-player {
+  display:block!important;width:100%!important;min-width:0!important;
+  max-width:none!important;height:auto!important;max-height:none!important;
+  aspect-ratio:16/9!important;object-fit:contain!important;
+}
+body:has(#home) #zctv-channel-hub .zctv-archive {
+  display:block!important;width:100%!important;max-width:none!important;
+  max-height:none!important;height:auto!important;min-height:0!important;
+  box-sizing:border-box!important;overflow:visible!important;
+  padding:12px 14px!important;
+}
+body:has(#home) #zctv-channel-hub .zctv-episodes {
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  width:100%!important;max-height:190px!important;min-height:0!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+}
+body:has(#home) #zctv-channel-hub .zctv-empty {
+  min-height:0!important;padding:10px 8px!important;
+}
+body:has(#home) #zctv-channel-hub .zctv-episode {
+  width:100%!important;box-sizing:border-box!important;
+}
+@media(max-width:900px) {
+  body:has(#home) #zctv-channel-hub .zctv-player-column {
+    grid-column:1!important;grid-row:1!important;
+  }
+}
