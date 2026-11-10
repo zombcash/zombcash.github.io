@@ -1023,6 +1023,46 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 .zctv-foot{display:flex;justify-content:space-between;gap:12px;margin-top:18px;padding-top:12px;border-top:1px solid #344333;color:#647560;font:600 8px Orbitron,sans-serif;letter-spacing:1px}
 @media(max-width:1050px){.zctv-layout{grid-template-columns:minmax(180px,.75fr) minmax(0,1fr)}.zctv-host-art{grid-column:2;grid-row:1;height:390px}.zctv-player-column{grid-column:1/-1;display:flex;flex-direction:column;align-items:stretch;justify-self:center;width:min(100%,760px);max-width:760px;min-width:0;margin-inline:auto}.zctv-live-label{width:100%;box-sizing:border-box}.zctv-player-mount{box-sizing:border-box;width:100%;min-width:0;margin-inline:auto}.zctv-archive{box-sizing:border-box;width:100%;min-width:0}}
 @media(max-width:680px){.zctv-channel-hub{padding:30px 5%}.zctv-layout{grid-template-columns:1fr;gap:16px}.zctv-intro{grid-column:1}.zctv-host-art{grid-column:1;grid-row:auto;height:360px}.zctv-player-column{grid-column:1;display:flex}.zctv-archive{width:100%;box-sizing:border-box}.zctv-channels{grid-template-columns:1fr;gap:10px}.zctv-channel-card{min-height:125px;padding:15px}.zctv-foot{flex-direction:column}.zctv-player-mount #zc-promo-player{max-height:none!important}}
+
+/* 2026-11-11 stable TV geometry: player left, fixed proportional columns */
+@media (min-width:1201px){
+  #zctv-channel-hub .zctv-layout{
+    display:grid!important;
+    grid-template-columns:minmax(360px,1.15fr) minmax(280px,.9fr) minmax(340px,1.05fr)!important;
+    grid-template-areas:"player intro host"!important;
+    grid-template-rows:minmax(0,1fr)!important;
+    align-items:stretch!important;
+    gap:clamp(14px,1.4vw,24px)!important;
+  }
+  #zctv-channel-hub .zctv-player-column{grid-area:player!important;min-width:0!important;width:100%!important;align-self:stretch!important}
+  #zctv-channel-hub .zctv-intro{grid-area:intro!important;min-width:0!important;align-self:center!important}
+  #zctv-channel-hub .zctv-host-art{grid-area:host!important;width:100%!important;height:auto!important;min-height:360px!important;aspect-ratio:4/5!important;align-self:stretch!important}
+}
+@media (min-width:701px) and (max-width:1200px){
+  #zctv-channel-hub .zctv-layout{
+    display:grid!important;grid-template-columns:minmax(320px,1.08fr) minmax(260px,.92fr)!important;
+    grid-template-rows:minmax(220px,auto) minmax(220px,auto)!important;
+    grid-template-areas:"player intro" "player host"!important;
+    align-items:stretch!important;gap:14px!important;
+  }
+  #zctv-channel-hub .zctv-player-column{grid-area:player!important;width:100%!important;min-width:0!important;align-self:stretch!important}
+  #zctv-channel-hub .zctv-intro{grid-area:intro!important;min-width:0!important;align-self:center!important}
+  #zctv-channel-hub .zctv-host-art{grid-area:host!important;width:100%!important;height:100%!important;min-height:220px!important;aspect-ratio:auto!important}
+}
+@media (max-width:700px){
+  #zctv-channel-hub .zctv-layout{
+    display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:auto auto auto!important;grid-template-areas:"player" "intro" "host"!important;
+    gap:14px!important;
+  }
+  #zctv-channel-hub .zctv-player-column{grid-area:player!important;width:100%!important;min-width:0!important}
+  #zctv-channel-hub .zctv-intro{grid-area:intro!important;width:100%!important;min-width:0!important}
+  #zctv-channel-hub .zctv-host-art{grid-area:host!important;width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:16/10!important}
+}
+#zctv-channel-hub .zctv-player-mount,
+#zctv-channel-hub .zctv-archive,
+#zctv-channel-hub .zctv-host-art{box-sizing:border-box!important;min-width:0!important}
+#zctv-channel-hub .zctv-player-mount .zc-promo-player-wrap{width:100%!important;max-width:100%!important}
 </style>
 <script src="/assets/js/zctv-player.js?v=18-player-left-grid-20261111" defer></script>
 
