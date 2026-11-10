@@ -275,7 +275,7 @@
       #zctv-channel-hub .zctv-channel-card{min-height:104px!important;padding:15px!important;border-radius:13px!important}
       #zctv-channel-hub .zctv-foot{flex-direction:column!important}
     }
-  `;;
+  `;
   document.head.appendChild(style);
 
   function text(node, value) { if (node) node.textContent = value; }
