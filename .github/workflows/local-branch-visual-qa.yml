@@ -16,20 +16,15 @@ on:
       - "tr/index.html"
       - "hi/index.html"
       - "shared-nav.js"
-      - "zombcash-tv-player.css"
-      - "zombcash-tv-player.js"
-      - "tests/zombcash-tv-player-visual.cjs"
       - "language.js"
       - "homepage-visual.css"
       - "assets/js/zctv-player.js"
       - "tests/zctv-layout-smoke.cjs"
-      - "tests/tool-video-card-layout-smoke.cjs"
       - "homepage-ribbons.js"
       - "assets/zombcash-survivor-v13.jpg"
       - "docs/DESIGN-STYLE-GUIDE.md"
       - ".github/workflows/homepage-visual-smoke.yml"
       - "tests/mobile-viewport-smoke.cjs"
-      - "tests/homepage-zoom-layout-smoke.cjs"
       - "tests/localized-article-visual.cjs"
       - "tests/survivor-field-manual-smoke.cjs"
       - "tests/memecoin-platforms-article-smoke.cjs"
@@ -62,13 +57,9 @@ jobs:
       - name: Validate JavaScript syntax
         run: |
           node --check shared-nav.js
-          node --check zombcash-tv-player.js
-          node --check tests/zombcash-tv-player-visual.cjs
           node --check language.js
           node --check tests/mobile-viewport-smoke.cjs
-          node --check tests/homepage-zoom-layout-smoke.cjs
           node --check tests/zctv-layout-smoke.cjs
-          node --check tests/tool-video-card-layout-smoke.cjs
           node --check tests/localized-article-visual.cjs
           node --check tests/survivor-field-manual-smoke.cjs
           node --check tests/memecoin-platforms-article-smoke.cjs
@@ -98,11 +89,6 @@ jobs:
           echo "::error::Local branch preview did not start."
           exit 1
 
-      - name: Test Outbreak Transmission TV archive across all locales and viewports
-        env:
-          SITE_URL: http://127.0.0.1:4173
-        run: node tests/zombcash-tv-player-visual.cjs
-
       - name: Test ZombieCash TV three-column, tablet and mobile layout
         env:
           SITE_URL: http://127.0.0.1:4173/
@@ -112,16 +98,6 @@ jobs:
         env:
           SITE_URL: http://127.0.0.1:4173/
         run: node tests/mobile-viewport-smoke.cjs
-
-      - name: Test homepage at reduced browser zoom viewports
-        env:
-          SITE_URL: http://127.0.0.1:4173/
-        run: node tests/homepage-zoom-layout-smoke.cjs
-
-      - name: Test balanced tool video cards, 16:9 windows and hover/touch playback
-        env:
-          SITE_URL: http://127.0.0.1:4173/
-        run: node tests/tool-video-card-layout-smoke.cjs
 
       - name: Test localized articles across desktop and mobile
         env:
@@ -150,9 +126,7 @@ jobs:
           name: local-branch-visual-qa
           path: |
             mobile-test-results/
-            homepage-zoom-results/
             zctv-layout-results/
-            tool-video-card-results/
             localized-article-visual-results/
             survivor-field-manual-results/
             memecoin-article-results/

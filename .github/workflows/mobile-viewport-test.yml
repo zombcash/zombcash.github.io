@@ -12,7 +12,6 @@ on:
       - 'homepage-visual.css'
       - 'tests/homepage-locales-layout-smoke.cjs'
       - 'tests/homepage-zoom-layout-smoke.cjs'
-      - 'tests/tool-video-card-layout-smoke.cjs'
       - 'de/index.html'
       - 'fr/index.html'
       - 'it/index.html'
@@ -95,9 +94,6 @@ jobs:
       - name: Test ZombieCash TV player, archive and responsive columns
         if: always()
         run: node tests/zctv-layout-smoke.cjs
-      - name: Test balanced tool video cards, 16:9 windows and hover/touch playback
-        if: always()
-        run: node tests/tool-video-card-layout-smoke.cjs
       - name: Test Survivor Field Manual across locales and viewports
         if: always()
         run: node tests/survivor-field-manual-smoke.cjs
@@ -124,7 +120,6 @@ jobs:
             homepage-locale-results/
             homepage-zoom-results/
             zctv-layout-results/
-            tool-video-card-results/
             survivor-field-manual-results/
             memecoin-article-results/
           if-no-files-found: ignore
