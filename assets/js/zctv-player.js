@@ -66,7 +66,7 @@
     @keyframes zctvPulse{0%,100%{opacity:1;box-shadow:0 0 8px #9bff45,0 0 20px #9bff4580}50%{opacity:.55;box-shadow:0 0 3px #9bff45,0 0 9px #9bff4560}}
     @media(max-width:900px){#zctv-channel-hub .zctv-layout{grid-template-columns:minmax(0,1fr)!important}#zctv-channel-hub .zctv-player-column{grid-column:1!important;grid-row:1!important}#zctv-channel-hub .zctv-intro{grid-column:1!important;grid-row:2!important}}
     @media(max-width:600px){#zctv-channel-hub{padding:24px 4%!important}#zctv-channel-hub .zctv-live-label{align-items:flex-start!important;flex-direction:column!important}#zctv-channel-hub .zctv-channels{grid-template-columns:1fr!important}#zctv-channel-hub .zctv-channel-card{min-height:105px!important}#zctv-channel-hub .zctv-archive{max-height:250px!important}#zctv-channel-hub #zc-promo-player{max-height:none!important}}
-  `;
+
 
     /* Cinematic studio refinement: one dominant screen, host portrait as a secondary rail. */
     #zctv-channel-hub{padding:clamp(30px,4vw,64px) clamp(14px,3vw,44px)!important;background:radial-gradient(ellipse at 72% 38%,#183b1e65 0,transparent 42%),radial-gradient(ellipse at 12% 88%,#4d26701c 0,transparent 38%),linear-gradient(130deg,#050907 0%,#080e0b 52%,#0c0a11 100%)!important}
@@ -110,6 +110,7 @@
     @media(max-width:900px){#zctv-channel-hub .zctv-layout{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto auto auto!important;gap:14px!important}#zctv-channel-hub .zctv-player-column{grid-column:1!important;grid-row:1!important}#zctv-channel-hub .zctv-intro{grid-column:1!important;grid-row:2!important}#zctv-channel-hub .zctv-host-art{grid-column:1!important;grid-row:3!important;height:clamp(220px,45vw,340px)!important;max-height:340px!important}#zctv-channel-hub .zctv-channels{margin-top:14px!important}}
     @media(max-width:600px){#zctv-channel-hub{padding:28px 4%!important}#zctv-channel-hub .zctv-live-label{border-radius:14px!important;align-items:flex-start!important;flex-direction:column!important}#zctv-channel-hub .zctv-channels{grid-template-columns:1fr!important;gap:9px!important}#zctv-channel-hub .zctv-channel-card{min-height:104px!important;border-radius:13px!important}#zctv-channel-hub .zctv-archive{max-height:270px!important;padding:12px!important;border-radius:13px!important}#zctv-channel-hub .zctv-episodes{max-height:195px!important}#zctv-channel-hub .zctv-player-mount,#zctv-channel-hub .zc-promo-player-wrap{border-radius:13px!important}}
 
+  `;
   document.head.appendChild(style);
 
   function text(node, value) { if (node) node.textContent = value; }
