@@ -14,6 +14,10 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
   await page.goto(process.env.SITE_URL || 'http://127.0.0.1:4173/', { waitUntil: 'domcontentloaded', timeout: 60000 });
   await page.locator('#zctv-channel-hub').scrollIntoViewIfNeeded();
   await page.waitForSelector('#zctv-channel-hub .zctv-player-mount .zc-promo-player-wrap', { state: 'visible', timeout: 15000 });
+  await page.waitForFunction(() => {
+    const count = document.querySelector('#zctv-channel-hub #zc-promo-count');
+    return count && count.textContent.trim() !== 'LOADING VIDEO LIBRARY…';
+  }, null, { timeout: 15000 }).catch(() => {});
 
   const measure = async () => page.evaluate(() => {
     const box = selector => {
@@ -31,6 +35,8 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
       player: box('#zctv-channel-hub .zctv-player-column'),
       video: box('#zctv-channel-hub #zc-promo-player'),
       videoSource: document.querySelector('#zctv-channel-hub #zc-promo-player')?.currentSrc || document.querySelector('#zctv-channel-hub #zc-promo-player')?.src || '',
+      promoControls: box('#zctv-channel-hub .zc-promo-video-controls'),
+      promoCount: document.querySelector('#zctv-channel-hub #zc-promo-count')?.textContent.trim() || '',
       archive: box('#zctv-channel-hub .zctv-archive'),
       channels: getComputedStyle(cards).gridTemplateColumns.split(' ').filter(Boolean).length,
       documentWidth: document.documentElement.scrollWidth,
@@ -46,6 +52,8 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
   check(m.intro.right < m.host.x && m.host.right < m.player.x, 'Desktop columns overlap or are out of order');
   check(m.video && m.video.width > 0 && Math.abs(m.video.width / m.video.height - 16/9) < .08, 'Desktop video frame is not 16:9');
   check(m.videoSource.includes('zombiecash_final_real_screens.mp4'), 'Empty archive must fall back to the published promo video');
+  check(m.promoControls && m.promoControls.width > 0 && m.promoControls.height > 0, 'Promo library controls must be visible inside the TV player column');
+  check(m.promoCount && m.promoCount !== 'LOADING VIDEO LIBRARY…', 'Promo library counter must initialize');
   check(m.archive && Math.abs(m.archive.width - m.player.width) < 4, 'Episode archive must match the player width');
   check(m.channels === 3, 'Desktop channel cards must use three columns');
   check(m.documentWidth <= m.viewportWidth, 'Desktop page has horizontal overflow');
