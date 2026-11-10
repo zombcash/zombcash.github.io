@@ -69,7 +69,7 @@ fs.mkdirSync(outDir, { recursive: true });
       await page.waitForSelector('header.zombcash-shared-header', { timeout: 20000 });
       // Give shared ad/counter insertion scripts a chance to run before measuring.
       await page.waitForTimeout(1200);
-      await page.waitForSelector('.zc-hero-ad-unit iframe', { timeout: 10000 }).catch(() => {});
+      // Geometry is reserved by CSS; a third-party iframe is not required for layout assertions.
 
       const result = await page.evaluate(() => {
         const header = document.querySelector('header.zombcash-shared-header');
