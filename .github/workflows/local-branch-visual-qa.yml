@@ -18,6 +18,8 @@ on:
       - "shared-nav.js"
       - "language.js"
       - "homepage-visual.css"
+      - "assets/js/zctv-player.js"
+      - "tests/zctv-layout-smoke.cjs"
       - "homepage-ribbons.js"
       - "assets/zombcash-survivor-v13.jpg"
       - "docs/DESIGN-STYLE-GUIDE.md"
@@ -57,6 +59,7 @@ jobs:
           node --check shared-nav.js
           node --check language.js
           node --check tests/mobile-viewport-smoke.cjs
+          node --check tests/zctv-layout-smoke.cjs
           node --check tests/localized-article-visual.cjs
           node --check tests/survivor-field-manual-smoke.cjs
           node --check tests/memecoin-platforms-article-smoke.cjs
@@ -85,6 +88,11 @@ jobs:
           cat /tmp/zombcash-local-preview.log
           echo "::error::Local branch preview did not start."
           exit 1
+
+      - name: Test ZombieCash TV three-column, tablet and mobile layout
+        env:
+          SITE_URL: http://127.0.0.1:4173/
+        run: node tests/zctv-layout-smoke.cjs
 
       - name: Test homepage across mobile, tablet and desktop widths
         env:
@@ -118,6 +126,7 @@ jobs:
           name: local-branch-visual-qa
           path: |
             mobile-test-results/
+            zctv-layout-results/
             localized-article-visual-results/
             survivor-field-manual-results/
             memecoin-article-results/
