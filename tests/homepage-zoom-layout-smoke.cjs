@@ -19,7 +19,7 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
       await page.waitForFunction(() => {
         const count = document.getElementById('zc-promo-count');
         return count && count.textContent.trim() !== 'LOADING VIDEO LIBRARY…';
-      }, { timeout: 15000 }).catch(() => {});
+      }, null, { timeout: 15000 }).catch(() => {});
       await page.waitForTimeout(300);
       const layout = await page.evaluate(() => {
         const rect = selector => {
