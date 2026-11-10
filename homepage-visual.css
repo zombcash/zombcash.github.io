@@ -1504,132 +1504,6 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > .card-l
 }
 
 
-/* 2026-11-10: normalize the main homepage section frame and repair ZombieCash TV layout. */
-body:has(#home) #home > #zctv-channel-hub {
-  width:min(100%,1440px)!important;
-  max-width:1440px!important;
-  padding:clamp(26px,3vw,46px) clamp(18px,3.2vw,48px)!important;
-  overflow:visible!important;
-}
-body:has(#home) #zctv-channel-hub > .zctv-inner {
-  width:100%!important;
-  max-width:100%!important;
-  margin-inline:auto!important;
-}
-body:has(#home) #zctv-channel-hub .zctv-layout {
-  grid-template-columns:minmax(250px,.36fr) minmax(0,1.64fr)!important;
-  gap:clamp(16px,2vw,28px)!important;
-  align-items:stretch!important;
-}
-body:has(#home) #zctv-channel-hub .zctv-intro,
-body:has(#home) #zctv-channel-hub .zctv-host-art,
-body:has(#home) #zctv-channel-hub .zctv-player-column {
-  min-width:0!important;
-}
-body:has(#home) #zctv-channel-hub .zctv-host-art {
-  display:flex!important;
-  height:clamp(260px,29vw,410px)!important;
-  max-height:410px!important;
-}
-body:has(#home) #zctv-channel-hub .zctv-player-column {
-  display:flex!important;
-  flex-direction:column!important;
-  grid-column:2!important;
-  grid-row:1 / span 2!important;
-  gap:12px!important;
-}
-body:has(#home) #zctv-channel-hub .zctv-player-mount,
-body:has(#home) #zctv-channel-hub .zc-promo-player-wrap,
-body:has(#home) #zctv-channel-hub .zctv-archive {
-  width:100%!important;
-  max-width:none!important;
-  box-sizing:border-box!important;
-}
-body:has(#home) #zctv-channel-hub .zctv-player-mount #zc-promo-player {
-  width:100%!important;
-  max-height:none!important;
-  aspect-ratio:16/9!important;
-}
-body:has(#home) #zctv-channel-hub .zctv-channels {
-  width:100%!important;
-  grid-template-columns:repeat(3,minmax(0,1fr))!important;
-  gap:12px!important;
-}
-body:has(#home) #zctv-channel-hub .zctv-channel-card {
-  width:100%!important;
-  min-width:0!important;
-  box-sizing:border-box!important;
-}
-@media(max-width:900px) {
-  body:has(#home) #zctv-channel-hub .zctv-layout {
-    grid-template-columns:minmax(0,1fr)!important;
-    grid-template-rows:auto auto auto!important;
-  }
-  body:has(#home) #zctv-channel-hub .zctv-player-column {
-    grid-column:1!important;grid-row:1!important;
-  }
-  body:has(#home) #zctv-channel-hub .zctv-intro {
-    grid-column:1!important;grid-row:2!important;
-  }
-  body:has(#home) #zctv-channel-hub .zctv-host-art {
-    grid-column:1!important;grid-row:3!important;
-    height:clamp(260px,60vw,420px)!important;
-  }
-}
-@media(max-width:600px) {
-  body:has(#home) #zctv-channel-hub .zctv-channels {
-    grid-template-columns:minmax(0,1fr)!important;
-  }
-}
-
-
-/* 2026-11-10: TV player must occupy the complete right column; archive stays compact. */
-body:has(#home) #zctv-channel-hub .zctv-layout {
-  grid-template-columns:minmax(245px,.34fr) minmax(0,1.66fr)!important;
-}
-body:has(#home) #zctv-channel-hub .zctv-player-column {
-  width:100%!important;min-width:0!important;max-width:none!important;
-  grid-column:2!important;grid-row:1 / span 2!important;
-}
-body:has(#home) #zctv-channel-hub .zctv-player-mount {
-  display:block!important;width:100%!important;min-width:0!important;
-  max-width:none!important;box-sizing:border-box!important;
-  padding:0!important;overflow:hidden!important;
-}
-body:has(#home) #zctv-channel-hub .zc-promo-player-wrap {
-  display:block!important;position:relative!important;
-  width:100%!important;min-width:0!important;max-width:none!important;
-  margin:0!important;box-sizing:border-box!important;
-}
-body:has(#home) #zctv-channel-hub #zc-promo-player {
-  display:block!important;width:100%!important;min-width:0!important;
-  max-width:none!important;height:auto!important;max-height:none!important;
-  aspect-ratio:16/9!important;object-fit:contain!important;
-}
-body:has(#home) #zctv-channel-hub .zctv-archive {
-  display:block!important;width:100%!important;max-width:none!important;
-  max-height:none!important;height:auto!important;min-height:0!important;
-  box-sizing:border-box!important;overflow:visible!important;
-  padding:12px 14px!important;
-}
-body:has(#home) #zctv-channel-hub .zctv-episodes {
-  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
-  width:100%!important;max-height:190px!important;min-height:0!important;
-  overflow-y:auto!important;overflow-x:hidden!important;
-}
-body:has(#home) #zctv-channel-hub .zctv-empty {
-  min-height:0!important;padding:10px 8px!important;
-}
-body:has(#home) #zctv-channel-hub .zctv-episode {
-  width:100%!important;box-sizing:border-box!important;
-}
-@media(max-width:900px) {
-  body:has(#home) #zctv-channel-hub .zctv-player-column {
-    grid-column:1!important;grid-row:1!important;
-  }
-}
-
-
 /* 2026-11-10 final responsive polish — shared by all nine localized homepages. */
 body:has(#home) #home,
 body:has(#home) #home > section {
@@ -1787,54 +1661,17 @@ body:has(#home) #home .zctv-player-column {
   }
 }
 
-/* 2026-11-10 verified responsive fix: override legacy !important TV grid rules at tablet widths. */
-@media (max-width: 1050px) {
-  body:has(#home) #zctv-channel-hub .zctv-layout {
-    display:grid!important;
-    width:100%!important;
-    grid-template-columns:minmax(0,1fr)!important;
-    grid-template-rows:auto auto auto!important;
-    align-items:start!important;
-  }
-  body:has(#home) #zctv-channel-hub .zctv-player-column {
-    display:flex!important;
-    width:min(100%,760px)!important;
-    max-width:760px!important;
-    min-width:0!important;
-    grid-column:1!important;
-    grid-row:1!important;
-    justify-self:center!important;
-    align-self:start!important;
-    margin-inline:auto!important;
-  }
-  body:has(#home) #zctv-channel-hub .zctv-intro {
-    grid-column:1!important;
-    grid-row:2!important;
-  }
-  body:has(#home) #zctv-channel-hub .zctv-host-art {
-    grid-column:1!important;
-    grid-row:3!important;
-    width:100%!important;
-    max-width:760px!important;
-    justify-self:center!important;
-  }
-  body:has(#home) #zctv-channel-hub .zctv-player-mount,
-  body:has(#home) #zctv-channel-hub .zctv-archive {
-    width:100%!important;
-    max-width:100%!important;
-    box-sizing:border-box!important;
-  }
-}
 
-/* 2026-11-10 final TV layout correction: preserve three aligned desktop columns and center the player on resize. */
+
+/* ZOMBCASH TV — single authoritative responsive layout (2026-11-10). */
 body:has(#home) #home > #zctv-channel-hub {
   display:block!important;
-  width:min(100%,1440px)!important;
+  width:100%!important;
   max-width:1440px!important;
   margin-inline:auto!important;
-  padding:clamp(26px,3vw,46px) clamp(18px,3.2vw,48px)!important;
+  padding:clamp(28px,3.5vw,52px) clamp(18px,3.2vw,46px)!important;
   box-sizing:border-box!important;
-  overflow:hidden!important;
+  overflow:visible!important;
 }
 body:has(#home) #zctv-channel-hub > .zctv-inner {
   display:block!important;
@@ -1847,9 +1684,10 @@ body:has(#home) #zctv-channel-hub > .zctv-inner {
 body:has(#home) #zctv-channel-hub .zctv-layout {
   display:grid!important;
   width:100%!important;
-  grid-template-columns:minmax(190px,.72fr) minmax(240px,1fr) minmax(0,1.35fr)!important;
+  min-width:0!important;
+  grid-template-columns:minmax(250px,.86fr) minmax(280px,1fr) minmax(360px,1.18fr)!important;
   grid-template-rows:auto!important;
-  gap:clamp(14px,1.8vw,26px)!important;
+  gap:clamp(16px,1.9vw,28px)!important;
   align-items:stretch!important;
   margin:20px 0 26px!important;
 }
@@ -1858,9 +1696,15 @@ body:has(#home) #zctv-channel-hub .zctv-intro {
   min-width:0!important;align-self:center!important;
 }
 body:has(#home) #zctv-channel-hub .zctv-host-art {
+  display:flex!important;
   grid-column:2!important;grid-row:1!important;
   width:100%!important;min-width:0!important;
-  height:clamp(300px,30vw,420px)!important;max-height:420px!important;
+  height:clamp(320px,31vw,420px)!important;
+  min-height:300px!important;max-height:420px!important;
+}
+body:has(#home) #zctv-channel-hub .zctv-host-art img {
+  width:100%!important;height:100%!important;
+  object-fit:cover!important;object-position:center 18%!important;
 }
 body:has(#home) #zctv-channel-hub .zctv-player-column {
   display:flex!important;
@@ -1869,6 +1713,7 @@ body:has(#home) #zctv-channel-hub .zctv-player-column {
   margin:0!important;align-self:stretch!important;
   flex-direction:column!important;gap:12px!important;
 }
+body:has(#home) #zctv-channel-hub .zctv-live-label,
 body:has(#home) #zctv-channel-hub .zctv-player-mount,
 body:has(#home) #zctv-channel-hub .zc-promo-player-wrap,
 body:has(#home) #zctv-channel-hub #zc-promo-player,
@@ -1876,9 +1721,16 @@ body:has(#home) #zctv-channel-hub .zctv-archive {
   display:block!important;width:100%!important;max-width:100%!important;
   min-width:0!important;box-sizing:border-box!important;
 }
-body:has(#home) #zctv-channel-hub .zctv-player-mount {padding:10px!important;overflow:hidden!important}
+body:has(#home) #zctv-channel-hub .zctv-live-label {display:flex!important;flex:0 0 auto!important}
+body:has(#home) #zctv-channel-hub .zctv-player-mount {
+  flex:0 0 auto!important;padding:0!important;overflow:hidden!important;
+}
+body:has(#home) #zctv-channel-hub .zc-promo-player-wrap {
+  margin:0!important;overflow:hidden!important;
+}
 body:has(#home) #zctv-channel-hub #zc-promo-player {
-  height:auto!important;max-height:none!important;aspect-ratio:16/9!important;object-fit:contain!important;
+  height:auto!important;max-height:none!important;aspect-ratio:16/9!important;
+  object-fit:contain!important;background:#020403!important;
 }
 body:has(#home) #zctv-channel-hub .zctv-archive {
   flex:0 0 auto!important;align-self:stretch!important;
@@ -1898,12 +1750,12 @@ body:has(#home) #zctv-channel-hub .zctv-channel-card {
 }
 @media(max-width:1050px) {
   body:has(#home) #zctv-channel-hub .zctv-layout {
-    grid-template-columns:minmax(0,1fr)!important;
-    grid-template-rows:auto auto auto!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    grid-template-rows:auto auto!important;
     gap:18px!important;
   }
   body:has(#home) #zctv-channel-hub .zctv-player-column {
-    grid-column:1!important;grid-row:1!important;
+    grid-column:1 / -1!important;grid-row:1!important;
     width:min(100%,900px)!important;max-width:900px!important;
     justify-self:center!important;margin-inline:auto!important;
   }
@@ -1911,13 +1763,31 @@ body:has(#home) #zctv-channel-hub .zctv-channel-card {
     grid-column:1!important;grid-row:2!important;
   }
   body:has(#home) #zctv-channel-hub .zctv-host-art {
-    grid-column:1!important;grid-row:3!important;
-    width:min(100%,760px)!important;max-width:760px!important;
-    height:clamp(260px,55vw,420px)!important;
-    justify-self:center!important;margin-inline:auto!important;
+    grid-column:2!important;grid-row:2!important;
+    width:100%!important;max-width:none!important;
+    height:clamp(260px,38vw,390px)!important;
+    min-height:250px!important;
   }
   body:has(#home) #zctv-channel-hub .zctv-channels {
     grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:760px) {
+  body:has(#home) #zctv-channel-hub .zctv-layout {
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:auto auto auto!important;
+  }
+  body:has(#home) #zctv-channel-hub .zctv-player-column {
+    grid-column:1!important;grid-row:1!important;
+    width:100%!important;max-width:100%!important;
+  }
+  body:has(#home) #zctv-channel-hub .zctv-intro {
+    grid-column:1!important;grid-row:2!important;
+  }
+  body:has(#home) #zctv-channel-hub .zctv-host-art {
+    grid-column:1!important;grid-row:3!important;
+    width:100%!important;max-width:100%!important;
+    height:clamp(240px,65vw,390px)!important;
   }
 }
 @media(max-width:600px) {
