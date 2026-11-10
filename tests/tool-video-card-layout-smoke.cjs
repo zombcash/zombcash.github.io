@@ -9,6 +9,10 @@ fs.mkdirSync('tool-video-card-results', { recursive: true });
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 
   await page.addInitScript(() => {
+    const nativeMatchMedia = window.matchMedia.bind(window);
+    window.matchMedia = query => query === '(hover:hover) and (pointer:fine)'
+      ? { matches:true, media:query, onchange:null, addListener(){}, removeListener(){}, addEventListener(){}, removeEventListener(){}, dispatchEvent(){ return false; } }
+      : nativeMatchMedia(query);
     HTMLMediaElement.prototype.play = function () {
       this.dataset.testPlaying = '1';
       return Promise.resolve();
@@ -55,6 +59,7 @@ fs.mkdirSync('tool-video-card-results', { recursive: true });
     check(m.cards.length === 3, width + 'px: expected exactly three tool cards');
     check(m.gridColumns === expectedColumns, width + 'px: expected ' + expectedColumns + ' columns, got ' + m.gridColumns);
     check(m.documentWidth <= width + 1, width + 'px: horizontal overflow (' + m.documentWidth + 'px)');
+    check(m.cards.every(c => c.box.left >= 8 && c.box.right <= width - 8), width + 'px: tool cards must retain balanced outer gutters');
     for (const card of m.cards) {
       check(card.video && Math.abs(card.video.width / card.video.height - 16/9) < .025, width + 'px: ' + card.name + ' video is not 16:9');
       check(card.video && Math.abs(card.video.width - card.box.width + 32) < 4, width + 'px: ' + card.name + ' video does not fill the shared card content width');
@@ -76,14 +81,14 @@ fs.mkdirSync('tool-video-card-results', { recursive: true });
   await page.setViewportSize({ width: 1440, height: 1000 });
   const radar = page.locator('[data-video-card="meme-radar"]');
   const radarVideo = radar.locator('video');
-  const radarBox = await radar.boundingBox();
-  await page.mouse.move(radarBox.x + radarBox.width / 2, radarBox.y + 100);
-  await page.waitForFunction(() => document.querySelector('[data-video-card="meme-radar"]').classList.contains('is-playing'));
+  await radar.scrollIntoViewIfNeeded();
+  await radar.hover({ force:true });
+  await page.waitForFunction(() => document.querySelector('[data-video-card="meme-radar"]').classList.contains('is-playing'), null, { timeout:5000 });
   const hoverState = await radarVideo.evaluate(video => ({ src: video.getAttribute('src'), expected: video.dataset.src, muted: video.muted }));
   check(hoverState.src === hoverState.expected, 'Mouse hover must lazy-load the selected video source');
   check(hoverState.muted, 'Tool videos must always play muted');
   await page.mouse.move(5, 5);
-  await page.waitForFunction(() => !document.querySelector('[data-video-card="meme-radar"]').classList.contains('is-playing'));
+  await page.waitForFunction(() => !document.querySelector('[data-video-card="meme-radar"]').classList.contains('is-playing'), null, { timeout:5000 });
   console.log('HOVER', JSON.stringify(hoverState));
 
   const touchPage = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
