@@ -87,6 +87,8 @@ jobs:
         run: node tests/homepage-locales-layout-smoke.cjs
       - name: Test homepage at reduced browser zoom viewports
         run: node tests/homepage-zoom-layout-smoke.cjs
+      - name: Test ZombieCash TV player, archive and responsive columns
+        run: node tests/zctv-layout-smoke.cjs
       - name: Test Survivor Field Manual across locales and viewports
         run: node tests/survivor-field-manual-smoke.cjs
       - name: Test multilingual comparison article visually across locales and viewports
@@ -110,6 +112,7 @@ jobs:
             mobile-test-results/
             homepage-locale-results/
             homepage-zoom-results/
+            zctv-layout-results/
             survivor-field-manual-results/
             memecoin-article-results/
           if-no-files-found: ignore
