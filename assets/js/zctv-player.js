@@ -20,11 +20,17 @@
   const status = root.querySelector('#zc-promo-status');
   const version = root.querySelector('#zc-promo-version');
   const download = root.querySelector('#zc-promo-download');
+  const promoCount = document.getElementById('zc-promo-count');
+  const promoPrev = document.getElementById('zc-promo-prev');
+  const promoNext = document.getElementById('zc-promo-next');
+  const promoRelease = document.getElementById('zc-promo-release');
   const liveLabel = root.querySelector('.zctv-live-label');
   const labels = { all: 'ALL EPISODES', news: 'OUTBREAK NEWS', meme: 'MEME SHOW', lab: 'ZOMBIE LAB' };
   const metaStream = document.querySelector('meta[name="zctv-live-stream"]');
   const liveUrl = (root.dataset.liveStream || (metaStream && metaStream.content) || '').trim();
   let episodes = [];
+  let promoVideos = [];
+  let promoIndex = 0;
   let active = 'news';
   let mode = liveUrl ? 'live' : 'archive';
   let currentId = '';
@@ -280,18 +286,55 @@
 
   function text(node, value) { if (node) node.textContent = value; }
   function videoUrl(id) { return API + '/episodes/' + encodeURIComponent(id) + '/video'; }
+  function updatePromoControls() {
+    const total = promoVideos.length;
+    if (promoCount) promoCount.textContent = total ? String(promoIndex + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0') : 'VIDEO LIBRARY UNAVAILABLE';
+    if (promoPrev) promoPrev.disabled = total < 2 || promoIndex <= 0;
+    if (promoNext) promoNext.disabled = total < 2 || promoIndex >= total - 1;
+    if (promoRelease) promoRelease.href = 'https://github.com/zombcash/zombcash.github.io/releases';
+  }
   function showFeaturedPromo() {
-    if (!player || currentId) return;
+    if (!player || currentId && currentId !== 'featured-promo') return;
+    const item = promoVideos[promoIndex] || { title: 'ZombieCash Promo Video', tag: 'FEATURED PROMO', date: '2026-10-24', src: FEATURED_VIDEO, releaseUrl: 'https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10' };
     player.pause();
     player.poster = FEATURED_POSTER;
-    player.src = FEATURED_VIDEO;
+    player.src = item.src || FEATURED_VIDEO;
     player.load();
     currentId = 'featured-promo';
-    text(version, 'FEATURED PROMO');
-    text(status, 'OFFICIAL ZOMBIECASH PROMO · PRESS PLAY');
-    if (download) { download.href = FEATURED_VIDEO; download.textContent = 'OPEN / DOWNLOAD ↗'; }
+    text(version, item.tag || 'FEATURED PROMO');
+    text(status, (item.title || 'OFFICIAL ZOMBIECASH PROMO') + ' · PRESS PLAY');
+    if (download) { download.href = item.src || FEATURED_VIDEO; download.textContent = 'OPEN / DOWNLOAD ↗'; }
+    updatePromoControls();
     setSignal(false, 'FEATURED TRANSMISSION');
   }
+  function playPromoAt(index) {
+    if (!promoVideos.length) return;
+    promoIndex = Math.max(0, Math.min(index, promoVideos.length - 1));
+    mode = 'archive'; root.dataset.zctvMode = mode;
+    if (archive) archive.hidden = false;
+    currentId = '';
+    showFeaturedPromo();
+    updateModeButtons();
+  }
+  if (promoPrev) promoPrev.addEventListener('click', function () { playPromoAt(promoIndex - 1); });
+  if (promoNext) promoNext.addEventListener('click', function () { playPromoAt(promoIndex + 1); });
+  fetch('/promo-videos.json?v=20261110-tv-library', { cache: 'no-store', credentials: 'omit' })
+    .then(function (response) { if (!response.ok) throw new Error('Promo manifest unavailable'); return response.json(); })
+    .then(function (payload) {
+      promoVideos = Array.isArray(payload.videos) ? payload.videos.filter(function (item) {
+        if (!item || typeof item.src !== 'string') return false;
+        try { return new URL(item.src, location.href).protocol === 'https:'; } catch (_) { return false; }
+      }) : [];
+      if (!promoVideos.length) throw new Error('No valid promo videos');
+      updatePromoControls();
+      if (currentId === 'featured-promo') showFeaturedPromo();
+    })
+    .catch(function () {
+      promoVideos = [{ title: 'ZombieCash Promo Video', tag: 'FEATURED PROMO', date: '2026-10-24', src: FEATURED_VIDEO, releaseUrl: 'https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10' }];
+      promoIndex = 0;
+      updatePromoControls();
+      if (currentId === 'featured-promo') showFeaturedPromo();
+    });
   function setSignal(on, label) {
     livePlaying = !!on;
     root.dataset.zctvLive = livePlaying ? 'true' : 'false';
