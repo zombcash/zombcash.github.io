@@ -70,8 +70,8 @@
     }
     #zctv-channel-hub .zctv-layout{
       display:grid!important;width:100%!important;min-width:0!important;
-      grid-template-columns:minmax(300px,1.05fr) minmax(300px,.95fr) minmax(420px,1.35fr)!important;
-      grid-template-rows:auto!important;grid-template-areas:"intro host player"!important;
+      grid-template-columns:minmax(420px,1.28fr) minmax(260px,.88fr) minmax(300px,1fr)!important;
+      grid-template-rows:auto!important;grid-template-areas:"player intro host"!important;
       grid-auto-flow:row!important;gap:clamp(16px,1.65vw,28px)!important;
       align-items:stretch!important;margin:18px 0 24px!important;
     }
