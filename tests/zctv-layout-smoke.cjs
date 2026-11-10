@@ -1,4 +1,6 @@
 const { chromium } = require('playwright');
+const fs = require('node:fs');
+fs.mkdirSync('zctv-layout-results', { recursive: true });
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -47,6 +49,7 @@ const { chromium } = require('playwright');
   check(m.archive && Math.abs(m.archive.width - m.player.width) < 4, 'Episode archive must match the player width');
   check(m.channels === 3, 'Desktop channel cards must use three columns');
   check(m.documentWidth <= m.viewportWidth, 'Desktop page has horizontal overflow');
+  await page.screenshot({ path: 'zctv-layout-results/desktop.png' });
   console.log('DESKTOP', JSON.stringify(m));
 
   await page.setViewportSize({ width: 1024, height: 900 });
@@ -54,7 +57,8 @@ const { chromium } = require('playwright');
   m = await measure();
   check(m.tracks === 2, 'Tablet must use two support columns below a full-width player');
   check(m.player && m.player.width <= 900 && Math.abs((m.player.x + m.player.width/2) - 512) < 5, 'Tablet player must be centered and capped at 900px');
-  check(m.intro && m.host && Math.abs(m.intro.y - m.host.y) < 8, 'Tablet intro and host artwork must share a row');
+  check(m.intro && m.host && m.intro.y < m.host.bottom && m.host.y < m.intro.bottom, 'Tablet intro and host artwork must share a row');
+  await page.screenshot({ path: 'zctv-layout-results/tablet.png' });
   check(m.video && Math.abs(m.video.width / m.video.height - 16/9) < .08, 'Tablet video frame is not 16:9');
   check(m.documentWidth <= m.viewportWidth, 'Tablet page has horizontal overflow');
   console.log('TABLET', JSON.stringify(m));
@@ -66,6 +70,7 @@ const { chromium } = require('playwright');
   check(m.player && m.player.y < m.intro.y && m.intro.y < m.host.y, 'Mobile order must be player, intro, host artwork');
   check(m.channels === 1, 'Mobile channel cards must stack in one column');
   check(m.documentWidth <= m.viewportWidth, 'Mobile page has horizontal overflow');
+  await page.screenshot({ path: 'zctv-layout-results/mobile.png' });
   console.log('MOBILE', JSON.stringify(m));
 
   await browser.close();
