@@ -91,6 +91,16 @@ jobs:
         run: node tests/survivor-field-manual-smoke.cjs
       - name: Test multilingual comparison article visually across locales and viewports
         run: node tests/memecoin-platforms-article-smoke.cjs
+
+      - name: Upload wide viewport visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-zoom-visual-evidence
+          path: homepage-zoom-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
       - name: Upload screenshots and diagnostics
         if: failure()
         uses: actions/upload-artifact@v4
