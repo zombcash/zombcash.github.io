@@ -50,6 +50,8 @@ jobs:
           for filename, lang in pages.items():
               html = Path(filename).read_text(encoding="utf-8")
               assert f'<html lang="{lang}">' in html, f"{filename}: wrong language tag"
+              assert 'homepage-visual.css?v=20261110-toolcards-balanced-v1' in html, f"{filename}: stale tool-card stylesheet"
+              assert html.count('data-video-card=') == 3, f"{filename}: expected exactly three homepage tool video cards"
               assert html.count('href="/homepage-visual.css?') == 1, f"{filename}: stylesheet missing or duplicated"
               assert html.count('src="/homepage-ribbons.js?v=20261105"') == 1, f"{filename}: ticker script missing or duplicated"
               assert html.count('rel="canonical"') == 1, f"{filename}: canonical count changed"
@@ -76,6 +78,7 @@ jobs:
           PY
 
       - name: Verify published full-bleed banner assets
+        if: github.event_name != 'pull_request'
         run: |
           python -m pip install --quiet requests Pillow
           python - <<'PY'
@@ -104,6 +107,7 @@ jobs:
           PY
 
       - name: Verify live localized tool video panels and hover behavior
+        if: github.event_name != 'pull_request'
         run: |
           python -m pip install --quiet requests
           python - <<'PY'
