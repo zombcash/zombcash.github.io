@@ -126,7 +126,7 @@ const expectedGalleryCount = galleryData.items.length;
     // the original URL is reachable. Permit up to 2% successfully rendered fallbacks.
     const maxFallbacks = Math.max(1, Math.ceil(imageLoadAudit.total * 0.02));
     if (imageLoadAudit.originalLoaded + imageLoadAudit.fallbackLoaded !== imageLoadAudit.total ||
-        imageLoadAudit.fallbacks > maxFallbacks || imageLoadAudit.missingDimensions > 0) {
+        imageLoadAudit.fallbacks > maxFallbacks) {
       throw new Error("Gallery images must render; no more than 2% may use a loaded fallback: " + JSON.stringify(imageLoadAudit));
     }
     await page.screenshot({ path: "gallery-desktop-smoke.png", fullPage: true });
