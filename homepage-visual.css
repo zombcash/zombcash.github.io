@@ -2135,3 +2135,105 @@ html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art img{
   html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-intro{grid-area:intro!important;height:auto!important}
   html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art{grid-area:host!important;height:clamp(240px,65vw,390px)!important}
 }
+
+
+/* 2026-11-11 — unified homepage geometry at every browser zoom.
+   Browser zoom-out creates a very wide CSS viewport. Older 1800px rules let
+   separate sections expand to unrelated widths (up to 5600px), which made
+   cards and panels drift apart. Keep full-bleed backgrounds, but use one
+   shared centered content rail for every homepage section. */
+html body:has(main#home) > main#home{
+  width:100%!important;max-width:none!important;min-width:0!important;
+  overflow-x:clip!important;
+}
+html body:has(main#home) > main#home > section{
+  box-sizing:border-box!important;width:100%!important;max-width:none!important;
+  min-width:0!important;margin-inline:0!important;
+}
+html body:has(main#home) > main#home > section > :is(
+  .hero-layout,.field-manual-spotlight-inner,.zc-promo-video-shell,.zctv-inner,
+  .world-grid,.intro-row,.outbreak-panel,.tool-grid,.section-heading,
+  .crew-grid,.arcade-feature,.transmission-box,.site-visits-inner,
+  .campaign-dashboard-inner
+){
+  box-sizing:border-box!important;
+  width:min( calc(100% - 48px), 1440px )!important;
+  max-width:1440px!important;min-width:0!important;
+  margin-left:auto!important;margin-right:auto!important;
+}
+html body:has(main#home) > main#home > section.section{
+  padding-left:0!important;padding-right:0!important;
+}
+html body:has(main#home) > main#home > section.section > .section-kicker,
+html body:has(main#home) > main#home > section.section > .section-heading,
+html body:has(main#home) > main#home > section.section > .intro-row,
+html body:has(main#home) > main#home > section.section > .outbreak-panel,
+html body:has(main#home) > main#home > section.section > .tool-grid,
+html body:has(main#home) > main#home > section.section > .world-grid,
+html body:has(main#home) > main#home > section.section > .crew-grid,
+html body:has(main#home) > main#home > section.section > .arcade-feature,
+html body:has(main#home) > main#home > section.section > .transmission-box{
+  width:min(calc(100% - 48px),1440px)!important;
+  max-width:1440px!important;min-width:0!important;
+  margin-left:auto!important;margin-right:auto!important;
+}
+html body:has(main#home) > main#home :is(
+  .hero-layout,.world-grid,.intro-row,.outbreak-panel,.tool-grid,.crew-grid,
+  .arcade-feature,.transmission-box,.zc-promo-video-shell,.zctv-inner
+) *{
+  box-sizing:border-box;
+}
+html body:has(main#home) > main#home :is(
+  .hero-layout,.world-grid,.intro-row,.outbreak-panel,.tool-grid,.crew-grid,
+  .arcade-feature,.transmission-box,.zc-promo-video-shell,.zctv-inner
+) :is(article,aside,div,figure){
+  min-width:0;
+}
+@media(max-width:900px){
+  html body:has(main#home) > main#home > section > :is(
+    .hero-layout,.field-manual-spotlight-inner,.zc-promo-video-shell,.zctv-inner,
+    .world-grid,.intro-row,.outbreak-panel,.tool-grid,.section-heading,
+    .crew-grid,.arcade-feature,.transmission-box,.site-visits-inner,
+    .campaign-dashboard-inner
+  ),
+  html body:has(main#home) > main#home > section.section > :is(
+    .section-kicker,.section-heading,.intro-row,.outbreak-panel,.tool-grid,
+    .world-grid,.crew-grid,.arcade-feature,.transmission-box
+  ){
+    width:calc(100% - 32px)!important;max-width:760px!important;
+  }
+}
+@media(max-width:600px){
+  html body:has(main#home) > main#home > section > :is(
+    .hero-layout,.field-manual-spotlight-inner,.zc-promo-video-shell,.zctv-inner,
+    .world-grid,.intro-row,.outbreak-panel,.tool-grid,.section-heading,
+    .crew-grid,.arcade-feature,.transmission-box,.site-visits-inner,
+    .campaign-dashboard-inner
+  ),
+  html body:has(main#home) > main#home > section.section > :is(
+    .section-kicker,.section-heading,.intro-row,.outbreak-panel,.tool-grid,
+    .world-grid,.crew-grid,.arcade-feature,.transmission-box
+  ){
+    width:calc(100% - 24px)!important;max-width:520px!important;
+  }
+}
+@media(min-width:1800px){
+  /* Override legacy 90vw/5600px zoom-out compensation consistently. */
+  html body:has(main#home) > main#home > section > :is(
+    .hero-layout,.field-manual-spotlight-inner,.zc-promo-video-shell,.zctv-inner,
+    .world-grid,.intro-row,.outbreak-panel,.tool-grid,.section-heading,
+    .crew-grid,.arcade-feature,.transmission-box,.site-visits-inner,
+    .campaign-dashboard-inner
+  ),
+  html body:has(main#home) > main#home > section.section > :is(
+    .section-kicker,.section-heading,.intro-row,.outbreak-panel,.tool-grid,
+    .world-grid,.crew-grid,.arcade-feature,.transmission-box
+  ){
+    width:min(calc(100% - 48px),1440px)!important;
+    max-width:1440px!important;margin-inline:auto!important;
+  }
+  html body:has(main#home) > main#home > section.hero > .hero-layout{
+    grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)!important;
+    gap:clamp(24px,2vw,48px)!important;
+  }
+}
