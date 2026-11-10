@@ -1979,3 +1979,16 @@ body:has(#home) #home > section:not(.hero){
     margin-inline:0!important;
   }
 }
+
+
+/* Wide .section children such as .world-grid and .intro-row use 90vw. The
+   legacy global section padding was still 262/962/2562px, shifting those
+   already-wide children to the right. Give these two content sections the
+   same 5vw gutters so their 90vw grids stay centered inside the viewport. */
+@media (min-width:1800px) {
+  html body:has(main#home) > main#home > section.section#outbreak,
+  html body:has(main#home) > main#home > section.section#living-world {
+    padding-left:5vw!important;
+    padding-right:5vw!important;
+  }
+}
