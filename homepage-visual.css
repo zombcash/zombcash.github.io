@@ -1628,3 +1628,124 @@ body:has(#home) #zctv-channel-hub .zctv-episode {
     grid-column:1!important;grid-row:1!important;
   }
 }
+
+
+/* 2026-11-10 final responsive polish — shared by all nine localized homepages. */
+body:has(#home) #home,
+body:has(#home) #home > section {
+  box-sizing: border-box;
+  min-width: 0;
+}
+body:has(#home) #home > section:not(.hero) {
+  width: 100%;
+  max-width: 100%;
+}
+body:has(#home) #home .hero-layout,
+body:has(#home) #home .zc-promo-video-shell,
+body:has(#home) #home .zctv-inner,
+body:has(#home) #home .living-world > .section-inner {
+  box-sizing: border-box;
+  min-width: 0;
+  margin-inline: auto;
+}
+body:has(#home) #home .hero-layout {
+  width: min(100%, 1440px) !important;
+  max-width: 1440px !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 640px) !important;
+}
+body:has(#home) #home .hero-layout > *,
+body:has(#home) #home .world-grid > *,
+body:has(#home) #home .zctv-layout > *,
+body:has(#home) #home .zc-promo-video-shell > * {
+  min-width: 0;
+}
+body:has(#home) #home .zc-promo-video-shell,
+body:has(#home) #home .zctv-inner {
+  width: min(100% - 40px, 1440px);
+}
+body:has(#home) #home .zc-promo-player-wrap,
+body:has(#home) #home #zc-promo-player,
+body:has(#home) #home .zctv-player-column,
+body:has(#home) #home .zctv-player-column video,
+body:has(#home) #home .zctv-player-column iframe {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+body:has(#home) #home img,
+body:has(#home) #home video,
+body:has(#home) #home iframe {
+  max-width: 100%;
+}
+body:has(#home) #home a,
+body:has(#home) #home button {
+  -webkit-tap-highlight-color: transparent;
+}
+body:has(#home) #home :focus-visible {
+  outline: 2px solid #b8ff75;
+  outline-offset: 3px;
+}
+body:has(#home) #home .world-panel,
+body:has(#home) #home .tool-card,
+body:has(#home) #home .zc-promo-player-wrap,
+body:has(#home) #home .zctv-player-column {
+  border-color: color-mix(in srgb, #9bff45 28%, #26382d);
+  box-shadow: 0 14px 38px #0005, inset 0 1px 0 #ffffff08;
+}
+@media (min-width: 1360px) {
+  body:has(#home) #home > section.hero > .hero-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(560px, 640px) !important;
+    align-items: start !important;
+  }
+}
+@media (max-width: 1359px) {
+  body:has(#home) #home > section.hero > .hero-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas: "content" "sponsor" !important;
+  }
+  body:has(#home) #home > section.hero > .hero-layout > .hero-content,
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    width: min(100%, 900px) !important;
+    max-width: 900px !important;
+    justify-self: center !important;
+  }
+}
+@media (max-width: 900px) {
+  body:has(#home) #home .zc-promo-video-shell,
+  body:has(#home) #home .zctv-inner {
+    width: min(100% - 28px, 760px);
+  }
+  body:has(#home) #home .world-grid,
+  body:has(#home) #home .zctv-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+@media (max-width: 600px) {
+  body:has(#home) #home .zc-promo-video-shell,
+  body:has(#home) #home .zctv-inner {
+    width: calc(100% - 24px);
+  }
+  body:has(#home) #home .section-heading,
+  body:has(#home) #home .intro-row {
+    gap: 12px;
+  }
+  body:has(#home) #home .zc-ribbon-track {
+    animation-duration: 52s;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body:has(#home) #home .zc-ribbon-track,
+  body:has(#home) #home .zc-ribbon-track * {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+  body:has(#home) #home *,
+  body:has(#home) #home *::before,
+  body:has(#home) #home *::after {
+    transition-duration: .01ms !important;
+  }
+}
