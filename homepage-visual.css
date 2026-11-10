@@ -1505,18 +1505,6 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > .card-l
 
 
 /* 2026-11-10: normalize the main homepage section frame and repair ZombieCash TV layout. */
-body:has(#home) #home > section:not(.hero):not(.ticker) {
-  box-sizing:border-box!important;
-  width:min(100%,1440px)!important;
-  max-width:1440px!important;
-  margin-inline:auto!important;
-}
-body:has(#home) #home > section:not(.hero):not(.ticker) > :where(.section-inner,.container,.inner,.zctv-inner,.promo-inner,.living-world-inner) {
-  box-sizing:border-box!important;
-  width:100%!important;
-  max-width:100%!important;
-  margin-inline:auto!important;
-}
 body:has(#home) #home > #zctv-channel-hub {
   width:min(100%,1440px)!important;
   max-width:1440px!important;
