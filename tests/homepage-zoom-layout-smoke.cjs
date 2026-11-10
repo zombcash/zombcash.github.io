@@ -32,7 +32,7 @@ const widths = [1800, 3200, 6400];
           promo: rect('#promo-video .zc-promo-video-shell'),
           tv: rect('#zctv-channel-hub > .zctv-inner'),
           player: rect('#zctv-channel-hub .zctv-player-column'),
-          stylesheet: [...document.styleSheets].some(s => s.href && new URL(s.href).search.includes('zoom-mobile-fix-20261110-2'))
+          stylesheet: [...document.styleSheets].some(s => s.href && new URL(s.href).search.includes('zoom-mobile-fix-20261110-3'))
         };
       });
       const issues = [];
