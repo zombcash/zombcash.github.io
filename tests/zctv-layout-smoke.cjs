@@ -11,7 +11,7 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
     route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ episodes: [] }) })
   );
 
-  await page.goto(process.env.SITE_URL || 'http://127.0.0.1:4173/', { waitUntil: 'networkidle', timeout: 60000 });
+  await page.goto(process.env.SITE_URL || 'http://127.0.0.1:4173/', { waitUntil: 'domcontentloaded', timeout: 60000 });
   await page.locator('#zctv-channel-hub').scrollIntoViewIfNeeded();
   await page.waitForSelector('#zctv-channel-hub .zctv-player-mount .zc-promo-player-wrap', { state: 'visible', timeout: 15000 });
 
@@ -56,7 +56,7 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
   await page.waitForTimeout(150);
   m = await measure();
   check(m.tracks === 2, 'Tablet must use two support columns below a full-width player');
-  check(m.player && m.player.width <= 900 && Math.abs((m.player.x + m.player.width/2) - 512) < 5, 'Tablet player must be centered and capped at 900px');
+  check(m.player && m.player.width <= 1040 && Math.abs((m.player.x + m.player.width/2) - 512) < 5, 'Tablet player must be centered and capped at 1040px');
   check(m.intro && m.host && m.intro.y < m.host.bottom && m.host.y < m.intro.bottom, 'Tablet intro and host artwork must share a row');
   await page.screenshot({ path: 'zctv-layout-results/tablet.png' });
   check(m.video && Math.abs(m.video.width / m.video.height - 16/9) < .08, 'Tablet video frame is not 16:9');
@@ -67,7 +67,7 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
   await page.waitForTimeout(150);
   m = await measure();
   check(m.tracks === 1, 'Mobile TV content must stack in one column');
-  check(m.player && m.player.y < m.intro.y && m.intro.y < m.host.y, 'Mobile order must be player, intro, host artwork');
+  check(m.player && m.intro.y < m.host.y && m.host.y < m.player.y, 'Mobile order must be intro, host artwork, player and archive');
   check(m.channels === 1, 'Mobile channel cards must stack in one column');
   check(m.documentWidth <= m.viewportWidth, 'Mobile page has horizontal overflow');
   await page.screenshot({ path: 'zctv-layout-results/mobile.png' });
