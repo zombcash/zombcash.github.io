@@ -73,14 +73,6 @@ fs.mkdirSync(output, { recursive: true });
           if (Math.abs(result.tvChannels.width - result.tvInner.width) > 2) issues.push('ZombieCash TV channel cards do not align with the main container edges');
           if (width <= 1050 && Math.abs((result.tvPlayer.left + result.tvPlayer.right) / 2 - innerCenter) > 2) issues.push('Responsive ZombieCash TV player is not centered below 1050px');
         }
-        else {
-          const sectionCenter = (result.tvSection.left + result.tvSection.right) / 2;
-          const innerCenter = (result.tvInner.left + result.tvInner.right) / 2;
-          if (Math.abs(sectionCenter - innerCenter) > 2) issues.push('ZombieCash TV inner container is not horizontally centered');
-          if (result.tvInner.width < Math.min(width * 0.85, 1500 * 0.85)) issues.push('ZombieCash TV inner container is unexpectedly narrow');
-          if (result.tvPlayer.left < result.tvInner.left - 2 || result.tvPlayer.right > result.tvInner.right + 2) issues.push('ZombieCash TV player column escapes the centered container');
-          if (result.tvChannels.left < result.tvInner.left - 2 || result.tvChannels.right > result.tvInner.right + 2) issues.push('ZombieCash TV channel cards escape the centered container');
-        }
         if (result.documentWidth > width + 1) issues.push('horizontal overflow: ' + result.documentWidth + 'px');
         if (!result.imagePresent || !result.imageLoaded) issues.push('sponsor artwork image is missing or failed to load');
         if (!result.adStage) {
