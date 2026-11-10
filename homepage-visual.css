@@ -1776,3 +1776,13 @@ body:has(#home) #home .zctv-player-column {
     overflow: visible !important;
   }
 }
+
+@media (min-width: 768px) {
+  body:has(#home) #home > section.hero .zc-adsterra-mobile-slot,
+  body:has(#home) #home > section.hero .zc-adsterra-grid {
+    display: none !important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-native-slot {
+    display: block !important;
+  }
+}
