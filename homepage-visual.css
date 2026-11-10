@@ -1795,3 +1795,83 @@ body:has(#home) #zctv-channel-hub .zctv-channel-card {
     grid-template-columns:minmax(0,1fr)!important;
   }
 }
+
+
+/* 2026-11-10 — final full-width homepage content geometry.
+   All homepage sections remain full-bleed; only their inner content is centered
+   and capped. Use viewport-based sizing so a narrow inherited grid track cannot
+   collapse the hero, promo transmission, or ZombieCash TV studio. */
+body:has(#home) > main#home{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  box-sizing:border-box!important;
+}
+body:has(#home) #home > section:not(.hero){
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin-inline:0!important;
+  box-sizing:border-box!important;
+}
+@media (min-width:1360px){
+  body:has(#home) #home > section.hero > .hero-layout{
+    width:min(calc(100vw - 112px),1440px)!important;
+    max-width:1440px!important;
+    margin-inline:auto!important;
+    grid-template-columns:minmax(0,1fr) minmax(560px,640px)!important;
+  }
+  body:has(#home) #home .zc-promo-video-shell,
+  body:has(#home) #zctv-channel-hub > .zctv-inner{
+    width:min(calc(100vw - 112px),1440px)!important;
+    max-width:1440px!important;
+    margin-inline:auto!important;
+  }
+  body:has(#home) #zctv-channel-hub{
+    width:100%!important;
+    max-width:none!important;
+    margin-inline:0!important;
+    padding-inline:0!important;
+  }
+  body:has(#home) #zctv-channel-hub .zctv-layout{
+    width:100%!important;
+    grid-template-columns:minmax(260px,.88fr) minmax(300px,1fr) minmax(420px,1.28fr)!important;
+    gap:clamp(18px,2vw,30px)!important;
+  }
+}
+@media (min-width:901px) and (max-width:1359px){
+  body:has(#home) #home > section.hero > .hero-layout{
+    width:min(calc(100vw - 64px),1100px)!important;
+    max-width:1100px!important;
+    margin-inline:auto!important;
+  }
+  body:has(#home) #home .zc-promo-video-shell,
+  body:has(#home) #zctv-channel-hub > .zctv-inner{
+    width:min(calc(100vw - 64px),1100px)!important;
+    max-width:1100px!important;
+    margin-inline:auto!important;
+  }
+  body:has(#home) #zctv-channel-hub{
+    width:100%!important;
+    max-width:none!important;
+    margin-inline:0!important;
+    padding-inline:0!important;
+  }
+}
+@media (max-width:900px){
+  body:has(#home) #home .zc-promo-video-shell,
+  body:has(#home) #zctv-channel-hub > .zctv-inner{
+    width:calc(100% - 28px)!important;
+    max-width:760px!important;
+    margin-inline:auto!important;
+  }
+  body:has(#home) #zctv-channel-hub{
+    width:100%!important;
+    max-width:none!important;
+    margin-inline:0!important;
+  }
+}
