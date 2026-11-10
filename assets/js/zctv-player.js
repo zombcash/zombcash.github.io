@@ -274,17 +274,18 @@
       0%,100%{opacity:1;box-shadow:0 0 8px #9bff45,0 0 20px #9bff4580}
       50%{opacity:.55;box-shadow:0 0 3px #9bff45,0 0 9px #9bff4560}
     }
-    @media(max-width:1200px){
+    @media(max-width:1050px) and (min-width:761px){
       #zctv-channel-hub .zctv-layout{
-        grid-template-columns:minmax(240px,.95fr) minmax(260px,1.05fr)!important;
-        grid-template-rows:auto auto!important;grid-template-areas:"player player" "intro host"!important;
-        grid-auto-flow:row!important;gap:18px!important;
+        grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)!important;
+        grid-template-rows:minmax(220px,auto) minmax(260px,auto)!important;
+        grid-template-areas:"player intro" "player host"!important;
+        grid-auto-flow:row!important;gap:16px!important;
       }
       #zctv-channel-hub .zctv-intro{grid-area:intro!important}
-      #zctv-channel-hub .zctv-host-art{grid-area:host!important;height:clamp(300px,36vw,430px)!important}
+      #zctv-channel-hub .zctv-host-art{grid-area:host!important;height:100%!important;min-height:260px!important;max-height:390px!important}
       #zctv-channel-hub .zctv-player-column{
-        grid-area:player!important;width:min(100%,760px)!important;
-        justify-self:center!important;margin-inline:auto!important;
+        grid-area:player!important;width:100%!important;max-width:none!important;
+        justify-self:stretch!important;margin:0!important;
       }
     }
     @media(max-width:700px){
