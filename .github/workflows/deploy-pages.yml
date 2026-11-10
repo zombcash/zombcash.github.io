@@ -3,6 +3,11 @@ name: Deploy ZombieCash static site to GitHub Pages
 on:
   push:
     branches: [main]
+    # Tests and workflow-only edits do not change the published site.
+    # Keep Pages deployments for actual site/content changes.
+    paths-ignore:
+      - 'tests/**'
+      - '.github/workflows/**'
   workflow_dispatch:
 
 permissions:
