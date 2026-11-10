@@ -28,7 +28,20 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
           const r = el.getBoundingClientRect();
           return { left: Math.round(r.left), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height) };
         };
+        const overflowElements = [...document.body.querySelectorAll('*')].map(el => {
+          const r = el.getBoundingClientRect();
+          const path = [];
+          let node = el;
+          while (node && node !== document.body && path.length < 5) {
+            let part = node.tagName.toLowerCase();
+            if (node.id) part += '#' + node.id;
+            else if (node.classList && node.classList.length) part += '.' + [...node.classList].slice(0, 3).join('.');
+            path.unshift(part); node = node.parentElement;
+          }
+          return { selector: path.join(' > '), left: Math.round(r.left), right: Math.round(r.right), width: Math.round(r.width), scrollWidth: el.scrollWidth, overflowX: getComputedStyle(el).overflowX };
+        }).filter(item => item.right > innerWidth + 2 || item.width > innerWidth + 2).sort((a,b) => b.right - a.right).slice(0, 20);
         return {
+          overflowElements,
           viewport: innerWidth,
           documentWidth: document.documentElement.scrollWidth,
           hero: rect('#home > .hero'),
@@ -53,7 +66,7 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
       if (!layout.player || layout.player.width < 420) issues.push('ZombieCash TV player column is too narrow');
       if (!layout.promoCount || layout.promoCount === 'LOADING VIDEO LIBRARY…') issues.push('promo video library controls did not initialize');
       if (!layout.promoSource.startsWith('https://')) issues.push('featured promo video source was not assigned');
-      if (layout.documentWidth > width + 2) issues.push('horizontal overflow: ' + layout.documentWidth + 'px');
+      if (layout.documentWidth > width + 2) issues.push('horizontal overflow: ' + layout.documentWidth + 'px; offenders: ' + JSON.stringify(layout.overflowElements));
       if (errors.length) issues.push('JavaScript errors: ' + errors.join(' | '));
       await page.screenshot({ path: `${outDir}/homepage-zoom-${width}.png`, fullPage: false });
       console.log(JSON.stringify({ width, layout, issues }));
