@@ -327,7 +327,7 @@
       }) : [];
       if (!promoVideos.length) throw new Error('No valid promo videos');
       updatePromoControls();
-      if (currentId === 'featured-promo') showFeaturedPromo();
+      if (currentId === 'featured-promo' || (!currentId && mode === 'archive')) showFeaturedPromo();
     })
     .catch(function () {
       promoVideos = [{ title: 'ZombieCash Promo Video', tag: 'FEATURED PROMO', date: '2026-10-24', src: FEATURED_VIDEO, releaseUrl: 'https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10' }];
@@ -433,7 +433,7 @@
       clearPlayer();
       text(version, 'SERVER ARCHIVE'); text(status, 'ARCHIVE MODE · SELECT AN EPISODE');
       if (download) { download.removeAttribute('href'); download.textContent = 'SELECT AN EPISODE'; }
-      render(); setSignal(false, 'ARCHIVE MODE');
+      render(); if (!currentId && promoVideos.length) showFeaturedPromo(); setSignal(false, currentId === 'featured-promo' ? 'FEATURED TRANSMISSION' : 'ARCHIVE MODE');
     }
     updateModeButtons();
   }
