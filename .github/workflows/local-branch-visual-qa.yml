@@ -29,6 +29,7 @@ on:
       - "docs/DESIGN-STYLE-GUIDE.md"
       - ".github/workflows/homepage-visual-smoke.yml"
       - "tests/mobile-viewport-smoke.cjs"
+      - "tests/homepage-zoom-layout-smoke.cjs"
       - "tests/localized-article-visual.cjs"
       - "tests/survivor-field-manual-smoke.cjs"
       - "tests/memecoin-platforms-article-smoke.cjs"
@@ -65,6 +66,7 @@ jobs:
           node --check tests/zombcash-tv-player-visual.cjs
           node --check language.js
           node --check tests/mobile-viewport-smoke.cjs
+          node --check tests/homepage-zoom-layout-smoke.cjs
           node --check tests/zctv-layout-smoke.cjs
           node --check tests/tool-video-card-layout-smoke.cjs
           node --check tests/localized-article-visual.cjs
@@ -111,6 +113,11 @@ jobs:
           SITE_URL: http://127.0.0.1:4173/
         run: node tests/mobile-viewport-smoke.cjs
 
+      - name: Test homepage at reduced browser zoom viewports
+        env:
+          SITE_URL: http://127.0.0.1:4173/
+        run: node tests/homepage-zoom-layout-smoke.cjs
+
       - name: Test balanced tool video cards, 16:9 windows and hover/touch playback
         env:
           SITE_URL: http://127.0.0.1:4173/
@@ -143,6 +150,7 @@ jobs:
           name: local-branch-visual-qa
           path: |
             mobile-test-results/
+            homepage-zoom-results/
             zctv-layout-results/
             tool-video-card-results/
             localized-article-visual-results/
