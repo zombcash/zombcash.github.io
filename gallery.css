@@ -199,13 +199,17 @@ body.gallery-lightbox-open{overflow:hidden}
 }
 
 
-/* Mobile detail mode: give the caption enough of the viewport to show the full
-   source address and description without requiring hidden inner scrolling. */
+/* Mobile detail mode: keep the full caption visible at standard phone heights,
+   while shrinking the artwork on short screens so the controls remain in view. */
 @media(max-width:720px){
+  .gallery-lightbox:not(.is-image-only) figure{
+    gap:8px;
+    padding-bottom:4px;
+  }
   .gallery-lightbox:not(.is-image-only) figure img{
-    max-height:min(58svh,calc(100svh - 330px));
+    max-height:min(54svh,328px);
   }
   .gallery-lightbox:not(.is-image-only) figcaption{
-    max-height:min(36svh,300px);
+    max-height:min(46svh,calc(100svh - 430px));
   }
 }
