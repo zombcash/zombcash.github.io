@@ -44,6 +44,11 @@ fs.mkdirSync(output, { recursive: true });
             documentWidth: document.documentElement.scrollWidth,
             stylesheet,
             hero: rect(hero), layout: rect(layout), content: rect(content), sponsor: rect(sponsor), art: rect(art),
+            adStage: rect(sponsor?.querySelector('.zc-hero-ad-stage')),
+            nativeSlot: rect(sponsor?.querySelector('.zc-adsterra-native-slot')),
+            mobileSlot: rect(sponsor?.querySelector('.zc-adsterra-mobile-slot')),
+            nativeSlotVisible: (() => { const el = sponsor?.querySelector('.zc-adsterra-native-slot'); if (!el) return false; const r = el.getBoundingClientRect(); return getComputedStyle(el).display !== 'none' && r.width > 0 && r.height > 0; })(),
+            mobileSlotVisible: (() => { const el = sponsor?.querySelector('.zc-adsterra-mobile-slot'); if (!el) return false; const r = el.getBoundingClientRect(); return getComputedStyle(el).display !== 'none' && r.width > 0 && r.height > 0; })(),
             imagePresent: !!image,
             imageLoaded: !!image && image.complete && image.naturalWidth > 0,
           };
@@ -52,6 +57,18 @@ fs.mkdirSync(output, { recursive: true });
         if (!result.stylesheet) issues.push('homepage-visual.css was not loaded');
         if (result.documentWidth > width + 1) issues.push('horizontal overflow: ' + result.documentWidth + 'px');
         if (!result.imagePresent || !result.imageLoaded) issues.push('sponsor artwork image is missing or failed to load');
+        if (!result.adStage) {
+          issues.push('sponsor ad reservation is missing');
+        } else if (width < 768) {
+          const expectedHeight = 50 * Math.min(1, result.adStage.width / 320);
+          if (result.adStage.height < expectedHeight * 0.9) issues.push('mobile ad reservation does not preserve the 320×50 ratio');
+          if (!result.mobileSlotVisible) issues.push('mobile sponsor slot is not visible below 768px');
+          if (result.nativeSlotVisible) issues.push('desktop native sponsor slot must be hidden below 768px');
+        } else {
+          if (result.adStage.height < 270) issues.push('desktop sponsor stage must reserve 300px from 768px upward');
+          if (!result.nativeSlotVisible || !result.nativeSlot || result.nativeSlot.height < 270) issues.push('native sponsor slot must be visible and reserve 300px from 768px upward');
+          if (result.mobileSlotVisible) issues.push('mobile sponsor slot must be hidden from 768px upward');
+        }
         if (width >= 1360 && result.content.right > result.sponsor.left + 2) issues.push('desktop hero columns overlap');
         if (width < 1360 && result.content.bottom > result.sponsor.top + 2) issues.push('stacked hero sections overlap');
         if (errors.length) issues.push('JavaScript errors: ' + errors.join(' | '));
