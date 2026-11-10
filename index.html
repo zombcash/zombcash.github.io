@@ -2535,5 +2535,69 @@ body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
 
 
 
+
+<style id="zc-adsterra-breakpoint-fix-20261110">
+/* Keep the rendered ad reservation in sync with the loader's 767px breakpoint.
+   This rule is deliberately last because the legacy inline styles above otherwise win. */
+@media (min-width: 768px) {
+  body:has(#home) #home > section.hero .zc-hero-ad-stage {
+    box-sizing: border-box !important;
+    display: block !important;
+    width: 100% !important;
+    height: 300px !important;
+    min-height: 300px !important;
+    max-height: 300px !important;
+    flex: 0 0 300px !important;
+    overflow: visible !important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-native-slot {
+    box-sizing: border-box !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: 640px !important;
+    min-width: 0 !important;
+    min-height: 300px !important;
+    height: 300px !important;
+    margin-inline: auto !important;
+    overflow: visible !important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-mobile-slot,
+  body:has(#home) #home > section.hero .zc-adsterra-grid {
+    display: none !important;
+  }
+}
+@media (max-width: 767px) {
+  body:has(#home) #home > section.hero .zc-hero-ad-stage {
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: min(320px, 100%) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    aspect-ratio: 320 / 50 !important;
+    flex: 0 0 auto !important;
+    overflow: hidden !important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-native-slot,
+  body:has(#home) #home > section.hero .zc-adsterra-grid {
+    display: none !important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-mobile-slot {
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    max-width: 320px !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+  }
+}
+</style>
+
 <script src="tool-video-cards.js?v=20261109-2" defer></script>
 </body></html>
