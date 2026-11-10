@@ -2076,3 +2076,62 @@ body:has(#home) #zctv-channel-hub #zc-promo-player{
     height:clamp(240px,65vw,390px)!important;min-height:240px!important;
   }
 }
+
+
+/* 2026-11-11 — final TV alignment correction.
+   Explicitly map each direct grid child to its named area. Earlier theme rules
+   assigned intro/host/player areas in a different order, so changing only the
+   grid-template-areas left the panels split across rows. */
+html body:has(main#home) #zctv-channel-hub .zctv-layout{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.18fr)!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  grid-template-areas:"player intro host"!important;
+  align-items:stretch!important;
+}
+html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-player-column{
+  grid-area:player!important;
+  grid-column:auto!important;grid-row:auto!important;
+  width:100%!important;max-width:none!important;min-width:0!important;
+  height:100%!important;min-height:0!important;align-self:stretch!important;
+}
+html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-intro{
+  grid-area:intro!important;
+  grid-column:auto!important;grid-row:auto!important;
+  width:100%!important;max-width:none!important;min-width:0!important;
+  height:100%!important;min-height:0!important;align-self:stretch!important;
+  display:flex!important;flex-direction:column!important;justify-content:center!important;
+  box-sizing:border-box!important;
+}
+html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art{
+  grid-area:host!important;
+  grid-column:auto!important;grid-row:auto!important;
+  width:100%!important;max-width:none!important;min-width:0!important;
+  height:100%!important;min-height:0!important;max-height:none!important;
+  align-self:stretch!important;box-sizing:border-box!important;
+}
+html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art img{
+  width:100%!important;height:100%!important;object-fit:cover!important;
+}
+@media(max-width:1050px) and (min-width:761px){
+  html body:has(main#home) #zctv-channel-hub .zctv-layout{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    grid-template-rows:auto auto!important;
+    grid-template-areas:"player intro" "player host"!important;
+  }
+  html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-player-column{
+    grid-area:player!important;grid-row:1 / span 2!important;
+  }
+  html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-intro{grid-area:intro!important;height:auto!important}
+  html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art{grid-area:host!important;height:100%!important;min-height:260px!important}
+}
+@media(max-width:760px){
+  html body:has(main#home) #zctv-channel-hub .zctv-layout{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:auto auto auto!important;
+    grid-template-areas:"player" "intro" "host"!important;
+  }
+  html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-player-column{grid-area:player!important;height:auto!important}
+  html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-intro{grid-area:intro!important;height:auto!important}
+  html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art{grid-area:host!important;height:clamp(240px,65vw,390px)!important}
+}
