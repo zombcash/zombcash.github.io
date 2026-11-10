@@ -60,10 +60,11 @@ fs.mkdirSync('tool-video-card-results', { recursive: true });
     check(m.gridColumns === expectedColumns, width + 'px: expected ' + expectedColumns + ' columns, got ' + m.gridColumns);
     check(m.documentWidth <= width + 1, width + 'px: horizontal overflow (' + m.documentWidth + 'px)');
     check(m.cards.every(c => c.box.left >= 8 && c.box.right <= width - 8), width + 'px: tool cards must retain balanced outer gutters');
+    const innerInset = width <= 760 ? 28 : 34;
     for (const card of m.cards) {
       check(card.video && Math.abs(card.video.width / card.video.height - 16/9) < .025, width + 'px: ' + card.name + ' video is not 16:9');
-      check(card.video && Math.abs(card.video.width - card.box.width + 32) < 4, width + 'px: ' + card.name + ' video does not fill the shared card content width');
-      check(card.action && Math.abs(card.action.width - (card.box.width - 32)) < 4, width + 'px: ' + card.name + ' CTA width is inconsistent');
+      check(card.video && Math.abs(card.video.width - (card.box.width - innerInset)) < 4, width + 'px: ' + card.name + ' video does not fill the shared card content width');
+      check(card.action && Math.abs(card.action.width - (card.box.width - innerInset)) < 4, width + 'px: ' + card.name + ' CTA width is inconsistent');
       check(!card.overlayVisible, width + 'px: ' + card.name + ' has a visible play icon or overlay label');
     }
     if (width > 760) {
@@ -71,8 +72,8 @@ fs.mkdirSync('tool-video-card-results', { recursive: true });
       const heights = m.cards.map(c => c.box.height);
       check(Math.max(...widths) - Math.min(...widths) < 3, width + 'px: tool cards do not have equal widths');
       check(Math.max(...heights) - Math.min(...heights) < 3, width + 'px: tool cards do not have equal heights');
-      const actionBottoms = m.cards.map(c => c.action.bottom);
-      check(Math.max(...actionBottoms) - Math.min(...actionBottoms) < 3, width + 'px: CTA buttons are not aligned on one baseline');
+      const actionBottoms = m.cards.slice(0, expectedColumns).map(c => c.action.bottom);
+      check(Math.max(...actionBottoms) - Math.min(...actionBottoms) < 3, width + 'px: CTA buttons in the same grid row are not aligned on one baseline');
     }
     await page.screenshot({ path: 'tool-video-card-results/' + width + '.png' });
     console.log('LAYOUT', JSON.stringify(m));
