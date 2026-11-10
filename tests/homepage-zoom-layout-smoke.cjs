@@ -53,7 +53,7 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
           player: rect('#zctv-channel-hub .zctv-player-column'),
           promoCount: document.getElementById('zc-promo-count')?.textContent.trim() || '',
           promoSource: document.getElementById('zc-promo-player')?.currentSrc || document.getElementById('zc-promo-player')?.src || '',
-          stylesheet: [...document.styleSheets].some(s => s.href && new URL(s.href).search.includes('zoom-mobile-fix-20261110-6-zctv-layout'))
+          stylesheet: [...document.styleSheets].some(s => s.href && new URL(s.href).search.includes('20261110-toolcards-balanced-v2'))
         };
       });
       const issues = [];

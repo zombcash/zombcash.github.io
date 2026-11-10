@@ -18,6 +18,7 @@ on:
       - 'homepage-ribbons.js'
       - 'assets/zombcash-survivor-realistic-520.avif'
       - 'docs/DESIGN-STYLE-GUIDE.md'
+      - 'tests/tool-video-card-layout-smoke.cjs'
       - '.github/workflows/homepage-visual-smoke.yml'
 
 permissions:
@@ -50,6 +51,8 @@ jobs:
           for filename, lang in pages.items():
               html = Path(filename).read_text(encoding="utf-8")
               assert f'<html lang="{lang}">' in html, f"{filename}: wrong language tag"
+              assert 'homepage-visual.css?v=20261110-toolcards-balanced-v2' in html, f"{filename}: stale tool-card stylesheet"
+              assert html.count('data-video-card=') == 3, f"{filename}: expected exactly three homepage tool video cards"
               assert html.count('href="/homepage-visual.css?') == 1, f"{filename}: stylesheet missing or duplicated"
               assert html.count('src="/homepage-ribbons.js?v=20261105"') == 1, f"{filename}: ticker script missing or duplicated"
               assert html.count('rel="canonical"') == 1, f"{filename}: canonical count changed"
@@ -76,6 +79,7 @@ jobs:
           PY
 
       - name: Verify published full-bleed banner assets
+        if: github.event_name != 'pull_request'
         run: |
           python -m pip install --quiet requests Pillow
           python - <<'PY'
@@ -84,7 +88,7 @@ jobs:
           import requests
           from PIL import Image
           base = "https://zombcash.github.io"
-          version = "zoom-mobile-fix-20261110-6-zctv-layout"
+          version = "20261110-toolcards-balanced-v2"
           pages = ["index.html", "de/index.html", "fr/index.html", "it/index.html", "ja/index.html", "zh-CN/index.html", "tr/index.html", "hi/index.html", "ru/index.html"]
           for page in pages:
               response = requests.get(f"{base}/{page}?banner-check={version}", timeout=30)
@@ -104,12 +108,13 @@ jobs:
           PY
 
       - name: Verify live localized tool video panels and hover behavior
+        if: github.event_name != 'pull_request'
         run: |
           python -m pip install --quiet requests
           python - <<'PY'
           import requests
           base = "https://zombcash.github.io"
-          version = "zoom-mobile-fix-20261110-6-zctv-layout"
+          version = "20261110-toolcards-balanced-v2"
           pages = {
               "index.html": "en", "de/index.html": "de", "fr/index.html": "fr",
               "it/index.html": "it", "ja/index.html": "ja", "zh-CN/index.html": "zh-CN",

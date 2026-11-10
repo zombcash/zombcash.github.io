@@ -20,6 +20,7 @@ on:
       - "homepage-visual.css"
       - "assets/js/zctv-player.js"
       - "tests/zctv-layout-smoke.cjs"
+      - "tests/tool-video-card-layout-smoke.cjs"
       - "homepage-ribbons.js"
       - "assets/zombcash-survivor-v13.jpg"
       - "docs/DESIGN-STYLE-GUIDE.md"
@@ -60,6 +61,7 @@ jobs:
           node --check language.js
           node --check tests/mobile-viewport-smoke.cjs
           node --check tests/zctv-layout-smoke.cjs
+          node --check tests/tool-video-card-layout-smoke.cjs
           node --check tests/localized-article-visual.cjs
           node --check tests/survivor-field-manual-smoke.cjs
           node --check tests/memecoin-platforms-article-smoke.cjs
@@ -99,6 +101,11 @@ jobs:
           SITE_URL: http://127.0.0.1:4173/
         run: node tests/mobile-viewport-smoke.cjs
 
+      - name: Test balanced tool video cards, 16:9 windows and hover/touch playback
+        env:
+          SITE_URL: http://127.0.0.1:4173/
+        run: node tests/tool-video-card-layout-smoke.cjs
+
       - name: Test localized articles across desktop and mobile
         env:
           SITE_URL: http://127.0.0.1:4173/
@@ -127,6 +134,7 @@ jobs:
           path: |
             mobile-test-results/
             zctv-layout-results/
+            tool-video-card-results/
             localized-article-visual-results/
             survivor-field-manual-results/
             memecoin-article-results/
