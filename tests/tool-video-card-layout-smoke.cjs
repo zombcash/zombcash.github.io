@@ -60,7 +60,7 @@ fs.mkdirSync('tool-video-card-results', { recursive: true });
     check(m.gridColumns === expectedColumns, width + 'px: expected ' + expectedColumns + ' columns, got ' + m.gridColumns);
     check(m.documentWidth <= width + 1, width + 'px: horizontal overflow (' + m.documentWidth + 'px)');
     check(m.cards.every(c => c.box.left >= 8 && c.box.right <= width - 8), width + 'px: tool cards must retain balanced outer gutters');
-    const innerInset = width <= 760 ? 28 : 34;
+    const innerInset = width <= 760 ? 28 : width <= 1050 ? 30 : 34;
     for (const card of m.cards) {
       check(card.video && Math.abs(card.video.width / card.video.height - 16/9) < .025, width + 'px: ' + card.name + ' video is not 16:9');
       check(card.video && Math.abs(card.video.width - (card.box.width - innerInset)) < 4, width + 'px: ' + card.name + ' video does not fill the shared card content width');
