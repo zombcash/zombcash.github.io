@@ -37,6 +37,7 @@ fs.mkdirSync(output, { recursive: true });
           const tvInner = tvSection?.querySelector('.zctv-inner');
           const tvLayout = tvInner?.querySelector('.zctv-layout');
           const tvPlayer = tvLayout?.querySelector('.zctv-player-column');
+          const tvArchive = tvPlayer?.querySelector('.zctv-archive');
           const tvChannels = tvInner?.querySelector('.zctv-channels');
           const art = sponsor?.querySelector('.zc-sponsor-art-slot');
           const image = art?.querySelector('img');
@@ -49,7 +50,7 @@ fs.mkdirSync(output, { recursive: true });
             documentWidth: document.documentElement.scrollWidth,
             stylesheet,
             hero: rect(hero), layout: rect(layout), content: rect(content), sponsor: rect(sponsor), art: rect(art),
-            tvSection: rect(tvSection), tvInner: rect(tvInner), tvLayout: rect(tvLayout), tvPlayer: rect(tvPlayer), tvChannels: rect(tvChannels),
+            tvSection: rect(tvSection), tvInner: rect(tvInner), tvLayout: rect(tvLayout), tvPlayer: rect(tvPlayer), tvArchive: rect(tvArchive), tvChannels: rect(tvChannels),
             adStage: rect(sponsor?.querySelector('.zc-hero-ad-stage')),
             nativeSlot: rect(sponsor?.querySelector('.zc-adsterra-native-slot')),
             mobileSlot: rect(sponsor?.querySelector('.zc-adsterra-mobile-slot')),
@@ -62,6 +63,16 @@ fs.mkdirSync(output, { recursive: true });
         const issues = [];
         if (!result.stylesheet) issues.push('homepage-visual.css was not loaded');
         if (!result.tvSection || !result.tvInner || !result.tvLayout || !result.tvPlayer || !result.tvChannels) issues.push('ZombieCash TV layout is missing a required container');
+        else {
+          const sectionCenter = (result.tvSection.left + result.tvSection.right) / 2;
+          const innerCenter = (result.tvInner.left + result.tvInner.right) / 2;
+          if (Math.abs(sectionCenter - innerCenter) > 2) issues.push('ZombieCash TV inner container is not horizontally centered');
+          if (result.tvInner.width < Math.min(width * 0.85, 1500 * 0.85)) issues.push('ZombieCash TV inner container is unexpectedly narrow');
+          if (result.tvPlayer.left < result.tvInner.left - 2 || result.tvPlayer.right > result.tvInner.right + 2) issues.push('ZombieCash TV player column escapes the centered container');
+          if (!result.tvArchive || Math.abs(result.tvArchive.width - result.tvPlayer.width) > 2) issues.push('ZombieCash TV archive width does not match the video player');
+          if (Math.abs(result.tvChannels.width - result.tvInner.width) > 2) issues.push('ZombieCash TV channel cards do not align with the main container edges');
+          if (width <= 1050 && Math.abs((result.tvPlayer.left + result.tvPlayer.right) / 2 - innerCenter) > 2) issues.push('Responsive ZombieCash TV player is not centered below 1050px');
+        }
         else {
           const sectionCenter = (result.tvSection.left + result.tvSection.right) / 2;
           const innerCenter = (result.tvInner.left + result.tvInner.right) / 2;
