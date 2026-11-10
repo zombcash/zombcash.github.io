@@ -27,7 +27,6 @@
   const liveLabel = root.querySelector('.zctv-live-label');
   const promoControls = document.querySelector('#promo-video .zc-promo-video-controls');
   const promoStatus = document.querySelector('#promo-video #zc-promo-status');
-  const promoRelease = document.querySelector('#promo-video #zc-promo-release');
   if (column && mount) {
     [promoControls, promoStatus, promoRelease].forEach(function (node) { if (node) column.insertBefore(node, mount); });
   }
