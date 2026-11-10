@@ -2330,3 +2330,30 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     grid-template-columns:minmax(0,1fr)!important;
   }
 }
+
+
+/* Wide-viewport zoom mode: every major homepage section shares one expanding
+   rail. This preserves readable proportions at browser zoom levels such as
+   20% without allowing one section to grow while its neighbours stay narrow. */
+@media(min-width:1800px){
+  html body:has(main#home) > main#home > section > :is(
+    .hero-layout,.field-manual-spotlight-inner,.zc-promo-video-shell,.zctv-inner,
+    .world-grid,.intro-row,.outbreak-panel,.tool-grid,.section-heading,
+    .crew-grid,.arcade-feature,.transmission-box,.site-visits-inner,
+    .campaign-dashboard-inner
+  ),
+  html body:has(main#home) > main#home > section.section > :is(
+    .section-kicker,.section-heading,.intro-row,.outbreak-panel,.tool-grid,
+    .world-grid,.crew-grid,.arcade-feature,.transmission-box
+  ),
+  html body:has(main#home) > main#home > section.section > .section-heading,
+  html body:has(main#home) > main#home > section.section > .section-kicker{
+    width:min(90vw,5600px)!important;
+    max-width:5600px!important;
+    margin-left:auto!important;margin-right:auto!important;
+  }
+  html body:has(main#home) #zctv-channel-hub .zctv-layout{
+    width:100%!important;max-width:none!important;
+    grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr) minmax(0,1fr)!important;
+  }
+}
