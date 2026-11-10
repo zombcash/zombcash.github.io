@@ -3,21 +3,21 @@ const assert = require("node:assert/strict");
 
 const base = process.env.SITE_URL || "http://127.0.0.1:4173";
 const locales = [
-  ["en", "ZOMBCASH TV — LIVE FROM THE OUTBREAK"],
-  ["de", "ZOMBCASH TV — LIVE AUS DEM AUSBRUCHSGEBIET"],
-  ["fr", "ZOMBCASH TV — EN DIRECT DE L’ÉPIDÉMIE"],
-  ["it", "ZOMBCASH TV — IN DIRETTA DALL’EPIDEMIA"],
-  ["ja", "ZOMBCASH TV — アウトブレイク現場から生中継"],
-  ["zh-CN", "ZOMBCASH TV — 疫情前线直播"],
-  ["ru", "ZOMBCASH TV — ПРЯМОЙ ЭФИР ИЗ ЗОНЫ ВСПЫШКИ"],
-  ["tr", "ZOMBCASH TV — SALGIN BÖLGESİNDEN CANLI"],
-  ["hi", "ZOMBCASH TV — प्रकोप क्षेत्र से सीधा प्रसारण"]
+  ["en", "ZOMBCASH TV — LIVE FROM THE OUTBREAK", "Choose an episode from the archive.", "ARCHIVE ONLINE · AWAITING FIRST TRANSMISSION"],
+  ["de", "ZOMBCASH TV — LIVE AUS DEM AUSBRUCHSGEBIET", "Wähle eine Folge aus dem Archiv.", "ARCHIV ONLINE · ERSTE ÜBERTRAGUNG AUSSTEHEND"],
+  ["fr", "ZOMBCASH TV — EN DIRECT DE L’ÉPIDÉMIE", "Choisissez un épisode dans les archives.", "ARCHIVES EN LIGNE · EN ATTENTE DE LA PREMIÈRE TRANSMISSION"],
+  ["it", "ZOMBCASH TV — IN DIRETTA DALL’EPIDEMIA", "Scegli un episodio dall’archivio.", "ARCHIVIO ONLINE · IN ATTESA DELLA PRIMA TRASMISSIONE"],
+  ["ja", "ZOMBCASH TV — アウトブレイク現場から生中継", "アーカイブからエピソードを選択してください。", "アーカイブ稼働中 · 初回配信待ち"],
+  ["zh-CN", "ZOMBCASH TV — 疫情前线直播", "从档案中选择一期节目。", "档案已上线 · 等待首期节目"],
+  ["ru", "ZOMBCASH TV — ПРЯМОЙ ЭФИР ИЗ ЗОНЫ ВСПЫШКИ", "Выберите выпуск из архива.", "АРХИВ ДОСТУПЕН · ОЖИДАЕТСЯ ПЕРВЫЙ ВЫПУСК"],
+  ["tr", "ZOMBCASH TV — SALGIN BÖLGESİNDEN CANLI", "Arşivden bir bölüm seç.", "ARŞİV ÇEVRİMİÇİ · İLK YAYIN BEKLENİYOR"],
+  ["hi", "ZOMBCASH TV — प्रकोप क्षेत्र से सीधा प्रसारण", "संग्रह से एक एपिसोड चुनें।", "संग्रह ऑनलाइन · पहले प्रसारण की प्रतीक्षा"]
 ];
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
   try {
-    for (const [locale, expectedTitle] of locales) {
+    for (const [locale, expectedTitle, expectedChoose, expectedStatus] of locales) {
       const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
       await page.route("https://zombcash-bot.fadehost.app/api/tv/episodes**", route =>
         route.fulfill({
@@ -62,7 +62,29 @@ const locales = [
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
       assert.equal(overflow, false, "no horizontal overflow at 320px: " + locale);
       await page.close();
-      console.log("PASS " + locale);
+
+      // Empty archive state must be localized and must leave the connecting state.
+      const emptyPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+      await emptyPage.route("https://zombcash-bot.fadehost.app/api/tv/episodes**", route =>
+        route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({ episodes: [], page: 1, per_page: 8, total: 0, total_pages: 0 })
+        })
+      );
+      await emptyPage.goto(base + path, { waitUntil: "domcontentloaded" });
+      await emptyPage.waitForFunction(({ status, title }) =>
+        document.querySelector("#zombcash-tv .zctv-status")?.textContent?.trim() === status &&
+        document.querySelector("#zombcash-tv .zctv-current-title")?.textContent?.trim() === title,
+        { status: expectedStatus, title: expectedChoose },
+        { timeout: 10000 }
+      );
+      assert.equal((await emptyPage.locator(".zctv-current-title").textContent()).trim(), expectedChoose, "localized empty-state prompt: " + locale);
+      assert.equal((await emptyPage.locator(".zctv-status").textContent()).trim(), expectedStatus, "localized empty-archive status: " + locale);
+      assert.equal(await emptyPage.locator(".zctv-screen-empty").isVisible(), true, "empty-state screen remains visible: " + locale);
+      assert.equal(await emptyPage.locator(".zctv-episode").count(), 0, "empty archive has no episode cards: " + locale);
+      await emptyPage.close();
+      console.log("PASS " + locale + " + empty state");
     }
   } finally {
     await browser.close();
