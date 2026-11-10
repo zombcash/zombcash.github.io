@@ -99,6 +99,7 @@ jobs:
           path: |
             mobile-test-results/
             homepage-locale-results/
+            homepage-zoom-results/
             survivor-field-manual-results/
             memecoin-article-results/
           if-no-files-found: ignore
