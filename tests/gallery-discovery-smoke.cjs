@@ -354,6 +354,10 @@ const expectedGalleryCount = galleryData.items.length;
     if (!mobileShareBox || mobileShareBox.x < 0 || mobileShareBox.x + mobileShareBox.width > 375) throw new Error("Mobile lightbox share control overflows the viewport");
     if (mobileShareBox.y < 0 || mobileShareBox.y + mobileShareBox.height > 812) throw new Error("Mobile lightbox share control is clipped below the viewport");
     if (mobileSharePosition !== "static") throw new Error("Mobile lightbox share control must stay in the caption flow");
+    await mobile.waitForFunction(() => {
+      const lightbox = document.querySelector(".gallery-lightbox");
+      return lightbox?.classList.contains("is-open") && Number.parseFloat(getComputedStyle(lightbox).opacity) >= 0.99;
+    });
     await mobile.screenshot({ path: "gallery-lightbox-mobile-smoke.png" });
     await mobile.locator(".gallery-lightbox-close").click();
     const russian = await browser.newPage({ viewport: { width: 390, height: 844 } });
