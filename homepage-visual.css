@@ -1921,3 +1921,46 @@ body:has(#home) #home > section:not(.hero){
     min-width:0!important;
   }
 }
+
+
+/* 2026-11-10 — wide viewport geometry repair.
+   Keep the full-bleed sections anchored to the viewport, not the padded legacy
+   .section content box. Explicitly release the hero's legacy 1440px cap. */
+@media (min-width:1800px) {
+  html body:has(main#home) > main#home > section.hero {
+    padding-inline:0!important;
+    overflow:hidden!important;
+  }
+  html body:has(main#home) > main#home > section.hero > .hero-layout {
+    display:grid!important;
+    width:90vw!important;
+    max-width:5600px!important;
+    margin-inline:auto!important;
+    grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)!important;
+    gap:clamp(48px,3vw,180px)!important;
+  }
+  html body:has(main#home) > main#home > section.hero > .hero-layout > .hero-content {
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+  }
+  html body:has(main#home) > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel {
+    width:100%!important;
+    max-width:min(40vw,2400px)!important;
+    min-width:0!important;
+  }
+  html body:has(main#home) > main#home > section.zc-promo-video,
+  html body:has(main#home) > main#home > section#zctv-channel-hub {
+    width:100vw!important;
+    max-width:none!important;
+    margin-left:calc(50% - 50vw)!important;
+    margin-right:calc(50% - 50vw)!important;
+    padding-inline:0!important;
+  }
+  html body:has(main#home) > main#home > section.zc-promo-video > .zc-promo-video-shell,
+  html body:has(main#home) > main#home > section#zctv-channel-hub > .zctv-inner {
+    width:90vw!important;
+    max-width:5600px!important;
+    margin-inline:auto!important;
+  }
+}
