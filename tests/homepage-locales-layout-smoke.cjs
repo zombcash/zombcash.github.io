@@ -33,6 +33,11 @@ fs.mkdirSync(output, { recursive: true });
           const layout = hero?.querySelector('.hero-layout');
           const content = layout?.querySelector('.hero-content');
           const sponsor = layout?.querySelector('.zc-hero-sponsor-panel');
+          const tvSection = document.querySelector('#zctv-channel-hub');
+          const tvInner = tvSection?.querySelector('.zctv-inner');
+          const tvLayout = tvInner?.querySelector('.zctv-layout');
+          const tvPlayer = tvLayout?.querySelector('.zctv-player-column');
+          const tvChannels = tvInner?.querySelector('.zctv-channels');
           const art = sponsor?.querySelector('.zc-sponsor-art-slot');
           const image = art?.querySelector('img');
           const stylesheet = Array.from(document.styleSheets).some(s => {
@@ -44,6 +49,7 @@ fs.mkdirSync(output, { recursive: true });
             documentWidth: document.documentElement.scrollWidth,
             stylesheet,
             hero: rect(hero), layout: rect(layout), content: rect(content), sponsor: rect(sponsor), art: rect(art),
+            tvSection: rect(tvSection), tvInner: rect(tvInner), tvLayout: rect(tvLayout), tvPlayer: rect(tvPlayer), tvChannels: rect(tvChannels),
             adStage: rect(sponsor?.querySelector('.zc-hero-ad-stage')),
             nativeSlot: rect(sponsor?.querySelector('.zc-adsterra-native-slot')),
             mobileSlot: rect(sponsor?.querySelector('.zc-adsterra-mobile-slot')),
@@ -55,6 +61,15 @@ fs.mkdirSync(output, { recursive: true });
         });
         const issues = [];
         if (!result.stylesheet) issues.push('homepage-visual.css was not loaded');
+        if (!result.tvSection || !result.tvInner || !result.tvLayout || !result.tvPlayer || !result.tvChannels) issues.push('ZombieCash TV layout is missing a required container');
+        else {
+          const sectionCenter = (result.tvSection.left + result.tvSection.right) / 2;
+          const innerCenter = (result.tvInner.left + result.tvInner.right) / 2;
+          if (Math.abs(sectionCenter - innerCenter) > 2) issues.push('ZombieCash TV inner container is not horizontally centered');
+          if (result.tvInner.width < Math.min(width * 0.85, 1500 * 0.85)) issues.push('ZombieCash TV inner container is unexpectedly narrow');
+          if (result.tvPlayer.left < result.tvInner.left - 2 || result.tvPlayer.right > result.tvInner.right + 2) issues.push('ZombieCash TV player column escapes the centered container');
+          if (result.tvChannels.left < result.tvInner.left - 2 || result.tvChannels.right > result.tvInner.right + 2) issues.push('ZombieCash TV channel cards escape the centered container');
+        }
         if (result.documentWidth > width + 1) issues.push('horizontal overflow: ' + result.documentWidth + 'px');
         if (!result.imagePresent || !result.imageLoaded) issues.push('sponsor artwork image is missing or failed to load');
         if (!result.adStage) {
