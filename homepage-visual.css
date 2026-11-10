@@ -1749,3 +1749,30 @@ body:has(#home) #home .zctv-player-column {
     transition-duration: .01ms !important;
   }
 }
+
+
+/* Desktop native sponsor unit is 300px tall; never clip it inside the legacy 250px banner reservation. */
+@media (min-width: 768px) {
+  body:has(#home) #home > section.hero .zc-hero-ad-stage {
+    box-sizing: border-box !important;
+    display: block !important;
+    width: 100% !important;
+    height: 300px !important;
+    min-height: 300px !important;
+    max-height: 300px !important;
+    flex: 0 0 300px !important;
+    overflow: visible !important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-native-slot,
+  body:has(#home) #home > section.hero #container-4420dadadbd2f0727c322cd6c632be3e {
+    box-sizing: border-box !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: 640px !important;
+    min-width: 0 !important;
+    min-height: 300px !important;
+    height: auto !important;
+    margin-inline: auto !important;
+    overflow: visible !important;
+  }
+}
