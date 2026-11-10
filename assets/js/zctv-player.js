@@ -5,6 +5,8 @@
   root.dataset.apiPlayerReady = '1';
 
   const API = 'https://zombcash-bot.fadehost.app/api/tv';
+  const FEATURED_VIDEO = 'https://github.com/zombcash/zombcash.github.io/releases/download/zombiecash-promo-2026-10/zombiecash_final_real_screens.mp4-1080p-.ANONMP4.TO.mp4';
+  const FEATURED_POSTER = '/assets/images/zombcash-tv-raven.png';
   const mount = root.querySelector('[data-zctv-player-mount]');
   const oldWrap = document.querySelector('#promo-video .zc-promo-player-wrap');
   if (mount && oldWrap) mount.appendChild(oldWrap);
@@ -114,6 +116,18 @@
 
   function text(node, value) { if (node) node.textContent = value; }
   function videoUrl(id) { return API + '/episodes/' + encodeURIComponent(id) + '/video'; }
+  function showFeaturedPromo() {
+    if (!player || currentId) return;
+    player.pause();
+    player.poster = FEATURED_POSTER;
+    player.src = FEATURED_VIDEO;
+    player.load();
+    currentId = 'featured-promo';
+    text(version, 'FEATURED PROMO');
+    text(status, 'OFFICIAL ZOMBIECASH PROMO · PRESS PLAY');
+    if (download) { download.href = FEATURED_VIDEO; download.textContent = 'OPEN / DOWNLOAD ↗'; }
+    setSignal(false, 'FEATURED TRANSMISSION');
+  }
   function setSignal(on, label) {
     livePlaying = !!on;
     root.dataset.zctvLive = livePlaying ? 'true' : 'false';
@@ -165,7 +179,10 @@
     list.replaceChildren();
     if (!shown.length) {
       showEmpty(active === 'news' ? 'No Outbreak News episodes have been published yet.' : 'No episodes in this channel yet. New transmissions will appear here.');
-      if (mode === 'archive' && !currentId) { text(status, 'ARCHIVE READY · AWAITING FIRST EPISODE'); text(version, 'SERVER ARCHIVE'); }
+      if (mode === 'archive' && !currentId) {
+        if (episodes.length === 0) showFeaturedPromo();
+        else { text(status, 'ARCHIVE READY · AWAITING FIRST EPISODE'); text(version, 'SERVER ARCHIVE'); }
+      }
       return;
     }
     shown.forEach(function (episode) {
