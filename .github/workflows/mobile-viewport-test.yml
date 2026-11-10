@@ -86,14 +86,19 @@ jobs:
       - name: Test mobile layouts against current checkout
         run: node tests/mobile-viewport-smoke.cjs
       - name: Test homepage layout across all locales and viewports
+        if: always()
         run: node tests/homepage-locales-layout-smoke.cjs
       - name: Test homepage at reduced browser zoom viewports
+        if: always()
         run: node tests/homepage-zoom-layout-smoke.cjs
       - name: Test ZombieCash TV player, archive and responsive columns
+        if: always()
         run: node tests/zctv-layout-smoke.cjs
       - name: Test Survivor Field Manual across locales and viewports
+        if: always()
         run: node tests/survivor-field-manual-smoke.cjs
       - name: Test multilingual comparison article visually across locales and viewports
+        if: always()
         run: node tests/memecoin-platforms-article-smoke.cjs
 
       - name: Upload wide viewport visual evidence
