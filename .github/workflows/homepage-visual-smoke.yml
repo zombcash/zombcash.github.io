@@ -84,7 +84,7 @@ jobs:
           import requests
           from PIL import Image
           base = "https://zombcash.github.io"
-          version = "zoom-mobile-fix-20261110-6-zctv-layout"
+          version = "20261110-toolcards-balanced-v1"
           pages = ["index.html", "de/index.html", "fr/index.html", "it/index.html", "ja/index.html", "zh-CN/index.html", "tr/index.html", "hi/index.html", "ru/index.html"]
           for page in pages:
               response = requests.get(f"{base}/{page}?banner-check={version}", timeout=30)
@@ -109,7 +109,7 @@ jobs:
           python - <<'PY'
           import requests
           base = "https://zombcash.github.io"
-          version = "zoom-mobile-fix-20261110-6-zctv-layout"
+          version = "20261110-toolcards-balanced-v1"
           pages = {
               "index.html": "en", "de/index.html": "de", "fr/index.html": "fr",
               "it/index.html": "it", "ja/index.html": "ja", "zh-CN/index.html": "zh-CN",
