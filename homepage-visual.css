@@ -1995,3 +1995,84 @@ body:has(#home) #home > section:not(.hero){
     padding-right:5vw!important;
   }
 }
+
+
+/* 2026-11-11 — authoritative ZombieCash TV grid.
+   This final block intentionally overrides the older Nov 10 layout patches.
+   Desktop: player left, intro center, host image right.
+   Tablet: player remains left and spans the two right-side cards.
+   Mobile: all three panels use one full-width column. */
+body:has(#home) #zctv-channel-hub .zctv-layout{
+  display:grid!important;
+  width:100%!important;
+  min-width:0!important;
+  grid-template-columns:minmax(0,1.28fr) minmax(0,.88fr) minmax(0,1fr)!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  grid-template-areas:"player intro host"!important;
+  align-items:stretch!important;
+  gap:clamp(14px,1.5vw,24px)!important;
+}
+body:has(#home) #zctv-channel-hub .zctv-player-column{
+  grid-area:player!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:0!important;
+  align-self:stretch!important;
+}
+body:has(#home) #zctv-channel-hub .zctv-intro{
+  grid-area:intro!important;
+  width:100%!important;
+  min-width:0!important;
+  align-self:center!important;
+}
+body:has(#home) #zctv-channel-hub .zctv-host-art{
+  grid-area:host!important;
+  width:100%!important;
+  min-width:0!important;
+  height:clamp(300px,31vw,430px)!important;
+  min-height:260px!important;
+  max-height:430px!important;
+  align-self:stretch!important;
+}
+body:has(#home) #zctv-channel-hub .zctv-host-art img{
+  width:100%!important;height:100%!important;
+  object-fit:cover!important;object-position:center 18%!important;
+}
+body:has(#home) #zctv-channel-hub .zctv-player-mount,
+body:has(#home) #zctv-channel-hub .zc-promo-player-wrap,
+body:has(#home) #zctv-channel-hub #zc-promo-player{
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  box-sizing:border-box!important;
+}
+body:has(#home) #zctv-channel-hub #zc-promo-player{
+  display:block!important;height:auto!important;aspect-ratio:16/9!important;
+  object-fit:contain!important;background:#020403!important;
+}
+@media(max-width:1050px) and (min-width:761px){
+  body:has(#home) #zctv-channel-hub .zctv-layout{
+    grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)!important;
+    grid-template-rows:minmax(220px,auto) minmax(260px,auto)!important;
+    grid-template-areas:"player intro" "player host"!important;
+    gap:16px!important;
+  }
+  body:has(#home) #zctv-channel-hub .zctv-host-art{
+    height:100%!important;min-height:260px!important;max-height:390px!important;
+  }
+}
+@media(max-width:760px){
+  body:has(#home) #zctv-channel-hub .zctv-layout{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:auto auto auto!important;
+    grid-template-areas:"player" "intro" "host"!important;
+    gap:14px!important;
+  }
+  body:has(#home) #zctv-channel-hub .zctv-player-column,
+  body:has(#home) #zctv-channel-hub .zctv-intro,
+  body:has(#home) #zctv-channel-hub .zctv-host-art{
+    grid-column:1!important;width:100%!important;max-width:100%!important;
+  }
+  body:has(#home) #zctv-channel-hub .zctv-host-art{
+    height:clamp(240px,65vw,390px)!important;min-height:240px!important;
+  }
+}
