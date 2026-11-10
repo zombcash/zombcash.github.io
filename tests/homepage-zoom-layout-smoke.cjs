@@ -16,6 +16,10 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
       await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
       await page.waitForSelector('main#home .hero-layout .zc-hero-sponsor-panel', { timeout: 30000 });
       await page.waitForSelector('#zctv-channel-hub > .zctv-inner', { timeout: 30000 });
+      await page.waitForFunction(() => {
+        const count = document.getElementById('zc-promo-count');
+        return count && count.textContent.trim() !== 'LOADING VIDEO LIBRARY…';
+      }, { timeout: 15000 }).catch(() => {});
       await page.waitForTimeout(300);
       const layout = await page.evaluate(() => {
         const rect = selector => {
@@ -34,6 +38,8 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
           promo: rect('#promo-video .zc-promo-video-shell'),
           tv: rect('#zctv-channel-hub > .zctv-inner'),
           player: rect('#zctv-channel-hub .zctv-player-column'),
+          promoCount: document.getElementById('zc-promo-count')?.textContent.trim() || '',
+          promoSource: document.getElementById('zc-promo-player')?.currentSrc || document.getElementById('zc-promo-player')?.src || '',
           stylesheet: [...document.styleSheets].some(s => s.href && new URL(s.href).search.includes('zoom-mobile-fix-20261110-3'))
         };
       });
@@ -45,6 +51,8 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
       if (!layout.promo || layout.promo.width < width * 0.8) issues.push('promo video shell did not expand');
       if (!layout.tv || layout.tv.width < width * 0.8) issues.push('ZombieCash TV container did not expand');
       if (!layout.player || layout.player.width < 420) issues.push('ZombieCash TV player column is too narrow');
+      if (!layout.promoCount || layout.promoCount === 'LOADING VIDEO LIBRARY…') issues.push('promo video library controls did not initialize');
+      if (!layout.promoSource.startsWith('https://')) issues.push('featured promo video source was not assigned');
       if (layout.documentWidth > width + 2) issues.push('horizontal overflow: ' + layout.documentWidth + 'px');
       if (errors.length) issues.push('JavaScript errors: ' + errors.join(' | '));
       await page.screenshot({ path: `${outDir}/homepage-zoom-${width}.png`, fullPage: false });
