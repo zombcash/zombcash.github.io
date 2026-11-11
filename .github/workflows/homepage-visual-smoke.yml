@@ -116,6 +116,8 @@ jobs:
           css_url = next(iter(css_urls))
           css = requests.get(css_url, timeout=30)
           css.raise_for_status()
+          version = css_url.split("?v=", 1)[1] if "?v=" in css_url else ""
+          assert version, f"Missing homepage CSS cache version in {css_url}"
           assert "FULL-BLEED TOOL BANNERS" in css.text
           for filename in ["meme-radar.jpg", "zombie-lab.jpg", "survivor-network.jpg"]:
               response = requests.get(f"{base}/assets/tools/{filename}?v={version}", timeout=30)
