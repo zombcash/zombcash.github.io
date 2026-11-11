@@ -48,12 +48,13 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
           heroLayout: rect('#home > .hero .hero-layout'),
           heroContent: rect('#home > .hero .hero-content'),
           sponsor: rect('#home > .hero .zc-hero-sponsor-panel'),
-          promo: rect('#promo-video .zc-promo-video-shell'),
+          tvPlayerWrap: rect('#zctv-channel-hub .zctv-player-mount .zc-promo-player-wrap'),
+          promoVideo: rect('#zctv-channel-hub .zctv-player-mount #zc-promo-player'),
           tv: rect('#zctv-channel-hub > .zctv-inner'),
           player: rect('#zctv-channel-hub .zctv-player-column'),
           promoCount: document.getElementById('zc-promo-count')?.textContent.trim() || '',
           promoSource: document.getElementById('zc-promo-player')?.currentSrc || document.getElementById('zc-promo-player')?.src || '',
-          stylesheet: [...document.styleSheets].some(s => s.href && new URL(s.href).search.includes('zoom-mobile-fix-20261110-6-zctv-layout'))
+          stylesheet: [...document.styleSheets].some(s => s.href && new URL(s.href).pathname.endsWith('/homepage-visual.css'))
         };
       });
       const issues = [];
@@ -61,7 +62,8 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
       if (!layout.heroLayout || layout.heroLayout.width < width * 0.85) issues.push('hero wrapper did not expand with the wide CSS viewport');
       if (!layout.heroContent || layout.heroContent.width < 760) issues.push('hero copy column remains capped at desktop width');
       if (!layout.sponsor || layout.sponsor.width < 640) issues.push('sponsor column remains capped at desktop width');
-      if (!layout.promo || layout.promo.width < width * 0.8) issues.push('promo video shell did not expand');
+      if (!layout.tvPlayerWrap || layout.tvPlayerWrap.width < 420) issues.push('visible ZombieCash TV promo player shell did not expand');
+      if (!layout.promoVideo || layout.promoVideo.width < 400 || Math.abs(layout.promoVideo.width / layout.promoVideo.height - 16 / 9) > 0.08) issues.push('visible ZombieCash TV promo video is not a valid 16:9 frame');
       if (!layout.tv || layout.tv.width < width * 0.8) issues.push('ZombieCash TV container did not expand');
       if (!layout.player || layout.player.width < 420) issues.push('ZombieCash TV player column is too narrow');
       if (!layout.promoCount || layout.promoCount === 'LOADING VIDEO LIBRARY…') issues.push('promo video library controls did not initialize');
