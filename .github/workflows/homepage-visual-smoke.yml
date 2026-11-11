@@ -82,15 +82,22 @@ jobs:
           from io import BytesIO
           from pathlib import Path
           import requests
+          import re
+          from urllib.parse import urljoin
           from PIL import Image
           base = "https://zombcash.github.io"
-          version = "zoom-mobile-fix-20261110-6-zctv-layout"
           pages = ["index.html", "de/index.html", "fr/index.html", "it/index.html", "ja/index.html", "zh-CN/index.html", "tr/index.html", "hi/index.html", "ru/index.html"]
+          css_urls = set()
           for page in pages:
-              response = requests.get(f"{base}/{page}?banner-check={version}", timeout=30)
+              response = requests.get(f"{base}/{page}?banner-check=homepage-current", timeout=30)
               response.raise_for_status()
-              assert f"homepage-visual.css?v={version}" in response.text, f"{page}: stale CSS version"
-          css = requests.get(f"{base}/homepage-visual.css?v={version}", timeout=30)
+              match = re.search(r'href=["\\'](/homepage-visual\\.css\\?v=[^"\\']+)["\\']', response.text)
+              assert match, f"{page}: homepage visual stylesheet link missing"
+              css_url = urljoin(base + "/", match.group(1))
+              css_urls.add(css_url)
+          assert len(css_urls) == 1, f"Homepage locales do not share one stylesheet: {sorted(css_urls)}"
+          css_url = next(iter(css_urls))
+          css = requests.get(css_url, timeout=30)
           css.raise_for_status()
           assert "FULL-BLEED TOOL BANNERS" in css.text
           for filename in ["meme-radar.jpg", "zombie-lab.jpg", "survivor-network.jpg"]:
