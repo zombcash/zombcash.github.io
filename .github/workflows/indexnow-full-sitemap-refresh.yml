@@ -1,0 +1,77 @@
+name: IndexNow Full Sitemap Refresh
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [indexnow-full-sitemap-refresh-20261104]
+
+permissions:
+  contents: read
+
+jobs:
+  submit-sitemap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out sitemap source
+        uses: actions/checkout@v4
+      - name: Validate public IndexNow key and submit sitemap URLs
+        env:
+          INDEXNOW_KEY: ${{ vars.INDEXNOW_KEY }}
+        run: |
+          set -euo pipefail
+          KEY="${INDEXNOW_KEY:-zomcash-indexnow-2026-10-24-a7f93c12}"
+          KEY_URL="https://zombcash.github.io/${KEY}.txt"
+          BODY="$(curl -fsSL "$KEY_URL")"
+          if [ "$BODY" != "$KEY" ]; then
+            echo "::error::Public IndexNow key file does not match the configured key."
+            exit 1
+          fi
+          python3 - "$KEY" <<'PY'
+          import json
+          import sys
+          import urllib.request
+          import urllib.error
+          import xml.etree.ElementTree as ET
+
+          key = sys.argv[1]
+          sitemap_url = "https://zombcash.github.io/sitemap.xml"
+          response = urllib.request.urlopen(sitemap_url, timeout=30)
+          print(f"Sitemap HTTP: {response.status}")
+          root = ET.fromstring(response.read())
+          ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+          urls = list(dict.fromkeys(
+              (node.text or "").strip()
+              for node in root.findall("sm:url/sm:loc", ns)
+              if (node.text or "").strip()
+          ))
+          if not urls:
+              raise SystemExit("ERROR: sitemap contains no URL entries")
+          if any(not url.startswith("https://zombcash.github.io/") for url in urls):
+              raise SystemExit("ERROR: sitemap contains a URL outside zombcash.github.io")
+          print(f"Unique same-host URLs: {len(urls)}")
+          payload = {
+              "host": "zombcash.github.io",
+              "key": key,
+              "keyLocation": f"https://zombcash.github.io/{key}.txt",
+              "urlList": urls,
+          }
+          request = urllib.request.Request(
+              "https://api.indexnow.org/indexnow",
+              data=json.dumps(payload).encode("utf-8"),
+              headers={"Content-Type": "application/json; charset=utf-8"},
+              method="POST",
+          )
+          try:
+              with urllib.request.urlopen(request, timeout=45) as result:
+                  body = result.read().decode("utf-8", errors="replace")[:1000]
+                  print(f"IndexNow HTTP: {result.status}")
+                  print(f"Submitted URLs: {len(urls)}")
+                  print(f"Response: {body or '(empty)'}")
+          except urllib.error.HTTPError as exc:
+              body = exc.read().decode("utf-8", errors="replace")[:2000]
+              print(f"IndexNow HTTP ERROR: {exc.code}")
+              print(body)
+              raise
+          print("IndexNow accepted the URL notification request; this is not confirmation of indexing.")
+          PY
