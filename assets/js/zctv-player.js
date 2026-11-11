@@ -499,6 +499,74 @@
     .then(function (payload) { episodes = Array.isArray(payload.episodes) ? payload.episodes : []; if (mode === 'archive') render(); })
     .catch(function () { showEmpty('SERVER ARCHIVE OFFLINE · PLEASE TRY AGAIN LATER'); text(status, 'SERVER CONNECTION UNAVAILABLE'); text(version, 'OFFLINE'); setSignal(false, 'SIGNAL UNAVAILABLE'); });
 
+
+  // Authenticated episode publishing. The API remains the authority for admin access.
+  function mountAdminUpload() {
+    if (!archive || archive.querySelector('[data-zctv-admin-upload]')) return;
+    let authToken = '';
+    try { authToken = localStorage.getItem('zombcash-survivor-token') || ''; } catch (_) {}
+    if (!authToken) return;
+
+    const panel = document.createElement('section');
+    panel.dataset.zctvAdminUpload = '1';
+    panel.className = 'zctv-admin-upload';
+    panel.innerHTML = '<details><summary>ADMIN // PUBLISH EPISODE</summary><form data-zctv-upload-form><label>VIDEO FILE (MP4)<input name="video" type="file" accept="video/mp4,.mp4" required></label><label>TITLE<input name="title" type="text" maxlength="160" value="Raven — ZombieCash TV Introduction" required></label><label>DESCRIPTION<textarea name="description" maxlength="1000" rows="2">Meet Raven, the host of ZombieCash TV. Welcome to the Outbreak News studio.</textarea></label><div class="zctv-admin-fields"><label>DURATION (SEC)<input name="duration_seconds" type="number" min="1" max="86400" value="4"></label><label>CHANNEL<select name="channel"><option value="news">Outbreak News</option><option value="meme">Meme Show</option><option value="lab">Zombie Lab</option></select></label></div><button type="submit">UPLOAD & PUBLISH</button><p data-zctv-upload-status role="status"></p></form></details>';
+    const css = document.createElement('style');
+    css.textContent = '#zctv-channel-hub .zctv-admin-upload{margin:0 0 12px;padding:13px 15px;border:1px solid #9bff4560;border-radius:12px;background:#0b140d;color:#dcebd5}#zctv-channel-hub .zctv-admin-upload summary{cursor:pointer;color:#aaff72;font:700 9px Orbitron,sans-serif;letter-spacing:1px}#zctv-channel-hub .zctv-admin-upload form{display:grid;gap:9px;margin-top:14px}#zctv-channel-hub .zctv-admin-upload label{display:grid;gap:5px;color:#9eae9d;font:700 8px Orbitron,sans-serif;letter-spacing:.5px}#zctv-channel-hub .zctv-admin-upload input,#zctv-channel-hub .zctv-admin-upload textarea,#zctv-channel-hub .zctv-admin-upload select{box-sizing:border-box;width:100%;min-width:0;padding:9px;border:1px solid #40583b;border-radius:6px;background:#060b08;color:#eaf4e5;font:500 13px Rajdhani,sans-serif}#zctv-channel-hub .zctv-admin-fields{display:grid;grid-template-columns:1fr 1fr;gap:9px}#zctv-channel-hub .zctv-admin-upload button{min-height:38px;border:1px solid #aaff72;border-radius:7px;background:#aaff72;color:#071006;font:800 9px Orbitron,sans-serif;cursor:pointer}#zctv-channel-hub .zctv-admin-upload button:disabled{opacity:.55;cursor:wait}#zctv-channel-hub [data-zctv-upload-status]{min-height:16px;margin:0;color:#aaff72;font:600 12px Rajdhani,sans-serif}';
+    document.head.appendChild(css);
+    archive.parentNode.insertBefore(panel, archive);
+    const form = panel.querySelector('form');
+    const statusNode = panel.querySelector('[data-zctv-upload-status]');
+    form.addEventListener('submit', async function (event) {
+      event.preventDefault();
+      const file = form.elements.video.files && form.elements.video.files[0];
+      if (!file) { text(statusNode, 'Choose an MP4 file first.'); return; }
+      if (file.size > 250 * 1024 * 1024) { text(statusNode, 'File exceeds the 250 MB limit.'); return; }
+      const data = new FormData();
+      data.append('video', file, file.name);
+      data.append('title', form.elements.title.value.trim());
+      data.append('description', form.elements.description.value.trim());
+      data.append('duration_seconds', form.elements.duration_seconds.value);
+      data.append('channel', form.elements.channel.value);
+      const submit = form.querySelector('button[type="submit"]');
+      submit.disabled = true;
+      text(statusNode, 'Uploading video to ZombieCash server…');
+      try {
+        const response = await fetch(API + '/episodes/upload', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + authToken },
+          body: data,
+          cache: 'no-store'
+        });
+        const result = await response.json().catch(function () { return {}; });
+        if (response.status === 403) throw new Error(result.error || 'Admin access denied. Confirm this Telegram account is on ZOMBCASH_ADMIN_IDS.');
+        if (!response.ok) throw new Error(result.error || 'Upload failed (' + response.status + ').');
+        text(statusNode, 'PUBLISHED · ' + result.title + ' · ' + Math.round((result.size_bytes || 0) / 1024) + ' KB');
+        form.elements.video.value = '';
+        const refreshed = await fetch(API + '/episodes?page=1&per_page=24', { cache: 'no-store', credentials: 'omit' });
+        if (refreshed.ok) {
+          const payload = await refreshed.json();
+          episodes = Array.isArray(payload.episodes) ? payload.episodes : [];
+          active = result.channel || 'news';
+          cards.forEach(function (card) { card.setAttribute('aria-pressed', String(card.dataset.channel === active)); });
+          mode = 'archive'; root.dataset.zctvMode = mode;
+          render();
+          const published = episodes.find(function (item) { return item.episode_id === result.episode_id; });
+          if (published) playEpisode(published, false);
+        }
+      } catch (error) {
+        text(statusNode, error && error.message ? error.message : 'Upload failed. Please try again.');
+      } finally {
+        submit.disabled = false;
+      }
+    });
+  }
+  mountAdminUpload();
+  document.addEventListener('zombcash:survivorlogin', mountAdminUpload);
+  window.addEventListener('storage', function (event) {
+    if (event.key === 'zombcash-survivor-token' && event.newValue) mountAdminUpload();
+  });
+
   const defaultCard = cards.find(function (card) { return card.dataset.channel === active; });
   if (defaultCard) defaultCard.setAttribute('aria-pressed', 'true');
   root.dataset.zctvMode = mode;
