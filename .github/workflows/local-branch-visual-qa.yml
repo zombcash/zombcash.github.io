@@ -70,10 +70,11 @@ jobs:
         run: node tests/living-world-single-loader-smoke.cjs
 
       - name: Install Playwright and Chromium
+        timeout-minutes: 10
         run: |
           npm init -y
           npm install --no-save playwright
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
 
       - name: Start local static preview of this branch
         run: |
