@@ -1,0 +1,40 @@
+name: SEO internal-link discovery audit
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "tests/seo-internal-link-audit.py"
+      - ".github/workflows/seo-internal-link-audit.yml"
+  push:
+    branches: [seo-internal-link-graph-audit-20261104]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: seo-internal-link-audit-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install audit dependencies
+        run: python -m pip install --disable-pip-version-check requests beautifulsoup4
+      - name: Crawl sitemap and build internal-link graph
+        run: python tests/seo-internal-link-audit.py
+      - name: Upload full link graph report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-internal-link-audit
+          path: seo-internal-link-audit.json
+          if-no-files-found: warn
+          retention-days: 14
