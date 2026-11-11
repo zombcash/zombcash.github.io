@@ -986,8 +986,8 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 @media (min-width:701px) and (max-width:1200px){
   #zctv-channel-hub .zctv-layout{
     display:grid!important;grid-template-columns:minmax(320px,1.08fr) minmax(260px,.92fr)!important;
-    grid-template-rows:minmax(220px,auto) minmax(220px,auto)!important;
-    grid-template-areas:"player intro" "player host"!important;
+    grid-template-rows:auto minmax(220px,auto)!important;
+    grid-template-areas:"player player" "intro host"!important;
     align-items:stretch!important;gap:14px!important;
   }
   #zctv-channel-hub .zctv-player-column{grid-area:player!important;width:100%!important;min-width:0!important;align-self:stretch!important}
@@ -997,7 +997,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 @media (max-width:700px){
   #zctv-channel-hub .zctv-layout{
     display:grid!important;grid-template-columns:minmax(0,1fr)!important;
-    grid-template-rows:auto auto auto!important;grid-template-areas:"player" "intro" "host"!important;
+    grid-template-rows:auto auto auto!important;grid-template-areas:"intro" "host" "player"!important;
     gap:14px!important;
   }
   #zctv-channel-hub .zctv-player-column{grid-area:player!important;width:100%!important;min-width:0!important}
