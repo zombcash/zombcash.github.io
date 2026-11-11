@@ -5,6 +5,7 @@ const path = require("path");
 const galleryData = JSON.parse(fs.readFileSync("gallery-data.json", "utf8"));
 const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]));
 const expectedGalleryCount = galleryData.items.length;
+const targetLikeImageId = galleryData.items[0]?.id || "";
 
 (async () => {
   const server = spawn("python3", ["-m", "http.server", "4173", "--bind", "127.0.0.1"], { stdio: "ignore", cwd: process.cwd() });
@@ -63,7 +64,7 @@ const expectedGalleryCount = galleryData.items.length;
       const ids = (url.searchParams.get("ids") || "").split(",").filter(Boolean);
       const stats = ids.map(image_id => ({
         image_id,
-        like_count: image_id === "ZOMBCASH/4146:0" ? 100 : (image_id === "ZOMBCASH/4102:0" ? 10 : 0),
+        like_count: image_id === targetLikeImageId ? 100 : (image_id === "ZOMBCASH/4102:0" ? 10 : 0),
         liked: false
       }));
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ stats }) });
@@ -73,7 +74,7 @@ const expectedGalleryCount = galleryData.items.length;
       const payload = request.postDataJSON() || {};
       const authorization = request.headers()["authorization"] || "";
       likeToggleCalls.push({ authorization, imageId: payload.imageId, liked: payload.liked });
-      if (authorization !== "Bearer smoke-survivor-session" || payload.imageId !== "ZOMBCASH/4146:0" || typeof payload.liked !== "boolean") {
+      if (authorization !== "Bearer smoke-survivor-session" || payload.imageId !== targetLikeImageId || typeof payload.liked !== "boolean") {
         await route.fulfill({ status: 401, contentType: "application/json", body: JSON.stringify({ ok: false, error: "invalid smoke session or payload" }) });
         return;
       }
@@ -195,14 +196,14 @@ const expectedGalleryCount = galleryData.items.length;
     if (initial !== expectedGalleryCount) throw new Error("Expected " + expectedGalleryCount + " gallery cards, got " + initial);
     const likeButtons = await page.locator("#gallery-grid .gallery-like-button").count();
     if (likeButtons !== expectedGalleryCount) throw new Error("Expected " + expectedGalleryCount + " card like controls, got " + likeButtons);
-    const firstCard = page.locator("#gallery-grid .gallery-card[data-gallery-id=\"ZOMBCASH/4146:0\"]");
+    const firstCard = page.locator("#gallery-grid .gallery-card[data-gallery-id=\"" + targetLikeImageId + "\"]");
     const firstLikeButton = firstCard.locator(".gallery-like-button");
-    await page.waitForFunction(() => document.querySelector("#gallery-grid .gallery-card[data-gallery-id=" + JSON.stringify("ZOMBCASH/4146:0") + "] .gallery-like-count")?.textContent === "100");
+    await page.waitForFunction(imageId => Array.from(document.querySelectorAll("#gallery-grid .gallery-card")).find(card => card.dataset.galleryId === imageId)?.querySelector(".gallery-like-count")?.textContent === "100", targetLikeImageId);
     await firstLikeButton.click();
-    await page.waitForFunction(() => { const card = document.querySelector("#gallery-grid .gallery-card[data-gallery-id=\"ZOMBCASH/4146:0\"]"); return card?.querySelector(".gallery-like-button")?.getAttribute("aria-pressed") === "true" && card?.querySelector(".gallery-like-count")?.textContent === "101"; });
+    await page.waitForFunction(imageId => { const card = Array.from(document.querySelectorAll("#gallery-grid .gallery-card")).find(item => item.dataset.galleryId === imageId); return card?.querySelector(".gallery-like-button")?.getAttribute("aria-pressed") === "true" && card?.querySelector(".gallery-like-count")?.textContent === "101"; }, targetLikeImageId);
     if (!await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_like"))) throw new Error("Authenticated gallery like event was not recorded");
     await firstLikeButton.click();
-    await page.waitForFunction(() => { const card = document.querySelector("#gallery-grid .gallery-card[data-gallery-id=\"ZOMBCASH/4146:0\"]"); return card?.querySelector(".gallery-like-button")?.getAttribute("aria-pressed") === "false" && card?.querySelector(".gallery-like-count")?.textContent === "100"; });
+    await page.waitForFunction(imageId => { const card = Array.from(document.querySelectorAll("#gallery-grid .gallery-card")).find(item => item.dataset.galleryId === imageId); return card?.querySelector(".gallery-like-button")?.getAttribute("aria-pressed") === "false" && card?.querySelector(".gallery-like-count")?.textContent === "100"; }, targetLikeImageId);
     if (!await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_unlike"))) throw new Error("Authenticated gallery unlike event was not recorded");
     if (likeToggleCalls.length !== 2 || likeToggleCalls[0].liked !== true || likeToggleCalls[1].liked !== false) throw new Error("Like/unlike API payload sequence was incorrect: " + JSON.stringify(likeToggleCalls));
     await page.locator("#gallery-grid .gallery-card").first().click({ position: { x: 20, y: 20 } });
