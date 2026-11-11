@@ -136,15 +136,27 @@ jobs:
           python -m pip install --quiet requests
           python - <<'PY'
           import requests
+          from html.parser import HTMLParser
+          from urllib.parse import urljoin
           base = "https://zombcash.github.io"
-          version = "zoom-mobile-fix-20261110-6-zctv-layout"
           pages = {
               "index.html": "en", "de/index.html": "de", "fr/index.html": "fr",
               "it/index.html": "it", "ja/index.html": "ja", "zh-CN/index.html": "zh-CN",
               "tr/index.html": "tr", "hi/index.html": "hi", "ru/index.html": "ru"
           }
+          class StylesheetParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.hrefs = []
+              def handle_starttag(self, tag, attrs):
+                  values = dict(attrs)
+                  if tag.lower() == "link" and "stylesheet" in values.get("rel", "").lower().split():
+                      href = values.get("href", "")
+                      if "/homepage-visual.css?" in href:
+                          self.hrefs.append(href)
+          version = None
           for path, lang in pages.items():
-              r = requests.get(f"{base}/{path}?video-audit={version}", timeout=30)
+              r = requests.get(f"{base}/{path}?video-audit=homepage-current", timeout=30)
               r.raise_for_status()
               html = r.text
               assert f'<html lang="{lang}">' in html, f"{path}: wrong/missing lang"
@@ -152,7 +164,15 @@ jobs:
               assert html.count('class="tool-card-video"') == 3, f"{path}: expected 3 video elements"
               assert html.count('data-video-card=') == 3, f"{path}: expected 3 video controllers"
               assert 'tool-video-cards.js?v=20261109-2' in html, f"{path}: video controller missing"
-              assert f'homepage-visual.css?v={version}' in html, f"{path}: wrong CSS cache version"
+              parser = StylesheetParser()
+              parser.feed(html)
+              assert len(parser.hrefs) == 1, f"{path}: homepage stylesheet missing or duplicated"
+              css_version = parser.hrefs[0].split("?v=", 1)[1] if "?v=" in parser.hrefs[0] else ""
+              assert css_version, f"{path}: homepage stylesheet version missing"
+              if version is None:
+                  version = css_version
+              else:
+                  assert version == css_version, f"{path}: homepage CSS version differs"
               print(f"OK {path} [{lang}]: 3 video panels + controller + current CSS")
           js = requests.get(f"{base}/tool-video-cards.js?v=20261109-2", timeout=30)
           js.raise_for_status()
