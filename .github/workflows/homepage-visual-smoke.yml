@@ -86,15 +86,32 @@ jobs:
           from urllib.parse import urljoin
           from PIL import Image
           base = "https://zombcash.github.io"
+          from html.parser import HTMLParser
+          from urllib.parse import urljoin
+
+          class StylesheetParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.hrefs = []
+              def handle_starttag(self, tag, attrs):
+                  if tag.lower() != "link":
+                      return
+                  values = dict(attrs)
+                  if "stylesheet" in values.get("rel", "").lower().split():
+                      href = values.get("href", "")
+                      if "/homepage-visual.css?" in href:
+                          self.hrefs.append(href)
+
+          base = "https://zombcash.github.io"
           pages = ["index.html", "de/index.html", "fr/index.html", "it/index.html", "ja/index.html", "zh-CN/index.html", "tr/index.html", "hi/index.html", "ru/index.html"]
           css_urls = set()
           for page in pages:
               response = requests.get(f"{base}/{page}?banner-check=homepage-current", timeout=30)
               response.raise_for_status()
-              match = re.search(r'href=["\\'](/homepage-visual\\.css\\?v=[^"\\']+)["\\']', response.text)
-              assert match, f"{page}: homepage visual stylesheet link missing"
-              css_url = urljoin(base + "/", match.group(1))
-              css_urls.add(css_url)
+              parser = StylesheetParser()
+              parser.feed(response.text)
+              assert len(parser.hrefs) == 1, f"{page}: homepage visual stylesheet missing or duplicated"
+              css_urls.add(urljoin(base + "/", parser.hrefs[0]))
           assert len(css_urls) == 1, f"Homepage locales do not share one stylesheet: {sorted(css_urls)}"
           css_url = next(iter(css_urls))
           css = requests.get(css_url, timeout=30)
