@@ -1866,9 +1866,15 @@ body:has(#home) #home > section:not(.hero){
   }
 }
 @media (max-width:900px){
-  body:has(#home) #home .zc-promo-video-shell,
-  body:has(#home) #zctv-channel-hub > .zctv-inner{
+  body:has(#home) #home .zc-promo-video-shell{
     width:calc(100% - 28px)!important;
+    max-width:760px!important;
+    margin-inline:auto!important;
+  }
+  /* The TV section already supplies its own responsive side padding.
+     Do not subtract a second gutter from its inner content width. */
+  body:has(#home) #zctv-channel-hub > .zctv-inner{
+    width:100%!important;
     max-width:760px!important;
     margin-inline:auto!important;
   }
