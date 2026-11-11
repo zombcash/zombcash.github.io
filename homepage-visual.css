@@ -2222,6 +2222,10 @@ html body:has(main#home) > main#home :is(
   ){
     width:calc(100% - 24px)!important;max-width:520px!important;
   }
+  /* TV already has a 5% section gutter; do not apply the shared 24px inset twice. */
+  html body:has(main#home) > main#home > section#zctv-channel-hub > .zctv-inner{
+    width:100%!important;max-width:760px!important;
+  }
 }
 @media(min-width:1800px){
   /* Override legacy 90vw/5600px zoom-out compensation consistently. */
