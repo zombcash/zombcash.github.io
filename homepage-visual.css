@@ -2252,18 +2252,18 @@ html body:has(main#home) #zctv-channel-hub .zctv-layout{
   align-items:stretch!important;gap:clamp(14px,1.4vw,22px)!important;
 }
 html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-player-column{
-  grid-area:player!important;grid-column:auto!important;grid-row:auto!important;
+  grid-area:player!important;
   width:100%!important;max-width:none!important;min-width:0!important;
   height:auto!important;min-height:0!important;align-self:stretch!important;
 }
 html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-intro{
-  grid-area:intro!important;grid-column:auto!important;grid-row:auto!important;
+  grid-area:intro!important;
   width:100%!important;max-width:none!important;min-width:0!important;
   height:100%!important;min-height:0!important;align-self:stretch!important;
   display:flex!important;flex-direction:column!important;justify-content:center!important;
 }
 html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art{
-  grid-area:host!important;grid-column:auto!important;grid-row:auto!important;
+  grid-area:host!important;
   width:100%!important;max-width:none!important;min-width:0!important;
   height:100%!important;min-height:0!important;max-height:none!important;
   align-self:stretch!important;
