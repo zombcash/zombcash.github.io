@@ -15,7 +15,10 @@ for (const locale of locales) {
 const zhStart = dictionary.indexOf("'zh-CN':{");
 const zhEnd = dictionary.indexOf('},', zhStart);
 const zh = dictionary.slice(zhStart, zhEnd < 0 ? dictionary.length : zhEnd);
-for (const key of ['subtitle', 'tracking', 'referralTitle', 'leaderboardTitle', 'rulesTitle', 'privacy']) {
+const english = dictionary.match(/en:\\{([\\s\\S]*?)\\},de:\\{/);
+assert.ok(english, 'English source dictionary must exist');
+const requiredKeys = [...english[1].matchAll(/([A-Za-z][A-Za-z0-9]*):'/g)].map(match => match[1]);
+for (const key of requiredKeys) {
   assert.ok(zh.includes(key + ':'), 'zh-CN is missing ' + key);
 }
 assert.ok(html.includes("document.addEventListener('zombcash:languagechange'"), 'Survivor Hub must respond to shared language selector');
