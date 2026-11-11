@@ -114,6 +114,8 @@ jobs:
               css_urls.add(urljoin(base + "/", parser.hrefs[0]))
           assert len(css_urls) == 1, f"Homepage locales do not share one stylesheet: {sorted(css_urls)}"
           css_url = next(iter(css_urls))
+          version = css_url.split("?v=", 1)[1] if "?v=" in css_url else ""
+          assert version, f"Missing homepage CSS cache version in {css_url}"
           css = requests.get(css_url, timeout=30)
           css.raise_for_status()
           version = css_url.split("?v=", 1)[1] if "?v=" in css_url else ""
