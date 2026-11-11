@@ -54,7 +54,11 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
           player: rect('#zctv-channel-hub .zctv-player-column'),
           promoCount: document.getElementById('zc-promo-count')?.textContent.trim() || '',
           promoSource: document.getElementById('zc-promo-player')?.currentSrc || document.getElementById('zc-promo-player')?.src || '',
-          stylesheet: [...document.styleSheets].some(s => s.href && new URL(s.href).pathname.endsWith('/homepage-visual.css'))
+          stylesheet: (() => {
+            const link = [...document.querySelectorAll('link[rel="stylesheet"]')]
+              .find(item => new URL(item.href).pathname.endsWith('/homepage-visual.css'));
+            return !!link && [...document.styleSheets].some(sheet => sheet.href === link.href);
+          })()
         };
       });
       const issues = [];
