@@ -3,6 +3,12 @@ name: Mobile viewport smoke test
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'survivor-hub.html'
+      - 'tests/survivor-hub-localization-smoke.cjs'
+      - '.github/workflows/mobile-viewport-test.yml'
   push:
     branches: [main]
     paths:
