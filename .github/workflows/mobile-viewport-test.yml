@@ -3,6 +3,12 @@ name: Mobile viewport smoke test
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'survivor-hub.html'
+      - 'tests/survivor-hub-localization-smoke.cjs'
+      - '.github/workflows/mobile-viewport-test.yml'
   push:
     branches: [main]
     paths:
@@ -24,6 +30,8 @@ on:
       - '.github/workflows/mobile-viewport-test.yml'
       - 'tests/mobile-viewport-smoke.cjs'
       - 'tests/survivor-field-manual-smoke.cjs'
+      - 'survivor-hub.html'
+      - 'tests/survivor-hub-localization-smoke.cjs'
       - 'tests/memecoin-platforms-article-smoke.cjs'
       - 'memecoin-promotion-platforms-comparison.html'
       - 'de/memecoin-promotion-platforms-comparison.html'
@@ -73,7 +81,7 @@ jobs:
         run: |
           npm init -y
           npm install --no-save playwright
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
       - name: Serve checked-out site for deterministic browser QA
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/zombcash-preview.log 2>&1 &
@@ -100,6 +108,10 @@ jobs:
       - name: Test multilingual comparison article visually across locales and viewports
         if: always()
         run: node tests/memecoin-platforms-article-smoke.cjs
+
+      - name: Test Survivor Hub translations in all supported locales
+        if: always()
+        run: node tests/survivor-hub-localization-smoke.cjs
 
       - name: Upload wide viewport visual evidence
         if: always()
