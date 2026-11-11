@@ -153,8 +153,150 @@
   <url><loc>https://zombcash.github.io/survivor-challenge-001.html</loc><lastmod>2026-11-04</lastmod><changefreq>weekly</changefreq><priority>0.7</priority><xhtml:link rel="alternate" hreflang="en" href="https://zombcash.github.io/survivor-challenge-001.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/survivor-challenge-001.html"/></url>
   <url><loc>https://zombcash.github.io/crew-vote.html</loc>
       <lastmod>2026-11-04</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link rel="alternate" hreflang="en" href="https://zombcash.github.io/crew-vote.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/crew-vote.html"/></url>
-  <url><loc>https://zombcash.github.io/survivor-hub.html</loc>
-      <lastmod>2026-11-04</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link rel="alternate" hreflang="en" href="https://zombcash.github.io/survivor-hub.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/survivor-hub.html"/></url>
+    <url>
+    <loc>https://zombcash.github.io/survivor-hub.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://zombcash.github.io/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="de" href="https://zombcash.github.io/de/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="fr" href="https://zombcash.github.io/fr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="it" href="https://zombcash.github.io/it/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ja" href="https://zombcash.github.io/ja/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://zombcash.github.io/zh-CN/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ru" href="https://zombcash.github.io/ru/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="tr" href="https://zombcash.github.io/tr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="hi" href="https://zombcash.github.io/hi/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/survivor-hub.html"/>
+  </url>
+  <url>
+    <loc>https://zombcash.github.io/de/survivor-hub.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://zombcash.github.io/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="de" href="https://zombcash.github.io/de/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="fr" href="https://zombcash.github.io/fr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="it" href="https://zombcash.github.io/it/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ja" href="https://zombcash.github.io/ja/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://zombcash.github.io/zh-CN/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ru" href="https://zombcash.github.io/ru/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="tr" href="https://zombcash.github.io/tr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="hi" href="https://zombcash.github.io/hi/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/survivor-hub.html"/>
+  </url>
+  <url>
+    <loc>https://zombcash.github.io/fr/survivor-hub.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://zombcash.github.io/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="de" href="https://zombcash.github.io/de/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="fr" href="https://zombcash.github.io/fr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="it" href="https://zombcash.github.io/it/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ja" href="https://zombcash.github.io/ja/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://zombcash.github.io/zh-CN/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ru" href="https://zombcash.github.io/ru/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="tr" href="https://zombcash.github.io/tr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="hi" href="https://zombcash.github.io/hi/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/survivor-hub.html"/>
+  </url>
+  <url>
+    <loc>https://zombcash.github.io/it/survivor-hub.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://zombcash.github.io/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="de" href="https://zombcash.github.io/de/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="fr" href="https://zombcash.github.io/fr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="it" href="https://zombcash.github.io/it/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ja" href="https://zombcash.github.io/ja/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://zombcash.github.io/zh-CN/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ru" href="https://zombcash.github.io/ru/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="tr" href="https://zombcash.github.io/tr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="hi" href="https://zombcash.github.io/hi/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/survivor-hub.html"/>
+  </url>
+  <url>
+    <loc>https://zombcash.github.io/ja/survivor-hub.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://zombcash.github.io/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="de" href="https://zombcash.github.io/de/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="fr" href="https://zombcash.github.io/fr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="it" href="https://zombcash.github.io/it/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ja" href="https://zombcash.github.io/ja/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://zombcash.github.io/zh-CN/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ru" href="https://zombcash.github.io/ru/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="tr" href="https://zombcash.github.io/tr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="hi" href="https://zombcash.github.io/hi/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/survivor-hub.html"/>
+  </url>
+  <url>
+    <loc>https://zombcash.github.io/zh-CN/survivor-hub.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://zombcash.github.io/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="de" href="https://zombcash.github.io/de/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="fr" href="https://zombcash.github.io/fr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="it" href="https://zombcash.github.io/it/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ja" href="https://zombcash.github.io/ja/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://zombcash.github.io/zh-CN/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ru" href="https://zombcash.github.io/ru/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="tr" href="https://zombcash.github.io/tr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="hi" href="https://zombcash.github.io/hi/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/survivor-hub.html"/>
+  </url>
+  <url>
+    <loc>https://zombcash.github.io/ru/survivor-hub.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://zombcash.github.io/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="de" href="https://zombcash.github.io/de/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="fr" href="https://zombcash.github.io/fr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="it" href="https://zombcash.github.io/it/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ja" href="https://zombcash.github.io/ja/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://zombcash.github.io/zh-CN/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ru" href="https://zombcash.github.io/ru/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="tr" href="https://zombcash.github.io/tr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="hi" href="https://zombcash.github.io/hi/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/survivor-hub.html"/>
+  </url>
+  <url>
+    <loc>https://zombcash.github.io/tr/survivor-hub.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://zombcash.github.io/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="de" href="https://zombcash.github.io/de/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="fr" href="https://zombcash.github.io/fr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="it" href="https://zombcash.github.io/it/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ja" href="https://zombcash.github.io/ja/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://zombcash.github.io/zh-CN/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ru" href="https://zombcash.github.io/ru/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="tr" href="https://zombcash.github.io/tr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="hi" href="https://zombcash.github.io/hi/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/survivor-hub.html"/>
+  </url>
+  <url>
+    <loc>https://zombcash.github.io/hi/survivor-hub.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://zombcash.github.io/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="de" href="https://zombcash.github.io/de/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="fr" href="https://zombcash.github.io/fr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="it" href="https://zombcash.github.io/it/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ja" href="https://zombcash.github.io/ja/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://zombcash.github.io/zh-CN/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="ru" href="https://zombcash.github.io/ru/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="tr" href="https://zombcash.github.io/tr/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="hi" href="https://zombcash.github.io/hi/survivor-hub.html"/>
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/survivor-hub.html"/>
+  </url>
   <url><loc>https://zombcash.github.io/solana-memecoin-research-guide.html</loc><lastmod>2026-11-04</lastmod><changefreq>monthly</changefreq><priority>0.8</priority><xhtml:link rel="alternate" hreflang="en" href="https://zombcash.github.io/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="de" href="https://zombcash.github.io/de/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="fr" href="https://zombcash.github.io/fr/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="it" href="https://zombcash.github.io/it/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="ja" href="https://zombcash.github.io/ja/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="zh-Hans" href="https://zombcash.github.io/zh-CN/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="ru" href="https://zombcash.github.io/ru/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="tr" href="https://zombcash.github.io/tr/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="hi" href="https://zombcash.github.io/hi/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/transmission-solana-memecoin-warning-signs.html"/></url>
   
   <url><loc>https://zombcash.github.io/de/solana-memecoin-research-guide.html</loc><lastmod>2026-11-04</lastmod><changefreq>monthly</changefreq><priority>0.8</priority><xhtml:link rel="alternate" hreflang="en" href="https://zombcash.github.io/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="de" href="https://zombcash.github.io/de/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="fr" href="https://zombcash.github.io/fr/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="it" href="https://zombcash.github.io/it/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="ja" href="https://zombcash.github.io/ja/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="zh-Hans" href="https://zombcash.github.io/zh-CN/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="ru" href="https://zombcash.github.io/ru/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="tr" href="https://zombcash.github.io/tr/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="hi" href="https://zombcash.github.io/hi/solana-memecoin-research-guide.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/solana-memecoin-research-guide.html"/></url>

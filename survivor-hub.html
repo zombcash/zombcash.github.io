@@ -31,14 +31,14 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}.she
 <script src="shared-nav.js?v=nav-optional-modules-guard-20261106-1" defer></script><script src="language.js?v=i18n-persist-route-20261104-10" defer></script>
 <script src="survivor-auth.js?v=survivor-identity-online-20261022-2" defer></script>
 <link rel="alternate" hreflang="en" href="https://zombcash.github.io/survivor-hub.html">
-<link rel="alternate" hreflang="de" href="https://zombcash.github.io/survivor-hub.html?lang=de">
-<link rel="alternate" hreflang="fr" href="https://zombcash.github.io/survivor-hub.html?lang=fr">
-<link rel="alternate" hreflang="it" href="https://zombcash.github.io/survivor-hub.html?lang=it">
-<link rel="alternate" hreflang="ja" href="https://zombcash.github.io/survivor-hub.html?lang=ja">
-<link rel="alternate" hreflang="zh-CN" href="https://zombcash.github.io/survivor-hub.html?lang=zh-CN">
-<link rel="alternate" hreflang="ru" href="https://zombcash.github.io/survivor-hub.html?lang=ru">
-<link rel="alternate" hreflang="tr" href="https://zombcash.github.io/survivor-hub.html?lang=tr">
-<link rel="alternate" hreflang="hi" href="https://zombcash.github.io/survivor-hub.html?lang=hi">
+<link rel="alternate" hreflang="de" href="https://zombcash.github.io/de/survivor-hub.html">
+<link rel="alternate" hreflang="fr" href="https://zombcash.github.io/fr/survivor-hub.html">
+<link rel="alternate" hreflang="it" href="https://zombcash.github.io/it/survivor-hub.html">
+<link rel="alternate" hreflang="ja" href="https://zombcash.github.io/ja/survivor-hub.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://zombcash.github.io/zh-CN/survivor-hub.html">
+<link rel="alternate" hreflang="ru" href="https://zombcash.github.io/ru/survivor-hub.html">
+<link rel="alternate" hreflang="tr" href="https://zombcash.github.io/tr/survivor-hub.html">
+<link rel="alternate" hreflang="hi" href="https://zombcash.github.io/hi/survivor-hub.html">
 <link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/survivor-hub.html">
 
 
@@ -143,7 +143,7 @@ async function loadBoard(){
 async function loadReferral(){const url=document.getElementById('referral-url'),status=document.getElementById('referral-status'),p=profile();document.getElementById('my-points').textContent=(p?Number(p.points||0).toLocaleString():'—')+' SP';if(!token()){url.value='';document.getElementById('referral-count').textContent='—';status.textContent=tr('loginPrompt');return}try{const r=await fetch(API+'/api/referrals/me',{headers:{Authorization:'Bearer '+token()},cache:'no-store'});if(!r.ok)throw Error();const d=await r.json();url.value=d.referralUrl||'';document.getElementById('referral-count').textContent=Number(d.verifiedReferrals||0);status.textContent=tr('pointsOff')}catch(_){status.textContent=tr('loginRequired')}}
 async function claimReferral(){const ref=new URLSearchParams(location.search).get('ref');if(!ref||!token())return;try{const r=await fetch(API+'/api/referrals/claim',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token()},body:JSON.stringify({referralCode:ref}),cache:'no-store'});const d=await r.json();const n=document.getElementById('referral-status');if(d.claimed)n.textContent=tr('referralSaved');else if(d.ok&&d.reason==='already_claimed')n.textContent=tr('referralNotSaved');else if(!r.ok)n.textContent=tr('referralNotSaved');loadReferral()}catch(_){}}
 document.getElementById('copy-link').addEventListener('click',async()=>{const v=document.getElementById('referral-url').value;if(!v){document.getElementById('referral-status').textContent=tr('loginRequired');return}try{await navigator.clipboard.writeText(v);document.getElementById('referral-status').textContent=tr('linkCopied')}catch(_){document.getElementById('referral-url').select();document.getElementById('referral-status').textContent=tr('copyFailed')}});
-document.addEventListener('zombcash:languagechange',e=>{const next=e.detail&&e.detail.language;if(next&&copy[next])lang=next;try{const url=new URL(location.href);if(lang==='en')url.searchParams.delete('lang');else url.searchParams.set('lang',lang);history.replaceState(null,'',url.pathname+url.search+url.hash)}catch(_){}translate();loadBoard();loadReferral()});
+document.addEventListener('zombcash:languagechange',e=>{const next=e.detail&&e.detail.language;if(next&&copy[next])lang=next;try{const url=new URL(location.href);url.pathname=lang==='en'?'/survivor-hub.html':'/'+lang+'/survivor-hub.html';url.searchParams.delete('lang');history.replaceState(null,'',url.pathname+url.search+url.hash)}catch(_){}translate();loadBoard();loadReferral()});
 document.addEventListener('zombcash:survivorlogin',()=>{claimReferral();loadReferral()});
 window.addEventListener('storage',e=>{if(e.key===TOKEN||e.key===PROFILE){loadReferral();claimReferral()}});
 translate();loadBoard();loadReferral();claimReferral();

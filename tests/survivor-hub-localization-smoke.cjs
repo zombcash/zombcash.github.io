@@ -22,4 +22,12 @@ for (const key of requiredKeys) {
   assert.ok(zh.includes(key + ':'), 'zh-CN is missing ' + key);
 }
 assert.ok(html.includes("document.addEventListener('zombcash:languagechange'"), 'Survivor Hub must respond to shared language selector');
+for (const locale of locales.slice(1)) {
+  const localizedPath = locale + '/survivor-hub.html';
+  const localized = fs.readFileSync(localizedPath, 'utf8');
+  assert.ok(localized.includes('<html lang="' + locale + '">'), localizedPath + ' must declare its language');
+  assert.ok(localized.includes('rel="canonical" href="https://zombcash.github.io/' + locale + '/survivor-hub.html"'), localizedPath + ' must have a self-canonical URL');
+  assert.ok(localized.includes('hreflang="x-default" href="https://zombcash.github.io/survivor-hub.html"'), localizedPath + ' must point x-default to English');
+}
+assert.ok(fs.readFileSync('language.js', 'utf8').includes('"/survivor-hub.html": ["de","fr","it","ja","zh-CN","ru","tr","hi"]'), 'language routing must use dedicated Survivor Hub locale URLs');
 console.log('PASS: Survivor Hub has all 9 locale dictionaries and required zh-CN translations.');
