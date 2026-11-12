@@ -2560,7 +2560,7 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     padding-inline:clamp(4vw, 6vw, 8vw)!important;
   }
   html body:has(main#home) main#home > section.hero > .hero-layout {
-    width: min(100%, 7400px)!important;
+    width: min(100%, 15000px)!important;
     max-width: 92vw!important;
     grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)!important;
     gap:clamp(28px,2.5vw,220px)!important;
@@ -2730,8 +2730,8 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
 @media (min-width: 2200px) {
   /* ZCTV inner wrapper: outrank the later studio-v2 inline stylesheet. */
   html body:has(main#home) > main#home > section#zctv-channel-hub#zctv-channel-hub > .zctv-inner {
-    width:min(92vw,7400px)!important;
-    max-width:7400px!important;
+    width:min(92vw,15000px)!important;
+    max-width:15000px!important;
     margin-inline:auto!important;
   }
   /* Section-level inner wrappers targeted by the legacy 5600px rule. */
@@ -2747,8 +2747,8 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   html body:has(main#home) > main#home > section#community-console#community-console > .crew-grid,
   html body:has(main#home) > main#home > section#snake-game#snake-game > .arcade-feature,
   html body:has(main#home) > main#home > section#community#community > .transmission-box {
-    width:min(92vw,7400px)!important;
-    max-width:7400px!important;
+    width:min(92vw,15000px)!important;
+    max-width:15000px!important;
     margin-left:auto!important;
     margin-right:auto!important;
     box-sizing:border-box!important;
@@ -2756,8 +2756,8 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   /* Main page footer: override legacy 1320px cap without affecting other pages. */
   html body:has(main#home) > main#home > footer#site-footer#site-footer > .site-footer-main,
   html body:has(main#home) > main#home > footer#site-footer#site-footer > .site-footer-bottom {
-    width:min(92vw,7400px)!important;
-    max-width:7400px!important;
+    width:min(92vw,15000px)!important;
+    max-width:15000px!important;
     margin-left:auto!important;
     margin-right:auto!important;
     box-sizing:border-box!important;
@@ -2790,8 +2790,8 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
 @media (min-width: 2200px) {
   html body:has(main#home) > footer#site-footer#site-footer > .site-footer-main,
   html body:has(main#home) > footer#site-footer#site-footer > .site-footer-bottom {
-    width:min(92vw,7400px)!important;
-    max-width:7400px!important;
+    width:min(92vw,15000px)!important;
+    max-width:15000px!important;
     margin-left:auto!important;
     margin-right:auto!important;
     box-sizing:border-box!important;
@@ -2843,8 +2843,8 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     grid-template-columns: minmax(0, 1fr) minmax(0, .72fr) !important;
     align-items: end !important;
     column-gap: clamp(32px, 3vw, 180px) !important;
-    width: min(92vw, 7400px) !important;
-    max-width: 7400px !important;
+    width: min(92vw, 15000px) !important;
+    max-width: 15000px !important;
     min-width: 0 !important;
   }
   html body:has(main#home) > main#home > section#community-console#community-console > .section-heading > p {
