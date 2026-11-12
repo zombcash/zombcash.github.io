@@ -2726,3 +2726,63 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   }
 }
 
+/* CASCADE FIX: beat the later inline studio-v2 width caps */
+@media (min-width: 2200px) {
+  /* ZCTV inner wrapper: outrank the later studio-v2 inline stylesheet. */
+  html body:has(main#home) > main#home > section#zctv-channel-hub#zctv-channel-hub > .zctv-inner {
+    width:min(92vw,7400px)!important;
+    max-width:7400px!important;
+    margin-inline:auto!important;
+  }
+  /* Section-level inner wrappers targeted by the legacy 5600px rule. */
+  html body:has(main#home) > main#home > section#living-world#living-world > .section-kicker,
+  html body:has(main#home) > main#home > section#living-world#living-world > .section-heading,
+  html body:has(main#home) > main#home > section#living-world#living-world > .world-grid,
+  html body:has(main#home) > main#home > section#outbreak#outbreak > .section-kicker,
+  html body:has(main#home) > main#home > section#outbreak#outbreak > .intro-row,
+  html body:has(main#home) > main#home > section#outbreak#outbreak > .outbreak-panel,
+  html body:has(main#home) > main#home > section#radar#radar > .section-kicker,
+  html body:has(main#home) > main#home > section#radar#radar > .section-heading,
+  html body:has(main#home) > main#home > section#community-console#community-console > .section-heading,
+  html body:has(main#home) > main#home > section#community-console#community-console > .crew-grid,
+  html body:has(main#home) > main#home > section#snake-game#snake-game > .arcade-feature,
+  html body:has(main#home) > main#home > section#community#community > .transmission-box {
+    width:min(92vw,7400px)!important;
+    max-width:7400px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+    box-sizing:border-box!important;
+  }
+  /* Main page footer: override legacy 1320px cap without affecting other pages. */
+  html body:has(main#home) > main#home > footer#site-footer#site-footer > .site-footer-main,
+  html body:has(main#home) > main#home > footer#site-footer#site-footer > .site-footer-bottom {
+    width:min(92vw,7400px)!important;
+    max-width:7400px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+    box-sizing:border-box!important;
+  }
+  html body:has(main#home) > main#home > footer#site-footer#site-footer > .site-footer-main {
+    grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr) minmax(0,.8fr)!important;
+    gap:clamp(24px,1.8vw,144px)!important;
+    padding-block:clamp(32px,1.5vw,120px)!important;
+  }
+  html body:has(main#home) > main#home > footer#site-footer#site-footer > .site-footer-main > .site-footer-brand,
+  html body:has(main#home) > main#home > footer#site-footer#site-footer > .site-footer-main > .site-footer-column,
+  html body:has(main#home) > main#home > footer#site-footer#site-footer > .site-footer-main > .footer-contract {
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+  }
+  html body:has(main#home) > main#home > footer#site-footer#site-footer .site-footer-column a,
+  html body:has(main#home) > main#home > footer#site-footer#site-footer .site-footer-brand p,
+  html body:has(main#home) > main#home > footer#site-footer#site-footer .footer-contract code {
+    font-size:clamp(14px,.38vw,30px)!important;
+    line-height:1.5!important;
+    overflow-wrap:anywhere!important;
+  }
+  html body:has(main#home) > main#home > footer#site-footer#site-footer .site-footer-column h2 {
+    font-size:clamp(13px,.4vw,32px)!important;
+  }
+}
+
