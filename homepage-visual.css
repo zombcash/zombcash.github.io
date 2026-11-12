@@ -2786,3 +2786,31 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   }
 }
 
+/* FOOTER IS A BODY SIBLING, NOT A CHILD OF MAIN#HOME */
+@media (min-width: 2200px) {
+  html body:has(main#home) > footer#site-footer#site-footer > .site-footer-main,
+  html body:has(main#home) > footer#site-footer#site-footer > .site-footer-bottom {
+    width:min(92vw,7400px)!important;
+    max-width:7400px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+    box-sizing:border-box!important;
+  }
+  html body:has(main#home) > footer#site-footer#site-footer > .site-footer-main {
+    grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr) minmax(0,.8fr)!important;
+    gap:clamp(24px,1.8vw,144px)!important;
+    padding-block:clamp(32px,1.5vw,120px)!important;
+  }
+  html body:has(main#home) > footer#site-footer#site-footer > .site-footer-main > .site-footer-brand,
+  html body:has(main#home) > footer#site-footer#site-footer > .site-footer-main > .site-footer-column,
+  html body:has(main#home) > footer#site-footer#site-footer > .site-footer-main > .footer-contract {
+    width:100%!important; max-width:none!important; min-width:0!important;
+  }
+  html body:has(main#home) > footer#site-footer#site-footer .site-footer-column a,
+  html body:has(main#home) > footer#site-footer#site-footer .site-footer-brand p,
+  html body:has(main#home) > footer#site-footer#site-footer .footer-contract code {
+    font-size:clamp(14px,.38vw,30px)!important;
+    line-height:1.5!important; overflow-wrap:anywhere!important;
+  }
+}
+
