@@ -1,7 +1,7 @@
 const { chromium } = require('playwright');
 
 const URL = process.env.SITE_URL || 'https://zombcash.github.io/';
-const widths = [1800, 3200, 6400];
+const widths = [1800, 3200, 6400, 9600, 12800, 16000];
 const outDir = 'homepage-zoom-results';
 require('node:fs').mkdirSync(outDir, { recursive: true });
 
@@ -57,8 +57,14 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
           stylesheet: (() => {
             const link = [...document.querySelectorAll('link[rel="stylesheet"]')]
               .find(item => new URL(item.href).pathname.endsWith('/homepage-visual.css'));
-            return !!link && [...document.styleSheets].some(sheet => sheet.href === link.href);
-          })()
+            return !!link && new URL(link.href).searchParams.get('v') === 'homepage-zoom-fit-20261112-7'
+              && [...document.styleSheets].some(sheet => sheet.href === link.href);
+          })(),
+          worldGrid: rect('#living-world .world-grid'),
+          toolGrid: rect('#radar .tool-grid'),
+          crewGrid: rect('#community-console .crew-grid'),
+          arcadeFeature: rect('#snake-game .arcade-feature'),
+          footerMain: rect('body > footer#site-footer .site-footer-main')
         };
       });
       const issues = [];
@@ -69,6 +75,15 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
       if (!layout.tvPlayerWrap || layout.tvPlayerWrap.width < 420) issues.push('visible ZombieCash TV promo player shell did not expand');
       if (!layout.promoVideo || layout.promoVideo.width < 400 || Math.abs(layout.promoVideo.width / layout.promoVideo.height - 16 / 9) > 0.08) issues.push('visible ZombieCash TV promo video is not a valid 16:9 frame');
       if (!layout.tv || layout.tv.width < width * 0.8) issues.push('ZombieCash TV container did not expand');
+      for (const [name, box] of Object.entries({
+        'Living World': layout.worldGrid,
+        'Radar cards': layout.toolGrid,
+        'Community Console': layout.crewGrid,
+        'Arcade feature': layout.arcadeFeature,
+        'Footer': layout.footerMain
+      })) {
+        if (!box || box.width < width * 0.8) issues.push(name + ' did not expand with the 20% zoom viewport');
+      }
       if (!layout.player || layout.player.width < 420) issues.push('ZombieCash TV player column is too narrow');
       if (!layout.promoCount || layout.promoCount === 'LOADING VIDEO LIBRARY…') issues.push('promo video library controls did not initialize');
       if (!layout.promoSource.startsWith('https://')) issues.push('featured promo video source was not assigned');
