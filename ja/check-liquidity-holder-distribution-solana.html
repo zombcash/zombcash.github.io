@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080b11">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>Solanaの流動性と保有者分布を確認する方法 | ZombieCash</title>
+<meta name="description" content="Solanaトークンの流動性プール、上位保有者の集中、プール所有者、価格インパクト、スリッページを確認し、表示指標を安全保証と取り違えない方法を解説します。"><meta name="keywords" content="Solana 流動性 確認, 保有者分布, 上位保有者, 流動性プール, 価格インパクト, スリッページ"><meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://zombcash.github.io/ja/check-liquidity-holder-distribution-solana.html">
+<link rel="alternate" hreflang="en" href="https://zombcash.github.io/check-liquidity-holder-distribution-solana.html">
+<link rel="alternate" hreflang="de" href="https://zombcash.github.io/de/check-liquidity-holder-distribution-solana.html">
+<link rel="alternate" hreflang="fr" href="https://zombcash.github.io/fr/check-liquidity-holder-distribution-solana.html">
+<link rel="alternate" hreflang="ru" href="https://zombcash.github.io/ru/check-liquidity-holder-distribution-solana.html">
+<link rel="alternate" hreflang="ja" href="https://zombcash.github.io/ja/check-liquidity-holder-distribution-solana.html">
+<link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/check-liquidity-holder-distribution-solana.html">
+<meta property="og:type" content="article"><meta property="og:site_name" content="ZombieCash"><meta property="og:locale" content="ja_JP"><meta property="og:title" content="Solanaの流動性と保有者分布を確認する方法"><meta property="og:description" content="Solanaトークンの流動性プール、上位保有者の集中、プール所有者、価格インパクト、スリッページを確認し、表示指標を安全保証と取り違えない方法を解説します。"><meta property="og:url" content="https://zombcash.github.io/ja/check-liquidity-holder-distribution-solana.html"><meta property="og:image" content="https://zombcash.github.io/images/solana-signal-field-check.svg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Solanaの流動性と保有者分布を確認する方法"><meta name="twitter:description" content="Solanaトークンの流動性プール、上位保有者の集中、プール所有者、価格インパクト、スリッページを確認し、表示指標を安全保証と取り違えない方法を解説します。"><meta name="twitter:image" content="https://zombcash.github.io/images/solana-signal-field-check.svg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Solanaの流動性と保有者分布を確認する方法","description":"Solanaトークンの流動性プール、上位保有者の集中、プール所有者、価格インパクト、スリッページを確認し、表示指標を安全保証と取り違えない方法を解説します。","mainEntityOfPage":"https://zombcash.github.io/ja/check-liquidity-holder-distribution-solana.html","author":{"@type":"Organization","name":"ZombieCash","url":"https://zombcash.github.io/"},"publisher":{"@type":"Organization","name":"ZombieCash","url":"https://zombcash.github.io/"},"inLanguage":"ja","datePublished":"2026-11-12","dateModified":"2026-11-12","keywords":"Solana 流動性 確認, 保有者分布, 上位保有者, 流動性プール, 価格インパクト, スリッページ"}</script>
+<style>
+:root{color-scheme:dark;--bg:#080b11;--line:#293c31;--green:#9bff45;--muted:#aab8ad;--text:#eef8f0}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 82% 0,#173321 0,transparent 42%),var(--bg);color:var(--text);font:17px/1.8 "Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",system-ui,sans-serif}
+a{color:var(--green);text-underline-offset:3px;overflow-wrap:anywhere}
+.wrap{width:min(900px,calc(100% - 32px));margin:auto;padding:24px 0 70px}
+.top{display:flex;justify-content:space-between;gap:16px;align-items:center;border-bottom:1px solid var(--line);padding:10px 0 20px}
+.brand{font-weight:900;letter-spacing:.08em;text-decoration:none;color:var(--text)}
+.brand span{color:var(--green)}
+.eyebrow{color:var(--green);font-size:12px;font-weight:800;letter-spacing:.12em;margin-top:40px}
+h1{font-size:clamp(30px,6vw,54px);line-height:1.18;letter-spacing:-.025em;margin:12px 0 18px;overflow-wrap:anywhere}
+h2{font-size:clamp(21px,3.7vw,30px);line-height:1.35;margin:34px 0 10px;color:var(--green)}
+p{margin:12px 0}
+.lead{font-size:clamp(18px,2.6vw,21px);color:#d4e2d5;line-height:1.65}
+.meta,.small{color:var(--muted);font-size:13px}
+.notice,.card{border:1px solid var(--line);background:#0e1712;border-radius:14px;padding:18px;margin:20px 0}
+.notice strong,.card strong{color:var(--green)}
+.checklist{padding-left:1.35rem}
+.checklist li{margin:9px 0}
+.footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;color:var(--muted);font-size:14px}
+@media(max-width:600px){.lead{font-size:18px}.top{align-items:flex-start;flex-wrap:wrap}.wrap{width:calc(100% - 24px);padding-top:14px}}
+</style>
+<link rel="stylesheet" href="/editorial-atmosphere.css?v=20261103-noir2">
+</head>
+<body><div class="wrap">
+<header class="top"><a class="brand" href="/ja/">☣ ZOMBIE<span>CASH</span></a><a href="/ja/outbreak-transmission.html">← アウトブレイク通信</a></header>
+<main>
+<p class="eyebrow">SURVIVOR FIELD MANUAL · 市場解剖 004</p>
+<h1>Solanaの流動性と保有者分布を確認する方法</h1>
+<p class="lead">流動性は出口への扉です。保有者分布は、その扉に誰が殺到する可能性があるかを示します。市場に入る前に両方を確認しましょう。</p>
+<p class="meta">ZOMBIECASH SURVIVOR ARCHIVES · 日本語版公開：2026年11月12日 · 原文更新：2026年10月24日 · 教育目的の情報であり、金融アドバイスではありません。</p>
+<div class="notice"><strong>フィールドルール：</strong> このガイドはリスクを調べるための手順です。トークンの安全性を認定したり、結果を保証したりするものではありません。シードフレーズや秘密鍵を誰にも共有しないでください。</div>
+<section><h2>1. 正確な取引ペアを開く</h2><p>確認済みのMintアドレスを使って、DEX Screenerで取引ペアを探します。トークンと見積もり通貨の両方を確認してください。似た名前でも、まったく別の資産を指していることがあります。</p></section>
+<section><h2>2. 流動性を理解する</h2><p>流動性はスワップを成立させるためにプール内で利用できる価値です。プロジェクトの銀行残高ではなく、時間とともに変化します。流動性が薄いと、比較的小さな取引でも価格が大きく動くことがあります。一枚のスクリーンショットだけでなく、推移を確認してください。</p></section>
+<section><h2>3. 出口を見積もる</h2><p>予定する取引サイズをプールの流動性と比較し、見積もりに表示される価格インパクトとスリッページを確認します。表示された時価総額は、保有者が現金化できる金額ではありません。浅いプールでは、小さな取引に表示された価格で大きな売却が成立するとは限りません。</p></section>
+<section><h2>4. 上位保有者を慎重に読む</h2><p>Solana ExplorerでMintを開き、信頼できるエクスプローラー画面からトークンアカウントや保有者を確認します。集中度を計算する前に、プール、バーン、取引所、プログラムのアカウントを識別してください。上位アカウントをすべて一人の保有者として単純に合算したり、別々のウォレットなら別人だと決めつけたりしないでください。</p></section>
+<section><h2>5. 集中とウォレットのまとまりを調べる</h2><p>一つのウォレットや小さなグループが売却した場合、プールの流動性を圧倒する可能性があるか考えます。新たに資金を受け取ったウォレット、取得時期の類似、大口送金などを確認します。ただし、これらは手掛かりであり、協調した所有の証明ではありません。保有者のスナップショットはすぐに変わります。</p></section>
+<section><h2>6. 複数の時刻を比較する</h2><p>流動性、上位保有者の割合、出来高、買いと売りの動きを今記録し、後で比較します。流動性が急減したり、少数のウォレットが取引所へトークンを移したりした場合は、一度立ち止まってください。どの指標も安全を保証しません。</p></section>
+<section><h2>参考資料・ツール</h2><p>独立した情報源を使って確認してください。ツールの表示やデータ範囲は変わるため、対象トークンと確認時刻を記録しましょう。どのツールも安全を保証するものではありません。</p><ul><li><a href="https://dexscreener.com/solana" target="_blank" rel="noopener noreferrer">DEX Screener — Solana ↗</a></li><li><a href="https://explorer.solana.com/" target="_blank" rel="noopener noreferrer">Solana Explorer ↗</a></li><li><a href="https://solana.com/docs" target="_blank" rel="noopener noreferrer">Solana公式ドキュメント ↗</a></li></ul><p class="small">暗号資産は価格変動が大きく、市場操作の可能性もあります。流動性が失われ、投入資金のすべてを失うことがあります。</p></section>
+<section class="card"><strong>調査を続ける</strong><ul><li><a href="/ja/how-to-research-solana-meme-coins.html">Solanaミームコインの調査方法</a></li><li><a href="/ja/solana-token-safety-checklist.html">Solanaトークン安全チェックリスト</a></li><li><a href="/ja/outbreak-transmission.html">アウトブレイク通信</a></li><li><a href="/ja/survivor-field-manual.html">サバイバー・フィールドマニュアル</a></li></ul></section>
+</main>
+<footer class="footer">☣ ZombieCash · <a href="/ja/">メインターミナル</a> · <a href="/ja/outbreak-transmission.html">アウトブレイク通信</a> · <a href="/ja/survivor-field-manual.html">サバイバー・フィールドマニュアル</a></footer>
+</div>
+<script src="/shared-nav.js?v=nav-main-wrap-20261104-12" defer></script>
+<script src="/language.js?v=i18n-ja-guides-20261112-1" defer></script>
+</body></html>

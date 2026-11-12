@@ -2,6 +2,29 @@ name: Localized article visual QA
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/localized-article-visual.yml'
+      - 'tests/localized-article-visual.cjs'
+      - 'avoid-fake-token-websites-wallet-scams.html'
+      - 'check-liquidity-holder-distribution-solana.html'
+      - 'how-to-research-solana-meme-coins.html'
+      - 'solana-token-safety-checklist.html'
+      - 'de/avoid-fake-token-websites-wallet-scams.html'
+      - 'de/check-liquidity-holder-distribution-solana.html'
+      - 'de/how-to-research-solana-meme-coins.html'
+      - 'fr/avoid-fake-token-websites-wallet-scams.html'
+      - 'fr/check-liquidity-holder-distribution-solana.html'
+      - 'fr/how-to-research-solana-meme-coins.html'
+      - 'ru/avoid-fake-token-websites-wallet-scams.html'
+      - 'ru/check-liquidity-holder-distribution-solana.html'
+      - 'ru/how-to-research-solana-meme-coins.html'
+      - 'ru/solana-token-safety-checklist.html'
+      - 'ja/avoid-fake-token-websites-wallet-scams.html'
+      - 'ja/check-liquidity-holder-distribution-solana.html'
+      - 'ja/how-to-research-solana-meme-coins.html'
+      - 'ja/solana-token-safety-checklist.html'
   push:
     branches: [main]
     paths:
@@ -26,6 +49,8 @@ concurrency:
 jobs:
   visual-qa:
     runs-on: ubuntu-latest
+    env:
+      SITE_URL: http://127.0.0.1:4173/
     timeout-minutes: 20
     steps:
       - name: Check out site
@@ -43,7 +68,16 @@ jobs:
           npm init -y
           npm install --no-save playwright
           npx playwright install --with-deps chromium
-      - name: Test 27 live article pages on desktop and mobile
+      - name: Serve checked-out PR site for deterministic browser QA
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/zombcash-preview.log 2>&1 &
+          for attempt in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/zombcash-preview.log
+          exit 1
+      - name: Test 27 article pages on desktop and mobile
         run: node tests/localized-article-visual.cjs
       - name: Upload screenshots and diagnostics
         if: always()
