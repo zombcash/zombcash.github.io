@@ -1,8 +1,10 @@
 /* Homepage-only outbreak ribbons. Localized copy is selected from the page locale. */
 (function(){
  'use strict';
- var main=document.querySelector('main#home'),header=document.querySelector('header.topbar');
- if(!main||!header||document.querySelector('.zc-outbreak-ribbons'))return;
+ var main=document.querySelector('main#home'),header=document.querySelector('header.topbar, header');
+ if(!header)return;
+ var existing=document.querySelector('.zc-outbreak-ribbons');
+ if(existing){window.setTimeout(function(){existing.style.setProperty('display','grid','important');},0);return;}
  var parts=location.pathname.split('/').filter(Boolean),known=['de','fr','it','ja','zh-CN','ru','tr','hi'];
  var lang=parts.length&&known.indexOf(parts[0])!==-1?parts[0]:'en';
  var copy={
