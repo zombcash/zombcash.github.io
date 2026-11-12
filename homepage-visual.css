@@ -2367,3 +2367,189 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr) minmax(0,1fr)!important;
   }
 }
+
+/* ZombieCash homepage effective-viewport scaling: desktop window resizing and browser zoom-out compensation.
+   Desktop browser zoom changes the CSS viewport dramatically. These rules keep
+   the homepage fluid at very wide effective viewports without changing phone,
+   tablet, or ordinary desktop layouts. */
+@media (min-width: 2200px) {
+  body:has(main#home) {
+    font-size: clamp(18px, .55vw, 46px);
+  }
+
+  body:has(main#home) .topbar {
+    padding-inline: clamp(5.5%, 4vw, 7%);
+  }
+  body:has(main#home) .topbar nav {
+    gap: clamp(18px, .65vw, 56px);
+  }
+  body:has(main#home) .topbar nav a,
+  body:has(main#home) .top-cta {
+    font-size: clamp(11px, .48vw, 38px);
+    letter-spacing: clamp(.5px, .07vw, 2px);
+  }
+
+  body:has(main#home) #home > .hero {
+    padding-inline: clamp(5.2%, 4vw, 7%);
+  }
+  body:has(main#home) #home > .hero .hero-layout {
+    width: 100%;
+    max-width: min(94vw, 7200px);
+    gap: clamp(28px, 3.2vw, 260px);
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
+  }
+  body:has(main#home) #home > .hero .hero-content {
+    min-width: 0;
+  }
+  body:has(main#home) #home > .hero h1 {
+    max-width: 100%;
+    font-size: clamp(64px, 4vw, 300px);
+    line-height: .96;
+    letter-spacing: -.06em;
+  }
+  body:has(main#home) #home > .hero .hero-copy {
+    max-width: 2200px;
+    font-size: clamp(20px, .72vw, 58px);
+    line-height: 1.45;
+  }
+  body:has(main#home) #home > .hero .eyebrow {
+    font-size: clamp(10px, .38vw, 30px);
+    padding: clamp(10px, .45vw, 36px) clamp(13px, .55vw, 44px);
+  }
+  body:has(main#home) #home > .hero .hero-actions {
+    gap: clamp(12px, .55vw, 44px);
+  }
+  body:has(main#home) #home > .hero .btn {
+    padding: clamp(14px, .55vw, 44px) clamp(18px, .7vw, 56px);
+    font-size: clamp(11px, .42vw, 34px);
+  }
+  body:has(main#home) #home > .hero .hero-stats {
+    gap: clamp(18px, 1.1vw, 88px);
+  }
+  body:has(main#home) #home > .hero .hero-stats strong {
+    font-size: clamp(21px, .85vw, 68px);
+  }
+  body:has(main#home) #home > .hero .hero-stats span {
+    font-size: clamp(10px, .38vw, 30px);
+  }
+  body:has(main#home) #home > .hero .zc-hero-sponsor-panel {
+    min-width: 0;
+    padding: clamp(14px, .65vw, 52px);
+  }
+  body:has(main#home) #home > .hero .zc-hero-sponsor-label {
+    font-size: clamp(9px, .34vw, 27px);
+  }
+  body:has(main#home) #home > .hero .zc-hero-sponsor-promo h2 {
+    font-size: clamp(21px, 1.05vw, 84px);
+  }
+  body:has(main#home) #home > .hero .zc-hero-sponsor-promo p:not(.zc-hero-sponsor-kicker) {
+    max-width: 1800px;
+    font-size: clamp(15px, .56vw, 45px);
+  }
+  body:has(main#home) #home > .hero .zc-hero-sponsor-promo a {
+    min-height: clamp(38px, 2.4vw, 100px);
+    padding-inline: clamp(18px, .8vw, 64px);
+    font-size: clamp(9px, .38vw, 30px);
+  }
+
+  body:has(main#home) #home > .section,
+  body:has(main#home) #home > section.section,
+  body:has(main#home) #home > .living-world,
+  body:has(main#home) #home > .world-section {
+    width: 100%;
+    max-width: min(94vw, 7200px);
+    margin-inline: auto;
+    padding-inline: clamp(5%, 3vw, 6%);
+  }
+  body:has(main#home) #home .section-heading h2,
+  body:has(main#home) #home .intro h2,
+  body:has(main#home) #home .game-copy h2,
+  body:has(main#home) #home .transmission h2 {
+    font-size: clamp(32px, 2.6vw, 210px);
+    line-height: 1.08;
+  }
+  body:has(main#home) #home .section-heading p,
+  body:has(main#home) #home .intro-row p,
+  body:has(main#home) #home .game-copy p,
+  body:has(main#home) #home .transmission p {
+    max-width: 2400px;
+    font-size: clamp(18px, .62vw, 50px);
+    line-height: 1.5;
+  }
+  body:has(main#home) #home .tool-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(18px, .8vw, 64px);
+  }
+  body:has(main#home) #home .tool-card {
+    padding: clamp(22px, 1.1vw, 88px);
+  }
+  body:has(main#home) #home .tool-card h3 {
+    font-size: clamp(22px, 1.15vw, 92px);
+  }
+  body:has(main#home) #home .tool-card p {
+    min-height: 0;
+    font-size: clamp(17px, .58vw, 46px);
+    line-height: 1.5;
+  }
+  body:has(main#home) #home .tool-card li,
+  body:has(main#home) #home .card-link,
+  body:has(main#home) #home .mini-label,
+  body:has(main#home) #home .section-kicker {
+    font-size: clamp(9px, .38vw, 30px);
+  }
+  body:has(main#home) #home .zombie-maker-promo,
+  body:has(main#home) #home .zc-promo-video-shell,
+  body:has(main#home) #home .zc-promo-video-inner {
+    width: min(94vw, 6800px);
+    max-width: 6800px;
+  }
+  body:has(main#home) #home .zombie-maker-promo {
+    gap: clamp(24px, 1.2vw, 96px);
+    padding: clamp(28px, 1.5vw, 120px);
+  }
+  body:has(main#home) #home .zombie-maker-promo h2 {
+    font-size: clamp(30px, 2.2vw, 176px);
+  }
+  body:has(main#home) #home .zombie-maker-promo p {
+    max-width: 2200px;
+    font-size: clamp(19px, .68vw, 54px);
+  }
+  body:has(main#home) #home .zc-promo-video-copy h2 {
+    font-size: clamp(30px, 2.1vw, 168px);
+  }
+  body:has(main#home) #home .zc-promo-video-copy p {
+    font-size: clamp(16px, .58vw, 46px);
+  }
+  body:has(main#home) #home .live-radar-head h3 {
+    font-size: clamp(20px, 1.1vw, 88px);
+  }
+  body:has(main#home) #home .live-radar-head p,
+  body:has(main#home) #home .radar-table td {
+    font-size: clamp(14px, .48vw, 38px);
+  }
+  body:has(main#home) #home .radar-table th,
+  body:has(main#home) #home .radar-filter,
+  body:has(main#home) #home .radar-refresh {
+    font-size: clamp(8px, .34vw, 27px);
+  }
+  body:has(main#home) #home footer {
+    font-size: clamp(12px, .42vw, 34px);
+  }
+}
+
+/* Extra-wide screens: prevent fixed-width grids from creating empty gutters. */
+@media (min-width: 3200px) {
+  body:has(main#home) #home .intro-row {
+    gap: clamp(30px, 2.2vw, 176px);
+  }
+  body:has(main#home) #home .outbreak-panel {
+    grid-template-columns: clamp(70px, 5vw, 400px) minmax(0, 1fr) minmax(24%, 34%);
+    gap: clamp(24px, 1vw, 80px);
+    padding: clamp(25px, 1.1vw, 88px);
+  }
+  body:has(main#home) #home .world-community-pair {
+    gap: clamp(16px, .8vw, 64px);
+    padding: clamp(16px, .8vw, 64px);
+  }
+}
+
