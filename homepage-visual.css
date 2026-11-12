@@ -3010,9 +3010,10 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     width: min(92vw,15000px) !important;
     max-width: 15000px !important;
   }
-  /* Animated market ribbons must stay clipped to their own viewport on touch layouts. */
-  @media (max-width: 900px) {
-    html:has(main#home),
-    body:has(main#home) { overflow-x: clip !important; }
-  }
+}
+
+/* Prevent animated ribbon tracks from widening the document on touch-sized screens. */
+@media (max-width: 900px) {
+  html:has(main#home),
+  body:has(main#home) { overflow-x: clip !important; }
 }
