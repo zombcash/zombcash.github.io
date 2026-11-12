@@ -2814,3 +2814,23 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   }
 }
 
+/* MID-SIZE DESKTOP FOOTER ALIGNMENT */
+@media (min-width: 1200px) and (max-width: 2199px) {
+  html body:has(main#home) > footer#site-footer#site-footer > .site-footer-main,
+  html body:has(main#home) > footer#site-footer#site-footer > .site-footer-bottom {
+    width:min(92vw,1440px)!important;
+    max-width:1440px!important;
+    margin-inline:auto!important;
+    box-sizing:border-box!important;
+  }
+  html body:has(main#home) > footer#site-footer#site-footer > .site-footer-main {
+    grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr) minmax(0,.8fr)!important;
+    gap:clamp(20px,1.8vw,40px)!important;
+  }
+  html body:has(main#home) > footer#site-footer#site-footer > .site-footer-main > .site-footer-brand,
+  html body:has(main#home) > footer#site-footer#site-footer > .site-footer-main > .site-footer-column,
+  html body:has(main#home) > footer#site-footer#site-footer > .site-footer-main > .footer-contract {
+    min-width:0!important;max-width:none!important;
+  }
+}
+
