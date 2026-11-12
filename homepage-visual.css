@@ -2604,7 +2604,7 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     grid-template-columns:repeat(3,minmax(0,1fr))!important;
     grid-auto-flow:row!important;
     grid-auto-rows:minmax(0,auto)!important;
-    width:100%!important; max-width:7400px!important;
+    width:100%!important; max-width:15000px!important;
     gap:clamp(24px,1.4vw,112px)!important;
   }
   html body:has(main#home) main#home section.section.tools#radar > .tool-grid > article.tool-card {
@@ -2631,7 +2631,7 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   html body:has(main#home) main#home .zombcash-market,
   html body:has(main#home) main#home .crew-card,
   html body:has(main#home) main#home .world-panel {
-    max-width:7400px!important;
+    max-width:15000px!important;
     font-size:clamp(16px,.55vw,44px)!important;
   }
   html body:has(main#home) main#home .live-radar-head h3,
@@ -2651,7 +2651,7 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     padding:clamp(12px,.55vw,44px)!important;
   }
   html body:has(main#home) main#home .zombie-maker-promo {
-    width:100%!important; max-width:7400px!important;
+    width:100%!important; max-width:15000px!important;
     padding:clamp(28px,1.5vw,120px)!important;
     gap:clamp(24px,1.5vw,120px)!important;
   }
@@ -2664,7 +2664,7 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   html body:has(main#home) main#home .zc-promo-video,
   html body:has(main#home) main#home .zc-promo-video-shell,
   html body:has(main#home) main#home .zc-promo-video-inner {
-    max-width:7400px!important; width:100%!important;
+    max-width:15000px!important; width:100%!important;
   }
   html body:has(main#home) main#home footer {
     font-size:clamp(14px,.46vw,37px)!important;
@@ -2682,12 +2682,12 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   html body:has(main#home) main#home .crew-grid,
   html body:has(main#home) main#home .arcade-feature,
   html body:has(main#home) main#home .transmission-box {
-    width:min(92vw,7400px)!important; max-width:7400px!important;
+    width:min(92vw,15000px)!important; max-width:15000px!important;
     margin-left:auto!important; margin-right:auto!important; box-sizing:border-box!important;
   }
   html body:has(main#home) main#home footer#site-footer .site-footer-main,
   html body:has(main#home) main#home footer#site-footer .site-footer-bottom {
-    width:min(92vw,7400px)!important; max-width:7400px!important;
+    width:min(92vw,15000px)!important; max-width:15000px!important;
     margin-left:auto!important; margin-right:auto!important; box-sizing:border-box!important;
   }
   html body:has(main#home) main#home footer#site-footer .site-footer-main {

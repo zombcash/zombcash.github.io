@@ -46,7 +46,7 @@ fs.mkdirSync(output, { recursive: true });
           const stylesheet = Array.from(document.styleSheets).some(s => {
             try {
               return s.href && new URL(s.href).pathname.endsWith('/homepage-visual.css')
-                && new URL(s.href).searchParams.get('v') === 'homepage-zoom-fit-20261112-10';
+                && new URL(s.href).searchParams.get('v') === 'homepage-zoom-fit-20261112-11';
             } catch { return false; }
           });
           return {
