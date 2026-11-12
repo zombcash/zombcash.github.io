@@ -2721,4 +2721,37 @@ body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
 </style>
 
 <script src="tool-video-cards.js?v=20261109-2" defer></script>
+
+<style id="zc-remove-native-ad-dead-space-20261112">
+/* Last-in-document override: native creative is ~175px tall; remove the unused 250px reserve. */
+@media (min-width: 901px) {
+  body:has(#home) #home > section.hero .zc-hero-sponsor {
+    gap: 8px !important;
+  }
+  body:has(#home) #home > section.hero .zc-hero-ad-stage {
+    box-sizing: border-box !important;
+    flex: 0 0 175px !important;
+    height: 175px !important;
+    min-height: 175px !important;
+    max-height: 175px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-native-slot,
+  body:has(#home) #home > section.hero #container-4420dadadbd2f0727c322cd6c632be3e {
+    box-sizing: border-box !important;
+    height: 175px !important;
+    min-height: 0 !important;
+    max-height: 175px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+  body:has(#home) #home > section.hero .zc-sponsor-art-slot {
+    margin-top: 0 !important;
+  }
+}
+</style>
+
 </body></html>
