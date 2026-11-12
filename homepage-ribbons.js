@@ -36,7 +36,8 @@
  }
  function fmtPrice(v){
   if(!Number.isFinite(v))return '—';
-  return '
+  return 'USD '+v.toLocaleString('en-US',{maximumFractionDigits:v>=1000?0:(v<1?6:2)});
+ }
  function fmtChange(v){
   if(!Number.isFinite(v))return '';
   return (v>=0?'+':'')+v.toFixed(2)+'%';
