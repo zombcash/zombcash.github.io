@@ -11,6 +11,10 @@ const pages = [
   { slug: 'transmission-liquidity-is-not-market-cap.html', kind: 'liquidity' },
   { slug: 'transmission-zombie-fiction-rpg-guide.html', kind: 'fiction' },
   { slug: 'transmission-last-backup-ai-apocalypse.html', kind: 'backup' },
+  { slug: 'avoid-fake-token-websites-wallet-scams.html', kind: 'guide', availableLocales: ['en', 'de', 'fr', 'ja', 'ru'] },
+  { slug: 'check-liquidity-holder-distribution-solana.html', kind: 'guide', availableLocales: ['en', 'de', 'fr', 'ja', 'ru'] },
+  { slug: 'how-to-research-solana-meme-coins.html', kind: 'guide', availableLocales: ['en', 'de', 'fr', 'ja', 'ru'] },
+  { slug: 'solana-token-safety-checklist.html', kind: 'guide', availableLocales: ['en', 'ja', 'ru'] },
 ];
 const viewports = [
   { name: 'small-mobile', width: 320, height: 740, mobile: true },
@@ -43,7 +47,7 @@ function pagePath(locale, slug) {
   pagesByContext.desktop.on('pageerror', error => pageErrorsByMode.desktop.push(error.message));
   try {
     for (const item of pages) {
-      for (const locale of locales) {
+      for (const locale of item.availableLocales || locales) {
         for (const viewport of viewports) {
           const mode = viewport.mobile ? 'mobile' : 'desktop';
           const page = pagesByContext[mode];
@@ -78,6 +82,11 @@ function pagePath(locale, slug) {
               const data = {
                 lang: document.documentElement.lang,
                 title: document.title,
+                description: document.querySelector('meta[name="description"]')?.content || '',
+                twitterTitle: document.querySelector('meta[name="twitter:title"]')?.content || '',
+                twitterDescription: document.querySelector('meta[name="twitter:description"]')?.content || '',
+                twitterImage: document.querySelector('meta[name="twitter:image"]')?.content || '',
+                hasJapaneseText: /[\u3040-\u30ff\u3400-\u9fff]/.test(main?.innerText || ''),
                 canonical: document.querySelector('link[rel="canonical"]')?.href || '',
                 alternates,
                 width: innerWidth,
@@ -105,7 +114,11 @@ function pagePath(locale, slug) {
             if (result.lang !== locale) issues.push('html lang mismatch: ' + result.lang);
             if (!result.title || result.mainTextLength < 500) issues.push('missing title or main article content');
             if (result.canonical !== expected) issues.push('canonical mismatch: ' + result.canonical);
-            if (result.alternates.length < 10 || !result.alternates.includes('x-default')) issues.push('incomplete hreflang cluster');
+            const expectedLocales = (item.availableLocales || locales).map(code => code === 'zh-CN' ? 'zh-Hans' : code);
+            const missingAlternates = expectedLocales.filter(code => !result.alternates.includes(code));
+            if (missingAlternates.length || !result.alternates.includes('x-default')) {
+              issues.push('incomplete hreflang cluster; missing: ' + missingAlternates.join(', '));
+            }
             if (result.documentWidth > viewport.width + 1) issues.push('horizontal overflow: ' + result.documentWidth + 'px at ' + viewport.width + 'px');
             if (result.languageOptions !== 9) issues.push('expected 9 language options, found ' + result.languageOptions);
             if (result.missingTocTargets.length) issues.push('missing in-page anchors: ' + result.missingTocTargets.join(', '));
@@ -120,6 +133,11 @@ function pagePath(locale, slug) {
             if (item.kind === 'backup') {
               if (result.infraQuestions !== 6) issues.push('expected 6 infrastructure questions, found ' + result.infraQuestions);
               if (result.detailedChecklistItems !== 6) issues.push('expected 6 detailed checklist items, found ' + result.detailedChecklistItems);
+            }
+            if (item.kind === 'guide') {
+              if (!result.description) issues.push('missing SEO meta description');
+              if (!result.twitterTitle || !result.twitterDescription || !result.twitterImage) issues.push('incomplete Twitter Card metadata');
+              if (locale === 'ja' && !result.hasJapaneseText) issues.push('Japanese guide body text is missing Japanese characters');
             }
             await page.locator('header.zombcash-shared-header .language-trigger').click();
             const menuVisible = await page.locator('header.zombcash-shared-header .language-menu').isVisible().catch(() => false);
@@ -138,10 +156,19 @@ function pagePath(locale, slug) {
 
     // Test actual language changes on two article types with a real dropdown click.
     const switchPage = pagesByContext.mobile;
-    for (const test of [
+    const routeSwitchTests = [
       { from: 'buy-zombcash.html', lang: 'ja', to: '/ja/buy-zombcash.html' },
       { from: 'transmission-liquidity-is-not-market-cap.html', lang: 'ru', to: '/ru/transmission-liquidity-is-not-market-cap.html' },
-    ]) {
+      { from: 'avoid-fake-token-websites-wallet-scams.html', lang: 'ja', to: '/ja/avoid-fake-token-websites-wallet-scams.html' },
+      { from: 'check-liquidity-holder-distribution-solana.html', lang: 'ja', to: '/ja/check-liquidity-holder-distribution-solana.html' },
+      { from: 'how-to-research-solana-meme-coins.html', lang: 'ja', to: '/ja/how-to-research-solana-meme-coins.html' },
+      { from: 'solana-token-safety-checklist.html', lang: 'ja', to: '/ja/solana-token-safety-checklist.html' },
+      { from: '/ja/avoid-fake-token-websites-wallet-scams.html', lang: 'en', to: '/avoid-fake-token-websites-wallet-scams.html' },
+      { from: '/ja/check-liquidity-holder-distribution-solana.html', lang: 'en', to: '/check-liquidity-holder-distribution-solana.html' },
+      { from: '/ja/how-to-research-solana-meme-coins.html', lang: 'en', to: '/how-to-research-solana-meme-coins.html' },
+      { from: '/ja/solana-token-safety-checklist.html', lang: 'en', to: '/solana-token-safety-checklist.html' },
+    ];
+    for (const test of routeSwitchTests) {
       await switchPage.goto(new URL(test.from, BASE).href, { waitUntil: 'domcontentloaded', timeout: 30000 });
       await switchPage.waitForSelector('header.zombcash-shared-header .language-trigger', { timeout: 10000 });
       await switchPage.locator('header.zombcash-shared-header .language-trigger').click();
@@ -177,8 +204,8 @@ function pagePath(locale, slug) {
     }
 
     const summary = {
-      visualCases: pages.length * locales.length * viewports.length,
-      routeSwitches: 2,
+      visualCases: pages.reduce((total, item) => total + (item.availableLocales || locales).length * viewports.length, 0),
+      routeSwitches: routeSwitchTests.length,
       localizedHomepagesChecked: 8,
       failures,
       reportCount: reports.length,

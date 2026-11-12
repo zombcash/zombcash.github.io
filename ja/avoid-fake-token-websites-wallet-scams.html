@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080b11">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>偽トークンサイトとウォレット詐欺を見抜く方法 | ZombieCash</title>
+<meta name="description" content="偽のトークンサイト、なりすましサポート、悪意あるエアドロップ、ウォレットドレイナー、危険な署名要求を見分けるための実践ガイド。"><meta name="keywords" content="偽トークンサイト, Solana ウォレット詐欺, 暗号資産 フィッシング, 偽エアドロップ, ウォレットドレイナー, シードフレーズ詐欺"><meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://zombcash.github.io/ja/avoid-fake-token-websites-wallet-scams.html">
+<link rel="alternate" hreflang="en" href="https://zombcash.github.io/avoid-fake-token-websites-wallet-scams.html">
+<link rel="alternate" hreflang="de" href="https://zombcash.github.io/de/avoid-fake-token-websites-wallet-scams.html">
+<link rel="alternate" hreflang="fr" href="https://zombcash.github.io/fr/avoid-fake-token-websites-wallet-scams.html">
+<link rel="alternate" hreflang="ru" href="https://zombcash.github.io/ru/avoid-fake-token-websites-wallet-scams.html">
+<link rel="alternate" hreflang="ja" href="https://zombcash.github.io/ja/avoid-fake-token-websites-wallet-scams.html">
+<link rel="alternate" hreflang="x-default" href="https://zombcash.github.io/avoid-fake-token-websites-wallet-scams.html">
+<meta property="og:type" content="article"><meta property="og:site_name" content="ZombieCash"><meta property="og:locale" content="ja_JP"><meta property="og:title" content="偽トークンサイトとウォレット詐欺を見抜く方法"><meta property="og:description" content="偽のトークンサイト、なりすましサポート、悪意あるエアドロップ、ウォレットドレイナー、危険な署名要求を見分けるための実践ガイド。"><meta property="og:url" content="https://zombcash.github.io/ja/avoid-fake-token-websites-wallet-scams.html"><meta property="og:image" content="https://zombcash.github.io/images/wallet-signing-field-guide.svg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="偽トークンサイトとウォレット詐欺を見抜く方法"><meta name="twitter:description" content="偽のトークンサイト、なりすましサポート、悪意あるエアドロップ、ウォレットドレイナー、危険な署名要求を見分けるための実践ガイド。"><meta name="twitter:image" content="https://zombcash.github.io/images/wallet-signing-field-guide.svg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"偽トークンサイトとウォレット詐欺を見抜く方法","description":"偽のトークンサイト、なりすましサポート、悪意あるエアドロップ、ウォレットドレイナー、危険な署名要求を見分けるための実践ガイド。","mainEntityOfPage":"https://zombcash.github.io/ja/avoid-fake-token-websites-wallet-scams.html","author":{"@type":"Organization","name":"ZombieCash","url":"https://zombcash.github.io/"},"publisher":{"@type":"Organization","name":"ZombieCash","url":"https://zombcash.github.io/"},"inLanguage":"ja","datePublished":"2026-11-12","dateModified":"2026-11-12","keywords":"偽トークンサイト, Solana ウォレット詐欺, 暗号資産 フィッシング, 偽エアドロップ, ウォレットドレイナー, シードフレーズ詐欺"}</script>
+<style>
+:root{color-scheme:dark;--bg:#080b11;--line:#293c31;--green:#9bff45;--muted:#aab8ad;--text:#eef8f0}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 82% 0,#173321 0,transparent 42%),var(--bg);color:var(--text);font:17px/1.8 "Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",system-ui,sans-serif}
+a{color:var(--green);text-underline-offset:3px;overflow-wrap:anywhere}
+.wrap{width:min(900px,calc(100% - 32px));margin:auto;padding:24px 0 70px}
+.top{display:flex;justify-content:space-between;gap:16px;align-items:center;border-bottom:1px solid var(--line);padding:10px 0 20px}
+.brand{font-weight:900;letter-spacing:.08em;text-decoration:none;color:var(--text)}
+.brand span{color:var(--green)}
+.eyebrow{color:var(--green);font-size:12px;font-weight:800;letter-spacing:.12em;margin-top:40px}
+h1{font-size:clamp(30px,6vw,54px);line-height:1.18;letter-spacing:-.025em;margin:12px 0 18px;overflow-wrap:anywhere}
+h2{font-size:clamp(21px,3.7vw,30px);line-height:1.35;margin:34px 0 10px;color:var(--green)}
+p{margin:12px 0}
+.lead{font-size:clamp(18px,2.6vw,21px);color:#d4e2d5;line-height:1.65}
+.meta,.small{color:var(--muted);font-size:13px}
+.notice,.card{border:1px solid var(--line);background:#0e1712;border-radius:14px;padding:18px;margin:20px 0}
+.notice strong,.card strong{color:var(--green)}
+.checklist{padding-left:1.35rem}
+.checklist li{margin:9px 0}
+.footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;color:var(--muted);font-size:14px}
+@media(max-width:600px){.lead{font-size:18px}.top{align-items:flex-start;flex-wrap:wrap}.wrap{width:calc(100% - 24px);padding-top:14px}}
+</style>
+<link rel="stylesheet" href="/editorial-atmosphere.css?v=20261103-noir2">
+</head>
+<body><div class="wrap">
+<header class="top"><a class="brand" href="/ja/">☣ ZOMBIE<span>CASH</span></a><a href="/ja/outbreak-transmission.html">← アウトブレイク通信</a></header>
+<main>
+<p class="eyebrow">SURVIVOR FIELD MANUAL · ウォレット防衛 005</p>
+<h1>偽トークンサイトとウォレット詐欺を見抜く方法</h1>
+<p class="lead">詐欺師はバンカーを破る必要はありません。あなたが扉を開ければよいのです。ドメインとアドレスを確認し、ウォレットの署名要求を一つずつ読みましょう。</p>
+<p class="meta">ZOMBIECASH SURVIVOR ARCHIVES · 日本語版公開：2026年11月12日 · 原文更新：2026年10月24日 · 教育目的の情報であり、金融アドバイスではありません。</p>
+<div class="notice"><strong>フィールドルール：</strong> このガイドはリスクを調べるための手順です。トークンの安全性を認定したり、結果を保証したりするものではありません。シードフレーズや秘密鍵を誰にも共有しないでください。</div>
+<section><h2>1. ドメインを独立して確認する</h2><p>返信、広告、DM、検索結果に表示されたというだけでリンクを信用しないでください。既知の公式チャンネルから出発し、ドメイン全体を一文字ずつ照合します。文字の入れ替え、余分なハイフン、不自然なサブドメイン、綴り間違いに注意してください。</p></section>
+<section><h2>2. リカバリーフレーズを絶対に明かさない</h2><p>正規のサポート担当者、モデレーター、トークンチームがシードフレーズや秘密鍵を尋ねることはありません。それを要求する相手は、あなたのウォレットを乗っ取ろうとしています。「本人確認」や「復旧手続き」という説明も例外ではありません。</p></section>
+<section><h2>3. エアドロップや請求リンクは確認するまで危険とみなす</h2><p>予期しないトークン、NFT、「報酬を受け取る」リンクは、おとりの可能性があります。埋め込まれたサイトを開いたり、削除するための取引に署名したりしないでください。キャンペーンは公式情報源で確認し、確信が持てなければ無視してください。</p></section>
+<section><h2>4. ウォレットの署名要求をすべて読む</h2><p>ドメイン、要求された操作、トークン、金額、権限を確認します。説明できない取引は拒否してください。特に予期しない承認や、無害に見せかけて広範なアクセスを求める要求に注意しましょう。ハードウェアウォレットは鍵の保護に役立ちますが、悪意ある取引を安全に変えるものではありません。</p></section>
+<section><h2>5. 閲覧用ウォレットと資産保管用ウォレットを分ける</h2><p>実験には専用ウォレットを使い、そこには失ってもよい金額だけを置きます。長期保有資産は分けて保管してください。権限の取り消しには信頼できるツールだけを使い、操作前にネットワークとアカウントを確認します。</p></section>
+<section><h2>6. クリックまたは署名してしまった場合</h2><p>そのサイトとのやり取りを止めてください。安全な端末からウォレット提供元の公式ガイダンスを確認します。シードフレーズや鍵が漏れた可能性がある場合は、残っている資産を新しい安全なウォレットへ移すことを検討してください。突然連絡してくる「資産回復業者」に支払わないでください。取引IDを保存し、該当プラットフォームにドメインを報告します。</p></section>
+<section><h2>参考資料・ツール</h2><p>独立した情報源を使って確認してください。ツールの表示やデータ範囲は変わるため、対象トークンと確認時刻を記録しましょう。どのツールも安全を保証するものではありません。</p><ul><li><a href="https://solana.com/docs" target="_blank" rel="noopener noreferrer">Solana公式ドキュメント ↗</a></li><li><a href="https://explorer.solana.com/" target="_blank" rel="noopener noreferrer">Solana Explorer ↗</a></li><li><a href="https://safebrowsing.google.com/safebrowsing/report_phish/" target="_blank" rel="noopener noreferrer">Google セーフブラウジング：フィッシング報告 ↗</a></li></ul><p class="small">暗号資産は価格変動が大きく、市場操作の可能性もあります。流動性が失われ、投入資金のすべてを失うことがあります。</p></section>
+<section class="card"><strong>調査を続ける</strong><ul><li><a href="/ja/solana-token-safety-checklist.html">Solanaトークン安全チェックリスト</a></li><li><a href="/ja/how-to-research-solana-meme-coins.html">Solanaミームコインの調査方法</a></li><li><a href="/ja/outbreak-transmission.html">アウトブレイク通信 — すべてのレポート</a></li><li><a href="/ja/survivor-field-manual.html">サバイバー・フィールドマニュアル</a></li></ul></section>
+</main>
+<footer class="footer">☣ ZombieCash · <a href="/ja/">メインターミナル</a> · <a href="/ja/outbreak-transmission.html">アウトブレイク通信</a> · <a href="/ja/survivor-field-manual.html">サバイバー・フィールドマニュアル</a></footer>
+</div>
+<script src="/shared-nav.js?v=nav-main-wrap-20261104-12" defer></script>
+<script src="/language.js?v=i18n-ja-guides-20261112-1" defer></script>
+</body></html>
