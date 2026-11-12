@@ -207,9 +207,9 @@ body.gallery-lightbox-open{overflow:hidden}
     padding-bottom:4px;
   }
   .gallery-lightbox:not(.is-image-only) figure img{
-    max-height:min(54svh,328px);
+    max-height:min(42svh,280px);
   }
   .gallery-lightbox:not(.is-image-only) figcaption{
-    max-height:min(46svh,calc(100svh - 430px));
+    max-height:min(52svh,calc(100svh - 390px));
   }
 }
