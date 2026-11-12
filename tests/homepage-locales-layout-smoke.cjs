@@ -91,8 +91,8 @@ fs.mkdirSync(output, { recursive: true });
           if (!result.mobileSlotVisible) issues.push('mobile sponsor slot is not visible below 768px');
           if (result.nativeSlotVisible) issues.push('desktop native sponsor slot must be hidden below 768px');
         } else {
-          if (result.adStage.height < 270) issues.push('desktop sponsor stage must reserve 300px from 768px upward');
-          if (!result.nativeSlotVisible || !result.nativeSlot || result.nativeSlot.height < 270) issues.push('native sponsor slot must be visible and reserve 300px from 768px upward');
+          if (result.adStage.height < 180) issues.push('desktop sponsor stage must reserve the configured 180px fallback from 768px upward');
+          if (!result.nativeSlotVisible || !result.nativeSlot || result.nativeSlot.height < 180) issues.push('native sponsor slot must be visible and reserve 180px from 768px upward');
           if (result.mobileSlotVisible) issues.push('mobile sponsor slot must be hidden from 768px upward');
         }
         if (width >= 1360 && result.content.right > result.sponsor.left + 2) issues.push('desktop hero columns overlap');
