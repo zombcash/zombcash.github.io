@@ -67,7 +67,10 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
           footerMain: rect('body > footer#site-footer .site-footer-main'),
           headerNavFontSize: (() => { const el = document.querySelector('header.zombcash-shared-header .zsh-nav > a'); return el ? parseFloat(getComputedStyle(el).fontSize) : 0; })(),
           headerBrandFontSize: (() => { const el = document.querySelector('header.zombcash-shared-header .zsh-brand-copy'); return el ? parseFloat(getComputedStyle(el).fontSize) : 0; })(),
-          tickerFontSize: (() => { const el = document.querySelector('#home > section.ticker'); return el ? parseFloat(getComputedStyle(el).fontSize) : 0; })()
+          tickerFontSize: (() => { const el = document.querySelector('#home > section.ticker'); return el ? parseFloat(getComputedStyle(el).fontSize) : 0; })(),
+          ribbonFontSize: (() => { const el = document.querySelector('.zc-outbreak-ribbons .zc-ribbon-copy'); return el ? parseFloat(getComputedStyle(el).fontSize) : 0; })(),
+          ribbonLabelFontSize: (() => { const el = document.querySelector('.zc-outbreak-ribbons .zc-ribbon-label'); return el ? parseFloat(getComputedStyle(el).fontSize) : 0; })(),
+          ribbonHeight: (() => { const el = document.querySelector('.zc-outbreak-ribbons .zc-ribbon'); return el ? Math.round(el.getBoundingClientRect().height) : 0; })()
         };
       });
       const issues = [];
@@ -75,6 +78,9 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
       if (width >= 7600 && layout.headerNavFontSize < 32) issues.push('shared header navigation remains too small at 20% browser zoom');
       if (width >= 7600 && layout.headerBrandFontSize < 32) issues.push('shared header brand remains too small at 20% browser zoom');
       if (width >= 7600 && layout.tickerFontSize < 32) issues.push('homepage market ticker text remains too small at 20% browser zoom');
+      if (width >= 7600 && layout.ribbonFontSize < 28) issues.push('outbreak ribbon text remains too small at 20% browser zoom');
+      if (width >= 7600 && layout.ribbonLabelFontSize < 30) issues.push('outbreak ribbon labels remain too small at 20% browser zoom');
+      if (width >= 7600 && layout.ribbonHeight < 84) issues.push('outbreak ribbon bars remain too short at 20% browser zoom');
       if (!layout.heroLayout || layout.heroLayout.width < width * 0.85) issues.push('hero wrapper did not expand with the wide CSS viewport');
       if (!layout.heroContent || layout.heroContent.width < 760) issues.push('hero copy column remains capped at desktop width');
       if (!layout.sponsor || layout.sponsor.width < 640) issues.push('sponsor column remains capped at desktop width');

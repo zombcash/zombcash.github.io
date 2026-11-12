@@ -3087,3 +3087,37 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     line-height: inherit !important;
   }
 }
+
+
+/* 20% browser-zoom legibility: scale the three live outbreak ribbons as well as the header. */
+@media (min-width: 7600px) {
+  html body:has(main#home) .zc-outbreak-ribbons {
+    gap: clamp(8px, .08vw, 14px) !important;
+    padding: clamp(12px, .2vw, 32px) clamp(20px, 2vw, 320px) !important;
+  }
+  html body:has(main#home) .zc-outbreak-ribbons .zc-ribbon {
+    height: clamp(84px, .9vw, 144px) !important;
+    border-radius: clamp(8px, .1vw, 16px) !important;
+  }
+  html body:has(main#home) .zc-outbreak-ribbons .zc-ribbon-label {
+    flex: 0 0 clamp(260px, 3vw, 480px) !important;
+    width: clamp(260px, 3vw, 480px) !important;
+    min-width: clamp(260px, 3vw, 480px) !important;
+    max-width: clamp(260px, 3vw, 480px) !important;
+    padding-inline: clamp(16px, .2vw, 32px) !important;
+    font-size: clamp(30px, .42vw, 56px) !important;
+    line-height: 1.15 !important;
+    letter-spacing: 0 !important;
+    text-overflow: clip !important;
+  }
+  html body:has(main#home) .zc-outbreak-ribbons .zc-ribbon-copy {
+    gap: clamp(26px, .3vw, 48px) !important;
+    padding-left: clamp(26px, .3vw, 48px) !important;
+    font-size: clamp(28px, .42vw, 56px) !important;
+    line-height: 1.15 !important;
+  }
+  html body:has(main#home) .zc-outbreak-ribbons .zc-ribbon-copy b {
+    font-size: clamp(24px, .3vw, 40px) !important;
+    line-height: 1 !important;
+  }
+}
