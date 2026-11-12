@@ -161,9 +161,9 @@ fs.mkdirSync(outDir, { recursive: true });
           if (!result.mobileSlotVisible) issues.push('mobile Adsterra banner slot is not visible below 768px');
           if (result.ads > 1) issues.push(`expected at most 1 mobile Adsterra iframe, found ${result.ads}`);
         } else {
-          if (result.adSlotGeometry.height < 270) issues.push('native sponsor stage must reserve at least 270px from 768px upward');
-          if (!result.nativeSlotVisible || !result.nativeSlotGeometry || result.nativeSlotGeometry.height < 270) {
-            issues.push('300px native sponsor slot is missing or not visibly reserved');
+          if (result.adSlotGeometry.height < 180) issues.push('native sponsor stage must reserve the configured 180px desktop fallback from 768px upward');
+          if (!result.nativeSlotVisible || !result.nativeSlotGeometry || result.nativeSlotGeometry.height < 180) {
+            issues.push('180px native sponsor slot is missing or not visibly reserved');
           }
           if (result.mobileSlotVisible || result.bannerGridVisible) {
             issues.push('legacy mobile/banner-grid placements must be hidden when the native sponsor slot is active');
