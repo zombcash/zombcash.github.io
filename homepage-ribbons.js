@@ -32,8 +32,7 @@
  header.insertAdjacentElement('afterend',wrap);
  function setItem(label,value){
   var nodes=Array.prototype.slice.call(wrap.querySelectorAll('.zc-ribbon-copy span'));
-  var node=nodes.find(function(n){return n.textContent.indexOf(label)===0;});
-  if(node)node.textContent=value;
+  nodes.forEach(function(node){if(node.textContent.indexOf(label)===0)node.textContent=value;});
  }
  function fmtPrice(v){
   if(!Number.isFinite(v))return '—';
