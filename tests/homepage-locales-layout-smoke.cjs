@@ -4,7 +4,7 @@ const path = require('node:path');
 
 const ORIGIN = process.env.SITE_URL || 'https://zombcash.github.io/';
 const locales = ['en', 'de', 'fr', 'it', 'ja', 'zh-CN', 'ru', 'tr', 'hi'];
-const viewports = [360, 768, 1024, 1440];
+const viewports = [360, 768, 1024, 1440, 9600, 16000];
 const output = path.join(process.cwd(), 'homepage-locale-results');
 fs.mkdirSync(output, { recursive: true });
 
@@ -44,8 +44,10 @@ fs.mkdirSync(output, { recursive: true });
           const art = sponsor?.querySelector('.zc-sponsor-art-slot');
           const image = art?.querySelector('img');
           const stylesheet = Array.from(document.styleSheets).some(s => {
-            try { return s.href && new URL(s.href).pathname.endsWith('/homepage-visual.css'); }
-            catch { return false; }
+            try {
+              return s.href && new URL(s.href).pathname.endsWith('/homepage-visual.css')
+                && new URL(s.href).searchParams.get('v') === 'homepage-zoom-fit-20261112-7';
+            } catch { return false; }
           });
           return {
             width: innerWidth,
@@ -78,6 +80,8 @@ fs.mkdirSync(output, { recursive: true });
           if (!result.tvVideo || !result.tvArchive || result.tvArchive.top < result.tvVideo.bottom - 2) issues.push('Episode archive must sit below the video player');
         }
         if (result.documentWidth > width + 1) issues.push('horizontal overflow: ' + result.documentWidth + 'px');
+        if (width >= 7600 && (!result.layout || result.layout.width < width * 0.85)) issues.push('localized hero layout did not expand for 20% browser zoom');
+        if (width >= 7600 && (!result.tvInner || result.tvInner.width < width * 0.8)) issues.push('localized ZombieCash TV rail did not expand for 20% browser zoom');
         if (!result.imagePresent || !result.imageLoaded) issues.push('sponsor artwork image is missing or failed to load');
         if (!result.adStage) {
           issues.push('sponsor ad reservation is missing');
