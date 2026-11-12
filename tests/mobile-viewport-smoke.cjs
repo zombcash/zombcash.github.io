@@ -139,8 +139,8 @@ fs.mkdirSync(outDir, { recursive: true });
       if (result.adSectionCount !== 1) issues.push(`expected exactly one hero sponsor panel, found ${result.adSectionCount}`);
       if (!result.sponsorPromoVisible) issues.push('Sponsor Zone fallback is not visible');
       if (!result.adPlacementInHero) issues.push('sponsor panel is not inside the original hero layout');
-      // Current placements: 320×50 mobile banner below 768px; 300px native
-      // sponsor reservation from 768px upward. Keep assertions aligned with
+      // Current placements: 320×50 mobile banner below 768px; 180px native
+      // sponsor fallback reservation from 768px upward. Keep assertions aligned with
       // the live CSS rather than the retired two-banner desktop grid.
       const mobileAd = width < 768;
       if (!result.adScriptTags.length) issues.push('Adsterra provider script is missing');
@@ -303,7 +303,7 @@ fs.mkdirSync(outDir, { recursive: true });
         };
       });
       const blockedIssues = [];
-      const nativeHeight = width <= 900 ? 50 : 250;
+      const nativeHeight = width <= 900 ? 50 : 180;
       // Mobile banners scale proportionally when the sponsor panel is narrower than 320px.
       const expectedHeight = width <= 900 && blockedResult.stage
         ? nativeHeight * Math.min(1, blockedResult.stage.width / 320)
