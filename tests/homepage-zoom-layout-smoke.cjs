@@ -64,11 +64,17 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
           toolGrid: rect('#radar .tool-grid'),
           crewGrid: rect('#community-console .crew-grid'),
           arcadeFeature: rect('#snake-game .arcade-feature'),
-          footerMain: rect('body > footer#site-footer .site-footer-main')
+          footerMain: rect('body > footer#site-footer .site-footer-main'),
+          headerNavFontSize: (() => { const el = document.querySelector('header.zombcash-shared-header .zsh-nav > a'); return el ? parseFloat(getComputedStyle(el).fontSize) : 0; })(),
+          headerBrandFontSize: (() => { const el = document.querySelector('header.zombcash-shared-header .zsh-brand-copy'); return el ? parseFloat(getComputedStyle(el).fontSize) : 0; })(),
+          tickerFontSize: (() => { const el = document.querySelector('#home > section.ticker'); return el ? parseFloat(getComputedStyle(el).fontSize) : 0; })()
         };
       });
       const issues = [];
       if (!layout.stylesheet) issues.push('latest responsive stylesheet cache version is not loaded');
+      if (width >= 7600 && layout.headerNavFontSize < 32) issues.push('shared header navigation remains too small at 20% browser zoom');
+      if (width >= 7600 && layout.headerBrandFontSize < 32) issues.push('shared header brand remains too small at 20% browser zoom');
+      if (width >= 7600 && layout.tickerFontSize < 32) issues.push('homepage market ticker text remains too small at 20% browser zoom');
       if (!layout.heroLayout || layout.heroLayout.width < width * 0.85) issues.push('hero wrapper did not expand with the wide CSS viewport');
       if (!layout.heroContent || layout.heroContent.width < 760) issues.push('hero copy column remains capped at desktop width');
       if (!layout.sponsor || layout.sponsor.width < 640) issues.push('sponsor column remains capped at desktop width');
