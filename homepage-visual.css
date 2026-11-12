@@ -2976,4 +2976,43 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     width: min(92vw,15000px) !important; max-width: 15000px !important; margin: 0 !important;
     font-size: clamp(12px,.36vw,56px) !important;
   }
+
+  /* Override legacy 7,400px rails on nested homepage sections at 20% zoom. */
+  html body:has(main#home) main#home .hero-layout,
+  html body:has(main#home) main#home .field-manual-spotlight-inner,
+  html body:has(main#home) main#home .zc-promo-video-shell,
+  html body:has(main#home) main#home .zctv-inner,
+  html body:has(main#home) main#home .world-grid,
+  html body:has(main#home) main#home .intro-row,
+  html body:has(main#home) main#home .outbreak-panel,
+  html body:has(main#home) main#home .tool-grid,
+  html body:has(main#home) main#home .section-heading,
+  html body:has(main#home) main#home .section-kicker,
+  html body:has(main#home) main#home .crew-grid,
+  html body:has(main#home) main#home .arcade-feature,
+  html body:has(main#home) main#home .transmission-box,
+  html body:has(main#home) main#home .site-visits-inner,
+  html body:has(main#home) main#home .campaign-dashboard-inner {
+    box-sizing: border-box !important;
+    width: min(92vw,15000px) !important;
+    max-width: 15000px !important;
+    min-width: 0 !important;
+    margin-inline: auto !important;
+  }
+  html body:has(main#home) > footer#site-footer {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: none !important;
+    padding-inline: 4vw !important;
+  }
+  html body:has(main#home) > footer#site-footer .site-footer-main,
+  html body:has(main#home) > footer#site-footer .site-footer-bottom {
+    width: min(92vw,15000px) !important;
+    max-width: 15000px !important;
+  }
+  /* Animated market ribbons must stay clipped to their own viewport on touch layouts. */
+  @media (max-width: 900px) {
+    html:has(main#home),
+    body:has(main#home) { overflow-x: clip !important; }
+  }
 }
