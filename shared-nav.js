@@ -1,3 +1,31 @@
+/* ZombieCash Adcash AutoTag — global zone supplied by the site owner. */
+(() => {
+  'use strict';
+  try {
+    if (window.__zcAdcashAutoTagLoaded) return;
+    window.__zcAdcashAutoTagLoaded = true;
+    const script = document.createElement('script');
+    script.id = 'zc-adcash-aclib';
+    script.type = 'text/javascript';
+    script.async = true;
+    script.src = 'https://acscdn.com/script/aclib.js';
+    script.onload = () => {
+      try {
+        if (window.aclib && typeof window.aclib.runAutoTag === 'function' && !window.__zcAdcashZoneStarted) {
+          window.__zcAdcashZoneStarted = true;
+          window.aclib.runAutoTag({ zoneId: 'f0ha7epib3' });
+        }
+      } catch (error) {
+        console.warn('[ZombieCash] Adcash AutoTag could not start:', error);
+      }
+    };
+    script.onerror = () => console.warn('[ZombieCash] Adcash library failed to load.');
+    document.head.appendChild(script);
+  } catch (error) {
+    console.warn('[ZombieCash] Adcash integration skipped:', error);
+  }
+})();
+
 /* ZombieCash site-wide Adsterra placement — shared across every language/page. */
 (() => {
   'use strict';
