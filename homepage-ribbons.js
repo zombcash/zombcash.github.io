@@ -72,7 +72,7 @@
   fetch('https://api.dexscreener.com/latest/dex/tokens/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump',{cache:'no-store'})
    .then(function(r){if(!r.ok)throw new Error('DexScreener HTTP '+r.status);return r.json();})
    .then(function(data){
-    var pair=(data.pairs||[]).filter(function(p){return p.chainId==='solana';}).sort(function(a,b)=>Number(b.liquidity&&b.liquidity.usd||0)-Number(a.liquidity&&a.liquidity.usd||0))[0];
+    var pair=(data.pairs||[]).filter(function(p){return p.chainId==='solana';}).sort(function(a,b){return Number(b.liquidity&&b.liquidity.usd||0)-Number(a.liquidity&&a.liquidity.usd||0);})[0];
     if(pair&&pair.priceUsd)setItem('$ZOMBCASH:','$ZOMBCASH: '+fmtPrice(Number(pair.priceUsd))+' ('+fmtChange(Number(pair.priceChange&&pair.priceChange.h24))+')');
     else setItem('$ZOMBCASH:','$ZOMBCASH: no live pair data');
    }).catch(function(){setItem('$ZOMBCASH:','$ZOMBCASH: temporarily unavailable');});
