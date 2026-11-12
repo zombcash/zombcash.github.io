@@ -3,15 +3,11 @@
  'use strict';
  var main=document.querySelector('main#home'),header=document.querySelector('header.topbar, header');
  var existing=document.querySelector('.zc-outbreak-ribbons');
- if(existing){
-  existing.style.setProperty('display','grid','important');
-  existing.style.setProperty('visibility','visible','important');
-  existing.style.setProperty('opacity','1','important');
-  return;
- }
+ if(existing)existing.remove();
  if(!header && !main)return;
  var parts=location.pathname.split('/').filter(Boolean),known=['de','fr','it','ja','zh-CN','ru','tr','hi'];
- var lang=parts.length&&known.indexOf(parts[0])!==-1?parts[0]:'en';
+ var pageLang=(document.documentElement.lang||'').toLowerCase();
+ var lang=known.indexOf(pageLang)!==-1?pageLang:(parts.length&&known.indexOf(parts[0])!==-1?parts[0]:'en');
  var copy={
  en:[['CRYPTO LIVE','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['FX RATES','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['MARKET PULSE','Live crypto prices','24-hour market changes','Currency exchange rates','Updated automatically']],
  de:[['AUSBRUCH-ALARM','Das ZombieCash-Ökosystem wächst','Neue Missionen und Spiele für Überlebende','Bleib wachsam. Bleib am Leben.'],['COMMUNITY-FEED','Memes','Spiele','Events','Missionen für Überlebende','Der Community beitreten'],['MARKTINTELLIGENZ','$ZOMBCASH auf Solana','Marktsignale und Token-Daten','Radar- und Token-Daten','Den Ausbruch verfolgen']],
