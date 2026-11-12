@@ -892,6 +892,49 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 }
 </style>
 
+<style id="zc-aads-compact-stage-fix-20261112">
+/* Compact sponsor slot: do not reserve 300px when the Adsterra native creative is empty. */
+@media (min-width: 768px) {
+  body:has(#home) #home > section.hero .zc-hero-ad-stage {
+    box-sizing:border-box!important;
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:90px!important;
+    max-height:none!important;
+    flex:0 0 auto!important;
+    overflow:visible!important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-native-slot {
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+  }
+  body:has(#home) #home > section.hero #container-4420dadadbd2f0727c322cd6c632be3e {
+    height:auto!important;
+    min-height:0!important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-native-slot:has(#container-4420dadadbd2f0727c322cd6c632be3e:empty) {
+    display:none!important;
+  }
+  body:has(#home) #home > section.hero #frame iframe {
+    height:90px!important;
+    min-height:90px!important;
+  }
+}
+@media (max-width: 767px) {
+  body:has(#home) #home > section.hero .zc-hero-ad-stage {
+    height:50px!important;
+    min-height:50px!important;
+    max-height:50px!important;
+    flex:0 0 50px!important;
+  }
+  body:has(#home) #home > section.hero #frame iframe {
+    height:50px!important;
+    min-height:50px!important;
+  }
+}
+</style>
 </head>
 <body>
 <div class="scanlines"></div>
