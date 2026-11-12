@@ -914,7 +914,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
     height:auto!important;
     min-height:0!important;
   }
-  body:has(#home) #home > section.hero .zc-adsterra-native-slot:has(#container-4420dadadbd2f0727c322cd6c632be3e:empty) {
+  body:has(#home) #home > section.hero .zc-adsterra-native-slot {
     display:none!important;
   }
   body:has(#home) #home > section.hero #frame iframe {
@@ -2337,7 +2337,7 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
   }
   function syncPlacement(){
     if(mobileQuery.matches)loadMobile();
-    else loadDesktopNative();
+    /* Desktop native grid disabled: keep the compact A-ADS banner as the only desktop placement. */
   }
   syncPlacement();
   if(typeof mobileQuery.addEventListener==='function')mobileQuery.addEventListener('change',syncPlacement);
