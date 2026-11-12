@@ -58,6 +58,7 @@ const localizedEditorialPages = {
     "tr",
     "hi"
   ],
+  "/the-city-went-quiet-raven-outbreak.html": ["de","fr","it","ja","zh-CN","ru","tr","hi"],
   "/memecoin-promotion-platforms-comparison.html": [
     "de",
     "fr",
