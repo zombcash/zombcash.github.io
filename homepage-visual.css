@@ -2834,3 +2834,29 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   }
 }
 
+
+
+/* 2026-11-12 — keep the Community Console intro copy readable at extreme browser zoom-out. */
+@media (min-width: 2200px) {
+  html body:has(main#home) > main#home > section#community-console#community-console > .section-heading {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, .72fr) !important;
+    align-items: end !important;
+    column-gap: clamp(32px, 3vw, 180px) !important;
+    width: min(92vw, 7400px) !important;
+    max-width: 7400px !important;
+    min-width: 0 !important;
+  }
+  html body:has(main#home) > main#home > section#community-console#community-console > .section-heading > p {
+    display: block !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 1100px !important;
+    min-width: 0 !important;
+    margin: 0 0 .25em auto !important;
+    white-space: normal !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+    justify-self: end !important;
+  }
+}
