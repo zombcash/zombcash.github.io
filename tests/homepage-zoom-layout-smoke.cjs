@@ -57,7 +57,7 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
           stylesheet: (() => {
             const link = [...document.querySelectorAll('link[rel="stylesheet"]')]
               .find(item => new URL(item.href).pathname.endsWith('/homepage-visual.css'));
-            return !!link && new URL(link.href).searchParams.get('v') === 'homepage-zoom-fit-20261112-9'
+            return !!link && new URL(link.href).searchParams.get('v') === 'homepage-zoom-fit-20261112-10'
               && [...document.styleSheets].some(sheet => sheet.href === link.href);
           })(),
           worldGrid: rect('#living-world .world-grid'),
