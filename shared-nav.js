@@ -1274,6 +1274,14 @@
 
   document.head.querySelector('#zombcash-shared-navigation-style')?.remove();
   document.head.append(style);
+  // Load the unified cinematic graphite visual layer after legacy page styles.
+  if (!document.getElementById('zc-cinematic-theme')) {
+    const cinematicTheme = document.createElement('link');
+    cinematicTheme.id = 'zc-cinematic-theme';
+    cinematicTheme.rel = 'stylesheet';
+    cinematicTheme.href = '/cinematic-theme.css?v=20261114-1';
+    document.head.append(cinematicTheme);
+  }
 
   const toggle = header.querySelector('.zsh-menu-toggle');
   const nav = header.querySelector('.zsh-nav');
