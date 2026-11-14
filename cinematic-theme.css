@@ -162,3 +162,34 @@ body:has(#home) .hero-zombie{filter:grayscale(.58) saturate(.62) contrast(1.08) 
   html{scroll-behavior:auto!important}
   *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+/* Replace the placeholder neon skull in the homepage arcade promo with project artwork. */
+body:has(#home) .snake-promo-art{
+  isolation:isolate;
+  filter:none!important;
+}
+body:has(#home) .snake-promo-art::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  inset:8%;
+  border:1px solid #aab58e66;
+  border-radius:50%;
+  background:
+    linear-gradient(180deg,#090d0f08 38%,#090d0f9c 100%),
+    url("/assets/zombcash-survivor-realistic-520.avif") center 24%/cover no-repeat;
+  filter:grayscale(.48) saturate(.68) contrast(1.06);
+  box-shadow:0 0 0 1px #aab58e18,0 18px 54px #000a,0 0 42px #aab58e16;
+  clip-path:circle(49%);
+}
+body:has(#home) .snake-promo-symbol{display:none!important}
+body:has(#home) .snake-promo-orbit{
+  z-index:1;inset:5%;border-color:#aab58e38;
+  box-shadow:0 0 0 14px #aab58e08,0 0 38px #aab58e0b,inset 0 0 28px #aab58e0b;
+  pointer-events:none;
+}
+body:has(#home) .snake-promo-orbit:before,
+body:has(#home) .snake-promo-orbit:after{
+  border-color:#aab58e26;
+}
+body:has(#home) .snake-promo-chip{z-index:2;background:#0b1010eF;border-color:#65705e;color:#d1d9c1}
