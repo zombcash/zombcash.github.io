@@ -3121,3 +3121,90 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     line-height: 1 !important;
   }
 }
+
+/* 2026-11-14 — normalize the desktop/effective-viewport content rail.
+   Older zoom fixes capped different homepage sections at 5,600px, 7,400px,
+   or 15,000px in separate media queries. Keep each major section aligned
+   to one fluid rail on wide desktop and zoomed-out browser viewports. */
+@media (min-width: 1800px) {
+  html body:has(main#home) {
+    --zc-homepage-content-rail: min(92vw, 15000px);
+  }
+
+  html body:has(main#home) > main#home > section > :is(
+    .hero-layout,
+    .field-manual-spotlight-inner,
+    .zc-promo-video-shell,
+    .zctv-inner,
+    .world-grid,
+    .intro-row,
+    .outbreak-panel,
+    .tool-grid,
+    .section-heading,
+    .section-kicker,
+    .crew-grid,
+    .arcade-feature,
+    .transmission-box,
+    .site-visits-inner,
+    .campaign-dashboard-inner
+  ),
+  html body:has(main#home) > main#home > section.section > :is(
+    .section-kicker,
+    .section-heading,
+    .intro-row,
+    .outbreak-panel,
+    .tool-grid,
+    .world-grid,
+    .crew-grid,
+    .arcade-feature,
+    .transmission-box
+  ),
+  html body:has(main#home) > footer#site-footer > :is(
+    .site-footer-main,
+    .site-footer-bottom
+  ) {
+    box-sizing: border-box !important;
+    width: var(--zc-homepage-content-rail) !important;
+    max-width: 15000px !important;
+    min-width: 0 !important;
+    margin-inline: auto !important;
+  }
+
+  html body:has(main#home) > main#home > section:not(.hero) {
+    box-sizing: border-box !important;
+    padding-inline: 4vw !important;
+  }
+
+  html body:has(main#home) > main#home > section.hero {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: none !important;
+    padding-inline: 4vw !important;
+  }
+
+  html body:has(main#home) > main#home > section.hero > .hero-layout {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr) !important;
+    gap: clamp(28px, 2vw, 320px) !important;
+    align-items: start !important;
+  }
+
+  html body:has(main#home) > main#home > section.hero .hero-content,
+  html body:has(main#home) > main#home > section.hero .zc-hero-sponsor-panel,
+  html body:has(main#home) > main#home > section > :is(
+    .world-grid,
+    .tool-grid,
+    .crew-grid,
+    .arcade-feature,
+    .transmission-box
+  ) > * {
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+  }
+
+  html body:has(main#home) > footer#site-footer {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: none !important;
+    padding-inline: 4vw !important;
+  }
+}
