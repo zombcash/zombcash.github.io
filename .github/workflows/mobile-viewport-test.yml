@@ -8,6 +8,7 @@ on:
     paths:
       - 'language.js'
       - 'shared-nav.js'
+      - 'cinematic-theme.css'
       - 'tests/language-transition-smoke.cjs'
       - 'tests/homepage-locales-layout-smoke.cjs'
       - 'tests/homepage-zoom-layout-smoke.cjs'
@@ -19,6 +20,7 @@ on:
     branches: [main]
     paths:
       - 'shared-nav.js'
+      - 'cinematic-theme.css'
       - 'language.js'
       - 'tests/language-transition-smoke.cjs'
       - 'index.html'
