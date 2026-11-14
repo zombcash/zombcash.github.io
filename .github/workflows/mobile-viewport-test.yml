@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - 'language.js'
+      - 'shared-nav.js'
+      - 'tests/language-transition-smoke.cjs'
+      - 'tests/homepage-locales-layout-smoke.cjs'
+      - 'tests/homepage-zoom-layout-smoke.cjs'
+      - 'tests/language-transition-smoke.cjs'
+      - 'survivor-field-manual.html'
       - 'survivor-hub.html'
       - 'tests/survivor-hub-localization-smoke.cjs'
       - '.github/workflows/mobile-viewport-test.yml'

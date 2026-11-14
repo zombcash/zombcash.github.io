@@ -3,6 +3,19 @@ name: Gallery discovery feature preview
 on:
   push:
     branches: [main, gallery-metadata-main-reconciled-20261104]
+    paths:
+      - "gallery.js"
+      - "gallery.css"
+      - "gallery.html"
+      - "**/gallery.html"
+      - "gallery-data.json"
+      - "language.js"
+      - "script.js"
+      - "scripts/sync_gallery_image_seo.py"
+      - "scripts/generate_localized_gallery_pages.py"
+      - "tests/gallery-discovery-smoke.cjs"
+      - "tests/gallery-feature-static-smoke.py"
+      - ".github/workflows/gallery-discovery-feature-preview.yml"
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened]
