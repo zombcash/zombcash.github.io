@@ -93,6 +93,8 @@ jobs:
           exit 1
       - name: Test mobile layouts against current checkout
         run: node tests/mobile-viewport-smoke.cjs
+      - name: Test language switching after page transitions
+        run: node tests/language-transition-smoke.cjs
       - name: Test homepage layout across all locales and viewports
         if: always()
         run: node tests/homepage-locales-layout-smoke.cjs
