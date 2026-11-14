@@ -34,9 +34,15 @@ const locales = ['de', 'fr', 'it', 'ja', 'zh-CN', 'ru', 'tr', 'hi'];
     await page.locator('.language-option[data-lang="ja"]').click();
     await page.waitForFunction(() => document.documentElement.lang === 'ja' && localStorage.getItem('zombcash-language') === 'ja', null, { timeout: 15000 });
     await page.waitForURL(url => url.pathname === '/zombie-lab-archives.html' && url.searchParams.get('lang') === 'ja', { timeout: 5000 }).catch(() => {});
-    await page.locator('#zsh-navigation a[href="/ja/survivor-field-manual.html"]').click();
+    await page.locator('.zsh-nav a[href="/ja/survivor-field-manual.html"]').click();
     await page.waitForURL(url => url.pathname === '/ja/survivor-field-manual.html', { timeout: 20000, waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => document.documentElement.lang === 'ja', null, { timeout: 15000 });
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => document.documentElement.lang === 'ja' && localStorage.getItem('zombcash-language') === 'ja' && location.pathname === '/ja/survivor-field-manual.html', null, { timeout: 15000 });
+    await page.goBack({ waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => document.documentElement.lang === 'ja' && localStorage.getItem('zombcash-language') === 'ja' && location.pathname === '/zombie-lab-archives.html' && new URLSearchParams(location.search).get('lang') === 'ja', null, { timeout: 15000 });
+    await page.goForward({ waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => document.documentElement.lang === 'ja' && localStorage.getItem('zombcash-language') === 'ja' && location.pathname === '/ja/survivor-field-manual.html', null, { timeout: 15000 });
 
     if (errors.length) throw new Error('JavaScript errors: ' + errors.join(' | '));
     console.log('PASS: 18 language transitions, persistent locale, one shared switcher, fallback routing and localized internal navigation.');
