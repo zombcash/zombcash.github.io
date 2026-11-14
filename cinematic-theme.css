@@ -10,6 +10,13 @@
   --zc-moss:#aab58e;
   --zc-moss-bright:#c2cca0;
   --zc-alert:#c47b70;
+  --zc-green:#aab58e;
+  --green:#aab58e;
+  --green2:#c2cca0;
+  --muted:#a0aaa6;
+  --line:#343d40;
+  --white:#e2e4dc;
+  --purple:#8d8794;
   --zc-radius:3px;
 }
 html{background:var(--zc-graphite)!important;scroll-behavior:smooth}
