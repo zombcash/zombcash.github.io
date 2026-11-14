@@ -32,24 +32,46 @@ const locales = ['de', 'fr', 'it', 'ja', 'zh-CN', 'ru', 'tr', 'hi'];
 
     await page.goto(new URL('zombie-lab-archives.html', BASE).href, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await page.waitForSelector('.language-trigger', { timeout: 15000 });
-    await openSwitcher();
-    await page.locator('.language-option[data-lang="ja"]').click();
-    await page.waitForFunction(() => document.documentElement.lang === 'ja' && localStorage.getItem('zombcash-language') === 'ja', null, { timeout: 15000 });
-    await page.waitForURL(url => url.pathname === '/zombie-lab-archives.html' && url.searchParams.get('lang') === 'ja', { timeout: 5000 });
-    const localizedManualLink = page.locator('.zsh-nav a[href="/ja/survivor-field-manual.html"]');
-    await localizedManualLink.waitFor({ state: 'visible', timeout: 5000 });
-    await localizedManualLink.click();
-    await page.waitForURL(url => url.pathname === '/ja/survivor-field-manual.html', { timeout: 20000, waitUntil: 'domcontentloaded' });
-    await page.waitForFunction(() => document.documentElement.lang === 'ja', null, { timeout: 15000 });
-    await page.reload({ waitUntil: 'domcontentloaded' });
-    await page.waitForFunction(() => document.documentElement.lang === 'ja' && localStorage.getItem('zombcash-language') === 'ja' && location.pathname === '/ja/survivor-field-manual.html', null, { timeout: 15000 });
-    await page.goBack({ waitUntil: 'domcontentloaded' });
-    await page.waitForFunction(() => document.documentElement.lang === 'ja' && localStorage.getItem('zombcash-language') === 'ja' && location.pathname === '/zombie-lab-archives.html' && new URLSearchParams(location.search).get('lang') === 'ja', null, { timeout: 15000 });
-    await page.goForward({ waitUntil: 'domcontentloaded' });
-    await page.waitForFunction(() => document.documentElement.lang === 'ja' && localStorage.getItem('zombcash-language') === 'ja' && location.pathname === '/ja/survivor-field-manual.html', null, { timeout: 15000 });
+    for (const locale of locales) {
+      await openSwitcher();
+      await page.locator('.language-option[data-lang="' + locale + '"]').click();
+      await page.waitForFunction(code => document.documentElement.lang === code
+        && localStorage.getItem('zombcash-language') === code
+        && new URLSearchParams(location.search).get('lang') === code, locale, { timeout: 15000 });
+      await page.waitForURL(url => url.pathname === '/zombie-lab-archives.html' && url.searchParams.get('lang') === locale, { timeout: 5000 });
+
+      const localizedManualLink = page.locator('.zsh-nav a[href="/' + locale + '/survivor-field-manual.html"]');
+      await localizedManualLink.waitFor({ state: 'visible', timeout: 5000 });
+      await localizedManualLink.click();
+      await page.waitForURL(url => url.pathname === '/' + locale + '/survivor-field-manual.html', { timeout: 20000, waitUntil: 'domcontentloaded' });
+      await page.waitForFunction(code => document.documentElement.lang === code
+        && localStorage.getItem('zombcash-language') === code, locale, { timeout: 15000 });
+
+      if (locale === 'ja') {
+        await page.reload({ waitUntil: 'domcontentloaded' });
+        await page.waitForFunction(() => document.documentElement.lang === 'ja'
+          && localStorage.getItem('zombcash-language') === 'ja'
+          && location.pathname === '/ja/survivor-field-manual.html', null, { timeout: 15000 });
+        await page.goBack({ waitUntil: 'domcontentloaded' });
+        await page.waitForFunction(() => document.documentElement.lang === 'ja'
+          && localStorage.getItem('zombcash-language') === 'ja'
+          && location.pathname === '/zombie-lab-archives.html'
+          && new URLSearchParams(location.search).get('lang') === 'ja', null, { timeout: 15000 });
+        await page.goForward({ waitUntil: 'domcontentloaded' });
+        await page.waitForFunction(() => document.documentElement.lang === 'ja'
+          && localStorage.getItem('zombcash-language') === 'ja'
+          && location.pathname === '/ja/survivor-field-manual.html', null, { timeout: 15000 });
+      }
+      await page.goBack({ waitUntil: 'domcontentloaded' });
+      await page.waitForFunction(code => document.documentElement.lang === code
+        && localStorage.getItem('zombcash-language') === code
+        && location.pathname === '/zombie-lab-archives.html'
+        && new URLSearchParams(location.search).get('lang') === code, locale, { timeout: 15000 });
+      console.log('PASS: fallback routing and browser-back persistence for ' + locale);
+    }
 
     if (errors.length) throw new Error('JavaScript errors: ' + errors.join(' | '));
-    console.log('PASS: all eight English-to-locale and locale-to-English pairs, fallback URL routing, reload/back/forward persistence, one shared switcher and localized internal navigation.');
+    console.log('PASS: all eight English-to-locale and locale-to-English pairs, all eight fallback-page routes, reload/back/forward persistence, one shared switcher and localized internal navigation.');
   } catch (error) {
     console.error('FAIL: language transition smoke test:', error);
     process.exitCode = 1;
