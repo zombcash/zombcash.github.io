@@ -11,7 +11,6 @@ on:
       - 'tests/language-transition-smoke.cjs'
       - 'tests/homepage-locales-layout-smoke.cjs'
       - 'tests/homepage-zoom-layout-smoke.cjs'
-      - 'tests/language-transition-smoke.cjs'
       - 'survivor-field-manual.html'
       - 'survivor-hub.html'
       - 'tests/survivor-hub-localization-smoke.cjs'
@@ -21,6 +20,7 @@ on:
     paths:
       - 'shared-nav.js'
       - 'language.js'
+      - 'tests/language-transition-smoke.cjs'
       - 'index.html'
       - 'homepage-visual.css'
       - 'tests/homepage-locales-layout-smoke.cjs'
