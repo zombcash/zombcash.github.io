@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#080b11">
+<title>LINE Japan Insights | ZombieCash</title>
+<style>
+:root{color-scheme:dark;--bg:#080b11;--panel:#111923;--line:#293746;--green:#a5f45b;--cyan:#55d9e8;--muted:#91a0ae;--text:#edf4f8;--red:#ff7777}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -15%,#19303a 0,transparent 48%),var(--bg);color:var(--text);font:16px/1.5 system-ui,Segoe UI,sans-serif}.shell{max-width:1120px;margin:auto;padding:28px 20px 60px}.top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}.brand{font-size:11px;letter-spacing:2px;color:var(--cyan);font-weight:800}.back{color:var(--green);text-decoration:none}.hero{padding:38px 0 20px}h1{font-size:clamp(28px,5vw,44px);line-height:1.12;margin:8px 0;color:var(--green)}.sub{color:var(--muted);max-width:720px}.panel{background:linear-gradient(145deg,#121d27,#0c121a);border:1px solid var(--line);border-radius:12px;padding:20px;margin:18px 0}.auth{display:flex;gap:10px;flex-wrap:wrap}.auth input{flex:1;min-width:230px;background:#080d13;border:1px solid #405263;border-radius:7px;color:var(--text);padding:12px;font:13px monospace}.btn{background:#19301d;border:1px solid #5b8545;color:#c8ff9c;padding:11px 16px;border-radius:7px;font-weight:800;cursor:pointer}.btn.secondary{background:#172431;border-color:#405263;color:#d8e8f4}.notice{color:var(--muted);font-size:13px;margin:9px 0 0;min-height:20px}.notice.error{color:var(--red)}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.metric{background:#0a1118;border:1px solid var(--line);padding:16px;border-radius:9px;min-width:0}.metric span{display:block;color:var(--muted);font-size:11px;letter-spacing:1px;text-transform:uppercase}.metric strong{display:block;font-size:clamp(23px,3vw,34px);margin-top:7px;color:var(--green);overflow-wrap:anywhere}.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}h2{font-size:16px;margin:0 0 12px}.filters{display:flex;gap:8px;flex-wrap:wrap}.filter{border:1px solid var(--line);background:#0a1118;color:var(--muted);padding:7px 12px;border-radius:20px;cursor:pointer}.filter.active{color:var(--green);border-color:#638a4a}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:650px}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid #24313d;font-size:13px}th{color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase}td.num{font-variant-numeric:tabular-nums}.tag{color:var(--cyan);font-size:11px}.empty{padding:24px;text-align:center;color:var(--muted);border:1px dashed #344655;border-radius:8px}.foot{color:var(--muted);font-size:12px;margin-top:18px}.hidden{display:none}@media(max-width:760px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.shell{padding:18px 14px 40px}.panel{padding:15px}}
+</style>
+</head>
+<body><main class="shell">
+<div class="top"><div class="brand">ZOMBCASH // OUTBREAK INTELLIGENCE</div><a class="back" href="/">← Main site</a></div>
+<header class="hero"><div class="brand">JAPAN COMMUNITY</div><h1>LINE Broadcast Insights</h1><p class="sub">Private analytics for ZombieCash Japan · @022khlio. Delivery, impressions and clicks for news and meme broadcasts.</p></header>
+<section class="panel">
+<h2>Secure access</h2>
+<div class="auth"><input id="token" type="password" autocomplete="off" placeholder="Paste NEWS_PUBLISH_TOKEN from FadeHost"><button class="btn" id="load">Load statistics</button><button class="btn secondary" id="clear">Clear</button></div>
+<p class="notice" id="status" role="status">The token is used only for this page session and is not saved in browser storage.</p>
+</section>
+<section id="dashboard" class="hidden">
+<div class="metrics">
+<div class="metric"><span>Broadcasts</span><strong id="broadcasts">—</strong></div>
+<div class="metric"><span>Delivered</span><strong id="delivered">—</strong></div>
+<div class="metric"><span>Unique impressions</span><strong id="impressions">—</strong></div>
+<div class="metric"><span>Unique clicks</span><strong id="clicks">—</strong></div>
+</div>
+<section class="panel"><div class="section-head"><h2>Publication history</h2><div class="filters"><button class="filter active" data-filter="all">All</button><button class="filter" data-filter="news">News</button><button class="filter" data-filter="meme">Memes</button></div></div>
+<div class="table-wrap"><table><thead><tr><th>Date / time</th><th>Type</th><th>Delivered</th><th>Impressions</th><th>Clicks</th><th>Metrics</th></tr></thead><tbody id="rows"></tbody></table></div><div id="empty" class="empty hidden">No broadcasts with statistics yet. The first message sent after analytics deployment will appear here once LINE makes its metrics available.</div></section>
+<p class="foot" id="updated"></p>
+</section>
+<p class="foot">LINE may return unavailable interaction metrics for small audiences (typically below 20 users/events). Metrics are collected for up to 14 days after each broadcast. Older broadcasts sent before request-ID tracking cannot be backfilled.</p>
+</main>
+<script>
+(function(){
+ const API='https://zombcash-bot.fadehost.app/api/line/insights';
+ const $=id=>document.getElementById(id); let posts=[]; let filter='all';
+ const fmt=v=>v===null||v===undefined?'—':Number(v).toLocaleString();
+ function render(){
+  const list=posts.filter(p=>filter==='all'||p.kind===filter);
+  $('rows').innerHTML=list.map(p=>'<tr><td>'+new Date(p.sentAt*1000).toLocaleString()+'</td><td class="tag">'+(p.kind==='meme'?'MEME':'NEWS')+(p.category?' · '+String(p.category).replace(/[<>]/g,''):'')+'</td><td class="num">'+fmt(p.delivered)+'</td><td class="num">'+fmt(p.uniqueImpression)+'</td><td class="num">'+fmt(p.uniqueClick)+'</td><td>'+(p.available?'Available':'Waiting')+'</td></tr>').join('');
+  $('empty').classList.toggle('hidden',list.length!==0);
+ }
+ async function load(){
+  const token=$('token').value.trim(); if(!token){$('status').textContent='Enter the token from FadeHost.';$('status').className='notice error';return}
+  $('load').disabled=true;$('status').textContent='Loading LINE metrics…';$('status').className='notice';
+  try{
+   const res=await fetch(API,{headers:{Authorization:'Bearer '+token},cache:'no-store'});
+   if(res.status===401)throw new Error('Access denied. Check NEWS_PUBLISH_TOKEN.');
+   if(!res.ok)throw new Error('API error '+res.status+'. Try again later.');
+   const data=await res.json();posts=data.posts||[];
+   $('broadcasts').textContent=fmt(data.broadcasts);
+   $('delivered').textContent=fmt(data.totals&&data.totals.delivered);
+   $('impressions').textContent=fmt(data.totals&&data.totals.uniqueImpression);
+   $('clicks').textContent=fmt(data.totals&&data.totals.uniqueClick);
+   $('updated').textContent='Last refreshed: '+new Date(data.updatedAt*1000).toLocaleString()+' · Insights available for '+fmt(data.withInsights)+' / '+fmt(data.broadcasts)+' broadcasts.';
+   $('dashboard').classList.remove('hidden');$('status').textContent='Statistics loaded. Token remains only in this page memory.';render();
+  }catch(e){$('status').textContent=e.message;$('status').className='notice error';}
+  finally{$('load').disabled=false}
+ }
+ $('load').addEventListener('click',load);
+ $('clear').addEventListener('click',()=>{$('token').value='';posts=[];$('dashboard').classList.add('hidden');$('status').textContent='Token cleared from this page.';$('status').className='notice'});
+ document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));render()}));
+})();
+</script></body></html>
