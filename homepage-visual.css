@@ -3208,3 +3208,89 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     padding-inline: 4vw !important;
   }
 }
+
+/* 2026-11-14 — the visitor and campaign dashboards are BODY siblings of
+   main#home, not children of it. Give them the same zoom-aware content rail. */
+@media (min-width: 1800px) {
+  html body:has(main#home) > section.site-visits,
+  html body:has(main#home) > section.campaign-dashboard {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: none !important;
+    padding-inline: 4vw !important;
+  }
+
+  html body:has(main#home) > section.site-visits > .site-visits-inner,
+  html body:has(main#home) > section.campaign-dashboard > .campaign-dashboard-inner {
+    box-sizing: border-box !important;
+    width: min(92vw, 15000px) !important;
+    max-width: 15000px !important;
+    min-width: 0 !important;
+    margin-inline: auto !important;
+  }
+
+  html body:has(main#home) > section.site-visits > .site-visits-inner {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.35fr) repeat(3, minmax(0, .8fr)) !important;
+    align-items: center !important;
+    gap: clamp(20px, 1.2vw, 180px) !important;
+  }
+
+  html body:has(main#home) > section.campaign-dashboard > .campaign-dashboard-inner {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: clamp(18px, .8vw, 120px) !important;
+  }
+
+  html body:has(main#home) > section.campaign-dashboard .campaign-cards {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: clamp(14px, .6vw, 90px) !important;
+  }
+
+  html body:has(main#home) > section.campaign-dashboard .campaign-details {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: clamp(14px, .6vw, 90px) !important;
+  }
+
+  html body:has(main#home) > section.campaign-dashboard :is(
+    .campaign-heading h2,
+    .campaign-panel h3
+  ) {
+    font-size: clamp(28px, 1.1vw, 165px) !important;
+    line-height: 1.15 !important;
+  }
+
+  html body:has(main#home) > section.campaign-dashboard :is(
+    .campaign-heading p,
+    .campaign-card small,
+    .campaign-card span,
+    .campaign-panel,
+    .campaign-updated
+  ) {
+    font-size: clamp(16px, .48vw, 72px) !important;
+    line-height: 1.4 !important;
+  }
+
+  html body:has(main#home) > section.campaign-dashboard .campaign-card strong {
+    font-size: clamp(28px, 1vw, 150px) !important;
+    line-height: 1.1 !important;
+  }
+
+  html body:has(main#home) > section.site-visits .visits-heading h2 {
+    font-size: clamp(26px, .9vw, 135px) !important;
+  }
+
+  html body:has(main#home) > section.site-visits :is(
+    .visits-heading p,
+    .visits-stat small,
+    .visits-updated
+  ) {
+    font-size: clamp(14px, .38vw, 57px) !important;
+  }
+
+  html body:has(main#home) > section.site-visits .visits-stat strong {
+    font-size: clamp(26px, .85vw, 128px) !important;
+  }
+}
