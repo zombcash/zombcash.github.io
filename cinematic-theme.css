@@ -1,0 +1,157 @@
+/* ZombieCash — cinematic graphite / overgrown-world visual system.
+   Additive visual layer: preserves page structure, content, controls and integrations. */
+:root{
+  --zc-graphite:#090c0f;
+  --zc-panel:#101519;
+  --zc-panel-raised:#151c20;
+  --zc-line:#343d40;
+  --zc-bone:#e2e4dc;
+  --zc-muted:#a0aaa6;
+  --zc-moss:#aab58e;
+  --zc-moss-bright:#c2cca0;
+  --zc-alert:#c47b70;
+  --zc-radius:3px;
+}
+html{background:var(--zc-graphite)!important;scroll-behavior:smooth}
+body{background:var(--zc-graphite)!important;color:var(--zc-bone)!important}
+::selection{background:#aab58e55!important;color:#fff!important}
+a{transition:color .18s ease,border-color .18s ease}
+a:hover{color:var(--zc-moss-bright)}
+:focus-visible{outline:2px solid var(--zc-moss-bright)!important;outline-offset:3px!important}
+button,input,select,textarea{accent-color:var(--zc-moss)}
+/* Shared navigation: graphite glass, bone typography, restrained moss signal. */
+header.zombcash-shared-header{
+  border-bottom:1px solid #68716a55!important;
+  background:rgba(7,10,12,.96)!important;
+  box-shadow:0 8px 28px #0007!important;
+}
+header.zombcash-shared-header .zsh-mark{
+  border-color:#9ba58a!important;color:#c0c9a5!important;
+  box-shadow:inset 0 0 16px #aab58e16!important;
+}
+header.zombcash-shared-header .zsh-brand-copy,
+header.zombcash-shared-header .zsh-brand-copy .zsh-green{color:#e2e4dc!important}
+header.zombcash-shared-header .zsh-brand-copy small{color:#929d98!important}
+header.zombcash-shared-header .zsh-nav>a{color:#c0c7c1!important}
+header.zombcash-shared-header .zsh-nav>a:hover,
+header.zombcash-shared-header .zsh-nav>a[aria-current="page"]{color:#c2cca0!important}
+header.zombcash-shared-header .zsh-nav>a[aria-current="page"]{border-color:#aab58e!important}
+header.zombcash-shared-header .zsh-cta,
+header.zombcash-shared-header .zsh-actions>.zsh-home,
+header.zombcash-shared-header .zsh-actions .language-trigger,
+header.zombcash-shared-header .zsh-actions .survivor-entry-button,
+header.zombcash-shared-header .zsh-actions .top-cta,
+header.zombcash-shared-header .zsh-actions .zsh-login-button{
+  border-color:#65705e!important;background:#111719!important;color:#d5dcc5!important;
+}
+header.zombcash-shared-header .zsh-cta:hover,
+header.zombcash-shared-header .zsh-actions>.zsh-home:hover,
+header.zombcash-shared-header .zsh-actions .language-trigger:hover,
+header.zombcash-shared-header .zsh-actions .survivor-entry-button:hover,
+header.zombcash-shared-header .zsh-actions .top-cta:hover{
+  border-color:#c2cca0!important;color:#fff!important;background:#202923!important;
+}
+header.zombcash-shared-header .zsh-menu-toggle{
+  border-color:#65705e!important;background:#111719!important;color:#d5dcc5!important;
+}
+/* Legacy page headers and common interactive surfaces. */
+.topbar{background:#090d10f5!important;border-color:#343d40!important}
+.topbar nav a,.top-cta{color:#c0c7c1!important}
+.topbar nav a:hover,.top-cta:hover{color:#c2cca0!important}
+.brand-mark{border-color:#9ba58a!important;color:#c2cca0!important;box-shadow:0 0 16px #aab58e18!important}
+.green,.eyebrow,.section-kicker,.mini-label{color:#c2cca0!important}
+.btn-primary{background:#aab58e!important;border-color:#aab58e!important;color:#101511!important;box-shadow:0 0 20px #aab58e18!important}
+.btn-primary:hover{background:#c6d0a6!important;border-color:#c6d0a6!important}
+.btn-ghost,.top-cta,.card-link,.radar-refresh,.radar-filter,.activity-tab,.pill{
+  border-color:#58635a!important;color:#d0d5ca!important;background:#111719!important;
+}
+.btn-ghost:hover,.top-cta:hover,.card-link:hover,.radar-refresh:hover,.radar-filter:hover,.activity-tab:hover,.pill:hover{
+  border-color:#aab58e!important;color:#eef0e7!important;background:#1a211e!important;
+}
+.tool-card,.crew-card,.world-panel,.outbreak-panel,.zom-market-panel,.campaign-card,.campaign-panel,
+.panel,.card,.game-box,.live-radar,.zombcash-market{
+  border-color:#394346!important;background-color:#101619!important;box-shadow:0 16px 42px #0005!important;
+}
+.tool-card:hover,.crew-card:hover,.zom-market-panel:hover{border-color:#79836e!important}
+.tool-card h3,.world-panel-head h3,.section-heading h2,.intro-row h2{color:#e4e5dd!important}
+.tool-card p,.world-panel p,.section-heading p,.intro-row p{color:#a8b1ac!important}
+.tool-card li:before{color:#b8c39a!important}
+.world-panel-head{background:linear-gradient(100deg,#1b2423,#101619)!important;border-color:#394346!important}
+.world-panel:nth-child(2) .world-panel-head{background:linear-gradient(100deg,#292022,#101619)!important}
+.world-tag i,.pulse,.status-tag i{background:#aab58e!important;box-shadow:0 0 8px #aab58e!important}
+.world-panel-foot{background:#0b1012!important}
+footer,.site-footer{background:#080c0f!important;border-color:#394346!important}
+.site-footer a,.footer-contract button{color:#c2cca0!important}
+.site-footer-main{border-color:#394346!important}
+#zsh-global-footprint{background:linear-gradient(110deg,#0d1315,#111719 58%,#090c0f)!important;border-color:#596258!important}
+#zsh-global-footprint .zsh-global-footprint-heading,
+#zsh-global-footprint .zsh-global-footprint-stats strong{color:#c2cca0!important}
+#zsh-global-footprint .zsh-global-pulse{background:#aab58e!important;box-shadow:0 0 8px #aab58e!important}
+/* Home: cinematic overgrown-city treatment, monochrome atmosphere and warm field lights. */
+body:has(#home) .hero{
+  background-color:#090d0f!important;
+  background-image:
+    linear-gradient(90deg,rgba(5,8,10,.97) 0%,rgba(7,10,12,.88) 42%,rgba(8,12,13,.48) 100%),
+    linear-gradient(0deg,#090d0f 0%,transparent 42%),
+    url("https://upload.wikimedia.org/wikipedia/commons/9/91/Overgrown_city%2C_post-apocalyptic.jpg")!important;
+  background-size:cover!important;background-position:center 48%!important;
+}
+body:has(#home) .hero:before{
+  background:linear-gradient(115deg,#aab58e0b,transparent 54%,#d8ddd00b)!important;
+  border-color:#8b94814a!important;
+}
+body:has(#home) .hero-grid{opacity:.13!important}
+body:has(#home) .hero .eyebrow{
+  color:#d0d5c5!important;border-color:#7b8670!important;background:#111719d9!important;
+}
+body:has(#home) .hero h1 .alive{color:#c2cca0!important;text-shadow:0 0 24px #aab58e26!important}
+body:has(#home) .hero h1 .dead{color:#e2e4dc!important;text-shadow:0 2px 18px #000!important}
+body:has(#home) .hero-copy{color:#c0c7c1!important}
+body:has(#home) .hero-stats strong{color:#c2cca0!important}
+body:has(#home) .hero-stats span{color:#a0aaa6!important}
+body:has(#home) .hero-bottom{border-color:#65705e!important;color:#a0aaa6!important}
+body:has(#home) .zc-outbreak-ribbons{background:#080c0f!important;border-color:#394346!important}
+body:has(#home) .zc-ribbon{
+  --ribbon-color:#c0c9a5!important;--ribbon-tint:#202722!important;
+  border-color:#687261!important;border-radius:2px!important;box-shadow:inset 0 0 16px #aab58e0a!important;
+  background:linear-gradient(90deg,#1a211d,#0d1214 58%,#0d1214)!important;
+}
+body:has(#home) .zc-ribbon--community{--ribbon-color:#c3c8c0!important;--ribbon-tint:#252a2b!important}
+body:has(#home) .zc-ribbon--market{--ribbon-color:#c6a98e!important;--ribbon-tint:#2c2520!important}
+body:has(#home) .zc-ribbon-label{background:linear-gradient(90deg,#202722,#141a1a 92%)!important}
+body:has(#home) .zc-ribbon-copy{color:#d2d7d1!important}
+body:has(#home) .zc-ribbon-copy b{color:#d0d8bd!important}
+body:has(#home) .field-manual-spotlight,
+body:has(#home) .zc-hero-sponsor-panel{
+  border-color:#586258!important;background:linear-gradient(110deg,#111a18ed,#111519e8)!important;
+  box-shadow:0 14px 42px #0009!important;
+}
+body:has(#home) .zc-hero-sponsor-promo{background:linear-gradient(120deg,#1a211e,#111719)!important}
+body:has(#home) .living-world{
+  background:linear-gradient(180deg,#090d0ff2,#090d0ff7),url("https://upload.wikimedia.org/wikipedia/commons/b/b2/Post-apocalyptic_scenery.jpg") center/cover!important;
+}
+body:has(#home) .world-panel{border-color:#3b4546!important}
+body:has(#home) .world-panel-head{background:linear-gradient(100deg,#202826d9,#101619e8)!important}
+body:has(#home) .world-panel:nth-child(2) .world-panel-head{background:linear-gradient(100deg,#292323e8,#101619e8)!important}
+body:has(#home) .world-panel-foot{background:#0a1012ef!important}
+body:has(#home) .tool-card{background:linear-gradient(110deg,#0d1316 0%,#151b1d 65%,#101619 100%)!important}
+body:has(#home) .tool-card:after{opacity:.035!important}
+body:has(#home) .tool-card:before{opacity:.14!important}
+body:has(#home) .tool-card .card-link{color:#c2cca0!important}
+body:has(#home) .zombcash-market{background:linear-gradient(135deg,#171e1d,#0c1114)!important;border-color:#48534c!important}
+body:has(#home) .zombcash-market-grid>div{background:#101719!important;border-color:#394346!important}
+body:has(#home) .zombcash-market-grid small{color:#a0aaa6!important}
+body:has(#home) .zombcash-market-grid strong{color:#e2e4dc!important}
+body:has(#home) .zombcash-market-bottom a,body:has(#home) .zombcash-market-bottom button{color:#c2cca0!important;border-color:#65705e!important}
+body:has(#home) .hero-zombie{filter:grayscale(.58) saturate(.62) contrast(1.08) drop-shadow(0 0 22px #aab58e1c)!important}
+/* Keep alerts distinct without letting red dominate the interface. */
+.alarm-tag,.status-danger,.error-text{color:#c47b70!important}
+@media(max-width:760px){
+  body:has(#home) .hero{background-position:58% center!important}
+  body:has(#home) .zc-ribbon-label{padding-inline:9px!important}
+  header.zombcash-shared-header{backdrop-filter:blur(10px)!important}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto!important}
+  *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
