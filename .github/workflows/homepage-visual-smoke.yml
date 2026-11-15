@@ -47,6 +47,11 @@ jobs:
               "tr/index.html": "tr",
               "hi/index.html": "hi",
           }
+          html = Path("index.html").read_text(encoding="utf-8")
+          assert "if(document.getElementById('zctv-channel-hub'))return;" not in html, "promo-video initializer must not be disabled by the TV hub"
+          assert "if(window.__zcPromoVideoLibraryInitialized)return;" in html, "promo-video initializer must retain duplicate-init protection"
+          assert "fetch('promo-videos.json?v=20261105-i18n1'" in html, "promo-video manifest loader missing"
+          print("OK homepage promo-video initializer is enabled alongside the TV channel hub")
           for filename, lang in pages.items():
               html = Path(filename).read_text(encoding="utf-8")
               assert f'<html lang="{lang}">' in html, f"{filename}: wrong language tag"
