@@ -7,23 +7,37 @@ const shared = read("shared-nav.js");
 const tv = read("assets/js/zctv-player.js");
 const news = read("script.js");
 const recovery = read("living-world-recovery.js");
+const localePaths = ["de/index.html", "fr/index.html", "it/index.html", "ja/index.html", "zh-CN/index.html", "ru/index.html", "tr/index.html", "hi/index.html"];
+const homepages = [["index.html", index], ...localePaths.map(path => [path, read(path)])];
 
-assert(!index.includes('<script src="https://plugin.jup.ag/plugin-v1.js"></script>'),
-  "Jupiter plugin must not be parser-blocking in the homepage head");
-assert(index.includes("new IntersectionObserver") && index.includes("observer.observe(terminal)"),
-  "Jupiter must load only when the swap panel approaches the viewport");
-assert(index.includes("script.async = true") && index.includes("script.fetchPriority = 'low'"),
-  "Jupiter plugin must load asynchronously with low priority");
-assert(index.includes('preload="none"'), "Promo video must not fetch media metadata on initial page load");
-assert(index.includes('loading="lazy" fetchpriority="low"'),
-  "Below-the-fold ZombieCash TV host art must load lazily");
-assert(index.includes('rel="preload" as="image"') && index.includes("Overgrown_city%2C_post-apocalyptic.jpg") && index.includes('fetchpriority="high"'),
-  "Homepage CSS hero background must be preloaded at high priority");
-assert(index.includes("display=optional"), "Homepage brand fonts must avoid late font-swap layout shifts");
+for (const [path, page] of homepages) {
+  assert(!page.includes('<script src="https://plugin.jup.ag/plugin-v1.js"></script>'),
+    path + " must not load the Jupiter plugin as a parser-blocking script");
+  assert(page.includes("new IntersectionObserver") && page.includes("observer.observe(terminal)"),
+    path + " must load Jupiter only when the Swap panel approaches the viewport");
+  assert(page.includes("script.async = true") && page.includes("script.fetchPriority = 'low'"),
+    path + " must load Jupiter asynchronously at low priority");
+  assert(page.includes('preload="none"'), path + " must not preload promo video metadata");
+  assert(page.includes('loading="lazy" fetchpriority="low"'),
+    path + " must lazy-load below-the-fold TV host art");
+  assert(page.includes('rel="preload" as="image"') &&
+         page.includes("Overgrown_city%2C_post-apocalyptic.jpg") &&
+         page.includes('fetchpriority="high"'),
+    path + " must preload the CSS hero background at high priority");
+  assert(page.includes("display=optional"), path + " must use optional display for brand fonts");
+}
+
 assert(index.includes('src="runtime-fixes.js?v=20261027-2" defer') &&
        index.includes('src="script.js?v=market-status-fix-20261029-1" defer') &&
        index.includes('src="living-world-recovery.js?v=news-commentary-sync-20261021-2" defer'),
-  "Homepage utility scripts must be deferred");
+  "English homepage utility scripts must be deferred");
+for (const path of localePaths) {
+  const page = read(path);
+  assert(page.includes('src="/runtime-fixes.js?v=20261027-2" defer') &&
+         page.includes('src="/script.js?v=radar-icon-fallback-20261027-3" defer') &&
+         page.includes('src="/living-world-recovery.js?v=news-commentary-sync-20261021-2" defer'),
+    path + " utility scripts must be deferred");
+}
 
 assert(shared.includes("requestIdleCallback(loadGaScript") && shared.includes("gaScript.fetchPriority = 'low'"),
   "GA4 library must load after page load/idle with low priority");
