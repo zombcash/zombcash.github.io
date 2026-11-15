@@ -21,9 +21,16 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
         return count && count.textContent.trim() !== 'LOADING VIDEO LIBRARY…';
       }, null, { timeout: 15000 }).catch(() => {});
 
-      // The TV player is intentionally lazy-loaded. Scroll it into the observer
-      // margin before asserting that its featured source has been assigned.
+      // The TV player and its poster must stay unloaded while they are far below
+      // the initial viewport. Scroll it into the observer margin only after this check.
       const promoPlayer = page.locator('#zctv-channel-hub .zctv-player-mount #zc-promo-player');
+      const initialMedia = await promoPlayer.evaluate(video => ({
+        src: video.getAttribute('src'),
+        poster: video.getAttribute('poster')
+      }));
+      if (initialMedia.src || initialMedia.poster) {
+        throw new Error('TV media loaded before the player approached the viewport: ' + JSON.stringify(initialMedia));
+      }
       await promoPlayer.scrollIntoViewIfNeeded();
       await page.waitForFunction(() => {
         const video = document.getElementById('zc-promo-player');
