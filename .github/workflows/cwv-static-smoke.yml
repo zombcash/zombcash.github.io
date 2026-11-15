@@ -1,0 +1,38 @@
+name: Core Web Vitals Static Guard
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "shared-nav.js"
+      - "assets/js/zctv-player.js"
+      - "script.js"
+      - "living-world-recovery.js"
+      - "tests/cwv-static-smoke.cjs"
+      - ".github/workflows/cwv-static-smoke.yml"
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "shared-nav.js"
+      - "assets/js/zctv-player.js"
+      - "script.js"
+      - "living-world-recovery.js"
+      - "tests/cwv-static-smoke.cjs"
+      - ".github/workflows/cwv-static-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check performance loading safeguards
+        run: node tests/cwv-static-smoke.cjs
