@@ -141,8 +141,10 @@
 </script>
 <title>ZombieCash ($ZOMBCASH) on Solana — The Undead Internet</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://upload.wikimedia.org">
+<link rel="preload" as="image" href="https://upload.wikimedia.org/wikipedia/commons/9/91/Overgrown_city%2C_post-apocalyptic.jpg" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=optional" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=tools-card-bg-20261110-1">
 <style id="zombcash-hero-v8-inline">
 /* V8 emergency inline hero override: intentionally distinct from cached external CSS */
@@ -582,7 +584,7 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 @media(max-width:560px){.jupiter-buy-section{padding:48px 5%}.jupiter-buy-layout{margin-top:20px;gap:16px}.jupiter-buy-copy{padding:19px}.jupiter-terminal-top{padding:0 11px;font-size:7px}#jupiter-zombcash-terminal{min-height:560px}}
 </style>
 <!-- Current official Jupiter Plugin (replaces deprecated Jupiter Terminal v4). -->
-<script src="https://plugin.jup.ag/plugin-v1.js"></script>
+
 
 <link rel="stylesheet" href="site-polish.css?v=20261109-video-cards1">
 
@@ -1031,7 +1033,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
     </div>
     <div class="zc-promo-player-wrap">
       <div class="zc-promo-player-top"><span><i></i> ZC // PROMO TRANSMISSION</span><span id="zc-promo-version">ARCHIVE</span></div>
-      <video id="zc-promo-player" controls playsinline preload="metadata" aria-label="ZombieCash promotional video">
+      <video id="zc-promo-player" controls playsinline preload="none" aria-label="ZombieCash promotional video">
         <p>Your browser cannot play this video. <a href="https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10">Open the video release instead.</a></p>
       </video>
       <div class="zc-promo-player-foot"><span>PLAY ON DEMAND · SOUND ON</span><a id="zc-promo-download" href="https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10" target="_blank" rel="noopener noreferrer">OPEN / DOWNLOAD ↗</a></div>
@@ -1044,7 +1046,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 <div class="zctv-inner"><div class="zctv-kicker"><i></i> ZOMBIECASH TV // BROADCAST STUDIO</div>
 <div class="zctv-layout">
 <div class="zctv-intro"><span class="eyebrow">THE UNDEAD INTERNET — ON AIR</span><h2 id="zctv-title">THREE CHANNELS.<br><span>ONE UNDEAD SIGNAL.</span></h2><p>Meet your host and tune into the ZombieCash broadcast network. Choose a channel below — every show plays in the same screen.</p><div class="zctv-host-tag">☣ <div>YOUR ZOMBIECASH HOST<small>Live from the outbreak studio</small></div></div></div>
-<div class="zctv-host-art"><img src="/assets/images/zombcash-tv-raven.png" alt="Raven, ZombieCash TV host in her neon broadcast studio, wearing a ZOMBCASH shirt" loading="eager" fetchpriority="high" decoding="async"></div>
+<div class="zctv-host-art"><img src="/assets/images/zombcash-tv-raven.png" alt="Raven, ZombieCash TV host in her neon broadcast studio, wearing a ZOMBCASH shirt" loading="lazy" fetchpriority="low" decoding="async"></div>
 <div class="zctv-player-column"><div class="zctv-live-label"><strong>● NOW PLAYING</strong><span>ON-DEMAND TRANSMISSIONS</span></div><div class="zctv-player-mount" data-zctv-player-mount></div><div class="zctv-archive"><div class="zctv-archive-head"><span>EPISODE ARCHIVE</span><span data-zctv-archive-title>ALL EPISODES</span></div><div class="zctv-episodes" data-zctv-episodes><div class="zctv-empty">No episodes are published in this channel yet.</div></div></div></div>
 </div>
 <div class="zctv-channels" role="group" aria-label="ZombieCash TV channels">
@@ -1696,9 +1698,9 @@ footer {
 }
 </style>
 
-<script src="runtime-fixes.js?v=20261027-2"></script>
-<script src="script.js?v=market-status-fix-20261029-1"></script>
-<script src="living-world-recovery.js?v=news-commentary-sync-20261021-2"></script>
+<script src="runtime-fixes.js?v=20261027-2" defer></script>
+<script src="script.js?v=market-status-fix-20261029-1" defer></script>
+<script src="living-world-recovery.js?v=news-commentary-sync-20261021-2" defer></script>
 <script id="jupiter-zombcash-init">
 (() => {
   const terminal = document.getElementById('jupiter-zombcash-terminal');
@@ -1731,14 +1733,30 @@ footer {
       fallback();
     }
   };
-  if (window.Jupiter && typeof window.Jupiter.init === 'function') init();
-  else {
-    const script = document.querySelector('script[src*="plugin.jup.ag/plugin-v1.js"]');
-    if (script) {
-      script.addEventListener('load', init, {once:true});
-      script.addEventListener('error', fallback, {once:true});
-      setTimeout(() => { if (!window.Jupiter) fallback(); }, 12000);
-    } else fallback();
+  let jupiterLoadStarted = false;
+  const loadJupiter = () => {
+    if (jupiterLoadStarted) return;
+    jupiterLoadStarted = true;
+    if (window.Jupiter && typeof window.Jupiter.init === 'function') { init(); return; }
+    const script = document.createElement('script');
+    script.src = 'https://plugin.jup.ag/plugin-v1.js';
+    script.async = true;
+    script.fetchPriority = 'low';
+    script.addEventListener('load', init, {once:true});
+    script.addEventListener('error', fallback, {once:true});
+    document.head.appendChild(script);
+    setTimeout(() => { if (!window.Jupiter) fallback(); }, 12000);
+  };
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        observer.disconnect();
+        loadJupiter();
+      }
+    }, {rootMargin:'650px 0px'});
+    observer.observe(terminal);
+  } else {
+    loadJupiter();
   }
 })();
 </script>

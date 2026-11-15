@@ -321,13 +321,54 @@
     if (promoNext) promoNext.disabled = total < 2 || promoIndex >= total - 1;
     if (promoRelease) promoRelease.href = 'https://github.com/zombcash/zombcash.github.io/releases';
   }
+  let featuredMediaObserver = null;
+  let featuredMediaLoaded = false;
+  let pendingFeaturedMediaSrc = '';
+
+  function cancelDeferredFeaturedMedia() {
+    if (featuredMediaObserver) {
+      featuredMediaObserver.disconnect();
+      featuredMediaObserver = null;
+    }
+    pendingFeaturedMediaSrc = '';
+  }
+
+  function loadPlayerMedia(src) {
+    if (!player || !src) return;
+    cancelDeferredFeaturedMedia();
+    featuredMediaLoaded = true;
+    player.poster = FEATURED_POSTER;
+    player.src = src;
+    player.load();
+  }
+
+  function queueFeaturedMedia(src) {
+    if (!player || !src) return;
+    if (featuredMediaLoaded) {
+      loadPlayerMedia(src);
+      return;
+    }
+    pendingFeaturedMediaSrc = src;
+    if (!('IntersectionObserver' in window)) {
+      loadPlayerMedia(src);
+      return;
+    }
+    if (featuredMediaObserver) return;
+    featuredMediaObserver = new IntersectionObserver(function (entries) {
+      if (entries.some(function (entry) { return entry.isIntersecting; })) {
+        const pending = pendingFeaturedMediaSrc;
+        cancelDeferredFeaturedMedia();
+        if (pending) loadPlayerMedia(pending);
+      }
+    }, { rootMargin: '650px 0px' });
+    featuredMediaObserver.observe(player);
+  }
+
   function showFeaturedPromo() {
     if (!player || currentId && currentId !== 'featured-promo') return;
     const item = promoVideos[promoIndex] || { title: 'ZombieCash Promo Video', tag: 'FEATURED PROMO', date: '2026-10-24', src: FEATURED_VIDEO, releaseUrl: 'https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10' };
     player.pause();
-    player.poster = FEATURED_POSTER;
-    player.src = item.src || FEATURED_VIDEO;
-    player.load();
+    queueFeaturedMedia(item.src || FEATURED_VIDEO);
     currentId = 'featured-promo';
     text(version, item.tag || 'FEATURED PROMO');
     text(status, (item.title || 'OFFICIAL ZOMBIECASH PROMO') + ' · PRESS PLAY');
@@ -371,6 +412,7 @@
   }
   function clearPlayer() {
     if (!player) return;
+    cancelDeferredFeaturedMedia();
     player.pause();
     player.removeAttribute('src');
     player.load();
@@ -392,8 +434,7 @@
     const src = videoUrl(episode.episode_id);
     if (currentId !== episode.episode_id) {
       player.pause();
-      player.src = src;
-      player.load();
+      loadPlayerMedia(src);
       currentId = episode.episode_id;
     }
     setSignal(false, 'ARCHIVE PLAYBACK');
@@ -451,7 +492,7 @@
     if (mode === 'live') {
       if (archive) archive.hidden = true;
       clearPlayer();
-      player.src = liveUrl; player.load();
+      loadPlayerMedia(liveUrl);
       text(version, 'LIVE TRANSMISSION'); text(status, 'CONNECTING TO LIVE SIGNAL…');
       if (download) { download.removeAttribute('href'); download.textContent = 'LIVE TRANSMISSION'; }
       setSignal(false, 'CONNECTING TO LIVE');
