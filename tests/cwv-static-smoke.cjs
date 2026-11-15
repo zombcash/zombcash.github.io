@@ -8,7 +8,7 @@ const tv = read("assets/js/zctv-player.js");
 const news = read("script.js");
 const recovery = read("living-world-recovery.js");
 
-assert(!/<script\\s+src=["']https:\\/\\/plugin\\.jup\\.ag\\/plugin-v1\\.js["'][^>]*><\\/script>/i.test(index),
+assert(!index.includes('<script src="https://plugin.jup.ag/plugin-v1.js"></script>'),
   "Jupiter plugin must not be parser-blocking in the homepage head");
 assert(index.includes("new IntersectionObserver") && index.includes("observer.observe(terminal)"),
   "Jupiter must load only when the swap panel approaches the viewport");
