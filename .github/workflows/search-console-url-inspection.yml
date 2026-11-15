@@ -25,10 +25,10 @@ permissions:
 jobs:
   inspect:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 30
     steps:
       - name: Install Google API client
-        run: python -m pip install --disable-pip-version-check requests google-api-python-client google-auth
+        run: python -m pip install --disable-pip-version-check requests google-api-python-client google-auth google-auth-httplib2
 
       - name: Inspect every sitemap URL in Google Search
         env:
@@ -48,6 +48,8 @@ jobs:
           from google.oauth2 import service_account
           from googleapiclient.discovery import build
           from googleapiclient.errors import HttpError
+          from google_auth_httplib2 import AuthorizedHttp
+          import httplib2
 
           site_url = "https://zombcash.github.io/"
           sitemap_url = "https://zombcash.github.io/sitemap.xml"
@@ -97,7 +99,8 @@ jobs:
           credentials = service_account.Credentials.from_service_account_info(
               info, scopes=["https://www.googleapis.com/auth/webmasters"]
           )
-          service = build("searchconsole", "v1", credentials=credentials, cache_discovery=False)
+          authorized_http = AuthorizedHttp(credentials, http=httplib2.Http(timeout=30))
+          service = build("searchconsole", "v1", http=authorized_http, cache_discovery=False)
           print(f"Service account: {info.get('client_email', '(email missing)')}")
           print(f"Property: {site_url}")
 
@@ -143,13 +146,13 @@ jobs:
 
           for number, url in enumerate(selected_urls, start=start_index + 1):
               print("\\n" + "=" * 78)
-              print(f"[{number}/{len(urls)}] URL: {url}")
+              print(f"[{number}/{len(urls)}] URL: {url}", flush=True)
               data = None
               for attempt in range(1, 4):
                   try:
                       data = service.urlInspection().index().inspect(
                           body={"inspectionUrl": url, "siteUrl": site_url, "languageCode": "en-US"}
-                      ).execute()
+                      ).execute(num_retries=0)
                       break
                   except HttpError as exc:
                       if exc.resp.status in (429, 500, 502, 503, 504) and attempt < 3:
@@ -214,7 +217,7 @@ jobs:
                   "apiError": "",
               })
               write_reports()
-              print(f"Verdict: {verdict}")
+              print(f"Verdict: {verdict}", flush=True)
               print(f"Coverage state: {state}")
               print(f"Indexing state: {index.get('indexingState', 'NOT_RETURNED')}")
               print(f"Last crawl: {index.get('lastCrawlTime', 'NOT_RETURNED')}")
