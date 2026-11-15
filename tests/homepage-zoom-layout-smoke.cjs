@@ -20,6 +20,17 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
         const count = document.getElementById('zc-promo-count');
         return count && count.textContent.trim() !== 'LOADING VIDEO LIBRARY…';
       }, null, { timeout: 15000 }).catch(() => {});
+
+      // The TV player is intentionally lazy-loaded. Scroll it into the observer
+      // margin before asserting that its featured source has been assigned.
+      const promoPlayer = page.locator('#zctv-channel-hub .zctv-player-mount #zc-promo-player');
+      await promoPlayer.scrollIntoViewIfNeeded();
+      await page.waitForFunction(() => {
+        const video = document.getElementById('zc-promo-player');
+        const source = video && (video.currentSrc || video.src || '');
+        return source.startsWith('https://');
+      }, null, { timeout: 15000 });
+      await page.evaluate(() => window.scrollTo(0, 0));
       await page.waitForTimeout(300);
       const layout = await page.evaluate(() => {
         const rect = selector => {
