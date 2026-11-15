@@ -13,6 +13,7 @@ SITE = "https://zombcash.github.io/"
 ROBOTS = "robots.txt"
 LANGUAGES = {"en", "de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"}
 NAMESPACE = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+XHTML_NAMESPACE = {"xhtml": "http://www.w3.org/1999/xhtml"}
 HEADERS = {"User-Agent": "ZombieCash-Sitemap-Live-Audit/1.0"}
 
 
@@ -21,6 +22,7 @@ class HeadParser(HTMLParser):
         super().__init__()
         self.lang = None
         self.canonicals = []
+        self.alternates = []
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
@@ -30,6 +32,8 @@ class HeadParser(HTMLParser):
             rel = (attrs.get("rel") or "").lower().split()
             if "canonical" in rel and attrs.get("href"):
                 self.canonicals.append(attrs["href"])
+            if "alternate" in rel and attrs.get("hreflang") and attrs.get("href"):
+                self.alternates.append((attrs["hreflang"], attrs["href"]))
 
 
 def sitemap_list_from_robots(text):
@@ -90,13 +94,114 @@ def read_live_sitemaps():
     return sitemap_urls, pages_by_sitemap
 
 
+def read_hreflang_map(sitemap_urls, live=False):
+    """Read hreflang alternate sets from every sitemap listed in robots.txt."""
+    alternates_by_url = {}
+    for sitemap_url in sitemap_urls:
+        if live:
+            response = requests.get(sitemap_url, timeout=25, headers=HEADERS)
+            response.raise_for_status()
+            xml_bytes = response.content
+        else:
+            path = sitemap_url.removeprefix(SITE)
+            with open(path, "rb") as sitemap_file:
+                xml_bytes = sitemap_file.read()
+
+        root = ET.fromstring(xml_bytes)
+        if not root.tag.endswith("urlset"):
+            continue
+        for node in root.findall("sm:url", NAMESPACE):
+            loc_node = node.find("sm:loc", NAMESPACE)
+            url = (loc_node.text or "").strip() if loc_node is not None else ""
+            if not url:
+                continue
+            alternates = []
+            for link in node.findall("xhtml:link", XHTML_NAMESPACE):
+                rel = (link.attrib.get("rel") or "").lower().split()
+                lang = (link.attrib.get("hreflang") or "").strip()
+                href = (link.attrib.get("href") or "").strip()
+                if "alternate" in rel and lang and href:
+                    alternates.append((lang, href))
+            if not alternates:
+                continue
+            previous = alternates_by_url.get(url)
+            if previous and set(previous) != set(alternates):
+                raise RuntimeError(
+                    f"Conflicting hreflang sets for duplicate sitemap URL {url}"
+                )
+            if not previous or len(alternates) > len(previous):
+                alternates_by_url[url] = alternates
+    return alternates_by_url
+
+
+def validate_hreflang_map(alternates_by_url, all_urls):
+    """Check self references, valid targets, reciprocal links and x-default."""
+    issues = []
+    for url in sorted(all_urls):
+        alternates = alternates_by_url.get(url, [])
+        if not alternates:
+            issues.append({"url": url, "issue": "missing sitemap hreflang alternates"})
+            continue
+
+        languages = [lang for lang, _ in alternates]
+        if len(languages) != len(set(languages)):
+            issues.append({"url": url, "issue": "duplicate hreflang language"})
+        self_languages = [
+            lang for lang, href in alternates
+            if href == url and lang != "x-default"
+        ]
+        if len(self_languages) != 1:
+            issues.append({
+                "url": url,
+                "issue": f"expected one self hreflang, found {len(self_languages)}",
+            })
+            continue
+        self_language = self_languages[0]
+
+        english = [href for lang, href in alternates if lang == "en"]
+        x_defaults = [href for lang, href in alternates if lang == "x-default"]
+        if len(english) != 1:
+            issues.append({"url": url, "issue": f"expected one English alternate, found {len(english)}"})
+        if len(x_defaults) != 1:
+            issues.append({"url": url, "issue": f"expected one x-default alternate, found {len(x_defaults)}"})
+        elif len(english) == 1 and x_defaults[0] != english[0]:
+            issues.append({
+                "url": url,
+                "issue": "x-default does not point to the English version",
+                "x-default": x_defaults[0],
+                "english": english[0],
+            })
+
+        for language, target_url in alternates:
+            if target_url not in all_urls:
+                issues.append({
+                    "url": url,
+                    "issue": "hreflang target is absent from all sitemaps",
+                    "language": language,
+                    "target": target_url,
+                })
+                continue
+            if language == "x-default":
+                continue
+            target_alternates = set(alternates_by_url.get(target_url, []))
+            if (self_language, url) not in target_alternates:
+                issues.append({
+                    "url": url,
+                    "issue": "hreflang target has no reciprocal alternate",
+                    "language": language,
+                    "target": target_url,
+                    "expected": {"language": self_language, "href": url},
+                })
+    return issues
+
+
 def expected_language(url):
     path = url.removeprefix(SITE)
     first = path.split("/", 1)[0]
     return first if first in LANGUAGES and first != "en" else "en"
 
 
-def check_page(url):
+def check_page(url, expected_alternates=None):
     last_error = None
     response = None
     for attempt in range(3):
@@ -131,6 +236,15 @@ def check_page(url):
         issues.append(f"expected one canonical link, found {len(parser.canonicals)}")
     elif parser.canonicals[0].rstrip("/") != url.rstrip("/"):
         issues.append(f"canonical={parser.canonicals[0]}")
+    if expected_alternates is not None:
+        actual_alternates = set(parser.alternates)
+        expected_alternates = set(expected_alternates)
+        if len(parser.alternates) != len(actual_alternates):
+            issues.append("duplicate HTML hreflang alternate")
+        if actual_alternates != expected_alternates:
+            missing = sorted(expected_alternates - actual_alternates)
+            unexpected = sorted(actual_alternates - expected_alternates)
+            issues.append(f"HTML hreflang differs from sitemap: missing={missing[:5]}, unexpected={unexpected[:5]}")
 
     return {
         "url": url,
@@ -166,6 +280,28 @@ def main():
     if not all_urls:
         raise SystemExit("FAIL: no HTML URLs found across robots.txt sitemaps")
 
+    local_hreflang = read_hreflang_map(local_sitemaps)
+    live_hreflang = read_hreflang_map(live_sitemaps, live=True)
+    if local_hreflang != live_hreflang:
+        raise SystemExit(json.dumps({
+            "error": "Live sitemap hreflang data differs from deployed commit",
+            "local_only": sorted(set(local_hreflang) - set(live_hreflang))[:20],
+            "live_only": sorted(set(live_hreflang) - set(local_hreflang))[:20],
+            "changed": sorted(
+                url for url in set(local_hreflang) & set(live_hreflang)
+                if set(local_hreflang[url]) != set(live_hreflang[url])
+            )[:20],
+        }, ensure_ascii=False, indent=2))
+
+    hreflang_issues = validate_hreflang_map(local_hreflang, all_urls)
+    if hreflang_issues:
+        raise SystemExit(json.dumps({
+            "error": "Sitemap hreflang validation failed",
+            "issues": hreflang_issues[:100],
+            "issue_count": len(hreflang_issues),
+        }, ensure_ascii=False, indent=2))
+    print(f"Sitemap hreflang reciprocity + x-default checks passed: {len(local_hreflang)}/{len(all_urls)}")
+
     owners = {}
     for sitemap_url, urls in local_pages.items():
         for url in urls:
@@ -200,17 +336,17 @@ def main():
 
     results = []
     with ThreadPoolExecutor(max_workers=12) as pool:
-        futures = [pool.submit(check_page, url) for url in sorted(all_urls)]
+        futures = [pool.submit(check_page, url, local_hreflang.get(url, [])) for url in sorted(all_urls)]
         for future in as_completed(futures):
             results.append(future.result())
 
     failures = sorted((item for item in results if not item["ok"]), key=lambda item: item["url"])
-    print(f"HTTP 200 + canonical/lang checks passed: {len(results) - len(failures)}/{len(results)}")
+    print(f"HTTP 200 + canonical/lang/hreflang checks passed: {len(results) - len(failures)}/{len(results)}")
     print(f"Failures: {len(failures)}")
     if failures:
         print(json.dumps(failures, ensure_ascii=False, indent=2))
         raise SystemExit(1)
-    print("PASS: all pages from every robots.txt sitemap are reachable and have matching canonical and html lang.")
+    print("PASS: all pages from every robots.txt sitemap are reachable and have matching canonical, html lang and reciprocal hreflang.")
 
 
 if __name__ == "__main__":
