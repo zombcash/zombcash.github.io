@@ -48,10 +48,13 @@ jobs:
               "hi/index.html": "hi",
           }
           html = Path("index.html").read_text(encoding="utf-8")
-          assert "if(document.getElementById('zctv-channel-hub'))return;" not in html, "promo-video initializer must not be disabled by the TV hub"
-          assert "if(window.__zcPromoVideoLibraryInitialized)return;" in html, "promo-video initializer must retain duplicate-init protection"
-          assert "fetch('promo-videos.json?v=20261105-i18n1'" in html, "promo-video manifest loader missing"
-          print("OK homepage promo-video initializer is enabled alongside the TV channel hub")
+          assert 'id="zombcash-promo-video-library-script"' not in html, "legacy inline promo loader must not compete with the TV player"
+          assert "fetch('promo-videos.json?v=20261105-i18n1'" not in html, "duplicate inline promo manifest request remains"
+          assert 'src="/assets/js/zctv-player.js?v=episode-default-20261111-2"' in html, "authoritative ZombieCash TV player script missing"
+          tv_script = Path("assets/js/zctv-player.js").read_text(encoding="utf-8")
+          assert "fetch('/promo-videos.json?v=20261110-tv-library'" in tv_script, "TV player must own promo manifest loading"
+          assert "function showFeaturedPromo()" in tv_script, "TV player must own featured promo rendering"
+          print("OK promo video library has one authoritative TV player loader")
           expected_ribbons = {name: "20261105" for name in pages}
           expected_ribbons["index.html"] = "20261112-live-market-8"
           for filename, lang in pages.items():

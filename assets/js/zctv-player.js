@@ -17,7 +17,7 @@
   const column = root.querySelector('.zctv-player-column');
   const cards = Array.from(root.querySelectorAll('[data-channel]'));
   const heading = root.querySelector('[data-zctv-archive-title]');
-  const status = root.querySelector('#zc-promo-status');
+  const status = document.getElementById('zc-promo-status');
   const version = root.querySelector('#zc-promo-version');
   const download = root.querySelector('#zc-promo-download');
   const promoCount = document.getElementById('zc-promo-count');
