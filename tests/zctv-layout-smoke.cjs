@@ -37,6 +37,7 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
       videoSource: document.querySelector('#zctv-channel-hub #zc-promo-player')?.currentSrc || document.querySelector('#zctv-channel-hub #zc-promo-player')?.src || '',
       promoControls: box('#zctv-channel-hub .zc-promo-video-controls'),
       promoCount: document.querySelector('#zctv-channel-hub #zc-promo-count')?.textContent.trim() || '',
+      promoStatus: document.querySelector('#zctv-channel-hub #zc-promo-status')?.textContent.trim() || '',
       archive: box('#zctv-channel-hub .zctv-archive'),
       channels: getComputedStyle(cards).gridTemplateColumns.split(' ').filter(Boolean).length,
       promoSectionDisplay: getComputedStyle(document.querySelector('#promo-video')).display,
@@ -59,6 +60,7 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
   check(m.videoSource.includes('zombiecash_final_real_screens.mp4'), 'Empty archive must fall back to the published promo video');
   check(m.promoControls && m.promoControls.width > 0 && m.promoControls.height > 0, 'Promo library controls must be visible inside the TV player column');
   check(m.promoCount && m.promoCount !== 'LOADING VIDEO LIBRARY…', 'Promo library counter must initialize');
+  check(m.promoStatus.includes('ZombieCash Promo Video') && !m.promoStatus.toLowerCase().includes('unavailable'), 'Featured promo status must remain initialized without a competing legacy error handler');
   check(m.archive && Math.abs(m.archive.width - m.player.width) < 4, 'Episode archive must match the player width');
   check(m.channels === 3, 'Desktop channel cards must use three columns');
   check(m.promoSectionDisplay === 'none', 'The source promo section must stay hidden after its player is moved into ZombieCash TV');
