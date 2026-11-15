@@ -47,11 +47,18 @@ jobs:
               "tr/index.html": "tr",
               "hi/index.html": "hi",
           }
+          html = Path("index.html").read_text(encoding="utf-8")
+          assert "if(document.getElementById('zctv-channel-hub'))return;" not in html, "promo-video initializer must not be disabled by the TV hub"
+          assert "if(window.__zcPromoVideoLibraryInitialized)return;" in html, "promo-video initializer must retain duplicate-init protection"
+          assert "fetch('promo-videos.json?v=20261105-i18n1'" in html, "promo-video manifest loader missing"
+          print("OK homepage promo-video initializer is enabled alongside the TV channel hub")
+          expected_ribbons = {name: "20261105" for name in pages}
+          expected_ribbons["index.html"] = "20261112-live-market-8"
           for filename, lang in pages.items():
               html = Path(filename).read_text(encoding="utf-8")
               assert f'<html lang="{lang}">' in html, f"{filename}: wrong language tag"
               assert html.count('href="/homepage-visual.css?') == 1, f"{filename}: stylesheet missing or duplicated"
-              assert html.count('src="/homepage-ribbons.js?v=20261105"') == 1, f"{filename}: ticker script missing or duplicated"
+              assert html.count(f'src="/homepage-ribbons.js?v={expected_ribbons[filename]}"') == 1, f"{filename}: ticker script missing or duplicated"
               assert html.count('rel="canonical"') == 1, f"{filename}: canonical count changed"
               assert html.count('hreflang=') == 10, f"{filename}: hreflang count changed"
               assert '<main id="home">' in html, f"{filename}: homepage main element missing"
