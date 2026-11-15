@@ -1747,7 +1747,6 @@ footer {
     document.head.appendChild(script);
     setTimeout(() => { if (!window.Jupiter) fallback(); }, 12000);
   };
-  if (status) status.textContent = 'The official Jupiter interface will load as you approach this panel.';
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(entries => {
       if (entries.some(entry => entry.isIntersecting)) {
