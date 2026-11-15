@@ -45,6 +45,8 @@ assert(shared.includes("link.href.includes('fonts.googleapis.com/css2')") &&
        shared.includes("Noto+Sans+JP") && shared.includes("Noto+Sans+SC") &&
        shared.includes("Noto+Sans+Devanagari") && shared.includes("display=optional"),
   "Shared navigation must load only the current locale's required font families");
+assert(shared.includes("document.addEventListener('zombcash:languagechange', ensureZshFonts)"),
+  "Shared navigation must re-evaluate font requirements after a language switch");
 
 const featured = tv.slice(tv.indexOf("function showFeaturedPromo"), tv.indexOf("function playPromoAt"));
 assert(featured.includes("queueFeaturedMedia") && !featured.includes("player.load()") && !featured.includes("player.poster"),
