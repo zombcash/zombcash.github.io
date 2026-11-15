@@ -1,0 +1,98 @@
+name: ZombieCash PageSpeed Deep Diagnostics
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    name: Deep PageSpeed — ${{ matrix.page.name }} — ${{ matrix.strategy }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        strategy: [mobile, desktop]
+        page:
+          - name: homepage
+            url: https://zombcash.github.io/
+          - name: german-homepage
+            url: https://zombcash.github.io/de/
+          - name: japanese-homepage
+            url: https://zombcash.github.io/ja/
+    steps:
+      - name: Run Google PageSpeed Insights and extract diagnostics
+        env:
+          PAGE_URL: ${{ matrix.page.url }}
+          STRATEGY: ${{ matrix.strategy }}
+          PSI_API_KEY: ${{ secrets.PAGESPEED_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${PSI_API_KEY:-}" ]; then
+            echo "::error::Missing PAGESPEED_API_KEY secret."
+            exit 1
+          fi
+          API_URL="https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${PAGE_URL}&strategy=${STRATEGY}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO&key=${PSI_API_KEY}"
+          HTTP_CODE=$(curl -sS -o psi.json -w '%{http_code}' --retry 2 --retry-delay 3 "$API_URL")
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "PageSpeed API failed with HTTP $HTTP_CODE for $PAGE_URL ($STRATEGY)"
+            cat psi.json
+            exit 1
+          fi
+          python3 - <<'PY'
+          import json, os
+          data=json.load(open("psi.json", encoding="utf-8"))
+          result=data.get("lighthouseResult", {})
+          categories=result.get("categories", {})
+          audits=result.get("audits", {})
+          print("## PageSpeed deep diagnostics")
+          print("URL:", os.environ["PAGE_URL"])
+          print("Strategy:", os.environ["STRATEGY"])
+          for key, label in (("performance","Performance"),("accessibility","Accessibility"),("best-practices","Best Practices"),("seo","SEO")):
+              score=categories.get(key,{}).get("score")
+              print(f"{label}: {'n/a' if score is None else round(score*100)}")
+          for key in ("first-contentful-paint","largest-contentful-paint","total-blocking-time","cumulative-layout-shift","speed-index","interactive","max-potential-fid"):
+              audit=audits.get(key,{})
+              print(f"{key}: {audit.get('displayValue','n/a')}")
+          def compact(item):
+              node=item.get("node") or {}
+              fields=("url","wastedMs","wastedBytes","totalBytes","duration","startTime","score","resourceType","label")
+              out={k:item[k] for k in fields if k in item}
+              for k in ("selector","snippet","nodeLabel"):
+                  if k in node: out[k]=node[k]
+              return out
+          keys=("largest-contentful-paint-element","layout-shift-elements","render-blocking-resources","unused-javascript","unused-css-rules","uses-optimized-images","uses-responsive-images","font-display","server-response-time","third-party-summary","lcp-discovery-insight")
+          print("## Key diagnostics")
+          for key in keys:
+              audit=audits.get(key)
+              if not audit: continue
+              print(f"AUDIT {key}: score={audit.get('score')} title={audit.get('title')} display={audit.get('displayValue')}")
+              items=(audit.get("details") or {}).get("items") or []
+              for item in items[:4]:
+                  print("  ITEM", json.dumps(compact(item), ensure_ascii=False))
+          opportunities=[]
+          for key,audit in audits.items():
+              details=audit.get("details") or {}
+              score=audit.get("score")
+              if details.get("type")=="opportunity" and score is not None and score<1:
+                  savings=details.get("overallSavingsMs") or 0
+                  bytes_saved=details.get("overallSavingsBytes") or 0
+                  opportunities.append((savings,bytes_saved,key,audit))
+          opportunities.sort(reverse=True)
+          print("## Top opportunities")
+          for savings,bytes_saved,key,audit in opportunities[:10]:
+              print(f"OPPORTUNITY {key}: {audit.get('title')} | {audit.get('displayValue')} | savings_ms={savings} | savings_bytes={bytes_saved}")
+              for item in ((audit.get("details") or {}).get("items") or [])[:3]:
+                  print("  ITEM", json.dumps(compact(item), ensure_ascii=False))
+          PY
+
+      - name: Upload raw PageSpeed report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pagespeed-diagnostics-${{ matrix.page.name }}-${{ matrix.strategy }}
+          path: psi.json
+          if-no-files-found: ignore
+          retention-days: 7
