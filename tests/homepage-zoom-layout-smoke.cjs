@@ -32,6 +32,14 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
       }, null, { timeout: 15000 });
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.waitForTimeout(300);
+      // The TV player is intentionally lazy-loaded. Bring it into view before
+      // asserting that its source has been assigned; do not require an offscreen
+      // player to fetch a large video during the initial page load.
+      await page.locator('#zctv-channel-hub #zc-promo-player').scrollIntoViewIfNeeded();
+      await page.waitForFunction(() => {
+        const player = document.querySelector('#zctv-channel-hub #zc-promo-player');
+        return !!player && (player.currentSrc || player.src || '').startsWith('https://');
+      }, null, { timeout: 15000 });
       const layout = await page.evaluate(() => {
         const rect = selector => {
           const el = document.querySelector(selector);
