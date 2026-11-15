@@ -17,7 +17,7 @@ assert(index.includes("script.async = true") && index.includes("script.fetchPrio
 assert(index.includes('preload="none"'), "Promo video must not fetch media metadata on initial page load");
 assert(index.includes('loading="lazy" fetchpriority="low"'),
   "Below-the-fold ZombieCash TV host art must load lazily");
-assert(index.includes('rel="preload" as="image"') && index.includes("Overgrown_city%2Cpost-apocalyptic.jpg") && index.includes('fetchpriority="high"'),
+assert(index.includes('rel="preload" as="image"') && index.includes("Overgrown_city%2C_post-apocalyptic.jpg") && index.includes('fetchpriority="high"'),
   "Homepage CSS hero background must be preloaded at high priority");
 assert(index.includes("display=optional"), "Homepage brand fonts must avoid late font-swap layout shifts");
 assert(index.includes('src="runtime-fixes.js?v=20261027-2" defer') &&
