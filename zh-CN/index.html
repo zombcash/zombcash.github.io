@@ -72,8 +72,10 @@
 </script>
 <title>ZombieCash ($ZOMBCASH) — Solana 模因币官方社区</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://upload.wikimedia.org">
+<link rel="preload" as="image" href="https://upload.wikimedia.org/wikipedia/commons/9/91/Overgrown_city%2C_post-apocalyptic.jpg" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=optional" rel="stylesheet">
 <link rel="stylesheet" href="/style.css?v=tools-card-bg-20261110-1">
 <style id="zombcash-hero-v8-inline">
 /* V8 emergency inline hero override: intentionally distinct from cached external CSS */
@@ -513,7 +515,7 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 @media(max-width:560px){.jupiter-buy-section{padding:48px 5%}.jupiter-buy-layout{margin-top:20px;gap:16px}.jupiter-buy-copy{padding:19px}.jupiter-terminal-top{padding:0 11px;font-size:7px}#jupiter-zombcash-terminal{min-height:560px}}
 </style>
 <!-- Current official Jupiter Plugin (replaces deprecated Jupiter Terminal v4). -->
-<script src="https://plugin.jup.ag/plugin-v1.js"></script>
+
 
 <link rel="stylesheet" href="/site-polish.css?v=20261109-video-cards1">
 
@@ -872,7 +874,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
     </div>
     <div class="zc-promo-player-wrap">
       <div class="zc-promo-player-top"><span><i></i> ZC // PROMO 疫情播报</span><span id="zc-promo-version">ARCHIVE</span></div>
-      <video id="zc-promo-player" controls playsinline preload="metadata" aria-label="ZombieCash promotional video">
+      <video id="zc-promo-player" controls playsinline preload="none" aria-label="ZombieCash promotional video">
         <p>浏览器无法播放此视频。 <a href="https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10">改为打开已发布的视频。</a></p>
       </video>
       <div class="zc-promo-player-foot"><span>按需播放 · 开启声音</span><a id="zc-promo-download" href="https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10" target="_blank" rel="noopener noreferrer">打开 / 下载 ↗</a></div>
@@ -885,7 +887,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 <div class="zctv-inner"><div class="zctv-kicker"><i></i> ZOMBIECASH TV // BROADCAST STUDIO</div>
 <div class="zctv-layout">
 <div class="zctv-intro"><span class="eyebrow">亡者互联网 — 正在播出</span><h2 id="zctv-title">三个频道。<br><span>一个不死信号。</span></h2><p>认识我们的主持人，接入ZombieCash广播网络。选择下方频道，所有节目都将在同一个播放器中播放。</p><div class="zctv-host-tag">☣ <div>你的ZOMBIECASH主持人<small>来自疫情爆发演播室</small></div></div></div>
-<div class="zctv-host-art"><img src="/assets/zombie-girl-heroine-hd.avif" alt="ZombieCash霓虹直播演播室女主持人" loading="eager" fetchpriority="high" decoding="async"></div>
+<div class="zctv-host-art"><img src="/assets/zombie-girl-heroine-hd.avif" alt="ZombieCash霓虹直播演播室女主持人" loading="lazy" fetchpriority="low" decoding="async"></div>
 <div class="zctv-player-column"><div class="zctv-live-label"><strong>● 正在播放</strong><span>点播节目</span></div><div class="zctv-player-mount" data-zctv-player-mount></div><div class="zctv-archive"><div class="zctv-archive-head"><span>节目档案</span><span data-zctv-archive-title>全部节目</span></div><div class="zctv-episodes" data-zctv-episodes><div class="zctv-empty">此频道暂时还没有发布节目。</div></div></div></div>
 </div>
 <div class="zctv-channels" role="group" aria-label="ZombieCash电视频道">
@@ -1517,9 +1519,9 @@ footer {
 }
 </style>
 
-<script src="/runtime-fixes.js?v=20261027-2"></script>
-<script src="/script.js?v=radar-icon-fallback-20261027-3"></script>
-<script src="/living-world-recovery.js?v=news-commentary-sync-20261021-2"></script>
+<script src="/runtime-fixes.js?v=20261027-2" defer></script>
+<script src="/script.js?v=radar-icon-fallback-20261027-3" defer></script>
+<script src="/living-world-recovery.js?v=news-commentary-sync-20261021-2" defer></script>
 <script id="jupiter-zombcash-init">
 (() => {
   const terminal = document.getElementById('jupiter-zombcash-terminal');
@@ -1552,14 +1554,30 @@ footer {
       fallback();
     }
   };
-  if (window.Jupiter && typeof window.Jupiter.init === 'function') init();
-  else {
-    const script = document.querySelector('script[src*="plugin.jup.ag/plugin-v1.js"]');
-    if (script) {
-      script.addEventListener('load', init, {once:true});
-      script.addEventListener('error', fallback, {once:true});
-      setTimeout(() => { if (!window.Jupiter) fallback(); }, 12000);
-    } else fallback();
+    let jupiterLoadStarted = false;
+  const loadJupiter = () => {
+    if (jupiterLoadStarted) return;
+    jupiterLoadStarted = true;
+    if (window.Jupiter && typeof window.Jupiter.init === 'function') { init(); return; }
+    const script = document.createElement('script');
+    script.src = 'https://plugin.jup.ag/plugin-v1.js';
+    script.async = true;
+    script.fetchPriority = 'low';
+    script.addEventListener('load', init, {once:true});
+    script.addEventListener('error', fallback, {once:true});
+    document.head.appendChild(script);
+    setTimeout(() => { if (!window.Jupiter) fallback(); }, 12000);
+  };
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        observer.disconnect();
+        loadJupiter();
+      }
+    }, {rootMargin:'650px 0px'});
+    observer.observe(terminal);
+  } else {
+    loadJupiter();
   }
 })();
 </script>
