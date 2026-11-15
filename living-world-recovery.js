@@ -48,7 +48,7 @@
     style.id = 'zombcash-enriched-news-styles';
     style.textContent = `
       .world-news-item.is-enriched{display:flex;flex-direction:column;gap:9px}
-      .world-news-image{display:block;width:100%;max-height:210px;object-fit:cover;border:1px solid #344b2d;background:#080d0a}
+      .world-news-image{display:block;width:100%;height:auto;aspect-ratio:16/9;max-height:210px;object-fit:cover;border:1px solid #344b2d;background:#080d0a}
       .world-news-kind{display:inline-flex;align-self:flex-start;border:1px solid #567d36;padding:4px 7px;color:#a4ff43;font:700 8px Orbitron,sans-serif;letter-spacing:1px}
       .world-news-commentary{display:block;margin:2px 0 0;padding:10px 12px;border-left:2px solid #9bff45;background:linear-gradient(90deg,#9bff450d,transparent);color:#c9d7c2;font:500 13px/1.55 Rajdhani,sans-serif}
       .world-news-commentary b{display:block;margin-bottom:5px;color:#a4ff43;font:700 8px Orbitron,sans-serif;letter-spacing:1px}
@@ -85,6 +85,8 @@
         const item = node('article', 'world-news-item' + (article.enriched ? ' is-enriched' : ''));
         if (article.enriched && article.imageUrl) {
           const image = node('img', 'world-news-image');
+          image.width = 640;
+          image.height = 360;
           image.src = /^https?:\/\//i.test(article.imageUrl) ? article.imageUrl : API + article.imageUrl;
           image.alt = 'ZombieCash editorial illustration for ' + (article.title || 'news');
           image.loading = 'lazy';
