@@ -360,7 +360,7 @@
         cancelDeferredFeaturedMedia();
         if (pending) loadPlayerMedia(pending);
       }
-    }, { rootMargin: '650px 0px' });
+    }, { rootMargin: '250px 0px' });
     featuredMediaObserver.observe(player);
   }
 
