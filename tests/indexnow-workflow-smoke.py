@@ -26,4 +26,4 @@ assert 'SubmitFeed?' in bing, "Bing workflow must continue submitting all robots
 assert '.github/workflows/bing-webmaster-api.yml' in seo_smoke, "SEO static smoke must run when Bing workflow changes"
 assert 'tests/indexnow-workflow-smoke.py' in seo_smoke and 'python tests/indexnow-workflow-smoke.py' in seo_smoke, "SEO static smoke must execute this regression test"
 
-print("PASS: IndexNow and Bing receive current sitemap URLs after successful GitHub Pages deployment.")
+print("PASS: IndexNow runs after Pages deployment; Bing uses the throttle-safe daily/manual/sitemap-change schedule.")
