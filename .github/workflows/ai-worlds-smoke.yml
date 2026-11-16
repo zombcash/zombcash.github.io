@@ -29,6 +29,12 @@ jobs:
         run: |
           node --check ai-arena.js
           node --check zombie-world.js
+      - name: Install browser test dependency
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Run AI Worlds browser interaction tests
+        run: node tests/ai-worlds.browser.cjs
       - name: Install MCP server dependency
         run: python -m pip install -r mcp-server/requirements.txt
       - name: Compile MCP server
