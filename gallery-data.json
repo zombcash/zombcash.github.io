@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "source": "https://t.me/ZOMBCASH",
-  "updated_at": "2026-11-16T23:31:53.690Z",
+  "updated_at": "2026-11-16T23:32:24.681Z",
   "items": [
     {
       "id": "ZOMBCASH/5922:0",
@@ -11624,6 +11624,32 @@
       "alt_review_method": "not-reviewed",
       "image_width": 800,
       "image_height": 600
+    },
+    {
+      "id": "ZOMBCASH/3153:0",
+      "image": "https://cdn4.telesco.pe/file/Ku1jHjJTIPVdHUMt3F9P9Evu7DstFO9DPG3F_AUfVCisB6X6Nqo9E370NDz1x7hbtLcdp65SAK9XUOTWvu4h8HE5fqfSSc1jL2ovDdImjqZ9Xv_kj-_2ygRPwC5CTlXIXM0EODKpuw3fClMMUDtJVqKTtd2MQ0aEr8tzt4L8TzDAsz3_w7-kOR1CaC3lB0Obeb95SgfeaEh6h_8J1E15WsuUm3ktt5IiZgPKSHDnHI9zO1yfPRDCU6LeIf0XBIcSs1hbdsQR4SOIhkAg7e1N1CKMZWKhKc8OfEAcXuYmzUQ48RpuiLHkpomB7bKAuy2J-UGdObHZ13_6gf0ldvuC4Q.jpg",
+      "caption": "🩸 NIGHTMARE DROP The silence in the server room lasted longer than the power, but something on the screens was still breathing. #ZombieCashHorror ━━━━━━━━━━━━━━━━━━ 🧟 $ZOMBCASH |  MARKET DIED. ZOMBIECASH DIDN'T. 📋 CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 🌐 Website: zombcash.github.io 𝕏 X Community 💬 Telegram",
+      "post_url": "https://t.me/ZOMBCASH/3153",
+      "date": "2026-10-28T14:26:53+00:00",
+      "post_id": "ZOMBCASH/3153",
+      "rights_status": "review-required",
+      "title": "🩸 NIGHTMARE DROP The silence in the server room lasted longer than the power, but something on the…",
+      "description": "",
+      "alt_text": "ZombieCash gallery artwork — visual ALT review pending.",
+      "category_ids": [
+        "nightmare-horror"
+      ],
+      "series": "nightmare-horror",
+      "tags": [],
+      "language": "en",
+      "pinterest_status": "blocked-rights-review",
+      "slug": "zombcash-3153-0",
+      "anchor_id": "gallery-image-3153-0",
+      "metadata_version": 2,
+      "alt_review_status": "pending-review",
+      "alt_review_method": "not-reviewed",
+      "image_width": 800,
+      "image_height": 800
     },
     {
       "id": "ZOMBCASH/3150:0",
