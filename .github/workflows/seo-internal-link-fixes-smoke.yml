@@ -12,6 +12,7 @@ on:
       - "tests/seo-internal-link-fixes-smoke.py"
       - "tests/seo-meta-duplicate-smoke.py"
       - ".github/workflows/indexnow.yml"
+      - ".github/workflows/bing-webmaster-api.yml"
       - ".github/workflows/sync-gallery-image-seo.yml"
       - "tests/indexnow-workflow-smoke.py"
       - ".github/workflows/seo-internal-link-fixes-smoke.yml"
