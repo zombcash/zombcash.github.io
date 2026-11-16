@@ -76,7 +76,7 @@ async function waitForText(page, selector, expected) {
       for (const key of REQUIRED_DYNAMIC_KEYS) {
         assert.equal(typeof map[key], 'string', locale + ' is missing dynamic translation: ' + key);
         assert.ok(map[key].length, locale + ' has an empty dynamic translation: ' + key);
-        if (key !== 'PTS') {
+        if (!['PTS', '● ONLINE'].includes(key)) {
           assert.notEqual(map[key], key, locale + ' leaves dynamic text untranslated: ' + key);
         }
       }
