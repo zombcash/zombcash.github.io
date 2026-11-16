@@ -5,7 +5,6 @@ const assert = require('node:assert/strict');
 
 const ROOT = 'https://zombcash.github.io/';
 const locales = ['en', 'de', 'fr', 'it', 'ja', 'zh-CN', 'ru', 'tr', 'hi'];
-const alternateLocales = ['en', 'de', 'fr', 'it', 'ja', 'zh-Hans', 'ru', 'tr', 'hi'];
 const localeTitles = {
   en: 'Survivor Hub — ZombieCash',
   de: 'Überlebenden-Hub — ZombieCash',
