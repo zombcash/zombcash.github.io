@@ -479,7 +479,23 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       const schema = JSON.parse(schemaText);
       const controls = await localized.locator(".gallery-category-chip").allTextContents();
       const firstCardTitle = (await localized.locator("#gallery-grid .gallery-caption p").first().textContent()) || "";
-      if (/NIGHTMARE & HORROR|ZOMBIECASH MEMES|UNDEAD AFTER DARK/i.test(firstCardTitle)) throw new Error(locale + " series header remained in English on first render: " + firstCardTitle);
+      const expectedSeriesHeader = {
+        de: "ALBTRAUM & HORROR", fr: "CAUCHEMAR ET HORREUR", it: "INCUBO E HORROR",
+        ja: "悪夢とホラー", "zh-CN": "噩梦与恐怖", ru: "КОШМАРЫ И ХОРРОР",
+        tr: "KÂBUS VE KORKU", hi: "दुःस्वप्न और हॉरर"
+      }[locale];
+      if (!firstCardTitle.includes(expectedSeriesHeader)) throw new Error(locale + " series header translation is missing: " + firstCardTitle);
+      const siteTransmissionLabel = {
+        de: "Website-Meldungen", fr: "Actualités du site", it: "Aggiornamenti dal sito",
+        ja: "サイト通信", "zh-CN": "网站播报", ru: "Передачи с сайта",
+        tr: "Site Duyuruları", hi: "साइट अपडेट"
+      }[locale];
+      if (!controls.includes(siteTransmissionLabel)) throw new Error(locale + " Site Transmissions category is not translated: " + controls.join(" | "));
+      await localized.getByRole("button", { name: siteTransmissionLabel, exact: true }).click();
+      const siteTransmissionCards = await localized.locator("#gallery-grid .gallery-card").count();
+      if (siteTransmissionCards !== expectedCategoryIds("site-transmissions").length) {
+        throw new Error(locale + " Site Transmissions filter count mismatch: " + siteTransmissionCards);
+      }
       if (lang !== locale) throw new Error(locale + " gallery lang mismatch: " + lang);
       if (canonical !== "https://zombcash.github.io/" + locale + "/gallery.html") throw new Error(locale + " canonical mismatch: " + canonical);
       if (alternates !== 10) throw new Error(locale + " should expose nine hreflang locales plus x-default, got " + alternates);
