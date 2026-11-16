@@ -44,10 +44,15 @@ jobs:
 
           import requests
           from google.oauth2 import service_account
+          from google.auth.transport.requests import Request as GoogleAuthRequest
           from googleapiclient.discovery import build
           from googleapiclient.errors import HttpError
           from google_auth_httplib2 import AuthorizedHttp
           import httplib2
+
+          class BoundedGoogleAuthRequest(GoogleAuthRequest):
+              def __call__(self, url, method="GET", body=None, headers=None, timeout=15, **kwargs):
+                  return super().__call__(url, method=method, body=body, headers=headers, timeout=timeout, **kwargs)
 
           site_url = "https://zombcash.github.io/"
           raw_credentials = os.environ.get("GSC_SERVICE_ACCOUNT_JSON", "")
@@ -59,7 +64,8 @@ jobs:
               credentials = service_account.Credentials.from_service_account_info(
                   info, scopes=["https://www.googleapis.com/auth/webmasters"]
               )
-              build("searchconsole", "v1", http=AuthorizedHttp(credentials, http=httplib2.Http(timeout=30)), cache_discovery=False)
+              credentials.refresh(BoundedGoogleAuthRequest())
+              build("searchconsole", "v1", http=AuthorizedHttp(credentials, http=httplib2.Http(timeout=15)), cache_discovery=False)
           except Exception as exc:
               raise SystemExit(f"ERROR: Could not initialize Search Console client: {type(exc).__name__}: {exc}")
 
@@ -137,9 +143,10 @@ jobs:
                   worker_credentials = service_account.Credentials.from_service_account_info(
                       info, scopes=["https://www.googleapis.com/auth/webmasters"]
                   )
+                  worker_credentials.refresh(BoundedGoogleAuthRequest())
                   thread_local.service = build(
                       "searchconsole", "v1",
-                      http=AuthorizedHttp(worker_credentials, http=httplib2.Http(timeout=30)),
+                      http=AuthorizedHttp(worker_credentials, http=httplib2.Http(timeout=15)),
                       cache_discovery=False,
                   )
               return thread_local.service
