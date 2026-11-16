@@ -40,6 +40,11 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     page.on("requestfailed", request => console.error("[requestfailed]", request.url(), request.failure()?.errorText || "unknown"));
     await page.route("https://**/*", route => route.abort());
     await page.route("https://cdn4.telesco.pe/file/**", route => route.continue());
+    await page.route("http://127.0.0.1:4173/gallery-data.json*", route => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: fs.readFileSync("gallery-data.json", "utf8")
+    }));
     fs.mkdirSync("gallery-visual-audit/images", { recursive: true });
     const imageNetworkEvents = [];
     const imageResponseTasks = [];
@@ -413,6 +418,11 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     const russian = await browser.newPage({ viewport: { width: 390, height: 844 } });
     await russian.route("https://**/*", route => route.abort());
     await russian.route("https://cdn4.telesco.pe/file/**", route => route.continue());
+    await russian.route("http://127.0.0.1:4173/gallery-data.json*", route => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: fs.readFileSync("gallery-data.json", "utf8")
+    }));
     await russian.goto("http://127.0.0.1:4173/ru/gallery.html", { waitUntil: "domcontentloaded" });
     await russian.waitForSelector(".gallery-toolbar");
     await russian.waitForFunction(expected => document.querySelectorAll("#gallery-grid .gallery-card").length === expected, expectedGalleryCount);
@@ -468,6 +478,11 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       const localized = await browser.newPage({ viewport: { width: 390, height: 844 } });
       await localized.route("https://**/*", route => route.abort());
       await localized.route("https://cdn4.telesco.pe/file/**", route => route.continue());
+      await localized.route("http://127.0.0.1:4173/gallery-data.json*", route => route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: fs.readFileSync("gallery-data.json", "utf8")
+      }));
       await localized.goto("http://127.0.0.1:4173/" + locale + "/gallery.html", { waitUntil: "domcontentloaded" });
       await localized.waitForSelector(".gallery-toolbar");
       await localized.waitForFunction(expected => document.querySelectorAll("#gallery-grid .gallery-card").length === expected, expectedGalleryCount);
