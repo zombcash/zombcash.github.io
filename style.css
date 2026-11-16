@@ -1583,3 +1583,33 @@ button,a{ -webkit-tap-highlight-color:transparent }
 @media(max-width:700px){
   .tools#radar .tool-card:before{background-size:100% 100%, auto 48%!important}
 }
+
+
+/* 2026-11-16: soften the survival-tool cards to match the cinematic homepage */
+.tools#radar .tool-card{
+  border-radius:18px;
+  border-color:rgba(157,190,151,.22);
+  background:linear-gradient(145deg,rgba(17,26,27,.88),rgba(8,13,17,.94) 72%);
+  box-shadow:0 12px 34px rgba(0,0,0,.22),inset 0 1px 0 rgba(225,245,220,.035);
+  transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;
+}
+.tools#radar .tool-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(155,255,69,.42);
+  box-shadow:0 16px 38px rgba(0,0,0,.3),0 0 24px rgba(155,255,69,.055);
+}
+.tools#radar .tool-card .tool-art{
+  border-radius:12px;
+  border-color:rgba(155,255,69,.18);
+}
+.tools#radar .tool-card .card-top{
+  padding-bottom:2px;
+}
+@media(max-width:700px){
+  .tools#radar .tool-card{border-radius:15px}
+  .tools#radar .tool-card .tool-art{border-radius:10px}
+}
+@media(prefers-reduced-motion:reduce){
+  .tools#radar .tool-card{transition:none}
+  .tools#radar .tool-card:hover{transform:none}
+}
