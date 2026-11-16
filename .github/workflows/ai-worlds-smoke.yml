@@ -1,0 +1,55 @@
+name: AI Worlds Smoke Tests
+
+on:
+  pull_request:
+    paths:
+      - 'arcade.html'
+      - 'ai-arena.js'
+      - 'zombie-world.js'
+      - 'mcp-server/**'
+      - 'supabase/**'
+      - 'tests/**'
+      - '.github/workflows/ai-worlds-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate browser scripts
+        run: |
+          node --check ai-arena.js
+          node --check zombie-world.js
+      - name: Install browser test dependency
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Run AI Worlds browser interaction tests
+        run: node tests/ai-worlds.browser.cjs
+      - name: Check deployed Edge Function TypeScript
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Type-check Outbreak MCP Edge Function
+        run: deno check supabase/functions/outbreak-mcp/index.ts
+      - name: Install MCP server dependency
+        run: python -m pip install -r mcp-server/requirements.txt
+      - name: Compile MCP server
+        run: python -m py_compile mcp-server/server.py
+      - name: Test MCP match rules
+        run: python -m unittest discover -s tests -v
+      - name: Test live deployed MCP endpoint
+        env:
+          # Public legacy anon JWT only; never place the server-side secret key in CI.
+          SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93bWl5d3ZtdGRqeWV5ZnhscGRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI1Nzc0MDIsImV4cCI6MjEwODE1MzQwMn0.1o80qtnCD7uqQiZF2whuEastsDxzDGv6MTuJyxzOewQ'
+        run: node tests/outbreak-mcp.integration.cjs
