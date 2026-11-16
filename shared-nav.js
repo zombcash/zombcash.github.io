@@ -1782,5 +1782,35 @@
       }
     }, {capture:true, passive:true});
   }
+  // Keep the shared language menu inside the viewport on phones and tablets.
+  // This runs at document bubble phase, after language.js toggles and positions the menu.
+  if (!window.__zombcashLanguageMenuClampBound) {
+    window.__zombcashLanguageMenuClampBound = true;
+    document.addEventListener('click', function(event) {
+      const trigger = event.target && event.target.closest ? event.target.closest('.language-trigger') : null;
+      if (!trigger || !window.matchMedia || !window.matchMedia('(max-width:900px)').matches) return;
+      const switcher = trigger.closest('.language-switcher');
+      const menu = switcher && switcher.querySelector('.language-menu') || document.querySelector('.language-menu');
+      if (!menu || menu.hidden) return;
+      const rect = trigger.getBoundingClientRect();
+      const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
+      const menuWidth = Math.min(180, Math.max(120, viewportWidth - 20));
+      const left = Math.max(10, Math.min(rect.right - menuWidth, viewportWidth - menuWidth - 10));
+      const set = (name, value) => menu.style.setProperty(name, value, 'important');
+      set('position', 'fixed');
+      set('top', Math.max(8, Math.min(rect.bottom + 7, window.innerHeight - menu.offsetHeight - 10)) + 'px');
+      set('left', left + 'px');
+      set('right', 'auto');
+      set('width', menuWidth + 'px');
+      set('max-width', 'calc(100vw - 20px)');
+      set('box-sizing', 'border-box');
+      set('z-index', '10050');
+      menu.querySelectorAll('.language-option').forEach(option => {
+        option.style.setProperty('white-space', 'normal', 'important');
+        option.style.setProperty('overflow-wrap', 'anywhere', 'important');
+      });
+    }, { passive: true });
+  }
+
 })();
 
