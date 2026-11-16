@@ -110,7 +110,7 @@ def shared_navigation_targets():
         raise ValueError("No shared navigation items were found")
     localized = {}
     for match in re.finditer(
-        r"([A-Za-z-]+): new Set\(\[([^\]]*)\]\)",
+        r"""['"]?([A-Za-z-]+)['"]?: new Set\(\[([^\]]*)\]\)""",
         source,
     ):
         locale, body = match.groups()
