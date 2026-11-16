@@ -6,6 +6,10 @@ on:
     paths:
       - "gallery-data.json"
       - "tests/gallery-metadata-reconcile-smoke.py"
+      - "tests/gallery-pages-sitemap-lastmod-smoke.py"
+      - "sitemap-gallery-pages.xml"
+      - "scripts/generate_localized_gallery_pages.py"
+      - ".github/workflows/sync-gallery-image-seo.yml"
       - ".github/workflows/gallery-metadata-reconcile-smoke.yml"
 
 permissions:
@@ -16,8 +20,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Validate current archive and editorial metadata
         run: python tests/gallery-metadata-reconcile-smoke.py
+      - name: Validate localized gallery sitemap lastmod
+        run: python tests/gallery-pages-sitemap-lastmod-smoke.py
