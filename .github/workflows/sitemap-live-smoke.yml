@@ -15,7 +15,7 @@ on:
   schedule:
     - cron: '37 2 * * *'
   workflow_run:
-    workflows: ["pages build and deployment"]
+    workflows: ["Deploy ZombieCash static site to GitHub Pages"]
     types: [completed]
     branches: [main]
 
