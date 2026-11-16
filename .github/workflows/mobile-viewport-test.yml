@@ -15,6 +15,7 @@ on:
       - 'survivor-field-manual.html'
       - 'survivor-hub.html'
       - 'tests/survivor-hub-localization-smoke.cjs'
+      - 'tests/survivor-hub-visual-smoke.cjs'
       - '.github/workflows/mobile-viewport-test.yml'
   push:
     branches: [main]
@@ -41,6 +42,7 @@ on:
       - 'tests/survivor-field-manual-smoke.cjs'
       - 'survivor-hub.html'
       - 'tests/survivor-hub-localization-smoke.cjs'
+      - 'tests/survivor-hub-visual-smoke.cjs'
       - 'tests/memecoin-platforms-article-smoke.cjs'
       - 'memecoin-promotion-platforms-comparison.html'
       - 'de/memecoin-promotion-platforms-comparison.html'
@@ -124,12 +126,25 @@ jobs:
         if: always()
         run: node tests/survivor-hub-localization-smoke.cjs
 
+      - name: Browser-check Survivor Hub navigation and layout across locales and viewports
+        if: always()
+        run: node tests/survivor-hub-visual-smoke.cjs
+
       - name: Upload wide viewport visual evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: homepage-zoom-visual-evidence
           path: homepage-zoom-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Upload Survivor Hub visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: survivor-hub-visual-evidence
+          path: survivor-hub-visual-results/
           if-no-files-found: ignore
           retention-days: 7
 
@@ -145,5 +160,6 @@ jobs:
             zctv-layout-results/
             survivor-field-manual-results/
             memecoin-article-results/
+            survivor-hub-visual-results/
           if-no-files-found: ignore
           retention-days: 14
