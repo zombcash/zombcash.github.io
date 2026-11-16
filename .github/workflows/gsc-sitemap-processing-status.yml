@@ -1,0 +1,102 @@
+name: Google Search Console Sitemap Processing Status
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  status:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Install Google API client
+        run: python -m pip install --disable-pip-version-check google-api-python-client google-auth google-auth-httplib2
+
+      - name: Read current sitemap processing state (no resubmission)
+        env:
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+        run: |
+          python - <<'PY'
+          import datetime
+          import json
+          import os
+          from pathlib import Path
+
+          import httplib2
+          from google.oauth2 import service_account
+          from google.auth.transport.requests import Request as GoogleAuthRequest
+          from google_auth_httplib2 import AuthorizedHttp
+          from googleapiclient.discovery import build
+
+          class BoundedGoogleAuthRequest(GoogleAuthRequest):
+              def __call__(self, url, method="GET", body=None, headers=None, timeout=15, **kwargs):
+                  return super().__call__(url, method=method, body=body, headers=headers, timeout=timeout, **kwargs)
+
+          site_url = "https://zombcash.github.io/"
+          raw = os.environ.get("GSC_SERVICE_ACCOUNT_JSON", "")
+          if not raw.strip():
+              raise SystemExit("ERROR: GitHub Secret GSC_SERVICE_ACCOUNT_JSON is missing or empty.")
+
+          info = json.loads(raw)
+          credentials = service_account.Credentials.from_service_account_info(
+              info, scopes=["https://www.googleapis.com/auth/webmasters"]
+          )
+          credentials.refresh(BoundedGoogleAuthRequest())
+          service = build(
+              "searchconsole", "v1",
+              http=AuthorizedHttp(credentials, http=httplib2.Http(timeout=15)),
+              cache_discovery=False,
+          )
+
+          response = service.sitemaps().list(siteUrl=site_url).execute(num_retries=0)
+          expected = [
+              site_url + "sitemap.xml",
+              site_url + "sitemap-gallery-images.xml",
+              site_url + "sitemap-zombie-fiction.xml",
+              site_url + "sitemap-gallery-pages.xml",
+          ]
+          items = {item.get("path"): item for item in response.get("sitemap", [])}
+          report = {
+              "site": site_url,
+              "generated_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              "source": "Google Search Console Sitemaps API (read-only; no submission performed)",
+              "sitemaps": [],
+          }
+
+          print(f"Property: {site_url}")
+          for url in expected:
+              item = items.get(url)
+              if not item:
+                  row = {"url": url, "found_in_search_console": False}
+              else:
+                  row = {"url": url, "found_in_search_console": True}
+                  for key in ("lastSubmitted", "lastDownloaded", "isPending", "type", "warnings", "errors"):
+                      if key in item:
+                          row[key] = item[key]
+              report["sitemaps"].append(row)
+              print(json.dumps(row, ensure_ascii=False, sort_keys=True))
+
+          Path("gsc-sitemap-processing-status.json").write_text(
+              json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
+          )
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as output:
+              output.write("# Google Search Console sitemap processing state\n\n")
+              output.write("Read-only status check; no sitemap was resubmitted.\n\n")
+              for row in report["sitemaps"]:
+                  output.write(f"- **{row['url']}**\n")
+                  for key in ("found_in_search_console", "lastSubmitted", "lastDownloaded", "isPending", "warnings", "errors"):
+                      if key in row:
+                          output.write(f"  - {key}: {row[key]}\n")
+
+          PY
+
+      - name: Upload sitemap status report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gsc-sitemap-processing-status
+          path: gsc-sitemap-processing-status.json
+          if-no-files-found: warn
+          retention-days: 14
