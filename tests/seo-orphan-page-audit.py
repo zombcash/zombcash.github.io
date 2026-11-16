@@ -23,6 +23,7 @@ class PageParser(HTMLParser):
     def __init__(self):
         super().__init__()
         self.links = []
+        self.scripts = []
         self.title = []
         self.in_title = False
 
@@ -30,6 +31,8 @@ class PageParser(HTMLParser):
         attrs = dict(attrs)
         if tag.lower() == "a" and attrs.get("href"):
             self.links.append(attrs["href"].strip())
+        elif tag.lower() == "script" and attrs.get("src"):
+            self.scripts.append(attrs["src"])
         elif tag.lower() == "title":
             self.in_title = True
 
@@ -92,6 +95,28 @@ def sitemap_urls(sitemap_url, seen=None):
     }
 
 
+def shared_navigation_targets():
+    """Mirror the locale-aware destinations injected by shared-nav.js."""
+    source = Path("shared-nav.js").read_text(encoding="utf-8")
+    labels_match = __import__("re").search(r"const labels = \\[(.*?)\\n  \\];", source, __import__("re").S)
+    if not labels_match:
+        raise ValueError("Could not parse shared navigation labels")
+    nav_items = __import__("re").findall(
+        r"\\['([^']+)',\\s*'([^']+)',\\s*'([^']+)'\\]",
+        labels_match.group(1),
+    )
+    if not nav_items:
+        raise ValueError("No shared navigation items were found")
+    localized = {}
+    for match in __import__("re").finditer(
+        r"([a-z-]+): new Set\\(\\[([^\\]]*)\\]\\)",
+        source,
+    ):
+        locale, body = match.groups()
+        localized[locale] = set(__import__("re").findall(r'"([^"]+)"', body))
+    return nav_items, localized
+
+
 def main():
     if not ROBOTS.is_file():
         raise FileNotFoundError("robots.txt is missing")
@@ -115,6 +140,8 @@ def main():
     inbound = Counter()
     outbound = Counter()
     missing_files = []
+    nav_items, localized_pages = shared_navigation_targets()
+    shared_nav_pages = 0
     page_titles = {}
     for source_url in sorted(urls):
         source_file = local_file(source_url)
@@ -124,6 +151,19 @@ def main():
         parser = PageParser()
         parser.feed(source_file.read_text(encoding="utf-8-sig", errors="replace"))
         page_titles[source_url] = " ".join(" ".join(parser.title).split())[:240]
+        if any("shared-nav.js" in src for src in parser.scripts):
+            shared_nav_pages += 1
+            path_parts = urlsplit(source_url).path.strip("/").split("/")
+            locale = path_parts[0] if len(path_parts) > 1 and path_parts[0] in localized_pages else "en"
+            for _label, href, _item_id in nav_items:
+                key = urlsplit(href).path.strip("/").split("/")[-1] or "index.html"
+                if locale != "en" and key in localized_pages.get(locale, set()):
+                    nav_target = site_url("/" + locale + "/" + key)
+                else:
+                    nav_target = site_url(href)
+                if nav_target and nav_target in urls and nav_target != source_url:
+                    inbound[nav_target] += 1
+                    outbound[source_url] += 1
         for href in parser.links:
             target = site_url(href, source_url)
             if target and target in urls and target != source_url:
@@ -148,6 +188,7 @@ def main():
             "sitemap_feeds": feeds,
             "unique_sitemap_urls": len(urls),
             "html_pages_audited": len(page_titles),
+            "shared_navigation_pages": shared_nav_pages,
             "missing_local_files": missing_files,
             "orphan_count": sum(row["status"] == "ORPHAN" for row in rows),
             "low_inbound_count": sum(row["status"] == "LOW_INBOUND" for row in rows),
@@ -165,6 +206,7 @@ def main():
     print(f"Sitemap feeds: {len(feeds)}")
     print(f"Unique HTML sitemap URLs: {len(urls)}")
     print(f"Local HTML pages read: {len(page_titles)}")
+    print(f"Pages with locale-aware shared navigation: {shared_nav_pages}")
     print(f"Missing local files: {len(missing_files)}")
     print(f"Orphan pages (zero incoming anchor links): {len(orphans)}")
     print(f"Low inbound pages (one or two incoming links): {len(low)}")
