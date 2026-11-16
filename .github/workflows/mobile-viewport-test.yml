@@ -89,6 +89,7 @@ jobs:
       - name: Validate homepage and Hub smoke-test JavaScript syntax
         run: |
           node --check assets/js/zctv-player.js
+          node --check language.js
           node --check tests/survivor-hub-localization-smoke.cjs
           node --check tests/survivor-hub-visual-smoke.cjs
       - name: Install Playwright

@@ -118,10 +118,22 @@ function pagePath(locale) {
         assert.ok(await page.locator('.language-option[data-lang="ru"]').isVisible(), locale + ' language menu is missing Russian');
         const menuRect = await page.locator('.language-menu').evaluate(element => {
           const rect = element.getBoundingClientRect();
-          return { left: rect.left, right: rect.right };
+          return {
+            left: rect.left,
+            right: rect.right,
+            width: rect.width,
+            innerWidth: window.innerWidth,
+            position: getComputedStyle(element).position,
+          };
         });
+        if (viewport.width === 360) {
+          await page.screenshot({
+            path: path.join(RESULTS_DIR, locale + '-' + viewport.width + '-language-menu.png'),
+            fullPage: true,
+          });
+        }
         assert.ok(menuRect.left >= -1 && menuRect.right <= viewport.width + 1,
-          locale + ' language menu overflows at ' + viewport.width + 'px');
+          locale + ' language menu overflows at ' + viewport.width + 'px: ' + JSON.stringify(menuRect));
         await languageTrigger.click();
 
         await page.screenshot({
