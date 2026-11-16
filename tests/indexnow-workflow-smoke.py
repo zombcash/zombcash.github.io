@@ -2,18 +2,24 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 indexnow = (ROOT / ".github/workflows/indexnow.yml").read_text(encoding="utf-8")
-gallery = (ROOT / ".github/workflows/sync-gallery-image-seo.yml").read_text(encoding="utf-8")
+bing = (ROOT / ".github/workflows/bing-webmaster-api.yml").read_text(encoding="utf-8")
+pages_smoke = (ROOT / ".github/workflows/sitemap-live-smoke.yml").read_text(encoding="utf-8")
+seo_smoke = (ROOT / ".github/workflows/seo-internal-link-fixes-smoke.yml").read_text(encoding="utf-8")
 
-assert 'name: Sync gallery image SEO assets' in gallery, "Gallery generator workflow name changed"
-assert 'workflows:\n      - "Sync gallery image SEO assets"' in indexnow, "IndexNow must listen for the gallery SEO generator"
-assert 'types:\n      - completed' in indexnow, "IndexNow must run after the generator completes"
-assert 'branches:\n      - main' in indexnow, "The workflow_run trigger must be restricted to main"
-assert "if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}" in indexnow, "Failed gallery runs must not trigger IndexNow"
-assert 'fetch-depth: 0' in indexnow, "IndexNow needs full history to diff generated pages"
-assert 'WORKFLOW_RUN_BEFORE="${{ github.event.workflow_run.head_sha }}"' in indexnow, "workflow_run must use its triggering commit as the diff base"
-assert 'git fetch origin main' in indexnow and 'AFTER="$(git rev-parse origin/main)"' in indexnow, "workflow_run must compare against the generated commit on main"
-assert 'git diff --name-only --diff-filter=AMDR "$BEFORE" "$AFTER"' in indexnow, "IndexNow must enumerate changed files between the two commits"
-assert 'case "$path" in' in indexnow and '*.html|*/index.html)' in indexnow, "Only changed HTML pages should be submitted"
+pages_workflow = 'workflows:\n      - "pages build and deployment"'
+assert pages_workflow in pages_smoke, "The live sitemap smoke must identify the actual Pages deployment workflow"
+for name, workflow in (("IndexNow", indexnow), ("Bing Webmaster", bing)):
+    assert pages_workflow in workflow, f"{name} must run after the Pages deployment"
+    assert 'types:\n      - completed' in workflow, f"{name} must wait for deployment completion"
+    assert 'branches:\n      - main' in workflow, f"{name} deployment trigger must be restricted to main"
+    assert "if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}" in workflow, f"{name} must ignore failed deployments"
+
 assert 'GITHUB_EVENT_NAME" = "workflow_dispatch"' in indexnow, "Manual dispatch must retain the full-sitemap fallback"
+assert 'GITHUB_EVENT_NAME" = "workflow_run"' in indexnow, "Successful Pages deployment must submit the full sitemap"
+assert 'Collected {len(urls)} unique URL(s) from all sitemaps.' in indexnow, "IndexNow must collect every live sitemap URL"
+assert 'https://api.indexnow.org/indexnow' in indexnow, "IndexNow endpoint must remain configured"
+assert 'SubmitFeed?' in bing, "Bing workflow must continue submitting all robots.txt sitemap feeds"
+assert '.github/workflows/bing-webmaster-api.yml' in seo_smoke, "SEO static smoke must run when Bing workflow changes"
+assert 'tests/indexnow-workflow-smoke.py' in seo_smoke and 'python tests/indexnow-workflow-smoke.py' in seo_smoke, "SEO static smoke must execute this regression test"
 
-print("PASS: IndexNow receives generated gallery HTML changes after the gallery SEO workflow completes.")
+print("PASS: IndexNow and Bing receive current sitemap URLs after successful GitHub Pages deployment.")
