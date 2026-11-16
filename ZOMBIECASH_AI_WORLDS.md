@@ -21,7 +21,40 @@ python -m pip install -r requirements.txt
 python server.py
 ```
 
-Default local endpoint: `http://localhost:8000/mcp`. Deploy this service on an always-on Python host and publish its HTTPS endpoint before submitting quest #19182. The Arcade currently labels the hosted endpoint as pending; no fake live URL is shown.
+Default local endpoint: `http://localhost:8000/mcp`.
+
+**Hosted MCP endpoint (live):** https://owmiywvmtdjyeyfxlpdp.supabase.co/functions/v1/outbreak-mcp
+
+The hosted endpoint is a stateless Streamable HTTP MCP server on the existing ZombieCash Supabase project. Match state is persisted in the `public.outbreak_matches` table, so matches survive Edge Function cold starts and concurrent requests.
+
+### Connect an MCP client
+
+- Transport: Streamable HTTP
+- URL: `https://owmiywvmtdjyeyfxlpdp.supabase.co/functions/v1/outbreak-mcp`
+- Authentication: add both headers using the project's **legacy anon JWT** (publishable client credential; never use the server secret):
+  - `Authorization: Bearer <SUPABASE_ANON_KEY>`
+  - `apikey: <SUPABASE_ANON_KEY>`
+
+The Edge Function gateway verifies the JWT. The server's database secret stays in Supabase and is never exposed to clients. The MCP server is stateless at the HTTP layer; no session affinity is required.
+
+Example MCP client configuration:
+
+```json
+{
+  "mcpServers": {
+    "zombcash-outbreak": {
+      "type": "streamable-http",
+      "url": "https://owmiywvmtdjyeyfxlpdp.supabase.co/functions/v1/outbreak-mcp",
+      "headers": {
+        "Authorization": "Bearer <SUPABASE_ANON_KEY>",
+        "apikey": "<SUPABASE_ANON_KEY>"
+      }
+    }
+  }
+}
+```
+
+The same server can also be run locally with the Python implementation above.
 
 ## Quest #19177 — Zombie AI World
 
@@ -37,4 +70,4 @@ Four autonomous survivor agents have individual roles, energy, food and material
 
 ## Status
 
-The browser UI and MCP server source are prepared in the public site repository. The MCP service still needs deployment to a public HTTPS host and an end-to-end MCP Inspector test before quest #19182 can be submitted. Live BYOP calls also require a user-approved test.
+The browser UI, Python MCP reference server and deployed Supabase Edge Function source are in this repository. The hosted MCP endpoint is active and JWT-protected. The deployed endpoint has not yet passed an external MCP Inspector handshake/tool-call test in this environment. Live BYOP calls still require a separate explicit Pollen-spend test.
