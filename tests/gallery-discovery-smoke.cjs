@@ -5,7 +5,7 @@ const path = require("path");
 const galleryData = JSON.parse(fs.readFileSync("gallery-data.json", "utf8"));
 const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]));
 const expectedGalleryCount = galleryData.items.length;
-if (galleryData.items.some(item => /\\bZOMBIECASH\\s+SITE\\s+SPOTLIGHT\\b/i.test(String(item.caption || "")))) throw new Error("SITE SPOTLIGHT promotional cards must be excluded");
+if (galleryData.items.some(item => /\bZOMBIECASH\s+SITE\s+SPOTLIGHT\b/i.test(String(item.caption || "")))) throw new Error("SITE SPOTLIGHT promotional cards must be excluded");
 const targetLikeImageId = galleryData.items[0]?.id || "";
 const gallerySearchCorpus = galleryData.items.map(item =>
   [item.title || "", item.caption || "", ...(item.tags || [])].join(" ").toLowerCase()
