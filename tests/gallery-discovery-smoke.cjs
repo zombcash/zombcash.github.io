@@ -6,6 +6,14 @@ const galleryData = JSON.parse(fs.readFileSync("gallery-data.json", "utf8"));
 const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]));
 const expectedGalleryCount = galleryData.items.length;
 const targetLikeImageId = galleryData.items[0]?.id || "";
+const gallerySearchCorpus = galleryData.items.map(item =>
+  [item.title || "", item.caption || "", ...(item.tags || [])].join(" ").toLowerCase()
+);
+const nonHorrorSearchItem = galleryData.items.find(item => !(item.category_ids || []).includes("nightmare-horror")) || galleryData.items[0];
+const searchCandidates = String(nonHorrorSearchItem?.title || "") + " " + String(nonHorrorSearchItem?.caption || "");
+const gallerySearchWords = searchCandidates.toLowerCase().match(/[a-z0-9]{6,}/g) || [];
+const gallerySearchTerm = gallerySearchWords.find(word => gallerySearchCorpus.filter(text => text.includes(word)).length === 1) || gallerySearchWords[0] || "zombie";
+const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gallerySearchTerm)).length;
 
 (async () => {
   const server = spawn("python3", ["-m", "http.server", "4173", "--bind", "127.0.0.1"], { stdio: "ignore", cwd: process.cwd() });
@@ -291,7 +299,7 @@ const targetLikeImageId = galleryData.items[0]?.id || "";
     if (horror !== expectedHorrorIds.length || JSON.stringify(await visibleCategoryIds()) !== JSON.stringify(expectedHorrorIds)) {
       throw new Error("Nightmare filter does not match the current gallery metadata: expected " + expectedHorrorIds.length + ", got " + horror);
     }
-    await page.locator(".gallery-search").fill("goldfish");
+    await page.locator(".gallery-search").fill(gallerySearchTerm);
     await page.locator(".gallery-search").press("Tab");
     const searchTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_search"));
     if (!searchTracked) throw new Error("Gallery search analytics event was not recorded");
@@ -326,9 +334,9 @@ const targetLikeImageId = galleryData.items[0]?.id || "";
     await page.locator(".gallery-reset").click();
     const categoryReset = await page.locator("#gallery-grid .gallery-card").count();
     if (categoryReset !== expectedGalleryCount) throw new Error("Reset after taxonomy filters should restore all gallery images");
-    await page.locator(".gallery-search").fill("goldfish");
+    await page.locator(".gallery-search").fill(gallerySearchTerm);
     const matching = await page.locator("#gallery-grid .gallery-card").count();
-    if (matching !== 1) throw new Error("Search expected one goldfish caption, got " + matching);
+    if (matching !== expectedSearchCount) throw new Error("Search expected " + expectedSearchCount + " matching cards for " + gallerySearchTerm + ", got " + matching);
     await page.locator(".gallery-reset").click();
     await page.locator(".gallery-sort").selectOption("oldest");
     const oldestFirst = await page.locator("#gallery-grid .gallery-card").first().getAttribute("data-gallery-id");
