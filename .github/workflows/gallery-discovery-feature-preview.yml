@@ -40,8 +40,7 @@ permissions:
   contents: write
 
 concurrency:
-  # Serialize preview commits with Telegram sync commits to prevent data/sitemap races.
-  group: zombie-gallery-sync
+  group: gallery-discovery-feature-${{ github.event.pull_request.head.ref || github.ref }}
   cancel-in-progress: false
 
 jobs:
