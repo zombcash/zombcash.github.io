@@ -24,6 +24,8 @@ assert 'Collected {len(urls)} unique URL(s) from all sitemaps.' in indexnow, "In
 assert 'https://api.indexnow.org/indexnow' in indexnow, "IndexNow endpoint must remain configured"
 assert 'SubmitFeed?' in bing, "Bing workflow must continue submitting all robots.txt sitemap feeds"
 assert '"fetched_urls": "GetFetchedUrls"' in bing, "Bing report must include URL-level fetched-page records"
+assert '"GetUrlInfo?"' in bing and '"GetChildrenUrlInfo?"' in bing, "Bing report must include host-level URL crawl details"
+assert 'domain:zombcash.github.io' in bing, "Bing URL crawl report must scope directory inspection to the verified host"
 assert '.github/workflows/bing-webmaster-api.yml' in seo_smoke, "SEO static smoke must run when Bing workflow changes"
 assert 'tests/indexnow-workflow-smoke.py' in seo_smoke and 'python tests/indexnow-workflow-smoke.py' in seo_smoke, "SEO static smoke must execute this regression test"
 

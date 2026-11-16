@@ -37,6 +37,7 @@ jobs:
           import json
           import os
           import sys
+          import time
           import urllib.error
           import urllib.parse
           import urllib.request
@@ -154,6 +155,91 @@ jobs:
               except Exception as exc:
                   print(f"::error::{method} failed ({type(exc).__name__}). Details omitted to protect credentials.")
                   sys.exit(1)
+
+          # Fetch URL-level crawl records for the whole verified host. These
+          # records describe discovery/fetching and HTTP status; they are not
+          # an independent indexed/not-indexed verdict.
+          domain_query = "domain:zombcash.github.io"
+          domain_params = urllib.parse.urlencode({
+              "siteUrl": site, "url": domain_query, "apikey": key
+          })
+          domain_request = urllib.request.Request(
+              base + "GetUrlInfo?" + domain_params,
+              headers={"Accept": "application/json", "User-Agent": "ZombieCash-Bing-Webmaster-Report/1.0"},
+          )
+          try:
+              with urllib.request.urlopen(domain_request, timeout=25) as response:
+                  payload = json.loads(response.read().decode("utf-8"))
+              domain_info = payload.get("d", payload) if isinstance(payload, dict) else payload
+              report["results"]["directory_info"] = {
+                  "http_status": 200,
+                  "data": domain_info,
+              }
+              print("GetUrlInfo(domain): HTTP 200; directory details received.")
+          except Exception as exc:
+              warning = f"GetUrlInfo(domain) unavailable ({type(exc).__name__})."
+              warnings.append(warning)
+              report["results"]["directory_info"] = {
+                  "status": "unavailable",
+                  "error_type": type(exc).__name__,
+              }
+              print(f"::warning::{warning}")
+
+          directory_records = []
+          directory_pages = 0
+          directory_truncated = False
+          for page in range(100):
+              params = urllib.parse.urlencode({"apikey": key})
+              body = json.dumps({
+                  "siteUrl": site,
+                  "url": domain_query,
+                  "page": page,
+                  "filterProperties": {
+                      "__type": "FilterProperties:#Microsoft.Bing.Webmaster.Api",
+                      "CrawlDateFilter": 0,
+                      "DiscoveredDateFilter": 0,
+                      "DocFlagsFilters": 0,
+                      "HttpCodeFilters": 0,
+                  },
+              }).encode("utf-8")
+              request = urllib.request.Request(
+                  base + "GetChildrenUrlInfo?" + params,
+                  data=body,
+                  headers={
+                      "Accept": "application/json",
+                      "Content-Type": "application/json; charset=utf-8",
+                      "User-Agent": "ZombieCash-Bing-Webmaster-Report/1.0",
+                  },
+                  method="POST",
+              )
+              try:
+                  with urllib.request.urlopen(request, timeout=25) as response:
+                      payload = json.loads(response.read().decode("utf-8"))
+                  data = payload.get("d", payload) if isinstance(payload, dict) else payload
+                  if not isinstance(data, list) or not data:
+                      break
+                  directory_records.extend(data)
+                  directory_pages += 1
+                  print(f"GetChildrenUrlInfo: page {page + 1}; {len(data)} URL record(s).")
+              except Exception as exc:
+                  warning = f"GetChildrenUrlInfo page {page} unavailable ({type(exc).__name__})."
+                  warnings.append(warning)
+                  print(f"::warning::{warning}")
+                  break
+              if page == 99:
+                  directory_truncated = True
+              time.sleep(0.2)
+
+          report["results"]["directory_children"] = {
+              "record_count": len(directory_records),
+              "page_count": directory_pages,
+              "truncated_at_100_pages": directory_truncated,
+              "data": directory_records,
+          }
+          print(
+              f"Bing URL-level crawl records: {len(directory_records)} "
+              f"across {directory_pages} page(s)."
+          )
 
           Path("bing-webmaster-report.json").write_text(
               json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
