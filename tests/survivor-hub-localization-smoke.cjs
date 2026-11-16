@@ -88,7 +88,7 @@ const expectedAlternates = [
 const sharedNavVersion = assetVersion(source, 'shared-nav.js', 'English shared navigation script');
 const languageVersion = assetVersion(source, 'language.js', 'English language script');
 const authVersion = assetVersion(source, 'survivor-auth.js', 'English survivor auth script');
-assert.equal(sharedNavVersion, 'shared-nav.js?v=survivor-hub-nav-20261116-1', 'Survivor Hub must bust the shared navigation cache after the latest nav update');
+assert.equal(sharedNavVersion, 'shared-nav.js?v=nav-language-menu-clamp-20261116-2', 'Survivor Hub must bust the shared navigation cache after the latest nav update');
 
 for (const locale of locales) {
   const localizedPath = locale === 'en' ? sourcePath : locale + '/survivor-hub.html';
