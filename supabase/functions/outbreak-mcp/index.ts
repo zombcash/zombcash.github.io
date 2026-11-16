@@ -63,15 +63,29 @@ async function dbRequest(path: string, init: RequestInit = {}) {
   return raw ? JSON.parse(raw) : null;
 }
 async function loadMatch(id: string) {
-  const rows = await dbRequest(`outbreak_matches?id=eq.${encodeURIComponent(id)}&select=state`);
-  return rows?.[0]?.state ?? null;
+  const rows = await dbRequest(`outbreak_matches?id=eq.${encodeURIComponent(id)}&select=state,updated_at`);
+  return rows?.[0] ?? null;
 }
-async function saveMatch(m: any) {
-  await dbRequest("outbreak_matches?on_conflict=id", {
-    method: "POST",
-    headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
-    body: JSON.stringify({ id: m.id, state: m, updated_at: new Date().toISOString() }),
+async function saveMatch(m: any, expectedUpdatedAt?: string) {
+  const updatedAt = new Date().toISOString();
+  if (!expectedUpdatedAt) {
+    await dbRequest("outbreak_matches?on_conflict=id", {
+      method: "POST",
+      headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
+      body: JSON.stringify({ id: m.id, state: m, updated_at: updatedAt }),
+    });
+    return;
+  }
+  const rows = await dbRequest(`outbreak_matches?id=eq.${encodeURIComponent(m.id)}&updated_at=eq.${encodeURIComponent(expectedUpdatedAt)}`, {
+    method: "PATCH",
+    headers: { Prefer: "return=representation" },
+    body: JSON.stringify({ state: m, updated_at: updatedAt }),
   });
+  if (!rows?.length) throw new Error("Match changed concurrently. Fetch the latest state and retry your action.");
+}
+async function tokenHash(token: string) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(token));
+  return Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2, "0")).join("");
 }
 function requiredString(args: any, key: string, max: number) {
   const value = args?.[key];
@@ -87,27 +101,31 @@ async function callTool(name: string, args: any) {
     return publicState(match);
   }
   const matchId = requiredString(args, "match_id", 64);
-  const match = await loadMatch(matchId);
-  if (!match) throw new Error("Match not found");
+  const matchRow = await loadMatch(matchId);
+  if (!matchRow) throw new Error("Match not found");
+  const match = matchRow.state;
   if (name === "get_match_state") return publicState(match);
   if (name === "join_match") {
     const agentId = requiredString(args, "agent_id", 48);
     const role = requiredString(args, "role", 16);
     if (!ROLES.has(role)) throw new Error("role must be survivor or infected");
-    if (match.players[agentId]) return publicState(match);
+    if (match.players[agentId]) throw new Error("Agent ID is already taken in this match. Choose a new agent_id.");
     if (Object.keys(match.players).length >= MAX_PLAYERS) throw new Error("Match is full");
     if (match.status === "finished") throw new Error("Match is finished");
-    match.players[agentId] = { agent_id: agentId, role, position: role === "survivor" ? 0 : 80, health: 3, food: 2, wood: 0, acted_turn: -1 };
+    const agentToken = crypto.randomUUID() + crypto.randomUUID();
+    match.players[agentId] = { agent_id: agentId, role, position: role === "survivor" ? 0 : 80, health: 3, food: 2, wood: 0, acted_turn: -1, token_hash: await tokenHash(agentToken) };
     match.status = Object.keys(match.players).length >= 2 ? "running" : "waiting";
     match.events.push(`${agentId} joined as ${role}`);
-    await saveMatch(match);
-    return publicState(match);
+    await saveMatch(match, matchRow.updated_at);
+    return { ...publicState(match), agent_token: agentToken, token_notice: "Store this token securely. It is shown only once and is required to submit actions for this agent." };
   }
   if (name === "submit_action") {
     const agentId = requiredString(args, "agent_id", 48);
     const action = requiredString(args, "action", 32);
+    const agentToken = requiredString(args, "agent_token", 128);
     const player = match.players[agentId];
     if (!player) throw new Error("Agent has not joined this match");
+    if (!player.token_hash || await tokenHash(agentToken) !== player.token_hash) throw new Error("Invalid agent token");
     if (match.status !== "running") throw new Error("Match needs at least two agents");
     if (!ACTIONS.has(action)) throw new Error("Unsupported action");
     if (player.acted_turn === match.turn) throw new Error("Agent already acted this turn");
@@ -155,12 +173,15 @@ const TOOLS = [
   { name: "create_match", description: "Create a shared ZombieCash Outbreak match. Returns match_id for other agents to join.", inputSchema: { type: "object", properties: { name: { type: "string", description: "Optional match name" } }, additionalProperties: false } },
   { name: "join_match", description: "Join a match as a survivor or infected agent.", inputSchema: { type: "object", properties: { match_id: { type: "string" }, agent_id: { type: "string" }, role: { type: "string", enum: ["survivor", "infected"] } }, required: ["match_id", "agent_id", "role"], additionalProperties: false } },
   { name: "get_match_state", description: "Read the authoritative state of a shared match.", inputSchema: { type: "object", properties: { match_id: { type: "string" } }, required: ["match_id"], additionalProperties: false } },
-  { name: "submit_action", description: "Submit one legal action for the current turn. Supported actions: move_north, move_south, move_east, move_west, scavenge, barricade, attack, wait.", inputSchema: { type: "object", properties: { match_id: { type: "string" }, agent_id: { type: "string" }, action: { type: "string", enum: [...ACTIONS] } }, required: ["match_id", "agent_id", "action"], additionalProperties: false } },
+  { name: "submit_action", description: "Submit one legal action for the current turn. Requires the private agent_token returned by join_match. Supported actions: move_north, move_south, move_east, move_west, scavenge, barricade, attack, wait.", inputSchema: { type: "object", properties: { match_id: { type: "string" }, agent_id: { type: "string" }, agent_token: { type: "string" }, action: { type: "string", enum: [...ACTIONS] } }, required: ["match_id", "agent_id", "agent_token", "action"], additionalProperties: false } },
 ];
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
-  if (req.method === "GET") return json({ name: "ZombieCash Outbreak MCP", transport: "Streamable HTTP", endpoint: "/functions/v1/outbreak-mcp", tools: TOOLS.map(t => t.name) });
+  if (req.method === "GET") {
+    if (req.headers.get("accept")?.includes("text/event-stream")) return new Response(null, { status: 405, headers: { ...cors, Allow: "POST, OPTIONS" } });
+    return json({ name: "ZombieCash Outbreak MCP", status: "active", transport: "Streamable HTTP", endpoint: "/functions/v1/outbreak-mcp", tools: TOOLS.map(t => t.name) });
+  }
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405, { Allow: "GET, POST, OPTIONS" });
 
   let body: any;
