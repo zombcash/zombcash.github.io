@@ -48,3 +48,8 @@ jobs:
         run: python -m py_compile mcp-server/server.py
       - name: Test MCP match rules
         run: python -m unittest discover -s tests -v
+      - name: Test live deployed MCP endpoint
+        env:
+          # Public legacy anon JWT only; never place the server-side secret key in CI.
+          SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93bWl5d3ZtdGRqeWV5ZnhscGRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI1Nzc0MDIsImV4cCI6MjEwODE1MzQwMn0.1o80qtnCD7uqQiZF2whuEastsDxzDGv6MTuJyxzOewQ'
+        run: node tests/outbreak-mcp.integration.cjs
