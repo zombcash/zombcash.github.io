@@ -6,6 +6,7 @@ not navigational/editorial links that help users discover a page.
 """
 from collections import Counter
 from html.parser import HTMLParser
+import re
 import csv
 import json
 from pathlib import Path
@@ -98,24 +99,23 @@ def sitemap_urls(sitemap_url, seen=None):
 def shared_navigation_targets():
     """Mirror the locale-aware destinations injected by shared-nav.js."""
     source = Path("shared-nav.js").read_text(encoding="utf-8")
-    labels_match = __import__("re").search(r"const labels = \\[(.*?)\\n  \\];", source, __import__("re").S)
+    labels_match = re.search(r"const labels = \[(.*?)\n  \];", source, re.S)
     if not labels_match:
         raise ValueError("Could not parse shared navigation labels")
-    nav_items = __import__("re").findall(
-        r"\\['([^']+)',\\s*'([^']+)',\\s*'([^']+)'\\]",
+    nav_items = re.findall(
+        r"\['([^']+)',\s*'([^']+)',\s*'([^']+)'\]",
         labels_match.group(1),
     )
     if not nav_items:
         raise ValueError("No shared navigation items were found")
     localized = {}
-    for match in __import__("re").finditer(
-        r"([a-z-]+): new Set\\(\\[([^\\]]*)\\]\\)",
+    for match in re.finditer(
+        r"([A-Za-z-]+): new Set\(\[([^\]]*)\]\)",
         source,
     ):
         locale, body = match.groups()
-        localized[locale] = set(__import__("re").findall(r'"([^"]+)"', body))
+        localized[locale] = set(re.findall(r'"([^"]+)"', body))
     return nav_items, localized
-
 
 def main():
     if not ROBOTS.is_file():
