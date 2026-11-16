@@ -131,7 +131,6 @@ function pagePath(locale) {
         assert.deepEqual(pageErrors, [], locale + ' produced browser JavaScript errors at ' + viewport.width + 'px');
         console.log('PASS: Survivor Hub browser layout/navigation ' + locale + ' @ ' + viewport.width + 'px');
         await page.close();
-      }
     }
 
     const switchPage = await browser.newPage({ viewport: { width: 1600, height: 1000 } });

@@ -86,8 +86,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Validate homepage player JavaScript syntax
-        run: node --check assets/js/zctv-player.js
+      - name: Validate homepage and Hub smoke-test JavaScript syntax
+        run: |
+          node --check assets/js/zctv-player.js
+          node --check tests/survivor-hub-localization-smoke.cjs
+          node --check tests/survivor-hub-visual-smoke.cjs
       - name: Install Playwright
         run: |
           npm init -y
