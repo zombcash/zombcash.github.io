@@ -85,7 +85,7 @@ def make_sitemap(items):
         if not image.startswith(("https://", "http://")) or image in seen:
             continue
         seen.add(image)
-        caption = str(item.get("description") or item.get("title") or clean_caption(item.get("caption", "ZombieCash gallery image"))).strip()
+        caption = str(item.get("caption") or "ZombieCash gallery image").strip()
         rows.extend([
             '    <image:image>',
             '      <image:loc>' + html.escape(image, quote=False) + '</image:loc>',
