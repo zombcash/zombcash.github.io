@@ -1,0 +1,215 @@
+name: Google Search Console URL Inspection Audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/gsc-url-inspection-audit.yml"
+  schedule:
+    - cron: "43 6 * * 0"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gsc-url-inspection-audit
+  cancel-in-progress: false
+
+jobs:
+  inspect-indexed-urls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Install Google API clients
+        run: python -m pip install --disable-pip-version-check requests google-api-python-client google-auth
+
+      - name: Inspect every unique sitemap URL in Google
+        env:
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+        run: |
+          python - <<'PY'
+          import datetime
+          import json
+          import os
+          import sys
+          import time
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+
+          import requests
+          from google.oauth2 import service_account
+          from googleapiclient.discovery import build
+          from googleapiclient.errors import HttpError
+
+          site_url = "https://zombcash.github.io/"
+          raw_credentials = os.environ.get("GSC_SERVICE_ACCOUNT_JSON", "")
+          if not raw_credentials.strip():
+              raise SystemExit("ERROR: GitHub Secret GSC_SERVICE_ACCOUNT_JSON is missing or empty.")
+
+          try:
+              info = json.loads(raw_credentials)
+              credentials = service_account.Credentials.from_service_account_info(
+                  info, scopes=["https://www.googleapis.com/auth/webmasters"]
+              )
+              service = build("searchconsole", "v1", credentials=credentials, cache_discovery=False)
+          except Exception as exc:
+              raise SystemExit(f"ERROR: Could not initialize Search Console client: {type(exc).__name__}: {exc}")
+
+          robots_response = requests.get(site_url + "robots.txt", timeout=30)
+          robots_response.raise_for_status()
+          sitemap_urls = list(dict.fromkeys(
+              line.split(":", 1)[1].strip()
+              for line in robots_response.text.splitlines()
+              if line.lower().startswith("sitemap:")
+          ))
+          if not sitemap_urls:
+              raise SystemExit("ERROR: robots.txt contains no Sitemap directives.")
+
+          ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+          page_urls = set()
+          for sitemap_url in sitemap_urls:
+              if not sitemap_url.startswith(site_url):
+                  raise SystemExit(f"ERROR: Sitemap is outside the configured site: {sitemap_url}")
+              response = requests.get(sitemap_url, timeout=30)
+              response.raise_for_status()
+              root = ET.fromstring(response.content)
+              if root.tag.endswith("urlset"):
+                  page_urls.update(
+                      (node.text or "").strip()
+                      for node in root.findall("sm:url/sm:loc", ns)
+                      if (node.text or "").strip()
+                  )
+              elif root.tag.endswith("sitemapindex"):
+                  for node in root.findall("sm:sitemap/sm:loc", ns):
+                      child_url = (node.text or "").strip()
+                      if not child_url.startswith(site_url):
+                          raise SystemExit(f"ERROR: Nested sitemap is outside the configured site: {child_url}")
+                      child_response = requests.get(child_url, timeout=30)
+                      child_response.raise_for_status()
+                      child_root = ET.fromstring(child_response.content)
+                      if not child_root.tag.endswith("urlset"):
+                          raise SystemExit(f"ERROR: Unsupported nested sitemap structure: {child_url}")
+                      page_urls.update(
+                          (item.text or "").strip()
+                          for item in child_root.findall("sm:url/sm:loc", ns)
+                          if (item.text or "").strip()
+                      )
+              else:
+                  raise SystemExit(f"ERROR: Unexpected sitemap XML root: {root.tag}")
+
+          urls = sorted(url for url in page_urls if url.startswith(site_url))
+          if not urls:
+              raise SystemExit("ERROR: No valid page URLs found in the published sitemaps.")
+
+          report = {
+              "site": site_url,
+              "generated_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              "source": "Google Search Console URL Inspection API",
+              "sitemaps": sitemap_urls,
+              "unique_sitemap_urls": len(urls),
+              "inspected_count": 0,
+              "error_count": 0,
+              "stopped_early": False,
+              "records": [],
+          }
+
+          print(f"Search Console property: {site_url}")
+          print(f"Unique sitemap URLs to inspect: {len(urls)}")
+          print("Inspection cadence: 0.2 seconds between requests (below the documented 600 requests/minute per-site quota).")
+
+          for index, url in enumerate(urls, start=1):
+              try:
+                  response = service.urlInspection().index().inspect(
+                      body={
+                          "inspectionUrl": url,
+                          "siteUrl": site_url,
+                          "languageCode": "en-US",
+                      }
+                  ).execute()
+                  result = response.get("inspectionResult", {})
+                  status = result.get("indexStatusResult", {})
+                  record = {
+                      "url": url,
+                      "verdict": status.get("verdict"),
+                      "coverage_state": status.get("coverageState"),
+                      "robots_txt_state": status.get("robotsTxtState"),
+                      "indexing_state": status.get("indexingState"),
+                      "page_fetch_state": status.get("pageFetchState"),
+                      "last_crawl_time": status.get("lastCrawlTime"),
+                      "google_canonical": status.get("googleCanonical"),
+                      "user_canonical": status.get("userCanonical"),
+                      "sitemaps": status.get("sitemap", []),
+                      "referring_urls": status.get("referringUrls", []),
+                  }
+                  report["records"].append(record)
+                  report["inspected_count"] += 1
+                  print(
+                      f"[{index}/{len(urls)}] {record['verdict'] or 'NO_VERDICT'} | "
+                      f"{record['coverage_state'] or 'NO_COVERAGE_STATE'} | {url}"
+                  )
+              except HttpError as exc:
+                  body = exc.content.decode("utf-8", errors="replace")[:1500]
+                  report["records"].append({
+                      "url": url,
+                      "error_http_status": int(exc.resp.status),
+                      "error": body,
+                  })
+                  report["error_count"] += 1
+                  print(f"::warning::URL inspection failed for {url}: HTTP {exc.resp.status}.")
+                  if exc.resp.status in (401, 403, 429):
+                      report["stopped_early"] = True
+                      report["stop_reason"] = f"HTTP {exc.resp.status} from URL Inspection API"
+                      print("::warning::Stopping further inspection requests to avoid repeating an authorization or quota failure.")
+                      break
+              except Exception as exc:
+                  report["records"].append({
+                      "url": url,
+                      "error": f"{type(exc).__name__}: {exc}",
+                  })
+                  report["error_count"] += 1
+                  print(f"::warning::URL inspection failed for {url}: {type(exc).__name__}.")
+              if index < len(urls):
+                  time.sleep(0.2)
+
+          Path("gsc-url-inspection-report.json").write_text(
+              json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
+          )
+
+          verdicts = {}
+          coverage = {}
+          for record in report["records"]:
+              verdict = record.get("verdict", "ERROR" if "error" in record or "error_http_status" in record else "UNKNOWN")
+              verdicts[verdict] = verdicts.get(verdict, 0) + 1
+              state = record.get("coverage_state", "ERROR" if "error" in record or "error_http_status" in record else "UNKNOWN")
+              coverage[state] = coverage.get(state, 0) + 1
+
+          summary = [
+              "# Google Search Console URL Inspection",
+              "",
+              f"- Unique sitemap URLs: **{len(urls)}**",
+              f"- Inspected: **{report['inspected_count']}**",
+              f"- Errors: **{report['error_count']}**",
+              f"- Stopped early: **{report['stopped_early']}**",
+              "",
+              "## Index verdicts",
+          ]
+          summary.extend(f"- {key}: {value}" for key, value in sorted(verdicts.items()))
+          summary.extend(["", "## Coverage states"])
+          summary.extend(f"- {key}: {value}" for key, value in sorted(coverage.items()))
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as output:
+              output.write("\n".join(summary) + "\n")
+
+          print(f"Inspection complete: {report['inspected_count']} inspected; {report['error_count']} errors.")
+          if report["stopped_early"] or report["error_count"]:
+              sys.exit(1)
+          PY
+
+      - name: Upload URL inspection report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gsc-url-inspection-report
+          path: gsc-url-inspection-report.json
+          if-no-files-found: warn
+          retention-days: 14
