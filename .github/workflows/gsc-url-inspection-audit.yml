@@ -222,9 +222,9 @@ jobs:
           verdicts = {}
           coverage = {}
           for record in report["records"]:
-              verdict = record.get("verdict", "ERROR" if "error" in record or "error_http_status" in record else "UNKNOWN")
+              verdict = record.get("verdict") or ("ERROR" if "error" in record or "error_http_status" in record else "UNKNOWN")
               verdicts[verdict] = verdicts.get(verdict, 0) + 1
-              state = record.get("coverage_state", "ERROR" if "error" in record or "error_http_status" in record else "UNKNOWN")
+              state = record.get("coverage_state") or ("ERROR" if "error" in record or "error_http_status" in record else "UNKNOWN")
               coverage[state] = coverage.get(state, 0) + 1
 
           summary = [
