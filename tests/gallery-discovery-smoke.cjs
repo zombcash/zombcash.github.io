@@ -210,8 +210,16 @@ const targetLikeImageId = galleryData.items[0]?.id || "";
     await page.waitForSelector(".gallery-lightbox.is-open .gallery-lightbox-like");
     const openTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_image_open"));
     if (!openTracked) throw new Error("Gallery image open analytics event was not recorded");
+    const duplicateDescriptionCount = await page.locator(".gallery-lightbox-description").count();
+    if (duplicateDescriptionCount !== 0) throw new Error("Lightbox must suppress a description that duplicates the Telegram caption");
+    await page.evaluate(() => {
+      const card = document.querySelector("#gallery-grid .gallery-card");
+      card.dataset.galleryDescription = "A distinct editorial note about the artwork.";
+    });
+    await page.locator(".gallery-lightbox-close").click();
+    await page.locator("#gallery-grid .gallery-card").first().click({ position: { x: 20, y: 20 } });
     const detailDescription = await page.locator(".gallery-lightbox-description").textContent();
-    if (!detailDescription) throw new Error("Lightbox should include the editorial description");
+    if (detailDescription !== "A distinct editorial note about the artwork.") throw new Error("Lightbox should retain a genuinely distinct description");
     const detailCategories = await page.locator(".gallery-lightbox-categories").textContent();
     const openedCardCategoryCount = await page.locator("#gallery-grid .gallery-card").first().locator(".gallery-category-tag").count();
     if (!detailCategories || (openedCardCategoryCount > 1 && !detailCategories.includes("·"))) throw new Error("Lightbox category labels should be separated");
