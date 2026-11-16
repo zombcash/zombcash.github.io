@@ -4,6 +4,7 @@ from html import escape
 from pathlib import Path
 import json
 import re
+import subprocess
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -218,7 +219,30 @@ def build_page(base, locale):
     return page
 
 
+def latest_source_lastmod():
+    source_paths = [
+        "gallery.html",
+        "gallery-data.json",
+        "gallery.css",
+        "gallery.js",
+        "scripts/generate_localized_gallery_pages.py",
+        "scripts/sync_gallery_image_seo.py",
+    ]
+    result = subprocess.run(
+        ["git", "log", "-1", "--format=%cs", "--", *source_paths],
+        cwd=ROOT,
+        capture_output=True,
+        check=True,
+        text=True,
+    )
+    lastmod = result.stdout.strip()
+    if not re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", lastmod):
+        raise RuntimeError("Could not determine a verified YYYY-MM-DD gallery source date from Git history.")
+    return lastmod
+
+
 def build_sitemap():
+    lastmod = latest_source_lastmod()
     root = ET.Element(f"{{{NS}}}urlset")
     for locale in LOCALES:
         url = ET.SubElement(root, f"{{{NS}}}url")
@@ -234,6 +258,7 @@ def build_sitemap():
             "hreflang": "x-default",
             "href": page_url("en"),
         })
+        ET.SubElement(url, f"{{{NS}}}lastmod").text = lastmod
         ET.SubElement(url, f"{{{NS}}}changefreq").text = "monthly"
         ET.SubElement(url, f"{{{NS}}}priority").text = "0.6"
     ET.indent(root, space="  ")
