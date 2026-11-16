@@ -3015,5 +3015,32 @@ body:has(#home) .site-footer{
   html{scroll-behavior:auto}
 }
 </style>
+<style id="homepage-tool-card-softness-override-2026">
+/* Override the legacy high-specificity homepage card treatment intentionally. */
+body:has(#home) #home .tools#radar .tool-card{
+  border-radius:18px!important;
+  border-color:rgba(157,190,151,.22)!important;
+  background:linear-gradient(145deg,rgba(17,26,27,.88),rgba(8,13,17,.94) 72%)!important;
+  box-shadow:0 12px 34px rgba(0,0,0,.22),inset 0 1px 0 rgba(225,245,220,.035)!important;
+  transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease!important;
+}
+body:has(#home) #home .tools#radar .tool-card:hover{
+  transform:translateY(-3px)!important;
+  border-color:rgba(155,255,69,.42)!important;
+  box-shadow:0 16px 38px rgba(0,0,0,.3),0 0 24px rgba(155,255,69,.055)!important;
+}
+body:has(#home) #home .tools#radar .tool-card .tool-art{
+  border-radius:12px!important;
+  border-color:rgba(155,255,69,.18)!important;
+}
+@media(max-width:700px){
+  body:has(#home) #home .tools#radar .tool-card{border-radius:15px!important}
+  body:has(#home) #home .tools#radar .tool-card .tool-art{border-radius:10px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  body:has(#home) #home .tools#radar .tool-card{transition:none!important}
+  body:has(#home) #home .tools#radar .tool-card:hover{transform:none!important}
+}
+</style>
 
 </body></html>
