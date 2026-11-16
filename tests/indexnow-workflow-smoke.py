@@ -23,6 +23,7 @@ assert 'grep -qx ".github/workflows/indexnow.yml"' in indexnow, "The workflow-fi
 assert 'Collected {len(urls)} unique URL(s) from all sitemaps.' in indexnow, "IndexNow must collect every live sitemap URL"
 assert 'https://api.indexnow.org/indexnow' in indexnow, "IndexNow endpoint must remain configured"
 assert 'SubmitFeed?' in bing, "Bing workflow must continue submitting all robots.txt sitemap feeds"
+assert '"fetched_urls": "GetFetchedUrls"' in bing, "Bing report must include URL-level fetched-page records"
 assert '.github/workflows/bing-webmaster-api.yml' in seo_smoke, "SEO static smoke must run when Bing workflow changes"
 assert 'tests/indexnow-workflow-smoke.py' in seo_smoke and 'python tests/indexnow-workflow-smoke.py' in seo_smoke, "SEO static smoke must execute this regression test"
 
