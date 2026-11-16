@@ -32,6 +32,9 @@ on:
       - "tests/gallery-discovery-smoke.cjs"
       - "tests/gallery-feature-static-smoke.py"
       - ".github/workflows/gallery-discovery-feature-preview.yml"
+  workflow_run:
+    workflows: ["Sync Zombie Gallery"]
+    types: [completed]
 
 permissions:
   contents: write
@@ -42,6 +45,7 @@ concurrency:
 
 jobs:
   gallery-preview:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:

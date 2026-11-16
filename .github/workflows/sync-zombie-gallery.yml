@@ -4,6 +4,8 @@ on:
     branches: [main]
     paths:
       - "scripts/sync_gallery.py"
+      - "scripts/sync_gallery_image_seo.py"
+      - "scripts/generate_localized_gallery_pages.py"
       - ".github/workflows/sync-zombie-gallery.yml"
   workflow_dispatch:
   schedule:
@@ -12,13 +14,16 @@ permissions:
   contents: write
 concurrency:
   group: zombie-gallery-sync
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   sync:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Check out website
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -27,43 +32,51 @@ jobs:
         run: pip install requests beautifulsoup4
       - name: Sync Telegram gallery
         run: python scripts/sync_gallery.py
-      - name: Commit gallery updates
+      - name: Regenerate crawlable gallery and localized pages
         run: |
-          if git diff --quiet -- gallery-data.json; then
-            echo "Gallery data is already up to date."
-            exit 0
-          fi
+          python scripts/sync_gallery_image_seo.py
+          python scripts/generate_localized_gallery_pages.py
+          python tests/gallery-feature-static-smoke.py
+      - name: Commit gallery data, pages and sitemaps
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add gallery-data.json
+          git add gallery-data.json gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html
+          if git diff --cached --quiet; then
+            echo "Telegram gallery data and generated SEO assets are already current."
+            exit 0
+          fi
           git commit -m "Sync Zombie Gallery from Telegram"
 
-          # The SEO generator can update sitemaps while this scraper is running.
-          # Rebase this data-only commit instead of losing the freshly scraped archive.
+          # The SEO generator and other site workflows may advance main while
+          # Telegram pagination and image metadata are being collected.
           if git push; then
             exit 0
           fi
 
-          echo "Push raced with another gallery/SEO commit; fetching current main."
+          echo "Push raced with another gallery/site commit; fetching current main."
           git fetch origin main
           if git rebase origin/main; then
             if git push; then
               exit 0
             fi
           else
-            echo "Rebase conflicted; regenerate gallery data on current main."
+            echo "Rebase conflicted; regenerate all gallery outputs on current main."
             git rebase --abort
           fi
 
-          # If gallery-data.json itself changed concurrently, rerun the scraper
-          # against the newest main rather than overwriting newer editorial metadata.
+          # If source data or editorial metadata changed concurrently, rerun
+          # the scraper and both generators against the newest committed main.
           git fetch origin main
           git reset --hard origin/main
           python scripts/sync_gallery.py
-          if git diff --quiet -- gallery-data.json; then
-            echo "Gallery data is current after syncing latest main."
+          python scripts/sync_gallery_image_seo.py
+          python scripts/generate_localized_gallery_pages.py
+          python tests/gallery-feature-static-smoke.py
+          git add gallery-data.json gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html
+          if git diff --cached --quiet; then
+            echo "Gallery outputs are current after syncing latest main."
             exit 0
           fi
-          git add gallery-data.json
           git commit -m "Sync Zombie Gallery from Telegram (retry)"
           git push

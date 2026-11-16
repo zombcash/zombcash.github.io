@@ -1,25 +1,15 @@
 name: Sync gallery image SEO assets
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "gallery-data.json"
-      - "gallery.html"
-      - "gallery.css"
-      - "gallery.js"
-      - "scripts/sync_gallery_image_seo.py"
-      - "scripts/generate_localized_gallery_pages.py"
-      - ".github/workflows/sync-gallery-image-seo.yml"
+  # Manual recovery/maintenance only. Hourly Telegram sync is the single
+  # authoritative writer for gallery-data.json, crawlable cards and sitemaps.
   workflow_dispatch:
-  schedule:
-    - cron: "17 */6 * * *"
 
 permissions:
   contents: write
 
 concurrency:
-  group: sync-gallery-image-seo
+  group: zombie-gallery-sync
   cancel-in-progress: false
 
 jobs:
@@ -38,6 +28,8 @@ jobs:
         run: python scripts/sync_gallery_image_seo.py
       - name: Generate localized gallery pages
         run: python scripts/generate_localized_gallery_pages.py
+      - name: Validate gallery outputs
+        run: python tests/gallery-feature-static-smoke.py
       - name: Commit generated SEO assets when changed
         run: |
           if git diff --quiet -- gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html; then
@@ -48,34 +40,4 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html
           git commit -m "SEO: sync gallery image index"
-
-          # Another workflow or manual edit can advance main while this job
-          # generates SEO assets. Never force-push generated files over that work.
-          if git push; then
-            exit 0
-          fi
-
-          echo "Push raced with a concurrent update; fetching current main."
-          git fetch origin main
-          if git rebase origin/main; then
-            if git push; then
-              exit 0
-            fi
-          else
-            echo "Rebase conflicted; regenerate the SEO assets on current main."
-            git rebase --abort
-          fi
-
-          # Only this disposable Actions checkout is reset. The generator runs
-          # again against the newest committed gallery data before the retry.
-          git fetch origin main
-          git reset --hard origin/main
-          python scripts/sync_gallery_image_seo.py
-          python scripts/generate_localized_gallery_pages.py
-          if git diff --quiet -- gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html; then
-            echo "Gallery SEO assets are current after syncing latest main."
-            exit 0
-          fi
-          git add gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html
-          git commit -m "SEO: sync gallery image index (retry)"
           git push

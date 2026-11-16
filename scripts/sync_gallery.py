@@ -14,8 +14,8 @@ from bs4 import BeautifulSoup
 CHANNEL = "ZOMBCASH"
 BASE_URL = f"https://t.me/s/{CHANNEL}"
 OUTPUT = Path("gallery-data.json")
-MAX_PAGES = 100
-MAX_PER_CATEGORY = 50
+MAX_PAGES = 300
+MAX_PER_CATEGORY = 100
 # Classify all attached image posts, not only the three legacy series headers.
 # The order is intentional: explicit series/meme labels win over broad keywords.
 CATEGORY_PATTERNS = {
@@ -163,7 +163,7 @@ def main():
         time.sleep(0.35)
 
     # Keep up to 50 newest image entries in each of seven categories, then merge
-    # them into one date-sorted archive. This yields up to 350 total images.
+    # them into one date-sorted archive. This yields up to 700 total images.
     selected_by_category = {category: [] for category in CATEGORY_PATTERNS}
     for item in sorted(all_items.values(), key=lambda item: (item.get("date") or "", item.get("post_id") or ""), reverse=True):
         category = category_for_caption(item.get("caption"))

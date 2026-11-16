@@ -8,6 +8,9 @@ on:
     paths-ignore:
       - 'tests/**'
       - '.github/workflows/**'
+  workflow_run:
+    workflows: ["Sync Zombie Gallery", "Sync gallery image SEO assets"]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
@@ -21,6 +24,7 @@ concurrency:
 
 jobs:
   deploy:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     timeout-minutes: 40
     environment:
       name: github-pages

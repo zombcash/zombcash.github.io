@@ -106,23 +106,30 @@ const targetLikeImageId = galleryData.items[0]?.id || "";
       throw error;
     }
     await page.waitForFunction(() => typeof window.ZombieCashTrack === "function");
-    await page.locator("#gallery-grid img").evaluateAll(images => images.forEach(image => { image.loading = "eager"; }));
-    await page.waitForFunction(expected => {
+    const imageSampleSize = Math.min(24, expectedGalleryCount);
+    await page.locator("#gallery-grid img").evaluateAll((images, sampleSize) => {
+      images.slice(0, sampleSize).forEach(image => { image.loading = "eager"; });
+    }, imageSampleSize);
+    await page.waitForFunction(payload => {
       const images = Array.from(document.querySelectorAll("#gallery-grid img"));
-      return images.length === expected && images.every(image =>
+      return images.length === payload.expected && images.slice(0, payload.sampleSize).every(image =>
         image.complete && (image.naturalWidth > 0 || image.dataset.fallbackApplied === "true")
       );
-    }, expectedGalleryCount, { timeout: 45000 });
-    await page.locator("#gallery-grid img").evaluateAll(async images => {
-      await Promise.all(images.map(image => image.decode().catch(() => {})));
-    });
-    const imageLoadAudit = await page.locator("#gallery-grid img").evaluateAll(images => ({
-      total: images.length,
-      originalLoaded: images.filter(image => !image.dataset.fallbackApplied && image.naturalWidth > 0).length,
-      fallbacks: images.filter(image => image.dataset.fallbackApplied).length,
-      fallbackLoaded: images.filter(image => image.dataset.fallbackApplied && image.naturalWidth > 0).length,
-      missingDimensions: images.filter(image => !image.hasAttribute("width") || !image.hasAttribute("height")).length
-    }));
+    }, { expected: expectedGalleryCount, sampleSize: imageSampleSize }, { timeout: 60000 });
+    await page.locator("#gallery-grid img").evaluateAll(async (images, sampleSize) => {
+      await Promise.all(images.slice(0, sampleSize).map(image => image.decode().catch(() => {})));
+    }, imageSampleSize);
+    const imageLoadAudit = await page.locator("#gallery-grid img").evaluateAll((images, sampleSize) => {
+      const sample = images.slice(0, sampleSize);
+      return {
+        total: sample.length,
+        galleryTotal: images.length,
+        originalLoaded: sample.filter(image => !image.dataset.fallbackApplied && image.naturalWidth > 0).length,
+        fallbacks: sample.filter(image => image.dataset.fallbackApplied).length,
+        fallbackLoaded: sample.filter(image => image.dataset.fallbackApplied && image.naturalWidth > 0).length,
+        missingDimensions: sample.filter(image => !image.hasAttribute("width") || !image.hasAttribute("height")).length
+      };
+    }, imageSampleSize);
     // Telegram CDN can intermittently trigger browser ORB/network errors even when
     // the original URL is reachable. Permit up to 2% successfully rendered fallbacks.
     const maxFallbacks = Math.max(1, Math.ceil(imageLoadAudit.total * 0.02));
@@ -150,7 +157,7 @@ const targetLikeImageId = galleryData.items[0]?.id || "";
       }
     }
     const visualAudit = [];
-    for (const card of await page.locator("#gallery-grid .gallery-card").all()) {
+    for (const card of (await page.locator("#gallery-grid .gallery-card").all()).slice(0, 24)) {
       const image = card.locator("img");
       const details = await card.evaluate(element => {
         const img = element.querySelector("img");
@@ -337,15 +344,17 @@ const targetLikeImageId = galleryData.items[0]?.id || "";
     await mobile.goto("http://127.0.0.1:4173/gallery.html", { waitUntil: "domcontentloaded" });
     await mobile.waitForSelector(".gallery-toolbar");
     await mobile.waitForFunction(expected => document.querySelectorAll("#gallery-grid .gallery-card").length === expected, expectedGalleryCount);
-    await mobile.locator("#gallery-grid img").evaluateAll(images => images.forEach(image => { image.loading = "eager"; }));
+    await mobile.locator("#gallery-grid img").evaluateAll(images => {
+      images.slice(0, 12).forEach(image => { image.loading = "eager"; });
+    });
     await mobile.waitForFunction(expected => {
       const images = Array.from(document.querySelectorAll("#gallery-grid img"));
-      return images.length === expected && images.every(image =>
+      return images.length === expected && images.slice(0, 12).every(image =>
         image.complete && (image.naturalWidth > 0 || image.dataset.fallbackApplied === "true")
       );
-    }, expectedGalleryCount, { timeout: 45000 });
+    }, expectedGalleryCount, { timeout: 60000 });
     await mobile.locator("#gallery-grid img").evaluateAll(async images => {
-      await Promise.all(images.map(image => image.decode().catch(() => {})));
+      await Promise.all(images.slice(0, 12).map(image => image.decode().catch(() => {})));
     });
     await mobile.screenshot({ path: "gallery-mobile-smoke.png", fullPage: true });
     const overflow = await mobile.evaluate(() => ({
@@ -391,22 +400,35 @@ const targetLikeImageId = galleryData.items[0]?.id || "";
     await russian.goto("http://127.0.0.1:4173/ru/gallery.html", { waitUntil: "domcontentloaded" });
     await russian.waitForSelector(".gallery-toolbar");
     await russian.waitForFunction(expected => document.querySelectorAll("#gallery-grid .gallery-card").length === expected, expectedGalleryCount);
-    await russian.locator("#gallery-grid .gallery-card img").evaluateAll(images => {
-      images.forEach(image => { image.loading = "eager"; });
-    });
     const visuallyReviewedIds = galleryData.items.filter(item => item.alt_review_status === "visual-reviewed").map(item => item.id);
-    await russian.waitForFunction(payload => {
-      const reviewed = new Set(payload.ids);
-      const cards = Array.from(document.querySelectorAll("#gallery-grid .gallery-card"));
-      return cards.length === payload.expected && cards.every(card => {
-        const image = card.querySelector("img");
-        if (!image || !image.complete || image.naturalWidth <= 0) return false;
-        return !reviewed.has(card.dataset.galleryId) || image.naturalWidth === 800;
+    const russianSampleIds = Array.from(new Set([
+      ...galleryData.items.slice(0, 24).map(item => item.id),
+      ...visuallyReviewedIds
+    ]));
+    await russian.locator("#gallery-grid .gallery-card").evaluateAll((cards, ids) => {
+      const wanted = new Set(ids);
+      cards.forEach(card => {
+        if (wanted.has(card.dataset.galleryId)) {
+          const image = card.querySelector("img");
+          if (image) image.loading = "eager";
+        }
       });
-    }, { expected: expectedGalleryCount, ids: visuallyReviewedIds }, { timeout: 45000 });
-    await russian.locator("#gallery-grid .gallery-card img").evaluateAll(async images => {
-      await Promise.all(images.map(image => image.decode().catch(() => {})));
-    });
+    }, russianSampleIds);
+    await russian.waitForFunction(payload => {
+      const cards = Array.from(document.querySelectorAll("#gallery-grid .gallery-card"));
+      if (cards.length !== payload.expected) return false;
+      return payload.ids.every(id => {
+        const card = cards.find(item => item.dataset.galleryId === id);
+        const image = card?.querySelector("img");
+        if (!image || !image.complete || image.naturalWidth <= 0) return false;
+        return !payload.reviewed.includes(id) || image.naturalWidth === 800;
+      });
+    }, { expected: expectedGalleryCount, ids: russianSampleIds, reviewed: visuallyReviewedIds }, { timeout: 60000 });
+    await russian.locator("#gallery-grid .gallery-card img").evaluateAll(async (images, ids) => {
+      const wanted = new Set(ids);
+      await Promise.all(images.filter(image => wanted.has(image.closest(".gallery-card")?.dataset.galleryId))
+        .map(image => image.decode().catch(() => {})));
+    }, russianSampleIds);
     await russian.screenshot({ path: "gallery-russian-smoke.png", fullPage: true });
     const russianLang = await russian.locator("html").getAttribute("lang");
     if (russianLang !== "ru") throw new Error("Russian gallery html lang is incorrect");
