@@ -52,7 +52,7 @@ def join_match(match_id: str, agent_id: str, role: str) -> dict[str, Any]:
         raise ValueError("Match is full")
     if match["status"] == "finished":
         raise ValueError("Match is finished")
-    match["players"][agent_id[:48]] = {"agent_id": agent_id[:48], "role": role, "position": 0 if role == "survivor" else 80, "health": 3, "food": 2, "wood": 0}
+    match["players"][agent_id[:48]] = {"agent_id": agent_id[:48], "role": role, "position": 0 if role == "survivor" else 80, "health": 3, "food": 2, "wood": 0, "acted_turn": -1}
     match["status"] = "running" if len(match["players"]) >= 2 else "waiting"
     match["events"].append(f"{agent_id[:48]} joined as {role}")
     return _public(match)
@@ -106,7 +106,7 @@ def submit_action(match_id: str, agent_id: str, action: str) -> dict[str, Any]:
     player["acted_turn"] = match["turn"]
     match["events"].append(f"{agent_id}: {action}")
     active = [p for p in match["players"].values() if p["health"] > 0]
-    if len({p["acted_turn"] for p in active}) == 1 and all(p.get("acted_turn") == match["turn"] for p in active):
+    if active and all(p.get("acted_turn") == match["turn"] for p in active):
         match["turn"] += 1
     if not any(p["role"] == "survivor" and p["health"] > 0 for p in active) or not any(p["role"] == "infected" and p["health"] > 0 for p in active):
         match["status"] = "finished"
