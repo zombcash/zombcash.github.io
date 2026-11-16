@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows:
-      - "Sync gallery image SEO assets"
+      - "pages build and deployment"
     types:
       - completed
     branches:
@@ -53,17 +53,14 @@ jobs:
           KEY="${INDEXNOW_KEY:-zomcash-indexnow-2026-10-24-a7f93c12}"
           EVENT_NAME="$GITHUB_EVENT_NAME"
           PUSH_BEFORE="${{ github.event.before }}"
-          WORKFLOW_RUN_BEFORE="${{ github.event.workflow_run.head_sha }}"
           PUSH_AFTER="${{ github.sha }}"
           URLS_FILE="$(mktemp)"
 
-          # GITHUB_TOKEN commits do not trigger another push workflow. When the
-          # gallery SEO generator finishes, compare its triggering SHA with the
-          # current main so its generated localized HTML pages are submitted too.
+          # GITHUB_TOKEN commits do not trigger another push workflow. After a
+          # successful Pages deployment, notify IndexNow about every live URL.
           if [ "$EVENT_NAME" = "workflow_run" ]; then
-            BEFORE="$WORKFLOW_RUN_BEFORE"
-            git fetch origin main
-            AFTER="$(git rev-parse origin/main)"
+            BEFORE=""
+            AFTER="$PUSH_AFTER"
           elif [ "$EVENT_NAME" = "push" ]; then
             BEFORE="$PUSH_BEFORE"
             AFTER="$PUSH_AFTER"
@@ -87,8 +84,8 @@ jobs:
             done < <(git diff --name-only --diff-filter=AMDR "$BEFORE" "$AFTER")
           fi
 
-          if [ ! -s "$URLS_FILE" ] && [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
-            echo "Manual run with no changed HTML: submitting every URL from robots.txt sitemaps."
+          if [ ! -s "$URLS_FILE" ] && { [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] || [ "$GITHUB_EVENT_NAME" = "workflow_run" ]; }; then
+            echo "Manual or post-deployment run with no changed HTML: submitting every URL from robots.txt sitemaps."
             python3 - "$URLS_FILE" <<'PY'
           import sys
           import urllib.request
@@ -148,7 +145,7 @@ jobs:
           )
           try:
               with urllib.request.urlopen(req, timeout=30) as response:
-                  print(f"IndexNow HTTP {response.status}: submitted {len(urls)} changed page URL(s).")
+                  print(f"IndexNow HTTP {response.status}: submitted {len(urls)} page URL(s).")
           except urllib.error.HTTPError as error:
               print(f"IndexNow HTTP {error.code}: {error.read().decode('utf-8', 'replace')}")
               raise
