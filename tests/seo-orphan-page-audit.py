@@ -4,7 +4,7 @@
 Hreflang <link> elements are deliberately excluded: they are language alternates,
 not navigational/editorial links that help users discover a page.
 """
-from collections import Counter
+from collections import Counter, defaultdict
 from html.parser import HTMLParser
 import re
 import csv
@@ -139,6 +139,7 @@ def main():
 
     inbound = Counter()
     outbound = Counter()
+    inbound_sources = defaultdict(set)
     missing_files = []
     nav_items, localized_pages = shared_navigation_targets()
     shared_nav_pages = 0
@@ -163,11 +164,13 @@ def main():
                     nav_target = site_url(href)
                 if nav_target and nav_target in urls and nav_target != source_url:
                     inbound[nav_target] += 1
+                    inbound_sources[nav_target].add(source_url)
                     outbound[source_url] += 1
         for href in parser.links:
             target = site_url(href, source_url)
             if target and target in urls and target != source_url:
                 inbound[target] += 1
+                inbound_sources[target].add(source_url)
                 outbound[source_url] += 1
 
     rows = []
@@ -178,6 +181,7 @@ def main():
             "title": page_titles.get(url, ""),
             "inbound_internal_links": count,
             "outbound_internal_links": outbound[url],
+            "inbound_sources": sorted(inbound_sources[url]),
             "status": "ORPHAN" if count == 0 else "LOW_INBOUND" if count <= 2 else "LINKED",
         })
 
