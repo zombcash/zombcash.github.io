@@ -6,9 +6,9 @@ bing = (ROOT / ".github/workflows/bing-webmaster-api.yml").read_text(encoding="u
 pages_smoke = (ROOT / ".github/workflows/sitemap-live-smoke.yml").read_text(encoding="utf-8")
 seo_smoke = (ROOT / ".github/workflows/seo-internal-link-fixes-smoke.yml").read_text(encoding="utf-8")
 
-assert 'workflow_run:' in pages_smoke and 'workflows: ["pages build and deployment"]' in pages_smoke, "The live sitemap smoke must identify the actual Pages deployment workflow"
+assert 'workflow_run:' in pages_smoke and 'workflows: ["Deploy ZombieCash static site to GitHub Pages"]' in pages_smoke, "The live sitemap smoke must identify the actual Pages deployment workflow"
 for name, workflow in (("IndexNow", indexnow), ("Bing Webmaster", bing)):
-    assert 'workflow_run:' in workflow and '"pages build and deployment"' in workflow, f"{name} must run after the Pages deployment"
+    assert 'workflow_run:' in workflow and '"Deploy ZombieCash static site to GitHub Pages"' in workflow, f"{name} must run after the Pages deployment"
     assert 'types:\n      - completed' in workflow, f"{name} must wait for deployment completion"
     assert 'branches:\n      - main' in workflow, f"{name} deployment trigger must be restricted to main"
     assert "if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}" in workflow, f"{name} must ignore failed deployments"
