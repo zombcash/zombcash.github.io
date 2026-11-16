@@ -41,10 +41,29 @@ for (const path of localePaths) {
 
 assert(shared.includes("requestIdleCallback(loadGaScript") && shared.includes("gaScript.fetchPriority = 'low'"),
   "GA4 library must load after page load/idle with low priority");
-assert(shared.includes("link.href.includes('fonts.googleapis.com/css2')") &&
+assert(shared.includes("const fontNeeded = Array.from(document.querySelectorAll('style')).some(style =>") &&
+       shared.includes("style.textContent.includes(localeFont.cssFamily)") &&
        shared.includes("Noto+Sans+JP") && shared.includes("Noto+Sans+SC") &&
        shared.includes("Noto+Sans+Devanagari") && shared.includes("display=optional"),
-  "Shared navigation must load only the current locale's required font families");
+  "Shared navigation must load locale fonts only when page styles require them");
+
+const localeFontPages = [
+  ["ja/index.html", "ja", "Noto+Sans+JP"],
+  ["ja/avoid-fake-token-websites-wallet-scams.html", "ja", "Noto+Sans+JP"],
+  ["ja/check-liquidity-holder-distribution-solana.html", "ja", "Noto+Sans+JP"],
+  ["ja/how-to-research-solana-meme-coins.html", "ja", "Noto+Sans+JP"],
+  ["ja/solana-memecoin-research-guide.html", "ja", "Noto+Sans+JP"],
+  ["ja/solana-token-safety-checklist.html", "ja", "Noto+Sans+JP"],
+  ["zh-CN/index.html", "zh", "Noto+Sans+SC"],
+  ["hi/index.html", "hi", "Noto+Sans+Devanagari"]
+];
+for (const [path, familyName, family] of localeFontPages) {
+  const page = read(path);
+  const head = page.slice(0, page.indexOf("</head>"));
+  assert(head.includes(`data-zsh-font-family="${familyName}"`) &&
+         head.includes(`family=${family}:wght@400;500;700&display=optional`),
+    path + " must request its locale font from <head> to prevent late font layout shifts");
+}
 assert(shared.includes("document.addEventListener('zombcash:languagechange', ensureZshFonts)"),
   "Shared navigation must re-evaluate font requirements after a language switch");
 
@@ -53,7 +72,7 @@ assert(featured.includes("queueFeaturedMedia") && !featured.includes("player.loa
   "Featured TV video and poster must not load before the player approaches the viewport");
 assert(tv.includes("function queueFeaturedMedia(src)") &&
        tv.includes("function loadPlayerMedia(src)") &&
-       tv.includes("rootMargin: '250px 0px'"),
+       tv.includes("rootMargin: '650px 0px'"),
   "TV media must use the lazy IntersectionObserver loader");
 
 for (const [path, source] of [["script.js", news], ["living-world-recovery.js", recovery]]) {

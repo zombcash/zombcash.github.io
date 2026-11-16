@@ -325,9 +325,23 @@
       document.head.append(link);
       loaded.add('brand');
     }
-    if (lang.startsWith('zh')) addFont('Noto+Sans+SC:wght@400;500;700', 'zh');
-    else if (lang === 'ja') addFont('Noto+Sans+JP:wght@400;500;700', 'ja');
-    else if (lang === 'hi') addFont('Noto+Sans+Devanagari:wght@400;500;700', 'hi');
+    const localeFont = lang.startsWith('zh')
+      ? { family: 'Noto+Sans+SC:wght@400;500;700', familyName: 'zh', cssFamily: 'Noto Sans SC' }
+      : lang === 'ja'
+        ? { family: 'Noto+Sans+JP:wght@400;500;700', familyName: 'ja', cssFamily: 'Noto Sans JP' }
+        : lang === 'hi'
+          ? { family: 'Noto+Sans+Devanagari:wght@400;500;700', familyName: 'hi', cssFamily: 'Noto Sans Devanagari' }
+          : null;
+    if (!localeFont) return;
+
+    // Avoid loading language fonts on pages whose styles do not use them.
+    // Pages that need these fonts declare their stylesheet in <head> to avoid late font swaps.
+    const fontNeeded = Array.from(document.querySelectorAll('style')).some(style =>
+      style.textContent.includes(localeFont.cssFamily)
+    );
+    if (!fontNeeded) return;
+
+    addFont(localeFont.family, localeFont.familyName);
   };
   ensureZshFonts();
   document.addEventListener('zombcash:languagechange', ensureZshFonts);
