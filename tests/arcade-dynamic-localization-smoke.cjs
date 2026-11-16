@@ -87,7 +87,8 @@ async function waitForText(page, selector, expected) {
       }, map['REGISTERED SURVIVOR'], { timeout: 10000 });
       const leaderboardText = await page.locator('#leaderboard-list').textContent();
       assert.ok(leaderboardText.includes(map['● ONLINE']), locale + ' did not translate the online record status');
-      assert.ok(leaderboardText.includes('120 ' + map.PTS), locale + ' did not translate the record points suffix');
+      assert.ok(leaderboardText.includes(map.PTS), locale + ' did not translate the record points suffix; actual: ' + leaderboardText + '; expected suffix: ' + map.PTS);
+      if (map.PTS !== 'PTS') assert.ok(!leaderboardText.includes('120 PTS'), locale + ' still displays the English points suffix; actual: ' + leaderboardText);
 
       const emptyRecords = map['No records yet. Play, score, and claim the top spot.'];
       await page.locator('#leaderboard-list').evaluate(el => { el.textContent = 'No records yet. Play, score, and claim the top spot.'; });
