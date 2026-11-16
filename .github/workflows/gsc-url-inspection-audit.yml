@@ -25,7 +25,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Install Google API clients
-        run: python -m pip install --disable-pip-version-check requests google-api-python-client google-auth
+        run: python -m pip install --disable-pip-version-check requests google-api-python-client google-auth google-auth-httplib2
 
       - name: Inspect every unique sitemap URL in Google
         env:
@@ -46,6 +46,8 @@ jobs:
           from google.oauth2 import service_account
           from googleapiclient.discovery import build
           from googleapiclient.errors import HttpError
+          from google_auth_httplib2 import AuthorizedHttp
+          import httplib2
 
           site_url = "https://zombcash.github.io/"
           raw_credentials = os.environ.get("GSC_SERVICE_ACCOUNT_JSON", "")
@@ -57,7 +59,7 @@ jobs:
               credentials = service_account.Credentials.from_service_account_info(
                   info, scopes=["https://www.googleapis.com/auth/webmasters"]
               )
-              build("searchconsole", "v1", credentials=credentials, cache_discovery=False)
+              build("searchconsole", "v1", http=AuthorizedHttp(credentials, http=httplib2.Http(timeout=30)), cache_discovery=False)
           except Exception as exc:
               raise SystemExit(f"ERROR: Could not initialize Search Console client: {type(exc).__name__}: {exc}")
 
@@ -137,7 +139,7 @@ jobs:
                   )
                   thread_local.service = build(
                       "searchconsole", "v1",
-                      credentials=worker_credentials,
+                      http=AuthorizedHttp(worker_credentials, http=httplib2.Http(timeout=30)),
                       cache_discovery=False,
                   )
               return thread_local.service
@@ -160,7 +162,7 @@ jobs:
                           "siteUrl": site_url,
                           "languageCode": "en-US",
                       }
-                  ).execute()
+                  ).execute(num_retries=0)
                   result = response.get("inspectionResult", {})
                   status = result.get("indexStatusResult", {})
                   return {
