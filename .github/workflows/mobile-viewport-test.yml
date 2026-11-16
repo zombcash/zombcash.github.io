@@ -15,6 +15,8 @@ on:
       - 'survivor-field-manual.html'
       - 'survivor-hub.html'
       - 'tests/survivor-hub-localization-smoke.cjs'
+      - 'arcade.html'
+      - 'tests/arcade-dynamic-localization-smoke.cjs'
       - '.github/workflows/mobile-viewport-test.yml'
   push:
     branches: [main]
@@ -36,6 +38,7 @@ on:
       - 'tr/index.html'
       - 'hi/index.html'
       - 'arcade.html'
+      - 'tests/arcade-dynamic-localization-smoke.cjs'
       - '.github/workflows/mobile-viewport-test.yml'
       - 'tests/mobile-viewport-smoke.cjs'
       - 'tests/survivor-field-manual-smoke.cjs'
@@ -123,6 +126,9 @@ jobs:
       - name: Test Survivor Hub translations in all supported locales
         if: always()
         run: node tests/survivor-hub-localization-smoke.cjs
+      - name: Test Arcade dynamic records, save statuses and progress in all locales
+        if: always()
+        run: node tests/arcade-dynamic-localization-smoke.cjs
 
       - name: Upload wide viewport visual evidence
         if: always()
