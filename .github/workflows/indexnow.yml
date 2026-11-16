@@ -10,6 +10,8 @@ on:
       - "robots.txt"
       - "sitemap.xml"
       - "sitemap-*.xml"
+      - ".github/workflows/indexnow.yml"
+      - "tests/indexnow-workflow-smoke.py"
   workflow_dispatch:
   workflow_run:
     workflows:
