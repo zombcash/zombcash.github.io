@@ -2,7 +2,6 @@
   'use strict';
   const root = document.getElementById('zombcash-ai-arena');
   if (!root) return;
-  const APP_KEY = 'pk_k5xGdZvyUZUVNXRx';
   const API = 'https://gen.pollinations.ai/alpha/decisions';
   const MODELS = [
     { id: 'typesafe/jev-1.14', name: 'Jev' },
@@ -12,6 +11,7 @@
   let pollenKey = null;
   let busy = false;
   let round = 0;
+  let finished = false;
   let score = [0, 0];
   let offline = true;
   const actions = ['attack', 'defend', 'feint'];
@@ -49,7 +49,7 @@
       headers: { 'Authorization': 'Bearer ' + pollenKey, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model,
-        state: 'You are a combat AI in ZombieCash Outbreak Arena. Win a three-action tactical duel. You are ' + model + '. Current round ' + round + '. Your score ' + myScore + ', opponent score ' + theirScore + '. Opponent is ' + opponent + '. Choose one action. Attack beats feint, defend counters attack, feint exploits defend. You do not know the opponent action.',
+        state: 'You are a combat AI in ZombieCash Outbreak Arena. Win a five-point tactical duel. You are ' + model + '. Current round ' + round + '. Your score ' + myScore + ', opponent score ' + theirScore + '. Opponent is ' + opponent + '. Choose one action. Attack beats feint, defend counters attack, feint exploits defend. You do not know the opponent action.',
         questions: {
           move: {
             type: 'choice',
@@ -75,7 +75,7 @@
     $('zai-score-b').textContent = String(score[1]);
   }
   async function playRound() {
-    if (busy) return;
+    if (busy || finished) return;
     busy = true;
     $('zai-play').disabled = true;
     const modelA = $('zai-model-a').value;
@@ -101,7 +101,13 @@
       $('zai-last').textContent = aName + ': ' + labels[a.move] + '  ·  ' + bName + ': ' + labels[b.move];
       log('ROUND ' + round + ' — ' + aName + ' chose ' + labels[a.move] + '; ' + bName + ' chose ' + labels[b.move] + '. ' + (result > 0 ? aName + ' wins the exchange.' : result < 0 ? bName + ' wins the exchange.' : 'Draw.'));
       paint();
-      status(pollenKey ? 'Live round complete' : 'Free simulation round complete');
+      if (score[0] >= 5 || score[1] >= 5) {
+        finished = true;
+        status((score[0] >= 5 ? aName : bName) + ' wins the duel!');
+        log((score[0] >= 5 ? aName : bName) + ' wins the match. Reset to play again.');
+      } else {
+        status(pollenKey ? 'Live round complete' : 'Free simulation round complete');
+      }
     } catch (error) {
       round--;
       status('Live request failed');
@@ -113,7 +119,7 @@
   }
   function reset() {
     if (busy) return;
-    round = 0; score = [0, 0];
+    round = 0; finished = false; score = [0, 0];
     $('zai-log').replaceChildren();
     $('zai-last').textContent = 'No round played yet';
     paint(); status(pollenKey ? 'Pollinations connected' : 'Free simulation ready');
