@@ -12,7 +12,7 @@ assert 1 <= len(items) <= 150, f"Expected 1–150 current gallery items, got {le
 assert len(set(ids)) == len(items), "Duplicate gallery item IDs"
 
 def normalize_editorial_text(value):
-    return re.sub(r"[\\W_]+", " ", str(value or "").lower(), flags=re.UNICODE).strip()
+    return re.sub(r"[\W_]+", " ", str(value or "").lower(), flags=re.UNICODE).strip()
 
 for item in items:
     description = normalize_editorial_text(item.get("description"))
