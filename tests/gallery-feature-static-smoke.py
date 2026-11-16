@@ -9,6 +9,10 @@ items = data["items"]
 ids = [item["id"] for item in items]
 assert 1 <= len(items) <= 1200 and len(set(ids)) == len(items)
 assert not any("ZOMBIECASH SITE SPOTLIGHT" in str(item.get("caption", "")).upper() for item in items), "Promotional SITE SPOTLIGHT posts must not appear in the gallery"
+honey_trap = next((item for item in items if "HONEY-TRAP APOCALYPSE" in str(item.get("caption", "")).upper()), None)
+if honey_trap:
+    assert "community-creations" in honey_trap.get("category_ids", []), "Corporate honey-trap fiction should not be classified as Apocalypse & Survival"
+    assert "apocalypse-survival" not in honey_trap.get("category_ids", []), "Generic use of 'apocalypse' must not override visual/topic relevance"
 gallery_categories = {"zombie-memes", "nightmare-horror", "undead-after-dark", "zombie-characters", "site-transmissions", "apocalypse-survival", "crypto-apocalypse", "community-creations"}
 category_counts = {category: sum(1 for item in items if category in item.get("category_ids", [])) for category in gallery_categories}
 assert all(count <= 150 for count in category_counts.values()), f"Per-category gallery cap exceeded: {category_counts}"
