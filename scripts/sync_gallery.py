@@ -32,6 +32,17 @@ def category_for_caption(caption):
 
 def is_gallery_artwork(caption):
     return category_for_caption(caption) is not None
+
+
+def gallery_title(caption, limit=100):
+    """Keep generated titles within the limit without cutting a word in half."""
+    text = re.sub(r"\\s+", " ", str(caption or "")).strip()
+    if len(text) <= limit:
+        return text or "ZombieCash gallery artwork"
+    shortened = text[:limit - 1].rsplit(" ", 1)[0].rstrip()
+    if not shortened:
+        shortened = text[:limit - 1]
+    return shortened + "…"
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; ZombieCashGalleryBot/1.0)"}
 
 
@@ -187,7 +198,7 @@ def main():
         new_items_for_dimensions.append(item)
         item.update({
             "rights_status": "review-required",
-            "title": caption[:100] or "ZombieCash gallery artwork",
+            "title": gallery_title(caption),
             # Telegram provides a caption, not a separate editorial description.
             "description": "",
             "alt_text": "ZombieCash gallery artwork — visual ALT review pending.",
