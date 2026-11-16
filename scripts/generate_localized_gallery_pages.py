@@ -236,7 +236,7 @@ def latest_source_lastmod():
         text=True,
     )
     lastmod = result.stdout.strip()
-    if not re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", lastmod):
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", lastmod):
         raise RuntimeError("Could not determine a verified YYYY-MM-DD gallery source date from Git history.")
     return lastmod
 
