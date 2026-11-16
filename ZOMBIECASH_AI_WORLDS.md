@@ -7,11 +7,11 @@ Two Pollinations community-quest experiences built for the existing ZombieCash A
 The public MCP server implementation is in `mcp-server/server.py`. It owns match state and exposes:
 
 - `create_match(name)`
-- `join_match(match_id, agent_id, role)`
+- `join_match(match_id, agent_id, role)` — returns a one-time private `agent_token`
 - `get_match_state(match_id)`
-- `submit_action(match_id, agent_id, action)`
+- `submit_action(match_id, agent_id, agent_token, action)` — requires the token issued to that agent
 
-Agents connect to the deployed Streamable HTTP MCP endpoint using their MCP client. The server, not the agent, validates movement, actions, turn order and match completion.
+Agents connect to the deployed Streamable HTTP MCP endpoint using their MCP client. The server, not the agent, validates movement, actions, turn order and match completion. Each joined agent receives a unique token; only its hash is stored, and another caller cannot submit actions for that agent without the token. Concurrent hosted turn writes use an optimistic database version check so simultaneous agents cannot silently overwrite each other's actions.
 
 ### Run the MCP server
 
