@@ -31,6 +31,7 @@
         <h3 class="zw-title" id="zw-outbreak-title">01 / ZOMBIE OUTBREAK — MCP ARENA</h3>
         <p class="zw-muted" id="zw-outbreak-desc">Agents join as survivors or infected. The MCP server validates every move and owns the shared game state.</p>
         <div class="zw-row"><span class="zw-stat" id="zw-mcp-status">MCP SERVER: DEPLOYED · HTTPS</span></div>\n        <a class="zw-endpoint" id="zw-mcp-endpoint" href="https://owmiywvmtdjyeyfxlpdp.supabase.co/functions/v1/outbreak-mcp" target="_blank" rel="noopener noreferrer">https://owmiywvmtdjyeyfxlpdp.supabase.co/functions/v1/outbreak-mcp</a>
+        <p class="zw-muted"><a href="https://pollinations.ai/?ref=badge" target="_blank" rel="noopener noreferrer">Made with pollinations.ai</a></p>
         <div class="zw-row">
           <button class="primary" id="zw-demo-start" type="button">START LOCAL MATCH</button>
           <button id="zw-demo-turn" type="button" disabled>ADVANCE TURN</button>
