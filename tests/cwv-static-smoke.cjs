@@ -72,7 +72,7 @@ assert(featured.includes("queueFeaturedMedia") && !featured.includes("player.loa
   "Featured TV video and poster must not load before the player approaches the viewport");
 assert(tv.includes("function queueFeaturedMedia(src)") &&
        tv.includes("function loadPlayerMedia(src)") &&
-       tv.includes("rootMargin: '650px 0px'"),
+       tv.includes("rootMargin: '250px 0px'"),
   "TV media must use the lazy IntersectionObserver loader");
 
 for (const [path, source] of [["script.js", news], ["living-world-recovery.js", recovery]]) {
