@@ -84,7 +84,7 @@ jobs:
             done < <(git diff --name-only --diff-filter=AMDR "$BEFORE" "$AFTER")
           fi
 
-          if [ ! -s "$URLS_FILE" ] && { [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] || [ "$GITHUB_EVENT_NAME" = "workflow_run" ]; }; then
+          if [ ! -s "$URLS_FILE" ] && { [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] || [ "$GITHUB_EVENT_NAME" = "workflow_run" ] || { [ "$GITHUB_EVENT_NAME" = "push" ] && [ -n "$BEFORE" ] && git diff --name-only "$BEFORE" "$AFTER" | grep -qx ".github/workflows/indexnow.yml"; }; }; then
             echo "Manual or post-deployment run with no changed HTML: submitting every URL from robots.txt sitemaps."
             python3 - "$URLS_FILE" <<'PY'
           import sys
