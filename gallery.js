@@ -160,6 +160,9 @@
       normalizedDescription.startsWith(normalizedCaption) ||
       normalizedTitle.startsWith(normalizedDescription) ||
       normalizedDescription.startsWith(normalizedTitle);
+    const captionToShow = titleIsDuplicate
+      ? cleanCaption(originalCaption)
+      : (!descriptionIsDuplicate ? cleanCaption(description) : "");
     const categories = Array.from(card.querySelectorAll(".gallery-category-tag"))
       .map(tag => tag.textContent.trim()).filter(Boolean).join(" · ");
     const sourceUrl = card.querySelector(".gallery-caption a")?.href || "https://t.me/ZOMBCASH";
@@ -167,7 +170,7 @@
     trackGalleryEvent("gallery_image_open", "image_" + String(card.dataset.galleryId || "").replace(/[^0-9]/g, "_"));
     fullCaption.innerHTML =
       (!titleIsDuplicate ? '<strong class="gallery-lightbox-title">' + escapeHtml(title) + '</strong>' : '') +
-      (!descriptionIsDuplicate ? '<span class="gallery-lightbox-description">' + escapeHtml(cleanCaption(description)) + '</span>' : '') +
+      (captionToShow ? '<span class="gallery-lightbox-description gallery-lightbox-caption">' + escapeHtml(captionToShow) + '</span>' : '') +
       (categories ? '<span class="gallery-lightbox-categories">' + escapeHtml(categories) + '</span>' : '') +
       '<span class="gallery-lightbox-actions">' +
       '<button class="gallery-lightbox-like" type="button" aria-pressed="false"></button>' +
