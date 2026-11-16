@@ -5,6 +5,20 @@ const path = require("path");
 const galleryData = JSON.parse(fs.readFileSync("gallery-data.json", "utf8"));
 const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]));
 const expectedGalleryCount = galleryData.items.length;
+const installGalleryDataMock = page => page.addInitScript(data => {
+  localStorage.setItem("zombcash-survivor-token", "smoke-survivor-session");
+  const nativeFetch = window.fetch.bind(window);
+  window.fetch = (input, init) => {
+    const url = typeof input === "string" ? input : (input?.url || "");
+    if (url.includes("/gallery-data.json")) {
+      return Promise.resolve(new Response(JSON.stringify(data), {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      }));
+    }
+    return nativeFetch(input, init);
+  };
+}, galleryData);
 if (galleryData.items.some(item => /\bZOMBIECASH\s+SITE\s+SPOTLIGHT\b/i.test(String(item.caption || "")))) throw new Error("SITE SPOTLIGHT promotional cards must be excluded");
 const targetLikeImageId = galleryData.items[0]?.id || "";
 const gallerySearchCorpus = galleryData.items.map(item =>
@@ -34,20 +48,12 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     browser = await chromium.launch({ headless: true });
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     const likeToggleCalls = [];
-    await page.addInitScript(() => localStorage.setItem("zombcash-survivor-token", "smoke-survivor-session"));
+    await installGalleryDataMock(page);
     page.on("pageerror", error => console.error("[pageerror]", error.stack || String(error)));
     page.on("console", message => { if (message.type() === "error") console.error("[console]", message.text()); });
     page.on("requestfailed", request => console.error("[requestfailed]", request.url(), request.failure()?.errorText || "unknown"));
     await page.route("https://**/*", route => route.abort());
     await page.route("https://cdn4.telesco.pe/file/**", route => route.continue());
-    await page.route(/gallery-data\.json/, async route => {
-      console.log("[gallery-data-route]", route.request().url());
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: fs.readFileSync("gallery-data.json", "utf8")
-      });
-    });
     fs.mkdirSync("gallery-visual-audit/images", { recursive: true });
     const imageNetworkEvents = [];
     const imageResponseTasks = [];
@@ -421,11 +427,7 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     const russian = await browser.newPage({ viewport: { width: 390, height: 844 } });
     await russian.route("https://**/*", route => route.abort());
     await russian.route("https://cdn4.telesco.pe/file/**", route => route.continue());
-    await russian.route(/gallery-data\.json/, route => route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: fs.readFileSync("gallery-data.json", "utf8")
-    }));
+    await installGalleryDataMock(russian);
     await russian.goto("http://127.0.0.1:4173/ru/gallery.html", { waitUntil: "domcontentloaded" });
     await russian.waitForSelector(".gallery-toolbar");
     await russian.waitForFunction(expected => document.querySelectorAll("#gallery-grid .gallery-card").length === expected, expectedGalleryCount);
@@ -481,11 +483,7 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       const localized = await browser.newPage({ viewport: { width: 390, height: 844 } });
       await localized.route("https://**/*", route => route.abort());
       await localized.route("https://cdn4.telesco.pe/file/**", route => route.continue());
-      await localized.route(/gallery-data\.json/, route => route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: fs.readFileSync("gallery-data.json", "utf8")
-      }));
+      await installGalleryDataMock(localized);
       await localized.goto("http://127.0.0.1:4173/" + locale + "/gallery.html", { waitUntil: "domcontentloaded" });
       await localized.waitForSelector(".gallery-toolbar");
       await localized.waitForFunction(expected => document.querySelectorAll("#gallery-grid .gallery-card").length === expected, expectedGalleryCount);
