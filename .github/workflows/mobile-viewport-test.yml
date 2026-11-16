@@ -16,6 +16,8 @@ on:
       - 'survivor-hub.html'
       - 'tests/survivor-hub-localization-smoke.cjs'
       - 'tests/survivor-hub-visual-smoke.cjs'
+      - 'arcade.html'
+      - 'tests/arcade-dynamic-localization-smoke.cjs'
       - '.github/workflows/mobile-viewport-test.yml'
   push:
     branches: [main]
@@ -43,6 +45,7 @@ on:
       - 'survivor-hub.html'
       - 'tests/survivor-hub-localization-smoke.cjs'
       - 'tests/survivor-hub-visual-smoke.cjs'
+      - 'tests/arcade-dynamic-localization-smoke.cjs'
       - 'tests/memecoin-platforms-article-smoke.cjs'
       - 'memecoin-promotion-platforms-comparison.html'
       - 'de/memecoin-promotion-platforms-comparison.html'
@@ -86,12 +89,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Validate homepage and Hub smoke-test JavaScript syntax
+      - name: Validate homepage, Hub and Arcade smoke-test JavaScript syntax
         run: |
           node --check assets/js/zctv-player.js
           node --check shared-nav.js
           node --check tests/survivor-hub-localization-smoke.cjs
           node --check tests/survivor-hub-visual-smoke.cjs
+          node --check tests/arcade-dynamic-localization-smoke.cjs
       - name: Install Playwright
         run: |
           npm init -y
@@ -133,6 +137,10 @@ jobs:
       - name: Browser-check Survivor Hub navigation and layout across locales and viewports
         if: always()
         run: node tests/survivor-hub-visual-smoke.cjs
+
+      - name: Test Arcade dynamic records, save statuses and progress in all locales
+        if: always()
+        run: node tests/arcade-dynamic-localization-smoke.cjs
 
       - name: Upload wide viewport visual evidence
         if: always()
