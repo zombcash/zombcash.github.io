@@ -24,6 +24,8 @@ CATEGORY_PATTERNS = {
     "undead-after-dark": re.compile(r"\bUNDEAD\s+AFTER\s+DARK\b", re.I),
     "zombie-memes": re.compile(r"\bZOMBIECASH\s+MEMES?\b|\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b|#ZombieCashMeme\b|😂", re.I),
     "zombie-characters": re.compile(r"\b(?:ZOMBIE|UNDEAD)\s+(?:GIRL|BOY|CHARACTER|WARRIOR|QUEEN|KING|HUNTER|PRINCESS)\b|\bZOMBIE\s+CHARACTERS?\b", re.I),
+    # Keep the recurring site-promotion series separate from actual art and memes.
+    "site-transmissions": re.compile(r"\bZOMBIECASH\s+SITE\s+TRANSMISSION\b", re.I),
     # Crypto/market posts belong together even when they also use apocalypse language.
     "crypto-apocalypse": re.compile(r"\bCRYPTO\b|\bBITCOIN\b|\bSOLANA\b|\bMEMECOIN\b|\bTOKEN\b|\bWALLET\b|\bTRADING\b|\bPORTFOLIO\b|\bMARKET\b|\bCHARTS?\b|\bCANDLES?\b|\bHODL\b|\bBULL\b|\bBEAR\b|\bPUMP\b|\bDUMP\b", re.I),
     "apocalypse-survival": re.compile(r"\bAPOCALYPSE\b|\bSURVIVAL\b|\bWASTELAND\b|\bBUNKER\b|\bOUTBREAK\b|\bSCAVENGER\b|\bSHELTER\b|\bFALLOUT\b|\bEVACUATION\b|\bPOST[ -]APOCALYPTIC\b", re.I),
@@ -171,7 +173,7 @@ def main():
         time.sleep(0.35)
 
     # Keep up to MAX_PER_CATEGORY newest image entries in each category, then merge
-    # them into one date-sorted archive. This yields up to 980 total images.
+    # them into one date-sorted archive. This yields up to 1120 total images.
     selected_by_category = {category: [] for category in CATEGORY_PATTERNS}
     for item in sorted(all_items.values(), key=lambda item: (item.get("date") or "", item.get("post_id") or ""), reverse=True):
         category = category_for_caption(item.get("caption"))
