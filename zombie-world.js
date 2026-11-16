@@ -101,7 +101,7 @@
   let agents=initial(),turn=0,worldBusy=false,auto=false,autoTimer=null,food=12,logs=[];
   const worldLog=t=>{logs.unshift(t);logs=logs.slice(0,18);$('zw-world-feed').replaceChildren(...logs.map(s=>{const p=document.createElement('p');p.textContent=s;return p;}));};
   const renderWorld=()=>{
-    $('zw-turn').textContent='DAY '+(Math.floor(turn/8)+1)+' · TURN '+turn;
+    $('zw-world-turn').textContent='DAY '+(Math.floor(turn/8)+1)+' · TURN '+turn;
     $('zw-pop').textContent=agents.length+' SURVIVORS';
     $('zw-shelter').textContent=agents.reduce((n,a)=>n+a.home,0)+' SHELTERS';
     $('zw-food').textContent=food+' FOOD';
