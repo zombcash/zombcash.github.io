@@ -163,7 +163,7 @@ async function callTool(name: string, args: any) {
     const hasSurvivor = active.some((p: any) => p.role === "survivor");
     const hasInfected = active.some((p: any) => p.role === "infected");
     if (!hasSurvivor || !hasInfected) match.status = "finished";
-    await saveMatch(match);
+    await saveMatch(match, matchRow.updated_at);
     return publicState(match);
   }
   throw new Error(`Unknown tool: ${name}`);
