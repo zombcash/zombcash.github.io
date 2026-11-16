@@ -43,12 +43,10 @@ fs.mkdirSync(output, { recursive: true });
           const tvChannels = tvInner?.querySelector('.zctv-channels');
           const art = sponsor?.querySelector('.zc-sponsor-art-slot');
           const image = art?.querySelector('img');
-          const stylesheet = Array.from(document.styleSheets).some(s => {
-            try {
-              return s.href && new URL(s.href).pathname.endsWith('/homepage-visual.css')
-                && new URL(s.href).searchParams.get('v') === 'homepage-rail-20261114-1';
-            } catch { return false; }
-          });
+          const visualStylesheetLink = [...document.querySelectorAll('link[rel="stylesheet"]')]
+            .find(link => new URL(link.href).pathname.endsWith('/homepage-visual.css'));
+          const stylesheet = !!visualStylesheetLink
+            && [...document.styleSheets].some(sheet => sheet.href === visualStylesheetLink.href);
           return {
             width: innerWidth,
             documentWidth: document.documentElement.scrollWidth,
