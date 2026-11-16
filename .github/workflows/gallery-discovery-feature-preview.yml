@@ -40,8 +40,10 @@ permissions:
   contents: write
 
 concurrency:
-  group: gallery-discovery-feature-${{ github.event.pull_request.head.ref || github.ref }}
-  cancel-in-progress: true
+  # Share the gallery writer lock with Telegram sync so generated HTML/sitemaps
+  # cannot race with a concurrent gallery-data.json update.
+  group: zombie-gallery-sync
+  cancel-in-progress: false
 
 jobs:
   gallery-preview:
