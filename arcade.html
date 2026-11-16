@@ -88,6 +88,45 @@
     <a class="btn secondary" href="roulette.html">SPIN THE OUTBREAK ↗</a>
   </div>
 </section>
+
+<section class="panel zai-arena" id="zombcash-ai-arena" aria-labelledby="zai-title">
+  <div class="zai-head"><div><div class="kicker">POLLINATIONS // MODEL VS MODEL</div><h2 id="zai-title">OUTBREAK <span class="green">AI ARENA</span></h2><p class="intro">Watch decision models compete in a tactical duel. No account or Pollen needed for free simulation.</p></div><span class="zai-mode" id="zai-mode">FREE SIMULATION</span></div>
+  <div class="zai-connect-row"><div><strong>LIVE MODEL BATTLES</strong><p id="zai-live">Connect your own Pollen to let live models play. Free simulation is always available.</p></div><polli-connect id="zai-connect" app-key="pk_k5xGdZvyUZUVNXRx" budget="10" expiry="7" models="decision"></polli-connect></div>
+  <div class="zai-controls"><label>MODEL A<select id="zai-model-a"><option value="typesafe/jev-1.14">Jev</option><option value="microsoft/microsoft-decision-1">Microsoft Decision</option></select></label><label>MODEL B<select id="zai-model-b"><option value="microsoft/microsoft-decision-1">Microsoft Decision</option><option value="typesafe/jev-1.14">Jev</option></select></label></div>
+  <div class="zai-scoreboard"><div><small id="zai-model-a-label">MODEL A</small><strong id="zai-score-a">0</strong></div><div class="zai-round">ROUND<strong id="zai-round">0</strong></div><div><small id="zai-model-b-label">MODEL B</small><strong id="zai-score-b">0</strong></div></div>
+  <div class="zai-last" id="zai-last">No round played yet</div>
+  <div class="zai-actions"><button class="btn" id="zai-play" type="button">PLAY ROUND</button><button class="btn secondary" id="zai-reset" type="button">RESET DUEL</button><span id="zai-status" role="status" aria-live="polite">Free simulation ready</span></div>
+  <div class="zai-log" id="zai-log" aria-live="polite"></div>
+  <p class="zai-footnote">Free simulation never calls an API. Live mode sends two decision requests per round using the connected visitor's approved Pollen budget. Disconnect any time.</p>
+</section>
+<style>
+.zai-arena{margin:22px 0;padding:clamp(16px,3vw,30px)!important;border:1px solid #485344!important;background:linear-gradient(145deg,#141912,#090c0a)!important}
+.zai-head,.zai-connect-row,.zai-actions{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.zai-head h2{font:500 clamp(26px,4vw,42px)/1.1 Georgia,serif;margin:10px 0;color:#e9e8df}
+.zai-head .intro{font-size:16px;margin:0}
+.zai-mode{border:1px solid #65705d;padding:8px 11px;color:#c2c9b5;font:700 9px Orbitron,sans-serif;letter-spacing:1px}
+.zai-connect-row{margin:22px 0;padding:15px;background:#080d09;border:1px solid #303a2e}
+.zai-connect-row strong,.zai-controls label{font:700 10px Orbitron,sans-serif;letter-spacing:1px;color:#c8d0bd}
+.zai-connect-row p{margin:6px 0 0;color:#a6a89e;font-size:14px}
+.zai-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.zai-controls label{display:grid;gap:8px}
+.zai-controls select{width:100%;padding:11px;background:#0b100c;border:1px solid #46513e;color:#edf5e5;font:600 14px Rajdhani,sans-serif}
+.zai-scoreboard{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin:18px 0;padding:16px;background:#090e0a;border:1px solid #34402f;text-align:center}
+.zai-scoreboard>div:first-child{text-align:left}.zai-scoreboard>div:last-child{text-align:right}
+.zai-scoreboard small{display:block;color:#a6a89e;font:700 9px Orbitron,sans-serif;letter-spacing:1px}
+.zai-scoreboard strong{display:block;margin-top:7px;color:#c0c9ae;font:700 30px Orbitron,sans-serif}
+.zai-round{color:#9da695;font:700 9px Orbitron,sans-serif;letter-spacing:1px}.zai-round strong{font-size:20px}
+.zai-last{padding:12px;background:#151b14;color:#dce5d1;font:600 13px Rajdhani,sans-serif;text-align:center}
+.zai-actions{justify-content:flex-start;margin:14px 0}.zai-actions span{color:#b5c0a1;font-size:13px}
+.zai-actions button:disabled{opacity:.55;cursor:wait}
+.zai-log{max-height:180px;overflow:auto;border-top:1px solid #394333;margin-top:12px;padding-top:8px}
+.zai-log-line{margin:7px 0;color:#b8c0b0;font-size:13px}
+.zai-footnote{margin:12px 0 0;color:#879080;font-size:12px;line-height:1.5}
+@media(max-width:600px){.zai-controls{grid-template-columns:1fr}.zai-scoreboard{padding:11px}.zai-scoreboard strong{font-size:24px}.zai-connect-row{align-items:flex-start;flex-direction:column}}
+</style>
+<script defer src="https://cdn.jsdelivr.net/npm/@pollinations/ui@0.1.0-alpha.20/dist/connect.js"></script>
+<script defer src="ai-arena.js?v=20261116-1"></script>
+
 <!-- Legacy A-ADS placement removed; ZombieCash now uses one Adsterra banner on localized homepages only. -->
 </main><footer class="footer">BUILT FOR THE UNDEAD · POWERED BY COMMUNITY · © 2026 ZOMBIECASH</footer>
 <script>
