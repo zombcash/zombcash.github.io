@@ -20,6 +20,10 @@ def target_file(url: str):
     # Refuse paths that escape the repository root.
     if ".." in candidate.parts:
         return None
+    # GitHub Pages serves directory URLs without a trailing slash by redirecting
+    # to the directory's index.html (for example, /de -> /de/).
+    if not candidate.suffix and candidate.is_dir():
+        candidate = candidate / "index.html"
     return candidate
 
 def main():
