@@ -126,11 +126,14 @@ function pagePath(locale) {
             position: getComputedStyle(element).position,
           };
         });
-        if (viewport.width === 360) {
+        if (viewport.width <= 768) {
           await page.screenshot({
             path: path.join(RESULTS_DIR, locale + '-' + viewport.width + '-language-menu.png'),
             fullPage: true,
           });
+        }
+        if (viewport.width <= 900) {
+          assert.equal(menuRect.position, 'fixed', locale + ' language menu was not viewport-clamped at ' + viewport.width + 'px');
         }
         assert.ok(menuRect.left >= -1 && menuRect.right <= viewport.width + 1,
           locale + ' language menu overflows at ' + viewport.width + 'px: ' + JSON.stringify(menuRect));
