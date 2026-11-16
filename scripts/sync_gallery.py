@@ -15,7 +15,7 @@ CHANNEL = "ZOMBCASH"
 BASE_URL = f"https://t.me/s/{CHANNEL}"
 OUTPUT = Path("gallery-data.json")
 MAX_PAGES = 300
-MAX_PER_CATEGORY = 140
+MAX_PER_CATEGORY = 150
 # Classify all attached image posts, not only the three legacy series headers.
 # The order is intentional: explicit series/meme labels win over broad keywords.
 CATEGORY_PATTERNS = {
@@ -173,7 +173,7 @@ def main():
         time.sleep(0.35)
 
     # Keep up to MAX_PER_CATEGORY newest image entries in each category, then merge
-    # them into one date-sorted archive. This yields up to 1120 total images.
+    # them into one date-sorted archive. This yields up to 1200 total images.
     selected_by_category = {category: [] for category in CATEGORY_PATTERNS}
     for item in sorted(all_items.values(), key=lambda item: (item.get("date") or "", item.get("post_id") or ""), reverse=True):
         category = category_for_caption(item.get("caption"))

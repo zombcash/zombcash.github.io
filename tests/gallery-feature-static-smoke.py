@@ -7,11 +7,11 @@ from pathlib import Path
 data = json.loads(Path("gallery-data.json").read_text(encoding="utf-8"))
 items = data["items"]
 ids = [item["id"] for item in items]
-assert 1 <= len(items) <= 1120 and len(set(ids)) == len(items)
+assert 1 <= len(items) <= 1200 and len(set(ids)) == len(items)
 assert not any("ZOMBIECASH SITE SPOTLIGHT" in str(item.get("caption", "")).upper() for item in items), "Promotional SITE SPOTLIGHT posts must not appear in the gallery"
 gallery_categories = {"zombie-memes", "nightmare-horror", "undead-after-dark", "zombie-characters", "site-transmissions", "apocalypse-survival", "crypto-apocalypse", "community-creations"}
 category_counts = {category: sum(1 for item in items if category in item.get("category_ids", [])) for category in gallery_categories}
-assert all(count <= 140 for count in category_counts.values()), f"Per-category gallery cap exceeded: {category_counts}"
+assert all(count <= 150 for count in category_counts.values()), f"Per-category gallery cap exceeded: {category_counts}"
 assert all(item.get("category_ids") and set(item["category_ids"]).issubset(gallery_categories) for item in items), "Every image must belong to a known gallery category"
 assert all(item.get("rights_status") == "review-required" for item in items)
 reviewed = [item for item in items if item.get("alt_review_status") == "visual-reviewed"]
@@ -108,4 +108,4 @@ for marker in ("gallery-toolbar", "gallery-lightbox-share", "/api/gallery/likes"
     assert marker in js, marker
 assert "window.ZombieCashTrack = send;" in Path("script.js").read_text(encoding="utf-8")
 
-print(f"PASS: {len(items)} static gallery cards (up to 140 per category: {category_counts}), {len(reviewed)} visually reviewed, {len(pending)} pending review and Pinterest-blocked, {len(missing_dimensions)} CDN dimension fallback(s) protected by the square CSS ratio, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")
+print(f"PASS: {len(items)} static gallery cards (up to 150 per category: {category_counts}), {len(reviewed)} visually reviewed, {len(pending)} pending review and Pinterest-blocked, {len(missing_dimensions)} CDN dimension fallback(s) protected by the square CSS ratio, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")

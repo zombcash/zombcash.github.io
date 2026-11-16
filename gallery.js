@@ -336,7 +336,7 @@
       const headers = {};
       if (token) headers.Authorization = "Bearer " + token;
       try {
-        // The API deliberately accepts at most 50 IDs per request. A 1120-image
+        // The API deliberately accepts at most 50 IDs per request. A 1200-image
         // archive therefore loads its like stats in bounded batches.
         const batches = [];
         for (let index = 0; index < ids.length; index += 50) {
