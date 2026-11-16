@@ -1,0 +1,38 @@
+name: SEO orphan-page and internal-link audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "*.html"
+      - "**/*.html"
+      - "robots.txt"
+      - "sitemap*.xml"
+      - "tests/seo-orphan-page-audit.py"
+      - ".github/workflows/seo-orphan-page-audit.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Audit sitemap pages and incoming internal links
+        run: python tests/seo-orphan-page-audit.py
+      - name: Upload full audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-orphan-page-audit
+          path: seo-orphan-page-audit/
+          if-no-files-found: warn
+          retention-days: 30
