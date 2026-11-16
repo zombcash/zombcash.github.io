@@ -36,7 +36,7 @@ def is_gallery_artwork(caption):
 
 def gallery_title(caption, limit=100):
     """Keep generated titles within the limit without cutting a word in half."""
-    text = re.sub(r"\\s+", " ", str(caption or "")).strip()
+    text = re.sub(r"\s+", " ", str(caption or "")).strip()
     if len(text) <= limit:
         return text or "ZombieCash gallery artwork"
     shortened = text[:limit - 1].rsplit(" ", 1)[0].rstrip()
