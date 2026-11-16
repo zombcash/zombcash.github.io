@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "**/*.html"
+      - "index.html"
+      - "robots.txt"
+      - "sitemap.xml"
+      - "sitemap-*.xml"
   workflow_dispatch:
   workflow_run:
     workflows:
@@ -17,7 +23,7 @@ permissions:
   contents: read
 
 jobs:
-  submit-changed-pages:
+  submit-pages:
     if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
@@ -26,12 +32,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Wait for the public IndexNow key
+      - name: Verify public IndexNow key
         env:
           INDEXNOW_KEY: ${{ vars.INDEXNOW_KEY }}
         run: |
-          # The key is public by protocol design. Keep the fallback aligned with the
-          # public key file in the repository so no repository secret is required.
           KEY="${INDEXNOW_KEY:-zomcash-indexnow-2026-10-24-a7f93c12}"
           KEY_URL="https://zombcash.github.io/${KEY}.txt"
           for attempt in $(seq 1 18); do
@@ -46,46 +50,46 @@ jobs:
           echo "::error::IndexNow key file was not verified on the live site."
           exit 1
 
-      - name: Submit changed HTML pages to IndexNow
+      - name: Collect URLs and submit to IndexNow
         env:
           INDEXNOW_KEY: ${{ vars.INDEXNOW_KEY }}
         run: |
           KEY="${INDEXNOW_KEY:-zomcash-indexnow-2026-10-24-a7f93c12}"
-          EVENT_NAME="$GITHUB_EVENT_NAME"
-          PUSH_BEFORE="${{ github.event.before }}"
-          PUSH_AFTER="${{ github.sha }}"
           URLS_FILE="$(mktemp)"
+          FULL_REFRESH=false
 
-          # GITHUB_TOKEN commits do not trigger another push workflow. After a
-          # successful Pages deployment, notify IndexNow about every live URL.
-          if [ "$EVENT_NAME" = "workflow_run" ]; then
-            BEFORE=""
-            AFTER="$PUSH_AFTER"
-          elif [ "$EVENT_NAME" = "push" ]; then
-            BEFORE="$PUSH_BEFORE"
-            AFTER="$PUSH_AFTER"
-          else
-            BEFORE=""
-            AFTER="$PUSH_AFTER"
-          fi
-          if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
-            while IFS= read -r path; do
-            case "$path" in
-              *.html|*/index.html)
-                if [ "$path" = "index.html" ]; then
-                  printf '%s\n' "https://zombcash.github.io/" >> "$URLS_FILE"
-                elif [[ "$path" == */index.html ]]; then
-                  printf '%s\n' "https://zombcash.github.io/${path%index.html}" >> "$URLS_FILE"
-                else
-                  printf '%s\n' "https://zombcash.github.io/$path" >> "$URLS_FILE"
-                fi
-                ;;
-            esac
-            done < <(git diff --name-only --diff-filter=AMDR "$BEFORE" "$AFTER")
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] || [ "$GITHUB_EVENT_NAME" = "workflow_run" ]; then
+            FULL_REFRESH=true
+          elif [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            BEFORE="${{ github.event.before }}"
+            AFTER="${{ github.sha }}"
+            if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
+              CHANGED_FILES="$(git diff --name-only --diff-filter=AMDR "$BEFORE" "$AFTER")"
+              if printf '%s\n' "$CHANGED_FILES" | grep -Eq '^(robots\.txt|sitemap\.xml|sitemap-[^/]+\.xml)$'; then
+                FULL_REFRESH=true
+              else
+                while IFS= read -r path; do
+                  case "$path" in
+                    *.html)
+                      if [ "$path" = "index.html" ]; then
+                        printf '%s\n' "https://zombcash.github.io/" >> "$URLS_FILE"
+                      else
+                        printf '%s\n' "https://zombcash.github.io/$path" >> "$URLS_FILE"
+                      fi
+                      ;;
+                    */index.html)
+                      printf '%s\n' "https://zombcash.github.io/${path%index.html}" >> "$URLS_FILE"
+                      ;;
+                  esac
+                done <<< "$CHANGED_FILES"
+              fi
+            else
+              FULL_REFRESH=true
+            fi
           fi
 
-          if [ ! -s "$URLS_FILE" ] && { [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] || [ "$GITHUB_EVENT_NAME" = "workflow_run" ] || { [ "$GITHUB_EVENT_NAME" = "push" ] && [ -n "$BEFORE" ] && git diff --name-only "$BEFORE" "$AFTER" | grep -Eq '^(robots\.txt|sitemap\.xml|sitemap-[^/]+\.xml)
-            echo "Manual or post-deployment run with no changed HTML: submitting every URL from robots.txt sitemaps."
+          if [ "$FULL_REFRESH" = "true" ]; then
+            echo "Collecting every unique URL from the live robots.txt sitemap feeds."
             python3 - "$URLS_FILE" <<'PY'
           import sys
           import urllib.request
@@ -99,19 +103,32 @@ jobs:
               for line in robots.splitlines()
               if line.lower().startswith("sitemap:")
           ]
-          urls = set()
+          if not sitemap_urls:
+              raise SystemExit("robots.txt contains no sitemap URLs.")
           ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
-          for sitemap_url in sitemap_urls:
+          urls = set()
+          pending = list(sitemap_urls)
+          seen_sitemaps = set()
+          while pending:
+              sitemap_url = pending.pop()
+              if sitemap_url in seen_sitemaps:
+                  continue
+              seen_sitemaps.add(sitemap_url)
               with urllib.request.urlopen(sitemap_url, timeout=30) as response:
                   root = ET.fromstring(response.read())
               if root.tag.endswith("urlset"):
-                  urls.update((node.text or "").strip() for node in root.findall("sm:url/sm:loc", ns))
+                  urls.update(
+                      (node.text or "").strip()
+                      for node in root.findall("sm:url/sm:loc", ns)
+                  )
               elif root.tag.endswith("sitemapindex"):
-                  for node in root.findall("sm:sitemap/sm:loc", ns):
-                      child_url = (node.text or "").strip()
-                      with urllib.request.urlopen(child_url, timeout=30) as response:
-                          child_root = ET.fromstring(response.read())
-                      urls.update((item.text or "").strip() for item in child_root.findall("sm:url/sm:loc", ns))
+                  pending.extend(
+                      (node.text or "").strip()
+                      for node in root.findall("sm:sitemap/sm:loc", ns)
+                      if (node.text or "").strip()
+                  )
+              else:
+                  raise SystemExit(f"Unexpected sitemap XML root: {root.tag}")
           urls = sorted(url for url in urls if url.startswith(site))
           if not urls:
               raise SystemExit("No valid site URLs found in robots.txt sitemaps.")
@@ -128,73 +145,12 @@ jobs:
           fi
 
           python3 - "$URLS_FILE" "$KEY" <<'PY'
-          import json, pathlib, sys, urllib.request, urllib.error
-          urls = pathlib.Path(sys.argv[1]).read_text(encoding="utf-8").splitlines()
-          key = sys.argv[2]
-          payload = {
-              "host": "zombcash.github.io",
-              "key": key,
-              "keyLocation": f"https://zombcash.github.io/{key}.txt",
-              "urlList": urls,
-          }
-          req = urllib.request.Request(
-              "https://api.indexnow.org/indexnow",
-              data=json.dumps(payload).encode("utf-8"),
-              headers={"Content-Type": "application/json; charset=utf-8"},
-              method="POST",
-          )
-          try:
-              with urllib.request.urlopen(req, timeout=30) as response:
-                  print(f"IndexNow HTTP {response.status}: submitted {len(urls)} page URL(s).")
-          except urllib.error.HTTPError as error:
-              print(f"IndexNow HTTP {error.code}: {error.read().decode('utf-8', 'replace')}")
-              raise
-          PY
-; }; }; then
-            echo "Manual or post-deployment run with no changed HTML: submitting every URL from robots.txt sitemaps."
-            python3 - "$URLS_FILE" <<'PY'
+          import json
+          import pathlib
           import sys
           import urllib.request
-          import xml.etree.ElementTree as ET
+          import urllib.error
 
-          site = "https://zombcash.github.io/"
-          with urllib.request.urlopen(site + "robots.txt", timeout=30) as response:
-              robots = response.read().decode("utf-8")
-          sitemap_urls = [
-              line.split(":", 1)[1].strip()
-              for line in robots.splitlines()
-              if line.lower().startswith("sitemap:")
-          ]
-          urls = set()
-          ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
-          for sitemap_url in sitemap_urls:
-              with urllib.request.urlopen(sitemap_url, timeout=30) as response:
-                  root = ET.fromstring(response.read())
-              if root.tag.endswith("urlset"):
-                  urls.update((node.text or "").strip() for node in root.findall("sm:url/sm:loc", ns))
-              elif root.tag.endswith("sitemapindex"):
-                  for node in root.findall("sm:sitemap/sm:loc", ns):
-                      child_url = (node.text or "").strip()
-                      with urllib.request.urlopen(child_url, timeout=30) as response:
-                          child_root = ET.fromstring(response.read())
-                      urls.update((item.text or "").strip() for item in child_root.findall("sm:url/sm:loc", ns))
-          urls = sorted(url for url in urls if url.startswith(site))
-          if not urls:
-              raise SystemExit("No valid site URLs found in robots.txt sitemaps.")
-          with open(sys.argv[1], "w", encoding="utf-8") as output:
-              output.write("\n".join(urls) + "\n")
-          print(f"Collected {len(urls)} unique URL(s) from all sitemaps.")
-          PY
-          fi
-
-          sort -u "$URLS_FILE" -o "$URLS_FILE"
-          if [ ! -s "$URLS_FILE" ]; then
-            echo "No changed HTML pages in this push; nothing to submit."
-            exit 0
-          fi
-
-          python3 - "$URLS_FILE" "$KEY" <<'PY'
-          import json, pathlib, sys, urllib.request, urllib.error
           urls = pathlib.Path(sys.argv[1]).read_text(encoding="utf-8").splitlines()
           key = sys.argv[2]
           payload = {
@@ -203,15 +159,15 @@ jobs:
               "keyLocation": f"https://zombcash.github.io/{key}.txt",
               "urlList": urls,
           }
-          req = urllib.request.Request(
+          request = urllib.request.Request(
               "https://api.indexnow.org/indexnow",
               data=json.dumps(payload).encode("utf-8"),
               headers={"Content-Type": "application/json; charset=utf-8"},
               method="POST",
           )
           try:
-              with urllib.request.urlopen(req, timeout=30) as response:
-                  print(f"IndexNow HTTP {response.status}: submitted {len(urls)} page URL(s).")
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  print(f"IndexNow HTTP {response.status}: submitted {len(urls)} URL(s).")
           except urllib.error.HTTPError as error:
               print(f"IndexNow HTTP {error.code}: {error.read().decode('utf-8', 'replace')}")
               raise
