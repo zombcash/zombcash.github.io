@@ -1,0 +1,23 @@
+const { chromium } = require('playwright');
+const path = require('path');
+(async () => {
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto('file://' + path.resolve(__dirname, 'fixtures/ai-worlds.html'));
+  await page.waitForSelector('#zombcash-outbreak-world');
+  if (await page.locator('#zw-outbreak-map .zw-cell').count() !== 81) throw new Error('Outbreak board must render 81 cells');
+  await page.locator('#zw-demo-start').click();
+  await page.locator('#zw-demo-turn').click();
+  if (!(await page.locator('#zw-outbreak-feed').innerText()).includes('Turn 1')) throw new Error('Outbreak local turn did not advance');
+  await page.locator('#zw-next').click();
+  await page.waitForFunction(() => document.querySelector('#zw-world-turn').textContent.includes('TURN 1'));
+  await page.locator('#zw-auto').click();
+  if (await page.locator('#zw-auto').innerText() !== 'AUTO: ON') throw new Error('Auto mode did not enable');
+  await page.locator('#zw-auto').click();
+  if (await page.locator('#zw-auto').innerText() !== 'AUTO: OFF') throw new Error('Auto mode did not disable');
+  if (errors.length) throw new Error('Browser errors: ' + errors.join('; '));
+  console.log('AI Worlds browser smoke passed: board, outbreak turn, autonomous turn, auto toggle.');
+  await browser.close();
+})().catch(error => { console.error(error); process.exit(1); });
