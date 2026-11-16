@@ -497,7 +497,7 @@
     header.zombcash-shared-header .zsh-actions>.zsh-home{order:1!important}
     header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:2!important}
     header.zombcash-shared-header .zsh-actions .zsh-line-button{order:3!important}
-    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:3!important}
+    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:4!important}
     header.zombcash-shared-header .zsh-actions>.zsh-home:hover,
     header.zombcash-shared-header .zsh-actions .language-trigger:hover,
     header.zombcash-shared-header .zsh-actions .survivor-entry-button:hover,
@@ -711,7 +711,7 @@
     /* Consistent action order on every page: Back to Home, language, registration at far right. */
     header.zombcash-shared-header .zsh-actions>.zsh-home{order:1!important}
     header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:2!important}
-    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:3!important}
+    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:4!important}
     body.zsh-inner-page>.wrap,
     body.zsh-inner-page>.container,
     body.zsh-inner-page>.page-wrap,
@@ -1181,7 +1181,7 @@
     }
     header.zombcash-shared-header .zsh-actions>.zsh-home{order:1!important}
     header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:2!important}
-    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:3!important}
+    header.zombcash-shared-header .zsh-actions .zsh-login-button{order:4!important}
     @media (min-width:1200px) and (max-width:1699px) {
       header.zombcash-shared-header {
         grid-template-columns:minmax(0,1fr) auto!important;
@@ -1304,7 +1304,7 @@
         order:2!important;display:flex!important;align-items:center!important;flex:0 0 auto!important;
       }
       header.zombcash-shared-header .zsh-actions>.zsh-home { order:1!important; }
-      header.zombcash-shared-header .zsh-actions .zsh-login-button { order:3!important; }
+      header.zombcash-shared-header .zsh-actions .zsh-login-button { order:4!important; }
       header.zombcash-shared-header .language-switcher {
         position:relative!important;flex:0 0 auto!important;max-width:none!important;
       }
