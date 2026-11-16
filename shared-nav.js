@@ -4,6 +4,18 @@
   try {
   if (window.__zcSitewideAdsterraInit) return;
   window.__zcSitewideAdsterraInit = true;
+  /* Site-wide Adsterra Social Bar. Keep one loader per document; Cloudflare Rocket Loader must not rewrite it. */
+  try {
+    const socialBarSrc = 'https://bauval.org/14/26987a37c64c7c295763ca6d143e6d5c';
+    if (!document.querySelector('script[src="' + socialBarSrc + '"]')) {
+      const socialBarScript = document.createElement('script');
+      socialBarScript.setAttribute('data-cfasync', 'false');
+      socialBarScript.src = socialBarSrc;
+      (document.body || document.head || document.documentElement).appendChild(socialBarScript);
+    }
+  } catch (error) {
+    console.warn('[ZombieCash] Optional Social Bar loader failed:', error);
+  }
   const NATIVE_ID = '4420dadadbd2f0727c322cd6c632be3e';
   const MOBILE_KEY = 'fbb2658d8dcb4503b358387f042869d1';
   const nativeContainerId = 'container-4420dadadbd2f0727c322cd6c632be3e';
