@@ -19,6 +19,16 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
     return count && count.textContent.trim() !== 'LOADING VIDEO LIBRARY…';
   }, null, { timeout: 15000 }).catch(() => {});
 
+  // The player now loads its source only when the video itself approaches
+  // the viewport, not merely when the top of the TV section becomes visible.
+  await page.locator('#zctv-channel-hub #zc-promo-player').scrollIntoViewIfNeeded();
+  await page.waitForFunction(() => {
+    const video = document.querySelector('#zctv-channel-hub #zc-promo-player');
+    return !!video && (video.currentSrc || video.src || '').includes('zombiecash_final_real_screens.mp4');
+  }, null, { timeout: 15000 });
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(150);
+
   const measure = async () => page.evaluate(() => {
     const box = selector => {
       const el = document.querySelector(selector);
