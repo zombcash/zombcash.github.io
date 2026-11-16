@@ -188,7 +188,9 @@ def main():
         item.update({
             "rights_status": "review-required",
             "title": caption[:100] or "ZombieCash gallery artwork",
-            "description": caption or "New artwork from the ZombieCash Telegram channel.",
+            # No separate editorial description is available from the Telegram source.
+            # Keep this field empty instead of duplicating the caption.
+            "description": "",
             "alt_text": "ZombieCash gallery artwork — visual ALT review pending.",
             "category_ids": [category],
             "series": category,
