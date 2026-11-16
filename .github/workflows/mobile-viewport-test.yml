@@ -17,6 +17,9 @@ on:
       - 'tests/survivor-hub-localization-smoke.cjs'
       - 'tests/survivor-hub-visual-smoke.cjs'
       - 'arcade.html'
+      - 'ai-arena.js'
+      - 'zombie-world.js'
+      - 'tests/arcade-ai-worlds-visual-smoke.cjs'
       - 'tests/arcade-dynamic-localization-smoke.cjs'
       - '.github/workflows/mobile-viewport-test.yml'
   push:
@@ -96,6 +99,7 @@ jobs:
           node --check tests/survivor-hub-localization-smoke.cjs
           node --check tests/survivor-hub-visual-smoke.cjs
           node --check tests/arcade-dynamic-localization-smoke.cjs
+          node --check tests/arcade-ai-worlds-visual-smoke.cjs
       - name: Install Playwright
         run: |
           npm init -y
@@ -142,6 +146,10 @@ jobs:
         if: always()
         run: node tests/arcade-dynamic-localization-smoke.cjs
 
+      - name: Test AI Worlds on the actual Arcade page and capture screenshot
+        if: always()
+        run: node tests/arcade-ai-worlds-visual-smoke.cjs
+
       - name: Upload wide viewport visual evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -150,6 +158,15 @@ jobs:
           path: homepage-zoom-results/
           if-no-files-found: ignore
           retention-days: 7
+
+      - name: Upload AI Worlds Arcade screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-worlds-arcade-screenshot
+          path: ai-worlds-visual-results/
+          if-no-files-found: ignore
+          retention-days: 14
 
       - name: Upload Survivor Hub visual evidence
         if: always()
