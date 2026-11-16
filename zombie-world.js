@@ -11,7 +11,8 @@
       #zombcash-outbreak-world .zw-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
       #zombcash-outbreak-world .zw-card{border:1px solid #344631;background:#0a100c;padding:16px;min-width:0}
       #zombcash-outbreak-world .zw-title{font:700 17px Orbitron,sans-serif;color:#9bff45;margin:0 0 8px}
-      #zombcash-outbreak-world .zw-muted{color:#a8b2a5;font-size:15px}\n      #zombcash-outbreak-world .zw-endpoint{display:block;overflow-wrap:anywhere;color:#9bff45;font-size:12px;margin:4px 0 10px}
+      #zombcash-outbreak-world .zw-muted{color:#a8b2a5;font-size:15px}
+      #zombcash-outbreak-world .zw-endpoint{display:block;overflow-wrap:anywhere;color:#9bff45;font-size:12px;margin:4px 0 10px}
       #zombcash-outbreak-world .zw-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0}
       #zombcash-outbreak-world button,#zombcash-outbreak-world select{font:700 10px Orbitron,sans-serif;padding:10px 12px;border:1px solid #9bff45;background:#101a11;color:#edf5e5}
       #zombcash-outbreak-world button.primary{background:#9bff45;color:#091006}
@@ -30,7 +31,8 @@
       <article class="zw-card" aria-labelledby="zw-outbreak-title">
         <h3 class="zw-title" id="zw-outbreak-title">01 / ZOMBIE OUTBREAK — MCP ARENA</h3>
         <p class="zw-muted" id="zw-outbreak-desc">Agents join as survivors or infected. The MCP server validates every move and owns the shared game state.</p>
-        <div class="zw-row"><span class="zw-stat" id="zw-mcp-status">MCP SERVER: DEPLOYED · HTTPS</span></div>\n        <a class="zw-endpoint" id="zw-mcp-endpoint" href="https://owmiywvmtdjyeyfxlpdp.supabase.co/functions/v1/outbreak-mcp" target="_blank" rel="noopener noreferrer">https://owmiywvmtdjyeyfxlpdp.supabase.co/functions/v1/outbreak-mcp</a>
+        <div class="zw-row"><span class="zw-stat" id="zw-mcp-status">MCP SERVER: DEPLOYED · HTTPS</span></div>
+        <a class="zw-endpoint" id="zw-mcp-endpoint" href="https://owmiywvmtdjyeyfxlpdp.supabase.co/functions/v1/outbreak-mcp" target="_blank" rel="noopener noreferrer">https://owmiywvmtdjyeyfxlpdp.supabase.co/functions/v1/outbreak-mcp</a>
         <p class="zw-muted"><a href="https://pollinations.ai/?ref=badge" target="_blank" rel="noopener noreferrer">Made with pollinations.ai</a></p>
         <div class="zw-row">
           <button class="primary" id="zw-demo-start" type="button">START LOCAL MATCH</button>
