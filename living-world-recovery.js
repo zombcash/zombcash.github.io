@@ -81,7 +81,27 @@
       const articles = Array.isArray(data.articles) ? data.articles : [];
       if (!articles.length) throw new Error('API returned no articles');
       newsList.replaceChildren();
-      articles.slice(0, 7).forEach(article => {
+      const seenArticleLinks = new Set();
+      const seenArticleTitles = new Set();
+      let renderedArticles = 0;
+      for (const article of articles) {
+        if (renderedArticles >= 7) break;
+        const rawLink = String(article.link || '').trim();
+        let identityLink = '';
+        if (/^https?:\/\//i.test(rawLink)) {
+          try {
+            const parsed = new URL(rawLink);
+            parsed.hash = '';
+            [...parsed.searchParams.keys()].forEach(key => {
+              if (/^(utm_|fbclid$|gclid$|mc_cid$|mc_eid$)/i.test(key)) parsed.searchParams.delete(key);
+            });
+            identityLink = parsed.origin + parsed.pathname.replace(/\/+$/, '') + parsed.search;
+          } catch (_) {}
+        }
+        const identityTitle = String(article.title || '').normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+        if ((identityLink && seenArticleLinks.has(identityLink)) || (identityTitle && seenArticleTitles.has(identityTitle))) continue;
+        if (identityLink) seenArticleLinks.add(identityLink);
+        if (identityTitle) seenArticleTitles.add(identityTitle);
         const item = node('article', 'world-news-item' + (article.enriched ? ' is-enriched' : ''));
         if (article.enriched && article.imageUrl) {
           const image = node('img', 'world-news-image');
@@ -113,7 +133,8 @@
           item.append(commentary);
         }
         newsList.append(item);
-      });
+        renderedArticles += 1;
+      }
       newsStatus.textContent = data.stale ? 'LAST KNOWN FEED' : (Number(data.enrichedCount || 0) > 0 ? 'ZOMBIECASH NEWS ONLINE' : 'RSS FEED ONLINE');
       if (newsUpdated) newsUpdated.textContent = 'UPDATED ' + new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
     } catch (error) {
