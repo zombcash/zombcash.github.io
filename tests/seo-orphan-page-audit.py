@@ -166,6 +166,15 @@ def main():
                     inbound[nav_target] += 1
                     inbound_sources[nav_target].add(source_url)
                     outbound[source_url] += 1
+            # shared-nav.js also injects a locale-aware About link in the global footer.
+            about_target = site_url(
+                "/" + locale + "/about.html" if locale != "en" and "about.html" in localized_pages.get(locale, set())
+                else "/about.html"
+            )
+            if about_target and about_target in urls and about_target != source_url:
+                inbound[about_target] += 1
+                inbound_sources[about_target].add(source_url)
+                outbound[source_url] += 1
         for href in parser.links:
             target = site_url(href, source_url)
             if target and target in urls and target != source_url:
