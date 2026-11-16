@@ -13,5 +13,6 @@ assert "ThreadPoolExecutor(max_workers=4)" in workflow, "GSC URL inspection must
 assert "thread_local.service = build(" in workflow, "Each GSC inspection worker must use its own API client"
 assert 'name: gsc-url-inspection-report' in workflow, "GSC URL inspection results must be archived as an Actions artifact"
 assert "unique_sitemap_urls" in workflow and "coverage_state" in workflow, "GSC report must preserve per-URL index coverage details"
+assert 'record.get("verdict") or ("ERROR"' in workflow and 'record.get("coverage_state") or ("ERROR"' in workflow, "GSC summary must safely group missing verdict and coverage fields"
 
 print("PASS: GSC URL inspection audit is scheduled, quota-paced, and archives per-URL index results.")
