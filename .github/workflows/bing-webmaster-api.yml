@@ -12,20 +12,12 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "17 6 * * *"
-  workflow_run:
-    workflows:
-      - "Deploy ZombieCash static site to GitHub Pages"
-    types:
-      - completed
-    branches:
-      - main
 
 permissions:
   contents: read
 
 jobs:
   bing-webmaster-report:
-    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -72,6 +64,7 @@ jobs:
               raise SystemExit("ERROR: robots.txt references a sitemap outside the configured site.")
 
           submissions = []
+          warnings = []
           for feed_url in sitemap_urls:
               params = urllib.parse.urlencode({"apikey": key})
               body = json.dumps({"siteUrl": site, "feedUrl": feed_url}).encode("utf-8")
@@ -92,6 +85,17 @@ jobs:
                       print(f"SubmitFeed: HTTP {response.status}; {feed_url}")
               except urllib.error.HTTPError as exc:
                   error_body = exc.read().decode("utf-8", "replace")[:1000]
+                  if exc.code == 400 and "ThrottleHost" in error_body:
+                      warning = f"Bing throttled sitemap submission for {feed_url} (ThrottleHost, ErrorCode 5)."
+                      warnings.append(warning)
+                      submissions.append({
+                          "url": feed_url,
+                          "http_status": exc.code,
+                          "status": "throttled",
+                          "error_code": 5,
+                      })
+                      print(f"::warning::{warning} No retry will be attempted in this run.")
+                      continue
                   print(f"::error::SubmitFeed failed for {feed_url}: HTTP {exc.code}. {error_body}")
                   sys.exit(1)
 
@@ -108,6 +112,7 @@ jobs:
               "generated_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
               "source": "Bing Webmaster API",
               "results": {},
+              "warnings": warnings,
           }
 
           for name, method in calls.items():
@@ -130,6 +135,16 @@ jobs:
               except urllib.error.HTTPError as exc:
                   # Never print the request URL: it contains the API key.
                   body = exc.read().decode("utf-8", "replace")[:1000]
+                  if exc.code == 400 and "ThrottleHost" in body:
+                      warning = f"{method} was throttled by Bing (ThrottleHost, ErrorCode 5)."
+                      warnings.append(warning)
+                      report["results"][name] = {
+                          "http_status": exc.code,
+                          "status": "throttled",
+                          "error_code": 5,
+                      }
+                      print(f"::warning::{warning} The next scheduled report will try again.")
+                      continue
                   print(f"::error::{method} returned HTTP {exc.code}. Response: {body}")
                   sys.exit(1)
               except Exception as exc:
@@ -139,7 +154,10 @@ jobs:
           Path("bing-webmaster-report.json").write_text(
               json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
           )
-          print("Bing Webmaster API authentication and report retrieval succeeded.")
+          if warnings:
+              print(f"::warning::Bing report completed with {len(warnings)} throttled request(s). The daily schedule will retry; no rapid retry was attempted.")
+          else:
+              print("Bing Webmaster API authentication and report retrieval succeeded.")
           PY
 
       - name: Upload private-run report artifact
