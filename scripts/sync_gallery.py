@@ -16,22 +16,30 @@ BASE_URL = f"https://t.me/s/{CHANNEL}"
 OUTPUT = Path("gallery-data.json")
 MAX_PAGES = 100
 MAX_PER_CATEGORY = 50
+# Classify all attached image posts, not only the three legacy series headers.
+# The order is intentional: explicit series/meme labels win over broad keywords.
 CATEGORY_PATTERNS = {
-    "nightmare-horror": re.compile(r"\bNIGHTMARE\s+DROP\b", re.I),
-    "zombie-memes": re.compile(r"\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b", re.I),
     "undead-after-dark": re.compile(r"\bUNDEAD\s+AFTER\s+DARK\b", re.I),
+    "zombie-memes": re.compile(r"\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b|\bMEME\b|😂", re.I),
+    "nightmare-horror": re.compile(r"\bNIGHTMARE\b|\bHORROR\b|\bHAUNTED\b|\bGHOST\b|\bCREEPY\b|\bDREAD\b|🩸", re.I),
+    "zombie-characters": re.compile(r"\b(?:ZOMBIE|UNDEAD)\s+(?:GIRL|BOY|CHARACTER|WARRIOR|QUEEN|KING|HUNTER|PRINCESS)\b|\bZOMBIE\s+CHARACTERS?\b", re.I),
+    "apocalypse-survival": re.compile(r"\bAPOCALYPSE\b|\bSURVIVAL\b|\bWASTELAND\b|\bBUNKER\b|\bOUTBREAK\b|\bSCAVENGER\b|\bSHELTER\b|\bFALLOUT\b", re.I),
+    "crypto-apocalypse": re.compile(r"\bCRYPTO\b|\bBITCOIN\b|\bSOLANA\b|\bMEMECOIN\b|\bTOKEN\b|\bWALLET\b|\bTRADING\b|\bPORTFOLIO\b|\bMARKET\b", re.I),
+    "community-creations": re.compile(r".+", re.S),
 }
 
-# The archive limit is per recurring series, not one 50-image global cap.
+# Every attached image/video-thumbnail post can enter the archive. News-feed
+# text-only updates are excluded even if Telegram's page contains shared media.
 def category_for_caption(caption):
-    text = str(caption or "")
+    text = str(caption or "").strip()
     for category, pattern in CATEGORY_PATTERNS.items():
         if pattern.search(text):
             return category
-    return None
+    return "community-creations"
 
 def is_gallery_artwork(caption):
-    return category_for_caption(caption) is not None
+    text = str(caption or "").strip()
+    return not re.search(r"\bNEWS\s+UPDATE\b|\bORIGINAL\s+SOURCE\s*:", text, re.I)
 
 
 def gallery_title(caption, limit=100):
@@ -135,9 +143,12 @@ def main():
         response.raise_for_status()
         page_items, oldest_id = parse_page(response.text)
         for item in page_items:
-            category = category_for_caption(item.get("caption"))
+            caption = item.get("caption") or ""
+            if not is_gallery_artwork(caption):
+                continue
+            category = category_for_caption(caption)
             item_id = item.get("id")
-            if not category or not item_id or item_id in all_items:
+            if not item_id or item_id in all_items:
                 continue
             if category_counts[category] >= MAX_PER_CATEGORY:
                 continue
@@ -151,8 +162,8 @@ def main():
         before = next_before
         time.sleep(0.35)
 
-    # Keep up to 50 newest image entries in each primary series, then merge
-    # them into one date-sorted archive. This yields up to 150 total images.
+    # Keep up to 50 newest image entries in each of seven categories, then merge
+    # them into one date-sorted archive. This yields up to 350 total images.
     selected_by_category = {category: [] for category in CATEGORY_PATTERNS}
     for item in sorted(all_items.values(), key=lambda item: (item.get("date") or "", item.get("post_id") or ""), reverse=True):
         category = category_for_caption(item.get("caption"))
@@ -194,7 +205,7 @@ def main():
         elif re.search(r"\bUNDEAD\s+AFTER\s+DARK\b", caption, re.I):
             category = "undead-after-dark"
         else:
-            category = "community-creations"
+            category = category_for_caption(caption)
         new_items_for_dimensions.append(item)
         item.update({
             "rights_status": "review-required",
