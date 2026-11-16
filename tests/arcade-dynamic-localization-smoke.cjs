@@ -50,8 +50,17 @@ async function waitForText(page, selector, expected) {
       const pageErrors = [];
       page.on('pageerror', error => pageErrors.push(error.message));
 
+      let failProgressRequest = false;
+      await page.addInitScript(() => localStorage.setItem('zombcash-survivor-token', 'test-token'));
       await page.route('https://zombcash-bot.fadehost.app/**', route => {
         const url = new URL(route.request().url());
+        if (url.pathname.endsWith('/api/survival/arcade-stats')) {
+          return route.fulfill({
+            status: failProgressRequest ? 503 : 200,
+            contentType: 'application/json',
+            body: JSON.stringify(failProgressRequest ? { error: 'UPSTREAM_INTERNAL_ERROR' } : { stats: [] }),
+          });
+        }
         if (url.pathname.endsWith('/api/arcade-scores')) {
           return route.fulfill({
             status: 200,
@@ -121,6 +130,15 @@ async function waitForText(page, selector, expected) {
         return card && card.querySelector('strong')?.textContent === heading &&
           card.querySelector('small')?.textContent === detail;
       }, { heading: map['BEST RESULT'], detail: map['PERSONAL RECORD'] }, { timeout: 5000 });
+
+      failProgressRequest = true;
+      await page.evaluate(() => document.dispatchEvent(new Event('zombcash:survivorprofileupdated')));
+      await page.waitForFunction(expected => document.querySelector('#player-progress-status')?.textContent === expected,
+        map['SYNC UNAVAILABLE'], { timeout: 5000 });
+      await page.waitForFunction(expected => document.querySelector('#player-progress-grid')?.textContent.includes(expected),
+        map['Could not load progress.'], { timeout: 5000 });
+      const progressErrorText = await page.locator('#player-progress-grid').textContent();
+      assert.ok(!progressErrorText.includes('UPSTREAM_INTERNAL_ERROR'), locale + ' leaked a raw API error to the interface');
 
       assert.deepEqual(pageErrors, [], locale + ' produced browser JavaScript errors');
       console.log('PASS: Arcade dynamic records, save statuses and personal progress (' + locale + ')');
