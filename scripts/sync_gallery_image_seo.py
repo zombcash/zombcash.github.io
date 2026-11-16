@@ -40,7 +40,7 @@ def make_cards(items):
         caption = clean_caption(caption_raw)
         post = html.escape(str(item.get("post_url") or "https://t.me/ZOMBCASH"), quote=True)
         title = str(item.get("title") or caption).strip()
-        description = str(item.get("description") or "").strip()
+        description = str(item.get("description") or "").strip()  # Never substitute the Telegram caption into the editorial description field.
         alt_text = str(item.get("alt_text") or "").strip() or ("ZombieCash gallery artwork accompanying the story: " + description)
         esc_caption = html.escape(caption, quote=True)
         esc_raw = html.escape(caption_raw, quote=True)
