@@ -14,7 +14,7 @@ on:
     - cron: "17 6 * * *"
   workflow_run:
     workflows:
-      - "pages build and deployment"
+      - "Deploy ZombieCash static site to GitHub Pages"
     types:
       - completed
     branches:
