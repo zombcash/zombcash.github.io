@@ -1,6 +1,14 @@
 name: AI Worlds Actual Arcade Visual QA
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'arcade.html'
+      - 'ai-arena.js'
+      - 'zombie-world.js'
+      - 'tests/arcade-ai-worlds-visual-smoke.cjs'
+      - '.github/workflows/ai-worlds-visual.yml'
   workflow_dispatch:
   pull_request:
     branches: [main]
