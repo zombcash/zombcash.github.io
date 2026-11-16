@@ -10,6 +10,7 @@ on:
       - "zombie-maker.html"
       - "sitemap.xml"
       - "tests/seo-internal-link-fixes-smoke.py"
+      - "tests/internal-link-integrity-smoke.py"
       - "tests/seo-meta-duplicate-smoke.py"
       - ".github/workflows/indexnow.yml"
       - ".github/workflows/bing-webmaster-api.yml"
@@ -34,6 +35,8 @@ jobs:
       - run: python -m pip install --disable-pip-version-check beautifulsoup4
       - name: Validate candidate sitemap link graph
         run: python tests/seo-internal-link-fixes-smoke.py
+      - name: Audit every same-origin HTML link
+        run: python tests/internal-link-integrity-smoke.py
       - name: Audit duplicate Open Graph and Twitter metadata
         run: python tests/seo-meta-duplicate-smoke.py
       - name: Validate generated gallery pages reach IndexNow
