@@ -303,9 +303,16 @@ const targetLikeImageId = galleryData.items[0]?.id || "";
     const reset = await page.locator("#gallery-grid .gallery-card").count();
     if (reset !== expectedGalleryCount) throw new Error("Clear filters should restore " + expectedGalleryCount + " cards, got " + reset);
     if (await page.locator("#gallery-grid .gallery-like-button").count() !== expectedGalleryCount) throw new Error("Clear filters should restore like controls");
-    await page.getByRole("button", { name: "Zombie Characters" }).click();
-    const zombieCharacters = await page.locator("#gallery-grid .gallery-card").count();
-    if (zombieCharacters !== expectedCategoryIds("zombie-characters").length) throw new Error("Zombie Characters filter count does not match current gallery metadata: " + zombieCharacters);
+    const expectedZombieCharacters = expectedCategoryIds("zombie-characters").length;
+    const zombieCharactersButton = page.getByRole("button", { name: "Zombie Characters", exact: true });
+    if (expectedZombieCharacters > 0) {
+      if (await zombieCharactersButton.count() !== 1) throw new Error("Zombie Characters filter is missing despite matching gallery items");
+      await zombieCharactersButton.click();
+      const zombieCharacters = await page.locator("#gallery-grid .gallery-card").count();
+      if (zombieCharacters !== expectedZombieCharacters) throw new Error("Zombie Characters filter count does not match current gallery metadata: " + zombieCharacters);
+    } else if (await zombieCharactersButton.count() !== 0) {
+      throw new Error("Empty Zombie Characters category should not be rendered as a filter");
+    }
     const expectedApocalypseSurvival = expectedCategoryIds("apocalypse-survival").length;
     const apocalypseSurvivalButton = page.getByRole("button", { name: "Apocalypse & Survival", exact: true });
     if (expectedApocalypseSurvival > 0) {
