@@ -147,7 +147,7 @@
     const title = card.dataset.galleryTitle || card.querySelector(".gallery-caption p")?.textContent || "";
     const originalCaption = card.querySelector(".gallery-caption p")?.dataset.originalCaption || "";
     const description = card.dataset.galleryDescription || "";
-    const normalizeLightboxText = value => String(value || "").toLocaleLowerCase().replace(/[\\s\\p{P}\\p{S}]+/gu, " ").trim();
+    const normalizeLightboxText = value => String(value || "").toLocaleLowerCase().replace(/[\s\p{P}\p{S}]+/gu, " ").trim();
     const normalizedTitle = normalizeLightboxText(cleanCaption(title));
     const normalizedCaption = normalizeLightboxText(cleanCaption(originalCaption));
     const normalizedDescription = normalizeLightboxText(cleanCaption(description));
