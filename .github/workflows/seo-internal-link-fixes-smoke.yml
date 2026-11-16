@@ -10,6 +10,7 @@ on:
       - "zombie-maker.html"
       - "sitemap.xml"
       - "tests/seo-internal-link-fixes-smoke.py"
+      - "tests/internal-link-integrity-smoke.py"
       - "tests/seo-meta-duplicate-smoke.py"
       - ".github/workflows/indexnow.yml"
       - ".github/workflows/bing-webmaster-api.yml"
