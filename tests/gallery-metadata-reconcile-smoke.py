@@ -10,6 +10,7 @@ ids = [item["id"] for item in items]
 assert data.get("schema_version") == 2
 assert 1 <= len(items) <= 150, f"Expected 1–150 current gallery items, got {len(items)}"
 assert len(set(ids)) == len(items), "Duplicate gallery item IDs"
+assert all(not str(item.get("description") or "").strip() for item in items), "Gallery descriptions must stay empty until separately authored; do not duplicate Telegram captions"
 # The Telegram archive is intentionally rolling: the sync keeps up to
 # MAX_PER_CATEGORY newest images per recurring series. Do not pin old post IDs
 # here, because a valid older post will eventually age out of that window.
