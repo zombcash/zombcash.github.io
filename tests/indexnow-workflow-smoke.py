@@ -15,6 +15,7 @@ for name, workflow in (("IndexNow", indexnow), ("Bing Webmaster", bing)):
 
 assert 'GITHUB_EVENT_NAME" = "workflow_dispatch"' in indexnow, "Manual dispatch must retain the full-sitemap fallback"
 assert 'GITHUB_EVENT_NAME" = "workflow_run"' in indexnow, "Successful Pages deployment must submit the full sitemap"
+assert 'grep -qx ".github/workflows/indexnow.yml"' in indexnow, "The workflow-fix push must submit the full sitemap once so this correction does not miss the current deployment"
 assert 'Collected {len(urls)} unique URL(s) from all sitemaps.' in indexnow, "IndexNow must collect every live sitemap URL"
 assert 'https://api.indexnow.org/indexnow' in indexnow, "IndexNow endpoint must remain configured"
 assert 'SubmitFeed?' in bing, "Bing workflow must continue submitting all robots.txt sitemap feeds"
