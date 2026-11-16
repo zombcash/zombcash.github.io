@@ -294,7 +294,6 @@
       (!isHome ? '<a class="zsh-home home-return-button" href="' + target('/') + '"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
       '<div class="zsh-language-slot"></div>' +
       '<a class="zsh-line-button" href="https://line.me/R/ti/p/%40022khlio" target="_blank" rel="noopener noreferrer" aria-label="Add ZombieCash on LINE">ADD LINE</a>' +
-      '<div class="zsh-language-slot"></div>' +
       (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<button class="zsh-login-button" type="button" data-zsh-login>LOGIN WITH TELEGRAM</button>') +
     '</div>';
 
