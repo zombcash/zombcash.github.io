@@ -10,7 +10,14 @@ ids = [item["id"] for item in items]
 assert data.get("schema_version") == 2
 assert 1 <= len(items) <= 150, f"Expected 1–150 current gallery items, got {len(items)}"
 assert len(set(ids)) == len(items), "Duplicate gallery item IDs"
-assert all(not str(item.get("description") or "").strip() for item in items), "Gallery descriptions must stay empty until separately authored; do not duplicate Telegram captions"
+def normalize_editorial_text(value):
+    return re.sub(r"[\W_]+", " ", str(value or "").lower(), flags=re.UNICODE).strip()
+
+for item in items:
+    description = normalize_editorial_text(item.get("description"))
+    caption = normalize_editorial_text(item.get("caption"))
+    title = normalize_editorial_text(item.get("title"))
+    assert not description or (description != caption and description != title and not caption.startswith(description) and not description.startswith(caption) and not title.startswith(description) and not description.startswith(title)), f"Description duplicates title/caption: {item['id']}"
 # The Telegram archive is intentionally rolling: the sync keeps up to
 # MAX_PER_CATEGORY newest images per recurring series. Do not pin old post IDs
 # here, because a valid older post will eventually age out of that window.
