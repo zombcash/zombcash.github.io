@@ -212,7 +212,13 @@ const targetLikeImageId = galleryData.items[0]?.id || "";
     if (!openTracked) throw new Error("Gallery image open analytics event was not recorded");
     if (await page.locator(".gallery-lightbox-title").count() !== 0) throw new Error("Lightbox must hide a title that repeats the Telegram caption");
     const fullTelegramCaption = await page.locator(".gallery-lightbox-caption").textContent();
-    if (!fullTelegramCaption || !fullTelegramCaption.includes("blossoms.")) throw new Error("Lightbox must retain the full Telegram caption exactly once");
+    const expectedTelegramCaption = String(galleryData.items.find(item => item.id === targetLikeImageId)?.caption || "")
+      .replace(/\s+/g, " ")
+      .split(/━━━━━━━━|🧟\s*\$ZOMBCASH|MARKET DIED\.|📋\s*CA:|🌐\s*Website:|𝕏\s*X Community|💬\s*Telegram/i)[0]
+      .trim();
+    if (!fullTelegramCaption || fullTelegramCaption !== expectedTelegramCaption) {
+      throw new Error("Lightbox must retain the current Telegram caption exactly once: " + JSON.stringify({ expectedTelegramCaption, fullTelegramCaption }));
+    }
     if (await page.locator(".gallery-lightbox-description:not(.gallery-lightbox-caption)").count() !== 0) throw new Error("Lightbox must hide an absent or duplicate editorial description");
     const lightboxCaption = await page.locator(".gallery-lightbox figcaption").textContent();
     if (!lightboxCaption.includes("SOURCE")) throw new Error("Lightbox must retain its Telegram source link");
