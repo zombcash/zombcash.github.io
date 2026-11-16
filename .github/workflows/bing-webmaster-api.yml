@@ -105,6 +105,10 @@ jobs:
               "crawl_stats": "GetCrawlStats",
               "crawl_issues": "GetCrawlIssues",
               "sitemaps": "GetFeeds",
+              # Bing exposes fetched-URL records separately from aggregate crawl
+              # statistics. This distinguishes discovered sitemap URLs from URLs
+              # Bing has actually fetched.
+              "fetched_urls": "GetFetchedUrls",
           }
           report = {
               "sitemap_submissions": submissions,
