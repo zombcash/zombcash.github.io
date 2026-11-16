@@ -107,6 +107,7 @@ async function waitForText(page, selector, expected) {
 
       await page.locator('#player-progress-grid').evaluate(grid => {
         const card = document.createElement('div');
+        card.className = 'player-progress-item';
         const heading = document.createElement('strong');
         const detail = document.createElement('small');
         heading.textContent = 'BEST RESULT';
