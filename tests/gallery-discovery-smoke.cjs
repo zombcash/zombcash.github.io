@@ -6,6 +6,7 @@ const galleryData = JSON.parse(fs.readFileSync("gallery-data.json", "utf8"));
 const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]));
 const expectedGalleryCount = galleryData.items.length;
 const targetLikeImageId = galleryData.items[0]?.id || "";
+const captionAuditIndex = Math.max(0, galleryData.items.findIndex(item => String(item.caption || "").includes("blossoms.")));
 
 (async () => {
   const server = spawn("python3", ["-m", "http.server", "4173", "--bind", "127.0.0.1"], { stdio: "ignore", cwd: process.cwd() });
@@ -206,7 +207,7 @@ const targetLikeImageId = galleryData.items[0]?.id || "";
     await page.waitForFunction(imageId => { const card = Array.from(document.querySelectorAll("#gallery-grid .gallery-card")).find(item => item.dataset.galleryId === imageId); return card?.querySelector(".gallery-like-button")?.getAttribute("aria-pressed") === "false" && card?.querySelector(".gallery-like-count")?.textContent === "100"; }, targetLikeImageId);
     if (!await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_unlike"))) throw new Error("Authenticated gallery unlike event was not recorded");
     if (likeToggleCalls.length !== 2 || likeToggleCalls[0].liked !== true || likeToggleCalls[1].liked !== false) throw new Error("Like/unlike API payload sequence was incorrect: " + JSON.stringify(likeToggleCalls));
-    await page.locator("#gallery-grid .gallery-card").first().click({ position: { x: 20, y: 20 } });
+    await page.locator("#gallery-grid .gallery-card").nth(captionAuditIndex).click({ position: { x: 20, y: 20 } });
     await page.waitForSelector(".gallery-lightbox.is-open .gallery-lightbox-like");
     const openTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_image_open"));
     if (!openTracked) throw new Error("Gallery image open analytics event was not recorded");
