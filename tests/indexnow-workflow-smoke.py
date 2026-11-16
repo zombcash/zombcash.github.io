@@ -19,7 +19,7 @@ assert 'workflow_run:' not in bing, "Bing report must not submit feeds after eve
 
 assert 'GITHUB_EVENT_NAME" = "workflow_dispatch"' in indexnow, "Manual dispatch must retain the full-sitemap fallback"
 assert 'GITHUB_EVENT_NAME" = "workflow_run"' in indexnow, "Successful Pages deployment must submit the full sitemap"
-assert "grep -Eq" in indexnow and "robots\\\\.txt|sitemap\\\\.xml|sitemap-" in indexnow, "Sitemap or robots changes must trigger a full IndexNow refresh"
+assert "grep -Eq" in indexnow and r"robots\.txt|sitemap\.xml|sitemap-" in indexnow, "Sitemap or robots changes must trigger a full IndexNow refresh"
 assert 'Collected {len(urls)} unique URL(s) from all sitemaps.' in indexnow, "IndexNow must collect every live sitemap URL"
 assert 'https://api.indexnow.org/indexnow' in indexnow, "IndexNow endpoint must remain configured"
 assert 'SubmitFeed?' in bing, "Bing workflow must continue submitting all robots.txt sitemap feeds"
