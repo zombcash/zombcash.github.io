@@ -6,6 +6,9 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/gsc-url-inspection-audit.yml"
+      - "robots.txt"
+      - "sitemap.xml"
+      - "sitemap-*.xml"
   schedule:
     - cron: "43 6 * * 0"
 
