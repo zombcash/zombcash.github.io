@@ -40,11 +40,14 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     page.on("requestfailed", request => console.error("[requestfailed]", request.url(), request.failure()?.errorText || "unknown"));
     await page.route("https://**/*", route => route.abort());
     await page.route("https://cdn4.telesco.pe/file/**", route => route.continue());
-    await page.route("http://127.0.0.1:4173/gallery-data.json*", route => route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: fs.readFileSync("gallery-data.json", "utf8")
-    }));
+    await page.route(/gallery-data\\.json/, async route => {
+      console.log("[gallery-data-route]", route.request().url());
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: fs.readFileSync("gallery-data.json", "utf8")
+      });
+    });
     fs.mkdirSync("gallery-visual-audit/images", { recursive: true });
     const imageNetworkEvents = [];
     const imageResponseTasks = [];
@@ -418,7 +421,7 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     const russian = await browser.newPage({ viewport: { width: 390, height: 844 } });
     await russian.route("https://**/*", route => route.abort());
     await russian.route("https://cdn4.telesco.pe/file/**", route => route.continue());
-    await russian.route("http://127.0.0.1:4173/gallery-data.json*", route => route.fulfill({
+    await russian.route(/gallery-data\\.json/, route => route.fulfill({
       status: 200,
       contentType: "application/json",
       body: fs.readFileSync("gallery-data.json", "utf8")
@@ -478,7 +481,7 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       const localized = await browser.newPage({ viewport: { width: 390, height: 844 } });
       await localized.route("https://**/*", route => route.abort());
       await localized.route("https://cdn4.telesco.pe/file/**", route => route.continue());
-      await localized.route("http://127.0.0.1:4173/gallery-data.json*", route => route.fulfill({
+      await localized.route(/gallery-data\\.json/, route => route.fulfill({
         status: 200,
         contentType: "application/json",
         body: fs.readFileSync("gallery-data.json", "utf8")
