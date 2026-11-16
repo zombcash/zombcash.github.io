@@ -22,8 +22,9 @@ async function tool(name, args = {}) {
   const result = await rpc('tools/call', { name, arguments: args });
   if (result.error) throw new Error(result.error.message);
   const value = result.result;
+  if (value.isError) return value;
   const text = value.content?.find(x => x.type === 'text')?.text;
-  return text ? JSON.parse(text) : value.structuredContent;
+  return text ? JSON.parse(text) : value.structuredContent || value;
 }
 (async () => {
   const initialized = await rpc('initialize', {
