@@ -146,15 +146,28 @@
     const card = cards[activeIndex];
     const title = card.dataset.galleryTitle || card.querySelector(".gallery-caption p")?.textContent || "";
     const originalCaption = card.querySelector(".gallery-caption p")?.dataset.originalCaption || "";
-    const description = card.dataset.galleryDescription || cleanCaption(originalCaption) || title;
+    const description = card.dataset.galleryDescription || "";
+    const normalizeLightboxText = value => String(value || "").toLocaleLowerCase().replace(/[\\s\\p{P}\\p{S}]+/gu, " ").trim();
+    const normalizedTitle = normalizeLightboxText(cleanCaption(title));
+    const normalizedCaption = normalizeLightboxText(cleanCaption(originalCaption));
+    const normalizedDescription = normalizeLightboxText(cleanCaption(description));
+    const titleIsDuplicate = !normalizedTitle || !normalizedCaption ||
+      normalizedCaption.startsWith(normalizedTitle) || normalizedTitle.startsWith(normalizedCaption);
+    const descriptionIsDuplicate = !normalizedDescription ||
+      normalizedDescription === normalizedCaption ||
+      normalizedDescription === normalizedTitle ||
+      normalizedCaption.startsWith(normalizedDescription) ||
+      normalizedDescription.startsWith(normalizedCaption) ||
+      normalizedTitle.startsWith(normalizedDescription) ||
+      normalizedDescription.startsWith(normalizedTitle);
     const categories = Array.from(card.querySelectorAll(".gallery-category-tag"))
       .map(tag => tag.textContent.trim()).filter(Boolean).join(" · ");
     const sourceUrl = card.querySelector(".gallery-caption a")?.href || "https://t.me/ZOMBCASH";
     const shareLabels = galleryShareLabels[galleryLang] || galleryShareLabels.en;
     trackGalleryEvent("gallery_image_open", "image_" + String(card.dataset.galleryId || "").replace(/[^0-9]/g, "_"));
     fullCaption.innerHTML =
-      '<strong class="gallery-lightbox-title">' + escapeHtml(title) + '</strong>' +
-      (description && description !== title ? '<span class="gallery-lightbox-description">' + escapeHtml(description) + '</span>' : '') +
+      (!titleIsDuplicate ? '<strong class="gallery-lightbox-title">' + escapeHtml(title) + '</strong>' : '') +
+      (!descriptionIsDuplicate ? '<span class="gallery-lightbox-description">' + escapeHtml(cleanCaption(description)) + '</span>' : '') +
       (categories ? '<span class="gallery-lightbox-categories">' + escapeHtml(categories) + '</span>' : '') +
       '<span class="gallery-lightbox-actions">' +
       '<button class="gallery-lightbox-like" type="button" aria-pressed="false"></button>' +
