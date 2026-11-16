@@ -293,6 +293,8 @@
     '<div class="zsh-actions">' +
       (!isHome ? '<a class="zsh-home home-return-button" href="' + target('/') + '"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
       '<div class="zsh-language-slot"></div>' +
+      '<a class="zsh-line-button" href="https://line.me/R/ti/p/%40022khlio" target="_blank" rel="noopener noreferrer" aria-label="Add ZombieCash on LINE">ADD LINE</a>' +
+      '<div class="zsh-language-slot"></div>' +
       (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<button class="zsh-login-button" type="button" data-zsh-login>LOGIN WITH TELEGRAM</button>') +
     '</div>';
 
@@ -434,6 +436,8 @@
       font:700 8px/1.2 Orbitron,system-ui,sans-serif!important;white-space:nowrap!important;overflow-wrap:normal!important;
     }
     header.zombcash-shared-header .zsh-cta:hover{border-color:#9bff45!important;color:#d4ffc0!important}
+    header.zombcash-shared-header .zsh-line-button{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important;min-height:36px!important;padding:0 12px!important;border:1px solid #365c42!important;border-radius:2px!important;background:#101b16!important;color:#b8f992!important;text-decoration:none!important;font:700 8px/1 Orbitron,system-ui,sans-serif!important;letter-spacing:.1px!important;white-space:nowrap!important}
+    header.zombcash-shared-header .zsh-line-button:hover{border-color:#9bff45!important;color:#d4ffc0!important;background:#14251a!important}
     header.zombcash-shared-header .zsh-language-slot{order:2!important;display:flex!important;align-items:center!important;flex:0 0 auto!important}
     header.zombcash-shared-header .language-switcher{position:relative!important;display:inline-flex!important;flex:0 0 auto!important;margin:0!important;z-index:10002!important}
     header.zombcash-shared-header .language-trigger{
@@ -492,6 +496,7 @@
     /* Back to Home first, language selector second, registration CTA at far right. */
     header.zombcash-shared-header .zsh-actions>.zsh-home{order:1!important}
     header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:2!important}
+    header.zombcash-shared-header .zsh-actions .zsh-line-button{order:3!important}
     header.zombcash-shared-header .zsh-actions .zsh-login-button{order:3!important}
     header.zombcash-shared-header .zsh-actions>.zsh-home:hover,
     header.zombcash-shared-header .zsh-actions .language-trigger:hover,
@@ -1146,6 +1151,7 @@
       }
       header.zombcash-shared-header .zsh-actions > .zsh-home,
       header.zombcash-shared-header .zsh-actions .language-trigger,
+      header.zombcash-shared-header .zsh-actions .zsh-line-button,
       header.zombcash-shared-header .zsh-actions .zsh-login-button {
         height: 34px !important;
         min-height: 34px !important;
@@ -1406,6 +1412,9 @@
     const languageTrigger = header.querySelector('.language-trigger');
     const languageAria = {de:'Sprache auswählen',fr:'Choisir la langue',it:'Scegli la lingua',ja:'言語を選択','zh-CN':'选择语言',ru:'Выбрать язык',tr:'Dil seçin',hi:'भाषा चुनें'};
     if (languageTrigger) languageTrigger.setAttribute('aria-label', languageAria[language] || 'Choose language');
+    const lineControl = header.querySelector('.zsh-line-button');
+    const lineLabels = {de:'LINE HINZUFÜGEN',fr:'AJOUTER LINE',it:'AGGIUNGI LINE',ja:'LINEを追加','zh-CN':'添加 LINE',ru:'ДОБАВИТЬ LINE',tr:'LINE EKLE',hi:'LINE जोड़ें'};
+    if (lineControl) lineControl.textContent = language === 'en' ? 'ADD LINE' : (lineLabels[language] || 'ADD LINE');
     const loginControl = header.querySelector('.zsh-login-button');
     if (loginControl) {
       const loginLabels = {de:'MIT TELEGRAM ANMELDEN',fr:'SE CONNECTER AVEC TELEGRAM',it:'ACCEDI CON TELEGRAM',ja:'TELEGRAMでログイン','zh-CN':'使用 TELEGRAM 登录',ru:'ВОЙТИ ЧЕРЕЗ TELEGRAM',tr:'TELEGRAM İLE GİRİŞ',hi:'TELEGRAM से लॉग इन करें'};
@@ -1423,6 +1432,11 @@
     localizeNav(routeLanguage);
   };
   document.addEventListener('zombcash:languagechange', event => localizeNav(event.detail && event.detail.language || 'en'));
+  const lineFriendLink = header.querySelector('.zsh-line-button');
+  if (lineFriendLink && !lineFriendLink.dataset.zcTracked) {
+    lineFriendLink.dataset.zcTracked = '1';
+    lineFriendLink.addEventListener('click', () => { try { if (typeof window.gtag === 'function') window.gtag('event','line_add_friend_click',{event_category:'community',event_label:'header',page_path:location.pathname,language:document.documentElement.lang||'en'}); } catch (_) {} });
+  }
   readLanguage();
 
   // Shared fixed page-scroll controls: identical size and position on every page.
