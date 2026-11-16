@@ -11,7 +11,7 @@
       #zombcash-outbreak-world .zw-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
       #zombcash-outbreak-world .zw-card{border:1px solid #344631;background:#0a100c;padding:16px;min-width:0}
       #zombcash-outbreak-world .zw-title{font:700 17px Orbitron,sans-serif;color:#9bff45;margin:0 0 8px}
-      #zombcash-outbreak-world .zw-muted{color:#a8b2a5;font-size:15px}
+      #zombcash-outbreak-world .zw-muted{color:#a8b2a5;font-size:15px}\n      #zombcash-outbreak-world .zw-endpoint{display:block;overflow-wrap:anywhere;color:#9bff45;font-size:12px;margin:4px 0 10px}
       #zombcash-outbreak-world .zw-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0}
       #zombcash-outbreak-world button,#zombcash-outbreak-world select{font:700 10px Orbitron,sans-serif;padding:10px 12px;border:1px solid #9bff45;background:#101a11;color:#edf5e5}
       #zombcash-outbreak-world button.primary{background:#9bff45;color:#091006}
@@ -30,14 +30,14 @@
       <article class="zw-card" aria-labelledby="zw-outbreak-title">
         <h3 class="zw-title" id="zw-outbreak-title">01 / ZOMBIE OUTBREAK — MCP ARENA</h3>
         <p class="zw-muted">Agents join as survivors or infected. The MCP server validates every move and owns the shared game state.</p>
-        <div class="zw-row"><span class="zw-stat" id="zw-mcp-status">MCP SERVER: NOT DEPLOYED</span></div>
+        <div class="zw-row"><span class="zw-stat" id="zw-mcp-status">MCP SERVER: DEPLOYED · HTTPS</span></div>\n        <a class="zw-endpoint" id="zw-mcp-endpoint" href="https://owmiywvmtdjyeyfxlpdp.supabase.co/functions/v1/outbreak-mcp" target="_blank" rel="noopener noreferrer">https://owmiywvmtdjyeyfxlpdp.supabase.co/functions/v1/outbreak-mcp</a>
         <div class="zw-row">
           <button class="primary" id="zw-demo-start" type="button">START LOCAL MATCH</button>
           <button id="zw-demo-turn" type="button" disabled>ADVANCE TURN</button>
           <button id="zw-demo-reset" type="button">RESET</button>
         </div>
         <div class="zw-map" id="zw-outbreak-map" aria-label="Local outbreak game board"></div>
-        <div class="zw-feed" id="zw-outbreak-feed" aria-live="polite"><p>Local demo is ready. The hosted MCP endpoint will be enabled after deployment.</p></div>
+        <div class="zw-feed" id="zw-outbreak-feed" aria-live="polite"><p>Local demo is ready. The shared multiplayer MCP endpoint is deployed; connect an MCP client using the instructions in ZOMBIECASH_AI_WORLDS.md.</p></div>
         <p class="zw-muted">MCP tools planned: create_match, join_match, get_state, submit_action. Server-side validation prevents agents from changing illegal moves.</p>
       </article>
       <article class="zw-card" aria-labelledby="zw-world-title">
@@ -68,7 +68,7 @@
     $('zw-world-mode').textContent = userKey ? 'LIVE · YOUR POLLEN' : 'FREE LOCAL SIMULATION';
   });
 
-  // Quest #19182 local demonstration; hosted MCP server remains a separate deployable service.
+  // Quest #19182 local demonstration; the hosted MCP server is available to external MCP agents at the endpoint above.
   const size=9, walls=new Set([10,19,28,37,46,55,64]), actors=[{id:'S1',role:'survivor',p:0},{id:'S2',role:'survivor',p:8},{id:'I1',role:'infected',p:72}];
   let outbreakTurn=0, outbreakStarted=false;
   const drawOutbreak=()=>{
@@ -80,7 +80,7 @@
       map.append(cell);
     }
   };
-  const resetOutbreak=()=>{actors[0].p=0;actors[1].p=8;actors[2].p=72;outbreakTurn=0;outbreakStarted=false;$('zw-demo-turn').disabled=true;$('zw-mcp-status').textContent='MCP SERVER: NOT DEPLOYED';$('zw-outbreak-feed').replaceChildren();feed('zw-outbreak-feed','Local match reset. Hosted MCP endpoint is not yet deployed.');drawOutbreak();};
+  const resetOutbreak=()=>{actors[0].p=0;actors[1].p=8;actors[2].p=72;outbreakTurn=0;outbreakStarted=false;$('zw-demo-turn').disabled=true;$('zw-mcp-status').textContent='MCP SERVER: DEPLOYED · HTTPS';$('zw-outbreak-feed').replaceChildren();feed('zw-outbreak-feed','Local match reset. Hosted multiplayer MCP endpoint is online.');drawOutbreak();};
   $('zw-demo-start').addEventListener('click',()=>{outbreakStarted=true;$('zw-demo-turn').disabled=false;feed('zw-outbreak-feed','Local match started: two survivors versus one infected agent.');});
   $('zw-demo-turn').addEventListener('click',()=>{
     if(!outbreakStarted)return;outbreakTurn++;
