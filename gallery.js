@@ -152,7 +152,7 @@
     const description = card.dataset.galleryDescription || "";
     const cleanDescription = cleanCaption(description);
     const cleanOriginalCaption = cleanCaption(originalCaption);
-    const normalizeDescription = value => String(value || "").toLocaleLowerCase().replace(/[\\s\\p{P}\\p{S}]+/gu, " ").trim();
+    const normalizeDescription = value => String(value || "").toLocaleLowerCase().replace(/[\s\p{P}\p{S}]+/gu, " ").trim();
     const normalizedDescription = normalizeDescription(cleanDescription);
     const normalizedCaption = normalizeDescription(cleanOriginalCaption);
     const normalizedTitle = normalizeDescription(cleanCaption(title));
