@@ -5,12 +5,20 @@ on:
     branches:
       - main
   workflow_dispatch:
+  workflow_run:
+    workflows:
+      - "Sync gallery image SEO assets"
+    types:
+      - completed
+    branches:
+      - main
 
 permissions:
   contents: read
 
 jobs:
   submit-changed-pages:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -43,9 +51,26 @@ jobs:
           INDEXNOW_KEY: ${{ vars.INDEXNOW_KEY }}
         run: |
           KEY="${INDEXNOW_KEY:-zomcash-indexnow-2026-10-24-a7f93c12}"
-          BEFORE="${{ github.event.before }}"
-          AFTER="${{ github.sha }}"
+          EVENT_NAME="$GITHUB_EVENT_NAME"
+          PUSH_BEFORE="${{ github.event.before }}"
+          WORKFLOW_RUN_BEFORE="${{ github.event.workflow_run.head_sha }}"
+          PUSH_AFTER="${{ github.sha }}"
           URLS_FILE="$(mktemp)"
+
+          # GITHUB_TOKEN commits do not trigger another push workflow. When the
+          # gallery SEO generator finishes, compare its triggering SHA with the
+          # current main so its generated localized HTML pages are submitted too.
+          if [ "$EVENT_NAME" = "workflow_run" ]; then
+            BEFORE="$WORKFLOW_RUN_BEFORE"
+            git fetch origin main
+            AFTER="$(git rev-parse origin/main)"
+          elif [ "$EVENT_NAME" = "push" ]; then
+            BEFORE="$PUSH_BEFORE"
+            AFTER="$PUSH_AFTER"
+          else
+            BEFORE=""
+            AFTER="$PUSH_AFTER"
+          fi
           if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
             while IFS= read -r path; do
             case "$path" in
