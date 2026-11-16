@@ -2810,8 +2810,8 @@ body:has(#home) main#home:before{
 body:has(#home) #home>.hero{
   position:relative;isolation:isolate;overflow:hidden;
   background:
-    linear-gradient(90deg,rgba(5,9,7,.98) 0%,rgba(5,9,7,.91) 34%,rgba(5,9,7,.52) 68%,rgba(5,9,7,.78) 100%),
-    linear-gradient(0deg,#070b09 0%,transparent 24%,rgba(5,8,7,.2) 72%,#070b09 100%),
+    linear-gradient(90deg,rgba(5,9,7,.82) 0%,rgba(5,9,7,.64) 32%,rgba(5,9,7,.28) 68%,rgba(5,9,7,.52) 100%),
+    linear-gradient(0deg,#070b09 0%,rgba(7,11,9,.12) 28%,rgba(5,8,7,.18) 72%,#070b09 100%),
     url('/assets/zombie-girl-heroine-hd.avif') center 30%/cover no-repeat,
     #070b09!important;
   border-bottom:1px solid rgba(155,255,69,.16);
@@ -2837,53 +2837,53 @@ body:has(#home) #home>.section:before,
 body:has(#home) #home>.zc-promo-video:before,
 body:has(#home) #home>.zctv-channel-hub:before{
   content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
-  background:linear-gradient(180deg,rgba(6,10,8,.96),rgba(6,10,8,.82) 42%,rgba(6,10,8,.96));
+  background:linear-gradient(180deg,rgba(6,10,8,.20),rgba(6,10,8,.36) 42%,rgba(6,10,8,.24));
 }
 body:has(#home) #home>.living-world{
   background:
-    linear-gradient(90deg,rgba(5,10,7,.96),rgba(5,10,7,.84)),
+    linear-gradient(90deg,rgba(5,10,7,.72),rgba(5,10,7,.38)),
     url('/assets/zombcash-survivor-realistic-520.avif') center 42%/cover no-repeat,
     #080d0a;
 }
 body:has(#home) #home>#outbreak{
   background:
-    linear-gradient(90deg,rgba(6,10,8,.97),rgba(6,10,8,.84)),
+    linear-gradient(90deg,rgba(6,10,8,.72),rgba(6,10,8,.38)),
     url('/assets/images/zombcash-outbreak-graffiti.svg') center/cover no-repeat,
     #080d0a;
 }
 body:has(#home) #home>#radar{
   background:
-    linear-gradient(180deg,rgba(6,10,8,.97),rgba(6,10,8,.86)),
+    linear-gradient(180deg,rgba(6,10,8,.70),rgba(6,10,8,.34)),
     url('/assets/images/tool-radar-outbreak.webp') center 38%/cover no-repeat,
     #080d0a;
 }
 body:has(#home) #home>#community-console{
   background:
-    linear-gradient(90deg,rgba(5,9,7,.97),rgba(5,9,7,.88)),
+    linear-gradient(90deg,rgba(5,9,7,.74),rgba(5,9,7,.42)),
     url('/assets/images/tool-survivor-network.webp') center/cover no-repeat,
     #080d0a;
 }
 body:has(#home) #home>#snake-game{
   background:
-    linear-gradient(90deg,rgba(5,9,7,.96),rgba(5,9,7,.83)),
+    linear-gradient(90deg,rgba(5,9,7,.72),rgba(5,9,7,.36)),
     url('/assets/images/tool-zombie-lab.webp') center/cover no-repeat,
     #080d0a;
 }
 body:has(#home) #home>#community{
   background:
-    linear-gradient(90deg,rgba(5,9,7,.94),rgba(5,9,7,.72)),
+    linear-gradient(90deg,rgba(5,9,7,.70),rgba(5,9,7,.34)),
     url('/assets/images/zombcash-outbreak-graffiti.svg') center 58%/cover no-repeat,
     #080d0a;
 }
 body:has(#home) #home>.zc-promo-video{
   background:
-    linear-gradient(90deg,rgba(5,9,7,.96),rgba(5,9,7,.78)),
+    linear-gradient(90deg,rgba(5,9,7,.72),rgba(5,9,7,.36)),
     url('/assets/images/zombcash-tv-raven.png') center 28%/cover no-repeat,
     #080d0a;
 }
 body:has(#home) #home>.zctv-channel-hub{
   background:
-    linear-gradient(90deg,rgba(5,9,7,.97),rgba(5,9,7,.82)),
+    linear-gradient(90deg,rgba(5,9,7,.72),rgba(5,9,7,.36)),
     url('/assets/images/zombcash-tv-raven.png') center 30%/cover no-repeat,
     #080d0a;
 }
@@ -2891,6 +2891,20 @@ body:has(#home) #home>.zombie-maker-promo{
   background:transparent;
 }
 /* Replace hard-edged boxes with soft glass, restrained borders and more generous radii. */
+/* Sponsor rail belongs to the same soft-glass visual language as the rest of the page. */
+body:has(#home) #home .zc-hero-sponsor-panel{
+  border:1px solid rgba(160,205,132,.16)!important;
+  border-radius:20px!important;
+  background:rgba(8,14,10,.58)!important;
+  box-shadow:0 20px 58px rgba(0,0,0,.28),inset 0 1px 0 rgba(220,255,200,.04)!important;
+  backdrop-filter:blur(14px);
+  overflow:hidden;
+}
+body:has(#home) #home .zc-sponsor-art-slot,
+body:has(#home) #home .zc-sponsor-art-slot img{
+  border-radius:15px!important;
+}
+body:has(#home) #home .zc-sponsor-art-slot{overflow:hidden}
 body:has(#home) #home .world-panel,
 body:has(#home) #home .tool-card,
 body:has(#home) #home .crew-card,
@@ -2947,7 +2961,7 @@ body:has(#home) #home .world-event{
 }
 body:has(#home) #home .field-manual-spotlight{
   background:
-    linear-gradient(105deg,rgba(10,17,12,.94),rgba(8,13,10,.82)),
+    linear-gradient(105deg,rgba(10,17,12,.78),rgba(8,13,10,.52)),
     url('/assets/zombcash-survivor-v13.jpg') center 38%/cover no-repeat!important;
 }
 body:has(#home) #home .zc-promo-player-wrap{overflow:hidden}
@@ -2958,7 +2972,7 @@ body:has(#home) #home .zctv-host-art img{border-radius:14px}
 body:has(#home) #home .ticker{border-top:1px solid rgba(155,255,69,.14);border-bottom:1px solid rgba(155,255,69,.14);background:linear-gradient(90deg,#0a100c,#111a11,#0a100c)}
 body:has(#home) #home .transmission-box{
   background:
-    linear-gradient(100deg,rgba(7,12,9,.95),rgba(7,12,9,.70)),
+    linear-gradient(100deg,rgba(7,12,9,.74),rgba(7,12,9,.36)),
     url('/assets/zombcash-survivor-realistic-520.avif') center 35%/cover no-repeat!important;
 }
 /* Let section backgrounds breathe edge-to-edge without changing content widths. */
