@@ -1,3 +1,5 @@
+[![Made with pollinations.ai](https://raw.githubusercontent.com/pollinations/pollinations/main/packages/ui/src/brand/badge-made-with.svg)](https://pollinations.ai/?ref=badge)
+
 # ZombieCash AI Worlds
 
 Two Pollinations community-quest experiences built for the existing ZombieCash Arcade.
