@@ -20,6 +20,11 @@ const path = require('path');
   await page.evaluate(() => { document.documentElement.lang = 'ru'; document.dispatchEvent(new CustomEvent('zombcash:languagechange', { detail: { language: 'ru' } })); });
   if (!(await page.locator('#zw-mcp-status').innerText()).includes('РАБОТАЕТ')) throw new Error('Russian locale did not apply');
   if (!(await page.locator('#zw-demo-start').innerText()).includes('НАЧАТЬ')) throw new Error('Russian button translation missing');
+  for (const lang of ['en', 'de', 'fr', 'it', 'ja', 'zh-CN', 'ru', 'tr', 'hi']) {
+    await page.evaluate(code => { document.documentElement.lang = code; document.dispatchEvent(new CustomEvent('zombcash:languagechange', { detail: { language: code } })); }, lang);
+    const status = await page.locator('#zw-mcp-status').innerText();
+    if (!status || (lang !== 'en' && status === 'MCP SERVER: DEPLOYED · HTTPS')) throw new Error('AI Worlds locale missing: ' + lang);
+  }
   if (errors.length) throw new Error('Browser errors: ' + errors.join('; '));
   console.log('AI Worlds browser smoke passed: board, outbreak turn, autonomous turn, auto toggle.');
   await browser.close();
