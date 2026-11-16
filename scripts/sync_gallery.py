@@ -19,12 +19,14 @@ MAX_PER_CATEGORY = 140
 # Classify all attached image posts, not only the three legacy series headers.
 # The order is intentional: explicit series/meme labels win over broad keywords.
 CATEGORY_PATTERNS = {
+    # Explicit editorial series always take priority over broad topic keywords.
+    "nightmare-horror": re.compile(r"\bNIGHTMARE(?:\s+DROP|\s*&\s*HORROR)?\b|\bHORROR\b|\bHAUNTED\b|\bCREEPY\b|\bDREAD\b|🩸", re.I),
     "undead-after-dark": re.compile(r"\bUNDEAD\s+AFTER\s+DARK\b", re.I),
-    "zombie-memes": re.compile(r"\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b|\bMEME\b|😂", re.I),
-    "nightmare-horror": re.compile(r"\bNIGHTMARE\b|\bHORROR\b|\bHAUNTED\b|\bGHOST\b|\bCREEPY\b|\bDREAD\b|🩸", re.I),
+    "zombie-memes": re.compile(r"\bZOMBIECASH\s+MEMES?\b|\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b|#ZombieCashMeme\b|😂", re.I),
     "zombie-characters": re.compile(r"\b(?:ZOMBIE|UNDEAD)\s+(?:GIRL|BOY|CHARACTER|WARRIOR|QUEEN|KING|HUNTER|PRINCESS)\b|\bZOMBIE\s+CHARACTERS?\b", re.I),
-    "apocalypse-survival": re.compile(r"\bAPOCALYPSE\b|\bSURVIVAL\b|\bWASTELAND\b|\bBUNKER\b|\bOUTBREAK\b|\bSCAVENGER\b|\bSHELTER\b|\bFALLOUT\b", re.I),
-    "crypto-apocalypse": re.compile(r"\bCRYPTO\b|\bBITCOIN\b|\bSOLANA\b|\bMEMECOIN\b|\bTOKEN\b|\bWALLET\b|\bTRADING\b|\bPORTFOLIO\b|\bMARKET\b", re.I),
+    # Crypto/market posts belong together even when they also use apocalypse language.
+    "crypto-apocalypse": re.compile(r"\bCRYPTO\b|\bBITCOIN\b|\bSOLANA\b|\bMEMECOIN\b|\bTOKEN\b|\bWALLET\b|\bTRADING\b|\bPORTFOLIO\b|\bMARKET\b|\bCHARTS?\b|\bCANDLES?\b|\bHODL\b|\bBULL\b|\bBEAR\b|\bPUMP\b|\bDUMP\b", re.I),
+    "apocalypse-survival": re.compile(r"\bAPOCALYPSE\b|\bSURVIVAL\b|\bWASTELAND\b|\bBUNKER\b|\bOUTBREAK\b|\bSCAVENGER\b|\bSHELTER\b|\bFALLOUT\b|\bEVACUATION\b|\bPOST[ -]APOCALYPTIC\b", re.I),
     "community-creations": re.compile(r".+", re.S),
 }
 
@@ -39,7 +41,13 @@ def category_for_caption(caption):
 
 def is_gallery_artwork(caption):
     text = str(caption or "").strip()
-    return not re.search(r"\bNEWS\s+UPDATE\b|\bORIGINAL\s+SOURCE\s*:", text, re.I)
+    # Site Spotlight is a promotional CTA, not a gallery artwork or community image.
+    excluded = (
+        r"\bZOMBIECASH\s+SITE\s+SPOTLIGHT\b",
+        r"\bNEWS\s+UPDATE\b",
+        r"\bORIGINAL\s+SOURCE\s*:",
+    )
+    return not any(re.search(pattern, text, re.I) for pattern in excluded)
 
 
 def gallery_title(caption, limit=100):
@@ -162,7 +170,7 @@ def main():
         before = next_before
         time.sleep(0.35)
 
-    # Keep up to 50 newest image entries in each of seven categories, then merge
+    # Keep up to MAX_PER_CATEGORY newest image entries in each category, then merge
     # them into one date-sorted archive. This yields up to 980 total images.
     selected_by_category = {category: [] for category in CATEGORY_PATTERNS}
     for item in sorted(all_items.values(), key=lambda item: (item.get("date") or "", item.get("post_id") or ""), reverse=True):
@@ -225,7 +233,7 @@ def main():
             "alt_review_method": "not-reviewed",
         })
 
-    # Probe image dimensions concurrently so a 150-image archive does not
+    # Probe image dimensions concurrently so a large archive does not
     # serialize dozens of CDN requests and hold the hourly sync open.
     with ThreadPoolExecutor(max_workers=12) as executor:
         dimension_jobs = {
@@ -248,7 +256,7 @@ def main():
         "items": items,
     }
     OUTPUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    final_counts = {category: sum(1 for item in items if category_for_caption(item.get("caption")) == category) for category in CATEGORY_PATTERNS}
+    final_counts = {category: sum(1 for item in items if category in (item.get("category_ids") or [])) for category in CATEGORY_PATTERNS}
     print(f"Synced {len(items)} image entries from @{CHANNEL} into {OUTPUT} (up to {MAX_PER_CATEGORY} per category; counts: {final_counts})")
 
 

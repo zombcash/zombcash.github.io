@@ -5,6 +5,7 @@ const path = require("path");
 const galleryData = JSON.parse(fs.readFileSync("gallery-data.json", "utf8"));
 const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]));
 const expectedGalleryCount = galleryData.items.length;
+if (galleryData.items.some(item => /\\bZOMBIECASH\\s+SITE\\s+SPOTLIGHT\\b/i.test(String(item.caption || "")))) throw new Error("SITE SPOTLIGHT promotional cards must be excluded");
 const targetLikeImageId = galleryData.items[0]?.id || "";
 const gallerySearchCorpus = galleryData.items.map(item =>
   [item.title || "", item.caption || "", ...(item.tags || [])].join(" ").toLowerCase()
@@ -477,6 +478,8 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       const schemaText = await localized.locator("#gallery-collection-jsonld").textContent();
       const schema = JSON.parse(schemaText);
       const controls = await localized.locator(".gallery-category-chip").allTextContents();
+      const firstCardTitle = (await localized.locator("#gallery-grid .gallery-caption p").first().textContent()) || "";
+      if (/NIGHTMARE & HORROR|ZOMBIECASH MEMES|UNDEAD AFTER DARK/i.test(firstCardTitle)) throw new Error(locale + " series header remained in English on first render: " + firstCardTitle);
       if (lang !== locale) throw new Error(locale + " gallery lang mismatch: " + lang);
       if (canonical !== "https://zombcash.github.io/" + locale + "/gallery.html") throw new Error(locale + " canonical mismatch: " + canonical);
       if (alternates !== 10) throw new Error(locale + " should expose nine hreflang locales plus x-default, got " + alternates);
@@ -487,7 +490,7 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       const shareLabel = (await localized.locator(".gallery-lightbox-share").textContent()).trim();
       if (!shareLabel || shareLabel === "SHARE") throw new Error(locale + " gallery share control is not localized");
       await localized.locator(".gallery-lightbox-close").click();
-      localeAudit.push({ locale, lang, alternates, cards: expectedGalleryCount, title, shareLabel });
+      localeAudit.push({ locale, lang, alternates, cards: expectedGalleryCount, title, shareLabel, firstCardTitle });
       await localized.close();
     }
 
