@@ -11,6 +11,10 @@ on:
       - "sitemap.xml"
       - "tests/seo-internal-link-fixes-smoke.py"
       - "tests/seo-meta-duplicate-smoke.py"
+      - ".github/workflows/indexnow.yml"
+      - ".github/workflows/bing-webmaster-api.yml"
+      - ".github/workflows/sync-gallery-image-seo.yml"
+      - "tests/indexnow-workflow-smoke.py"
       - ".github/workflows/seo-internal-link-fixes-smoke.yml"
   push:
     branches: [seo-internal-link-discovery-fixes-20261104]
@@ -32,3 +36,5 @@ jobs:
         run: python tests/seo-internal-link-fixes-smoke.py
       - name: Audit duplicate Open Graph and Twitter metadata
         run: python tests/seo-meta-duplicate-smoke.py
+      - name: Validate generated gallery pages reach IndexNow
+        run: python tests/indexnow-workflow-smoke.py
