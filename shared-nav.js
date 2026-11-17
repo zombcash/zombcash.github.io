@@ -147,7 +147,7 @@
   // ZombieCash GA4: centralized measurement tag for pages loading shared-nav.js.
   try {
   // Keep the measurement ID in one place to avoid duplicate tags across HTML pages.
-  if (new URLSearchParams(location.search).get('arcadeSnake') !== '1' && !window.__zombcashGa4Loaded) {
+  if (location.hostname === 'zombcash.github.io' && new URLSearchParams(location.search).get('arcadeSnake') !== '1' && !window.__zombcashGa4Loaded) {
     window.__zombcashGa4Loaded = true;
     window.dataLayer = window.dataLayer || [];
     window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
