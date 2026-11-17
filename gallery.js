@@ -37,6 +37,7 @@
     return entities[ch];
   });
   const cleanCaption = value => String(value ?? "")
+    .replace(/\\n+/g, " ")
     .replace(/\s+/g, " ")
     .split(/━━━━━━━━|🧟\s*\$ZOMBCASH|MARKET DIED\.|📋\s*CA:|🌐\s*Website:|𝕏\s*X Community|💬\s*Telegram/i)[0]
     .trim();
