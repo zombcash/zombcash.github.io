@@ -5,6 +5,7 @@
   const API = 'https://gen.pollinations.ai/alpha/decisions';
   let MODELS = [];
   let catalogReady = false;
+  let catalogError = false;
   const CATALOG = 'https://gen.pollinations.ai/models?category=decision';
   const $ = (id) => root.querySelector('#' + id);
   let pollenKey = null;
@@ -34,7 +35,7 @@
       offline = !pollenKey;
       $('zai-mode').textContent = offline ? 'FREE SIMULATION' : 'LIVE POLLINATIONS';
       $('zai-live').textContent = offline ? 'Connect your own Pollen to let live models play. Free simulation is always available.' : 'Connected. Live model calls use only your approved Pollen budget.';
-      status(offline ? 'Offline AI ready' : (catalogReady && MODELS.length >= 2 ? 'Pollinations connected · free models ready' : 'Checking free decision models…'));
+      status(offline ? 'Offline AI ready' : (catalogError ? 'Could not verify free model access' : !catalogReady ? 'Checking free decision models…' : MODELS.length >= 2 ? 'Pollinations connected · free models ready' : 'Fewer than two Quest-Pollen decision models are available'));
       $('zai-play').disabled = !!(pollenKey && (!catalogReady || MODELS.length < 2));
     });
   }
@@ -54,6 +55,7 @@
   }
   async function loadDecisionModels() {
     try {
+      catalogError = false;
       const response = await fetch(CATALOG, { headers: { 'Accept': 'application/json' }, cache: 'no-store' });
       if (!response.ok) throw new Error('Model catalogue returned HTTP ' + response.status);
       const payload = await response.json();
@@ -77,6 +79,7 @@
       if (!MODELS.length) log('No decision models currently advertise both Quest-Pollen access and /alpha/decisions support.');
     } catch (error) {
       catalogReady = false;
+      catalogError = true;
       MODELS = [];
       renderModelOptions();
       if (pollenKey) {
