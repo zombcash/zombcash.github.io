@@ -87,6 +87,19 @@ const path = require('path');
     expectedMessage: 'SETTLEMENT LOST — the crew ran out of supplies or strength.',
     label: 'defeat'
   });
+  await page.evaluate(() => {
+    const connector = document.querySelector('#zai-connect');
+    connector.apiKey = 'test-live-key';
+    connector.dispatchEvent(new Event('change'));
+  });
+  if (!(await page.locator('#zw-command').isDisabled())) throw new Error('Manual command selector must be disabled in live model mode');
+  if (!(await page.locator('#zw-command-hint').innerText()).includes('Live model mode')) throw new Error('Live mode command guidance is missing');
+  await page.evaluate(() => {
+    const connector = document.querySelector('#zai-connect');
+    connector.apiKey = null;
+    connector.dispatchEvent(new Event('change'));
+  });
+  if (await page.locator('#zw-command').isDisabled()) throw new Error('Manual command selector did not re-enable in local mode');
   await page.locator('#zw-world-reset').click();
   if (!(await page.locator('#zw-world-turn').innerText()).includes('TURN 0')) throw new Error('Reset World did not start a fresh campaign after a terminal result');
   if (await page.locator('#zw-next').isDisabled()) throw new Error('Reset World left the new campaign locked');
