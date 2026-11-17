@@ -34,6 +34,7 @@ const path = require('path');
   if (!(await page.locator('#zw-district-map').innerText()).includes('Рынок')) throw new Error('District names did not localize to Russian');
   await page.locator('#zw-world-reset').click();
   if (!(await page.locator('#zw-district-map').innerText()).includes('НЕ ИЗУЧЕН')) throw new Error('World reset did not restore district exploration states');
+  await page.evaluate(() => { document.documentElement.lang = 'en'; document.dispatchEvent(new CustomEvent('zombcash:languagechange', { detail: { language: 'en' } })); });
   await page.locator('#zw-next').click();
   if (!(await page.locator('#zw-world-turn').innerText()).includes('TURN 1')) throw new Error('A new campaign turn did not advance after reset');
   await page.reload({ waitUntil: 'domcontentloaded' });
