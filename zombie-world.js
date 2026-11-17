@@ -270,6 +270,7 @@
     $('zw-site-shelter-1').title=shelterCount>=1?'Shelter secured':'Shelter not built';$('zw-site-shelter-2').title=shelterCount>=2?'Second shelter secured':'Second shelter not built';
     const roleIcons={SCOUT:'🧭',BUILDER:'🛠️',FORAGER:'🥫',GUARD:'🛡️',MEDIC:'💉'};
     $('zw-agent-cards').replaceChildren(...agents.map(a=>{const card=document.createElement('div');card.className='zw-agent';const name=document.createElement('b');name.textContent=(roleIcons[a.role]||'🧍')+' '+a.name+' · '+a.role;const stats=document.createElement('div');stats.textContent='⚡ '+a.energy+'/10  ·  🪵 '+a.wood+'  ·  🛖 '+a.home;card.append(name,stats);return card;}));
+    persistWorld();
   };
   function applyMedicCare(){
     const medic=agents.find(a=>a.role==='MEDIC');
@@ -293,6 +294,39 @@
   };
   const districtEvents=['cache','ambush','survivor','nothing','cache'];
   const districtState=districts.map((d,i)=>({id:d.id,event:d.event,searched:false}));
+  const worldSaveKey='zombcash.arcade.survival.v1';
+  function persistWorld(){
+    try{
+      const snapshot={version:1,agents:agents.map(a=>({name:a.name,role:a.role,energy:a.energy,food:a.food,wood:a.wood,home:a.home})),turn,food,danger,logs:logs.slice(0,18),worldFinished,searchedSites,lootFound,rescuedJune,districts:districtState.map(site=>({id:site.id,searched:site.searched}))};
+      localStorage.setItem(worldSaveKey,JSON.stringify(snapshot));
+    }catch(error){/* Private browsing or storage quotas must never interrupt a campaign turn. */}
+  }
+  function restoreWorld(){
+    try{
+      const raw=localStorage.getItem(worldSaveKey);if(!raw)return false;
+      const state=JSON.parse(raw),roles=['SCOUT','BUILDER','FORAGER','GUARD','MEDIC'];
+      if(!state||state.version!==1||!Array.isArray(state.agents)||state.agents.length<4||state.agents.length>5)return false;
+      if(!Number.isInteger(state.turn)||state.turn<0||state.turn>28||!Number.isInteger(state.food)||state.food<0||state.food>10000||!Number.isInteger(state.danger)||state.danger<0||state.danger>5)return false;
+      if(!Array.isArray(state.districts)||state.districts.length!==districtState.length||!Array.isArray(state.logs))return false;
+      const restoredAgents=state.agents.map(a=>{
+        if(!a||typeof a.name!=='string'||a.name.length>32||!roles.includes(a.role))throw new Error('Invalid survivor');
+        for(const key of ['energy','food','wood','home'])if(!Number.isInteger(a[key])||a[key]<0||a[key]>10000)throw new Error('Invalid survivor stat');
+        if(a.energy>10||a.home>2)throw new Error('Survivor stat out of range');
+        return {name:a.name,role:a.role,energy:a.energy,food:a.food,wood:a.wood,home:a.home};
+      });
+      const restoredDistricts=state.districts.map((site,index)=>{
+        if(!site||site.id!==districtState[index].id||typeof site.searched!=='boolean')throw new Error('Invalid district state');
+        return site.searched;
+      });
+      const searched=restoredDistricts.filter(Boolean).length;
+      if(!Number.isInteger(state.searchedSites)||state.searchedSites!==searched||searched>5||!Number.isInteger(state.lootFound)||state.lootFound<0||state.lootFound>10000||typeof state.rescuedJune!=='boolean'||typeof state.worldFinished!=='boolean')return false;
+      if(state.logs.some(line=>typeof line!=='string'||line.length>500))return false;
+      agents=restoredAgents;turn=state.turn;food=state.food;danger=state.danger;logs=state.logs.slice(0,18);worldFinished=state.worldFinished;searchedSites=state.searchedSites;lootFound=state.lootFound;rescuedJune=state.rescuedJune;
+      districtState.forEach((site,index)=>{site.searched=restoredDistricts[index];});
+      $('zw-world-feed').replaceChildren(...logs.map(line=>{const p=document.createElement('p');p.textContent=line;return p;}));
+      return true;
+    }catch(error){return false;}
+  }
   function renderExpedition(){
     $('zw-expedition-title').textContent=L('expeditionTitle');
     $('zw-explore').textContent=L('explore');
@@ -405,6 +439,6 @@
     auto=!auto;$('zw-auto').textContent=auto?L('autoOn'):L('autoOff');
     if(auto)autoTimer=setInterval(()=>{if(!worldBusy&&!worldFinished)nextTurn();},3500);else clearInterval(autoTimer);
   });
-  resetWorld();
+  if(!restoreWorld())resetWorld();else{renderWorld();renderExpedition();$('zw-next').disabled=worldFinished;}
   applyLocale();
 })();
