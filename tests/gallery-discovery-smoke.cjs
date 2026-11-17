@@ -20,6 +20,8 @@ const installGalleryDataMock = page => page.addInitScript(data => {
   };
 }, galleryData);
 if (galleryData.items.some(item => /\bZOMBIECASH\s+SITE\s+SPOTLIGHT\b/i.test(String(item.caption || "")))) throw new Error("SITE SPOTLIGHT promotional cards must be excluded");
+if (galleryData.items.some(item => (item.category_ids || []).includes("site-transmissions") || item.series === "site-transmissions" || /\bZOMBIECASH\s+SITE\s+TRANSMISSION\b/i.test(String(item.caption || "")))) throw new Error("Site Transmission screenshots must stay out of the gallery archive");
+for (const locale of ["en", "de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"]) { const pagePath = locale === "en" ? "gallery.html" : locale + "/gallery.html"; const pageHtml = fs.readFileSync(pagePath, "utf8"); if (/data-categories="site-transmissions"/.test(pageHtml)) throw new Error(locale + " gallery still contains Site Transmission screenshot cards"); }
 const targetLikeImageId = galleryData.items[0]?.id || "";
 const gallerySearchCorpus = galleryData.items.map(item =>
   [item.title || "", item.caption || "", ...(item.tags || [])].join(" ").toLowerCase()
@@ -496,24 +498,19 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       const controls = await localized.locator(".gallery-category-chip").allTextContents();
       const firstCardTitle = (await localized.locator("#gallery-grid .gallery-caption p").first().textContent()) || "";
       const firstCardCategory = (await localized.locator("#gallery-grid .gallery-category-tag").first().textContent()) || "";
-      const localizedMemeCategory = {
-        de: "Zombie-Memes", fr: "Mèmes zombies", it: "Meme zombie",
-        ja: "ゾンビミーム", "zh-CN": "僵尸梗图", ru: "Зомби-мемы",
-        tr: "Zombi Memleri", hi: "ज़ॉम्बी मीम"
-      }[locale];
-      if (firstCardCategory !== localizedMemeCategory) throw new Error(locale + " first-card category is not translated: " + firstCardCategory);
+      const localizedCategoryLabels = {
+        "undead-after-dark": { de: "Untote bei Nacht", fr: "Morts-vivants nocturnes", it: "Non morti dopo il tramonto", ja: "夜更けのアンデッド", "zh-CN": "午夜不死者", ru: "Нежить после заката", tr: "Gece Yarısı Ölüleri", hi: "रात ढलने के बाद के ज़ॉम्बी" },
+        "zombie-memes": { de: "Zombie-Memes", fr: "Mèmes zombies", it: "Meme zombie", ja: "ゾンビミーム", "zh-CN": "僵尸梗图", ru: "Зомби-мемы", tr: "Zombi Memleri", hi: "ज़ॉम्बी मीम" },
+        "nightmare-horror": { de: "Albtraum & Horror", fr: "Cauchemar et horreur", it: "Incubo e horror", ja: "悪夢とホラー", "zh-CN": "噩梦与恐怖", ru: "Кошмары и хоррор", tr: "Kâbus ve Korku", hi: "दुःस्वप्न और हॉरर" },
+        "crypto-apocalypse": { de: "Krypto-Apokalypse", fr: "Crypto-apocalypse", it: "Crypto-apocalisse", ja: "暗号資産アポカリプス", "zh-CN": "加密末日", ru: "Криптоапокалипсис", tr: "Kripto Kıyameti", hi: "क्रिप्टो प्रलय" },
+        "community-creations": { de: "Community-Kreationen", fr: "Créations de la communauté", it: "Creazioni della community", ja: "コミュニティ作品", "zh-CN": "社区创作", ru: "Работы сообщества", tr: "Topluluk Eserleri", hi: "समुदाय की कलाकृतियाँ" }
+      };
+      const firstCategoryId = galleryData.items[0]?.category_ids?.[0];
+      const localizedFirstCategory = localizedCategoryLabels[firstCategoryId]?.[locale];
+      if (localizedFirstCategory && firstCardCategory !== localizedFirstCategory) throw new Error(locale + " first-card category is not translated: " + firstCardCategory);
       if (/NIGHTMARE & HORROR|ZOMBIECASH MEMES|ZOMBIECASH MEME|UNDEAD AFTER DARK|SITE TRANSMISSION/i.test(firstCardTitle)) throw new Error(locale + " source series header was not removed from the caption: " + firstCardTitle);
-      const siteTransmissionLabel = {
-        de: "Website-Meldungen", fr: "Actualités du site", it: "Aggiornamenti dal sito",
-        ja: "サイト通信", "zh-CN": "网站播报", ru: "Передачи с сайта",
-        tr: "Site Duyuruları", hi: "साइट अपडेट"
-      }[locale];
-      if (!controls.includes(siteTransmissionLabel)) throw new Error(locale + " Site Transmissions category is not translated: " + controls.join(" | "));
-      await localized.getByRole("button", { name: siteTransmissionLabel, exact: true }).click();
-      const siteTransmissionCards = await localized.locator("#gallery-grid .gallery-card").count();
-      if (siteTransmissionCards !== expectedCategoryIds("site-transmissions").length) {
-        throw new Error(locale + " Site Transmissions filter count mismatch: " + siteTransmissionCards);
-      }
+      const siteTransmissionLabels = ["Website-Meldungen", "Actualités du site", "Aggiornamenti dal sito", "サイト通信", "网站播报", "Передачи с сайта", "Site Duyuruları", "साइट अपडेट", "Site Transmissions"];
+      if (controls.some(label => siteTransmissionLabels.includes(label))) throw new Error(locale + " removed Site Transmissions category is still visible");
       if (lang !== locale) throw new Error(locale + " gallery lang mismatch: " + lang);
       if (canonical !== "https://zombcash.github.io/" + locale + "/gallery.html") throw new Error(locale + " canonical mismatch: " + canonical);
       if (alternates !== 10) throw new Error(locale + " should expose nine hreflang locales plus x-default, got " + alternates);

@@ -24,8 +24,6 @@ CATEGORY_PATTERNS = {
     "undead-after-dark": re.compile(r"\bUNDEAD\s+AFTER\s+DARK\b", re.I),
     "zombie-memes": re.compile(r"\bZOMBIECASH\s+MEMES?\b|\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b|#ZombieCashMeme\b|😂", re.I),
     "zombie-characters": re.compile(r"\b(?:ZOMBIE|UNDEAD)\s+(?:GIRL|BOY|CHARACTER|WARRIOR|QUEEN|KING|HUNTER|PRINCESS)\b|\bZOMBIE\s+CHARACTERS?\b", re.I),
-    # Keep the recurring site-promotion series separate from actual art and memes.
-    "site-transmissions": re.compile(r"\bZOMBIECASH\s+SITE\s+TRANSMISSION\b", re.I),
     # Crypto/market posts belong together even when they also use apocalypse language.
     "crypto-apocalypse": re.compile(r"\bCRYPTO\b|\bBITCOIN\b|\bSOLANA\b|\bMEMECOIN\b|\bTOKEN\b|\bWALLET\b|\bTRADING\b|\bPORTFOLIO\b|\bMARKET\b|\bCHARTS?\b|\bCANDLES?\b|\bHODL\b|\bBULL\b|\bBEAR\b|\bPUMP\b|\bDUMP\b", re.I),
     "apocalypse-survival": re.compile(r"\bAPOCALYPSE\s+SURVIVAL\b|\bSURVIVAL\b|\bWASTELAND\b|\bBUNKER\b|\bOUTBREAK\b|\bSCAVENGER\b|\bSHELTER\b|\bFALLOUT\b|\bEVACUATION\b|\bPOST[ -]APOCALYPTIC\b|\bSAFE\s+ZONE\b|\bSUPPLY\s+RUN\b", re.I),
@@ -46,6 +44,7 @@ def is_gallery_artwork(caption):
     # Site Spotlight is a promotional CTA, not a gallery artwork or community image.
     excluded = (
         r"\bZOMBIECASH\s+SITE\s+SPOTLIGHT\b",
+        r"\bZOMBIECASH\s+SITE\s+TRANSMISSION\b",
         r"\bNEWS\s+UPDATE\b",
         r"\bORIGINAL\s+SOURCE\s*:",
     )
