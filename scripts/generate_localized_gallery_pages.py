@@ -6,6 +6,7 @@ import json
 import re
 import subprocess
 import xml.etree.ElementTree as ET
+from datetime import datetime, timezone
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_URL = "https://zombcash.github.io"
@@ -229,15 +230,19 @@ def latest_source_lastmod():
         "scripts/sync_gallery_image_seo.py",
     ]
     result = subprocess.run(
-        ["git", "log", "-1", "--format=%cs", "--", *source_paths],
+        ["git", "log", "-1", "--format=%cI", "--", *source_paths],
         cwd=ROOT,
         capture_output=True,
         check=True,
         text=True,
     )
-    lastmod = result.stdout.strip()
+    source_timestamp = result.stdout.strip()
+    try:
+        lastmod = datetime.fromisoformat(source_timestamp.replace("Z", "+00:00")).astimezone(timezone.utc).date().isoformat()
+    except ValueError as error:
+        raise RuntimeError("Could not determine a verified ISO-8601 gallery source timestamp from Git history.") from error
     if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", lastmod):
-        raise RuntimeError("Could not determine a verified YYYY-MM-DD gallery source date from Git history.")
+        raise RuntimeError("Could not normalize the gallery source timestamp to a verified UTC date.")
     return lastmod
 
 

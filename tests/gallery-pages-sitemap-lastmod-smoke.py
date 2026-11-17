@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 import subprocess
 import xml.etree.ElementTree as ET
@@ -16,14 +16,15 @@ SOURCE_PATHS = [
 ]
 
 result = subprocess.run(
-    ["git", "log", "-1", "--format=%cs", "--", *SOURCE_PATHS],
+    ["git", "log", "-1", "--format=%cI", "--", *SOURCE_PATHS],
     cwd=ROOT,
     capture_output=True,
     check=True,
     text=True,
 )
-expected_lastmod = result.stdout.strip()
-assert len(expected_lastmod) == 10, f"Expected a verified Git source date, got {expected_lastmod!r}"
+source_timestamp = result.stdout.strip()
+expected_lastmod = datetime.fromisoformat(source_timestamp.replace("Z", "+00:00")).astimezone(timezone.utc).date().isoformat()
+assert len(expected_lastmod) == 10, f"Expected a verified UTC Git source date, got {expected_lastmod!r}"
 date.fromisoformat(expected_lastmod)
 
 tree = ET.parse(ROOT / "sitemap-gallery-pages.xml")
