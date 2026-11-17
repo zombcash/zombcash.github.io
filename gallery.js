@@ -29,12 +29,12 @@
   };
   const cleanCaption = value => {
     let caption = String(value ?? "")
-      .replace(/\\s+/g, " ")
-      .split(/━━━━━━━━|🧟\\s*\\$ZOMBCASH|MARKET DIED\\.|📋\\s*CA:|🌐\\s*Website:|𝕏\\s*X Community|💬\\s*Telegram/i)[0]
+      .replace(/\s+/g, " ")
+      .split(/━━━━━━━━|🧟\s*\$ZOMBCASH|MARKET DIED\.|📋\s*CA:|🌐\s*Website:|𝕏\s*X Community|💬\s*Telegram/i)[0]
       .trim();
     // Series names already appear as localized category chips. Remove the
     // repeated English source prefix from the caption instead of mixing languages.
-    caption = caption.replace(/^(?:🩸|🌙|😂|🛰️)\\s*(?:NIGHTMARE\\s*&\\s*HORROR|NIGHTMARE\\s+DROP|ZOMBIECASH\\s+MEMES?|ZOMBIE\\s+MEME(?:\\s+OF\\s+THE\\s+HOUR)?|UNDEAD\\s+AFTER\\s+DARK|ZOMBIECASH\\s+SITE\\s+TRANSMISSION)\\s*/i, "").trim();
+    caption = caption.replace(/^(?:🩸|🌙|😂|🛰️)\s*(?:NIGHTMARE\s*&\s*HORROR|NIGHTMARE\s+DROP|ZOMBIECASH\s+MEMES?|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|UNDEAD\s+AFTER\s+DARK|ZOMBIECASH\s+SITE\s+TRANSMISSION)\s*/i, "").trim();
     return caption;
   };
 
