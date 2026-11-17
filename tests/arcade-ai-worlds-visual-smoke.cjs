@@ -15,7 +15,7 @@ const path = require('path');
   if (!(await page.locator('#zw-mcp-endpoint').getAttribute('href')).startsWith('https://')) throw new Error('MCP endpoint link is not HTTPS');
   await page.locator('#zw-demo-start').click();
   await page.locator('#zw-demo-turn').click();
-  if (!(await page.locator('#zw-outbreak-feed').innerText()).includes('1:')) throw new Error('Outbreak local demo did not advance');
+  if (!(await page.locator('#zw-outbreak-turns').innerText()).includes('1')) throw new Error('Outbreak local demo turn counter did not advance');
   await page.evaluate(() => { document.documentElement.lang = 'ru'; document.dispatchEvent(new CustomEvent('zombcash:languagechange', { detail: { language: 'ru' } })); });
   if (!(await page.locator('#zw-mcp-status').innerText()).includes('РАБОТАЕТ')) throw new Error('Russian translation is missing on the actual Arcade page');
   await page.evaluate(() => { document.documentElement.lang = 'en'; document.dispatchEvent(new CustomEvent('zombcash:languagechange', { detail: { language: 'en' } })); });
