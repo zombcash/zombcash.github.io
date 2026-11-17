@@ -199,7 +199,6 @@
     }
     const hunter=actors.find(a=>a.role==='infected');
     if(hunter){const targets=actors.filter(a=>a.role==='survivor');if(targets.length){targets.sort((a,b)=>Math.abs(a.p%size-hunter.p%size)+Math.abs(Math.floor(a.p/size)-Math.floor(hunter.p/size))-(Math.abs(b.p%size-hunter.p%size)+Math.abs(Math.floor(b.p/size)-Math.floor(hunter.p/size))));const target=targets[0];hunter.p=pathStep(hunter.p,target.p);if(hunter.p===target.p){target.role='captured';captured++;feed('zw-outbreak-feed',L('survivorCaught').replace('{name}',target.name));}else feed('zw-outbreak-feed',L('infectedHunts').replace('{name}',target.name));}}
-    }
     if(escaped===2){outbreakEnded=true;feed('zw-outbreak-feed',L('missionWon'));}
     else if(captured===2||outbreakTurn>=18){outbreakEnded=true;feed('zw-outbreak-feed',captured===2?L('missionLost'):L('missionTimeout'));}
     if(outbreakEnded)$('zw-demo-turn').disabled=true;
