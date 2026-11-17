@@ -44,6 +44,49 @@
 </style>
 <style id="zombcash-art-direction">:root{--green:#b5c0a1;--line:#41473e;--muted:#aaa99f}body{background:radial-gradient(ellipse at 50% 0,rgba(88,86,66,.2),transparent 52%),#090b0a;color:#e9e8df;font-family:Georgia,"Times New Roman",serif}.wrap{width:min(1080px,calc(100% - 36px));padding-top:clamp(36px,6vw,70px)}header,section,footer{border:0;border-top:1px solid #41473e;border-radius:0;background:rgba(18,21,17,.55);box-shadow:none;padding:clamp(20px,3vw,34px);margin:22px 0}header{background:linear-gradient(120deg,rgba(22,25,20,.8),rgba(9,11,10,.45))}.eyebrow{color:#b5c0a1}h1,h2{font-family:Georgia,serif;font-weight:500;letter-spacing:-.04em}h1{font-size:clamp(40px,7vw,76px)}.lead{color:#c1c0b6}.mint{border:0;border-bottom:1px solid #69735d;border-radius:0;background:rgba(0,0,0,.2);color:#c0c9ae}.links a{border:0;border-top:1px solid #41473e;border-radius:0;background:transparent}.warning{border-left-color:#aaa38d}</style>
 <meta name="twitter:image" content="https://zombcash.github.io/zombcash-hand-logo.svg">
+<style id="soi-market-panels">
+.market-live{border-top:1px solid var(--line,#41473e);margin-top:36px;padding-top:28px}
+.market-live .status{display:flex;flex-wrap:wrap;gap:10px;align-items:center;color:var(--muted,#aaa99f);font:12px/1.4 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.market-live .dot{width:8px;height:8px;border-radius:50%;background:#a8b58e;display:inline-block;box-shadow:0 0 12px #a8b58e}
+.market-live .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line,#41473e);margin:22px 0;border:1px solid var(--line,#41473e)}
+.market-live .metric{background:#0c100d;padding:16px;min-width:0}
+.market-live .metric small{display:block;font:11px/1.4 system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase}
+.market-live .metric strong{display:block;font:500 clamp(18px,2.6vw,27px)/1.25 system-ui,sans-serif;margin-top:8px;overflow-wrap:anywhere}
+.market-live .metric em{font:12px system-ui,sans-serif;color:var(--muted,#aaa99f)}
+.market-live .market-table{width:100%;border-collapse:collapse;font:13px/1.5 system-ui,sans-serif;margin-top:16px}
+.market-live .market-table th,.market-live .market-table td{text-align:left;padding:11px 8px;border-bottom:1px solid #343b32}
+.market-live .market-table th{color:var(--muted,#aaa99f);font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.market-live .market-table a{white-space:nowrap}
+.market-live .chart{width:100%;height:440px;border:1px solid var(--line,#41473e);background:#080b09;margin-top:18px}
+.market-live .note{font:13px/1.6 system-ui,sans-serif;color:var(--muted,#aaa99f);margin-top:14px}
+.market-live button{border:1px solid #68735e;background:transparent;color:inherit;padding:9px 14px;font:12px system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.soi-radar{border-top:1px solid #6a755f;margin-top:42px;padding-top:30px}
+.soi-toolbar{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap;margin:22px 0}
+.soi-status,.soi-report-meta{display:flex;gap:9px;align-items:center;flex-wrap:wrap;color:var(--muted,#aaa99f);font:12px/1.5 system-ui,sans-serif}
+.soi-status-dot{width:8px;height:8px;border-radius:50%;background:#a8b58e;display:inline-block}
+.soi-status[data-state="ready"] .soi-status-dot{background:#9bdb75;box-shadow:0 0 10px #9bdb75}
+.soi-status[data-state="error"] .soi-status-dot{background:#c58b70}
+.soi-controls{display:flex;gap:7px;flex-wrap:wrap}
+.soi-controls button{border:1px solid var(--line,#41473e);background:transparent;color:inherit;padding:8px 11px;font:11px system-ui,sans-serif;cursor:pointer}
+.soi-controls button.is-active{border-color:#b5c0a1;background:#252b22}
+.soi-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line,#41473e);border:1px solid var(--line,#41473e)}
+.soi-stat{background:#0c100d;padding:15px;min-width:0}
+.soi-stat small{display:block;color:var(--muted,#aaa99f);font:10px/1.4 system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em}
+.soi-stat strong{display:block;font:500 clamp(19px,2.5vw,26px)/1.3 system-ui,sans-serif;margin-top:7px}
+.soi-report-meta{justify-content:space-between;margin:14px 0}
+.soi-table-wrap{overflow-x:auto;border-top:1px solid var(--line,#41473e)}
+.soi-table{width:100%;min-width:760px;border-collapse:collapse;font:12px/1.5 system-ui,sans-serif}
+.soi-table th,.soi-table td{padding:12px 9px;text-align:left;vertical-align:top;border-bottom:1px solid #343b32}
+.soi-table th{font-size:10px;color:var(--muted,#aaa99f);text-transform:uppercase;letter-spacing:.08em}
+.soi-table .token-name{font-weight:600}
+.soi-table .token-mint{display:block;max-width:190px;overflow-wrap:anywhere;color:var(--muted,#aaa99f);font:10px/1.4 ui-monospace,monospace}
+.soi-table .token-mint a{color:inherit}
+.soi-signal{display:inline-block;border:1px solid var(--line,#41473e);padding:2px 6px;margin:0 3px 3px 0;color:#c9c9bd;font-size:10px}
+.soi-empty{padding:18px;border:1px solid var(--line,#41473e);color:var(--muted,#aaa99f);font:13px/1.6 system-ui,sans-serif}
+.soi-method{margin-top:14px;color:var(--muted,#aaa99f);font:12px/1.6 system-ui,sans-serif}
+.soi-links{font:12px/1.6 system-ui,sans-serif}
+@media(max-width:700px){.market-live .metrics,.soi-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.market-live .market-table{font-size:11px}.market-live .market-table th,.market-live .market-table td{padding:8px 5px}.market-live .chart{height:360px}}
+</style>
 </head>
 <body><main class="wrap">
 <p class="crumb"><a href="/fr/">Accueil ZombieCash</a> / Données de marché</p>
@@ -55,6 +98,29 @@
 <p class="mint">6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump</p>
 <p><a href="https://solscan.io/token/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" rel="noopener noreferrer">Vérifier le mint sur Solscan ↗</a> · <a href="/fr/buy-zombcash.html">Guide officiel du jeton ↗</a></p>
 </header>
+<section class="market-live" id="live-market" aria-labelledby="live-market-title">
+<p class="eyebrow">LIVE SOLANA INTELLIGENCE // DEXSCREENER</p><h2 id="live-market-title">Données de marché ZOMBCASH en direct</h2><p class="muted">Données publiques des pools Solana provenant directement de DexScreener. Les valeurs reflètent la source au moment de l’actualisation et ne garantissent pas le prix d’exécution.</p>
+<div class="status" aria-live="polite"><span class="dot"></span><span id="md-status">Connexion à la source de marché…</span><span id="md-updated"></span><button type="button" id="md-refresh">Actualiser</button></div>
+<div class="metrics" aria-live="polite">
+<div class="metric"><small>Prix USD</small><strong id="md-price">—</strong><em id="md-change">Variation 24 h : —</em></div>
+<div class="metric"><small>Market Cap</small><strong id="md-mcap">—</strong><em>Valeur de la source uniquement</em></div>
+<div class="metric"><small>FDV</small><strong id="md-fdv">—</strong><em>Ne remplace pas la Market Cap</em></div>
+<div class="metric"><small>Liquidité</small><strong id="md-liquidity">—</strong><em id="md-pool-count">Pools : —</em></div>
+<div class="metric"><small>Volume 24 h</small><strong id="md-volume">—</strong><em id="md-buys-sells">Achats / ventes : —</em></div>
+<div class="metric"><small>Transactions 24 h</small><strong id="md-txns">—</strong><em>Données du pool</em></div>
+<div class="metric"><small>Activité 1 h</small><strong id="md-hour">—</strong><em id="md-hour-change">Variation du prix : —</em></div>
+<div class="metric"><small>Activité 5 min</small><strong id="md-five">—</strong><em id="md-five-change">Variation du prix : —</em></div></div>
+<h3>Pools de trading</h3><div style="overflow-x:auto"><table class="market-table"><thead><tr><th>DEX / Pool</th><th>Prix</th><th>Liquidité</th><th>Volume 24 h</th><th>Achats / ventes</th></tr></thead><tbody id="md-pools"><tr><td colspan="5">Chargement des pools…</td></tr></tbody></table></div>
+<div id="md-chart-wrap" hidden><h3>Données du pool</h3><iframe class="chart" id="md-chart" title="Données de marché ZOMBCASH en direct" loading="lazy" referrerpolicy="no-referrer" allowfullscreen></iframe></div><p class="note">Source : API publique DexScreener. Actualisation automatique environ chaque minute. Les champs absents sont indiqués « Aucune donnée ». Market Cap et FDV restent séparées. Les données de portefeuille, de créateur et de frais ne sont pas affichées sans source on-chain vérifiée séparément.</p></section>
+<section class="soi-radar" id="solana-launch-radar" aria-labelledby="soi-title">
+<p class="eyebrow">SOLANA OUTBREAK INTELLIGENCE // DAILY LAUNCH RADAR</p><h2 id="soi-title">Nouveaux lancements Solana aujourd’hui</h2><p class="muted">Module de recherche sur les lancements détectés, les 60 premières minutes, la promotion et les événements de marché confirmés. Séparé des métriques ZOMBCASH ci-dessus.</p>
+<div class="soi-toolbar"><div class="soi-status" aria-live="polite"><span class="soi-status-dot"></span><span id="soi-status">Vérification du rapport quotidien…</span></div>
+<div class="soi-controls" role="group" aria-label="Tous les lancements"><button type="button" class="is-active" data-soi-filter="all">Tous les lancements</button><button type="button" class="" data-soi-filter="no-socials">Sans liens sociaux</button><button type="button" class="" data-soi-filter="promoted">Boost / publicité</button><button type="button" class="" data-soi-filter="million">1 M$+</button></div></div>
+<div class="soi-summary" aria-live="polite"><div class="soi-stat"><small>Lancements aujourd’hui</small><strong id="soi-count">—</strong></div><div class="soi-stat"><small>Sans liens sociaux détectés</small><strong id="soi-no-socials">—</strong></div><div class="soi-stat"><small>Promotion confirmée</small><strong id="soi-promoted">—</strong></div><div class="soi-stat"><small>Market Cap atteinte : 1 M$</small><strong id="soi-million">—</strong></div></div>
+<div class="soi-report-meta"><span id="soi-report-date">Date du rapport : —</span><span id="soi-report-updated">Mis à jour : —</span><span id="soi-coverage">Couverture : —</span></div>
+<div class="soi-table-wrap"><table class="soi-table"><thead><tr><th>Jeton / mint</th><th>Lancement</th><th>Market Cap</th><th>Liquidité</th><th>60 premières min</th><th>Signaux</th></tr></thead><tbody id="soi-launches"><tr><td colspan="6">En attente d’un rapport quotidien vérifié…</td></tr></tbody></table></div>
+<p class="soi-empty" id="soi-empty" hidden>Aucun résultat pour ce filtre. Cela ne signifie pas qu’aucun lancement n’a eu lieu ; seuls les événements détectés dans la couverture indiquée sont inclus.</p><p class="soi-method" id="soi-method">Source : collecteur SOI indépendant. Le rapport sera publié après connexion et vérification de la collecte en direct. Aucune valeur de démonstration ou inventée.</p>
+<p class="soi-links"><a href="https://github.com/vovik777-beep/solana-outbreak-intelligence" target="_blank" rel="noopener noreferrer">Dépôt SOI ↗</a> · <a href="https://github.com/pollinations/pollinations/issues/19174" target="_blank" rel="noopener noreferrer">MCP Quest #19174 ↗</a></p></section>
 <section>
 <h2>Sources indépendantes de données de marché</h2>
 <p class="muted">Ces services peuvent afficher des valeurs différentes ou être mis à jour à des moments différents. Vérifiez l'adresse exacte du mint et du pool avant toute action.</p>
@@ -89,6 +155,8 @@
 <a href="/fr/">Site officiel</a> · <a href="/fr/buy-zombcash.html">Guide du jeton</a> · <a href="/fr/outbreak-transmission.html">Transmission de l'épidémie</a>
 <p>© 2026 ZombieCash</p>
 </footer>
-</main><script src="/shared-nav.js?v=nav-main-wrap-20261104-12" defer></script>
+</main><script src="/market-data-live.js?v=20261118-i18n1" defer></script>
+<script src="/soi-launch-radar.js?v=20261118-i18n1" defer></script>
+<script src="/shared-nav.js?v=nav-main-wrap-20261104-12" defer></script>
 <script src="/language.js?v=i18n-persist-route-20261104-10" defer></script>
 </body></html>
