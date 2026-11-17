@@ -159,6 +159,82 @@ function pagePath(locale, slug) {
       }
     }
 
+    // Verify all nine localized Field Manual landing pages: poster uniqueness,
+    // translated card actions, card order, structured data and responsive layout.
+    const expectedGuideSlugs = [
+      'solana-memecoin-research-guide.html',
+      'transmission-solana-memecoin-warning-signs.html',
+      'transmission-wallet-security-red-flags.html',
+      'buy-zombcash.html',
+      'zombcash-buying-guide.html',
+      'how-to-research-solana-meme-coins.html',
+      'solana-token-safety-checklist.html',
+      'check-liquidity-holder-distribution-solana.html',
+      'avoid-fake-token-websites-wallet-scams.html',
+      'transmission-liquidity-is-not-market-cap.html',
+    ];
+    const manualViewports = [
+      { name: 'mobile', width: 390, height: 844, mobile: true },
+      { name: 'desktop', width: 1440, height: 1000, mobile: false },
+    ];
+    for (const locale of locales) {
+      for (const viewport of manualViewports) {
+        const mode = viewport.mobile ? 'mobile' : 'desktop';
+        const page = pagesByContext[mode];
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        await page.goto(new URL(pagePath(locale, 'survivor-field-manual.html'), BASE).href, {
+          waitUntil: 'domcontentloaded',
+          timeout: 30000,
+        });
+        await page.waitForSelector('header.zombcash-shared-header .language-trigger', { timeout: 10000 });
+        const result = await page.evaluate(async expected => {
+          const cards = [...document.querySelectorAll('article.article-card')];
+          const firstTen = cards.slice(0, 10);
+          const images = firstTen.map(card => card.querySelector('img'));
+          images.forEach(img => { if (img) img.loading = 'eager'; });
+          await Promise.all(images.map(img => img ? img.decode().catch(() => null) : Promise.resolve()));
+          const schema = [...document.querySelectorAll('script[type="application/ld+json"]')]
+            .map(node => { try { return JSON.parse(node.textContent); } catch { return null; } })
+            .find(item => item?.['@type'] === 'CollectionPage');
+          const itemList = schema?.mainEntity?.itemListElement || [];
+          const paths = firstTen.map(card => {
+            const link = card.querySelector('h2 a, h3 a, a.article-link');
+            return link ? new URL(link.href).pathname.split('/').pop() : '';
+          });
+          const allImages = images.filter(Boolean);
+          return {
+            cardCount: cards.length,
+            firstTenPaths: paths,
+            uniquePosters: new Set(allImages.map(img => new URL(img.src).pathname)).size,
+            missingAlt: allImages.filter(img => !img.alt.trim()).length,
+            brokenImages: allImages.filter(img => !img.complete || img.naturalWidth === 0).map(img => img.src),
+            schemaCount: schema?.mainEntity?.numberOfItems ?? null,
+            schemaItems: itemList.length,
+            schemaOrder: itemList.slice(0, 10).map(item => item.url.split('/').pop()),
+            width: innerWidth,
+            documentWidth: document.documentElement.scrollWidth,
+            englishMarkers: firstTen.filter(card => /original in english|read guide in english|article in english|en anglais|auf englisch|in inglese|на английском|İngilizce|अंग्रेज़ी|英文|英語/i.test(card.innerText)).length,
+          };
+        }, expectedGuideSlugs);
+        const issues = [];
+        if (result.cardCount !== 13) issues.push('expected 13 Field Manual cards, found ' + result.cardCount);
+        if (result.firstTenPaths.join('|') !== expectedGuideSlugs.join('|')) issues.push('first ten card order or links do not match the canonical order');
+        if (result.uniquePosters !== 10) issues.push('expected 10 distinct posters, found ' + result.uniquePosters);
+        if (result.missingAlt) issues.push('missing ALT on ' + result.missingAlt + ' card posters');
+        if (result.brokenImages.length) issues.push('broken poster images: ' + result.brokenImages.join(', '));
+        if (result.schemaCount !== 13 || result.schemaItems !== 13) issues.push('CollectionPage schema does not list all 13 cards');
+        if (result.schemaOrder.join('|') !== expectedGuideSlugs.join('|')) issues.push('structured-data order does not match visible card order');
+        if (result.documentWidth > viewport.width + 1) issues.push('Field Manual horizontal overflow: ' + result.documentWidth + 'px');
+        if (locale !== 'en' && result.englishMarkers) issues.push('English-only labels remain on ' + result.englishMarkers + ' of the first ten cards');
+        const report = { page: pagePath(locale, 'survivor-field-manual.html'), viewport: viewport.name, result, issues };
+        reports.push(report);
+        if (issues.length) {
+          failures.push(report);
+          await page.screenshot({ path: path.join(output, 'failure-field-manual-' + locale + '-' + viewport.name + '.png'), fullPage: true }).catch(() => {});
+        }
+      }
+    }
+
     // Test actual language changes on two article types with a real dropdown click.
     const switchPage = pagesByContext.mobile;
     const routeSwitchTests = [
@@ -210,6 +286,7 @@ function pagePath(locale, slug) {
 
     const summary = {
       visualCases: pages.reduce((total, item) => total + (item.availableLocales || locales).length * (item.kind === 'guide' ? 3 : viewports.length), 0),
+      fieldManualCases: locales.length * manualViewports.length,
       routeSwitches: routeSwitchTests.length,
       localizedHomepagesChecked: 8,
       failures,

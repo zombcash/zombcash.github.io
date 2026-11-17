@@ -37,6 +37,8 @@ on:
       - '*/transmission-solana-memecoin-warning-signs.html'
       - '*/transmission-wallet-security-red-flags.html'
       - '*/zombcash-buying-guide.html'
+      - 'survivor-field-manual.html'
+      - '*/survivor-field-manual.html'
   push:
     branches: [main]
     paths:
@@ -50,6 +52,8 @@ on:
       - '*/transmission-last-backup-ai-apocalypse.html'
       - 'shared-nav.js'
       - 'language.js'
+      - 'survivor-field-manual.html'
+      - '*/survivor-field-manual.html'
 
 permissions:
   contents: read
@@ -89,7 +93,7 @@ jobs:
           done
           cat /tmp/zombcash-preview.log
           exit 1
-      - name: Test 27 article pages on desktop and mobile
+      - name: Test localized article pages and all nine Field Manual landing pages
         run: node tests/localized-article-visual.cjs
       - name: Upload screenshots and diagnostics
         if: always()
