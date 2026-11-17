@@ -10,7 +10,7 @@ const path = require('path');
   if (await page.locator('#zw-outbreak-map .zw-cell').count() !== 81) throw new Error('Outbreak board must render 81 cells');
   await page.locator('#zw-demo-start').click();
   await page.locator('#zw-demo-turn').click();
-  if (!(await page.locator('#zw-outbreak-feed').innerText()).includes('1:')) throw new Error('Outbreak local turn did not advance');
+  if (!(await page.locator('#zw-outbreak-turns').innerText()).includes('1')) throw new Error('Outbreak local turn counter did not advance');
   await page.locator('#zw-next').click();
   await page.waitForFunction(() => document.querySelector('#zw-world-turn').textContent.includes('TURN 1'));
   await page.locator('#zw-auto').click();
