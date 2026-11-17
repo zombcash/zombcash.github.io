@@ -48,6 +48,8 @@
       #zombcash-outbreak-world .zw-legend{font-size:13px;gap:8px}
       #zombcash-outbreak-world .zw-legend span{padding:6px 9px;border-radius:20px;background:#ffffff12;border:1px solid #ffffff20}
       #zombcash-outbreak-world .zw-stat{border-radius:20px;background:linear-gradient(120deg,#243b50,#263d34);border-color:#638d83;color:#e7ffbd}
+      #zombcash-outbreak-world #zw-command{min-width:210px;max-width:100%;background:linear-gradient(145deg,#263b50,#182a36);border-color:#9bd4ae;color:#fff}
+      #zombcash-outbreak-world #zw-command-hint{padding:8px 11px;border-left:3px solid #a9ed8c;background:#ffffff09;border-radius:6px}
       #zombcash-outbreak-world .zw-agent{border-radius:10px;background:linear-gradient(145deg,#1b3544,#1a302d);border-color:#5d8e91;padding:11px;box-shadow:inset 0 0 18px #8df9d20a}
       #zombcash-outbreak-world .zw-agent:nth-child(2){border-color:#d2a36d}
       #zombcash-outbreak-world .zw-agent:nth-child(3){border-color:#7cc7a2}
@@ -95,11 +97,23 @@
         <div class="zw-row">
           <label for="zw-model">LIVE MODEL</label>
           <select id="zw-model"><option value="openai">openai</option><option value="openai-fast">openai-fast</option><option value="mistral">mistral</option></select>
+          <label for="zw-command">YOUR ORDER</label>
+          <select id="zw-command" aria-label="Choose the next survivor action">
+            <option value="auto">Let the survivor decide</option>
+            <option value="forage">🥫 Forage for food</option>
+            <option value="gather">🪵 Gather timber</option>
+            <option value="build">🛖 Build a shelter</option>
+            <option value="scout">🧭 Scout safe routes</option>
+            <option value="guard">🛡️ Guard the camp</option>
+            <option value="rest">🛏️ Rest and recover</option>
+            <option value="talk">💬 Rally the crew</option>
+          </select>
           <button class="primary" id="zw-next" type="button">NEXT AI TURN</button>
           <button id="zw-auto" type="button">AUTO: OFF</button>
           <button id="zw-world-reset" type="button">RESET WORLD</button>
         </div>
         <div class="zw-row"><span class="zw-stat" id="zw-pop">4 SURVIVORS</span><span class="zw-stat" id="zw-shelter">0 SHELTERS</span><span class="zw-stat" id="zw-food">12 FOOD</span><span class="zw-stat" id="zw-danger">DANGER 1</span></div>
+        <p class="zw-muted" id="zw-command-hint">Choose an order before the next turn to override the active survivor's decision. AUTO lets the crew decide.</p>
         <div class="zw-world-meter" aria-label="Survival energy"><i id="zw-energy-meter"></i></div>
         <div class="zw-settlement" id="zw-settlement" aria-label="Settlement status">
           <div class="zw-site zw-site-camp" id="zw-site-camp">🏕️<small>BASE</small></div>
@@ -213,7 +227,7 @@
     {name:'Nix',role:'FORAGER',energy:8,food:0,wood:1,home:0},
     {name:'Ash',role:'GUARD',energy:8,food:0,wood:0,home:0}
   ];
-  let agents=initial(),turn=0,worldBusy=false,auto=false,autoTimer=null,food=12,danger=1,logs=[],worldFinished=false;
+  let agents=initial(),turn=0,worldBusy=false,auto=false,autoTimer=null,food=12,danger=1,logs=[],worldFinished=false;queuedCommand='auto';
   const worldLog=t=>{logs.unshift(t);logs=logs.slice(0,18);$('zw-world-feed').replaceChildren(...logs.map(s=>{const p=document.createElement('p');p.textContent=s;return p;}));};
   const renderWorld=()=>{
     const day=Math.floor(turn/4)+1;
@@ -282,8 +296,10 @@
     if(worldBusy||worldFinished)return;worldBusy=true;$('zw-next').disabled=true;$('zw-auto').disabled=true;
     const a=agents[turn%agents.length];
     try{
-      const choice=userKey?await liveAction(a):{action:localAction(a),reason:''};
+      const command=$('zw-command').value;
+      const choice=userKey?await liveAction(a):{action:command==='auto'?localAction(a):command,reason:command==='auto'?'':'Player order'};
       applyAction(a,choice.action,choice.reason);turn++;
+      if(command!=='auto'){$('zw-command').value='auto';worldLog('🎮 Player order delivered to '+a.name+'.');}
       if(turn%4===0){
         food=Math.max(0,food-4);danger=Math.min(5,danger+1);
         agents.forEach(x=>{x.energy=Math.max(0,x.energy-(x.home?0:1));});
