@@ -815,6 +815,544 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 }
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;700&display=optional" data-zsh-font-family="hi">
+<style id="zc-adsterra-native-compact-height-20261112">
+/* Tighten only the desktop native-ad reservation to the actual four-card creative height. */
+@media (min-width: 768px) {
+  body:has(#home) #home > section.hero .zc-hero-ad-stage {
+    box-sizing: border-box !important;
+    height: 185px !important;
+    min-height: 185px !important;
+    max-height: 185px !important;
+    flex: 0 0 185px !important;
+    overflow: hidden !important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-native-slot {
+    box-sizing: border-box !important;
+    height: 185px !important;
+    min-height: 185px !important;
+    max-height: 185px !important;
+    overflow: hidden !important;
+  }
+  body:has(#home) #home > section.hero #container-4420dadadbd2f0727c322cd6c632be3e {
+    box-sizing: border-box !important;
+    height: 185px !important;
+    min-height: 0 !important;
+    max-height: 185px !important;
+    overflow: hidden !important;
+  }
+}
+</style>
+<style id="zc-adsterra-real-compact-geometry-20261112">
+/* Actual desktop native-ad frame: override all older 250/300px reservations. */
+@media (min-width: 901px) {
+  body:has(#home) #home > section.hero .zc-hero-sponsor-panel {
+    box-sizing: border-box !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    align-self: start !important;
+    justify-content: flex-start !important;
+  }
+  body:has(#home) #home > section.hero .zc-hero-sponsor {
+    height: auto !important;
+    min-height: 0 !important;
+    flex: 0 0 auto !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+  }
+  body:has(#home) #home > section.hero .zc-hero-ad-stage {
+    box-sizing: border-box !important;
+    display: block !important;
+    flex: 0 0 180px !important;
+    width: 100% !important;
+    height: 180px !important;
+    min-height: 180px !important;
+    max-height: 180px !important;
+    margin: 0 auto !important;
+    overflow: hidden !important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-native-slot {
+    box-sizing: border-box !important;
+    display: block !important;
+    width: 100% !important;
+    height: 180px !important;
+    min-height: 180px !important;
+    max-height: 180px !important;
+    overflow: hidden !important;
+  }
+  body:has(#home) #home > section.hero .zc-sponsor-art-slot {
+    flex: 0 0 auto !important;
+    margin-top: 0 !important;
+  }
+  body:has(#home) #home > section.hero .zc-hero-sponsor-promo {
+    flex: 0 0 auto !important;
+    min-height: 150px !important;
+  }
+}
+</style>
+<style id="zc-home-hero-compact-ad-placement">
+/* Keep the home hero content-led: browser zoom must not turn 100vh into a huge empty panel. */
+body > main#home > section.hero {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  padding-top: clamp(28px, 3.2vw, 48px) !important;
+  padding-bottom: 30px !important;
+  overflow: hidden !important;
+}
+body > main#home > section.hero > .hero-layout {
+  min-height: 0 !important;
+  align-items: center !important;
+}
+body > main#home > section.hero .zc-hero-art-panel {
+  min-height: 0 !important;
+  height: auto !important;
+  aspect-ratio: 900 / 650;
+}
+body > main#home > section.zc-adsterra-section {
+  margin: 0 !important;
+  padding: 12px 5% 18px !important;
+}
+body > main#home > section.zc-adsterra-section .zc-adsterra-inner {
+  max-width: 1120px !important;
+}
+@media (max-width: 680px) {
+  body > main#home > section.hero { padding: 28px 5% 24px !important; }
+  body > main#home > section.hero > .hero-layout { gap: 18px !important; }
+  body > main#home > section.hero .zc-hero-art-panel { aspect-ratio: 1.35 / 1; }
+  body > main#home > section.zc-adsterra-section { padding: 10px 4% 16px !important; }
+}
+</style>
+<style id="zc-homepage-final-layout-20261104-priority">
+/* Final homepage layout: balanced hero, compact sponsor panel, no oversized empty ad frame. */
+body > main#home > section.hero {
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  padding: clamp(34px, 4vw, 58px) 6.5% clamp(34px, 4vw, 52px) !important;
+}
+body > main#home > section.hero > .hero-layout {
+  align-items: center !important;
+  gap: clamp(22px, 3vw, 42px) !important;
+}
+body > main#home > section.hero .hero-content {
+  min-width: 0 !important;
+  max-width: 680px !important;
+}
+body > main#home > section.hero .zc-hero-sponsor-panel {
+  box-sizing: border-box !important;
+  align-self: center !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  aspect-ratio: auto !important;
+  padding: clamp(14px, 1.6vw, 22px) !important;
+  overflow: hidden !important;
+}
+body > main#home > section.hero .zc-hero-sponsor {
+  height: auto !important;
+  min-height: 0 !important;
+  gap: 12px !important;
+}
+body > main#home > section.hero .zc-hero-ad-stage {
+  box-sizing: border-box !important;
+  flex-shrink: 0 !important;
+  max-width: 100% !important;
+  margin-inline: auto !important;
+}
+body > main#home > section.hero .zc-hero-sponsor-promo {
+  box-sizing: border-box !important;
+  flex: 0 1 auto !important;
+  min-height: 210px !important;
+  padding: 24px 18px !important;
+}
+@media (max-width: 1100px) {
+  body > main#home > section.hero > .hero-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas: "content" "radar" !important;
+    align-items: stretch !important;
+  }
+  body > main#home > section.hero .zc-hero-sponsor-panel {
+    width: min(100%, 760px) !important;
+    justify-self: center !important;
+    min-height: 0 !important;
+  }
+}
+@media (max-width: 760px) {
+  body > main#home > section.hero {
+    padding: 30px 5% 26px !important;
+  }
+  body > main#home > section.hero > .hero-layout {
+    gap: 20px !important;
+  }
+  body > main#home > section.hero .zc-hero-sponsor-panel {
+    width: 100% !important;
+    padding: 12px !important;
+  }
+  body > main#home > section.hero .zc-hero-sponsor-promo {
+    min-height: 175px !important;
+    padding: 20px 12px !important;
+  }
+}
+</style>
+<style id="zc-adsterra-reserved-stage-final-20261105">
+/* Final reservation rule: placed after all homepage CSS so it wins the legacy cascade. */
+@media (min-width: 901px) {
+  body > main#home > section.hero .zc-hero-ad-stage {
+    display: block !important;
+    width: 100% !important;
+    height: 250px !important;
+    min-height: 250px !important;
+    max-height: 250px !important;
+    flex: 0 0 250px !important;
+    overflow: hidden !important;
+  }
+}
+@media (max-width: 900px) {
+  body > main#home > section.hero .zc-hero-ad-stage {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: min(320px, 100%) !important;
+    max-width: 320px !important;
+    height: 50px !important;
+    min-height: 50px !important;
+    max-height: 50px !important;
+    flex: 0 0 50px !important;
+    aspect-ratio: auto !important;
+    overflow: hidden !important;
+  }
+}
+@media (max-width: 360px) {
+  /* Extend the sponsor panel to the viewport edges; the 320×50 unit must never be clipped by the narrow hero grid track. */
+  body > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel {
+    box-sizing: border-box !important;
+    width: 100vw !important;
+    min-width: 100vw !important;
+    max-width: 100vw !important;
+    justify-self: start !important;
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: 0 !important;
+    padding: 0 0 12px !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    overflow: visible !important;
+  }
+  body > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel > .zc-hero-sponsor {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  body > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel > .zc-hero-sponsor > .zc-hero-ad-stage {
+    box-sizing: border-box !important;
+    width: 320px !important;
+    min-width: 320px !important;
+    max-width: 320px !important;
+    flex: 0 0 320px !important;
+    align-self: center !important;
+    margin: 0 auto !important;
+    aspect-ratio: 320 / 50 !important;
+  }
+}
+</style>
+<style id="zc-remove-native-ad-dead-space-20261112">
+/* Last-in-document override: native creative is ~195px tall; remove the unused 250px reserve. */
+@media (min-width: 901px) {
+  body:has(#home) #home > section.hero .zc-hero-sponsor {
+    gap: 8px !important;
+  }
+  body:has(#home) #home > section.hero .zc-hero-ad-stage {
+    box-sizing: border-box !important;
+    flex: 0 0 195px !important;
+    height: 195px !important;
+    min-height: 195px !important;
+    max-height: 195px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-native-slot,
+  body:has(#home) #home > section.hero #container-4420dadadbd2f0727c322cd6c632be3e {
+    box-sizing: border-box !important;
+    height: 195px !important;
+    min-height: 0 !important;
+    max-height: 195px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+  body:has(#home) #home > section.hero .zc-sponsor-art-slot {
+    margin-top: 0 !important;
+  }
+}
+</style>
+<style id="homepage-cinematic-refresh-2026">
+/* ZOMBCASH // Cinematic homepage refresh — visual-only, keep existing components and data hooks */
+:root{
+  --zc-acid:#9bff45;
+  --zc-ash:#c6cec3;
+  --zc-ink:#070b09;
+  --zc-glass:rgba(10,16,12,.76);
+  --zc-line:rgba(160,205,132,.18);
+  --zc-radius:18px;
+}
+html{scroll-behavior:smooth}
+body:has(#home){
+  background-color:#060907;
+  background-image:
+    radial-gradient(ellipse at 12% 12%,rgba(85,125,75,.13),transparent 34%),
+    radial-gradient(ellipse at 88% 40%,rgba(87,112,77,.10),transparent 38%),
+    linear-gradient(180deg,#070b09 0%,#080d0a 48%,#060907 100%);
+  background-attachment:fixed;
+}
+body:has(#home) main#home{position:relative;isolation:isolate}
+body:has(#home) main#home:before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.22;
+  background-image:linear-gradient(rgba(170,220,145,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(170,220,145,.025) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:linear-gradient(180deg,transparent,#000 7%,#000 92%,transparent);
+}
+/* Hero: use existing survivor photography as an atmospheric layer, not a boxed illustration. */
+body:has(#home) #home>.hero{
+  position:relative;isolation:isolate;overflow:hidden;
+  background:
+    linear-gradient(90deg,rgba(5,9,7,.82) 0%,rgba(5,9,7,.64) 32%,rgba(5,9,7,.28) 68%,rgba(5,9,7,.52) 100%),
+    linear-gradient(0deg,#070b09 0%,rgba(7,11,9,.12) 28%,rgba(5,8,7,.18) 72%,#070b09 100%),
+    url('/assets/zombie-girl-heroine-hd.avif') center 30%/cover no-repeat,
+    #070b09!important;
+  border-bottom:1px solid rgba(155,255,69,.16);
+}
+body:has(#home) #home>.hero:after{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 78% 46%,rgba(155,255,69,.12),transparent 35%),linear-gradient(110deg,transparent 55%,rgba(0,0,0,.28));
+}
+body:has(#home) #home>.hero>.hero-layout,
+body:has(#home) #home>.hero>.hero-bottom{position:relative;z-index:1}
+body:has(#home) #home>.hero .hero-content{max-width:780px}
+body:has(#home) #home>.hero h1{text-shadow:0 8px 38px rgba(0,0,0,.6)}
+body:has(#home) #home>.hero .hero-copy{max-width:620px;color:#d0d8cd;text-shadow:0 2px 18px #000}
+body:has(#home) #home>.hero .eyebrow{border-color:rgba(155,255,69,.32);background:rgba(6,12,8,.64);backdrop-filter:blur(10px)}
+/* Shared section rhythm: alternating photo atmospheres make the long homepage feel like one world. */
+body:has(#home) #home>.section,
+body:has(#home) #home>.zc-promo-video,
+body:has(#home) #home>.zctv-channel-hub,
+body:has(#home) #home>.zombie-maker-promo{
+  position:relative;isolation:isolate;
+}
+body:has(#home) #home>.section:before,
+body:has(#home) #home>.zc-promo-video:before,
+body:has(#home) #home>.zctv-channel-hub:before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(6,10,8,.20),rgba(6,10,8,.36) 42%,rgba(6,10,8,.24));
+}
+body:has(#home) #home>.living-world{
+  background:
+    linear-gradient(90deg,rgba(5,10,7,.72),rgba(5,10,7,.38)),
+    url('/assets/zombcash-survivor-realistic-520.avif') center 42%/cover no-repeat,
+    #080d0a;
+}
+body:has(#home) #home>#outbreak{
+  background:
+    linear-gradient(90deg,rgba(6,10,8,.72),rgba(6,10,8,.38)),
+    url('/assets/images/zombcash-outbreak-graffiti.svg') center/cover no-repeat,
+    #080d0a;
+}
+body:has(#home) #home>#radar{
+  background:
+    linear-gradient(180deg,rgba(6,10,8,.70),rgba(6,10,8,.34)),
+    url('/assets/images/tool-radar-outbreak.webp') center 38%/cover no-repeat,
+    #080d0a;
+}
+body:has(#home) #home>#community-console{
+  background:
+    linear-gradient(90deg,rgba(5,9,7,.74),rgba(5,9,7,.42)),
+    url('/assets/images/tool-survivor-network.webp') center/cover no-repeat,
+    #080d0a;
+}
+body:has(#home) #home>#snake-game{
+  background:
+    linear-gradient(90deg,rgba(5,9,7,.72),rgba(5,9,7,.36)),
+    url('/assets/images/tool-zombie-lab.webp') center/cover no-repeat,
+    #080d0a;
+}
+body:has(#home) #home>#community{
+  background:
+    linear-gradient(90deg,rgba(5,9,7,.70),rgba(5,9,7,.34)),
+    url('/assets/images/zombcash-outbreak-graffiti.svg') center 58%/cover no-repeat,
+    #080d0a;
+}
+body:has(#home) #home>.zc-promo-video{
+  background:
+    linear-gradient(90deg,rgba(5,9,7,.72),rgba(5,9,7,.36)),
+    url('/assets/zombcash-survivor-640.avif') center 28%/cover no-repeat,
+    #080d0a;
+}
+body:has(#home) #home>.zctv-channel-hub{
+  background:
+    linear-gradient(90deg,rgba(5,9,7,.72),rgba(5,9,7,.36)),
+    url('/assets/zombcash-survivor-640.avif') center 30%/cover no-repeat,
+    #080d0a;
+}
+body:has(#home) #home>.zombie-maker-promo{
+  background:transparent;
+}
+/* Replace hard-edged boxes with soft glass, restrained borders and more generous radii. */
+/* Sponsor rail belongs to the same soft-glass visual language as the rest of the page. */
+body:has(#home) #home .zc-hero-sponsor-panel{
+  border:1px solid rgba(160,205,132,.16)!important;
+  border-radius:20px!important;
+  background:rgba(8,14,10,.58)!important;
+  box-shadow:0 20px 58px rgba(0,0,0,.28),inset 0 1px 0 rgba(220,255,200,.04)!important;
+  backdrop-filter:blur(14px);
+  overflow:hidden;
+}
+body:has(#home) #home .zc-sponsor-art-slot,
+body:has(#home) #home .zc-sponsor-art-slot img{
+  border-radius:15px!important;
+}
+body:has(#home) #home .zc-sponsor-art-slot{overflow:hidden}
+body:has(#home) #home .world-panel,
+body:has(#home) #home .tool-card,
+body:has(#home) #home .crew-card,
+body:has(#home) #home .leaderboard-card,
+body:has(#home) #home .zc-promo-player-wrap,
+body:has(#home) #home .zctv-channel-card,
+body:has(#home) #home .field-manual-spotlight,
+body:has(#home) #home .zctv-host-art,
+body:has(#home) #home .zctv-player-mount,
+body:has(#home) #home .zm-promo-art,
+body:has(#home) #home .live-radar,
+body:has(#home) #home .transmission-box{
+  border:1px solid var(--zc-line)!important;
+  border-radius:var(--zc-radius)!important;
+  background-color:rgba(8,14,10,.78)!important;
+  box-shadow:0 18px 55px rgba(0,0,0,.25),inset 0 1px 0 rgba(220,255,200,.035)!important;
+  backdrop-filter:blur(12px);
+}
+body:has(#home) #home .tool-card,
+body:has(#home) #home .world-panel,
+body:has(#home) #home .crew-card{overflow:hidden}
+body:has(#home) #home .tool-card{transition:transform .24s ease,border-color .24s ease,box-shadow .24s ease}
+body:has(#home) #home .tool-card:hover{
+  transform:translateY(-5px);border-color:rgba(155,255,69,.42)!important;
+  box-shadow:0 24px 60px rgba(0,0,0,.38),0 0 30px rgba(155,255,69,.055)!important;
+}
+body:has(#home) #home .tool-art,
+body:has(#home) #home .zm-promo-art,
+body:has(#home) #home .snake-promo-art,
+body:has(#home) #home .zctv-host-art{
+  border-radius:14px!important;overflow:hidden;
+}
+body:has(#home) #home .world-panel-head,
+body:has(#home) #home .crew-card-head{border-color:rgba(170,205,150,.13)!important}
+body:has(#home) #home .world-panel-foot,
+body:has(#home) #home .zrai-foot{border-color:rgba(170,205,150,.13)!important}
+body:has(#home) #home .section-kicker,
+body:has(#home) #home .field-manual-kicker{color:#b7d6a7}
+body:has(#home) #home .section-heading,
+body:has(#home) #home .intro-row{margin-bottom:clamp(24px,3vw,42px)}
+body:has(#home) #home .section-heading h2,
+body:has(#home) #home .intro-row h2{letter-spacing:-.035em;text-wrap:balance}
+body:has(#home) #home .section-heading p,
+body:has(#home) #home .intro-row p{color:#aeb9aa;line-height:1.75}
+/* Make the news and radar feed feel like a live console rather than a stack of hard tiles. */
+body:has(#home) #home .world-news-list,
+body:has(#home) #home .zrai-list{gap:10px}
+body:has(#home) #home .world-news-list>a,
+body:has(#home) #home .zrai-item,
+body:has(#home) #home .world-event{
+  border-color:rgba(170,205,150,.13)!important;
+  border-radius:12px!important;
+  background:linear-gradient(120deg,rgba(18,28,20,.84),rgba(8,13,10,.74))!important;
+}
+body:has(#home) #home .field-manual-spotlight{
+  background:
+    linear-gradient(105deg,rgba(10,17,12,.78),rgba(8,13,10,.52)),
+    url('/assets/zombcash-survivor-v13.jpg') center 38%/cover no-repeat!important;
+}
+body:has(#home) #home .zc-promo-player-wrap{overflow:hidden}
+body:has(#home) #home .zctv-channel-card{background:rgba(8,14,10,.78)!important}
+body:has(#home) #home .zctv-channel-card[aria-pressed="true"],
+body:has(#home) #home .zctv-channel-card:hover{border-color:rgba(155,255,69,.5)!important;background:rgba(18,30,19,.88)!important}
+body:has(#home) #home .zctv-host-art img{border-radius:14px}
+body:has(#home) #home .ticker{border-top:1px solid rgba(155,255,69,.14);border-bottom:1px solid rgba(155,255,69,.14);background:linear-gradient(90deg,#0a100c,#111a11,#0a100c)}
+body:has(#home) #home .transmission-box{
+  background:
+    linear-gradient(100deg,rgba(7,12,9,.74),rgba(7,12,9,.36)),
+    url('/assets/zombcash-survivor-realistic-520.avif') center 35%/cover no-repeat!important;
+}
+/* Let section backgrounds breathe edge-to-edge without changing content widths. */
+body:has(#home) #home>.section,
+body:has(#home) #home>.zc-promo-video,
+body:has(#home) #home>.zctv-channel-hub{border-top:1px solid rgba(155,255,69,.07)}
+body:has(#home) #home .world-grid,
+body:has(#home) #home .tool-grid,
+body:has(#home) #home .crew-grid{align-items:stretch}
+body:has(#home) #home .crew-grid{gap:clamp(14px,2vw,24px)}
+body:has(#home) #home .tool-grid{gap:clamp(16px,2.2vw,28px)}
+/* Footer transitions into the same dark photographic world. */
+body:has(#home) footer,
+body:has(#home) .site-footer{
+  background:linear-gradient(180deg,rgba(7,11,9,.96),#050806 70%)!important;
+  border-top:1px solid rgba(155,255,69,.16)!important;
+}
+@media(max-width:760px){
+  body:has(#home) #home>.hero{
+    background:
+      linear-gradient(180deg,rgba(5,9,7,.82),rgba(5,9,7,.92) 46%,#070b09 100%),
+      url('/assets/zombie-girl-heroine-hd.avif') 58% 24%/cover no-repeat,
+      #070b09!important;
+  }
+  body:has(#home) #home>.hero:after{background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.18) 45%,#070b09 100%)}
+  body:has(#home) #home .world-panel,
+  body:has(#home) #home .tool-card,
+  body:has(#home) #home .crew-card,
+  body:has(#home) #home .leaderboard-card,
+  body:has(#home) #home .field-manual-spotlight,
+  body:has(#home) #home .zctv-channel-card,
+  body:has(#home) #home .live-radar,
+  body:has(#home) #home .transmission-box{border-radius:14px!important}
+  body:has(#home) #home>.section,
+  body:has(#home) #home>.zc-promo-video,
+  body:has(#home) #home>.zctv-channel-hub{background-position:center;background-attachment:scroll}
+}
+@media(prefers-reduced-motion:reduce){
+  body:has(#home) #home .tool-card{transition:none}
+  html{scroll-behavior:auto}
+}
+</style>
+<style id="homepage-tool-card-softness-override-2026">
+/* Override the legacy high-specificity homepage card treatment intentionally. */
+body:has(#home) #home .tools#radar .tool-card{
+  border-radius:18px!important;
+  border-color:rgba(157,190,151,.22)!important;
+  background:linear-gradient(145deg,rgba(17,26,27,.88),rgba(8,13,17,.94) 72%)!important;
+  box-shadow:0 12px 34px rgba(0,0,0,.22),inset 0 1px 0 rgba(225,245,220,.035)!important;
+  transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease!important;
+}
+body:has(#home) #home .tools#radar .tool-card:hover{
+  transform:translateY(-3px)!important;
+  border-color:rgba(155,255,69,.42)!important;
+  box-shadow:0 16px 38px rgba(0,0,0,.3),0 0 24px rgba(155,255,69,.055)!important;
+}
+body:has(#home) #home .tools#radar .tool-card .tool-art{
+  border-radius:12px!important;
+  border-color:rgba(155,255,69,.18)!important;
+}
+@media(max-width:700px){
+  body:has(#home) #home .tools#radar .tool-card{border-radius:15px!important}
+  body:has(#home) #home .tools#radar .tool-card .tool-art{border-radius:10px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  body:has(#home) #home .tools#radar .tool-card{transition:none!important}
+  body:has(#home) #home .tools#radar .tool-card:hover{transform:none!important}
+}
+</style>
 </head>
 <body>
 <div class="scanlines"></div>
