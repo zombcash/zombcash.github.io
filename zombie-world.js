@@ -91,13 +91,27 @@
     tr:{kicker:'GÖREVLER #19182 + #19177 · POLLINATIONS',intro:'İki bağlantılı deneyim: MCP üzerinden çok oyunculu ajanlar ve otonom bir hayatta kalma dünyası. İkisinde de ücretsiz yerel mod vardır. Canlı model çağrıları yalnızca açıkça izin verdiğin Pollen’i kullanır.',outbreakTitle:'01 / ZOMBIE OUTBREAK — MCP ARENASI',outbreakDesc:'Ajanlar hayatta kalan veya enfekte olarak katılır. MCP sunucusu her hamleyi doğrular ve ortak oyun durumunu yönetir.',mcpStatus:'MCP SUNUCUSU: ÇEVRİMİÇİ · HTTPS',start:'YEREL MAÇI BAŞLAT',advance:'SONRAKİ TUR',reset:'SIFIRLA',ready:'Yerel demo hazır. Çok oyunculu MCP sunucusu dağıtıldı; bağlantı yönergeleri ZOMBIECASH_AI_WORLDS.md dosyasında.',mcpTools:'MCP araçları: create_match, join_match, get_match_state, submit_action. Sunucu yasa dışı hamleleri ve kimlik taklidini engeller.',worldTitle:'02 / ZOMBIE AI WORLD — OTONOM SİMÜLASYON',worldDesc:'Dört ajan yiyecek arar, malzeme toplar, sığınak kurar, konuşur, iş birliği yapar ve rekabet eder.',localMode:'ÜCRETSİZ YEREL SİMÜLASYON',liveMode:'CANLI · SENİN POLLEN’İN',next:'SONRAKİ AI TURU',autoOff:'OTOMATİK: KAPALI',autoOn:'OTOMATİK: AÇIK',worldReset:'DÜNYAYI SIFIRLA',liveDesc:'Canlı modda her tur bir ajan tek bir eylem seçer. SONRAKİ AI TURU’na basılmadan veya otomatik açılmadan model çağrısı yapılmaz.',survivors:'HAYATTA KALANLAR',shelters:'SIĞINAKLAR',food:'YİYECEK',day:'GÜN',turn:'TUR'},
     hi:{kicker:'क्वेस्ट #19182 + #19177 · POLLINATIONS',intro:'दो जुड़े अनुभव: MCP के ज़रिए मल्टीप्लेयर एजेंट और एक स्वायत्त सर्वाइवल दुनिया। दोनों में मुफ़्त लोकल मोड है। लाइव मॉडल कॉल केवल आपके स्पष्ट रूप से अधिकृत Pollen का उपयोग करते हैं।',outbreakTitle:'01 / ZOMBIE OUTBREAK — MCP एरीना',outbreakDesc:'एजेंट सर्वाइवर या संक्रमित बनकर जुड़ते हैं। MCP सर्वर हर चाल की जाँच करता है और साझा गेम स्थिति संभालता है।',mcpStatus:'MCP सर्वर: चालू · HTTPS',start:'लोकल मैच शुरू करें',advance:'अगली चाल',reset:'रीसेट',ready:'लोकल डेमो तैयार है। मल्टीप्लेयर MCP सर्वर तैनात है; कनेक्शन निर्देश ZOMBIECASH_AI_WORLDS.md में हैं।',mcpTools:'MCP टूल: create_match, join_match, get_match_state, submit_action। सर्वर गलत चालों और पहचान की नकल को रोकता है।',worldTitle:'02 / ZOMBIE AI WORLD — स्वायत्त सिमुलेशन',worldDesc:'चार एजेंट भोजन खोजते हैं, सामग्री जुटाते हैं, आश्रय बनाते हैं, बातचीत, सहयोग और प्रतिस्पर्धा करते हैं।',localMode:'मुफ़्त लोकल सिमुलेशन',liveMode:'लाइव · आपका Pollen',next:'अगली AI चाल',autoOff:'ऑटो: बंद',autoOn:'ऑटो: चालू',worldReset:'दुनिया रीसेट करें',liveDesc:'लाइव मोड में हर चाल पर एक एजेंट एक कार्रवाई चुनता है। अगली AI चाल दबाने या ऑटो चालू करने से पहले कोई मॉडल कॉल नहीं होती।',survivors:'सर्वाइवर',shelters:'आश्रय',food:'भोजन',day:'दिन',turn:'चाल'}
   };
+  const extraCopy={
+    en:{outObjective:'MISSION: escort both survivors to the glowing extraction tile. The infected hunts them. Escape together to win; lose both survivors and the outbreak wins.',worldObjective:'7-DAY SURVIVAL: keep food stocked, restore energy, build at least 2 shelters and keep danger under control. Every fourth action ends a day.',legend:'🧍 Survivor   🧟 Infected   🚁 Extraction   ▥ Ruins',escaped:'ESCAPED',captured:'CAPTURED',turnLabel:'TURN',missionStart:'🚨 EXTRACTION MISSION STARTED — both survivors must reach the helicopter.',survivorEscaped:'🟢 {name} reached extraction!',survivorCaught:'☠️ {name} was caught by the infected!',infectedHunts:'🧟 The infected tracks {name} through the ruins.',missionWon:'🏆 EXTRACTION COMPLETE — both survivors escaped. YOU WIN!',missionLost:'💀 OUTBREAK OVERRUN — both survivors were lost.',missionTimeout:'⏱ EXTRACTION WINDOW CLOSED — mission failed.',worldStart:'🌅 DAY 1 — The crew reaches an abandoned district. Goal: survive seven days and build two shelters.',worldLost:'💀 SETTLEMENT LOST — the crew ran out of supplies or strength. Reset and plan better.',worldWon:'🏆 SEVEN DAYS SURVIVED — two shelters secured. THE CREW LIVES!',worldPartial:'⚠️ SEVEN DAYS SURVIVED, BUT THE SETTLEMENT IS EXPOSED. Build at least two shelters next run for a full victory.'},
+    ru:{outObjective:'МИССИЯ: доведи обоих выживших до точки эвакуации. Заражённый охотится на них. Оба спасены — победа; оба пойманы — поражение.',worldObjective:'ВЫЖИВИ 7 ДНЕЙ: пополняй еду, восстанавливай энергию, построй минимум 2 убежища и сдерживай опасность. Каждые 4 действия заканчивают день.',legend:'🧍 Выживший   🧟 Заражённый   🚁 Эвакуация   ▥ Руины',escaped:'СПАСЕНО',captured:'ПОЙМАНО',turnLabel:'ХОД',missionStart:'🚨 ЭВАКУАЦИЯ НАЧАЛАСЬ — оба выживших должны добраться до вертолёта.',survivorEscaped:'🟢 {name} добрался до эвакуации!',survivorCaught:'☠️ {name} пойман заражённым!',infectedHunts:'🧟 Заражённый преследует {name} среди руин.',missionWon:'🏆 ЭВАКУАЦИЯ ЗАВЕРШЕНА — оба выживших спасены. ПОБЕДА!',missionLost:'💀 ЗАРАЖЕНИЕ ПОБЕДИЛО — оба выживших потеряны.',missionTimeout:'⏱ ВРЕМЯ ЭВАКУАЦИИ ИСТЕКЛО — миссия провалена.',worldStart:'🌅 ДЕНЬ 1 — команда входит в заброшенный район. Цель: продержаться 7 дней и построить два убежища.',worldLost:'💀 ПОСЕЛЕНИЕ ПОГИБЛО — закончились припасы или силы. Начни заново и измени стратегию.',worldWon:'🏆 СЕМЬ ДНЕЙ ПОЗАДИ — два убежища построены. КОМАНДА ВЫЖИЛА!',worldPartial:'⚠️ Семь дней пройдены, но поселение без защиты. Для полной победы построй минимум два убежища.'},
+    de:{outObjective:'MISSION: Bringe beide Überlebenden zum Evakuierungspunkt. Der Infizierte jagt sie. Gemeinsam entkommen bedeutet Sieg.',worldObjective:'7 TAGE ÜBERLEBEN: Nahrung sichern, Energie regenerieren, mindestens 2 Schutzräume bauen und die Gefahr kontrollieren. Vier Aktionen ergeben einen Tag.',legend:'🧍 Überlebender   🧟 Infizierter   🚁 Evakuierung   ▥ Ruinen',escaped:'ENTKOMMEN',captured:'ERWISCHT',turnLabel:'ZUG'},
+    fr:{outObjective:'MISSION : escortez les deux survivants jusqu’à l’extraction. L’infecté les traque. Les deux s’échappent : victoire.',worldObjective:'SURVIVRE 7 JOURS : garder des vivres, récupérer de l’énergie, construire 2 abris minimum et maîtriser le danger. Quatre actions terminent une journée.',legend:'🧍 Survivant   🧟 Infecté   🚁 Extraction   ▥ Ruines',escaped:'ÉVADÉS',captured:'CAPTURÉS',turnLabel:'TOUR'},
+    it:{outObjective:'MISSIONE: accompagna entrambi i sopravvissuti al punto di estrazione. L’infetto li caccia. Se scappano entrambi, vinci.',worldObjective:'SOPRAVVIVI 7 GIORNI: fai scorta di cibo, recupera energia, costruisci almeno 2 rifugi e controlla il pericolo. Quattro azioni completano un giorno.',legend:'🧍 Sopravvissuto   🧟 Infetto   🚁 Estrazione   ▥ Rovine',escaped:'SALVATI',captured:'CATTURATI',turnLabel:'TURNO'},
+    ja:{outObjective:'ミッション：2人の生存者を脱出地点まで導こう。感染者が追跡する。2人とも脱出すれば勝利。',worldObjective:'7日間生き延びよう：食料を確保し、体力を回復し、避難所を2つ以上建設して危険を抑える。4アクションで1日終了。',legend:'🧍 生存者   🧟 感染者   🚁 脱出地点   ▥ 廃墟',escaped:'脱出',captured:'捕獲',turnLabel:'ターン'},
+    'zh-CN':{outObjective:'任务：护送两名幸存者到达撤离点。感染者会追捕他们。两人都逃脱即可获胜。',worldObjective:'生存7天：储备食物、恢复体力、建造至少2座避难所并控制危险。每4个行动结束一天。',legend:'🧍 幸存者   🧟 感染者   🚁 撤离点   ▥ 废墟',escaped:'已撤离',captured:'已被抓',turnLabel:'回合'},
+    tr:{outObjective:'GÖREV: iki hayatta kalanı tahliye noktasına ulaştır. Enfekte onları avlıyor. İkisi de kaçarsa kazanırsın.',worldObjective:'7 GÜN HAYATTA KAL: yiyecek stokla, enerjiyi yenile, en az 2 sığınak kur ve tehlikeyi kontrol et. Dört eylem bir günü tamamlar.',legend:'🧍 Hayatta kalan   🧟 Enfekte   🚁 Tahliye   ▥ Harabe',escaped:'KURTULDU',captured:'YAKALANDI',turnLabel:'TUR'},
+    hi:{outObjective:'मिशन: दोनों सर्वाइवर को निकासी स्थल तक पहुँचाएँ। संक्रमित उनका पीछा करता है। दोनों बच गए तो जीत।',worldObjective:'7 दिन जीवित रहें: भोजन जमा करें, ऊर्जा लौटाएँ, कम से कम 2 आश्रय बनाएँ और खतरे को नियंत्रित रखें। हर 4 चालों में एक दिन पूरा होता है।',legend:'🧍 सर्वाइवर   🧟 संक्रमित   🚁 निकासी   ▥ खंडहर',escaped:'बच निकले',captured:'पकड़े गए',turnLabel:'चाल'}
+  };
+  Object.entries(extraCopy).forEach(([language,values])=>Object.assign(copy[language]||(copy[language]={}),values));
   const locale = () => (copy[document.documentElement.lang] ? document.documentElement.lang : 'en');
   const L = key => copy[locale()][key] || copy.en[key] || key;
   function applyLocale() {
-    const map = { 'zw-kicker':'kicker','zw-intro':'intro','zw-outbreak-title':'outbreakTitle','zw-outbreak-desc':'outbreakDesc','zw-mcp-status':'mcpStatus','zw-demo-start':'start','zw-demo-turn':'advance','zw-demo-reset':'reset','zw-outbreak-ready':'ready','zw-mcp-tools':'mcpTools','zw-world-title':'worldTitle','zw-world-desc':'worldDesc','zw-world-live-desc':'liveDesc','zw-next':'next','zw-world-reset':'worldReset' };
+    const map = { 'zw-kicker':'kicker','zw-intro':'intro','zw-outbreak-title':'outbreakTitle','zw-outbreak-desc':'outbreakDesc','zw-mcp-status':'mcpStatus','zw-demo-start':'start','zw-demo-turn':'advance','zw-demo-reset':'reset','zw-outbreak-ready':'ready','zw-mcp-tools':'mcpTools','zw-world-title':'worldTitle','zw-world-desc':'worldDesc','zw-world-live-desc':'liveDesc','zw-next':'next','zw-world-reset':'worldReset','zw-outbreak-objective':'outObjective','zw-world-objective':'worldObjective' };
     Object.entries(map).forEach(([id,key]) => { const el=$(id); if(el) el.textContent=L(key); });
     $('zw-world-mode').textContent=userKey?L('liveMode'):L('localMode');
     $('zw-auto').textContent=auto?L('autoOn'):L('autoOff');
+    $('zw-outbreak-legend').textContent=L('legend');
+    paintOutbreakStats();
   }
   document.addEventListener('zombcash:languagechange', applyLocale);
   const feed = (id, text) => { const p=document.createElement('p'); p.textContent=text; $(id).prepend(p); };
@@ -119,7 +133,7 @@
       for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy,np=ny*size+nx;if(nx<0||nx>=size||ny<0||ny>=size||walls.has(np)||seen.has(np))continue;seen.add(np);queue.push([np,[...path,np]])}
     }return from;
   }
-  const paintOutbreakStats=()=>{$('zw-escaped').textContent=escaped+' / 2 ESCAPED';$('zw-captured').textContent=captured+' CAPTURED';$('zw-outbreak-turns').textContent='TURN '+outbreakTurn;};
+  const paintOutbreakStats=()=>{$('zw-escaped').textContent=escaped+' / 2 '+L('escaped');$('zw-captured').textContent=captured+' '+L('captured');$('zw-outbreak-turns').textContent=L('turnLabel')+' '+outbreakTurn;};
   const drawOutbreak=()=>{
     const map=$('zw-outbreak-map');map.replaceChildren();
     for(let i=0;i<size*size;i++){
@@ -138,19 +152,19 @@
     $('zw-demo-turn').disabled=true;$('zw-mcp-status').textContent=L('mcpStatus');
     $('zw-outbreak-feed').replaceChildren();feed('zw-outbreak-feed','Mission ready: guide both survivors to the helicopter. The infected moves after them.');drawOutbreak();
   };
-  $('zw-demo-start').addEventListener('click',()=>{if(outbreakEnded)resetOutbreak();outbreakStarted=true;$('zw-demo-turn').disabled=false;feed('zw-outbreak-feed','🚨 EXTRACTION MISSION STARTED — both survivors must reach the helicopter.');});
+  $('zw-demo-start').addEventListener('click',()=>{if(outbreakEnded)resetOutbreak();outbreakStarted=true;$('zw-demo-turn').disabled=false;feed('zw-outbreak-feed',L('missionStart'));});
   $('zw-demo-turn').addEventListener('click',()=>{
     if(!outbreakStarted||outbreakEnded)return;outbreakTurn++;
     for(const survivor of actors.filter(a=>a.role==='survivor')){
       const next=pathStep(survivor.p,exitTile);if(next===survivor.p)continue;
       survivor.p=next;
-      if(survivor.p===exitTile){survivor.role='escaped';escaped++;feed('zw-outbreak-feed','🟢 '+survivor.name+' reached extraction!');}
+      if(survivor.p===exitTile){survivor.role='escaped';escaped++;feed('zw-outbreak-feed',L('survivorEscaped').replace('{name}',survivor.name));}
     }
     const hunter=actors.find(a=>a.role==='infected');
-    if(hunter){const targets=actors.filter(a=>a.role==='survivor');if(targets.length){targets.sort((a,b)=>Math.abs(a.p%size-hunter.p%size)+Math.abs(Math.floor(a.p/size)-Math.floor(hunter.p/size))-(Math.abs(b.p%size-hunter.p%size)+Math.abs(Math.floor(b.p/size)-Math.floor(hunter.p/size))));const target=targets[0];hunter.p=pathStep(hunter.p,target.p);if(hunter.p===target.p){target.role='captured';captured++;feed('zw-outbreak-feed','☠️ '+target.name+' was caught by the infected!');}else feed('zw-outbreak-feed','🧟 The infected tracks '+target.name+' through the ruins.');}}
+    if(hunter){const targets=actors.filter(a=>a.role==='survivor');if(targets.length){targets.sort((a,b)=>Math.abs(a.p%size-hunter.p%size)+Math.abs(Math.floor(a.p/size)-Math.floor(hunter.p/size))-(Math.abs(b.p%size-hunter.p%size)+Math.abs(Math.floor(b.p/size)-Math.floor(hunter.p/size))));const target=targets[0];hunter.p=pathStep(hunter.p,target.p);if(hunter.p===target.p){target.role='captured';captured++;feed('zw-outbreak-feed',L('survivorCaught').replace('{name}',target.name));}else feed('zw-outbreak-feed',L('infectedHunts').replace('{name}',target.name));}}
     }
-    if(escaped===2){outbreakEnded=true;feed('zw-outbreak-feed','🏆 EXTRACTION COMPLETE — both survivors escaped. YOU WIN!');}
-    else if(captured===2||outbreakTurn>=18){outbreakEnded=true;feed('zw-outbreak-feed',captured===2?'💀 OUTBREAK OVERRUN — both survivors were lost.':'⏱ EXTRACTION WINDOW CLOSED — mission failed.');}
+    if(escaped===2){outbreakEnded=true;feed('zw-outbreak-feed',L('missionWon'));}
+    else if(captured===2||outbreakTurn>=18){outbreakEnded=true;feed('zw-outbreak-feed',captured===2?L('missionLost'):L('missionTimeout'));}
     if(outbreakEnded)$('zw-demo-turn').disabled=true;
     drawOutbreak();
   });
@@ -179,7 +193,7 @@
   const stopAuto=()=>{auto=false;if(autoTimer)clearInterval(autoTimer);autoTimer=null;$('zw-auto').textContent=L('autoOff');};
   const resetWorld=()=>{
     agents=initial();turn=0;food=12;danger=1;logs=[];worldFinished=false;
-    worldLog('🌅 DAY 1 — The crew reaches an abandoned district. Goal: survive seven days and build two shelters.');
+    worldLog(L('worldStart'));
     renderWorld();$('zw-next').disabled=false;
   };
   function localAction(a){
@@ -233,10 +247,10 @@
         worldLog('🌙 DAY '+Math.floor(turn/4)+' ENDS — the crew consumes 4 rations. Food: '+food+'.');
       }
       if(food===0||agents.every(x=>x.energy===0)){
-        worldFinished=true;stopAuto();worldLog('💀 SETTLEMENT LOST — the crew ran out of supplies or strength. Reset and plan better.');
+        worldFinished=true;stopAuto();worldLog(L('worldLost'));
       }else if(turn>=28){
         const shelters=agents.reduce((n,x)=>n+x.home,0);
-        worldFinished=true;stopAuto();worldLog(shelters>=2?'🏆 SEVEN DAYS SURVIVED — two shelters secured. THE CREW LIVES!':'⚠️ SEVEN DAYS SURVIVED, BUT THE SETTLEMENT IS EXPOSED. Build at least two shelters next run for a full victory.');
+        worldFinished=true;stopAuto();worldLog(shelters>=2?L('worldWon'):L('worldPartial'));
       }
       renderWorld();
     }catch(e){worldLog('AI turn failed: '+e.message+'. No fallback action was applied.');}
