@@ -41,6 +41,55 @@ const path = require('path');
   await page.waitForSelector('#zw-district-map .zw-district');
   if (!(await page.locator('#zw-world-turn').innerText()).includes('TURN 1')) throw new Error('Campaign progress after reset did not persist');
   await page.evaluate(() => { document.documentElement.lang = 'en'; document.dispatchEvent(new CustomEvent('zombcash:languagechange', { detail: { language: 'en' } })); });
+  async function runFinalDayScenario({food, shelters, expectedMessage, label}) {
+    await page.evaluate(({food, shelters}) => {
+      const key = 'zombcash.arcade.survival.v1';
+      const state = JSON.parse(localStorage.getItem(key));
+      if (!state) throw new Error('No saved campaign available for terminal scenario');
+      state.turn = 27;
+      state.food = food;
+      state.danger = 1;
+      state.worldFinished = false;
+      state.agents.forEach((agent, index) => {
+        agent.energy = 8;
+        agent.home = index < shelters ? 1 : 0;
+      });
+      localStorage.setItem(key, JSON.stringify(state));
+    }, {food, shelters});
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#zw-district-map .zw-district');
+    if (!(await page.locator('#zw-world-turn').innerText()).includes('TURN 27')) throw new Error(label + ': campaign did not restore at day seven, turn 27');
+    await page.selectOption('#zw-command', label === 'defeat' ? 'auto' : 'talk');
+    await page.locator('#zw-next').click();
+    await page.waitForFunction(() => document.querySelector('#zw-world-turn')?.textContent.includes('TURN 28'));
+    await page.waitForFunction(expected => document.querySelector('#zw-world-feed')?.innerText.includes(expected), expectedMessage);
+    if (!(await page.locator('#zw-next').isDisabled())) throw new Error(label + ': terminal campaign still allows another turn');
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#zw-district-map .zw-district');
+    if (!(await page.locator('#zw-world-feed').innerText()).includes(expectedMessage)) throw new Error(label + ': terminal result did not survive reload');
+    if (!(await page.locator('#zw-next').isDisabled())) throw new Error(label + ': terminal state was not restored as finished');
+  }
+  await runFinalDayScenario({
+    food: 8,
+    shelters: 2,
+    expectedMessage: 'SEVEN DAYS SURVIVED — two shelters secured. THE CREW LIVES!',
+    label: 'full victory'
+  });
+  await runFinalDayScenario({
+    food: 8,
+    shelters: 0,
+    expectedMessage: 'SEVEN DAYS SURVIVED, BUT THE SETTLEMENT IS EXPOSED.',
+    label: 'partial victory'
+  });
+  await runFinalDayScenario({
+    food: 0,
+    shelters: 2,
+    expectedMessage: 'SETTLEMENT LOST — the crew ran out of supplies or strength.',
+    label: 'defeat'
+  });
+  await page.locator('#zw-world-reset').click();
+  if (!(await page.locator('#zw-world-turn').innerText()).includes('TURN 0')) throw new Error('Reset World did not start a fresh campaign after a terminal result');
+  if (await page.locator('#zw-next').isDisabled()) throw new Error('Reset World left the new campaign locked');
   const out = path.join(process.cwd(), 'ai-worlds-visual-results');
   fs.mkdirSync(out, { recursive: true });
   await page.locator('#zombcash-outbreak-world').screenshot({ path: path.join(out, 'arcade-ai-worlds.png') });
