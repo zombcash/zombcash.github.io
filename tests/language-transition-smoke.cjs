@@ -35,10 +35,13 @@ const locales = ['de', 'fr', 'it', 'ja', 'zh-CN', 'ru', 'tr', 'hi'];
     for (const locale of locales) {
       await openSwitcher();
       await page.locator('.language-option[data-lang="' + locale + '"]').click();
+      // This fallback page updates its URL with history.replaceState(), not a
+      // document navigation. Assert the resulting URL directly instead of
+      // waiting for a navigation event that replaceState() does not emit.
       await page.waitForFunction(code => document.documentElement.lang === code
         && localStorage.getItem('zombcash-language') === code
+        && location.pathname === '/zombie-lab-archives.html'
         && new URLSearchParams(location.search).get('lang') === code, locale, { timeout: 15000 });
-      await page.waitForURL(url => url.pathname === '/zombie-lab-archives.html' && url.searchParams.get('lang') === locale, { timeout: 5000 });
 
       const localizedManualLink = page.locator('.zsh-nav a[href="/' + locale + '/survivor-field-manual.html"]');
       await localizedManualLink.waitFor({ state: 'visible', timeout: 5000 });

@@ -183,6 +183,7 @@
     const map = { 'zw-kicker':'kicker','zw-intro':'intro','zw-outbreak-title':'outbreakTitle','zw-outbreak-desc':'outbreakDesc','zw-mcp-status':'mcpStatus','zw-demo-start':'start','zw-demo-turn':'advance','zw-demo-reset':'reset','zw-outbreak-ready':'ready','zw-mcp-tools':'mcpTools','zw-world-title':'worldTitle','zw-world-desc':'worldDesc','zw-world-live-desc':'liveDesc','zw-next':'next','zw-world-reset':'worldReset','zw-outbreak-objective':'outObjective','zw-world-objective':'worldObjective' };
     Object.entries(map).forEach(([id,key]) => { const el=$(id); if(el) el.textContent=L(key); });
     $('zw-world-mode').textContent=userKey?L('liveMode'):L('localMode');
+    updateCommandControls();
     $('zw-auto').textContent=auto?L('autoOn'):L('autoOff');
     $('zw-outbreak-legend').textContent=L('legend');
     paintOutbreakStats();
@@ -190,12 +191,31 @@
   }
   document.addEventListener('zombcash:languagechange', applyLocale);
   const feed = (id, text) => { const p=document.createElement('p'); p.textContent=text; $(id).prepend(p); };
+  const commandHints={
+    en:{local:'Choose an order before the next turn to override the active survivor. AUTO lets the crew decide.',live:'Live model mode: the connected model chooses each action. Manual orders are disabled.'},
+    ru:{local:'Выбери приказ перед следующим ходом, чтобы управлять активным выжившим. АВТО — решение за командой.',live:'Режим LIVE: действие выбирает подключённая модель. Ручные приказы отключены.'},
+    de:{local:'Wähle vor dem nächsten Zug einen Befehl für den aktiven Überlebenden. AUTO entscheidet selbst.',live:'Live-Modus: Das verbundene Modell wählt jede Aktion. Manuelle Befehle sind deaktiviert.'},
+    fr:{local:'Choisissez un ordre avant le prochain tour pour diriger le survivant actif. AUTO laisse l’équipe décider.',live:'Mode LIVE : le modèle connecté choisit chaque action. Les ordres manuels sont désactivés.'},
+    it:{local:'Scegli un ordine prima del prossimo turno per guidare il sopravvissuto attivo. AUTO lascia decidere la squadra.',live:'Modalità LIVE: il modello collegato sceglie ogni azione. Gli ordini manuali sono disattivati.'},
+    ja:{local:'次のターン前に指示を選ぶと、行動中の生存者を操作できます。AUTOではチームが判断します。',live:'ライブモードでは接続モデルが行動を選択します。手動指示は無効です。'},
+    'zh-CN':{local:'在下一回合前选择命令即可指挥当前幸存者。AUTO 由团队自行决定。',live:'实时模式下由已连接的模型选择行动。手动命令已禁用。'},
+    tr:{local:'Etkin hayatta kalana komut vermek için sonraki turdan önce bir emir seç. AUTO ekibin karar vermesini sağlar.',live:'Canlı modda her eylemi bağlı model seçer. Manuel komutlar devre dışıdır.'},
+    hi:{local:'अगली चाल से पहले सक्रिय सर्वाइवर के लिए आदेश चुनें। AUTO में टीम स्वयं निर्णय लेती है।',live:'लाइव मोड में जुड़ा मॉडल हर कार्रवाई चुनता है। मैन्युअल आदेश बंद हैं।'}
+  };
+  function updateCommandControls(){
+    const live=!!userKey;
+    $('zw-command').disabled=live;
+    $('zw-command-hint').textContent=(commandHints[locale()]||commandHints.en)[live?'live':'local'];
+  }
   const connect = document.getElementById('zai-connect');
   let userKey = connect && connect.apiKey || null;
   if (connect) connect.addEventListener('change', () => {
     userKey = connect.apiKey || null;
+    if(userKey)$('zw-command').value='auto';
     $('zw-world-mode').textContent = userKey ? L('liveMode') : L('localMode');
+    updateCommandControls();
   });
+  updateCommandControls();
 
   // Local outbreak: survivors must reach extraction while the infected hunts them.
   const size=9, walls=new Set([10,19,28,37,46,55,64]), actors=[{id:'S1',name:'Mara',role:'survivor',p:0},{id:'S2',name:'Viktor',role:'survivor',p:8},{id:'I1',name:'Stalker',role:'infected',p:72}];
@@ -417,7 +437,7 @@
       const command=$('zw-command').value;
       const choice=userKey?await liveAction(a):{action:command==='auto'?localAction(a):command,reason:command==='auto'?'':'Player order'};
       applyAction(a,choice.action,choice.reason);turn++;
-      if(command!=='auto'){$('zw-command').value='auto';worldLog('🎮 Player order delivered to '+a.name+'.');}
+      if(!userKey&&command!=='auto'){$('zw-command').value='auto';worldLog('🎮 Player order delivered to '+a.name+'.');}
       if(turn%4===0){
         food=Math.max(0,food-4);danger=Math.min(5,danger+1);
         agents.forEach(x=>{x.energy=Math.max(0,x.energy-(x.home?0:1));});applyMedicCare();
