@@ -1146,7 +1146,6 @@
       }
       header.zombcash-shared-header .zsh-actions > .zsh-home,
       header.zombcash-shared-header .zsh-actions .language-trigger,
-      header.zombcash-shared-header .zsh-actions .zsh-line-button,
       header.zombcash-shared-header .zsh-actions .zsh-login-button {
         height: 34px !important;
         min-height: 34px !important;
@@ -1407,7 +1406,7 @@
     const languageTrigger = header.querySelector('.language-trigger');
     const languageAria = {de:'Sprache auswählen',fr:'Choisir la langue',it:'Scegli la lingua',ja:'言語を選択','zh-CN':'选择语言',ru:'Выбрать язык',tr:'Dil seçin',hi:'भाषा चुनें'};
     if (languageTrigger) languageTrigger.setAttribute('aria-label', languageAria[language] || 'Choose language');
-    const lineControl = header.querySelector('.zsh-line-button');
+    const lineControl = document.querySelector('#zsh-about-footer .zsh-footer-line');
     const lineLabels = {de:'LINE HINZUFÜGEN',fr:'AJOUTER LINE',it:'AGGIUNGI LINE',ja:'LINEを追加','zh-CN':'添加 LINE',ru:'ДОБАВИТЬ LINE',tr:'LINE EKLE',hi:'LINE जोड़ें'};
     if (lineControl) lineControl.textContent = language === 'en' ? 'ADD LINE' : (lineLabels[language] || 'ADD LINE');
     const loginControl = header.querySelector('.zsh-login-button');
@@ -1427,10 +1426,10 @@
     localizeNav(routeLanguage);
   };
   document.addEventListener('zombcash:languagechange', event => localizeNav(event.detail && event.detail.language || 'en'));
-  const lineFriendLink = header.querySelector('.zsh-line-button');
+  const lineFriendLink = document.querySelector('#zsh-about-footer .zsh-footer-line');
   if (lineFriendLink && !lineFriendLink.dataset.zcTracked) {
     lineFriendLink.dataset.zcTracked = '1';
-    lineFriendLink.addEventListener('click', () => { try { if (typeof window.gtag === 'function') window.gtag('event','line_add_friend_click',{event_category:'community',event_label:'header',page_path:location.pathname,language:document.documentElement.lang||'en'}); } catch (_) {} });
+    lineFriendLink.addEventListener('click', () => { try { if (typeof window.gtag === 'function') window.gtag('event','line_add_friend_click',{event_category:'community',event_label:'footer',page_path:location.pathname,language:document.documentElement.lang||'en'}); } catch (_) {} });
   }
   readLanguage();
 
