@@ -31,21 +31,18 @@
   let refreshGalleryControls = () => {};
   const gtx=k=>(galleryLocale[galleryLang]||galleryLocale.en)[k]||galleryLocale.en[k]||k;
   const localizeGalleryMeta=(items,updatedAt)=>{if(count&&items!==null)count.textContent=items.length+" "+gtx("images");if(updated)updated.textContent=updatedAt?gtx("updated")+" "+new Date(updatedAt).toLocaleString(galleryLang,{month:"short",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"";};
-  document.addEventListener("zombcash:languagechange",e=>{galleryLang=e.detail?.language||document.documentElement.lang||"en";const shareButton=lightbox.querySelector(".gallery-lightbox-share");if(shareButton){const shareLabels=galleryShareLabels[galleryLang]||galleryShareLabels.en;shareButton.textContent=shareLabels.share;shareButton.setAttribute("aria-label",shareLabels.share);}grid.querySelectorAll(".gallery-caption p").forEach(p=>{p.textContent=cleanCaption(p.dataset.originalTitle||p.dataset.originalCaption||p.textContent);});grid.querySelectorAll(".gallery-caption a").forEach(a=>a.textContent=gtx("source"));if(count&&/IMAGES|ИЗОБРАЖЕНИЙ|BILDER|IMAGES|IMMAGINI|枚|张图片|GÖRSEL|इमेज/.test(count.textContent)){const n=parseInt(count.textContent,10);if(Number.isFinite(n))count.textContent=n+" "+gtx("images");}if(updated&&updated.textContent){const raw=updated.textContent.replace(/^(UPDATED|ОБНОВЛЕНО|AKTUALISIERT|MIS À JOUR|AGGIORNATO|更新|更新于|GÜNCELLENDİ|अपडेट)\s*/,"");updated.textContent=gtx("updated")+" "+raw;}refreshGalleryControls();});
+  document.addEventListener("zombcash:languagechange",e=>{galleryLang=e.detail?.language||document.documentElement.lang||"en";const shareButton=lightbox.querySelector(".gallery-lightbox-share");if(shareButton){const shareLabels=galleryShareLabels[galleryLang]||galleryShareLabels.en;shareButton.textContent=shareLabels.share;shareButton.setAttribute("aria-label",shareLabels.share);}grid.querySelectorAll(".gallery-caption p").forEach(p=>{p.textContent=cleanCardTitle(p.dataset.originalTitle||p.dataset.originalCaption||p.textContent);});grid.querySelectorAll(".gallery-caption a").forEach(a=>a.textContent=gtx("source"));if(count&&/IMAGES|ИЗОБРАЖЕНИЙ|BILDER|IMAGES|IMMAGINI|枚|张图片|GÖRSEL|इमेज/.test(count.textContent)){const n=parseInt(count.textContent,10);if(Number.isFinite(n))count.textContent=n+" "+gtx("images");}if(updated&&updated.textContent){const raw=updated.textContent.replace(/^(UPDATED|ОБНОВЛЕНО|AKTUALISIERT|MIS À JOUR|AGGIORNATO|更新|更新于|GÜNCELLENDİ|अपडेट)\s*/,"");updated.textContent=gtx("updated")+" "+raw;}refreshGalleryControls();});
   const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, ch => {
     const entities = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
     return entities[ch];
   });
-  const cleanCaption = value => {
-    let caption = String(value ?? "")
-      .replace(/\s+/g, " ")
-      .split(/━━━━━━━━|🧟\s*\$ZOMBCASH|MARKET DIED\.|📋\s*CA:|🌐\s*Website:|𝕏\s*X Community|💬\s*Telegram/i)[0]
-      .trim();
-    // Series names already appear as localized category chips. Remove the
-    // repeated English source prefix from the caption instead of mixing languages.
-    caption = caption.replace(/^(?:🩸|🌙|😂|🛰️)\s*(?:NIGHTMARE\s*&\s*HORROR|NIGHTMARE\s+DROP|ZOMBIECASH\s+MEMES?|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|UNDEAD\s+AFTER\s+DARK|ZOMBIECASH\s+SITE\s+TRANSMISSION)\s*/i, "").trim();
-    return caption;
-  };
+  const cleanCaption = value => String(value ?? "")
+    .replace(/\s+/g, " ")
+    .split(/━━━━━━━━|🧟\s*\$ZOMBCASH|MARKET DIED\.|📋\s*CA:|🌐\s*Website:|𝕏\s*X Community|💬\s*Telegram/i)[0]
+    .trim();
+  const cleanCardTitle = value => cleanCaption(value)
+    .replace(/^(?:🩸|🌙|😂|🛰️)\s*(?:NIGHTMARE\s*&\s*HORROR|NIGHTMARE\s+DROP|ZOMBIECASH\s+MEMES?|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|UNDEAD\s+AFTER\s+DARK|ZOMBIECASH\s+SITE\s+TRANSMISSION)\s*/i, "")
+    .trim();
 
   const state = (title, message) => {
     grid.innerHTML = '<div class="gallery-state"><h3>' + escapeHtml(title) +
@@ -424,6 +421,7 @@
         const caption = cleanCaption(item.caption);
         const rawTitle = String(item.title || caption);
         const title = cleanCaption(rawTitle);
+        const cardTitle = cleanCardTitle(rawTitle);
         const image = escapeHtml(item.image);
         const imageLoading = index === 0 ? "eager" : "lazy";
         const imagePriority = index === 0 ? "high" : "auto";
@@ -439,7 +437,7 @@
         const categoryMarkup = (item.category_ids || []).map(id => '<span class="gallery-category-tag">' + escapeHtml(labels[id] || id) + '</span>').join("");
         return '<article class="gallery-card" id="' + escapeHtml(item.anchor_id || "") + '" data-gallery-id="' + escapeHtml(item.id || "") + '" data-categories="' + escapeHtml((item.category_ids || []).join(" ")) + '" data-gallery-title="' + escapeHtml(rawTitle) + '" data-gallery-description="' + escapeHtml(item.description || "") + '" tabindex="0" role="group" aria-label="Open image: ' + escapeHtml(title) + '">' +
           '<img' + dimensionAttributes + ' src="' + image + '" alt="' + escapeHtml(alt) + '" loading="' + imageLoading + '" fetchpriority="' + imagePriority + '" decoding="async">' +
-          '<div class="gallery-caption"><p data-original-caption="' + escapeHtml(item.caption) + '" data-original-title="' + escapeHtml(rawTitle) + '">' + escapeHtml(title) + '</p>' +
+          '<div class="gallery-caption"><p data-original-caption="' + escapeHtml(item.caption) + '" data-original-title="' + escapeHtml(rawTitle) + '">' + escapeHtml(cardTitle) + '</p>' +
           '<div class="gallery-card-tags">' + categoryMarkup + '</div>' +
           '<div class="gallery-card-actions"><button class="gallery-like-button" type="button" aria-pressed="false" title="' + escapeHtml(galleryLikeLabels.loginLike) + '"><span class="gallery-like-heart" aria-hidden="true">♡</span><span class="gallery-like-count">0</span></button></div>' +
           '<a href="' + post + '" target="_blank" rel="noreferrer">'+escapeHtml(gtx("source"))+'</a></div></article>';
