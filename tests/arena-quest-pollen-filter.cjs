@@ -76,6 +76,7 @@ async function boot(browser, catalogResponse) {
 
     // A single eligible model is not enough for a two-player live match.
     const single = await boot(browser, [eligible[0]]);
+    await single.page.waitForFunction(() => document.querySelectorAll('#zai-model-a option').length === 1);
     await single.page.evaluate(() => {
       const connector = document.querySelector('#zai-connect');
       connector.apiKey = 'test-pollen-key';
