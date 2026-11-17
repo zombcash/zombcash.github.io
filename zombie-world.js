@@ -58,6 +58,13 @@
       #zombcash-outbreak-world .zw-world-meter{height:12px;border:1px solid #668b7d}
       #zombcash-outbreak-world .zw-world-meter i{background:linear-gradient(90deg,#ff806d,#f8d66d,#7df3a4)}
       #zombcash-outbreak-world .zw-settlement{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:12px 0}
+      #zombcash-outbreak-world .zw-district-map{grid-template-columns:repeat(5,minmax(0,1fr));max-width:none;margin:12px 0}
+      #zombcash-outbreak-world .zw-district{min-width:0;min-height:92px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:8px 4px;border:1px solid #668b86;border-radius:10px;background:linear-gradient(145deg,#30485a,#1a3332);color:#eafff2;cursor:pointer}
+      #zombcash-outbreak-world .zw-district:disabled{opacity:.72;cursor:default}
+      #zombcash-outbreak-world .zw-district.is-searched{border-color:#7fd4a1;background:linear-gradient(145deg,#234c3d,#172b2a)}
+      #zombcash-outbreak-world .zw-district .zw-district-icon{font-size:23px}
+      #zombcash-outbreak-world .zw-district strong{font-size:10px;text-align:center;overflow-wrap:anywhere}
+      #zombcash-outbreak-world .zw-district small{font:700 9px Orbitron,sans-serif;color:#d9f6d9;text-align:center}
       #zombcash-outbreak-world .zw-site{min-height:68px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1px solid #668b86;border-radius:10px;background:linear-gradient(145deg,#30485a,#1a3332);font-size:23px;box-shadow:inset 0 0 16px #b4ffd20b}
       #zombcash-outbreak-world .zw-site small{font:700 9px Orbitron,sans-serif;color:#d9f6d9;letter-spacing:.04em}
       #zombcash-outbreak-world .zw-site.is-active{border-color:#a9ed8c;background:linear-gradient(145deg,#42684c,#24463b);box-shadow:0 0 12px #8dff9250}
@@ -65,7 +72,7 @@
       #zombcash-outbreak-world .zw-feed{border-radius:10px;background:linear-gradient(180deg,#101c29,#0b1718);border-color:#547a78}
       #zombcash-outbreak-world button,#zombcash-outbreak-world select{border-radius:8px;font-size:11px}
       @keyframes zw-pulse{50%{filter:brightness(1.3);transform:scale(.96)}}
-      @media(max-width:700px){#zombcash-outbreak-world .zw-grid{grid-template-columns:1fr}#zombcash-outbreak-world .zw-map{max-width:100%}}
+      @media(max-width:700px){#zombcash-outbreak-world .zw-grid{grid-template-columns:1fr}#zombcash-outbreak-world .zw-map{max-width:100%}#zombcash-outbreak-world .zw-district-map{grid-template-columns:repeat(2,minmax(0,1fr))}}
     </style>
     <div class="kicker" id="zw-kicker">QUEST #19182 + #19177 · POLLINATIONS</div>
     <h2 class="zw-title" id="zw-main-title">ZOMBIE OUTBREAK &amp; AI WORLD</h2>
@@ -123,6 +130,7 @@
           <div class="zw-site" id="zw-site-shelter-2">🛖<small>SHELTER 2</small></div>
         </div>
         <div class="zw-objective" id="zw-expedition-title">🧭 DISTRICT EXPEDITION · Search abandoned sites for supplies and survivors.</div>
+        <div class="zw-settlement zw-district-map" id="zw-district-map" aria-label="District exploration map"></div>
         <div class="zw-row"><span class="zw-stat" id="zw-expedition-progress">0 / 5 SITES SEARCHED</span><span class="zw-stat" id="zw-expedition-loot">0 LOOT FOUND</span></div>
         <div class="zw-row"><button id="zw-explore" type="button">EXPLORE NEXT DISTRICT</button><span class="zw-muted" id="zw-expedition-hint">Exploring costs 2 energy. Each site is searched once; events can help or hurt the crew.</span></div>
         <div class="zw-agent-cards" id="zw-agent-cards"></div>
@@ -273,7 +281,18 @@
   }
   const stopAuto=()=>{auto=false;if(autoTimer)clearInterval(autoTimer);autoTimer=null;$('zw-auto').textContent=L('autoOff');};
   let searchedSites=0,lootFound=0,rescuedJune=false;
-  const expeditionEvents=['cache','ambush','survivor','nothing'];
+  const districts=[
+    {id:'market',icon:'🥫',event:'cache',name:['Market','Рынок','Markt','Marché','Mercato','市場','市场','Pazar','बाज़ार']},
+    {id:'police',icon:'🚓',event:'ambush',name:['Police Station','Полицейский участок','Polizeistation','Commissariat','Stazione di polizia','警察署','警察局','Karakol','पुलिस स्टेशन']},
+    {id:'clinic',icon:'🏥',event:'survivor',name:['Field Clinic','Полевой госпиталь','Feldklinik','Clinique de campagne','Clinica da campo','野戦診療所','野战诊所','Saha Kliniği','फील्ड क्लिनिक']},
+    {id:'park',icon:'🌳',event:'nothing',name:['Overgrown Park','Заросший парк','Verwilderter Park','Parc envahi','Parco invaso','荒れた公園','荒废公园','Terk edilmiş park','उजड़ा पार्क']},
+    {id:'depot',icon:'🏭',event:'cache',name:['Rail Depot','Железнодорожное депо','Bahndepot','Dépôt ferroviaire','Deposito ferroviario','操車場','铁路仓库','Demiryolu deposu','रेल डिपो']}
+  ];
+  const districtLabels={
+    en:{open:'UNSEARCHED',done:'CLEARED'},ru:{open:'НЕ ИЗУЧЕН',done:'ЗАЧИЩЕН'},de:{open:'UNERKUNDET',done:'ERKUNDET'},fr:{open:'NON EXPLORÉ',done:'FOUILLÉ'},it:{open:'DA ESPLORARE',done:'BONIFICATO'},ja:{open:'未探索',done:'探索済み'},'zh-CN':{open:'未探索',done:'已搜索'},tr:{open:'KEŞFEDİLMEDİ',done:'TEMİZLENDİ'},hi:{open:'अज्ञात',done:'खोज पूरी'}
+  };
+  const districtEvents=['cache','ambush','survivor','nothing','cache'];
+  const districtState=districts.map((d,i)=>({id:d.id,event:d.event,searched:false}));
   function renderExpedition(){
     $('zw-expedition-title').textContent=L('expeditionTitle');
     $('zw-explore').textContent=L('explore');
@@ -281,14 +300,26 @@
     $('zw-expedition-progress').textContent=searchedSites+' / 5 '+L('sites');
     $('zw-expedition-loot').textContent=lootFound+' '+L('loot');
     $('zw-explore').disabled=searchedSites>=5||worldFinished;
+    const labels=districtLabels[locale()]||districtLabels.en,map=$('zw-district-map');
+    map.replaceChildren();
+    districts.forEach((district,index)=>{
+      const state=districtState[index],button=document.createElement('button');
+      button.type='button';button.className='zw-district'+(state.searched?' is-searched':'');
+      button.disabled=state.searched||worldFinished||worldBusy;
+      const icon=document.createElement('span');icon.className='zw-district-icon';icon.textContent=district.icon;
+      const name=document.createElement('strong');name.textContent=district.name[['en','ru','de','fr','it','ja','zh-CN','tr','hi'].indexOf(locale())]||district.name[0];
+      const status=document.createElement('small');status.textContent=state.searched?labels.done:labels.open;
+      button.append(icon,name,status);button.addEventListener('click',()=>exploreDistrict(index));map.append(button);
+    });
     if(searchedSites>=5)$('zw-expedition-hint').textContent=L('expeditionDone');
   }
-  function exploreDistrict(){
-    if(worldBusy||worldFinished||searchedSites>=5)return;
+  function exploreDistrict(index= districtState.findIndex(site=>!site.searched)){
+    if(worldBusy||worldFinished||index<0||index>=districtState.length||districtState[index].searched)return;
     const explorer=agents[turn%agents.length];
     if(explorer.energy<2){worldLog(L('expeditionNeedEnergy'));return;}
     explorer.energy-=2;searchedSites++;
-    let event=expeditionEvents[Math.floor(Math.random()*expeditionEvents.length)];
+    districtState[index].searched=true;
+    let event=districtState[index].event;
     if(event==='survivor'&&rescuedJune)event='cache';
     if(event==='cache'){food+=3;explorer.wood+=2;lootFound+=5;worldLog(L('eventCache'));if(explorer.role==='FORAGER'){food+=1;worldLog(L('perkForager'));}if(explorer.role==='BUILDER'){explorer.wood+=1;worldLog(L('perkBuilder'));}}
     else if(event==='ambush'){danger=Math.min(5,danger+2);explorer.energy=Math.max(0,explorer.energy-2);worldLog(L('eventAmbush').replace('{name}',explorer.name));if(explorer.role==='GUARD'){explorer.energy=Math.min(10,explorer.energy+1);worldLog(L('perkGuard'));}}
@@ -302,7 +333,7 @@
   }
   $('zw-explore').addEventListener('click',exploreDistrict);
   const resetWorld=()=>{
-    agents=initial();turn=0;food=12;danger=1;logs=[];worldFinished=false;searchedSites=0;lootFound=0;rescuedJune=false;
+    agents=initial();turn=0;food=12;danger=1;logs=[];worldFinished=false;searchedSites=0;lootFound=0;rescuedJune=false;districtState.forEach(site=>site.searched=false);
     worldLog(L('worldStart'));
     renderWorld();renderExpedition();$('zw-next').disabled=false;
   };
