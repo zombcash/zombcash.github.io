@@ -8,8 +8,10 @@ on:
     paths-ignore:
       - 'tests/**'
       - '.github/workflows/**'
+  # Gallery Preview writes generated HTML with GITHUB_TOKEN, so its bot push
+  # does not start a follow-up push workflow. Deploy after its successful main run.
   workflow_run:
-    workflows: ["Sync Zombie Gallery", "Sync gallery image SEO assets"]
+    workflows: ["Sync Zombie Gallery", "Sync gallery image SEO assets", "Gallery discovery feature preview"]
     types: [completed]
   workflow_dispatch:
 
@@ -24,7 +26,13 @@ concurrency:
 
 jobs:
   deploy:
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.head_branch == 'main' &&
+        github.event.workflow_run.event == 'push'
+      )
     timeout-minutes: 40
     environment:
       name: github-pages

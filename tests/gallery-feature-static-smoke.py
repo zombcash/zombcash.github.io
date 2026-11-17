@@ -79,6 +79,8 @@ item_by_id = {item["id"]: item for item in items}
 for card in parser.cards:
     item = item_by_id[card["id"]]
     image = card["images"][0]
+    assert image.get("src") == item["image"], f"Static card image source mismatch: {card['id']}"
+    assert image.get("alt") == item["alt_text"], f"Static card ALT is stale or does not match gallery-data.json: {card['id']}"
     if item.get("image_width") is None and item.get("image_height") is None:
         assert image.get("width") is None and image.get("height") is None, f"Unverified dimensions were emitted for {card['id']}"
     else:
@@ -94,6 +96,15 @@ assert len(images) == len(set(images)) == len({item["image"] for item in items})
 
 for locale in ("de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"):
     page = Path(locale, "gallery.html").read_text(encoding="utf-8")
+    locale_parser = Cards()
+    locale_parser.feed(page)
+    locale_cards = {card["id"]: card for card in locale_parser.cards}
+    assert set(locale_cards) == set(ids), f"{locale} gallery card IDs do not match gallery-data.json"
+    for item in items:
+        card = locale_cards[item["id"]]
+        image = card["images"][0]
+        assert image.get("src") == item["image"], f"{locale} image source mismatch: {item['id']}"
+        assert image.get("alt") == item["alt_text"], f"{locale} ALT is stale or does not match gallery-data.json: {item['id']}"
     assert f'<html lang="{locale}">' in page or f'<html lang="{locale}"' in page
     assert f'<link rel="canonical" href="https://zombcash.github.io/{locale}/gallery.html">' in page
     assert 'id="gallery-collection-jsonld"' in page
