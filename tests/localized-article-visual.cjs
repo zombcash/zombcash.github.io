@@ -6,15 +6,19 @@ const BASE = process.env.SITE_URL || 'https://zombcash.github.io/';
 const locales = ['en', 'de', 'fr', 'it', 'ja', 'zh-CN', 'ru', 'tr', 'hi'];
 const pages = [
   { slug: 'buy-zombcash.html', kind: 'buy' },
+  { slug: 'zombcash-buying-guide.html', kind: 'guide' },
+  { slug: 'solana-memecoin-research-guide.html', kind: 'guide' },
+  { slug: 'transmission-solana-memecoin-warning-signs.html', kind: 'guide' },
+  { slug: 'transmission-wallet-security-red-flags.html', kind: 'guide' },
+  { slug: 'how-to-research-solana-meme-coins.html', kind: 'guide' },
+  { slug: 'solana-token-safety-checklist.html', kind: 'guide' },
+  { slug: 'check-liquidity-holder-distribution-solana.html', kind: 'guide' },
+  { slug: 'avoid-fake-token-websites-wallet-scams.html', kind: 'guide' },
+  { slug: 'transmission-liquidity-is-not-market-cap.html', kind: 'liquidity' },
   { slug: 'zombcash-market-data.html', kind: 'market-data' },
   { slug: 'whitepaper.html', kind: 'whitepaper' },
-  { slug: 'transmission-liquidity-is-not-market-cap.html', kind: 'liquidity' },
   { slug: 'transmission-zombie-fiction-rpg-guide.html', kind: 'fiction' },
   { slug: 'transmission-last-backup-ai-apocalypse.html', kind: 'backup' },
-  { slug: 'avoid-fake-token-websites-wallet-scams.html', kind: 'guide', availableLocales: ['en', 'de', 'fr', 'ja', 'ru'] },
-  { slug: 'check-liquidity-holder-distribution-solana.html', kind: 'guide', availableLocales: ['en', 'de', 'fr', 'ja', 'ru'] },
-  { slug: 'how-to-research-solana-meme-coins.html', kind: 'guide', availableLocales: ['en', 'de', 'fr', 'ja', 'ru'] },
-  { slug: 'solana-token-safety-checklist.html', kind: 'guide', availableLocales: ['en', 'ja', 'ru'] },
 ];
 const viewports = [
   { name: 'small-mobile', width: 320, height: 740, mobile: true },
@@ -48,7 +52,8 @@ function pagePath(locale, slug) {
   try {
     for (const item of pages) {
       for (const locale of item.availableLocales || locales) {
-        for (const viewport of viewports) {
+        const selectedViewports = item.kind === 'guide' ? viewports.filter(v => ['small-mobile', 'mobile', 'desktop'].includes(v.name)) : viewports;
+        for (const viewport of selectedViewports) {
           const mode = viewport.mobile ? 'mobile' : 'desktop';
           const page = pagesByContext[mode];
           await page.setViewportSize({ width: viewport.width, height: viewport.height });
@@ -204,7 +209,7 @@ function pagePath(locale, slug) {
     }
 
     const summary = {
-      visualCases: pages.reduce((total, item) => total + (item.availableLocales || locales).length * viewports.length, 0),
+      visualCases: pages.reduce((total, item) => total + (item.availableLocales || locales).length * (item.kind === 'guide' ? 3 : viewports.length), 0),
       routeSwitches: routeSwitchTests.length,
       localizedHomepagesChecked: 8,
       failures,

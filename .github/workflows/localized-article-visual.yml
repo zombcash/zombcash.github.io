@@ -25,6 +25,18 @@ on:
       - 'ja/check-liquidity-holder-distribution-solana.html'
       - 'ja/how-to-research-solana-meme-coins.html'
       - 'ja/solana-token-safety-checklist.html'
+      - 'solana-memecoin-research-guide.html'
+      - 'transmission-solana-memecoin-warning-signs.html'
+      - 'transmission-wallet-security-red-flags.html'
+      - 'zombcash-buying-guide.html'
+      - '*/how-to-research-solana-meme-coins.html'
+      - '*/solana-token-safety-checklist.html'
+      - '*/check-liquidity-holder-distribution-solana.html'
+      - '*/avoid-fake-token-websites-wallet-scams.html'
+      - '*/solana-memecoin-research-guide.html'
+      - '*/transmission-solana-memecoin-warning-signs.html'
+      - '*/transmission-wallet-security-red-flags.html'
+      - '*/zombcash-buying-guide.html'
   push:
     branches: [main]
     paths:
