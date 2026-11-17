@@ -23,11 +23,17 @@ class HeadParser(HTMLParser):
         self.lang = None
         self.canonicals = []
         self.alternates = []
+        self.robots_directives = []
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
         if tag.lower() == "html":
             self.lang = attrs.get("lang")
+        if tag.lower() == "meta":
+            name = (attrs.get("name") or "").strip().lower()
+            content = (attrs.get("content") or "").strip()
+            if name in {"robots", "googlebot", "bingbot"} and content:
+                self.robots_directives.append((name, content))
         if tag.lower() == "link":
             rel = (attrs.get("rel") or "").lower().split()
             if "canonical" in rel and attrs.get("href"):
@@ -232,6 +238,26 @@ def check_page(url, expected_alternates=None):
         issues.append("missing html lang")
     elif parser.lang != expected_language(url):
         issues.append(f"html lang={parser.lang}, expected {expected_language(url)}")
+
+    def blocked_directives(value):
+        normalized = value.lower().replace(";", ",").replace(":", ",")
+        return {token.strip() for part in normalized.split(",") for token in part.split() if token.strip()}
+
+    for crawler, value in parser.robots_directives:
+        blocked = blocked_directives(value)
+        if "noindex" in blocked or "none" in blocked:
+            issues.append(f"{crawler} meta blocks indexing: {value}")
+        if "nofollow" in blocked or "none" in blocked:
+            issues.append(f"{crawler} meta blocks link following: {value}")
+
+    x_robots_tag = response.headers.get("x-robots-tag", "").strip()
+    if x_robots_tag:
+        blocked = blocked_directives(x_robots_tag)
+        if "noindex" in blocked or "none" in blocked:
+            issues.append(f"X-Robots-Tag blocks indexing: {x_robots_tag}")
+        if "nofollow" in blocked or "none" in blocked:
+            issues.append(f"X-Robots-Tag blocks link following: {x_robots_tag}")
+
     if len(parser.canonicals) != 1:
         issues.append(f"expected one canonical link, found {len(parser.canonicals)}")
     elif parser.canonicals[0].rstrip("/") != url.rstrip("/"):
@@ -252,6 +278,8 @@ def check_page(url, expected_alternates=None):
         "status": response.status_code,
         "lang": parser.lang,
         "canonical": parser.canonicals[0] if parser.canonicals else None,
+        "robots_directives": parser.robots_directives,
+        "x_robots_tag": x_robots_tag or None,
         "issues": issues,
     }
 
