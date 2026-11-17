@@ -84,7 +84,7 @@ async function boot(browser, catalogResponse) {
     });
     await single.page.waitForFunction(() => document.querySelector('#zai-status')?.textContent.includes('Fewer than two'));
     if (!(await single.page.locator('#zai-play').isDisabled())) throw new Error('Live play must be disabled when fewer than two eligible models exist');
-    await single.page.locator('#zai-play').click();
+    await single.page.locator('#zai-play').dispatchEvent('click');
     if (single.apiCalls.length) throw new Error('A live API request was sent without two verified eligible models');
     await single.page.close();
 
