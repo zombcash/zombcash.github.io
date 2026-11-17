@@ -27,35 +27,14 @@
     tr:{share:"PAYLAŞ",copied:"BAĞLANTI KOPYALANDI",unavailable:"PAYLAŞIM KULLANILAMIYOR",error:"PAYLAŞIM BAŞARISIZ"},
     hi:{share:"साझा करें",copied:"लिंक कॉपी हुआ",unavailable:"साझा करना उपलब्ध नहीं",error:"साझा नहीं हो सका"}
   };
-  const galleryCaptionLabels = {
-    en:{"NIGHTMARE & HORROR":"NIGHTMARE & HORROR","NIGHTMARE DROP":"NIGHTMARE DROP","ZOMBIECASH MEMES":"ZOMBIECASH MEMES","ZOMBIECASH MEME":"ZOMBIECASH MEME","ZOMBIE MEME OF THE HOUR":"ZOMBIE MEME OF THE HOUR","ZOMBIE MEME":"ZOMBIE MEME","UNDEAD AFTER DARK":"UNDEAD AFTER DARK","ZOMBIECASH SITE TRANSMISSION":"ZOMBIECASH SITE TRANSMISSION"},
-    ru:{"NIGHTMARE & HORROR":"КОШМАРЫ И ХОРРОР","NIGHTMARE DROP":"НОЧНОЙ КОШМАР","ZOMBIECASH MEMES":"ЗОМБИ-МЕМЫ","ZOMBIECASH MEME":"ЗОМБИ-МЕМ","ZOMBIE MEME OF THE HOUR":"ЗОМБИ-МЕМ ЧАСА","ZOMBIE MEME":"ЗОМБИ-МЕМ","UNDEAD AFTER DARK":"НЕЖИТЬ ПОСЛЕ ЗАКАТА","ZOMBIECASH SITE TRANSMISSION":"ПЕРЕДАЧА САЙТА ZOMBIECASH"},
-    de:{"NIGHTMARE & HORROR":"ALBTRAUM & HORROR","NIGHTMARE DROP":"ALBTRAUM-DROP","ZOMBIECASH MEMES":"ZOMBIECASH-MEMES","ZOMBIECASH MEME":"ZOMBIECASH-MEME","ZOMBIE MEME OF THE HOUR":"ZOMBIE-MEME DER STUNDE","ZOMBIE MEME":"ZOMBIE-MEME","UNDEAD AFTER DARK":"UNTOTE BEI NACHT","ZOMBIECASH SITE TRANSMISSION":"ZOMBIECASH-SITEÜBERTRAGUNG"},
-    fr:{"NIGHTMARE & HORROR":"CAUCHEMAR ET HORREUR","NIGHTMARE DROP":"DROP CAUCHEMAR","ZOMBIECASH MEMES":"MÈMES ZOMBIECASH","ZOMBIECASH MEME":"MÈME ZOMBIECASH","ZOMBIE MEME OF THE HOUR":"LE MÈME ZOMBIE DU MOMENT","ZOMBIE MEME":"MÈME ZOMBIE","UNDEAD AFTER DARK":"MORTS-VIVANTS NOCTURNES","ZOMBIECASH SITE TRANSMISSION":"TRANSMISSION DU SITE ZOMBIECASH"},
-    it:{"NIGHTMARE & HORROR":"INCUBO E HORROR","NIGHTMARE DROP":"DROP DA INCUBO","ZOMBIECASH MEMES":"MEME ZOMBIECASH","ZOMBIECASH MEME":"MEME ZOMBIECASH","ZOMBIE MEME OF THE HOUR":"IL MEME ZOMBIE DEL MOMENTO","ZOMBIE MEME":"MEME ZOMBIE","UNDEAD AFTER DARK":"NON MORTI DOPO IL TRAMONTO","ZOMBIECASH SITE TRANSMISSION":"TRASMISSIONE DAL SITO ZOMBIECASH"},
-    ja:{"NIGHTMARE & HORROR":"悪夢とホラー","NIGHTMARE DROP":"悪夢のドロップ","ZOMBIECASH MEMES":"ZOMBIECASHゾンビミーム","ZOMBIECASH MEME":"ZOMBIECASHゾンビミーム","ZOMBIE MEME OF THE HOUR":"今時のゾンビミーム","ZOMBIE MEME":"ゾンビミーム","UNDEAD AFTER DARK":"夜更けのアンデッド","ZOMBIECASH SITE TRANSMISSION":"ZOMBIECASHサイト通信"},
-    "zh-CN":{"NIGHTMARE & HORROR":"噩梦与恐怖","NIGHTMARE DROP":"噩梦掉落","ZOMBIECASH MEMES":"ZOMBIECASH僵尸梗图","ZOMBIECASH MEME":"ZOMBIECASH僵尸梗图","ZOMBIE MEME OF THE HOUR":"本小时僵尸梗图","ZOMBIE MEME":"僵尸梗图","UNDEAD AFTER DARK":"午夜不死者","ZOMBIECASH SITE TRANSMISSION":"ZOMBIECASH网站播报"},
-    tr:{"NIGHTMARE & HORROR":"KÂBUS VE KORKU","NIGHTMARE DROP":"KÂBUS PAYLAŞIMI","ZOMBIECASH MEMES":"ZOMBIECASH ZOMBİ MEMLERİ","ZOMBIECASH MEME":"ZOMBIECASH ZOMBİ MEMİ","ZOMBIE MEME OF THE HOUR":"SAATİN ZOMBİ MEMİ","ZOMBIE MEME":"ZOMBİ MEMİ","UNDEAD AFTER DARK":"GECE YARISI ÖLÜLERİ","ZOMBIECASH SITE TRANSMISSION":"ZOMBIECASH SİTE YAYINI"},
-    hi:{"NIGHTMARE & HORROR":"दुःस्वप्न और हॉरर","NIGHTMARE DROP":"दुःस्वप्न ड्रॉप","ZOMBIECASH MEMES":"ज़ॉम्बीकैश मीम","ZOMBIECASH MEME":"ज़ॉम्बीकैश मीम","ZOMBIE MEME OF THE HOUR":"इस घंटे का ज़ॉम्बी मीम","ZOMBIE MEME":"ज़ॉम्बी मीम","UNDEAD AFTER DARK":"रात ढलने के बाद के ज़ॉम्बी","ZOMBIECASH SITE TRANSMISSION":"ज़ॉम्बीकैश साइट प्रसारण"}
-  };
-  let galleryLang=document.documentElement.lang||"en";
-  let refreshGalleryControls = () => {};
-  const gtx=k=>(galleryLocale[galleryLang]||galleryLocale.en)[k]||galleryLocale.en[k]||k;
-  const localizeGalleryMeta=(items,updatedAt)=>{if(count&&items!==null)count.textContent=items.length+" "+gtx("images");if(updated)updated.textContent=updatedAt?gtx("updated")+" "+new Date(updatedAt).toLocaleString(galleryLang,{month:"short",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"";};
-  document.addEventListener("zombcash:languagechange",e=>{galleryLang=e.detail?.language||document.documentElement.lang||"en";const shareButton=lightbox.querySelector(".gallery-lightbox-share");if(shareButton){const shareLabels=galleryShareLabels[galleryLang]||galleryShareLabels.en;shareButton.textContent=shareLabels.share;shareButton.setAttribute("aria-label",shareLabels.share);}grid.querySelectorAll(".gallery-caption p").forEach(p=>{p.textContent=cleanCaption(p.dataset.originalTitle||p.dataset.originalCaption||p.textContent);});grid.querySelectorAll(".gallery-caption a").forEach(a=>a.textContent=gtx("source"));if(count&&/IMAGES|ИЗОБРАЖЕНИЙ|BILDER|IMAGES|IMMAGINI|枚|张图片|GÖRSEL|इमेज/.test(count.textContent)){const n=parseInt(count.textContent,10);if(Number.isFinite(n))count.textContent=n+" "+gtx("images");}if(updated&&updated.textContent){const raw=updated.textContent.replace(/^(UPDATED|ОБНОВЛЕНО|AKTUALISIERT|MIS À JOUR|AGGIORNATO|更新|更新于|GÜNCELLENDİ|अपडेट)\s*/,"");updated.textContent=gtx("updated")+" "+raw;}refreshGalleryControls();});
-  const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, ch => {
-    const entities = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
-    return entities[ch];
-  });
   const cleanCaption = value => {
     let caption = String(value ?? "")
-      .replace(/\s+/g, " ")
-      .split(/━━━━━━━━|🧟\s*\$ZOMBCASH|MARKET DIED\.|📋\s*CA:|🌐\s*Website:|𝕏\s*X Community|💬\s*Telegram/i)[0]
+      .replace(/\\s+/g, " ")
+      .split(/━━━━━━━━|🧟\\s*\\$ZOMBCASH|MARKET DIED\\.|📋\\s*CA:|🌐\\s*Website:|𝕏\\s*X Community|💬\\s*Telegram/i)[0]
       .trim();
-    const labels = galleryCaptionLabels[galleryLang] || galleryCaptionLabels.en;
-    Object.keys(galleryCaptionLabels.en).sort((a, b) => b.length - a.length).forEach(key => {
-      caption = caption.replace(new RegExp(key, "ig"), labels[key] || key);
-    });
+    // Series names already appear as localized category chips. Remove the
+    // repeated English source prefix from the caption instead of mixing languages.
+    caption = caption.replace(/^(?:🩸|🌙|😂|🛰️)\\s*(?:NIGHTMARE\\s*&\\s*HORROR|NIGHTMARE\\s+DROP|ZOMBIECASH\\s+MEMES?|ZOMBIE\\s+MEME(?:\\s+OF\\s+THE\\s+HOUR)?|UNDEAD\\s+AFTER\\s+DARK|ZOMBIECASH\\s+SITE\\s+TRANSMISSION)\\s*/i, "").trim();
     return caption;
   };
 

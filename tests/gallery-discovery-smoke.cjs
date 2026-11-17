@@ -495,12 +495,14 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       const schema = JSON.parse(schemaText);
       const controls = await localized.locator(".gallery-category-chip").allTextContents();
       const firstCardTitle = (await localized.locator("#gallery-grid .gallery-caption p").first().textContent()) || "";
-      const expectedSeriesHeader = {
-        de: "ZOMBIECASH-MEMES", fr: "MÈMES ZOMBIECASH", it: "MEME ZOMBIECASH",
-        ja: "ZOMBIECASHゾンビミーム", "zh-CN": "ZOMBIECASH僵尸梗图", ru: "ЗОМБИ-МЕМЫ",
-        tr: "ZOMBIECASH ZOMBİ MEMLERİ", hi: "ज़ॉम्बीकैश मीम"
+      const firstCardCategory = (await localized.locator("#gallery-grid .gallery-category-tag").first().textContent()) || "";
+      const localizedMemeCategory = {
+        de: "Zombie-Memes", fr: "Mèmes zombies", it: "Meme zombie",
+        ja: "ゾンビミーム", "zh-CN": "僵尸梗图", ru: "Зомби-мемы",
+        tr: "Zombi Memleri", hi: "ज़ॉम्बी मीम"
       }[locale];
-      if (!firstCardTitle.includes(expectedSeriesHeader)) throw new Error(locale + " series header translation is missing: " + firstCardTitle);
+      if (firstCardCategory !== localizedMemeCategory) throw new Error(locale + " first-card category is not translated: " + firstCardCategory);
+      if (/NIGHTMARE & HORROR|ZOMBIECASH MEMES|ZOMBIECASH MEME|UNDEAD AFTER DARK|SITE TRANSMISSION/i.test(firstCardTitle)) throw new Error(locale + " source series header was not removed from the caption: " + firstCardTitle);
       const siteTransmissionLabel = {
         de: "Website-Meldungen", fr: "Actualités du site", it: "Aggiornamenti dal sito",
         ja: "サイト通信", "zh-CN": "网站播报", ru: "Передачи с сайта",
@@ -522,7 +524,7 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       const shareLabel = (await localized.locator(".gallery-lightbox-share").textContent()).trim();
       if (!shareLabel || shareLabel === "SHARE") throw new Error(locale + " gallery share control is not localized");
       await localized.locator(".gallery-lightbox-close").click();
-      localeAudit.push({ locale, lang, alternates, cards: expectedGalleryCount, title, shareLabel, firstCardTitle });
+      localeAudit.push({ locale, lang, alternates, cards: expectedGalleryCount, title, shareLabel, firstCardTitle, firstCardCategory });
       await localized.close();
     }
 
