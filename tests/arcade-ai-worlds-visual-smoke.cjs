@@ -90,6 +90,25 @@ const path = require('path');
   await page.locator('#zw-world-reset').click();
   if (!(await page.locator('#zw-world-turn').innerText()).includes('TURN 0')) throw new Error('Reset World did not start a fresh campaign after a terminal result');
   if (await page.locator('#zw-next').isDisabled()) throw new Error('Reset World left the new campaign locked');
+  // Deterministic five-district expedition: cache, ambush, medic rescue, safe route, cache.
+  const expedition = page.locator('#zw-district-map .zw-district');
+  await expedition.nth(0).click();
+  let expeditionState = await page.evaluate(() => JSON.parse(localStorage.getItem('zombcash.arcade.survival.v1')));
+  if (expeditionState.food !== 15 || expeditionState.agents[0].wood !== 2 || expeditionState.lootFound !== 5) throw new Error('Market cache did not grant the expected food, timber and loot');
+  await expedition.nth(1).click();
+  expeditionState = await page.evaluate(() => JSON.parse(localStorage.getItem('zombcash.arcade.survival.v1')));
+  if (expeditionState.danger !== 3 || expeditionState.agents[1].energy !== 4) throw new Error('Police Station ambush did not apply danger and energy penalties');
+  await expedition.nth(2).click();
+  expeditionState = await page.evaluate(() => JSON.parse(localStorage.getItem('zombcash.arcade.survival.v1')));
+  if (!expeditionState.rescuedJune || expeditionState.agents.length !== 5 || expeditionState.agents[4].role !== 'MEDIC') throw new Error('Field Clinic did not rescue and add medic June');
+  await expedition.nth(3).click();
+  expeditionState = await page.evaluate(() => JSON.parse(localStorage.getItem('zombcash.arcade.survival.v1')));
+  if (expeditionState.turn !== 4 || expeditionState.food !== 11 || expeditionState.agents[1].energy !== 5) throw new Error('Day-end ration consumption or June medic treatment was not applied correctly');
+  await expedition.nth(4).click();
+  expeditionState = await page.evaluate(() => JSON.parse(localStorage.getItem('zombcash.arcade.survival.v1')));
+  if (expeditionState.searchedSites !== 5 || expeditionState.lootFound !== 10 || expeditionState.food !== 14) throw new Error('Rail Depot cache did not complete the five-district expedition rewards');
+  if (!(await page.locator('#zw-next').isDisabled()) && expeditionState.worldFinished) throw new Error('Expedition completion UI state is inconsistent');
+  await page.locator('#zw-world-reset').click();
   if (!(await page.locator('#zw-world-mode').innerText()).includes('FREE LOCAL SIMULATION')) throw new Error('Balance run must use the free local simulation, not a live model');
   for (let expectedTurn = 1; expectedTurn <= 28; expectedTurn++) {
     if (await page.locator('#zw-next').isDisabled()) throw new Error('Default local strategy ended before turn ' + expectedTurn);
