@@ -178,6 +178,7 @@
     $('zw-auto').textContent=auto?L('autoOn'):L('autoOff');
     $('zw-outbreak-legend').textContent=L('legend');
     paintOutbreakStats();
+    renderExpedition();
   }
   document.addEventListener('zombcash:languagechange', applyLocale);
   const feed = (id, text) => { const p=document.createElement('p'); p.textContent=text; $(id).prepend(p); };
@@ -289,7 +290,7 @@
     if(turn%4===0){food=Math.max(0,food-4);danger=Math.min(5,danger+1);agents.forEach(x=>{x.energy=Math.max(0,x.energy-(x.home?0:1));});worldLog('🌙 DAY '+Math.floor(turn/4)+' ENDS — the crew consumes 4 rations. Food: '+food+'.');}
     if(food===0||agents.every(x=>x.energy===0)){worldFinished=true;stopAuto();worldLog(L('worldLost'));}
     else if(turn>=28){worldFinished=true;stopAuto();const shelters=agents.reduce((n,x)=>n+x.home,0);worldLog(shelters>=2?L('worldWon'):L('worldPartial'));}
-    renderWorld();renderExpedition();
+    renderWorld();renderExpedition();$('zw-next').disabled=worldFinished;
   }
   $('zw-explore').addEventListener('click',exploreDistrict);
   const resetWorld=()=>{
