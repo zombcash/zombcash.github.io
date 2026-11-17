@@ -94,7 +94,7 @@ async function boot(browser, catalogResponse) {
       connector.apiKey = 'test-pollen-key';
       connector.dispatchEvent(new Event('change'));
     });
-    await unavailable.page.waitForFunction(() => document.querySelector('#zai-status')?.textContent.includes('Could not verify'));
+    await unavailable.page.waitForFunction(() => document.querySelector('#zai-log')?.innerText.includes('Could not load the live decision-model catalogue'));
     if (!(await unavailable.page.locator('#zai-play').isDisabled())) throw new Error('Live play must remain disabled when the model catalogue cannot be verified');
     if (unavailable.apiCalls.length) throw new Error('A live API request was sent while the model catalogue was unavailable');
     await unavailable.page.close();
