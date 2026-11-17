@@ -496,9 +496,9 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       const controls = await localized.locator(".gallery-category-chip").allTextContents();
       const firstCardTitle = (await localized.locator("#gallery-grid .gallery-caption p").first().textContent()) || "";
       const expectedSeriesHeader = {
-        de: "ALBTRAUM & HORROR", fr: "CAUCHEMAR ET HORREUR", it: "INCUBO E HORROR",
-        ja: "悪夢とホラー", "zh-CN": "噩梦与恐怖", ru: "КОШМАРЫ И ХОРРОР",
-        tr: "KÂBUS VE KORKU", hi: "दुःस्वप्न और हॉरर"
+        de: "ZOMBIECASH-MEMES", fr: "MÈMES ZOMBIECASH", it: "MEME ZOMBIECASH",
+        ja: "ZOMBIECASHゾンビミーム", "zh-CN": "ZOMBIECASH僵尸梗图", ru: "ЗОМБИ-МЕМЫ",
+        tr: "ZOMBIECASH ZOMBİ MEMLERİ", hi: "ज़ॉम्बीकैश मीम"
       }[locale];
       if (!firstCardTitle.includes(expectedSeriesHeader)) throw new Error(locale + " series header translation is missing: " + firstCardTitle);
       const siteTransmissionLabel = {
