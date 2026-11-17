@@ -227,7 +227,7 @@
     {name:'Nix',role:'FORAGER',energy:8,food:0,wood:1,home:0},
     {name:'Ash',role:'GUARD',energy:8,food:0,wood:0,home:0}
   ];
-  let agents=initial(),turn=0,worldBusy=false,auto=false,autoTimer=null,food=12,danger=1,logs=[],worldFinished=false;queuedCommand='auto';
+  let agents=initial(),turn=0,worldBusy=false,auto=false,autoTimer=null,food=12,danger=1,logs=[],worldFinished=false;
   const worldLog=t=>{logs.unshift(t);logs=logs.slice(0,18);$('zw-world-feed').replaceChildren(...logs.map(s=>{const p=document.createElement('p');p.textContent=s;return p;}));};
   const renderWorld=()=>{
     const day=Math.floor(turn/4)+1;
