@@ -122,6 +122,9 @@
           <div class="zw-site" id="zw-site-shelter-1">🛖<small>SHELTER 1</small></div>
           <div class="zw-site" id="zw-site-shelter-2">🛖<small>SHELTER 2</small></div>
         </div>
+        <div class="zw-objective" id="zw-expedition-title">🧭 DISTRICT EXPEDITION · Search abandoned sites for supplies and survivors.</div>
+        <div class="zw-row"><span class="zw-stat" id="zw-expedition-progress">0 / 5 SITES SEARCHED</span><span class="zw-stat" id="zw-expedition-loot">0 LOOT FOUND</span></div>
+        <div class="zw-row"><button id="zw-explore" type="button">EXPLORE NEXT DISTRICT</button><span class="zw-muted" id="zw-expedition-hint">Exploring costs 2 energy. Each site is searched once; events can help or hurt the crew.</span></div>
         <div class="zw-agent-cards" id="zw-agent-cards"></div>
         <div class="zw-feed" id="zw-world-feed" aria-live="polite"><p>The settlement is quiet. Advance a turn to watch agents act.</p></div>
         <p class="zw-muted" id="zw-world-live-desc">Live mode asks one agent for one action per turn. No model call is made until you press NEXT AI TURN or enable AUTO.</p>
@@ -154,6 +157,18 @@
     hi:{outObjective:'मिशन: दोनों सर्वाइवर को निकासी स्थल तक पहुँचाएँ। संक्रमित उनका पीछा करता है। दोनों बच गए तो जीत।',worldObjective:'7 दिन जीवित रहें: भोजन जमा करें, ऊर्जा लौटाएँ, कम से कम 2 आश्रय बनाएँ और खतरे को नियंत्रित रखें। हर 4 चालों में एक दिन पूरा होता है।',legend:'🧍 सर्वाइवर   🧟 संक्रमित   🚁 निकासी   ▥ खंडहर',escaped:'बच निकले',captured:'पकड़े गए',turnLabel:'चाल'}
   };
   Object.entries(extraCopy).forEach(([language,values])=>Object.assign(copy[language]||(copy[language]={}),values));
+  const expeditionCopy = {
+    en:{expeditionTitle:'🧭 DISTRICT EXPEDITION · Search abandoned sites for supplies and survivors.',explore:'EXPLORE NEXT DISTRICT',expeditionHint:'Exploring costs 2 energy. Each site is searched once; events can help or hurt the crew.',sites:'SITES SEARCHED',loot:'LOOT FOUND',expeditionDone:'All five districts have been searched.',expeditionNeedEnergy:'Not enough energy to explore. Rest first.',eventCache:'📦 Supply cache found: +3 food and +2 timber.',eventAmbush:'🧟 Ambush! Danger +2 and {name} loses 2 energy.',eventSurvivor:'🧍 A stranded survivor joins the crew. Meet June, a medic.',eventNothing:'🌫️ The site is empty, but the route is mapped. Danger −1.'},
+    ru:{expeditionTitle:'🧭 РАЗВЕДКА РАЙОНОВ · Ищи припасы и выживших в заброшенных местах.',explore:'ИССЛЕДОВАТЬ РАЙОН',expeditionHint:'Разведка стоит 2 энергии. Каждый район исследуется один раз; события могут помочь или навредить.',sites:'РАЙОНОВ ИЗУЧЕНО',loot:'ПРИПАСОВ НАЙДЕНО',expeditionDone:'Все пять районов исследованы.',expeditionNeedEnergy:'Недостаточно энергии для разведки. Сначала отдохни.',eventCache:'📦 Найден тайник: +3 еды и +2 древесины.',eventAmbush:'🧟 Засада! Опасность +2, {name} теряет 2 энергии.',eventSurvivor:'🧍 К отряду присоединяется выжившая Джун, медик.',eventNothing:'🌫️ Район пуст, но маршрут нанесён на карту. Опасность −1.'},
+    de:{expeditionTitle:'🧭 GEBIETSERKUNDUNG · Suche verlassene Orte nach Vorräten und Überlebenden ab.',explore:'NÄCHSTES GEBIET ERKUNDEN',expeditionHint:'Erkundung kostet 2 Energie. Jeder Ort wird einmal durchsucht; Ereignisse können helfen oder schaden.',sites:'ORTE ERKUNDET',loot:'BEUTE GEFUNDEN',expeditionDone:'Alle fünf Gebiete wurden durchsucht.',expeditionNeedEnergy:'Nicht genug Energie. Ruhe dich zuerst aus.',eventCache:'📦 Vorratslager gefunden: +3 Nahrung und +2 Holz.',eventAmbush:'🧟 Hinterhalt! Gefahr +2 und {name} verliert 2 Energie.',eventSurvivor:'🧍 Die Überlebende June, eine Sanitäterin, schließt sich an.',eventNothing:'🌫️ Der Ort ist leer, aber die Route ist kartiert. Gefahr −1.'},
+    fr:{expeditionTitle:'🧭 EXPLORATION · Fouillez les lieux abandonnés pour trouver vivres et survivants.',explore:'EXPLORER LE PROCHAIN SECTEUR',expeditionHint:'Explorer coûte 2 énergie. Chaque lieu est fouillé une fois ; les événements peuvent aider ou nuire.',sites:'LIEUX EXPLORÉS',loot:'BUTIN TROUVÉ',expeditionDone:'Les cinq secteurs ont été fouillés.',expeditionNeedEnergy:'Énergie insuffisante. Reposez-vous d’abord.',eventCache:'📦 Réserve trouvée : +3 nourriture et +2 bois.',eventAmbush:'🧟 Embuscade ! Danger +2 et {name} perd 2 énergie.',eventSurvivor:'🧍 June, une infirmière, rejoint le groupe.',eventNothing:'🌫️ Le lieu est vide, mais la route est cartographiée. Danger −1.'},
+    it:{expeditionTitle:'🧭 ESPLORAZIONE · Cerca provviste e sopravvissuti negli edifici abbandonati.',explore:'ESPLORA IL PROSSIMO DISTRETTO',expeditionHint:'Esplorare costa 2 energia. Ogni luogo si visita una volta; gli eventi possono aiutare o danneggiare.',sites:'LUOGHI ESPLORATI',loot:'BOTTINO TROVATO',expeditionDone:'Tutti e cinque i distretti sono stati esplorati.',expeditionNeedEnergy:'Energia insufficiente. Riposati prima.',eventCache:'📦 Scorta trovata: +3 cibo e +2 legname.',eventAmbush:'🧟 Agguato! Pericolo +2 e {name} perde 2 energia.',eventSurvivor:'🧍 June, una medica, si unisce al gruppo.',eventNothing:'🌫️ Il luogo è vuoto, ma il percorso è mappato. Pericolo −1.'},
+    ja:{expeditionTitle:'🧭 地区探索 · 廃墟を調べて物資と生存者を探そう。',explore:'次の地区を探索',expeditionHint:'探索にはエネルギー2が必要。各地点は一度だけ調査でき、イベントは助けにも脅威にもなる。',sites:'探索済み地点',loot:'発見した物資',expeditionDone:'5つすべての地区を探索した。',expeditionNeedEnergy:'探索するエネルギーが足りない。先に休もう。',eventCache:'📦 物資発見：食料+3、木材+2。',eventAmbush:'🧟 待ち伏せ！危険度+2、{name}のエネルギー-2。',eventSurvivor:'🧍 医療担当の生存者ジューンが仲間に加わった。',eventNothing:'🌫️ 何もないが、経路を地図に記録した。危険度-1。'},
+    'zh-CN':{expeditionTitle:'🧭 区域探索 · 搜索废弃地点，寻找物资和幸存者。',explore:'探索下一个区域',expeditionHint:'探索消耗2点能量。每个地点只能搜索一次；随机事件可能带来帮助或危险。',sites:'已搜索地点',loot:'发现物资',expeditionDone:'五个区域均已搜索。',expeditionNeedEnergy:'能量不足，先休息。',eventCache:'📦 找到补给箱：食物+3，木材+2。',eventAmbush:'🧟 遭遇伏击！危险度+2，{name}能量-2。',eventSurvivor:'🧍 医护幸存者June加入队伍。',eventNothing:'🌫️ 地点空无一物，但路线已标记。危险度-1。'},
+    tr:{expeditionTitle:'🧭 BÖLGE KEŞFİ · Terk edilmiş yerlerde erzak ve hayatta kalanları ara.',explore:'SONRAKİ BÖLGEYİ KEŞFET',expeditionHint:'Keşif 2 enerji harcar. Her yer bir kez aranır; olaylar ekibe yardım edebilir veya zarar verebilir.',sites:'ARAMA YAPILAN YER',loot:'BULUNAN GANİMET',expeditionDone:'Beş bölgenin tamamı arandı.',expeditionNeedEnergy:'Keşif için enerji yetersiz. Önce dinlen.',eventCache:'📦 Erzak bulundu: +3 yiyecek ve +2 kereste.',eventAmbush:'🧟 Pusu! Tehlike +2 ve {name} 2 enerji kaybeder.',eventSurvivor:'🧍 Sağlık görevlisi June ekibe katıldı.',eventNothing:'🌫️ Yer boş, ancak rota haritaya işlendi. Tehlike −1.'},
+    hi:{expeditionTitle:'🧭 जिला खोज · आपूर्ति और बचे लोगों के लिए छोड़ी गई जगहों की तलाशी लें।',explore:'अगला जिला खोजें',expeditionHint:'खोज में 2 ऊर्जा लगती है। हर स्थान एक बार खोजा जाता है; घटनाएँ मदद या नुकसान कर सकती हैं।',sites:'खोजे गए स्थान',loot:'मिली सामग्री',expeditionDone:'सभी पाँच जिलों की तलाशी हो गई।',expeditionNeedEnergy:'खोज के लिए ऊर्जा कम है। पहले आराम करें।',eventCache:'📦 आपूर्ति मिली: भोजन +3 और लकड़ी +2।',eventAmbush:'🧟 घात! खतरा +2 और {name} की ऊर्जा −2।',eventSurvivor:'🧍 चिकित्सक June दल में शामिल हुई।',eventNothing:'🌫️ जगह खाली है, लेकिन रास्ता मानचित्र पर दर्ज है। खतरा −1।'}
+  };
+  Object.entries(expeditionCopy).forEach(([language,values])=>Object.assign(copy[language]||(copy[language]={}),values));
   const locale = () => (copy[document.documentElement.lang] ? document.documentElement.lang : 'en');
   const L = key => copy[locale()][key] || copy.en[key] || key;
   function applyLocale() {
@@ -248,10 +263,39 @@
     $('zw-agent-cards').replaceChildren(...agents.map(a=>{const card=document.createElement('div');card.className='zw-agent';const name=document.createElement('b');name.textContent=(roleIcons[a.role]||'🧍')+' '+a.name+' · '+a.role;const stats=document.createElement('div');stats.textContent='⚡ '+a.energy+'/10  ·  🪵 '+a.wood+'  ·  🛖 '+a.home;card.append(name,stats);return card;}));
   };
   const stopAuto=()=>{auto=false;if(autoTimer)clearInterval(autoTimer);autoTimer=null;$('zw-auto').textContent=L('autoOff');};
+  let searchedSites=0,lootFound=0,rescuedJune=false;
+  const expeditionEvents=['cache','ambush','survivor','nothing'];
+  function renderExpedition(){
+    $('zw-expedition-title').textContent=L('expeditionTitle');
+    $('zw-explore').textContent=L('explore');
+    $('zw-expedition-hint').textContent=L('expeditionHint');
+    $('zw-expedition-progress').textContent=searchedSites+' / 5 '+L('sites');
+    $('zw-expedition-loot').textContent=lootFound+' '+L('loot');
+    $('zw-explore').disabled=searchedSites>=5||worldFinished;
+    if(searchedSites>=5)$('zw-expedition-hint').textContent=L('expeditionDone');
+  }
+  function exploreDistrict(){
+    if(worldBusy||worldFinished||searchedSites>=5)return;
+    const explorer=agents[turn%agents.length];
+    if(explorer.energy<2){worldLog(L('expeditionNeedEnergy'));return;}
+    explorer.energy-=2;searchedSites++;
+    let event=expeditionEvents[Math.floor(Math.random()*expeditionEvents.length)];
+    if(event==='survivor'&&rescuedJune)event='cache';
+    if(event==='cache'){food+=3;explorer.wood+=2;lootFound+=5;worldLog(L('eventCache'));}
+    else if(event==='ambush'){danger=Math.min(5,danger+2);explorer.energy=Math.max(0,explorer.energy-2);worldLog(L('eventAmbush').replace('{name}',explorer.name));}
+    else if(event==='survivor'){rescuedJune=true;agents.push({name:'June',role:'MEDIC',energy:8,food:0,wood:0,home:0});worldLog(L('eventSurvivor'));}
+    else {danger=Math.max(0,danger-1);worldLog(L('eventNothing'));}
+    turn++;
+    if(turn%4===0){food=Math.max(0,food-4);danger=Math.min(5,danger+1);agents.forEach(x=>{x.energy=Math.max(0,x.energy-(x.home?0:1));});worldLog('🌙 DAY '+Math.floor(turn/4)+' ENDS — the crew consumes 4 rations. Food: '+food+'.');}
+    if(food===0||agents.every(x=>x.energy===0)){worldFinished=true;stopAuto();worldLog(L('worldLost'));}
+    else if(turn>=28){worldFinished=true;stopAuto();const shelters=agents.reduce((n,x)=>n+x.home,0);worldLog(shelters>=2?L('worldWon'):L('worldPartial'));}
+    renderWorld();renderExpedition();
+  }
+  $('zw-explore').addEventListener('click',exploreDistrict);
   const resetWorld=()=>{
-    agents=initial();turn=0;food=12;danger=1;logs=[];worldFinished=false;
+    agents=initial();turn=0;food=12;danger=1;logs=[];worldFinished=false;searchedSites=0;lootFound=0;rescuedJune=false;
     worldLog(L('worldStart'));
-    renderWorld();$('zw-next').disabled=false;
+    renderWorld();renderExpedition();$('zw-next').disabled=false;
   };
   function localAction(a){
     if(a.energy<=3)return 'rest';
@@ -311,7 +355,7 @@
         const shelters=agents.reduce((n,x)=>n+x.home,0);
         worldFinished=true;stopAuto();worldLog(shelters>=2?L('worldWon'):L('worldPartial'));
       }
-      renderWorld();
+      renderWorld();renderExpedition();
     }catch(e){worldLog('AI turn failed: '+e.message+'. No fallback action was applied.');}
     finally{worldBusy=false;$('zw-next').disabled=worldFinished;$('zw-auto').disabled=false;}
   }
