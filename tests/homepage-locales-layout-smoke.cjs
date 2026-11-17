@@ -23,6 +23,11 @@ fs.mkdirSync(output, { recursive: true });
         await page.waitForLoadState('load', { timeout: 20000 }).catch(() => {});
         await page.waitForSelector('main#home .hero-layout .zc-hero-sponsor-panel', { timeout: 20000 });
         await page.waitForTimeout(250);
+        await page.evaluate(async () => {
+          const images = [...document.querySelectorAll('main#home .zctv-host-art img, main#home .zm-promo-character')];
+          images.forEach(image => { image.loading = 'eager'; });
+          await Promise.all(images.map(image => image.decode().catch(() => {})));
+        });
         const result = await page.evaluate(() => {
           const rect = el => {
             if (!el) return null;
@@ -39,6 +44,8 @@ fs.mkdirSync(output, { recursive: true });
           const tvPlayer = tvLayout?.querySelector('.zctv-player-column');
           const tvVideo = tvPlayer?.querySelector('#zc-promo-player');
           const tvHostArt = tvLayout?.querySelector('.zctv-host-art');
+          const tvHostImage = tvHostArt?.querySelector('img');
+          const labCharacter = document.querySelector('main#home .zm-promo-character');
           const tvArchive = tvPlayer?.querySelector('.zctv-archive');
           const tvChannels = tvInner?.querySelector('.zctv-channels');
           const art = sponsor?.querySelector('.zc-sponsor-art-slot');
@@ -53,6 +60,8 @@ fs.mkdirSync(output, { recursive: true });
             stylesheet,
             hero: rect(hero), layout: rect(layout), content: rect(content), sponsor: rect(sponsor), art: rect(art),
             tvSection: rect(tvSection), tvInner: rect(tvInner), tvLayout: rect(tvLayout), tvPlayer: rect(tvPlayer), tvVideo: rect(tvVideo), tvHostArt: rect(tvHostArt), tvArchive: rect(tvArchive), tvChannels: rect(tvChannels),
+            tvHostImageLoaded: !!tvHostImage && tvHostImage.complete && tvHostImage.naturalWidth > 0,
+            labCharacterImageLoaded: !!labCharacter && labCharacter.complete && labCharacter.naturalWidth > 0,
             adStage: rect(sponsor?.querySelector('.zc-hero-ad-stage')),
             nativeSlot: rect(sponsor?.querySelector('.zc-adsterra-native-slot')),
             mobileSlot: rect(sponsor?.querySelector('.zc-adsterra-mobile-slot')),
@@ -81,6 +90,8 @@ fs.mkdirSync(output, { recursive: true });
         if (width >= 7600 && (!result.layout || result.layout.width < width * 0.85)) issues.push('localized hero layout did not expand for 20% browser zoom');
         if (width >= 7600 && (!result.tvInner || result.tvInner.width < width * 0.8)) issues.push('localized ZombieCash TV rail did not expand for 20% browser zoom');
         if (!result.imagePresent || !result.imageLoaded) issues.push('sponsor artwork image is missing or failed to load');
+        if (!result.tvHostImageLoaded) issues.push('ZombieCash TV host artwork is missing or failed to load');
+        if (!result.labCharacterImageLoaded) issues.push('Zombie Lab character artwork is missing or failed to load');
         if (!result.adStage) {
           issues.push('sponsor ad reservation is missing');
         } else if (width < 768) {
