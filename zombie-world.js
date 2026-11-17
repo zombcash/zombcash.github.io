@@ -7,22 +7,33 @@
   shell.id = 'zombcash-outbreak-world';
   shell.innerHTML = `
     <style>
-      #zombcash-outbreak-world{margin:22px 0;padding:clamp(16px,3vw,30px)!important}
-      #zombcash-outbreak-world .zw-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-      #zombcash-outbreak-world .zw-card{border:1px solid #344631;background:#0a100c;padding:16px;min-width:0}
-      #zombcash-outbreak-world .zw-title{font:700 17px Orbitron,sans-serif;color:#9bff45;margin:0 0 8px}
-      #zombcash-outbreak-world .zw-muted{color:#a8b2a5;font-size:15px}
-      #zombcash-outbreak-world .zw-endpoint{display:block;overflow-wrap:anywhere;color:#9bff45;font-size:12px;margin:4px 0 10px}
+      #zombcash-outbreak-world{margin:22px 0;padding:clamp(16px,3vw,30px)!important;border:1px solid #465c45!important;background:radial-gradient(ellipse at 10% 0,#203c32 0,transparent 48%),linear-gradient(145deg,#101a17,#090d12)!important}
+      #zombcash-outbreak-world .zw-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+      #zombcash-outbreak-world .zw-card{border:1px solid #526b59;background:linear-gradient(155deg,#14251f,#0a1215);padding:clamp(13px,2vw,20px);min-width:0;box-shadow:0 12px 28px #0005}
+      #zombcash-outbreak-world .zw-title{font:700 17px Orbitron,sans-serif;color:#b9ff72;margin:0 0 8px;text-shadow:0 0 18px #8cff6b35}
+      #zombcash-outbreak-world .zw-muted{color:#bdc9c1;font-size:15px;line-height:1.5}
+      #zombcash-outbreak-world .zw-endpoint{display:block;overflow-wrap:anywhere;color:#7ee8cf;font-size:12px;margin:4px 0 10px}
       #zombcash-outbreak-world .zw-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0}
-      #zombcash-outbreak-world button,#zombcash-outbreak-world select{font:700 10px Orbitron,sans-serif;padding:10px 12px;border:1px solid #9bff45;background:#101a11;color:#edf5e5}
-      #zombcash-outbreak-world button.primary{background:#9bff45;color:#091006}
+      #zombcash-outbreak-world button,#zombcash-outbreak-world select{font:700 10px Orbitron,sans-serif;padding:10px 12px;border:1px solid #78d9a0;background:#12251d;color:#f0fff4;border-radius:5px}
+      #zombcash-outbreak-world button.primary{background:linear-gradient(135deg,#c8ff73,#69e6a4);border-color:#c8ff73;color:#102016;box-shadow:0 0 18px #a6ff7130}
+      #zombcash-outbreak-world button:hover:not(:disabled){filter:brightness(1.15);transform:translateY(-1px)}
       #zombcash-outbreak-world button:disabled{opacity:.45;cursor:not-allowed}
-      #zombcash-outbreak-world .zw-map{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;max-width:440px;margin:12px auto}
-      #zombcash-outbreak-world .zw-cell{aspect-ratio:1;background:#18251a;border:1px solid #2b3c2c;display:grid;place-items:center;font-size:clamp(13px,2vw,22px)}
-      #zombcash-outbreak-world .zw-feed{height:150px;overflow:auto;background:#060a07;border:1px solid #263628;padding:10px;font-size:14px}
-      #zombcash-outbreak-world .zw-feed p{margin:3px 0;color:#c4d0c0}
-      #zombcash-outbreak-world .zw-stat{font:700 11px Orbitron,sans-serif;color:#9bff45}
-      @media(max-width:700px){#zombcash-outbreak-world .zw-grid{grid-template-columns:1fr}}
+      #zombcash-outbreak-world .zw-map{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;max-width:440px;margin:14px auto;padding:9px;border:1px solid #405d54;border-radius:10px;background:radial-gradient(circle at 50% 40%,#1b3732,#08110f)}
+      #zombcash-outbreak-world .zw-cell{aspect-ratio:1;background:linear-gradient(145deg,#213d35,#142721);border:1px solid #416052;border-radius:5px;display:grid;place-items:center;font-size:clamp(13px,2vw,22px);box-shadow:inset 0 1px #ffffff12}
+      #zombcash-outbreak-world .zw-cell.zw-wall{background:repeating-linear-gradient(135deg,#39464b,#39464b 5px,#27343b 5px,#27343b 10px);border-color:#75858b}
+      #zombcash-outbreak-world .zw-cell.zw-exit{background:linear-gradient(145deg,#8affb4,#1b9b75);border-color:#c5ffe0;box-shadow:0 0 16px #51ffac80}
+      #zombcash-outbreak-world .zw-legend{display:flex;gap:8px 14px;flex-wrap:wrap;justify-content:center;color:#d4e4d8;font-size:12px;margin:8px 0 14px}
+      #zombcash-outbreak-world .zw-legend span{white-space:nowrap}
+      #zombcash-outbreak-world .zw-objective{padding:11px 13px;margin:12px 0;border:1px solid #607b50;border-left:4px solid #c5f66b;border-radius:5px;background:#1b2a1d;color:#e7f5d9;font-size:14px;line-height:1.5}
+      #zombcash-outbreak-world .zw-feed{height:160px;overflow:auto;background:linear-gradient(180deg,#08120f,#0b151a);border:1px solid #3a5b50;border-radius:6px;padding:10px;font-size:14px}
+      #zombcash-outbreak-world .zw-feed p{margin:5px 0;padding:5px 7px;border-radius:4px;background:#ffffff08;color:#d6e7dc}
+      #zombcash-outbreak-world .zw-stat{font:700 11px Orbitron,sans-serif;color:#baff7b;background:#172b21;border:1px solid #41694b;border-radius:5px;padding:7px 9px}
+      #zombcash-outbreak-world .zw-world-meter{height:9px;border-radius:9px;background:#253b34;overflow:hidden;margin:8px 0 12px}
+      #zombcash-outbreak-world .zw-world-meter i{display:block;height:100%;width:50%;background:linear-gradient(90deg,#67d8bb,#c5ff72);transition:width .25s}
+      #zombcash-outbreak-world .zw-agent-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:12px 0}
+      #zombcash-outbreak-world .zw-agent{padding:9px;border:1px solid #3b5a4a;border-radius:5px;background:#102019;color:#e8f5e8;font-size:12px}
+      #zombcash-outbreak-world .zw-agent b{color:#c9ff8c}
+      @media(max-width:700px){#zombcash-outbreak-world .zw-grid{grid-template-columns:1fr}#zombcash-outbreak-world .zw-map{max-width:100%}}
     </style>
     <div class="kicker" id="zw-kicker">QUEST #19182 + #19177 · POLLINATIONS</div>
     <h2 class="zw-title" id="zw-main-title">ZOMBIE OUTBREAK &amp; AI WORLD</h2>
@@ -31,6 +42,7 @@
       <article class="zw-card" aria-labelledby="zw-outbreak-title">
         <h3 class="zw-title" id="zw-outbreak-title">01 / ZOMBIE OUTBREAK — MCP ARENA</h3>
         <p class="zw-muted" id="zw-outbreak-desc">Agents join as survivors or infected. The MCP server validates every move and owns the shared game state.</p>
+        <div class="zw-objective" id="zw-outbreak-objective">MISSION: escort both survivors to the glowing extraction tile. The infected hunts them. Escape together to win; lose both survivors and the outbreak wins.</div>
         <div class="zw-row"><span class="zw-stat" id="zw-mcp-status">MCP SERVER: DEPLOYED · HTTPS</span></div>
         <a class="zw-endpoint" id="zw-mcp-endpoint" href="https://owmiywvmtdjyeyfxlpdp.supabase.co/functions/v1/outbreak-mcp" target="_blank" rel="noopener noreferrer">https://owmiywvmtdjyeyfxlpdp.supabase.co/functions/v1/outbreak-mcp</a>
         <p class="zw-muted"><a href="https://pollinations.ai/?ref=badge" target="_blank" rel="noopener noreferrer">Made with pollinations.ai</a></p>
@@ -39,13 +51,16 @@
           <button id="zw-demo-turn" type="button" disabled>ADVANCE TURN</button>
           <button id="zw-demo-reset" type="button">RESET</button>
         </div>
+        <div class="zw-legend" id="zw-outbreak-legend"><span>🧍 Survivor</span><span>🧟 Infected</span><span>🟩 Extraction</span><span>▥ Ruins</span></div>
         <div class="zw-map" id="zw-outbreak-map" aria-label="Local outbreak game board"></div>
+        <div class="zw-row"><span class="zw-stat" id="zw-escaped">0 / 2 ESCAPED</span><span class="zw-stat" id="zw-captured">0 CAPTURED</span><span class="zw-stat" id="zw-outbreak-turns">TURN 0</span></div>
         <div class="zw-feed" id="zw-outbreak-feed" aria-live="polite"><p id="zw-outbreak-ready">Local demo is ready. The shared multiplayer MCP endpoint is deployed; connect an MCP client using the instructions in ZOMBIECASH_AI_WORLDS.md.</p></div>
         <p class="zw-muted" id="zw-mcp-tools">MCP tools: create_match, join_match, get_match_state, submit_action. Server-side validation prevents illegal moves and impersonation.</p>
       </article>
       <article class="zw-card" aria-labelledby="zw-world-title">
         <h3 class="zw-title" id="zw-world-title">02 / ZOMBIE AI WORLD — AUTONOMOUS SIM</h3>
         <p class="zw-muted" id="zw-world-desc">Four agents seek food, gather materials, build shelter, talk, cooperate and compete. No scripted story is required.</p>
+        <div class="zw-objective" id="zw-world-objective">7-DAY SURVIVAL: keep food stocked, restore energy, build at least 2 shelters and keep danger under control. Every fourth action ends a day.</div>
         <div class="zw-row"><span class="zw-stat" id="zw-world-mode">FREE LOCAL SIMULATION</span><span class="zw-stat" id="zw-world-turn">DAY 1 · TURN 0</span></div>
         <div class="zw-row">
           <label for="zw-model">LIVE MODEL</label>
@@ -54,7 +69,9 @@
           <button id="zw-auto" type="button">AUTO: OFF</button>
           <button id="zw-world-reset" type="button">RESET WORLD</button>
         </div>
-        <div class="zw-row"><span class="zw-stat" id="zw-pop">4 SURVIVORS</span><span class="zw-stat" id="zw-shelter">0 SHELTERS</span><span class="zw-stat" id="zw-food">12 FOOD</span></div>
+        <div class="zw-row"><span class="zw-stat" id="zw-pop">4 SURVIVORS</span><span class="zw-stat" id="zw-shelter">0 SHELTERS</span><span class="zw-stat" id="zw-food">12 FOOD</span><span class="zw-stat" id="zw-danger">DANGER 1</span></div>
+        <div class="zw-world-meter" aria-label="Survival energy"><i id="zw-energy-meter"></i></div>
+        <div class="zw-agent-cards" id="zw-agent-cards"></div>
         <div class="zw-feed" id="zw-world-feed" aria-live="polite"><p>The settlement is quiet. Advance a turn to watch agents act.</p></div>
         <p class="zw-muted" id="zw-world-live-desc">Live mode asks one agent for one action per turn. No model call is made until you press NEXT AI TURN or enable AUTO.</p>
       </article>
@@ -91,70 +108,112 @@
     $('zw-world-mode').textContent = userKey ? L('liveMode') : L('localMode');
   });
 
-  // Quest #19182 local demonstration; the hosted MCP server is available to external MCP agents at the endpoint above.
-  const size=9, walls=new Set([10,19,28,37,46,55,64]), actors=[{id:'S1',role:'survivor',p:0},{id:'S2',role:'survivor',p:8},{id:'I1',role:'infected',p:72}];
-  let outbreakTurn=0, outbreakStarted=false;
+  // Local outbreak: survivors must reach extraction while the infected hunts them.
+  const size=9, walls=new Set([10,19,28,37,46,55,64]), actors=[{id:'S1',name:'Mara',role:'survivor',p:0},{id:'S2',name:'Viktor',role:'survivor',p:8},{id:'I1',name:'Stalker',role:'infected',p:72}];
+  const exitTile=80;
+  let outbreakTurn=0,outbreakStarted=false,escaped=0,captured=0,outbreakEnded=false;
+  function pathStep(from,to){
+    const queue=[[from,[]]],seen=new Set([from]);
+    while(queue.length){const [at,path]=queue.shift();if(at===to)return path[0]??from;
+      const x=at%size,y=Math.floor(at/size);
+      for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy,np=ny*size+nx;if(nx<0||nx>=size||ny<0||ny>=size||walls.has(np)||seen.has(np))continue;seen.add(np);queue.push([np,[...path,np]])}
+    }return from;
+  }
+  const paintOutbreakStats=()=>{$('zw-escaped').textContent=escaped+' / 2 ESCAPED';$('zw-captured').textContent=captured+' CAPTURED';$('zw-outbreak-turns').textContent='TURN '+outbreakTurn;};
   const drawOutbreak=()=>{
-    const map=$('zw-outbreak-map'); map.replaceChildren();
+    const map=$('zw-outbreak-map');map.replaceChildren();
     for(let i=0;i<size*size;i++){
-      const cell=document.createElement('div'); cell.className='zw-cell';
-      const actor=actors.find(a=>a.p===i);
-      cell.textContent=actor?(actor.role==='infected'?'🧟':'🧍'):walls.has(i)?'▥':'·';
+      const cell=document.createElement('div');cell.className='zw-cell';
+      const actor=actors.find(a=>a.p===i&&a.role!=='escaped'&&a.role!=='captured');
+      if(actor){cell.textContent=actor.role==='infected'?'🧟':'🧍';cell.title=actor.name+(actor.role==='infected'?' · infected':' · survivor')}
+      else if(i===exitTile){cell.classList.add('zw-exit');cell.textContent='🚁';cell.title='Extraction point'}
+      else if(walls.has(i)){cell.classList.add('zw-wall');cell.textContent='▥'}
+      else {cell.textContent='·'}
       map.append(cell);
-    }
+    }paintOutbreakStats();
   };
-  const resetOutbreak=()=>{actors[0].p=0;actors[1].p=8;actors[2].p=72;outbreakTurn=0;outbreakStarted=false;$('zw-demo-turn').disabled=true;$('zw-mcp-status').textContent=L('mcpStatus');$('zw-outbreak-feed').replaceChildren();feed('zw-outbreak-feed',L('ready'));drawOutbreak();};
-  $('zw-demo-start').addEventListener('click',()=>{outbreakStarted=true;$('zw-demo-turn').disabled=false;feed('zw-outbreak-feed',L('start')+': 2 survivors vs 1 infected.');});
+  const resetOutbreak=()=>{
+    actors[0].p=0;actors[0].role='survivor';actors[1].p=8;actors[1].role='survivor';actors[2].p=72;actors[2].role='infected';
+    outbreakTurn=0;escaped=0;captured=0;outbreakStarted=false;outbreakEnded=false;
+    $('zw-demo-turn').disabled=true;$('zw-mcp-status').textContent=L('mcpStatus');
+    $('zw-outbreak-feed').replaceChildren();feed('zw-outbreak-feed','Mission ready: guide both survivors to the helicopter. The infected moves after them.');drawOutbreak();
+  };
+  $('zw-demo-start').addEventListener('click',()=>{if(outbreakEnded)resetOutbreak();outbreakStarted=true;$('zw-demo-turn').disabled=false;feed('zw-outbreak-feed','🚨 EXTRACTION MISSION STARTED — both survivors must reach the helicopter.');});
   $('zw-demo-turn').addEventListener('click',()=>{
-    if(!outbreakStarted)return;outbreakTurn++;
-    for(const a of actors){const step=[-size,size,-1,1][(outbreakTurn+a.p)%4];const next=a.p+step;if(next>=0&&next<size*size&&!walls.has(next)&&Math.abs((next%size)-(a.p%size))<=1)a.p=next;}
-    const s=actors.filter(a=>a.role==='survivor').map(a=>a.p).join(', ');
-    feed('zw-outbreak-feed',L('advance')+' '+outbreakTurn+': '+s+'.');
+    if(!outbreakStarted||outbreakEnded)return;outbreakTurn++;
+    for(const survivor of actors.filter(a=>a.role==='survivor')){
+      const next=pathStep(survivor.p,exitTile);if(next===survivor.p)continue;
+      survivor.p=next;
+      if(survivor.p===exitTile){survivor.role='escaped';escaped++;feed('zw-outbreak-feed','🟢 '+survivor.name+' reached extraction!');}
+    }
+    const hunter=actors.find(a=>a.role==='infected');
+    if(hunter){const targets=actors.filter(a=>a.role==='survivor');if(targets.length){targets.sort((a,b)=>Math.abs(a.p%size-hunter.p%size)+Math.abs(Math.floor(a.p/size)-Math.floor(hunter.p/size))-(Math.abs(b.p%size-hunter.p%size)+Math.abs(Math.floor(b.p/size)-Math.floor(hunter.p/size))));const target=targets[0];hunter.p=pathStep(hunter.p,target.p);if(hunter.p===target.p){target.role='captured';captured++;feed('zw-outbreak-feed','☠️ '+target.name+' was caught by the infected!');}else feed('zw-outbreak-feed','🧟 The infected tracks '+target.name+' through the ruins.');}}
+    }
+    if(escaped===2){outbreakEnded=true;feed('zw-outbreak-feed','🏆 EXTRACTION COMPLETE — both survivors escaped. YOU WIN!');}
+    else if(captured===2||outbreakTurn>=18){outbreakEnded=true;feed('zw-outbreak-feed',captured===2?'💀 OUTBREAK OVERRUN — both survivors were lost.':'⏱ EXTRACTION WINDOW CLOSED — mission failed.');}
+    if(outbreakEnded)$('zw-demo-turn').disabled=true;
     drawOutbreak();
   });
-  $('zw-demo-reset').addEventListener('click',resetOutbreak);drawOutbreak();
+  $('zw-demo-reset').addEventListener('click',resetOutbreak);resetOutbreak();
 
-  // Quest #19177 autonomous agents. The free simulation is deterministic and never calls the network.
+  // Seven-day survival campaign. Every action changes shared resources and the settlement's fate.
   const initial=()=>[
-    {name:'Mara',role:'scout',energy:8,food:3,wood:0,home:0},
-    {name:'Viktor',role:'builder',energy:8,food:3,wood:2,home:0},
-    {name:'Nix',role:'forager',energy:8,food:3,wood:1,home:0},
-    {name:'Ash',role:'guard',energy:8,food:3,wood:0,home:0}
+    {name:'Mara',role:'SCOUT',energy:8,food:0,wood:0,home:0},
+    {name:'Viktor',role:'BUILDER',energy:8,food:0,wood:2,home:0},
+    {name:'Nix',role:'FORAGER',energy:8,food:0,wood:1,home:0},
+    {name:'Ash',role:'GUARD',energy:8,food:0,wood:0,home:0}
   ];
-  let agents=initial(),turn=0,worldBusy=false,auto=false,autoTimer=null,food=12,logs=[];
+  let agents=initial(),turn=0,worldBusy=false,auto=false,autoTimer=null,food=12,danger=1,logs=[],worldFinished=false;
   const worldLog=t=>{logs.unshift(t);logs=logs.slice(0,18);$('zw-world-feed').replaceChildren(...logs.map(s=>{const p=document.createElement('p');p.textContent=s;return p;}));};
   const renderWorld=()=>{
-    $('zw-world-turn').textContent=L('day')+(locale()==='ja'?'':' ')+(Math.floor(turn/8)+1)+' · '+L('turn')+' '+turn;
+    const day=Math.floor(turn/4)+1;
+    $('zw-world-turn').textContent=L('day')+' '+Math.min(day,7)+' · '+L('turn')+' '+turn;
     $('zw-pop').textContent=agents.length+' '+L('survivors');
     $('zw-shelter').textContent=agents.reduce((n,a)=>n+a.home,0)+' '+L('shelters');
     $('zw-food').textContent=food+' '+L('food');
+    $('zw-danger').textContent='DANGER '+danger;
+    const avg=agents.reduce((n,a)=>n+a.energy,0)/(agents.length||1);
+    $('zw-energy-meter').style.width=Math.max(0,avg*10)+'%';
+    $('zw-agent-cards').replaceChildren(...agents.map(a=>{const card=document.createElement('div');card.className='zw-agent';const name=document.createElement('b');name.textContent=a.name+' · '+a.role;const stats=document.createElement('div');stats.textContent='⚡ '+a.energy+'/10  ·  🪵 '+a.wood+'  ·  🛖 '+a.home;card.append(name,stats);return card;}));
   };
-  const resetWorld=()=>{agents=initial();turn=0;food=12;logs=[];worldLog('The survivors wake in an abandoned district.');renderWorld();};
+  const stopAuto=()=>{auto=false;if(autoTimer)clearInterval(autoTimer);autoTimer=null;$('zw-auto').textContent=L('autoOff');};
+  const resetWorld=()=>{
+    agents=initial();turn=0;food=12;danger=1;logs=[];worldFinished=false;
+    worldLog('🌅 DAY 1 — The crew reaches an abandoned district. Goal: survive seven days and build two shelters.');
+    renderWorld();$('zw-next').disabled=false;
+  };
   function localAction(a){
-    const options=['scout','forage','gather','build','talk','rest','guard'];
-    const pick=options[(turn*7+a.name.length*3+a.energy)%options.length];
-    return pick;
+    if(a.energy<=3)return 'rest';
+    if(food<=6)return 'forage';
+    if(danger>=3&&a.role==='GUARD')return 'guard';
+    if(a.wood>=3&&a.home<2)return 'build';
+    if(a.wood<3&&a.role==='BUILDER')return 'gather';
+    if(a.role==='FORAGER'&&food<12)return 'forage';
+    if(a.role==='SCOUT'&&danger>1)return 'scout';
+    if(a.role==='GUARD')return 'guard';
+    if(a.wood<3)return 'gather';
+    return 'talk';
   }
   function applyAction(a,action,reason){
     const outcomes={
-      scout:()=>{a.energy=Math.max(0,a.energy-1);worldLog(a.name+' scouts the ruins and marks a safe route.');},
-      forage:()=>{a.energy=Math.max(0,a.energy-1);food+=2;worldLog(a.name+' finds edible supplies. +2 food.');},
-      gather:()=>{a.energy=Math.max(0,a.energy-1);a.wood+=2;worldLog(a.name+' gathers timber. +2 wood.');},
-      build:()=>{if(a.wood>=2&&a.energy>=2){a.wood-=2;a.energy-=2;a.home++;worldLog(a.name+' builds a shelter.');}else worldLog(a.name+' wants to build but lacks wood or energy.');},
-      talk:()=>{a.energy=Math.min(10,a.energy+1);worldLog(a.name+' shares a warning with the group. Trust grows.');},
-      rest:()=>{a.energy=Math.min(10,a.energy+2);worldLog(a.name+' rests and recovers energy.');},
-      guard:()=>{a.energy=Math.max(0,a.energy-1);worldLog(a.name+' guards the camp through the night.');}
+      scout:()=>{a.energy=Math.max(0,a.energy-1);danger=Math.max(0,danger-1);worldLog('🧭 '+a.name+' scouts a safe route. Danger −1.');},
+      forage:()=>{a.energy=Math.max(0,a.energy-1);food+=4;worldLog('🥫 '+a.name+' finds canned food. Rations +4.');},
+      gather:()=>{a.energy=Math.max(0,a.energy-1);a.wood+=2;worldLog('🪵 '+a.name+' salvages timber. Materials +2.');},
+      build:()=>{if(a.wood>=3&&a.energy>=2){a.wood-=3;a.energy-=2;a.home++;danger=Math.max(0,danger-1);worldLog('🛖 '+a.name+' completes a shelter. Shelter +1, danger −1.');}else worldLog('🔧 '+a.name+' cannot build yet — needs 3 timber and 2 energy.');},
+      talk:()=>{a.energy=Math.min(10,a.energy+1);worldLog('💬 '+a.name+' rallies the crew. Energy +1.');},
+      rest:()=>{a.energy=Math.min(10,a.energy+3);worldLog('🛏️ '+a.name+' rests and recovers 3 energy.');},
+      guard:()=>{a.energy=Math.max(0,a.energy-1);danger=Math.max(0,danger-1);worldLog('🛡️ '+a.name+' secures the perimeter. Danger −1.');}
     };
     (outcomes[action]||outcomes.rest)();
-    if(reason)worldLog('Thought: '+reason.slice(0,180));
+    if(reason)worldLog('💭 '+a.name+': '+reason.slice(0,150));
   }
   async function liveAction(a){
     const response=await fetch('https://gen.pollinations.ai/v1/chat/completions',{
       method:'POST',headers:{'Authorization':'Bearer '+userKey,'Content-Type':'application/json'},
       body:JSON.stringify({model:$('zw-model').value,messages:[
-        {role:'system',content:'You are '+a.name+', a '+a.role+' survivor in a zombie apocalypse simulation. Choose exactly one action: scout, forage, gather, build, talk, rest, guard. Consider your energy '+a.energy+'/10, food stock '+food+', wood '+a.wood+', shelters '+a.home+'. Return only JSON: {"action":"...","reason":"short reason"}. Do not invent other actions.'},
-        {role:'user',content:'It is day '+(Math.floor(turn/8)+1)+', turn '+turn+'. What do you do now?'}
-      ],temperature:0.4,max_tokens:120})
+        {role:'system',content:'You are '+a.name+', a '+a.role+' survivor in a 7-day zombie apocalypse campaign. Choose exactly one action: scout, forage, gather, build, talk, rest, guard. Your energy '+a.energy+'/10, shared food '+food+', your wood '+a.wood+', shelters '+agents.reduce((n,x)=>n+x.home,0)+', danger '+danger+'/5. Priorities: prevent starvation (forage if food <= 6), rest if energy <= 3, build if you have 3 wood and fewer than 2 shelters, gather timber if low, reduce danger with guard/scout. Return only JSON: {"action":"...","reason":"short reason"}. No other actions.'},
+        {role:'user',content:'Day '+(Math.floor(turn/4)+1)+', action '+(turn%4+1)+' of 4. What do you do to help the crew survive seven days?'}
+      ],temperature:0.3,max_tokens:120})
     });
     const data=await response.json();if(!response.ok)throw new Error(data.error?.message||'Pollinations request failed '+response.status);
     const raw=data.choices?.[0]?.message?.content||'';const match=raw.match(/\{[\s\S]*\}/);if(!match)throw new Error('Model did not return JSON');
@@ -163,21 +222,31 @@
     return {action:parsed.action,reason:String(parsed.reason||'')};
   }
   async function nextTurn(){
-    if(worldBusy)return;worldBusy=true;$('zw-next').disabled=true;$('zw-auto').disabled=true;
+    if(worldBusy||worldFinished)return;worldBusy=true;$('zw-next').disabled=true;$('zw-auto').disabled=true;
     const a=agents[turn%agents.length];
     try{
       const choice=userKey?await liveAction(a):{action:localAction(a),reason:''};
       applyAction(a,choice.action,choice.reason);turn++;
-      if(turn%agents.length===0){food=Math.max(0,food-agents.length);agents.forEach(x=>{if(food===0)x.energy=Math.max(0,x.energy-1);});}
+      if(turn%4===0){
+        food=Math.max(0,food-4);danger=Math.min(5,danger+1);
+        agents.forEach(x=>{x.energy=Math.max(0,x.energy-(x.home?0:1));});
+        worldLog('🌙 DAY '+Math.floor(turn/4)+' ENDS — the crew consumes 4 rations. Food: '+food+'.');
+      }
+      if(food===0||agents.every(x=>x.energy===0)){
+        worldFinished=true;stopAuto();worldLog('💀 SETTLEMENT LOST — the crew ran out of supplies or strength. Reset and plan better.');
+      }else if(turn>=28){
+        const shelters=agents.reduce((n,x)=>n+x.home,0);
+        worldFinished=true;stopAuto();worldLog(shelters>=2?'🏆 SEVEN DAYS SURVIVED — two shelters secured. THE CREW LIVES!':'⚠️ SEVEN DAYS SURVIVED, BUT THE SETTLEMENT IS EXPOSED. Build at least two shelters next run for a full victory.');
+      }
       renderWorld();
     }catch(e){worldLog('AI turn failed: '+e.message+'. No fallback action was applied.');}
-    finally{worldBusy=false;$('zw-next').disabled=false;$('zw-auto').disabled=false;}
+    finally{worldBusy=false;$('zw-next').disabled=worldFinished;$('zw-auto').disabled=false;}
   }
   $('zw-next').addEventListener('click',nextTurn);
-  $('zw-world-reset').addEventListener('click',()=>{if(auto){auto=false;clearInterval(autoTimer);$('zw-auto').textContent=L('autoOff');}resetWorld();});
+  $('zw-world-reset').addEventListener('click',()=>{stopAuto();resetWorld();});
   $('zw-auto').addEventListener('click',()=>{
     auto=!auto;$('zw-auto').textContent=auto?L('autoOn'):L('autoOff');
-    if(auto)autoTimer=setInterval(()=>{if(!worldBusy)nextTurn();},3500);else clearInterval(autoTimer);
+    if(auto)autoTimer=setInterval(()=>{if(!worldBusy&&!worldFinished)nextTurn();},3500);else clearInterval(autoTimer);
   });
   resetWorld();
   applyLocale();
