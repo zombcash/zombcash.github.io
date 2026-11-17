@@ -320,13 +320,13 @@
   }
   function applyAction(a,action,reason){
     const outcomes={
-      scout:()=>{a.energy=Math.max(0,a.energy-1);danger=Math.max(0,danger-1);worldLog('🧭 '+a.name+' scouts a safe route. Danger −1.');},
-      forage:()=>{a.energy=Math.max(0,a.energy-1);food+=4;worldLog('🥫 '+a.name+' finds canned food. Rations +4.');},
-      gather:()=>{a.energy=Math.max(0,a.energy-1);a.wood+=2;worldLog('🪵 '+a.name+' salvages timber. Materials +2.');},
-      build:()=>{if(a.wood>=3&&a.energy>=2){a.wood-=3;a.energy-=2;a.home++;danger=Math.max(0,danger-1);worldLog('🛖 '+a.name+' completes a shelter. Shelter +1, danger −1.');}else worldLog('🔧 '+a.name+' cannot build yet — needs 3 timber and 2 energy.');},
+      scout:()=>{a.energy=Math.max(0,a.energy-1);const reduction=a.role==='SCOUT'?2:1;danger=Math.max(0,danger-reduction);worldLog('🧭 '+a.name+' scouts a safe route. Danger −'+reduction+'.'+(a.role==='SCOUT'?' Scout speciality: extra route intel.':''));},
+      forage:()=>{a.energy=Math.max(0,a.energy-1);const rations=a.role==='FORAGER'?5:4;food+=rations;worldLog('🥫 '+a.name+' finds canned food. Rations +'+rations+'.'+(a.role==='FORAGER'?' Forager speciality: +1 extra ration.':''));},
+      gather:()=>{a.energy=Math.max(0,a.energy-1);const timber=a.role==='BUILDER'?3:2;a.wood+=timber;worldLog('🪵 '+a.name+' salvages timber. Materials +'+timber+'.'+(a.role==='BUILDER'?' Builder speciality: +1 extra timber.':''));},
+      build:()=>{if(a.wood>=3&&a.energy>=2){a.wood-=3;a.energy-=2;a.home++;const reduction=a.role==='BUILDER'?2:1;danger=Math.max(0,danger-reduction);worldLog('🛖 '+a.name+' completes a shelter. Shelter +1, danger −'+reduction+'.');}else worldLog('🔧 '+a.name+' cannot build yet — needs 3 timber and 2 energy.');},
       talk:()=>{a.energy=Math.min(10,a.energy+1);worldLog('💬 '+a.name+' rallies the crew. Energy +1.');},
       rest:()=>{a.energy=Math.min(10,a.energy+3);worldLog('🛏️ '+a.name+' rests and recovers 3 energy.');},
-      guard:()=>{a.energy=Math.max(0,a.energy-1);danger=Math.max(0,danger-1);worldLog('🛡️ '+a.name+' secures the perimeter. Danger −1.');}
+      guard:()=>{a.energy=Math.max(0,a.energy-1);const reduction=a.role==='GUARD'?2:1;danger=Math.max(0,danger-reduction);worldLog('🛡️ '+a.name+' secures the perimeter. Danger −'+reduction+'.'+(a.role==='GUARD'?' Guard speciality: reinforced perimeter.':''));}
     };
     (outcomes[action]||outcomes.rest)();
     if(reason)worldLog('💭 '+a.name+': '+reason.slice(0,150));
