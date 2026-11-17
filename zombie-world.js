@@ -55,6 +55,11 @@
       #zombcash-outbreak-world .zw-agent b{color:#f0ffb7}
       #zombcash-outbreak-world .zw-world-meter{height:12px;border:1px solid #668b7d}
       #zombcash-outbreak-world .zw-world-meter i{background:linear-gradient(90deg,#ff806d,#f8d66d,#7df3a4)}
+      #zombcash-outbreak-world .zw-settlement{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:12px 0}
+      #zombcash-outbreak-world .zw-site{min-height:68px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1px solid #668b86;border-radius:10px;background:linear-gradient(145deg,#30485a,#1a3332);font-size:23px;box-shadow:inset 0 0 16px #b4ffd20b}
+      #zombcash-outbreak-world .zw-site small{font:700 9px Orbitron,sans-serif;color:#d9f6d9;letter-spacing:.04em}
+      #zombcash-outbreak-world .zw-site.is-active{border-color:#a9ed8c;background:linear-gradient(145deg,#42684c,#24463b);box-shadow:0 0 12px #8dff9250}
+      #zombcash-outbreak-world .zw-site.is-danger{border-color:#ff8294;background:linear-gradient(145deg,#70394f,#3a2639);box-shadow:0 0 12px #ff647550}
       #zombcash-outbreak-world .zw-feed{border-radius:10px;background:linear-gradient(180deg,#101c29,#0b1718);border-color:#547a78}
       #zombcash-outbreak-world button,#zombcash-outbreak-world select{border-radius:8px;font-size:11px}
       @keyframes zw-pulse{50%{filter:brightness(1.3);transform:scale(.96)}}
@@ -96,6 +101,13 @@
         </div>
         <div class="zw-row"><span class="zw-stat" id="zw-pop">4 SURVIVORS</span><span class="zw-stat" id="zw-shelter">0 SHELTERS</span><span class="zw-stat" id="zw-food">12 FOOD</span><span class="zw-stat" id="zw-danger">DANGER 1</span></div>
         <div class="zw-world-meter" aria-label="Survival energy"><i id="zw-energy-meter"></i></div>
+        <div class="zw-settlement" id="zw-settlement" aria-label="Settlement status">
+          <div class="zw-site zw-site-camp" id="zw-site-camp">🏕️<small>BASE</small></div>
+          <div class="zw-site" id="zw-site-food">🥫<small>FOOD</small></div>
+          <div class="zw-site" id="zw-site-danger">🌫️<small>OUTSKIRTS</small></div>
+          <div class="zw-site" id="zw-site-shelter-1">🛖<small>SHELTER 1</small></div>
+          <div class="zw-site" id="zw-site-shelter-2">🛖<small>SHELTER 2</small></div>
+        </div>
         <div class="zw-agent-cards" id="zw-agent-cards"></div>
         <div class="zw-feed" id="zw-world-feed" aria-live="polite"><p>The settlement is quiet. Advance a turn to watch agents act.</p></div>
         <p class="zw-muted" id="zw-world-live-desc">Live mode asks one agent for one action per turn. No model call is made until you press NEXT AI TURN or enable AUTO.</p>
@@ -213,6 +225,12 @@
     $('zw-danger').textContent='DANGER '+danger;
     const avg=agents.reduce((n,a)=>n+a.energy,0)/(agents.length||1);
     $('zw-energy-meter').style.width=Math.max(0,avg*10)+'%';
+    const shelterCount=agents.reduce((n,a)=>n+a.home,0);
+    $('zw-site-food').classList.toggle('is-active',food>=8);$('zw-site-food').classList.toggle('is-danger',food<=4);
+    $('zw-site-danger').classList.toggle('is-danger',danger>=3);$('zw-site-danger').classList.toggle('is-active',danger<3);
+    $('zw-site-shelter-1').classList.toggle('is-active',shelterCount>=1);$('zw-site-shelter-2').classList.toggle('is-active',shelterCount>=2);
+    $('zw-site-food').title='Food supplies: '+food;$('zw-site-danger').title='Outbreak danger: '+danger+'/5';
+    $('zw-site-shelter-1').title=shelterCount>=1?'Shelter secured':'Shelter not built';$('zw-site-shelter-2').title=shelterCount>=2?'Second shelter secured':'Second shelter not built';
     const roleIcons={SCOUT:'🧭',BUILDER:'🛠️',FORAGER:'🥫',GUARD:'🛡️'};
     $('zw-agent-cards').replaceChildren(...agents.map(a=>{const card=document.createElement('div');card.className='zw-agent';const name=document.createElement('b');name.textContent=(roleIcons[a.role]||'🧍')+' '+a.name+' · '+a.role;const stats=document.createElement('div');stats.textContent='⚡ '+a.energy+'/10  ·  🪵 '+a.wood+'  ·  🛖 '+a.home;card.append(name,stats);return card;}));
   };
