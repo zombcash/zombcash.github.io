@@ -94,7 +94,7 @@ const path = require('path');
   for (let expectedTurn = 1; expectedTurn <= 28; expectedTurn++) {
     if (await page.locator('#zw-next').isDisabled()) throw new Error('Default local strategy ended before turn ' + expectedTurn);
     await page.locator('#zw-next').click();
-    await page.waitForFunction(turn => new RegExp('TURN\\\\s+' + turn + '\\\\b').test(document.querySelector('#zw-world-turn')?.textContent || ''), expectedTurn);
+    await page.waitForFunction(turn => new RegExp('TURN\\s+' + turn + '\\b').test(document.querySelector('#zw-world-turn')?.textContent || ''), expectedTurn);
   }
   const balanceLog = await page.locator('#zw-world-feed').innerText();
   if (!balanceLog.includes('THE CREW LIVES!')) throw new Error('Default local strategy did not achieve a full seven-day victory');
