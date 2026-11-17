@@ -3,10 +3,9 @@
   const root = document.getElementById('zombcash-ai-arena');
   if (!root) return;
   const API = 'https://gen.pollinations.ai/alpha/decisions';
-  const MODELS = [
-    { id: 'typesafe/jev-1.14', name: 'Jev' },
-    { id: 'microsoft/microsoft-decision-1', name: 'Microsoft Decision' }
-  ];
+  let MODELS = [];
+  let catalogReady = false;
+  const CATALOG = 'https://gen.pollinations.ai/models?category=decision';
   const $ = (id) => root.querySelector('#' + id);
   let pollenKey = null;
   let busy = false;
@@ -35,8 +34,57 @@
       offline = !pollenKey;
       $('zai-mode').textContent = offline ? 'FREE SIMULATION' : 'LIVE POLLINATIONS';
       $('zai-live').textContent = offline ? 'Connect your own Pollen to let live models play. Free simulation is always available.' : 'Connected. Live model calls use only your approved Pollen budget.';
-      status(offline ? 'Offline AI ready' : 'Pollinations connected');
+      status(offline ? 'Offline AI ready' : (catalogReady && MODELS.length >= 2 ? 'Pollinations connected · free models ready' : 'Checking free decision models…'));
+      $('zai-play').disabled = !!(pollenKey && (!catalogReady || MODELS.length < 2));
     });
+  }
+  function renderModelOptions() {
+    const selects = [$('zai-model-a'), $('zai-model-b')];
+    selects.forEach((select, index) => {
+      select.replaceChildren();
+      MODELS.forEach((model) => {
+        const option = document.createElement('option');
+        option.value = model.id;
+        option.textContent = model.name;
+        select.append(option);
+      });
+      if (MODELS.length) select.value = MODELS[Math.min(index, MODELS.length - 1)].id;
+      select.disabled = MODELS.length === 0;
+    });
+  }
+  async function loadDecisionModels() {
+    try {
+      const response = await fetch(CATALOG, { headers: { 'Accept': 'application/json' }, cache: 'no-store' });
+      if (!response.ok) throw new Error('Model catalogue returned HTTP ' + response.status);
+      const payload = await response.json();
+      const entries = Array.isArray(payload) ? payload :
+        Array.isArray(payload.models) ? payload.models :
+        Array.isArray(payload.data) ? payload.data : [];
+      MODELS = entries.filter((model) =>
+        model && model.paid_only === false &&
+        Array.isArray(model.supported_endpoints) &&
+        model.supported_endpoints.includes('/alpha/decisions')
+      ).map((model) => {
+        const id = model.id || model.name || model.model;
+        return id ? { id, name: model.title || model.display_name || model.name || id } : null;
+      }).filter(Boolean);
+      catalogReady = true;
+      renderModelOptions();
+      if (pollenKey) {
+        status(MODELS.length >= 2 ? 'Free decision models ready' : 'Fewer than two Quest-Pollen decision models are available');
+        $('zai-play').disabled = MODELS.length < 2;
+      }
+      if (!MODELS.length) log('No decision models currently advertise both Quest-Pollen access and /alpha/decisions support.');
+    } catch (error) {
+      catalogReady = false;
+      MODELS = [];
+      renderModelOptions();
+      if (pollenKey) {
+        status('Could not verify free model access');
+        $('zai-play').disabled = true;
+      }
+      log('Could not load the live decision-model catalogue: ' + error.message + '. Live mode remains disabled to avoid paid-only calls.');
+    }
   }
   function randomAction(seed) {
     // Deterministic local simulation: no network request and no Pollen use.
@@ -76,10 +124,18 @@
   }
   async function playRound() {
     if (busy || finished) return;
-    busy = true;
-    $('zai-play').disabled = true;
+    if (pollenKey && (!catalogReady || MODELS.length < 2)) {
+      status('Live mode requires two verified Quest-Pollen decision models.');
+      return;
+    }
     const modelA = $('zai-model-a').value;
     const modelB = $('zai-model-b').value;
+    if (pollenKey && (!MODELS.some(model => model.id === modelA) || !MODELS.some(model => model.id === modelB))) {
+      status('Select models verified for Quest Pollen.');
+      return;
+    }
+    busy = true;
+    $('zai-play').disabled = true;
     const aName = MODELS.find(m => m.id === modelA)?.name || modelA;
     const bName = MODELS.find(m => m.id === modelB)?.name || modelB;
     round++;
@@ -114,7 +170,7 @@
       log('Could not complete live round: ' + error.message + '. No offline fallback was charged.');
     } finally {
       busy = false;
-      $('zai-play').disabled = false;
+      $('zai-play').disabled = !!(pollenKey && (!catalogReady || MODELS.length < 2));
     }
   }
   function reset() {
@@ -129,5 +185,7 @@
   $('zai-reset').addEventListener('click', reset);
   $('zai-mode').textContent = 'FREE SIMULATION';
   $('zai-live').textContent = 'Connect your own Pollen to let live models play. Free simulation is always available.';
+  renderModelOptions();
   reset();
+  loadDecisionModels();
 })();
