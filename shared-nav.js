@@ -293,7 +293,6 @@
     '<div class="zsh-actions">' +
       (!isHome ? '<a class="zsh-home home-return-button" href="' + target('/') + '"><span aria-hidden="true">←</span> BACK TO HOME</a>' : '') +
       '<div class="zsh-language-slot"></div>' +
-      '<a class="zsh-line-button" href="https://line.me/R/ti/p/%40022khlio" target="_blank" rel="noopener noreferrer" aria-label="Add ZombieCash on LINE">ADD LINE</a>' +
       (loginButton ? '<span class="zsh-preserved-login-slot"></span>' : '<button class="zsh-login-button" type="button" data-zsh-login>LOGIN WITH TELEGRAM</button>') +
     '</div>';
 
@@ -435,8 +434,6 @@
       font:700 8px/1.2 Orbitron,system-ui,sans-serif!important;white-space:nowrap!important;overflow-wrap:normal!important;
     }
     header.zombcash-shared-header .zsh-cta:hover{border-color:#9bff45!important;color:#d4ffc0!important}
-    header.zombcash-shared-header .zsh-line-button{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important;min-height:36px!important;padding:0 12px!important;border:1px solid #365c42!important;border-radius:2px!important;background:#101b16!important;color:#b8f992!important;text-decoration:none!important;font:700 8px/1 Orbitron,system-ui,sans-serif!important;letter-spacing:.1px!important;white-space:nowrap!important}
-    header.zombcash-shared-header .zsh-line-button:hover{border-color:#9bff45!important;color:#d4ffc0!important;background:#14251a!important}
     header.zombcash-shared-header .zsh-language-slot{order:2!important;display:flex!important;align-items:center!important;flex:0 0 auto!important}
     header.zombcash-shared-header .language-switcher{position:relative!important;display:inline-flex!important;flex:0 0 auto!important;margin:0!important;z-index:10002!important}
     header.zombcash-shared-header .language-trigger{
@@ -495,7 +492,6 @@
     /* Back to Home first, language selector second, registration CTA at far right. */
     header.zombcash-shared-header .zsh-actions>.zsh-home{order:1!important}
     header.zombcash-shared-header .zsh-actions .zsh-language-slot{order:2!important}
-    header.zombcash-shared-header .zsh-actions .zsh-line-button{order:3!important}
     header.zombcash-shared-header .zsh-actions .zsh-login-button{order:4!important}
     header.zombcash-shared-header .zsh-actions>.zsh-home:hover,
     header.zombcash-shared-header .zsh-actions .language-trigger:hover,
@@ -1150,7 +1146,6 @@
       }
       header.zombcash-shared-header .zsh-actions > .zsh-home,
       header.zombcash-shared-header .zsh-actions .language-trigger,
-      header.zombcash-shared-header .zsh-actions .zsh-line-button,
       header.zombcash-shared-header .zsh-actions .zsh-login-button {
         height: 34px !important;
         min-height: 34px !important;
@@ -1411,7 +1406,7 @@
     const languageTrigger = header.querySelector('.language-trigger');
     const languageAria = {de:'Sprache auswählen',fr:'Choisir la langue',it:'Scegli la lingua',ja:'言語を選択','zh-CN':'选择语言',ru:'Выбрать язык',tr:'Dil seçin',hi:'भाषा चुनें'};
     if (languageTrigger) languageTrigger.setAttribute('aria-label', languageAria[language] || 'Choose language');
-    const lineControl = header.querySelector('.zsh-line-button');
+    const lineControl = document.querySelector('#zsh-about-footer .zsh-footer-line');
     const lineLabels = {de:'LINE HINZUFÜGEN',fr:'AJOUTER LINE',it:'AGGIUNGI LINE',ja:'LINEを追加','zh-CN':'添加 LINE',ru:'ДОБАВИТЬ LINE',tr:'LINE EKLE',hi:'LINE जोड़ें'};
     if (lineControl) lineControl.textContent = language === 'en' ? 'ADD LINE' : (lineLabels[language] || 'ADD LINE');
     const loginControl = header.querySelector('.zsh-login-button');
@@ -1431,10 +1426,10 @@
     localizeNav(routeLanguage);
   };
   document.addEventListener('zombcash:languagechange', event => localizeNav(event.detail && event.detail.language || 'en'));
-  const lineFriendLink = header.querySelector('.zsh-line-button');
+  const lineFriendLink = document.querySelector('#zsh-about-footer .zsh-footer-line');
   if (lineFriendLink && !lineFriendLink.dataset.zcTracked) {
     lineFriendLink.dataset.zcTracked = '1';
-    lineFriendLink.addEventListener('click', () => { try { if (typeof window.gtag === 'function') window.gtag('event','line_add_friend_click',{event_category:'community',event_label:'header',page_path:location.pathname,language:document.documentElement.lang||'en'}); } catch (_) {} });
+    lineFriendLink.addEventListener('click', () => { try { if (typeof window.gtag === 'function') window.gtag('event','line_add_friend_click',{event_category:'community',event_label:'footer',page_path:location.pathname,language:document.documentElement.lang||'en'}); } catch (_) {} });
   }
   readLanguage();
 
@@ -1589,10 +1584,11 @@
       '<nav class="zsh-footer-social" aria-label="' + copy[2] + '"><span class="zsh-footer-social-label">' + copy[2] + '</span>' +
       '<a href="https://discord.gg/9spZhHMhfQ" target="_blank" rel="noopener noreferrer" aria-label="ZombieCash on Discord">DISCORD</a>' +
       '<a href="https://www.pinterest.com/ZOMBCASH/" target="_blank" rel="noopener noreferrer" aria-label="ZombieCash on Pinterest">PINTEREST</a>' +
-      '<a href="https://bsky.app/profile/zombcash.bsky.social" target="_blank" rel="noopener noreferrer" aria-label="ZombieCash on Bluesky">BLUESKY</a></nav>';
+      '<a href="https://bsky.app/profile/zombcash.bsky.social" target="_blank" rel="noopener noreferrer" aria-label="ZombieCash on Bluesky">BLUESKY</a>' +
+      '<a class="zsh-footer-line" href="https://line.me/R/ti/p/%40022khlio" target="_blank" rel="noopener noreferrer" aria-label="Add ZombieCash on LINE">LINE</a></nav>';
     const style = document.createElement('style');
     style.id = 'zsh-about-footer-style';
-    style.textContent = '#zsh-about-footer{box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px;width:100%;max-width:100%;margin:36px 0 0;padding:18px clamp(16px,4vw,48px);border-top:1px solid #9bff4533;background:#050907;color:#8e9d8d;font:500 12px/1.5 Rajdhani,Arial,sans-serif}#zsh-about-footer .zsh-footer-about{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}#zsh-about-footer a{color:#b8f992;text-decoration:none;font:700 10px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.04em}#zsh-about-footer a:hover{color:#9bff45;text-decoration:underline}#zsh-about-footer span{color:#718071}#zsh-about-footer .zsh-footer-social{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}#zsh-about-footer .zsh-footer-social-label{color:#718071;font:700 9px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.08em}#zsh-about-footer .zsh-footer-social a{padding:5px 8px;border:1px solid #9bff4533;border-radius:2px;background:#09110c;font-size:9px;letter-spacing:.06em}#zsh-about-footer .zsh-footer-social a:hover{border-color:#9bff45;background:#101b12}@media(max-width:600px){#zsh-about-footer{flex-direction:column;align-items:flex-start;padding:16px}#zsh-about-footer .zsh-footer-social{gap:8px}}';
+    style.textContent = '#zsh-about-footer{box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px;width:100%;max-width:100%;margin:36px 0 0;padding:18px clamp(16px,4vw,48px);border-top:1px solid #9bff4533;background:#050907;color:#8e9d8d;font:500 12px/1.5 Rajdhani,Arial,sans-serif}#zsh-about-footer .zsh-footer-about{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}#zsh-about-footer a{color:#b8f992;text-decoration:none;font:700 10px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.04em}#zsh-about-footer a:hover{color:#9bff45;text-decoration:underline}#zsh-about-footer span{color:#718071}#zsh-about-footer .zsh-footer-social{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}#zsh-about-footer .zsh-footer-social-label{color:#718071;font:700 9px/1.5 Orbitron,Arial,sans-serif;letter-spacing:.08em}#zsh-about-footer .zsh-footer-social a{padding:5px 8px;border:1px solid #9bff4533;border-radius:2px;background:#09110c;font-size:9px;letter-spacing:.06em}#zsh-about-footer .zsh-footer-social .zsh-footer-line{border-color:#365c42;background:#101b16;color:#b8f992}#zsh-about-footer .zsh-footer-social .zsh-footer-line:hover{border-color:#9bff45;background:#14251a;color:#d4ffc0}#zsh-about-footer .zsh-footer-social a:hover{border-color:#9bff45;background:#101b12}@media(max-width:600px){#zsh-about-footer{flex-direction:column;align-items:flex-start;padding:16px}#zsh-about-footer .zsh-footer-social{gap:8px}}';
     document.head.appendChild(style);
     document.body.appendChild(footer);
   };
