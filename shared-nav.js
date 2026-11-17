@@ -16,6 +16,19 @@
   } catch (error) {
     console.warn('[ZombieCash] Optional Social Bar loader failed:', error);
   }
+  /* Adsterra Popunder_1: one site-wide loader using the publisher's updated JS SYNC tag. */
+  try {
+    const popunderSrc = 'https://abscloud.org/1/1e35f47c75b9563c57c922bf4d7bb9cb';
+    if (!document.querySelector('script[src=\"' + popunderSrc + '\"]')) {
+      const popunderScript = document.createElement('script');
+      popunderScript.setAttribute('data-cfasync', 'false');
+      popunderScript.async = false;
+      popunderScript.src = popunderSrc;
+      (document.head || document.body || document.documentElement).appendChild(popunderScript);
+    }
+  } catch (error) {
+    console.warn('[ZombieCash] Optional Adsterra Popunder loader failed:', error);
+  }
   const NATIVE_ID = '4420dadadbd2f0727c322cd6c632be3e';
   const MOBILE_KEY = 'fbb2658d8dcb4503b358387f042869d1';
   const nativeContainerId = 'container-4420dadadbd2f0727c322cd6c632be3e';
