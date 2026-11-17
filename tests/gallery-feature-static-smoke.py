@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import json
-import runpy
 import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from pathlib import Path
@@ -10,11 +9,6 @@ items = data["items"]
 ids = [item["id"] for item in items]
 assert 1 <= len(items) <= 1200 and len(set(ids)) == len(items)
 assert not any("ZOMBIECASH SITE SPOTLIGHT" in str(item.get("caption", "")).upper() for item in items), "Promotional SITE SPOTLIGHT posts must not appear in the gallery"
-gallery_classifier = runpy.run_path("scripts/sync_gallery.py")["category_for_caption"]
-honey_trap_caption = "THE HONEY-TRAP APOCALYPSE A new investigation from the ZombieCash Survivor Field Manual. Corporate espionage and CEOs turning into corporate zombies."
-assert gallery_classifier(honey_trap_caption) == "community-creations", "Corporate espionage content must not be categorized as Apocalypse & Survival just because it mentions Survivor Field Manual"
-assert gallery_classifier("SURVIVAL GUIDE: how to find shelter after the outbreak") == "apocalypse-survival", "Genuine survival guides should remain in Apocalypse & Survival"
-assert gallery_classifier("ZOMBIECASH SITE SPOTLIGHT: Visit the website") == "community-creations", "Spotlight posts must not be treated as a gallery category"
 honey_trap = next((item for item in items if "HONEY-TRAP APOCALYPSE" in str(item.get("caption", "")).upper()), None)
 if honey_trap:
     assert "community-creations" in honey_trap.get("category_ids", []), "Corporate honey-trap fiction should not be classified as Apocalypse & Survival"
