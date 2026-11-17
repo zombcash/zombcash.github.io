@@ -28,7 +28,7 @@ CATEGORY_PATTERNS = {
     "site-transmissions": re.compile(r"\bZOMBIECASH\s+SITE\s+TRANSMISSION\b", re.I),
     # Crypto/market posts belong together even when they also use apocalypse language.
     "crypto-apocalypse": re.compile(r"\bCRYPTO\b|\bBITCOIN\b|\bSOLANA\b|\bMEMECOIN\b|\bTOKEN\b|\bWALLET\b|\bTRADING\b|\bPORTFOLIO\b|\bMARKET\b|\bCHARTS?\b|\bCANDLES?\b|\bHODL\b|\bBULL\b|\bBEAR\b|\bPUMP\b|\bDUMP\b", re.I),
-    "apocalypse-survival": re.compile(r"\bAPOCALYPSE\s+SURVIVAL\b|\bSURVIVAL\b|\bSURVIVOR\b|\bWASTELAND\b|\bBUNKER\b|\bOUTBREAK\b|\bSCAVENGER\b|\bSHELTER\b|\bFALLOUT\b|\bEVACUATION\b|\bPOST[ -]APOCALYPTIC\b|\bSAFE\s+ZONE\b|\bSUPPLY\s+RUN\b", re.I),
+    "apocalypse-survival": re.compile(r"\bAPOCALYPSE\s+SURVIVAL\b|\bSURVIVAL\b|\bWASTELAND\b|\bBUNKER\b|\bOUTBREAK\b|\bSCAVENGER\b|\bSHELTER\b|\bFALLOUT\b|\bEVACUATION\b|\bPOST[ -]APOCALYPTIC\b|\bSAFE\s+ZONE\b|\bSUPPLY\s+RUN\b", re.I),
     "community-creations": re.compile(r".+", re.S),
 }
 
