@@ -90,6 +90,20 @@ const path = require('path');
   await page.locator('#zw-world-reset').click();
   if (!(await page.locator('#zw-world-turn').innerText()).includes('TURN 0')) throw new Error('Reset World did not start a fresh campaign after a terminal result');
   if (await page.locator('#zw-next').isDisabled()) throw new Error('Reset World left the new campaign locked');
+  if (!(await page.locator('#zw-world-mode').innerText()).includes('FREE LOCAL SIMULATION')) throw new Error('Balance run must use the free local simulation, not a live model');
+  for (let expectedTurn = 1; expectedTurn <= 28; expectedTurn++) {
+    if (await page.locator('#zw-next').isDisabled()) throw new Error('Default local strategy ended before turn ' + expectedTurn);
+    await page.locator('#zw-next').click();
+    await page.waitForFunction(turn => new RegExp('TURN\\s+' + turn + '\\b').test(document.querySelector('#zw-world-turn')?.textContent || ''), expectedTurn);
+  }
+  const balanceLog = await page.locator('#zw-world-feed').innerText();
+  if (!balanceLog.includes('THE CREW LIVES!')) throw new Error('Default local strategy did not achieve a full seven-day victory');
+  if (parseInt(await page.locator('#zw-shelter').innerText(), 10) < 2) throw new Error('Default local strategy did not build at least two shelters');
+  if (parseInt(await page.locator('#zw-food').innerText(), 10) <= 0) throw new Error('Default local strategy reached victory without a food reserve');
+  if (!(await page.locator('#zw-next').isDisabled())) throw new Error('Completed balance run still allows another turn');
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('#zw-district-map .zw-district');
+  if (!(await page.locator('#zw-world-feed').innerText()).includes('THE CREW LIVES!')) throw new Error('Full victory from the default local strategy did not persist after reload');
   const out = path.join(process.cwd(), 'ai-worlds-visual-results');
   fs.mkdirSync(out, { recursive: true });
   await page.locator('#zombcash-outbreak-world').screenshot({ path: path.join(out, 'arcade-ai-worlds.png') });
