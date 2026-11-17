@@ -36,6 +36,8 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Run AI Worlds browser interaction tests
         run: node tests/ai-worlds.browser.cjs
+      - name: Verify Quest Pollen model eligibility and fail-closed live mode
+        run: node tests/arena-quest-pollen-filter.cjs
       - name: Check deployed Edge Function TypeScript
         uses: denoland/setup-deno@v2
         with:
