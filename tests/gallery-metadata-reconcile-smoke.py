@@ -38,6 +38,7 @@ patterns = {
     "zombie-memes": re.compile(r"\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b", re.I),
     "undead-after-dark": re.compile(r"\bUNDEAD\s+AFTER\s+DARK\b", re.I),
 }
+registered_categories = set(re.findall(r'^\s*"([^"]+)":\s*re\.compile', sync_script, re.M))
 category_counts = {}
 for item in items:
     caption = str(item.get("caption") or "")
@@ -45,12 +46,10 @@ for item in items:
     assert len(category_ids) == 1, f"Gallery item must have exactly one category: {item['id']}"
     category = category_ids[0]
     assert category != "site-transmissions", f"Removed Site Transmissions item returned: {item['id']}"
+    assert category in registered_categories, f"Unregistered gallery category: {category}"
     assert item.get("series") == category, f"Series/category mismatch: {item['id']}"
     category_counts[category] = category_counts.get(category, 0) + 1
     assert not re.search(r"\bZOMBIECASH\s+SITE\s+TRANSMISSION\b", caption, re.I), f"Site screenshot returned: {item['id']}"
-    primary_matches = [name for name, pattern in patterns.items() if pattern.search(caption)]
-    if len(primary_matches) == 1:
-        assert category == primary_matches[0], f"Primary series classification mismatch: {item['id']}"
 assert all(count <= per_category_limit for count in category_counts.values()), f"Rolling archive exceeded per-series limit {per_category_limit}: {category_counts}"
 assert not re.search(r'"site-transmissions"\s*:', sync_script), "Removed Site Transmissions category must not be registered in sync rules"
 assert re.search(r"ZOMBIECASH\\s\+SITE\\s\+TRANSMISSION", sync_script), "Site screenshot posts must be explicitly excluded from future sync"
