@@ -498,12 +498,16 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       const controls = await localized.locator(".gallery-category-chip").allTextContents();
       const firstCardTitle = (await localized.locator("#gallery-grid .gallery-caption p").first().textContent()) || "";
       const firstCardCategory = (await localized.locator("#gallery-grid .gallery-category-tag").first().textContent()) || "";
-      const localizedMemeCategory = {
-        de: "Zombie-Memes", fr: "Mèmes zombies", it: "Meme zombie",
-        ja: "ゾンビミーム", "zh-CN": "僵尸梗图", ru: "Зомби-мемы",
-        tr: "Zombi Memleri", hi: "ज़ॉम्बी मीम"
-      }[locale];
-      if (firstCardCategory !== localizedMemeCategory) throw new Error(locale + " first-card category is not translated: " + firstCardCategory);
+      const localizedCategoryLabels = {
+        "undead-after-dark": { de: "Untote bei Nacht", fr: "Morts-vivants nocturnes", it: "Non morti dopo il tramonto", ja: "夜更けのアンデッド", "zh-CN": "午夜不死者", ru: "Нежить после заката", tr: "Gece Yarısı Ölüleri", hi: "रात ढलने के बाद के ज़ॉम्बी" },
+        "zombie-memes": { de: "Zombie-Memes", fr: "Mèmes zombies", it: "Meme zombie", ja: "ゾンビミーム", "zh-CN": "僵尸梗图", ru: "Зомби-мемы", tr: "Zombi Memleri", hi: "ज़ॉम्बी मीम" },
+        "nightmare-horror": { de: "Albtraum & Horror", fr: "Cauchemar et horreur", it: "Incubo e horror", ja: "悪夢とホラー", "zh-CN": "噩梦与恐怖", ru: "Кошмары и хоррор", tr: "Kâbus ve Korku", hi: "दुःस्वप्न और हॉरर" },
+        "crypto-apocalypse": { de: "Krypto-Apokalypse", fr: "Crypto-apocalypse", it: "Crypto-apocalisse", ja: "暗号資産アポカリプス", "zh-CN": "加密末日", ru: "Криптоапокалипсис", tr: "Kripto Kıyameti", hi: "क्रिप्टो प्रलय" },
+        "community-creations": { de: "Community-Kreationen", fr: "Créations de la communauté", it: "Creazioni della community", ja: "コミュニティ作品", "zh-CN": "社区创作", ru: "Работы сообщества", tr: "Topluluk Eserleri", hi: "समुदाय की कलाकृतियाँ" }
+      };
+      const firstCategoryId = galleryData.items[0]?.category_ids?.[0];
+      const localizedFirstCategory = localizedCategoryLabels[firstCategoryId]?.[locale];
+      if (localizedFirstCategory && firstCardCategory !== localizedFirstCategory) throw new Error(locale + " first-card category is not translated: " + firstCardCategory);
       if (/NIGHTMARE & HORROR|ZOMBIECASH MEMES|ZOMBIECASH MEME|UNDEAD AFTER DARK|SITE TRANSMISSION/i.test(firstCardTitle)) throw new Error(locale + " source series header was not removed from the caption: " + firstCardTitle);
       const siteTransmissionLabels = ["Website-Meldungen", "Actualités du site", "Aggiornamenti dal sito", "サイト通信", "网站播报", "Передачи с сайта", "Site Duyuruları", "साइट अपडेट", "Site Transmissions"];
       if (controls.some(label => siteTransmissionLabels.includes(label))) throw new Error(locale + " removed Site Transmissions category is still visible");
