@@ -37,6 +37,9 @@ on:
       - '*/transmission-solana-memecoin-warning-signs.html'
       - '*/transmission-wallet-security-red-flags.html'
       - '*/zombcash-buying-guide.html'
+      - '*/buy-zombcash.html'
+      - '*/transmission-liquidity-is-not-market-cap.html'
+      - '*/survivor-field-manual.html'
       - 'survivor-field-manual.html'
       - '*/survivor-field-manual.html'
   push:
