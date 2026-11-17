@@ -204,6 +204,11 @@ def main():
             for key, value in prior.items():
                 if key not in source_keys:
                     item[key] = value
+            # Keep reviewed ALT/rights metadata, but always refresh the category
+            # from the current source caption so improved rules also fix old cards.
+            category = category_for_caption(item.get("caption") or prior.get("caption") or "")
+            item["category_ids"] = [category]
+            item["series"] = category
             continue
 
         caption = re.sub(r"\s+", " ", str(item.get("caption") or "")).strip()
