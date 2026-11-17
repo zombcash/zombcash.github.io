@@ -90,6 +90,7 @@ async function boot(browser, catalogResponse) {
 
     // If the catalogue cannot be verified, live mode fails closed.
     const unavailable = await boot(browser, 'error');
+    await unavailable.page.waitForFunction(() => document.querySelector('#zai-log')?.innerText.includes('Could not load the live decision-model catalogue'));
     await unavailable.page.evaluate(() => {
       const connector = document.querySelector('#zai-connect');
       connector.apiKey = 'test-pollen-key';
