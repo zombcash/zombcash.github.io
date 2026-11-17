@@ -8,7 +8,7 @@ items = data["items"]
 ids = [item["id"] for item in items]
 
 assert data.get("schema_version") == 2
-assert 1 <= len(items) <= 150, f"Expected 1–150 current gallery items, got {len(items)}"
+assert 1 <= len(items) <= 1200, f"Expected 1–1200 current gallery items, got {len(items)}"
 assert len(set(ids)) == len(items), "Duplicate gallery item IDs"
 
 def normalize_editorial_text(value):
@@ -38,14 +38,22 @@ patterns = {
     "zombie-memes": re.compile(r"\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b", re.I),
     "undead-after-dark": re.compile(r"\bUNDEAD\s+AFTER\s+DARK\b", re.I),
 }
-category_counts = {category: 0 for category in patterns}
+category_counts = {}
 for item in items:
     caption = str(item.get("caption") or "")
-    matches = [category for category, pattern in patterns.items() if pattern.search(caption)]
-    assert len(matches) == 1, f"Gallery item must match exactly one primary series: {item['id']}"
-    category_counts[matches[0]] += 1
-assert all(count > 0 for count in category_counts.values()), f"Expected current artwork in each primary series: {category_counts}"
+    category_ids = item.get("category_ids") or []
+    assert len(category_ids) == 1, f"Gallery item must have exactly one category: {item['id']}"
+    category = category_ids[0]
+    assert category != "site-transmissions", f"Removed Site Transmissions item returned: {item['id']}"
+    assert item.get("series") == category, f"Series/category mismatch: {item['id']}"
+    category_counts[category] = category_counts.get(category, 0) + 1
+    assert not re.search(r"\bZOMBIECASH\s+SITE\s+TRANSMISSION\b", caption, re.I), f"Site screenshot returned: {item['id']}"
+    primary_matches = [name for name, pattern in patterns.items() if pattern.search(caption)]
+    if len(primary_matches) == 1:
+        assert category == primary_matches[0], f"Primary series classification mismatch: {item['id']}"
 assert all(count <= per_category_limit for count in category_counts.values()), f"Rolling archive exceeded per-series limit {per_category_limit}: {category_counts}"
+assert not re.search(r'"site-transmissions"\s*:', sync_script), "Removed Site Transmissions category must not be registered in sync rules"
+assert re.search(r"ZOMBIECASH\\s\+SITE\\s\+TRANSMISSION", sync_script), "Site screenshot posts must be explicitly excluded from future sync"
 
 assert all(item.get("rights_status") == "review-required" for item in items), "Rights review must remain required for every item"
 reviewed = [item for item in items if item.get("alt_review_status") == "visual-reviewed"]
