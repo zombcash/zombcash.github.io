@@ -187,18 +187,17 @@ async function callTool(name:string,args:any){
   }
   throw new Error(\`Unknown tool: \${name}\`);
 }
-const TOOLS = [
-  { name: "create_match", description: "Create a shared ZombieCash Outbreak match. Returns match_id for other agents to join.", inputSchema: { type: "object", properties: { name: { type: "string", description: "Optional match name" } }, additionalProperties: false } },
-  { name: "join_match", description: "Join a match as a survivor or infected agent.", inputSchema: { type: "object", properties: { match_id: { type: "string" }, agent_id: { type: "string" }, role: { type: "string", enum: ["survivor", "infected"] } }, required: ["match_id", "agent_id", "role"], additionalProperties: false } },
-  { name: "get_match_state", description: "Read the authoritative state of a shared match.", inputSchema: { type: "object", properties: { match_id: { type: "string" } }, required: ["match_id"], additionalProperties: false } },
-  { name: "submit_action", description: "Submit one legal action for the current turn. Requires the private agent_token returned by join_match. Supported actions: move_north, move_south, move_east, move_west, scavenge, barricade, attack, wait.", inputSchema: { type: "object", properties: { match_id: { type: "string" }, agent_id: { type: "string" }, agent_token: { type: "string" }, action: { type: "string", enum: [...ACTIONS] } }, required: ["match_id", "agent_id", "agent_token", "action"], additionalProperties: false } },
+const TOOLS=[
+  {name:"create_match",description:"Create an 18x14 ZombieCash Outbreak map with 18 survivors, 6 infected, movable debris and helicopter extraction zones.",inputSchema:{type:"object",properties:{name:{type:"string",description:"Optional match name"}},additionalProperties:false}},
+  {name:"join_match",description:"Join as the survivor or infected faction controller. A controller can command all units on its side.",inputSchema:{type:"object",properties:{match_id:{type:"string"},agent_id:{type:"string"},role:{type:"string",enum:["survivor","infected"]}},required:["match_id","agent_id","role"],additionalProperties:false}},
+  {name:"get_match_state",description:"Read the authoritative 18x14 map, all units, score and recent events.",inputSchema:{type:"object",properties:{match_id:{type:"string"}},required:["match_id"],additionalProperties:false}},
+  {name:"submit_action",description:"Move one unit one tile, push an adjacent movable obstacle one tile, or wait. Each unit acts once per round. Optional unit_id selects a unit; otherwise the first ready unit is selected.",inputSchema:{type:"object",properties:{match_id:{type:"string"},agent_id:{type:"string"},agent_token:{type:"string"},unit_id:{type:"string"},action:{type:"string",enum:[...ACTIONS]}},required:["match_id","agent_id","agent_token","action"],additionalProperties:false}},
 ];
-
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method === "GET") {
     if (req.headers.get("accept")?.includes("text/event-stream")) return new Response(null, { status: 405, headers: { ...cors, Allow: "POST, OPTIONS" } });
-    return json({ name: "ZombieCash Outbreak MCP", status: "active", transport: "Streamable HTTP", endpoint: "/functions/v1/outbreak-mcp", tools: TOOLS.map(t => t.name) });
+    return json({ name: "ZombieCash Outbreak MCP", status: "active", transport: "Streamable HTTP", endpoint: "/functions/v1/outbreak-mcp", tools: TOOLS.map(t => t.name), map: { width: W, height: H }, units: { survivors: 18, infected: 6 } });
   }
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405, { Allow: "GET, POST, OPTIONS" });
 
@@ -213,8 +212,8 @@ Deno.serve(async (req: Request) => {
     return json({ jsonrpc: "2.0", id: body.id, result: {
       protocolVersion,
       capabilities: { tools: { listChanged: false } },
-      serverInfo: { name: "zombcash-outbreak", version: "1.0.0" },
-      instructions: "ZombieCash Outbreak multiplayer arena. Create a match, join as survivor or infected, inspect state, and submit one action per turn. Match state persists in the ZombieCash Supabase database."
+      serverInfo: { name: "zombcash-outbreak", version: "2.0.0" },
+      instructions: "ZombieCash Outbreak strategic multiplayer. Create an 18x14 match, join as survivor or infected faction controller, inspect all units, and submit one-tile move/push/wait actions for each unit. Humans can escape by helicopter; infected convert humans on contact. State persists in Supabase."
     } }, 200, { "Mcp-Protocol-Version": protocolVersion });
   }
   if (body.method === "ping") return json({ jsonrpc: "2.0", id: body.id, result: {} });
