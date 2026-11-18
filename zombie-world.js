@@ -319,7 +319,7 @@
   function moveActor(actor,target){
     if(!actor||!actor.alive||distance(actor.p,target)!==1||fixedWalls.has(target)||crates.has(target))return false;
     const victim=occupant(target);
-    if(actor.id[0]==='Z'&&victim&&victim.id[0]==='H'){infectHuman(victim,actor);actor.p=target;return true;}
+    if(actor.id[0]==='Z'&&victim&&victim.id[0]==='H'){infectHuman(victim,actor);return true;}
     if(victim)return false;
     actor.p=target;
     if(actor.id[0]==='H'&&heliPads.has(target)){actor.alive=false;actor.escape=true;escaped++;outbreakLog('🚁 '+actor.name+' '+OT('escaped'));}
