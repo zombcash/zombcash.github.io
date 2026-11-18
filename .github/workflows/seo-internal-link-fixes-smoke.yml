@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - "index.html"
+      - "soi-launch-radar.js"
+      - "tests/soi-launch-radar-smoke.py"
       - "**/*.html"
       - "arcade.html"
       - "zombie-maker.html"
@@ -45,3 +47,7 @@ jobs:
         run: python tests/indexnow-workflow-smoke.py
       - name: Validate GSC URL inspection workflow
         run: python tests/gsc-url-inspection-workflow-smoke.py
+      - name: Validate SOI Launch Radar JavaScript syntax
+        run: node --check soi-launch-radar.js
+      - name: Validate SOI dashboard IDs and controls
+        run: python tests/soi-launch-radar-smoke.py
