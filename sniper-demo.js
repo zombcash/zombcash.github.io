@@ -365,7 +365,7 @@
     }finally{state.busy=false;renderCandidates();}
   }
   function openPaper(item,automatic){
-    if(state.positions.some(p=>p.status==='open')){if(!automatic)alert(t('positionLimit'));return;}
+    if(!automatic&&state.positions.some(p=>p.status==='open')){alert(t('positionLimit'));return;}
     const buySol=Number($('sniper-size').value);
     const maxTrade=Math.max(0.001,Math.min(1000,Number($('sniper-capital')&&$('sniper-capital').value)||10));if(!Number.isFinite(buySol)||buySol<=0||buySol>maxTrade){if(!automatic)alert(state.lang==='ru'?'Размер сделки должен быть больше нуля и не превышать установленный максимум.':'Trade size must be positive and within your configured maximum.');return;}
     if(!item||!Number.isFinite(item.priceNative)||item.priceNative<=0){if(!automatic)alert(t('noPair'));return;}
@@ -512,7 +512,9 @@
       const age=now-Number(c.eventAt||0),m=c.firstMinute||{};
       const buys=Number(m.buyCount||0),sells=Number(m.sellCount||0);
       const net=Number(m.netSol||0),move=Number(m.priceChangePct||0);
-      return age>=0&&age<=60000&&Number(m.tradeCount||0)>=3&&buys>sells&&net>0&&move>=Math.max(0.05,Number(terminal.minMovePct)||0.2);
+      // Early-momentum demo: evaluate every newly observed mint during its configurable launch window.
+      // Buy/sell balance, net SOL and price movement remain visible as telemetry, not hard entry gates.
+      return age>=0&&age<=Math.max(60,Number(terminal.buyWindowSeconds||90))*1000&&Number(m.tradeCount||0)>=1;
     });
     if(!item)return;
     terminal.seen.push(item.address);terminal.seen=terminal.seen.slice(-250);terminal.lastAuto=Date.now();saveTerminal();
@@ -583,7 +585,9 @@
 
 
     /* Full-viewport trading terminal and position contract row */
-    .sniper-demo.zs-fullscreen{position:fixed!important;inset:0!important;width:100vw!important;height:auto!important;min-height:100vh!important;min-height:100dvh!important;max-height:none!important;z-index:2147483600!important;box-sizing:border-box!important;margin:0!important;border:0!important;border-radius:0!important;overflow:hidden!important}
+    .sniper-demo.zs-fullscreen{position:fixed!important;top:0!important;right:0!important;bottom:0!important;left:0!important;inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;min-height:100vh!important;min-height:100dvh!important;max-height:100vh!important;max-height:100dvh!important;z-index:2147483600!important;box-sizing:border-box!important;margin:0!important;border:0!important;border-radius:0!important;overflow:hidden!important;grid-template-rows:auto auto auto minmax(0,1fr)!important;align-content:stretch!important}
+    .zs-fullscreen .zs-layout{height:auto!important;min-height:0!important;align-self:stretch!important;min-width:0!important}
+    .zs-fullscreen .zs-left,.zs-fullscreen .zs-center,.zs-fullscreen .zs-right{height:100%!important;min-height:0!important;min-width:0!important}
     .zs-fullscreen .zs-layout{min-height:0!important;height:100%!important}
     .zs-fullscreen .zs-left,.zs-fullscreen .zs-center,.zs-fullscreen .zs-right{min-height:0!important;overflow:auto!important;overscroll-behavior:contain!important}
     .zs-fullscreen .zs-position-section{min-height:0!important;overflow:auto!important}
