@@ -304,7 +304,7 @@
     let best=null,bestScore=-1;
     for(const p of valid){const {x,y}=cellXY(p);let nearest=99;for(const q of used){const c=cellXY(q);nearest=Math.min(nearest,Math.abs(x-c.x)+Math.abs(y-c.y));}const score=used.size?nearest:Math.random()*0.01;if(score>bestScore){best=p;bestScore=score;}}
     if(best!==null&&(!used.size||bestScore>=minGap))return best;
-    for(let p=0;p<BOARD;p++)if(!used.has(p)&&!fixedWalls.has(p)&&!crates.has(p)&&!heliPads.has(p))return p;
+    for(const p of preferred)if(!used.has(p)&&!fixedWalls.has(p)&&!crates.has(p)&&!heliPads.has(p))return p;
     return 0;
   }
   function newRoster(){
@@ -386,7 +386,7 @@
       else if(crates.has(p)){cell.textContent='🧱';cell.classList.add('zw-crate');cell.title='Movable street barricade';}
       else if(fixedWalls.has(p)){cell.textContent='🏢';cell.classList.add('zw-wall','zw-building');cell.title='Building footprint / impassable';}
       else if(hazards.has(p)){cell.textContent='☣️';cell.classList.add('zw-hazard');cell.title='Contaminated zone';}
-      else if(parks.has(p)&&Math.random()<0.015){cell.textContent='🌳';cell.title='City park';}
+      else if(parks.has(p)&&p%5===0){cell.textContent='🌳';cell.title='City park';}
       else cell.textContent='';
       cell.addEventListener('click',()=>onTileClick(p));map.append(cell);
     }
