@@ -176,8 +176,14 @@
       const sourceLabel=item.source==='pumpportal'?' · '+t('liveTag'):' · DEX PROFILE';
       main.append(make('small','sniper-muted',item.address.slice(0,5)+'…'+item.address.slice(-5)+' · '+ageLabel(age)+sourceLabel));
       const stats=make('div','sniper-candidate-stats');
-      stats.append(make('span', '', t('liquidity')+': 
-      const link=make('a','sniper-link','DEXSCREENER ↗'); link.href=item.url; link.target='_blank'; link.rel='noopener noreferrer';
+      stats.append(make('span','',t('liquidity')+': $'+fmt(item.liquidityUsd,0)));
+      stats.append(make('span','',t('price')+': '+(item.priceNative>0?fmt(item.priceNative,9):t('waitingForPool'))));
+      const action=make('button','sniper-action',item.priceNative>0?t('action'):t('waitingForPool'));
+      action.type='button';
+      action.disabled=!(item.priceNative>0);
+      action.addEventListener('click',()=>openPaper(item));
+      const link=make('a','sniper-link','DEXSCREENER ↗');
+      link.href=item.url;link.target='_blank';link.rel='noopener noreferrer';
       row.append(main,stats,link,action);host.append(row);
     });
   }
@@ -405,11 +411,12 @@
     $('sniper-clear').addEventListener('click',()=>{state.positions=[];saveStore();clearServerHistory();renderPositions();$('sniper-feed-status').textContent=t('cleared');});
     ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
     refreshFeed();if(authToken())syncFromServer().then(updatePositions);else{updateSyncStatus('loginToSync');updatePositions();}
-    state.timer=window.setInterval(()=>{checkAccountChange();refreshFeed();updatePositions();},30000);
+    state.timer=window.setInterval(()=>{checkAccountChange();refreshFeed();},10000);
+    state.positionTimer=window.setInterval(()=>{updatePositions();},30000);
     document.addEventListener('zombcash:languagechange',translate);
-    document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer();});
+    document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer().then(updatePositions);});
     document.addEventListener('click',event=>{if(event.target&&event.target.closest&&event.target.closest('#survivor-logout'))Promise.resolve().then(checkAccountChange);});
-    window.addEventListener('storage',event=>{if(event.key===TOKEN_KEY||event.key===PROFILE_KEY){if(!checkAccountChange()&&authToken())syncFromServer();}});
+    window.addEventListener('storage',event=>{if(event.key===TOKEN_KEY||event.key===PROFILE_KEY){if(!checkAccountChange()&&authToken())syncFromServer().then(updatePositions);}});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
