@@ -657,7 +657,7 @@
     ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
     refreshFeed();if(authToken())syncFromServer().then(updatePositions);else{updateSyncStatus('loginToSync');updatePositions();}
     state.timer=window.setInterval(()=>{checkAccountChange();if(!document.hidden)refreshFeed();},15000);
-    state.positionTimer=window.setInterval(()=>{if(!document.hidden)updatePositions();},20000);
+    state.positionTimer=window.setInterval(()=>{if(!document.hidden)updatePositions();},10000);
     document.addEventListener('keydown',event=>{if(event.key==='Escape'&&$('zombie-sniper-demo')?.classList.contains('zs-fullscreen')){$('zombie-sniper-demo').classList.remove('zs-fullscreen');document.body.classList.remove('zs-lock');const b=document.querySelector('.zs-expand');if(b)b.textContent='⛶ FULL SCREEN';}});
     document.addEventListener('zombcash:languagechange',()=>{detectLang();translate();if($('zs-kpis'))renderDashboardState();});
     document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer().then(updatePositions);});
