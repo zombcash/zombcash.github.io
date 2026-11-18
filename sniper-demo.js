@@ -12,9 +12,9 @@
   const OFFICIAL_MINT = '6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump';
   const copy = {
     en: {
-      title:'ZOMBIE SNIPER // PAPER DEMO', intro:'Test the entry and exit rules against public DEX market data. This sandbox never connects a wallet and never submits a transaction.',
+      title:'ZOMBIE SNIPER // PAPER DEMO', intro:'Test the entry and exit rules against Pump.fun bonding-curve trades during each token’s first minute. Paper mode never signs or sends a transaction.',
       demo:'DEMO ONLY', refresh:'REFRESH TOKEN FEED', loading:'Scanning the latest public token profiles…', failed:'The public feed is temporarily unavailable. Try again later.',
-      source:'Source: PumpPortal free new-token/migration WebSocket stream plus DexScreener SOL-pair snapshots; DexScreener latest profiles are the fallback. Feed delivery and DEX indexing can be delayed; first-minute execution is not guaranteed.',
+      source:'Source: PumpPortal new-token stream plus per-Mint bonding-curve trades during the first 60 seconds. Trade streaming requires an API key and linked wallet; open positions remain monitored. DEX profiles are display-only fallback.',
       amount:'PAPER BUY SIZE (SOL)', target:'NET PROFIT TARGET (%)', stop:'NET STOP-LOSS (%)',
       network:'NETWORK FEE / TX (SOL)', priority:'PRIORITY FEE / TX (SOL)', dex:'DEX FEE / SIDE (%)', slip:'SLIPPAGE / SIDE (%)',
       assumptions:'Editable cost assumptions — not live transaction quotes. Actual costs depend on the route, congestion, liquidity and wallet account state.',
@@ -24,7 +24,7 @@
       open:'OPEN', closed:'CLOSED', entry:'ENTRY', current:'CURRENT', net:'NET P/L', targetHit:'NET TARGET HIT — SIMULATED SELL',
       stopHit:'NET STOP-LOSS HIT — SIMULATED SELL', manualClose:'CLOSE PAPER POSITION', saved:'Demo history is stored only in this browser on this device.', synced:'Demo history synced to your Telegram survivor profile.', loginToSync:'Log in with Telegram to sync demo history; otherwise it stays in this browser.', loginAgain:'Your Telegram session expired. Log in again to sync.', syncError:'Account sync is unavailable; this device copy is kept locally.',
       rules:'Net P/L includes both-side DEX fee and slippage assumptions plus network and priority fees for both transactions. The target is checked against net P/L, not token price movement.',
-      cap:'Demo trade size is capped at 0.05 SOL. No wallet is created or funded. Live trading is disabled.',
+      cap:'Demo trade size is capped at 0.05 SOL. A registered profile may have an empty Vault-backed wallet, but paper mode never uses or funds it. Live trading remains disabled.',
       ageUnknown:'unknown', justNow:'just now', mins:'m ago', hours:'h ago', days:'d ago', liveConnected:'LIVE LAUNCH STREAM CONNECTED', liveDisconnected:'LAUNCH STREAM OFFLINE — DEXSCREENER FALLBACK', waitingForPool:'WAITING FOR SOL POOL', liveTag:'LIVE LAUNCH',
       needAmount:'Enter a paper buy size greater than zero and no more than 0.05 SOL.',
       noPair:'No current SOL-quoted pool is available for this token.', buyOk:'Paper position opened. No transaction was sent.',
@@ -32,9 +32,9 @@
       refreshDone:'Feed refreshed.', feeWarning:'Illustrative assumptions only'
     },
     ru: {
-      title:'ZOMBIE SNIPER // ДЕМО-РЕЖИМ', intro:'Проверь правила входа и выхода на публичных рыночных данных DEX. Демо не подключает кошелёк и не отправляет транзакции.',
+      title:'ZOMBIE SNIPER // ДЕМО-РЕЖИМ', intro:'Проверяй вход и выход по сделкам bonding curve Pump.fun в первые 60 секунд после создания токена. Демо не подписывает и не отправляет транзакции.',
       demo:'ТОЛЬКО ДЕМО', refresh:'ОБНОВИТЬ ЛЕНТУ ТОКЕНОВ', loading:'Сканируем последние публичные профили токенов…', failed:'Публичная лента временно недоступна. Попробуйте позже.',
-      source:'Источник: бесплатный WebSocket-поток PumpPortal о новых токенах и миграциях плюс котировки SOL-пар DexScreener; резервный источник — последние профили DexScreener. Поток и индексация DEX могут запаздывать; вход в первую минуту не гарантируется.',
+      source:'Источник: поток новых Mint PumpPortal и сделки bonding curve по каждому Mint в первые 60 секунд. Для потока сделок нужен API-ключ и привязанный кошелёк; открытые позиции продолжают отслеживаться. DexScreener используется только как резервный источник отображения.',
       amount:'РАЗМЕР ДЕМО-ПОКУПКИ (SOL)', target:'ЦЕЛЬ ЧИСТОЙ ПРИБЫЛИ (%)', stop:'СТОП-ЛОСС ПО ЧИСТОМУ P/L (%)',
       network:'СЕТЕВАЯ КОМИССИЯ / TX (SOL)', priority:'ПРИОРИТЕТНАЯ КОМИССИЯ / TX (SOL)', dex:'КОМИССИЯ DEX / СТОРОНА (%)', slip:'ПРОСКАЛЬЗЫВАНИЕ / СТОРОНА (%)',
       assumptions:'Редактируемые допущения по расходам — не актуальные котировки комиссий. Фактические расходы зависят от маршрута, нагрузки сети, ликвидности и состояния кошелька.',
@@ -44,7 +44,7 @@
       open:'ОТКРЫТА', closed:'ЗАКРЫТА', entry:'ВХОД', current:'ТЕКУЩАЯ', net:'ЧИСТЫЙ P/L', targetHit:'ЦЕЛЬ ПО ЧИСТОЙ ПРИБЫЛИ ДОСТИГНУТА — ДЕМО-ПРОДАЖА',
       stopHit:'СТОП-ЛОСС ПО ЧИСТОМУ P/L ДОСТИГНУТ — ДЕМО-ПРОДАЖА', manualClose:'ЗАКРЫТЬ ДЕМО-ПОЗИЦИЮ', saved:'История демо хранится только в этом браузере на этом устройстве.', synced:'История демо синхронизирована с профилем Telegram.', loginToSync:'Войдите через Telegram для синхронизации; иначе история останется в этом браузере.', loginAgain:'Сессия Telegram истекла. Войдите снова для синхронизации.', syncError:'Синхронизация недоступна; локальная копия сохранена.',
       rules:'Чистый P/L учитывает комиссии DEX и проскальзывание на обеих сторонах, а также сетевые и приоритетные комиссии обеих транзакций. Цель проверяется по чистому P/L, а не по изменению цены токена.',
-      cap:'Размер демо-сделки ограничен 0,05 SOL. Кошелёк не создаётся и не пополняется. Реальная торговля отключена.',
+      cap:'Размер демо-сделки ограничен 0,05 SOL. У зарегистрированного пользователя может быть пустой кошелёк, защищённый Vault, но демо его не использует и не пополняет. Реальная торговля отключена.',
       ageUnknown:'неизвестно', justNow:'только что', mins:' мин. назад', hours:' ч. назад', days:' дн. назад', liveConnected:'ПОТОК ЗАПУСКОВ АКТИВЕН', liveDisconnected:'ПОТОК ОТКЛЮЧЁН — РЕЗЕРВ DEXSCREENER', waitingForPool:'ОЖИДАНИЕ SOL-ПУЛА', liveTag:'НОВЫЙ ЗАПУСК',
       needAmount:'Укажите размер демо-покупки больше нуля и не более 0,05 SOL.',
       noPair:'Для этого токена нет текущего пула с котировкой в SOL.', buyOk:'Демо-позиция открыта. Транзакция не отправлялась.',
@@ -97,8 +97,77 @@
       saveStore();updateSyncStatus('synced');
     }catch(_){if(telegramId()===accountId&&authToken()===token)updateSyncStatus('syncError');}
   }
+  async function setServerPaperEnabled(enabled){
+    const token=authToken();
+    if(!token)return true; // Guest demo remains local-only.
+    try{
+      const response=await fetch(AUTH_API+'/api/sniper/settings',{
+        method:'POST',
+        headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+        body:JSON.stringify({
+          enabled:!!enabled,mode:'paper',
+          paperCapitalSol:Number($('sniper-capital')&&$('sniper-capital').value)||10,
+          maxTradeSol:Math.min(0.05,Number($('sniper-size')&&$('sniper-size').value)||0.05),
+          takeProfitPct:Number($('sniper-target')&&$('sniper-target').value)||10,
+          stopLossPct:Number($('sniper-stop')&&$('sniper-stop').value)||5,
+          minPriceMovePct:Number($('sniper-min-move')&&$('sniper-min-move').value)||0.2,
+          idleExitSeconds:Number($('sniper-idle-timeout')&&$('sniper-idle-timeout').value)||60,
+          paperFeeBps:Math.min(5000,Math.round(20000*(1-(1-(Number($('sniper-dex')&&$('sniper-dex').value)||0)/100)*(1-(Number($('sniper-slip')&&$('sniper-slip').value)||0)/100)))),
+          paperNetworkFeeSol:Math.min(0.01,(Number($('sniper-network')&&$('sniper-network').value)||0)+(Number($('sniper-priority')&&$('sniper-priority').value)||0))
+        }),
+        cache:'no-store'
+      });
+      if(!response.ok){
+        const data=await response.json().catch(()=>({}));
+        window.alert(data.error||'Could not update server paper engine settings.');
+        return false;
+      }
+      return true;
+    }catch(_){
+      window.alert(state.lang==='ru'?'Не удалось связаться с серверным демо-снайпером.':'Could not reach the server paper engine.');
+      return false;
+    }
+  }
+
+  async function refreshWalletInfo(){
+    const panel=$('zs-wallet-panel');if(!panel)return;
+    panel.replaceChildren();
+    const title=dashNode('strong','',state.lang==='ru'?'ВАШ SOLANA-КОШЕЛЁК':'YOUR SOLANA WALLET');
+    panel.append(title);
+    const token=authToken();
+    if(!token){
+      panel.append(dashNode('small','',state.lang==='ru'?'Войдите через Telegram — для профиля будет создан отдельный кошелёк.':'Sign in with Telegram to create your dedicated wallet.'));
+      return;
+    }
+    try{
+      const response=await fetch(AUTH_API+'/api/sniper/wallet',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
+      if(!response.ok)throw new Error('wallet lookup '+response.status);
+      const data=await response.json(),wallet=data.wallet;
+      if(data.trading&&data.trading.mode==='paper'){
+        const serverEnabled=!!data.trading.enabled;
+        if(terminal.auto!==serverEnabled){terminal.auto=serverEnabled;saveTerminal();renderDashboardState();}
+      }
+      if(!wallet||!wallet.publicKey){
+        panel.append(dashNode('small','',state.lang==='ru'?'Кошелёк создаётся или временно недоступен.':'Wallet is provisioning or temporarily unavailable.'));
+        return;
+      }
+      const address=String(wallet.publicKey);
+      const line=dashNode('code','zs-wallet-address',address.slice(0,8)+'…'+address.slice(-8));
+      line.title=address;
+      const copy=dashNode('button','zs-copy-address',state.lang==='ru'?'КОПИРОВАТЬ':'COPY');
+      copy.type='button';
+      copy.addEventListener('click',async()=>{
+        try{await navigator.clipboard.writeText(address);copy.textContent=state.lang==='ru'?'СКОПИРОВАНО':'COPIED';}
+        catch(_){copy.textContent=state.lang==='ru'?'ОШИБКА':'FAILED';}
+      });
+      panel.append(line,copy,dashNode('small','',state.lang==='ru'?'Ключ хранится в защищённом хранилище. В демо-режиме средства не используются.':'Private key is held in protected server storage. Paper mode never uses wallet funds.'));
+    }catch(_){
+      panel.append(dashNode('small','',state.lang==='ru'?'Не удалось загрузить адрес кошелька.':'Could not load wallet address.'));
+    }
+  }
+
   async function syncFromServer(){
-    const token=authToken(),accountId=telegramId();if(!token||!accountId){updateSyncStatus('loginToSync');return;}
+    const token=authToken(),accountId=telegramId();if(!token||!accountId){updateSyncStatus('loginToSync');refreshWalletInfo();return;}
     try{
       const response=await fetch(AUTH_API+'/api/sniper/paper',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
       if(telegramId()!==accountId||authToken()!==token)return;
@@ -110,6 +179,7 @@
       if(remote.length){state.positions=remote;saveStore();renderPositions();}
       else if(state.positions.length){for(const p of state.positions)await persistPosition(p);}
       updateSyncStatus('synced');
+      refreshWalletInfo();
     }catch(_){if(telegramId()===accountId&&authToken()===token)updateSyncStatus('syncError');}
   }
   function checkAccountChange(){
@@ -177,14 +247,23 @@
       const sourceLabel=item.source==='pumpportal'?' · '+t('liveTag'):' · DEX PROFILE';
       main.append(make('small','sniper-muted',item.address.slice(0,5)+'…'+item.address.slice(-5)+' · '+ageLabel(age)+sourceLabel));
       const stats=make('div','sniper-candidate-stats');
-      stats.append(make('span','',t('liquidity')+': $'+fmt(item.liquidityUsd,0)));
-      stats.append(make('span','',t('price')+': '+(item.priceNative>0?fmt(item.priceNative,9):t('waitingForPool'))));
+      if(item.source==='pumpportal'){
+        const m=item.firstMinute||{};
+        stats.append(make('span','','BUY '+Number(m.buyCount||0)+' / SELL '+Number(m.sellCount||0)));
+        stats.append(make('span','','NET '+fmt(m.netSol||0,4)+' SOL'));
+        stats.append(make('span','','MOVE '+(m.priceChangePct==null?'—':fmt(m.priceChangePct,2)+'%')));
+        stats.append(make('span','',t('price')+': '+(item.priceNative>0?fmt(item.priceNative,9):t('waitingForPool'))+' SOL'));
+      }else{
+        stats.append(make('span','',t('liquidity')+': USD '+fmt(item.liquidityUsd,0)));
+        stats.append(make('span','',t('price')+': '+(item.priceNative>0?fmt(item.priceNative,9):t('waitingForPool'))));
+      }
       const action=make('button','sniper-action',item.priceNative>0?t('action'):t('waitingForPool'));
       action.type='button';
       action.disabled=!(item.priceNative>0);
       action.addEventListener('click',()=>openPaper(item));
-      const link=make('a','sniper-link','DEXSCREENER ↗');
-      link.href=item.url;link.target='_blank';link.rel='noopener noreferrer';
+      const link=make('a','sniper-link',item.source==='pumpportal'?'PUMP.FUN ↗':'DEXSCREENER ↗');
+      link.href=item.source==='pumpportal'?'https://pump.fun/coin/'+encodeURIComponent(item.address):item.url;
+      link.target='_blank';link.rel='noopener noreferrer';
       row.append(main,stats,link,action);host.append(row);
     });
     maybeAutoEnter();
@@ -236,67 +315,64 @@
   async function refreshFeed(){
     if(state.busy)return;
     state.busy=true;renderCandidates();
-    let liveConnected=false;
     try{
+      const liveResponse=await fetch(AUTH_API+'/api/sniper/launches?limit=30',{cache:'no-store'});
+      if(!liveResponse.ok)throw new Error('launch stream '+liveResponse.status);
+      const liveData=await liveResponse.json();
+      const feed=liveData.feed||{};
+      const launches=Array.isArray(liveData.launches)?liveData.launches:[];
+      const now=Date.now();
+      state.candidates=launches.map(launch=>{
+        const address=String(launch.mint||'');
+        const firstMinute=launch.firstMinute||{};
+        const curvePrice=Number(firstMinute.lastPriceSol)>0
+          ? Number(firstMinute.lastPriceSol)
+          : (Number(launch.vSolInBondingCurve)>0&&Number(launch.vTokensInBondingCurve)>0
+            ? Number(launch.vSolInBondingCurve)/Number(launch.vTokensInBondingCurve) : 0);
+        const eventAt=Number(launch.eventAt)||Number(launch.receivedAt)||0;
+        return {address,name:launch.name||'New launch',symbol:launch.symbol||'TOKEN',
+          priceNative:curvePrice,liquidityUsd:0,pairCreatedAt:eventAt,eventAt,firstMinute,
+          url:'https://pump.fun/coin/'+encodeURIComponent(address),source:'pumpportal',
+          status:launch.status||'detected',tradeStreamingEnabled:!!feed.tradeStreamingEnabled};
+      }).filter(item=>item.address&&item.eventAt&&now-item.eventAt>=0&&now-item.eventAt<=10*60*1000).slice(0,12);
+      if(state.candidates.length){
+        $('sniper-feed-status').textContent=feed.connected
+          ? (feed.tradeStreamingEnabled?'LIVE MINT + BONDING-CURVE TRADES':'MINT STREAM CONNECTED · TRADE API KEY REQUIRED')
+          : 'LAUNCH STREAM OFFLINE';
+      }else{
+        $('sniper-feed-status').textContent=feed.tradeStreamingEnabled?'WAITING FOR NEW MINTS':'TRADE STREAM REQUIRES PUMPPORTAL API KEY';
+      }
+    }catch(_){
+      // DEX profiles are display-only fallback; they cannot trigger automatic first-minute entry.
       try{
-        const liveResponse=await fetch(AUTH_API+'/api/sniper/launches?limit=12',{cache:'no-store'});
-        if(liveResponse.ok){
-          const liveData=await liveResponse.json();
-          liveConnected=!!(liveData.feed&&liveData.feed.connected);
-          const launches=Array.isArray(liveData.launches)?liveData.launches.slice(0,12):[];
-          if(launches.length){
-            const liveResolved=await Promise.allSettled(launches.map(async launch=>{
-              const address=String(launch.mint||'');
-              let pair=null;
-              try{pair=await fetchPairs(address);}catch(_){}
-              const eventAt=Number(launch.eventAt)||Number(launch.receivedAt)||0;
-              return {
-                address,
-                name:(pair&&pair.baseToken.name)||launch.name||'New launch',
-                symbol:(pair&&pair.baseToken.symbol)||launch.symbol||'TOKEN',
-                priceNative:pair?Number(pair.priceNative):0,
-                liquidityUsd:pair?Number(pair.liquidity&&pair.liquidity.usd)||0:0,
-                pairCreatedAt:pair?Number(pair.pairCreatedAt)||eventAt:eventAt,
-                eventAt,
-                url:'https://dexscreener.com/solana/'+encodeURIComponent(address),
-                source:'pumpportal',
-                status:launch.status||'detected'
-              };
-            }));
-            state.candidates=liveResolved.filter(x=>x.status==='fulfilled'&&x.value&&x.value.address).map(x=>x.value).slice(0,8);
-            if(state.candidates.length){
-              $('sniper-feed-status').textContent=liveConnected?t('liveConnected'):t('liveDisconnected');
-              return;
-            }
-          }
-        }
-      }catch(_){}
-      const r=await fetch(API+'/token-profiles/latest/v1',{cache:'no-store'});
-      if(!r.ok)throw new Error('profile feed '+r.status);
-      const profiles=await r.json();
-      const list=(Array.isArray(profiles)?profiles:[]).filter(x=>x&&x.chainId==='solana'&&x.tokenAddress&&x.tokenAddress!==OFFICIAL_MINT).slice(0,12);
-      const resolved=await Promise.allSettled(list.map(async profile=>{
-        const pair=await fetchPairs(profile.tokenAddress);
-        if(!pair)return null;
-        return {address:profile.tokenAddress,name:pair.baseToken.name||'Unknown',symbol:pair.baseToken.symbol||'TOKEN',priceNative:Number(pair.priceNative),liquidityUsd:Number(pair.liquidity&&pair.liquidity.usd)||0,pairCreatedAt:Number(pair.pairCreatedAt)||0,eventAt:0,source:'dexscreener',url:'https://dexscreener.com/solana/'+encodeURIComponent(profile.tokenAddress)};
-      }));
-      state.candidates=resolved.filter(x=>x.status==='fulfilled'&&x.value).map(x=>x.value).slice(0,8);
-      $('sniper-feed-status').textContent=liveConnected?t('liveConnected'):(state.candidates.length?t('liveDisconnected'):t('noCandidates'));
-    }catch(_){$('sniper-feed-status').textContent=t('failed');}
-    finally{state.busy=false;renderCandidates();}
+        const r=await fetch(API+'/token-profiles/latest/v1',{cache:'no-store'});
+        if(!r.ok)throw new Error('profile feed '+r.status);
+        const profiles=await r.json();
+        const list=(Array.isArray(profiles)?profiles:[]).filter(x=>x&&x.chainId==='solana'&&x.tokenAddress&&x.tokenAddress!==OFFICIAL_MINT).slice(0,8);
+        const resolved=await Promise.allSettled(list.map(async profile=>{
+          const pair=await fetchPairs(profile.tokenAddress);if(!pair)return null;
+          return {address:profile.tokenAddress,name:pair.baseToken.name||'Unknown',symbol:pair.baseToken.symbol||'TOKEN',
+            priceNative:Number(pair.priceNative),liquidityUsd:Number(pair.liquidity&&pair.liquidity.usd)||0,
+            pairCreatedAt:Number(pair.pairCreatedAt)||0,eventAt:0,firstMinute:null,source:'dexscreener',
+            url:'https://dexscreener.com/solana/'+encodeURIComponent(profile.tokenAddress)};
+        }));
+        state.candidates=resolved.filter(x=>x.status==='fulfilled'&&x.value).map(x=>x.value).slice(0,8);
+        $('sniper-feed-status').textContent=state.candidates.length?'DEXSCREENER DISPLAY FALLBACK · AUTO ENTRY DISABLED':t('failed');
+      }catch(__){state.candidates=[];$('sniper-feed-status').textContent=t('failed');}
+    }finally{state.busy=false;renderCandidates();}
   }
   function openPaper(item,automatic){
     if(state.positions.some(p=>p.status==='open')){if(!automatic)alert(t('positionLimit'));return;}
     const buySol=Number($('sniper-size').value);
     const maxTrade=Math.max(0.001,Math.min(10,Number($('sniper-max-size')&&$('sniper-max-size').value)||0.05));if(!Number.isFinite(buySol)||buySol<=0||buySol>maxTrade){if(!automatic)alert(state.lang==='ru'?'Размер сделки должен быть больше нуля и не превышать установленный максимум.':'Trade size must be positive and within your configured maximum.');return;}
     if(!item||!Number.isFinite(item.priceNative)||item.priceNative<=0){if(!automatic)alert(t('noPair'));return;}
-    if(Number(item.liquidityUsd||0)<Number(terminal.minLiquidity||0)){if(!automatic)alert(state.lang==='ru'?'Ликвидность ниже установленного минимума.':'Token liquidity is below your configured minimum.');return;}
+    if(item.source!=='pumpportal'&&Number(item.liquidityUsd||0)<Number(terminal.minLiquidity||0)){if(!automatic)alert(state.lang==='ru'?'Ликвидность ниже установленного минимума.':'Token liquidity is below your configured minimum.');return;}
     const c=getCosts();
     const closed=state.positions.filter(x=>x.status==='closed').reduce((a,x)=>a+(Number(x.netPnl)||0),0);
     const used=state.positions.filter(x=>x.status==='open').reduce((a,x)=>a+(Number(x.buySol)||0),0);
     if(buySol+used>Number(terminal.capital||10)+closed){if(!automatic)alert(state.lang==='ru'?'Недостаточно виртуального баланса.':'Insufficient virtual balance.');return;}
     const quantity=buySol*(1-c.dex)*(1-c.slip)/item.priceNative;
-    const now=Date.now();const p={id:makeUuid(),address:item.address,symbol:item.symbol,name:item.name,buySol,entryPrice:item.priceNative,lastPrice:item.priceNative,lastObservedPrice:item.priceNative,lastMovementAt:now,lastQuoteAt:now,quantity,openedAt:now,status:'open',netPnl:0,netPct:0,exitReason:null,priceHistory:[item.priceNative],_ownerTelegramId:telegramId()||'guest'};
+    const now=Date.now();const p={id:makeUuid(),address:item.address,symbol:item.symbol,name:item.name,buySol,entryPrice:item.priceNative,lastPrice:item.priceNative,lastObservedPrice:item.priceNative,lastMovementAt:now,lastQuoteAt:now,quantity,openedAt:now,status:'open',netPnl:0,netPct:0,exitReason:null,priceHistory:[item.priceNative],source:item.source||'manual',_ownerTelegramId:telegramId()||'guest'};
     state.positions.push(p);saveStore();renderPositions();renderStats();persistPosition(p);logEvent('BUY',item.symbol,(automatic?'Auto demo entry':'Manual demo entry')+' · '+fmt(buySol,4)+' SOL');if(!automatic)alert(t('buyOk'));
   }
   function closePaper(id,reason){
@@ -310,9 +386,18 @@
     let rotated=false;
     for(const p of open){
       try{
-        const pair=await fetchPairs(p.address);
-        if(!pair)continue;
-        const now=Date.now(),price=Number(pair.priceNative);
+        let price=0;
+        const token=authToken();
+        if(token){
+          try{
+            const quote=await fetch(AUTH_API+'/api/sniper/trades?mint='+encodeURIComponent(p.address),{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
+            if(quote.ok){const data=await quote.json();price=Number(data.trade&&data.trade.priceSol)||0;}
+          }catch(_){}
+        }
+        if(!(price>0)){
+          const pair=await fetchPairs(p.address);if(!pair)continue;price=Number(pair.priceNative);
+        }
+        const now=Date.now();
         if(!Number.isFinite(price)||price<=0)continue;
         p.lastQuoteAt=now;
         const previous=Number(p.lastObservedPrice||p.lastPrice||p.entryPrice);
@@ -339,8 +424,8 @@
   }
 
   const DASH_COPY = {
-    en:{nav:['Sniper','Stats','History','Settings','Help'],balance:'Virtual balance',profit:'Total P/L',trades:'Trades',wins:'Win rate',active:'Open positions',settings:'SIMULATION SETTINGS',capital:'Starting capital (SOL)',minliq:'Minimum liquidity (USD)',maxsize:'Maximum trade size (SOL)',autopilot:'AUTO SNIPER',armed:'AUTOSNIPER ACTIVE',paused:'AUTOSNIPER PAUSED',start:'START',pause:'PAUSE',stop:'STOP',launches:'LIVE LAUNCH FEED',journal:'SYSTEM LOG',empty:'No events yet',chart:'POSITION PERFORMANCE',demo:'DEMO MODE · PAPER TRADING',hint:'All settings are virtual and editable. No wallet or real transactions.',open:'OPEN',closed:'CLOSED',entry:'Entry',current:'Current',net:'Net',close:'Close demo position'},
-    ru:{nav:['Снайпер','Статистика','История','Настройки','Помощь'],balance:'Виртуальный баланс',profit:'Общий P/L',trades:'Сделки',wins:'Успешных',active:'Активные позиции',settings:'ПАРАМЕТРЫ СИМУЛЯЦИИ',capital:'Стартовый капитал (SOL)',minliq:'Мин. ликвидность (USD)',maxsize:'Макс. размер сделки (SOL)',autopilot:'АВТОСНАЙПЕР',armed:'АВТОСНАЙПЕР АКТИВЕН',paused:'АВТОСНАЙПЕР НА ПАУЗЕ',start:'ЗАПУСТИТЬ',pause:'ПАУЗА',stop:'СТОП',launches:'ЛЕНТА ЗАПУСКОВ LIVE',journal:'ЖУРНАЛ СИСТЕМЫ',empty:'Событий пока нет',chart:'ДИНАМИКА ПОЗИЦИИ',demo:'ДЕМО-РЕЖИМ · PAPER TRADING',hint:'Все параметры виртуальные и редактируемые. Без кошелька и реальных транзакций.',open:'ОТКРЫТА',closed:'ЗАКРЫТА',entry:'Вход',current:'Сейчас',net:'Чистый P/L',close:'Закрыть демо-позицию'},
+    en:{nav:['Sniper','Stats','History','Settings','Help'],balance:'Virtual balance',profit:'Total P/L',trades:'Trades',wins:'Win rate',active:'Open positions',settings:'SIMULATION SETTINGS',capital:'Starting capital (SOL)',minliq:'DEX fallback liquidity only (USD)',maxsize:'Maximum trade size (SOL)',autopilot:'AUTO SNIPER',armed:'AUTOSNIPER ACTIVE',paused:'AUTOSNIPER PAUSED',start:'START',pause:'PAUSE',stop:'STOP',launches:'LIVE LAUNCH FEED',journal:'SYSTEM LOG',empty:'No events yet',chart:'POSITION PERFORMANCE',demo:'DEMO MODE · PAPER TRADING',hint:'All settings are virtual and editable. No wallet or real transactions.',open:'OPEN',closed:'CLOSED',entry:'Entry',current:'Current',net:'Net',close:'Close demo position'},
+    ru:{nav:['Снайпер','Статистика','История','Настройки','Помощь'],balance:'Виртуальный баланс',profit:'Общий P/L',trades:'Сделки',wins:'Успешных',active:'Активные позиции',settings:'ПАРАМЕТРЫ СИМУЛЯЦИИ',capital:'Стартовый капитал (SOL)',minliq:'Ликвидность только для DEX fallback (USD)',maxsize:'Макс. размер сделки (SOL)',autopilot:'АВТОСНАЙПЕР',armed:'АВТОСНАЙПЕР АКТИВЕН',paused:'АВТОСНАЙПЕР НА ПАУЗЕ',start:'ЗАПУСТИТЬ',pause:'ПАУЗА',stop:'СТОП',launches:'ЛЕНТА ЗАПУСКОВ LIVE',journal:'ЖУРНАЛ СИСТЕМЫ',empty:'Событий пока нет',chart:'ДИНАМИКА ПОЗИЦИИ',demo:'ДЕМО-РЕЖИМ · PAPER TRADING',hint:'Все параметры виртуальные и редактируемые. Без кошелька и реальных транзакций.',open:'ОТКРЫТА',closed:'ЗАКРЫТА',entry:'Вход',current:'Сейчас',net:'Чистый P/L',close:'Закрыть демо-позицию'},
     de:{nav:['Sniper','Statistik','Verlauf','Einstellungen','Hilfe'],balance:'Virtuelles Guthaben',profit:'Gesamt-P/L',trades:'Trades',wins:'Erfolgsquote',active:'Offene Positionen',settings:'SIMULATIONSEINSTELLUNGEN',capital:'Startkapital (SOL)',minliq:'Mindestliquidität (USD)',maxsize:'Maximale Handelsgröße (SOL)',autopilot:'AUTO-SNIPER',armed:'AUTO-SNIPER AKTIV',paused:'AUTO-SNIPER PAUSIERT',start:'START',pause:'PAUSE',stop:'STOPP',launches:'LIVE TOKEN-STARTS',journal:'SYSTEMPROTOKOLL',empty:'Noch keine Ereignisse',chart:'POSITIONSVERLAUF',demo:'DEMO-MODUS · PAPER TRADING',hint:'Alle Werte sind virtuell und editierbar. Keine Wallet oder echten Transaktionen.',open:'OFFEN',closed:'GESCHLOSSEN',entry:'Einstieg',current:'Aktuell',net:'Netto',close:'Demo-Position schließen'},
     fr:{nav:['Sniper','Stats','Historique','Réglages','Aide'],balance:'Solde virtuel',profit:'P/L total',trades:'Transactions',wins:'Taux de réussite',active:'Positions ouvertes',settings:'PARAMÈTRES DE SIMULATION',capital:'Capital initial (SOL)',minliq:'Liquidité minimale (USD)',maxsize:'Taille maximale de transaction (SOL)',autopilot:'AUTO-SNIPER',armed:'AUTO-SNIPER ACTIF',paused:'AUTO-SNIPER EN PAUSE',start:'DÉMARRER',pause:'PAUSE',stop:'ARRÊTER',launches:'NOUVEAUX TOKENS LIVE',journal:'JOURNAL SYSTÈME',empty:'Aucun événement',chart:'PERFORMANCE',demo:'MODE DÉMO · PAPER TRADING',hint:'Tous les paramètres sont virtuels et modifiables. Aucun portefeuille ni transaction réelle.',open:'OUVERTE',closed:'FERMÉE',entry:'Entrée',current:'Actuel',net:'Net',close:'Fermer la position démo'},
     it:{nav:['Sniper','Statistiche','Cronologia','Impostazioni','Aiuto'],balance:'Saldo virtuale',profit:'P/L totale',trades:'Operazioni',wins:'Successi',active:'Posizioni aperte',settings:'PARAMETRI SIMULAZIONE',capital:'Capitale iniziale (SOL)',minliq:'Liquidità minima (USD)',maxsize:'Dimensione massima operazione (SOL)',autopilot:'AUTO-SNIPER',armed:'AUTO-SNIPER ATTIVO',paused:'AUTO-SNIPER IN PAUSA',start:'AVVIA',pause:'PAUSA',stop:'STOP',launches:'NUOVI TOKEN LIVE',journal:'LOG DI SISTEMA',empty:'Nessun evento',chart:'ANDAMENTO POSIZIONE',demo:'MODALITÀ DEMO · PAPER TRADING',hint:'Tutti i parametri sono virtuali e modificabili. Nessun wallet o trade reale.',open:'APERTA',closed:'CHIUSA',entry:'Ingresso',current:'Attuale',net:'Netto',close:'Chiudi posizione demo'},
@@ -412,14 +497,24 @@
     renderStats();renderLog();
   }
   function maybeAutoEnter(){
+    // Registered users are entered by the persistent server paper engine. Do not
+    // create a duplicate browser-side position for the same Mint.
+    if(authToken())return;
     if(!terminal.auto||state.positions.some(p=>p.status==='open'))return;
-    const item=state.candidates.find(c=>c.source==='pumpportal'&&c.priceNative>0&&Number(c.liquidityUsd)>=Number(terminal.minLiquidity||0)&&!terminal.seen.includes(c.address));
+    const now=Date.now();
+    const item=state.candidates.find(c=>{
+      if(c.source!=='pumpportal'||!c.tradeStreamingEnabled||!(c.priceNative>0)||terminal.seen.includes(c.address))return false;
+      const age=now-Number(c.eventAt||0),m=c.firstMinute||{};
+      const buys=Number(m.buyCount||0),sells=Number(m.sellCount||0);
+      const net=Number(m.netSol||0),move=Number(m.priceChangePct||0);
+      return age>=0&&age<=60000&&Number(m.tradeCount||0)>=3&&buys>sells&&net>0&&move>=Math.max(0.05,Number(terminal.minMovePct)||0.2);
+    });
     if(!item)return;
     terminal.seen.push(item.address);terminal.seen=terminal.seen.slice(-250);terminal.lastAuto=Date.now();saveTerminal();
     openPaper(item,true);
   }
 
-  function showLaunchConfirm(){
+  async function showLaunchConfirm(){
     const n=id=>Number($(id)&&$(id).value);
     const errors=[];
     if(!(n('sniper-size')>0))errors.push('Размер сделки должен быть больше нуля.');
@@ -434,7 +529,7 @@
       'Размер сделки: '+n('sniper-size')+' SOL',
       'Take Profit: +'+n('sniper-target')+'%',
       'Stop Loss: -'+n('sniper-stop')+'%',
-      'Мин. ликвидность: $'+n('sniper-liquidity'),
+      
       'DEX / сторона: '+n('sniper-dex')+'%',
       'Проскальзывание / сторона: '+n('sniper-slip')+'%',
       'Сеть / приоритет: '+n('sniper-network')+' / '+n('sniper-priority')+' SOL'
@@ -442,9 +537,10 @@
     if(n('sniper-slip')>5)lines.push('⚠ Проскальзывание выше 5% на сторону.');
     if(n('sniper-dex')>2)lines.push('⚠ Комиссия DEX выше 2% на сторону.');
     if(n('sniper-size')>0.05)lines.push('⚠ Сделка выше стартовой рекомендации 0,05 SOL.');
-    if(n('sniper-liquidity')<5000)lines.push('⚠ Минимальная ликвидность ниже $5 000.');
+    
     lines.push('Запустить автоснайпер в ДЕМО-РЕЖИМЕ? Реальных транзакций не будет.');
     if(!window.confirm(lines.join('\n')))return;
+    if(!await setServerPaperEnabled(true))return;
     terminal.auto=true;saveTerminal();renderDashboardState();
     logEvent('ARMED','SYSTEM','Подтверждён paper mode · '+n('sniper-size')+' SOL');
     refreshFeed();maybeAutoEnter();
@@ -738,18 +834,19 @@
 
     const fieldHost=dashNode('div','zs-fields');fields.forEach((f,i)=>{f.classList.add('zs-field');const input=f.querySelector('input');if(input){const lim={ 'sniper-size':[0.001,10,0.001], 'sniper-target':[0.1,100,0.1], 'sniper-stop':[0,99,0.5], 'sniper-network':[0,0.1,0.000001], 'sniper-priority':[0,0.1,0.000001], 'sniper-dex':[0,20,0.05], 'sniper-slip':[0,50,0.1] }[input.id];if(lim)addRange(f,input.id,...lim);}fieldHost.append(f);});
     addVirtualField(fieldHost,'sniper-capital',dcopy().capital,0.1,1000,0.1,terminal.capital||10);
-    addVirtualField(fieldHost,'sniper-max-size',dcopy().maxsize,0.001,10,0.001,terminal.maxTradeSize||0.05);
+    addVirtualField(fieldHost,'sniper-max-size',dcopy().maxsize,0.001,0.05,0.001,Math.min(0.05,terminal.maxTradeSize||0.05));
     addVirtualField(fieldHost,'sniper-liquidity',dcopy().minliq,0,1000000,100,terminal.minLiquidity||5000);
     addVirtualField(fieldHost,'sniper-idle-timeout',state.lang==='ru'?'ТАЙМ-АУТ БЕЗ ДВИЖЕНИЯ (СЕК.)':'NO-MOVEMENT TIMEOUT (SEC)',15,300,5,terminal.idleTimeout||60);
     addVirtualField(fieldHost,'sniper-min-move',state.lang==='ru'?'МИН. ДВИЖЕНИЕ ЦЕНЫ (%)':'MINIMUM PRICE MOVE (%)',0.05,2,0.05,terminal.minMovePct||0.2);
     const sizeInput=$('sniper-size');if(sizeInput){sizeInput.max=terminal.maxTradeSize||0.05;const sizeSlider=sizeInput.parentElement&&sizeInput.parentElement.querySelector('.zs-range');if(sizeSlider)sizeSlider.max=sizeInput.max;}
-    left.append(fieldHost,presetPanel,dashNode('p','zs-foot',dcopy().hint));
+    const walletPanel=dashNode('div','zs-foot');walletPanel.id='zs-wallet-panel';
+    left.append(fieldHost,presetPanel,walletPanel,dashNode('p','zs-foot',dcopy().hint));
     const center=dashNode('section','zs-panel zs-center');center.id='zs-center';const centerTitle=dashNode('h3','',dcopy().autopilot);centerTitle.id='zs-center-title';center.append(centerTitle);
     const portrait=dashNode('div','zs-portrait');const pic=dashNode('img','');pic.src='/assets/zombcash-survivor-640.avif';pic.alt='ZombieCash anime survivor heroine';portrait.append(pic,dashNode('b','','$ZOMBCASH SURVIVOR'));
     const core=dashNode('div','zs-core');const coreText=dashNode('div','');coreText.append(dashNode('strong','', '◉'),dashNode('strong','', 'AUTO SNIPER'),dashNode('span','', 'PAPER ENGINE'));core.append(coreText);
-    const toggle=dashNode('button','zs-toggle',dcopy().paused);toggle.id='zs-auto-toggle';toggle.type='button';toggle.addEventListener('click',()=>{if(terminal.auto){terminal.auto=false;saveTerminal();renderDashboardState();logEvent('PAUSED','SYSTEM','Auto-entry paused');}else showLaunchConfirm();});
-    const actions=dashNode('div','zs-actions');const pause=dashNode('button','sniper-action sniper-close',dcopy().pause);pause.type='button';pause.addEventListener('click',()=>{terminal.auto=false;saveTerminal();renderDashboardState();logEvent('PAUSE','SYSTEM','Auto-entry paused; open position remains');});
-    const stop=dashNode('button','sniper-action sniper-close',dcopy().stop);stop.type='button';stop.addEventListener('click',()=>{terminal.auto=false;saveTerminal();renderDashboardState();logEvent('STOP','SYSTEM','Auto-entry stopped; no live orders exist');});actions.append(pause,stop);
+    const toggle=dashNode('button','zs-toggle',dcopy().paused);toggle.id='zs-auto-toggle';toggle.type='button';toggle.addEventListener('click',async()=>{if(terminal.auto){if(!await setServerPaperEnabled(false))return;terminal.auto=false;saveTerminal();renderDashboardState();logEvent('PAUSED','SYSTEM','Server paper engine paused; open position remains managed.');}else showLaunchConfirm();});
+    const actions=dashNode('div','zs-actions');const pause=dashNode('button','sniper-action sniper-close',dcopy().pause);pause.type='button';pause.addEventListener('click',async()=>{if(!await setServerPaperEnabled(false))return;terminal.auto=false;saveTerminal();renderDashboardState();logEvent('PAUSE','SYSTEM','Server paper engine paused; open position remains managed.');});
+    const stop=dashNode('button','sniper-action sniper-close',dcopy().stop);stop.type='button';stop.addEventListener('click',async()=>{if(!await setServerPaperEnabled(false))return;terminal.auto=false;saveTerminal();renderDashboardState();logEvent('STOP','SYSTEM','Server paper engine stopped; no live orders exist');});actions.append(pause,stop);
     const statsPanel=dashNode('div','zs-stats-extra zs-tab-hidden');statsPanel.id='zs-stats-extra';
     const statsHeading=dashNode('h3','',state.lang==='ru'?'РЕЗУЛЬТАТЫ СИМУЛЯЦИИ':'SIMULATION PERFORMANCE');
     const statsGrid=dashNode('div','zs-stat-grid');statsGrid.id='zs-stat-grid';statsPanel.append(statsHeading,statsGrid);
@@ -771,12 +868,13 @@
     $('sniper-refresh').addEventListener('click',refreshFeed);
     $('sniper-clear').addEventListener('click',()=>{state.positions=[];saveStore();clearServerHistory();renderPositions();$('sniper-feed-status').textContent=t('cleared');});
     ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
-    refreshFeed();if(authToken())syncFromServer().then(updatePositions);else{updateSyncStatus('loginToSync');updatePositions();}
+    ['sniper-capital','sniper-size','sniper-target','sniper-stop','sniper-min-move','sniper-idle-timeout','sniper-network','sniper-priority','sniper-dex','sniper-slip'].forEach(id=>$(id)?.addEventListener('change',()=>{if(terminal.auto&&authToken())setServerPaperEnabled(true);}));
+    refreshFeed();if(authToken())syncFromServer();else{updateSyncStatus('loginToSync');updatePositions();}
     state.timer=window.setInterval(()=>{checkAccountChange();if(!document.hidden)refreshFeed();},15000);
-    state.positionTimer=window.setInterval(()=>{if(!document.hidden)updatePositions();},10000);
+    state.positionTimer=window.setInterval(()=>{if(!document.hidden){if(authToken())syncFromServer();else updatePositions();}},10000);
     document.addEventListener('keydown',event=>{if(event.key==='Escape'&&root.classList.contains('zs-fullscreen')&&!document.fullscreenElement){root.classList.remove('zs-fullscreen');root.dataset.nativeFullscreen='0';document.body.classList.remove('zs-lock');restoreDashboardToPage();const b=root.querySelector('.zs-expand');if(b)b.textContent='⛶ FULL SCREEN';}});
     document.addEventListener('zombcash:languagechange',()=>{detectLang();translate();if($('zs-kpis'))renderDashboardState();});
-    document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer().then(updatePositions);});
+    document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer();});
     document.addEventListener('click',event=>{if(event.target&&event.target.closest&&event.target.closest('#survivor-logout'))Promise.resolve().then(checkAccountChange);});
     window.addEventListener('storage',event=>{if(event.key===TOKEN_KEY||event.key===PROFILE_KEY){if(!checkAccountChange()&&authToken())syncFromServer().then(updatePositions);}});
   }
