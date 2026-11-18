@@ -756,28 +756,23 @@
     @media(max-width:760px){.sniper-demo.zs-fullscreen.zs-history-mode{display:block!important;overflow:auto!important}.sniper-demo.zs-fullscreen.zs-history-mode #zs-journal-panel{min-height:180px!important}.sniper-demo.zs-fullscreen.zs-history-mode #zs-log{max-height:135px!important}}
     `;
     const header=dashNode('div','zs-head');const brand=dashNode('span','zs-brand','☣ ZOMBCASH');const title=dashNode('strong','zs-title','ZOMBIE SNIPER');const headActions=dashNode('div','zs-head-actions');headActions.append(dashNode('span','zs-demo',dcopy().demo));const expand=dashNode('button','zs-expand','⛶ FULL SCREEN');expand.type='button';expand.title='Open terminal full screen';function syncFullscreenButton(){const on=root.classList.contains('zs-fullscreen');document.body.classList.toggle('zs-lock',on);expand.textContent=on?'✕ EXIT FULL SCREEN':'⛶ FULL SCREEN';}
-    async function enterDashboardFullscreen(useNative){
+    function enterDashboardFullscreen(){
+      // Expand only inside the current browser tab viewport. Never request the
+      // native Fullscreen API: it hides Chrome's tabs/address bar and Windows UI.
       mountDashboardOverlay();
-      root.classList.add('zs-fullscreen');syncFullscreenButton();
-      if(useNative&&document.fullscreenElement!==document.documentElement&&document.documentElement.requestFullscreen){
-        try{await document.documentElement.requestFullscreen();root.dataset.nativeFullscreen='1';}
-        catch(_){root.dataset.nativeFullscreen='0';}
-      }
-    }
-    async function exitDashboardFullscreen(){
-      if(document.fullscreenElement){try{await document.exitFullscreen();}catch(_){}}
+      root.classList.add('zs-fullscreen');
       root.dataset.nativeFullscreen='0';
-      root.classList.remove('zs-fullscreen');syncFullscreenButton();
+      syncFullscreenButton();
+    }
+    function exitDashboardFullscreen(){
+      root.dataset.nativeFullscreen='0';
+      root.classList.remove('zs-fullscreen');
+      syncFullscreenButton();
       restoreDashboardToPage();
     }
     expand.addEventListener('click',()=>{
       if(root.classList.contains('zs-fullscreen')){exitDashboardFullscreen();return;}
-      enterDashboardFullscreen(true);
-    });
-    document.addEventListener('fullscreenchange',()=>{
-      if(!document.fullscreenElement&&root.dataset.nativeFullscreen==='1'){
-        root.dataset.nativeFullscreen='0';root.classList.remove('zs-fullscreen');syncFullscreenButton();restoreDashboardToPage();
-      }
+      enterDashboardFullscreen();
     });headActions.append(expand);header.append(brand,title,headActions);
     const nav=dashNode('nav','zs-nav');nav.setAttribute('aria-label','Zombie Sniper navigation');
     const tabTargets=['sniper','stats','history','settings','help'];
