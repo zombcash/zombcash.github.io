@@ -34,6 +34,7 @@ const hour=document.createElement("td"),h=r.first_hour||{};
 if(h.trade_count!==null&&h.trade_count!==undefined){
 const line=document.createElement("span");line.className="soi-first-hour";line.textContent=number(h.trade_count)+" "+T.trades+" · "+number(h.buy_count)+" "+T.buys+" / "+number(h.sell_count)+" "+T.sells;hour.appendChild(line);
 if(h.unique_buyers!==null&&h.unique_buyers!==undefined){const buyers=document.createElement("small");buyers.textContent=" · "+number(h.unique_buyers)+" "+T.buyers;hour.appendChild(buyers);}
+if(h.market_snapshot_count!==null&&h.market_snapshot_count!==undefined){const snapshots=document.createElement("small");const expected=Array.isArray(h.expected_snapshot_offsets)?h.expected_snapshot_offsets.length:5;snapshots.textContent=" · "+number(h.market_snapshot_count)+"/"+number(expected)+" snapshots";hour.appendChild(snapshots);}
 if(h.status!=="complete"){const badge=document.createElement("span");badge.className="soi-coverage-chip";badge.textContent=T.partial;hour.appendChild(document.createElement("br"));hour.appendChild(badge);}
 }else hour.textContent=h.status==="partial"?T.partial:T.noSnapshots;
 tr.appendChild(hour);
@@ -47,6 +48,14 @@ const promotion=r.promotion||{},promoLine=document.createElement("p");promoLine.
 const social=r.socials||{},socialLine=document.createElement("p");socialLine.textContent=(T.socials||"Social links")+": ";content.appendChild(socialLine);let socialCount=0;
 ["website","twitter","telegram","discord"].forEach(key=>{const url=social[key];if(typeof url==="string"&&/^https:\/\//i.test(url)){const link=document.createElement("a");link.href=url;link.target="_blank";link.rel="noopener noreferrer";link.textContent=key;socialLine.appendChild(link);socialCount++;}});
 if(!socialCount)socialLine.appendChild(document.createTextNode(social.observed?T.noSocials:T.noData));
+if(h.market_snapshot_count!==null&&h.market_snapshot_count!==undefined){
+const expected=Array.isArray(h.expected_snapshot_offsets)?h.expected_snapshot_offsets.length:5;
+const ratio=Number.isFinite(Number(h.snapshot_coverage_ratio))?Math.round(Number(h.snapshot_coverage_ratio)*100):null;
+const snapshotLine=document.createElement("p");
+snapshotLine.textContent="First-hour snapshot coverage: "+number(h.market_snapshot_count)+"/"+number(expected)+(ratio===null?"":" ("+ratio+"%)")+" · peak MC "+money(h.peak_market_cap_usd);
+content.appendChild(snapshotLine);
+}
+if(r.market_snapshot_observed_at){const lastSnapshot=document.createElement("p");lastSnapshot.textContent="Last market snapshot: "+date(r.market_snapshot_observed_at);content.appendChild(lastSnapshot);}
 if(h.coverage_note){const note=document.createElement("p");note.textContent=h.coverage_note;content.appendChild(note);}
 details.appendChild(content);sig.appendChild(details);tr.appendChild(sig);body.appendChild(tr);
 });
