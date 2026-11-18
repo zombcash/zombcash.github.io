@@ -111,7 +111,9 @@
           takeProfitPct:Number($('sniper-target')&&$('sniper-target').value)||10,
           stopLossPct:Number($('sniper-stop')&&$('sniper-stop').value)||5,
           minPriceMovePct:Number($('sniper-min-move')&&$('sniper-min-move').value)||0.2,
-          idleExitSeconds:Number($('sniper-idle-timeout')&&$('sniper-idle-timeout').value)||60
+          idleExitSeconds:Number($('sniper-idle-timeout')&&$('sniper-idle-timeout').value)||60,
+          paperFeeBps:Math.min(5000,Math.round(20000*(1-(1-(Number($('sniper-dex')&&$('sniper-dex').value)||0)/100)*(1-(Number($('sniper-slip')&&$('sniper-slip').value)||0)/100)))),
+          paperNetworkFeeSol:Math.min(0.01,(Number($('sniper-network')&&$('sniper-network').value)||0)+(Number($('sniper-priority')&&$('sniper-priority').value)||0))
         }),
         cache:'no-store'
       });
