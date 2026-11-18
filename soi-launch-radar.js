@@ -14,34 +14,61 @@ const mintLink=m=>"https://solscan.io/token/"+encodeURIComponent(m);
 const rows=v=>Array.isArray(v)?v:[];
 function promoted(r){return Boolean(r.promotion?.observed||r.promotion?.boosted||r.promotion?.paid_order||r.promoted);}
 function noSocials(r){const s=r.socials||{};return s.observed===true&&!(s.website||s.twitter||s.telegram||s.discord||s.other);}
-function million(r){return Boolean(r.market_cap_milestone_1m?.reached||r.milestones?.market_cap_1m?.reached||Number(r.market_cap_usd)>=1000000);}
+function million(r){return Boolean(r.market_cap_milestone_1m?.reached||r.milestones?.market_cap_1m?.reached);}
 function matches(r){if(state.filter==="no-socials")return noSocials(r);if(state.filter==="promoted")return promoted(r);if(state.filter==="million")return million(r);return true;}
 function signal(v){const e=document.createElement("span");e.className="soi-signal";e.textContent=v;return e;}
-function renderRows(){const body=$("soi-launches");if(!body)return;body.replaceChildren();const data=state.rows.filter(matches);$("soi-empty").hidden=data.length!==0;
+function renderRows(){
+const body=$("soi-launches");if(!body)return;body.replaceChildren();
+const data=state.rows.filter(matches),empty=$("soi-empty");if(empty)empty.hidden=data.length!==0;
 if(!data.length){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=6;td.textContent=T.noRecords;tr.appendChild(td);body.appendChild(tr);return;}
-data.slice(0,100).forEach(r=>{const tr=document.createElement("tr"),token=document.createElement("td"),name=document.createElement("span");name.className="token-name";name.textContent=[r.name,r.symbol?"("+r.symbol+")":""].filter(Boolean).join(" ")||T.unknown;
-const mint=document.createElement("span");mint.className="token-mint";if(r.mint){const a=document.createElement("a");a.href=mintLink(r.mint);a.target="_blank";a.rel="noopener noreferrer";a.textContent=r.mint;mint.appendChild(a);}else mint.textContent=T.mintMissing;token.append(name,mint);tr.appendChild(token);
+data.slice(0,100).forEach(r=>{
+const tr=document.createElement("tr"),token=document.createElement("td"),name=document.createElement("span");
+name.className="token-name";name.textContent=[r.name,r.symbol?"("+r.symbol+")":""].filter(Boolean).join(" ")||T.unknown;
+const mint=document.createElement("span");mint.className="token-mint";
+if(r.mint){const a=document.createElement("a");a.href=mintLink(r.mint);a.target="_blank";a.rel="noopener noreferrer";a.textContent=r.mint;mint.appendChild(a);}else mint.textContent=T.mintMissing;
+token.append(name,mint);tr.appendChild(token);
 const launch=document.createElement("td");launch.textContent=[r.venue||T.venueMissing,date(r.first_seen_at||r.launch_at)].join(" · ");tr.appendChild(launch);
-const cap=document.createElement("td");cap.textContent=money(r.market_cap_usd);tr.appendChild(cap);const liq=document.createElement("td");liq.textContent=money(r.liquidity_usd);tr.appendChild(liq);
-const hour=document.createElement("td"),h=r.first_hour||{};hour.textContent=h.status==="complete"?(number(h.buy_count)+" "+T.buys+" · "+number(h.sell_count)+" "+T.sells+" · "+number(h.unique_buyers)+" "+T.buyers):(h.status==="partial"?T.partial:T.noSnapshots);tr.appendChild(hour);
-const sig=document.createElement("td");if(noSocials(r))sig.appendChild(signal(T.noSocials));if(promoted(r))sig.appendChild(signal(T.promoted));if(million(r))sig.appendChild(signal(T.million));if(!sig.childNodes.length)sig.textContent=T.noSignals;tr.appendChild(sig);body.appendChild(tr);});}
+const cap=document.createElement("td");cap.textContent=money(r.market_cap_usd);tr.appendChild(cap);
+const liq=document.createElement("td");liq.textContent=money(r.liquidity_usd);tr.appendChild(liq);
+const hour=document.createElement("td"),h=r.first_hour||{};
+if(h.trade_count!==null&&h.trade_count!==undefined){
+const line=document.createElement("span");line.className="soi-first-hour";line.textContent=number(h.trade_count)+" "+T.trades+" · "+number(h.buy_count)+" "+T.buys+" / "+number(h.sell_count)+" "+T.sells;hour.appendChild(line);
+if(h.unique_buyers!==null&&h.unique_buyers!==undefined){const buyers=document.createElement("small");buyers.textContent=" · "+number(h.unique_buyers)+" "+T.buyers;hour.appendChild(buyers);}
+if(h.status!=="complete"){const badge=document.createElement("span");badge.className="soi-coverage-chip";badge.textContent=T.partial;hour.appendChild(document.createElement("br"));hour.appendChild(badge);}
+}else hour.textContent=h.status==="partial"?T.partial:T.noSnapshots;
+tr.appendChild(hour);
+const sig=document.createElement("td");
+if(noSocials(r))sig.appendChild(signal(T.noSocials));if(promoted(r))sig.appendChild(signal(T.promoted));if(million(r))sig.appendChild(signal(T.million));if(!sig.childNodes.length)sig.appendChild(signal(T.noSignals));
+const details=document.createElement("details");details.className="soi-details";const summary=document.createElement("summary");summary.textContent=T.details||"Evidence details";details.appendChild(summary);
+const content=document.createElement("div");content.className="soi-details-content";
+const sources=rows(r.sources),sourceLine=document.createElement("p");sourceLine.textContent=(T.sourcesObserved||"Sources")+": "+(sources.length?sources.join(", "):T.noData);content.appendChild(sourceLine);
+const profile=r.profile||{},profileLine=document.createElement("p");profileLine.textContent=(T.profile||"Token profile")+": "+(profile.observed?T.reportLoaded:T.noData);content.appendChild(profileLine);
+const promotion=r.promotion||{},promoLine=document.createElement("p");promoLine.textContent=(T.promoted||"Promotion")+": "+(promotion.evidence_types&&promotion.evidence_types.length?promotion.evidence_types.join(", "):(promotion.observed?T.promoted:T.noSignals));content.appendChild(promoLine);
+const social=r.socials||{},socialLine=document.createElement("p");socialLine.textContent=(T.socials||"Social links")+": ";content.appendChild(socialLine);let socialCount=0;
+["website","twitter","telegram","discord"].forEach(key=>{const url=social[key];if(typeof url==="string"&&/^https:\/\//i.test(url)){const link=document.createElement("a");link.href=url;link.target="_blank";link.rel="noopener noreferrer";link.textContent=key;socialLine.appendChild(link);socialCount++;}});
+if(!socialCount)socialLine.appendChild(document.createTextNode(social.observed?T.noSocials:T.noData));
+if(h.coverage_note){const note=document.createElement("p");note.textContent=h.coverage_note;content.appendChild(note);}
+details.appendChild(content);sig.appendChild(details);tr.appendChild(sig);body.appendChild(tr);
+});
+}
 function renderHistory(rows){const body=$("soi-history");if(!body)return;body.replaceChildren();const data=rows.slice().reverse();if(!data.length){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=7;td.textContent=T.historyEmpty;tr.appendChild(td);body.appendChild(tr);return;}data.forEach(item=>{const tr=document.createElement("tr");[item.date,number(item.launches_detected),number(item.pools_created),number(item.buys),number(item.sells),number(item.unique_mints),number(item.observations)].forEach(value=>{const td=document.createElement("td");td.textContent=value;tr.appendChild(td);});body.appendChild(tr);});}
 function render(report){const rolling=report.rolling_24h||{};const s=rolling.summary||report.summary||{};state.rows=rows(rolling.launches||report.launches||report.tokens);set("soi-count",number(s.launches_detected??state.rows.length));set("soi-no-socials",number(state.rows.filter(noSocials).length));set("soi-promoted",number(state.rows.filter(promoted).length));set("soi-million",number(state.rows.filter(million).length));set("soi-buys",number(s.buys??0));set("soi-sells",number(s.sells??0));set("soi-pools",number(s.pools_created??0));set("soi-observations",number(s.observations??0));set("soi-title",T.rollingTitle);set("soi-count-label",T.rollingLaunches);set("soi-buys-label",T.rollingBuys);set("soi-sells-label",T.rollingSells);set("soi-pools-label",T.rollingPools);set("soi-observations-label",T.rollingObservations);set("soi-history-title",T.historyTitle);set("soi-history-note",T.historyNote);const historyHeaders=[T.historyDate,T.historyLaunches,T.historyPools,T.historyBuys,T.historySells,T.historyMints,T.historyObservations];document.querySelectorAll("#soi-history-head th").forEach((th,i)=>{if(historyHeaders[i])th.textContent=historyHeaders[i];});const start=rolling.window_start,end=rolling.window_end;set("soi-report-date",T.reportDate+" "+(start&&end?date(start)+" — "+date(end):"—"));set("soi-report-updated",T.updated+" "+date(report.generated_at));const c=report.coverage||{};const sources=Array.isArray(s.sources_observed)?s.sources_observed:(Array.isArray(c.sources_observed)?c.sources_observed:[]);const sourceLabels={boost_monitor:"Boost Monitor",dexscreener:"DexScreener",pumpfun_rpc:"Pump.fun RPC",pumpswap_rpc:"PumpSwap RPC"};const sourceText=sources.map(x=>sourceLabels[x]||x).join(", ");set("soi-coverage",T.coverage+" "+(c.description||c.status||(sourceText?T.sourcesObserved+" "+sourceText:T.coveragePending)));if(report.methodology)set("soi-method",report.methodology);const status=$("soi-status");status.dataset.state="ready";set("soi-status",report.status==="partial"?T.partialReport:T.reportLoaded);renderRows();renderHistory(rows(report.daily_history));}
 function localizeStatic(){const headers=T.table||[];const body=$("soi-launches");if(body){const table=body.closest("table");const cells=table?table.querySelectorAll("thead th"):[];cells.forEach((cell,index)=>{if(headers[index])cell.textContent=headers[index];});const placeholder=body.querySelector("tr td[colspan=\"6\"]");if(placeholder)placeholder.textContent=T.waiting;}set("soi-empty",T.empty);}
+let loading=false;
 async function load(){
-const status=$("soi-status");
-if(status){status.dataset.state="loading";set("soi-status",T.loadReport);}
+if(loading)return;loading=true;const status=$("soi-status"),refresh=$("soi-refresh");
+if(status){status.dataset.state="loading";set("soi-status",T.loadReport);}if(refresh)refresh.disabled=true;
+const controller=new AbortController(),timeout=window.setTimeout(()=>controller.abort(),20000);
 try{
-const response=await fetch(REPORT_URL,{method:"GET",headers:{Accept:"application/json"},cache:"no-store",mode:"cors"});
+const response=await fetch(REPORT_URL,{method:"GET",headers:{Accept:"application/json"},cache:"no-store",mode:"cors",signal:controller.signal});
 if(!response.ok)throw new Error("HTTP "+response.status);
 const report=await response.json();
-if(!report||typeof report!=="object"||!report.rolling_24h||!Array.isArray(report.daily_history))throw new Error("Unexpected SOI report schema");
+if(!report||typeof report!=="object"||(!Array.isArray(report.launches)&&!Array.isArray(report.rolling_24h?.launches)))throw new Error("Unexpected SOI report schema");
 render(report);
-}catch(error){
-if(status){status.dataset.state="error";set("soi-status",T.error+": "+String(error&&error.message||error));}
-set("soi-coverage",T.noCoverage);
-}
+}catch(error){const message=error&&error.name==="AbortError"?"Request timeout":String(error&&error.message||error);if(status){status.dataset.state="error";set("soi-status",T.error+": "+message);}set("soi-coverage",T.noCoverage);}
+finally{window.clearTimeout(timeout);loading=false;if(refresh)refresh.disabled=false;}
 }
 document.querySelectorAll("[data-soi-filter]").forEach(b=>b.addEventListener("click",()=>{state.filter=b.dataset.soiFilter;document.querySelectorAll("[data-soi-filter]").forEach(x=>x.classList.toggle("is-active",x===b));renderRows();}));
+const refreshButton=$("soi-refresh");if(refreshButton)refreshButton.addEventListener("click",load);
 localizeStatic();load();window.setInterval(load,60000);
 })();
