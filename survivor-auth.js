@@ -122,6 +122,70 @@
     button.textContent = t('connect');
     button.addEventListener('click', beginBotLogin);
     widgetNode.append(button);
+    // QR login option (backup method)
+    const qrButton = document.createElement('button');
+    qrButton.type = 'button';
+    qrButton.textContent = 'SCAN QR WITH TELEGRAM';
+    qrButton.style.cssText = 'margin-left:8px;border-color:#2b4930;color:#9aa996;';
+    qrButton.addEventListener('click', beginQrLogin);
+    widgetNode.append(qrButton);
+  }
+  async function beginQrLogin() {
+    if (isBusy) return;
+    isBusy = true;
+    statusNode.textContent = t('loading');
+    try {
+      const response = await fetch(API + '/api/auth/telegram/start', {
+        method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}', cache: 'no-store'
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok || !data.nonce || !data.botUrl) {
+        statusNode.textContent = response.status === 503 ? t('setup') : t('error');
+        isBusy = false;
+        return;
+      }
+      widgetNode.innerHTML = '';
+      const qrImg = document.createElement('img');
+      qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(data.botUrl);
+      qrImg.alt = 'Scan with Telegram';
+      qrImg.style.cssText = 'border:1px solid #426341;padding:8px;background:#fff;';
+      widgetNode.append(qrImg);
+      const qrLabel = document.createElement('p');
+      qrLabel.textContent = 'Scan this QR code with the Telegram app camera';
+      qrLabel.style.cssText = 'font-size:12px;color:#9aa996;margin-top:8px;';
+      widgetNode.append(qrLabel);
+      statusNode.textContent = loginWaiting[lang()] || loginWaiting.en;
+      const expiresAt = Date.now() + 115000;
+      while (Date.now() < expiresAt) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        const statusResponse = await fetch(API + '/api/auth/telegram/status?nonce=' + encodeURIComponent(data.nonce), {cache:'no-store'});
+        const statusData = await statusResponse.json().catch(() => ({}));
+        if (statusResponse.status === 410) {
+          statusNode.textContent = t('error');
+          widgetNode.innerHTML = '';
+          isBusy = false;
+          return;
+        }
+        if (statusResponse.ok && statusData.status === 'complete' && statusData.token && statusData.profile) {
+          localStorage.setItem(STORAGE_TOKEN, statusData.token);
+          localStorage.setItem(STORAGE_PROFILE, JSON.stringify(statusData.profile));
+          document.dispatchEvent(new CustomEvent('zombcash:survivorlogin'));
+          updateCta();
+          refreshProfile();
+          renderModal();
+          statusNode.textContent = '';
+          isBusy = false;
+          return;
+        }
+      }
+      statusNode.textContent = t('error');
+      widgetNode.innerHTML = '';
+      isBusy = false;
+    } catch (_) {
+      statusNode.textContent = t('error');
+      widgetNode.innerHTML = '';
+      isBusy = false;
+    }
   }
   async function beginBotLogin() {
     if (isBusy) return;
