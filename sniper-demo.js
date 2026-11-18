@@ -385,6 +385,38 @@
     terminal.seen.push(item.address);terminal.seen=terminal.seen.slice(-250);terminal.lastAuto=Date.now();saveTerminal();
     openPaper(item,true);
   }
+
+  function showLaunchConfirm(){
+    const n=id=>Number($(id)&&$(id).value);
+    const errors=[];
+    if(!(n('sniper-size')>0))errors.push('Размер сделки должен быть больше нуля.');
+    if(n('sniper-size')>n('sniper-max-size'))errors.push('Размер сделки выше максимума.');
+    if(n('sniper-size')>n('sniper-capital'))errors.push('Размер сделки выше виртуального капитала.');
+    if(!(n('sniper-capital')>0))errors.push('Капитал должен быть больше нуля.');
+    if(!(n('sniper-target')>0))errors.push('Цель прибыли должна быть больше нуля.');
+    if(errors.length){window.alert('Нельзя запустить:\n'+errors.join('\n'));return;}
+    const lines=[
+      'ПРОВЕРКА ПЕРЕД ЗАПУСКОМ',
+      'Капитал: '+n('sniper-capital')+' SOL',
+      'Размер сделки: '+n('sniper-size')+' SOL',
+      'Take Profit: +'+n('sniper-target')+'%',
+      'Stop Loss: -'+n('sniper-stop')+'%',
+      'Мин. ликвидность: $'+n('sniper-liquidity'),
+      'DEX / сторона: '+n('sniper-dex')+'%',
+      'Проскальзывание / сторона: '+n('sniper-slip')+'%',
+      'Сеть / приоритет: '+n('sniper-network')+' / '+n('sniper-priority')+' SOL'
+    ];
+    if(n('sniper-slip')>5)lines.push('⚠ Проскальзывание выше 5% на сторону.');
+    if(n('sniper-dex')>2)lines.push('⚠ Комиссия DEX выше 2% на сторону.');
+    if(n('sniper-size')>0.05)lines.push('⚠ Сделка выше стартовой рекомендации 0,05 SOL.');
+    if(n('sniper-liquidity')<5000)lines.push('⚠ Минимальная ликвидность ниже $5 000.');
+    lines.push('Запустить автоснайпер в ДЕМО-РЕЖИМЕ? Реальных транзакций не будет.');
+    if(!window.confirm(lines.join('\n')))return;
+    terminal.auto=true;saveTerminal();renderDashboardState();
+    logEvent('ARMED','SYSTEM','Подтверждён paper mode · '+n('sniper-size')+' SOL');
+    refreshFeed();maybeAutoEnter();
+  }
+
   function buildDashboard(){
     const root=$('zombie-sniper-demo');if(!root||root.dataset.zsBuilt)return;
     root.dataset.zsBuilt='1';loadTerminal();
@@ -516,7 +548,7 @@
     const center=dashNode('section','zs-panel zs-center');center.id='zs-center';const centerTitle=dashNode('h3','',dcopy().autopilot);centerTitle.id='zs-center-title';center.append(centerTitle);
     const portrait=dashNode('div','zs-portrait');const pic=dashNode('img','');pic.src='/assets/zombcash-survivor-640.avif';pic.alt='ZombieCash anime survivor heroine';portrait.append(pic,dashNode('b','','$ZOMBCASH SURVIVOR'));
     const core=dashNode('div','zs-core');const coreText=dashNode('div','');coreText.append(dashNode('strong','', '◉'),dashNode('strong','', 'AUTO SNIPER'),dashNode('span','', 'PAPER ENGINE'));core.append(coreText);
-    const toggle=dashNode('button','zs-toggle',dcopy().paused);toggle.id='zs-auto-toggle';toggle.type='button';toggle.addEventListener('click',()=>{terminal.auto=!terminal.auto;saveTerminal();renderDashboardState();logEvent(terminal.auto?'ARMED':'PAUSED','SYSTEM',terminal.auto?'Auto-entry enabled for eligible demo candidates':'Auto-entry paused');if(terminal.auto){refreshFeed();maybeAutoEnter();}});
+    const toggle=dashNode('button','zs-toggle',dcopy().paused);toggle.id='zs-auto-toggle';toggle.type='button';toggle.addEventListener('click',()=>{if(terminal.auto){terminal.auto=false;saveTerminal();renderDashboardState();logEvent('PAUSED','SYSTEM','Auto-entry paused');}else showLaunchConfirm();});
     const actions=dashNode('div','zs-actions');const pause=dashNode('button','sniper-action sniper-close',dcopy().pause);pause.type='button';pause.addEventListener('click',()=>{terminal.auto=false;saveTerminal();renderDashboardState();logEvent('PAUSE','SYSTEM','Auto-entry paused; open position remains');});
     const stop=dashNode('button','sniper-action sniper-close',dcopy().stop);stop.type='button';stop.addEventListener('click',()=>{terminal.auto=false;saveTerminal();renderDashboardState();logEvent('STOP','SYSTEM','Auto-entry stopped; no live orders exist');});actions.append(pause,stop);
     const statsPanel=dashNode('div','zs-stats-extra zs-tab-hidden');statsPanel.id='zs-stats-extra';
