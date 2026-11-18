@@ -7,10 +7,11 @@ const SECRET_KEYS = JSON.parse(Deno.env.get("SUPABASE_SECRET_KEYS") || "{}");
 const DB_KEY = SECRET_KEYS.default || Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 if (!DB_KEY) throw new Error("Supabase server secret is not configured");
 
-const W = 9, H = 9, MAX_PLAYERS = 8;
-const WALLS = [10, 19, 28, 37, 46, 55, 64];
+const W = 18, H = 14, MAX_PLAYERS = 8;
+const HELI = [0, 17, 8 + 13 * W];
+const DIRS: Record<string, [number, number]> = { north: [0,-1], south: [0,1], west: [-1,0], east: [1,0] };
 const ROLES = new Set(["survivor", "infected"]);
-const ACTIONS = new Set(["move_north", "move_south", "move_east", "move_west", "scavenge", "barricade", "attack", "wait"]);
+const ACTIONS = new Set([...Object.keys(DIRS).map(d => "move_"+d), ...Object.keys(DIRS).map(d => "push_"+d), "wait"]);
 const PROTOCOLS = ["2025-03-26", "2025-06-18", "2025-11-25"];
 
 const cors = {
