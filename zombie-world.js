@@ -124,7 +124,7 @@
             <button id="zw-demo-reset" type="button">NEW MAP</button>
             <button id="zw-push-mode" type="button" aria-pressed="false">🧱 PUSH OBSTACLE: OFF</button>
           </div>
-          <p class="zw-muted" id="zw-command-hint">Select one of your units, then click an adjacent tile. Each unit can act once per round. You may push a movable obstacle instead.</p>
+          <p class="zw-muted" id="zw-outbreak-command-hint">Select one of your units, then click an adjacent tile. Each unit can act once per round. You may push a movable obstacle instead.</p>
           <div class="zw-legend" id="zw-outbreak-legend"><span>🧍 Survivors</span><span>🧟 Infected</span><span>🚁 Extraction</span><span>🧱 Movable debris</span><span>🏚️ Ruins</span></div>
           <div class="zw-map zw-map-large" id="zw-outbreak-map" role="grid" aria-label="Zombie Outbreak tactical game board"></div>
           <div class="zw-row zw-outbreak-stats">
@@ -230,7 +230,6 @@
     if($('zw-demo-start'))$('zw-demo-start').textContent=OT('start');
     if($('zw-demo-turn'))$('zw-demo-turn').textContent=OT('resolve');
     if($('zw-push-mode'))$('zw-push-mode').textContent=OT(pushMode?'pushOn':'pushOff');
-    if($('zw-command-hint'))$('zw-command-hint').textContent=gameMode==='ai-ai'?OT('aiAi'):OT('hint');
     if($('zw-outbreak-objective'))$('zw-outbreak-objective').textContent=OT('escapeTarget');
     renderExpedition();
   }
@@ -374,7 +373,7 @@
       cell.addEventListener('click',()=>onTileClick(p));map.append(cell);
     }
     paintOutbreakStats();renderRoster();
-    $('zw-command-hint').textContent=gameMode==='ai-ai'?OT('aiAi'):OT('hint');
+    $('zw-outbreak-command-hint').textContent=gameMode==='ai-ai'?OT('aiAi'):OT('hint');
   }
   function onTileClick(p){
     if(!gameStarted||gameEnded||turnBusy||gameMode==='ai-ai')return;
@@ -444,7 +443,7 @@
   $('zw-game-mode').addEventListener('change',()=>{gameMode=$('zw-game-mode').value;if(gameMode!=='ai-ai'&&outbreakAiTimer)clearTimeout(outbreakAiTimer);});
   $('zw-player-side').addEventListener('change',()=>{playerSide=$('zw-player-side').value;drawOutbreak();});
   $('zw-push-mode').addEventListener('click',()=>{pushMode=!pushMode;selectedCrate=null;$('zw-push-mode').setAttribute('aria-pressed',String(pushMode));$('zw-push-mode').textContent=OT(pushMode?'pushOn':'pushOff');});
-  document.addEventListener('zombcash:languagechange',()=>{if($('zw-push-mode'))$('zw-push-mode').textContent=OT(pushMode?'pushOn':'pushOff');if($('zw-demo-start'))$('zw-demo-start').textContent=OT('start');if($('zw-demo-turn'))$('zw-demo-turn').textContent=OT('resolve');});
+  document.addEventListener('zombcash:languagechange',()=>{if($('zw-push-mode'))$('zw-push-mode').textContent=OT(pushMode?'pushOn':'pushOff');if($('zw-demo-start'))$('zw-demo-start').textContent=OT('start');if($('zw-demo-turn'))$('zw-demo-turn').textContent=OT('resolve');if($('zw-outbreak-command-hint'))$('zw-outbreak-command-hint').textContent=gameMode==='ai-ai'?OT('aiAi'):OT('hint');});
   newRoster();
 
   // Seven-day survival campaign. Every action changes shared resources and the settlement's fate.
