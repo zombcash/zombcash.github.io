@@ -25,7 +25,7 @@
       stopHit:'NET STOP-LOSS HIT — SIMULATED SELL', manualClose:'CLOSE PAPER POSITION', saved:'Demo history is stored only in this browser on this device.', synced:'Demo history synced to your Telegram survivor profile.', loginToSync:'Log in with Telegram to sync demo history; otherwise it stays in this browser.', loginAgain:'Your Telegram session expired. Log in again to sync.', syncError:'Account sync is unavailable; this device copy is kept locally.',
       rules:'Net P/L includes both-side DEX fee and slippage assumptions plus network and priority fees for both transactions. The target is checked against net P/L, not token price movement.',
       cap:'Demo trade size is capped at 0.05 SOL. No wallet is created or funded. Live trading is disabled.',
-      ageUnknown:'unknown', justNow:'just now', mins:'m ago', hours:'h ago', days:'d ago',
+      ageUnknown:'unknown', justNow:'just now', mins:'m ago', hours:'h ago', days:'d ago', liveConnected:'LIVE LAUNCH STREAM CONNECTED', liveDisconnected:'LAUNCH STREAM OFFLINE — DEXSCREENER FALLBACK', waitingForPool:'WAITING FOR SOL POOL', liveTag:'LIVE LAUNCH',
       needAmount:'Enter a paper buy size greater than zero and no more than 0.05 SOL.',
       noPair:'No current SOL-quoted pool is available for this token.', buyOk:'Paper position opened. No transaction was sent.',
       positionLimit:'Demo allows one open paper position at a time.', clear:'CLEAR LOCAL DEMO HISTORY', cleared:'Local demo history cleared.',
@@ -45,7 +45,7 @@
       stopHit:'СТОП-ЛОСС ПО ЧИСТОМУ P/L ДОСТИГНУТ — ДЕМО-ПРОДАЖА', manualClose:'ЗАКРЫТЬ ДЕМО-ПОЗИЦИЮ', saved:'История демо хранится только в этом браузере на этом устройстве.', synced:'История демо синхронизирована с профилем Telegram.', loginToSync:'Войдите через Telegram для синхронизации; иначе история останется в этом браузере.', loginAgain:'Сессия Telegram истекла. Войдите снова для синхронизации.', syncError:'Синхронизация недоступна; локальная копия сохранена.',
       rules:'Чистый P/L учитывает комиссии DEX и проскальзывание на обеих сторонах, а также сетевые и приоритетные комиссии обеих транзакций. Цель проверяется по чистому P/L, а не по изменению цены токена.',
       cap:'Размер демо-сделки ограничен 0,05 SOL. Кошелёк не создаётся и не пополняется. Реальная торговля отключена.',
-      ageUnknown:'неизвестно', justNow:'только что', mins:' мин. назад', hours:' ч. назад', days:' дн. назад',
+      ageUnknown:'неизвестно', justNow:'только что', mins:' мин. назад', hours:' ч. назад', days:' дн. назад', liveConnected:'ПОТОК ЗАПУСКОВ АКТИВЕН', liveDisconnected:'ПОТОК ОТКЛЮЧЁН — РЕЗЕРВ DEXSCREENER', waitingForPool:'ОЖИДАНИЕ SOL-ПУЛА', liveTag:'НОВЫЙ ЗАПУСК',
       needAmount:'Укажите размер демо-покупки больше нуля и не более 0,05 SOL.',
       noPair:'Для этого токена нет текущего пула с котировкой в SOL.', buyOk:'Демо-позиция открыта. Транзакция не отправлялась.',
       positionLimit:'В демо допускается только одна открытая позиция одновременно.', clear:'ОЧИСТИТЬ ЛОКАЛЬНУЮ ИСТОРИЮ', cleared:'Локальная история демо очищена.',
@@ -61,7 +61,7 @@
   };
 
   const $ = id => document.getElementById(id);
-  const state = { lang:'en', candidates:[], positions:[], timer:null, busy:false, syncStatusKey:'saved' };
+  const state = { lang:'en', candidates:[], positions:[], timer:null, positionTimer:null, busy:false, syncStatusKey:'saved' };
   let activeStorageKey = '';
   function detectLang(){
     const path = location.pathname.split('/').filter(Boolean);
@@ -116,7 +116,7 @@
     const next=storageKey();
     if(next===activeStorageKey)return false;
     activeStorageKey=next;state.positions=[];readStore();renderPositions();
-    if(authToken())syncFromServer();else updateSyncStatus('loginToSync');
+    if(authToken())syncFromServer().then(updatePositions);else updateSyncStatus('loginToSync');
     return true;
   }
   async function clearServerHistory(){
@@ -172,12 +172,148 @@
       const row=make('div','sniper-candidate');
       const main=make('div','sniper-candidate-main');
       main.append(make('strong','sniper-token-name',item.symbol+' · '+item.name));
-      main.append(make('small','sniper-muted',item.address.slice(0,5)+'…'+item.address.slice(-5)+' · '+ageLabel(item.pairCreatedAt)));
+      const age=item.eventAt||item.pairCreatedAt;
+      const sourceLabel=item.source==='pumpportal'?' · '+t('liveTag'):' · DEX PROFILE';
+      main.append(make('small','sniper-muted',item.address.slice(0,5)+'…'+item.address.slice(-5)+' · '+ageLabel(age)+sourceLabel));
       const stats=make('div','sniper-candidate-stats');
-      stats.append(make('span', '', t('liquidity')+': $'+fmt(item.liquidityUsd,0)));
-      stats.append(make('span', '', t('price')+': '+fmt(item.priceNative,9)));
-      const action=make('button','sniper-action',t('action'));
-      action.type='button'; action.addEventListener('click',()=>openPaper(item));
+      stats.append(make('span', '', t('liquidity')+': 
+      const link=make('a','sniper-link','DEXSCREENER ↗'); link.href=item.url; link.target='_blank'; link.rel='noopener noreferrer';
+      row.append(main,stats,link,action);host.append(row);
+    });
+  }
+  function renderPositions(){
+    const host=$('sniper-positions'); if(!host)return;
+    host.replaceChildren();
+    if(!state.positions.length){host.append(make('p','sniper-muted',t('noPositions')));return;}
+    state.positions.slice().reverse().forEach(p=>{
+      const row=make('div','sniper-position');
+      const head=make('div','sniper-position-head');
+      head.append(make('strong','',p.symbol+' · '+(p.status==='open'?t('open'):t('closed'))));
+      const net=make('strong',p.netPnl>=0?'sniper-positive':'sniper-negative',(p.netPnl>=0?'+':'')+fmt(p.netPnl,6)+' SOL');
+      head.append(net);
+      const detail=make('div','sniper-position-detail');
+      detail.textContent=t('entry')+': '+fmt(p.entryPrice,9)+' SOL · '+t('current')+': '+fmt(p.lastPrice||p.entryPrice,9)+' SOL · '+t('net')+': '+fmt(p.netPct||0,2)+'%';
+      row.append(head,detail);
+      if(p.status==='open'){
+        const close=make('button','sniper-action sniper-close',t('manualClose'));close.type='button';close.addEventListener('click',()=>closePaper(p.id,'manual'));row.append(close);
+      } else if(p.exitReason){
+        row.append(make('small','sniper-muted',p.exitReason==='target'?t('targetHit'):p.exitReason==='stop'?t('stopHit'):t('closed')));
+      }
+      host.append(row);
+    });
+  }
+  async function fetchPairs(address){
+    const r=await fetch(API+'/token-pairs/v1/solana/'+encodeURIComponent(address),{cache:'no-store'});
+    if(!r.ok)throw new Error('pair lookup '+r.status);
+    const pairs=await r.json();
+    const valid=(Array.isArray(pairs)?pairs:[]).filter(p=>p && p.chainId==='solana' && p.baseToken && p.baseToken.address===address && p.quoteToken && (p.quoteToken.symbol==='SOL'||p.quoteToken.address===WRAPPED_SOL) && Number(p.priceNative)>0);
+    valid.sort((a,b)=>(Number(b.liquidity&&b.liquidity.usd)||0)-(Number(a.liquidity&&a.liquidity.usd)||0));
+    return valid[0]||null;
+  }
+  async function refreshFeed(){
+    if(state.busy)return;
+    state.busy=true;renderCandidates();
+    let liveConnected=false;
+    try{
+      try{
+        const liveResponse=await fetch(AUTH_API+'/api/sniper/launches?limit=12',{cache:'no-store'});
+        if(liveResponse.ok){
+          const liveData=await liveResponse.json();
+          liveConnected=!!(liveData.feed&&liveData.feed.connected);
+          const launches=Array.isArray(liveData.launches)?liveData.launches.slice(0,12):[];
+          if(launches.length){
+            const liveResolved=await Promise.allSettled(launches.map(async launch=>{
+              const address=String(launch.mint||'');
+              let pair=null;
+              try{pair=await fetchPairs(address);}catch(_){}
+              const eventAt=Number(launch.eventAt)||Number(launch.receivedAt)||0;
+              return {
+                address,
+                name:(pair&&pair.baseToken.name)||launch.name||'New launch',
+                symbol:(pair&&pair.baseToken.symbol)||launch.symbol||'TOKEN',
+                priceNative:pair?Number(pair.priceNative):0,
+                liquidityUsd:pair?Number(pair.liquidity&&pair.liquidity.usd)||0:0,
+                pairCreatedAt:pair?Number(pair.pairCreatedAt)||eventAt:eventAt,
+                eventAt,
+                url:'https://dexscreener.com/solana/'+encodeURIComponent(address),
+                source:'pumpportal',
+                status:launch.status||'detected'
+              };
+            }));
+            state.candidates=liveResolved.filter(x=>x.status==='fulfilled'&&x.value&&x.value.address).map(x=>x.value).slice(0,8);
+            if(state.candidates.length){
+              $('sniper-feed-status').textContent=liveConnected?t('liveConnected'):t('liveDisconnected');
+              return;
+            }
+          }
+        }
+      }catch(_){}
+      const r=await fetch(API+'/token-profiles/latest/v1',{cache:'no-store'});
+      if(!r.ok)throw new Error('profile feed '+r.status);
+      const profiles=await r.json();
+      const list=(Array.isArray(profiles)?profiles:[]).filter(x=>x&&x.chainId==='solana'&&x.tokenAddress&&x.tokenAddress!==OFFICIAL_MINT).slice(0,12);
+      const resolved=await Promise.allSettled(list.map(async profile=>{
+        const pair=await fetchPairs(profile.tokenAddress);
+        if(!pair)return null;
+        return {address:profile.tokenAddress,name:pair.baseToken.name||'Unknown',symbol:pair.baseToken.symbol||'TOKEN',priceNative:Number(pair.priceNative),liquidityUsd:Number(pair.liquidity&&pair.liquidity.usd)||0,pairCreatedAt:Number(pair.pairCreatedAt)||0,eventAt:0,source:'dexscreener',url:'https://dexscreener.com/solana/'+encodeURIComponent(profile.tokenAddress)};
+      }));
+      state.candidates=resolved.filter(x=>x.status==='fulfilled'&&x.value).map(x=>x.value).slice(0,8);
+      $('sniper-feed-status').textContent=liveConnected?t('liveConnected'):(state.candidates.length?t('liveDisconnected'):t('noCandidates'));
+    }catch(_){$('sniper-feed-status').textContent=t('failed');}
+    finally{state.busy=false;renderCandidates();}
+  }
+  function openPaper(item){
+    if(state.positions.some(p=>p.status==='open')){alert(t('positionLimit'));return;}
+    const buySol=Number($('sniper-size').value);
+    if(!Number.isFinite(buySol)||buySol<=0||buySol>0.05){alert(t('needAmount'));return;}
+    if(!item||!Number.isFinite(item.priceNative)||item.priceNative<=0){alert(t('noPair'));return;}
+    const c=getCosts();
+    const quantity=buySol*(1-c.dex)*(1-c.slip)/item.priceNative;
+    const p={id:makeUuid(),address:item.address,symbol:item.symbol,name:item.name,buySol,entryPrice:item.priceNative,lastPrice:item.priceNative,quantity,openedAt:Date.now(),status:'open',netPnl:0,netPct:0,exitReason:null,_ownerTelegramId:telegramId()||'guest'};
+    state.positions.push(p);saveStore();renderPositions();persistPosition(p);alert(t('buyOk'));
+  }
+  function closePaper(id,reason){
+    const p=state.positions.find(x=>x.id===id&&x.status==='open');if(!p)return;
+    const m=metrics(p,p.lastPrice||p.entryPrice);
+    p.status='closed';p.closedAt=Date.now();p.netPnl=m.net;p.netPct=m.pct;p.exitReason=reason;
+    saveStore();renderPositions();persistPosition(p);
+  }
+  async function updatePositions(){
+    const open=state.positions.filter(p=>p.status==='open');
+    for(const p of open){
+      try{
+        const pair=await fetchPairs(p.address);
+        if(!pair)continue;
+        p.lastPrice=Number(pair.priceNative)||p.lastPrice;
+        const m=metrics(p,p.lastPrice);
+        p.netPnl=m.net;p.netPct=m.pct;
+        const target=Number($('sniper-target').value)||10;
+        const stop=Number($('sniper-stop').value)||0;
+        if(m.pct>=target){p.status='closed';p.closedAt=Date.now();p.exitReason='target';}
+        else if(stop>0&&m.pct<=-stop){p.status='closed';p.closedAt=Date.now();p.exitReason='stop';}
+      }catch(_){}
+    }
+    saveStore();renderPositions();
+    for(const p of open)await persistPosition(p);
+  }
+  function init(){
+    readStore();activeStorageKey=storageKey();translate();
+    $('sniper-refresh').addEventListener('click',refreshFeed);
+    $('sniper-clear').addEventListener('click',()=>{state.positions=[];saveStore();clearServerHistory();renderPositions();$('sniper-feed-status').textContent=t('cleared');});
+    ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
+    refreshFeed();if(authToken())syncFromServer().then(updatePositions);else{updateSyncStatus('loginToSync');updatePositions();}
+    state.timer=window.setInterval(()=>{checkAccountChange();refreshFeed();},10000);
+    state.positionTimer=window.setInterval(()=>{updatePositions();},30000);
+    document.addEventListener('zombcash:languagechange',translate);
+    document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer().then(updatePositions);});
+    document.addEventListener('click',event=>{if(event.target&&event.target.closest&&event.target.closest('#survivor-logout'))Promise.resolve().then(checkAccountChange);});
+    window.addEventListener('storage',event=>{if(event.key===TOKEN_KEY||event.key===PROFILE_KEY){if(!checkAccountChange()&&authToken())syncFromServer().then(updatePositions);}});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();+fmt(item.liquidityUsd,0)));
+      stats.append(make('span', '', t('price')+': '+(item.priceNative>0?fmt(item.priceNative,9):t('waitingForPool'))));
+      const action=make('button','sniper-action',item.priceNative>0?t('action'):t('waitingForPool'));
+      action.type='button';action.disabled=!(item.priceNative>0); action.addEventListener('click',()=>openPaper(item));
       const link=make('a','sniper-link','DEXSCREENER ↗'); link.href=item.url; link.target='_blank'; link.rel='noopener noreferrer';
       row.append(main,stats,link,action);host.append(row);
     });
