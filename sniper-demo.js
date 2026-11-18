@@ -452,7 +452,14 @@
 
   function buildDashboard(){
     const root=$('zombie-sniper-demo');if(!root||root.dataset.zsBuilt)return;
-    root.dataset.zsBuilt='1';loadTerminal();
+    root.dataset.zsBuilt='1';
+    /* Keep a stable slot in the article while allowing the dashboard to escape
+       transformed/narrow page wrappers when it is displayed as a viewport app. */
+    const rootHome=root.parentNode;
+    const rootAnchor=document.createComment('zombie-sniper-home');
+    if(rootHome)rootHome.insertBefore(rootAnchor,root);
+    function mountDashboardOverlay(){if(root.parentNode!==document.body)document.body.appendChild(root);}
+    function restoreDashboardToPage(){if(rootAnchor.parentNode){rootAnchor.parentNode.insertBefore(root,rootAnchor);rootAnchor.remove();}}loadTerminal();
     const fields=['sniper-size','sniper-target','sniper-stop','sniper-network','sniper-priority','sniper-dex','sniper-slip'].map(id=>$(id)?.closest('.sniper-field')).filter(Boolean);
     const candidates=$('sniper-candidates'),positions=$('sniper-positions'),refresh=$('sniper-refresh'),clear=$('sniper-clear'),status=$('sniper-feed-status');
     const style=dashNode('style','');style.textContent=`.sniper-demo{position:relative;overflow:hidden;border:1px solid #68736d!important;border-radius:8px!important;padding:clamp(12px,1.5vw,20px)!important;background:linear-gradient(145deg,#171c1b,#0b1010 58%,#151a18)!important;box-shadow:0 12px 40px #0008,inset 0 0 0 1px #ffffff08!important;color:#e5e9e4;font-family:Inter,system-ui,sans-serif}
@@ -468,7 +475,7 @@
     .zs-chart{width:100%;height:72px;margin-top:5px;border-radius:3px;background:linear-gradient(180deg,#a9b99c12,transparent);border:1px solid #69786b33}
     .zs-right{display:grid;grid-template-rows:auto minmax(0,.85fr) minmax(0,1.15fr);gap:6px}.zs-right>h3{margin:0!important;padding:0 0 4px;border-bottom:1px solid #ffffff18}.zs-launch-panel{min-height:0;overflow:hidden}.zs-positions,.zs-launches{max-height:none;min-height:0;overflow:auto;scrollbar-width:thin;scrollbar-color:#59665c #121816}.zs-launches .sniper-candidate{grid-template-columns:minmax(0,1fr) auto;gap:5px;padding:7px 0}.zs-launches .sniper-candidate-stats{grid-column:1/-1}.zs-launches .sniper-link{display:none}.zs-launches .sniper-action{grid-column:2;grid-row:1}.zs-positions .sniper-position{display:grid;grid-template-columns:1fr auto;gap:5px;padding:8px 0;border-top:1px solid #ffffff16}.zs-position-chart{grid-column:1/-1}.zs-spark{width:100%;height:34px;display:block;background:linear-gradient(180deg,#9db39b0b,transparent);border-radius:3px}
     .zs-log{display:grid;gap:2px;max-height:76px;overflow:auto}.zs-logrow{display:grid;grid-template-columns:65px 68px 82px 1fr;gap:7px;padding:5px 7px;border-top:1px solid #ffffff10;font-size:10px;color:#c9d0c9}.zs-logkind{color:#b8d0ad}.zs-foot{margin:4px 0 0;color:#aeb8af;font-size:10px;line-height:1.35}.zs-hidden{display:none!important}.sniper-demo .sniper-muted{color:#aeb8af!important}.sniper-demo .sniper-action{border-radius:3px!important;background:#a8b79f!important;color:#111812!important;border:1px solid #c2cdbb!important}.sniper-demo .sniper-close{background:transparent!important;border:1px solid #68776c!important;color:#d2dcd2!important}
-    .sniper-demo.zs-fullscreen{position:fixed!important;inset:0!important;z-index:2147483000!important;width:100vw!important;height:100vh!important;height:100dvh!important;max-height:100vh!important;max-height:100dvh!important;margin:0!important;border:0!important;border-radius:0!important;padding:10px 14px!important;overflow:hidden!important;display:grid!important;grid-template-rows:auto auto auto minmax(0,1fr) auto!important;gap:4px!important;background:linear-gradient(145deg,#171c1b,#0b1010 58%,#151a18)!important}
+    .sniper-demo.zs-fullscreen{position:fixed!important;inset:0!important;z-index:2147483600!important;width:100vw!important;height:auto!important;min-height:100vh!important;min-height:100dvh!important;max-height:none!important;box-sizing:border-box!important;margin:0!important;border:0!important;border-radius:0!important;padding:10px 14px!important;overflow:hidden!important;display:grid!important;grid-template-rows:auto auto auto minmax(0,1fr) auto!important;gap:4px!important;background:linear-gradient(145deg,#171c1b,#0b1010 58%,#151a18)!important}
     .zs-fullscreen .zs-head{min-height:34px;padding-bottom:5px}.zs-fullscreen .zs-nav{margin:2px 0}.zs-fullscreen .zs-kpis{margin:1px 0 4px}.zs-fullscreen .zs-layout{height:100%;min-height:0}.zs-fullscreen .zs-panel{padding:8px 10px}.zs-fullscreen .zs-portrait{height:76px}.zs-fullscreen .zs-core{min-height:94px;width:min(100%,118px)}.zs-fullscreen .zs-chart{height:62px}.zs-fullscreen .zs-log{max-height:58px}.zs-fullscreen .zs-foot{font-size:9px;margin:0}.zs-fullscreen>.zs-foot{display:none!important}.zs-fullscreen .zs-field{padding:2px 0}.zs-fullscreen .zs-field .zs-number{min-height:24px}.zs-fullscreen .zs-kpi{padding:6px 9px}
     .zs-fullscreen .zs-right{grid-template-rows:auto minmax(0,.85fr) minmax(0,1.15fr)}.zs-fullscreen .zs-positions,.zs-fullscreen .zs-launches{overflow:auto}
     body.zs-lock{overflow:hidden!important}
@@ -485,7 +492,7 @@
 
 
     /* Full-viewport trading terminal and position contract row */
-    .sniper-demo.zs-fullscreen{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;max-height:100dvh!important;z-index:2147483600!important;box-sizing:border-box!important;margin:0!important;border:0!important;border-radius:0!important;overflow:hidden!important}
+    .sniper-demo.zs-fullscreen{position:fixed!important;inset:0!important;width:100vw!important;height:auto!important;min-height:100vh!important;min-height:100dvh!important;max-height:none!important;z-index:2147483600!important;box-sizing:border-box!important;margin:0!important;border:0!important;border-radius:0!important;overflow:hidden!important}
     .zs-fullscreen .zs-layout{min-height:0!important;height:100%!important}
     .zs-fullscreen .zs-left,.zs-fullscreen .zs-center,.zs-fullscreen .zs-right{min-height:0!important;overflow:auto!important;overscroll-behavior:contain!important}
     .zs-fullscreen .zs-position-section{min-height:0!important;overflow:auto!important}
@@ -660,16 +667,28 @@
     @media(max-width:760px){.sniper-demo.zs-fullscreen.zs-history-mode{display:block!important;overflow:auto!important}.sniper-demo.zs-fullscreen.zs-history-mode #zs-journal-panel{min-height:180px!important}.sniper-demo.zs-fullscreen.zs-history-mode #zs-log{max-height:135px!important}}
     `;
     const header=dashNode('div','zs-head');const brand=dashNode('span','zs-brand','☣ ZOMBCASH');const title=dashNode('strong','zs-title','ZOMBIE SNIPER');const headActions=dashNode('div','zs-head-actions');headActions.append(dashNode('span','zs-demo',dcopy().demo));const expand=dashNode('button','zs-expand','⛶ FULL SCREEN');expand.type='button';expand.title='Open terminal full screen';function syncFullscreenButton(){const on=root.classList.contains('zs-fullscreen');document.body.classList.toggle('zs-lock',on);expand.textContent=on?'✕ EXIT FULL SCREEN':'⛶ FULL SCREEN';}
-    expand.addEventListener('click',async()=>{
-      if(document.fullscreenElement===root){try{await document.exitFullscreen();}catch(_){}return;}
-      if(!root.classList.contains('zs-fullscreen')){root.classList.add('zs-fullscreen');syncFullscreenButton();}
-      if(typeof root.requestFullscreen==='function'){try{await root.requestFullscreen();return;}catch(_){}}
-      else{root.classList.toggle('zs-fullscreen');syncFullscreenButton();}
+    async function enterDashboardFullscreen(useNative){
+      mountDashboardOverlay();
+      root.classList.add('zs-fullscreen');syncFullscreenButton();
+      if(useNative&&document.fullscreenElement!==document.documentElement&&document.documentElement.requestFullscreen){
+        try{await document.documentElement.requestFullscreen();root.dataset.nativeFullscreen='1';}
+        catch(_){root.dataset.nativeFullscreen='0';}
+      }
+    }
+    async function exitDashboardFullscreen(){
+      if(document.fullscreenElement){try{await document.exitFullscreen();}catch(_){}}
+      root.dataset.nativeFullscreen='0';
+      root.classList.remove('zs-fullscreen');syncFullscreenButton();
+      restoreDashboardToPage();
+    }
+    expand.addEventListener('click',()=>{
+      if(root.classList.contains('zs-fullscreen')){exitDashboardFullscreen();return;}
+      enterDashboardFullscreen(true);
     });
     document.addEventListener('fullscreenchange',()=>{
-      if(document.fullscreenElement===root)root.classList.add('zs-fullscreen');
-      else if(!document.fullscreenElement)root.classList.remove('zs-fullscreen');
-      syncFullscreenButton();
+      if(!document.fullscreenElement&&root.dataset.nativeFullscreen==='1'){
+        root.dataset.nativeFullscreen='0';root.classList.remove('zs-fullscreen');syncFullscreenButton();restoreDashboardToPage();
+      }
     });headActions.append(expand);header.append(brand,title,headActions);
     const nav=dashNode('nav','zs-nav');nav.setAttribute('aria-label','Zombie Sniper navigation');
     const tabTargets=['sniper','stats','history','settings','help'];
@@ -744,7 +763,7 @@
     const foot=dashNode('p','zs-foot',dcopy().hint+' '+t('source'));
     const helpPanel=dashNode('section','zs-panel zs-help zs-tab-hidden');helpPanel.innerHTML='';const helpTitle=dashNode('h3','',state.lang==='ru'?'СПРАВКА И БЕЗОПАСНОСТЬ':'HELP & SAFETY');helpPanel.append(helpTitle,dashNode('p','zs-foot',state.lang==='ru'?'Это симулятор. Все сделки виртуальные. Реальные кошельки, ключи и транзакции не используются.':'This is a paper-trading simulator. No live wallets, private keys or transactions are used.'),dashNode('p','zs-foot',state.lang==='ru'?'Настройте размер сделки, комиссии, проскальзывание, стоп-лосс и цель чистой прибыли. Автовход использует только новые запуски с доступной SOL-парой и заданной минимальной ликвидностью.':'Adjust trade size, fees, slippage, stop loss and net profit target. Auto-entry only uses new launches with a live SOL pair and your minimum liquidity threshold.'));
     root.replaceChildren(style,header,nav,kpis,layout,journal,helpPanel,foot);
-    renderDashboardState();renderPositions();renderCandidates();selectTab('sniper');root.classList.add('zs-fullscreen');document.body.classList.add('zs-lock');expand.textContent='✕ EXIT FULL SCREEN';
+    renderDashboardState();renderPositions();renderCandidates();selectTab('sniper');mountDashboardOverlay();root.classList.add('zs-fullscreen');document.body.classList.add('zs-lock');expand.textContent='✕ EXIT FULL SCREEN';
   }
 
   function init(){
@@ -755,7 +774,7 @@
     refreshFeed();if(authToken())syncFromServer().then(updatePositions);else{updateSyncStatus('loginToSync');updatePositions();}
     state.timer=window.setInterval(()=>{checkAccountChange();if(!document.hidden)refreshFeed();},15000);
     state.positionTimer=window.setInterval(()=>{if(!document.hidden)updatePositions();},10000);
-    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&$('zombie-sniper-demo')?.classList.contains('zs-fullscreen')){$('zombie-sniper-demo').classList.remove('zs-fullscreen');document.body.classList.remove('zs-lock');const b=document.querySelector('.zs-expand');if(b)b.textContent='⛶ FULL SCREEN';}});
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&root.classList.contains('zs-fullscreen')&&!document.fullscreenElement){root.classList.remove('zs-fullscreen');root.dataset.nativeFullscreen='0';document.body.classList.remove('zs-lock');restoreDashboardToPage();const b=root.querySelector('.zs-expand');if(b)b.textContent='⛶ FULL SCREEN';}});
     document.addEventListener('zombcash:languagechange',()=>{detectLang();translate();if($('zs-kpis'))renderDashboardState();});
     document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer().then(updatePositions);});
     document.addEventListener('click',event=>{if(event.target&&event.target.closest&&event.target.closest('#survivor-logout'))Promise.resolve().then(checkAccountChange);});
