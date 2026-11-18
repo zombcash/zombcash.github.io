@@ -362,9 +362,9 @@
   function drawOutbreak(){
     const map=$('zw-outbreak-map');map.replaceChildren();
     for(let p=0;p<BOARD;p++){
-      const cell=document.createElement('button');cell.type='button';cell.className='zw-cell';cell.setAttribute('role','gridcell');cell.setAttribute('aria-label','Tile '+(p+1));
+      const cell=document.createElement('button');cell.type='button';cell.className='zw-cell';cell.setAttribute('role','gridcell');cell.dataset.tile=String(p);cell.setAttribute('aria-label','Tile '+(p+1));
       const actor=occupant(p);
-      if(actor){cell.textContent=actor.id[0]==='Z'?'🧟':'🧍';cell.classList.add(actor.id[0]==='Z'?'zw-zombie':'zw-human');cell.title=actor.name+' · '+actor.id+(actor.acted?' · acted':' · ready');if(actor.id===selectedUnit)cell.classList.add('zw-selected');if(actor.acted)cell.classList.add('zw-acted');}
+      if(actor){cell.dataset.unitId=actor.id;cell.textContent=actor.id[0]==='Z'?'🧟':'🧍';cell.classList.add(actor.id[0]==='Z'?'zw-zombie':'zw-human');cell.title=actor.name+' · '+actor.id+(actor.acted?' · acted':' · ready');if(actor.id===selectedUnit)cell.classList.add('zw-selected');if(actor.acted)cell.classList.add('zw-acted');}
       else if(heliPads.has(p)){cell.textContent='🚁';cell.classList.add('zw-heli');cell.title='Helicopter extraction';}
       else if(crates.has(p)){cell.textContent='🧱';cell.classList.add('zw-crate');cell.title='Movable debris';}
       else if(fixedWalls.has(p)){cell.textContent='🏚️';cell.classList.add('zw-wall');cell.title='Collapsed building';}
