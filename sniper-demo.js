@@ -458,6 +458,42 @@
     .zs-preset-applied{min-height:14px;margin:6px 0 0;color:#b9d3aa;font-size:10px}
     @media(max-width:760px){.zs-preset-buttons{grid-template-columns:1fr}}
 
+
+    /* Zombie Sniper visual redesign v2 */
+    .zs-layout{grid-template-columns:minmax(390px,1.08fr) minmax(300px,.82fr) minmax(430px,1.18fr);gap:12px}
+    .zs-panel{position:relative;overflow:hidden;border-color:#607267;background:linear-gradient(145deg,#18231d 0%,#101813 58%,#0a100d 100%);box-shadow:0 10px 28px #0007,inset 0 1px #d9ead10d}
+    .zs-left{isolation:isolate;background:linear-gradient(90deg,#101813fa 0%,#101813ed 42%,#101813a8 74%,#1018135c 100%),url('/assets/zombcash-survivor-640.avif') right 20%/auto 100% no-repeat!important}
+    .zs-left:before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#0c130f 0%,#0c130fc9 42%,#0c130f35 100%);pointer-events:none}
+    .zs-left>*{position:relative}
+    .zs-left>h3{font-size:14px!important;letter-spacing:.13em!important;text-shadow:0 2px 12px #000}
+    .zs-fields{position:relative;z-index:1;gap:9px 18px}
+    .zs-field{padding:9px 0;border-bottom:1px solid #c4d5c00d}
+    .zs-field label{font-size:11px;letter-spacing:.025em;color:#e0e8de}
+    .zs-field .zs-range{height:9px;accent-color:#a8c59a;filter:drop-shadow(0 0 4px #9ec68c55)}
+    .zs-field .zs-number{min-height:32px;border:1px solid #65786a;background:#0a100d;color:#f0f5ed;font-size:12px}
+    .zs-presets{position:relative;z-index:1;margin-top:18px;padding:15px;border:1px solid #91a78a66;border-radius:6px;background:linear-gradient(135deg,#111a14ed,#101712c9);box-shadow:0 8px 25px #0006;backdrop-filter:blur(8px)}
+    .zs-presets h3{font-size:13px!important;letter-spacing:.1em!important;color:#e5eee1!important}
+    .zs-preset-note{font-size:11px;line-height:1.55;color:#c0cbbf}
+    .zs-preset-buttons{gap:8px}
+    .zs-preset-btn{min-height:40px;border-radius:4px;font-size:11px;letter-spacing:.025em;background:linear-gradient(180deg,#27352b,#19231c);box-shadow:inset 0 1px #ffffff13;transition:transform .18s,border-color .18s,background .18s}
+    .zs-preset-btn:hover{transform:translateY(-1px)}
+    .zs-preset-btn.is-selected{background:linear-gradient(180deg,#a9bf9d,#71896a);border-color:#d3e5c8;color:#0c150d;box-shadow:0 0 18px #9fc68b35,inset 0 1px #fff8}
+    .zs-preset-applied{font-size:11px;font-weight:700}
+    .zs-center{background:radial-gradient(ellipse at 50% 22%,#344437 0,#19231c 45%,#101713 80%)!important}
+    .zs-portrait{height:clamp(125px,17vh,190px)!important;margin-bottom:13px!important;border:1px solid #7f967a66!important;border-radius:5px!important;overflow:hidden;box-shadow:0 12px 30px #0007}
+    .zs-portrait img{object-fit:cover!important;object-position:50% 18%!important;filter:grayscale(.45) contrast(1.12) brightness(.76)!important;opacity:.94!important}
+    .zs-portrait:after{background:linear-gradient(90deg,#0b100ef0 0%,#0b100e5c 58%,#0b100e15),linear-gradient(0deg,#0b100ebd,transparent 68%)!important}
+    .zs-portrait b{font-size:13px!important;letter-spacing:.17em!important;text-shadow:0 2px 9px #000}
+    .zs-core{width:min(100%,160px)!important;min-height:132px!important;border:1px solid #a5bd9b!important;box-shadow:0 0 25px #8dbb7833,inset 0 0 30px #c2d1bd1c!important}
+    .zs-toggle{min-height:44px!important;box-shadow:0 0 18px #9dbd8d20,inset 0 1px #ffffff24}
+    .zs-kpi{background:linear-gradient(135deg,#202e24,#111914)!important;border-color:#657b68!important}
+    .zs-kpi strong{text-shadow:0 0 14px #b2d69a20}
+    .zs-right{background:linear-gradient(145deg,#18231d,#0b110e)!important}
+    .zs-position-section,.zs-launches{border-color:#526458!important;background:linear-gradient(180deg,#101a14,#0a100d)!important}
+    .zs-position-chart{height:52px!important;max-height:none!important}
+    .zs-spark{height:48px!important;filter:drop-shadow(0 0 5px #89c58b55)}
+    @media(max-width:1100px){.zs-layout{grid-template-columns:minmax(0,1fr)!important}.zs-left{background-position:right center!important}}
+
     /* Cinematic terminal refinement */
     .zs-stats-extra{margin-top:10px;padding-top:10px;border-top:1px solid #ffffff19}.zs-stats-extra h3{margin-bottom:10px}.zs-stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.zs-stat-card{padding:13px;border:1px solid #536157;border-radius:4px;background:#121a15}.zs-stat-card small{display:block;color:#b9c4b9;font-size:10px;letter-spacing:.07em}.zs-stat-card strong{display:block;margin-top:7px;color:#e8eee5;font-size:clamp(17px,1.5vw,22px);font-variant-numeric:tabular-nums}.zs-stat-card .zs-negative{color:#d99b9b}
 
