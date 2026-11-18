@@ -61,7 +61,7 @@
   };
 
   const $ = id => document.getElementById(id);
-  const state = { lang:'en', candidates:[], positions:[], timer:null, busy:false };
+  const state = { lang:'en', candidates:[], positions:[], timer:null, busy:false, syncStatusKey:'saved' };
   let activeStorageKey = '';
   function detectLang(){
     const path = location.pathname.split('/').filter(Boolean);
@@ -81,7 +81,7 @@
   function saveStore(){
     try { localStorage.setItem(storageKey(), JSON.stringify({positions:state.positions.slice(0,20),savedAt:Date.now()})); } catch (_) {}
   }
-  function updateSyncStatus(key){const node=document.querySelector('.sniper-demo [data-sniper-i18n="saved"]');if(node)node.textContent=t(key);}
+  function updateSyncStatus(key){state.syncStatusKey=key;const node=document.querySelector('.sniper-demo [data-sniper-i18n="saved"]');if(node)node.textContent=t(key);}
   function makeUuid(){if(window.crypto&&typeof window.crypto.randomUUID==='function')return window.crypto.randomUUID();return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);});}
   function mapServerPosition(p){return {id:String(p.id),address:String(p.mint),symbol:String(p.symbol||'TOKEN'),name:String(p.name||''),buySol:Number(p.buySol),entryPrice:Number(p.entryPrice),lastPrice:Number(p.lastPrice),quantity:Number(p.quantity),netPnl:Number(p.netPnl||0),netPct:Number(p.netPct||0),status:p.status==='closed'?'closed':'open',exitReason:p.exitReason||null,openedAt:Number(p.openedAt)||Date.now(),closedAt:p.closedAt?Number(p.closedAt):null};}
   async function persistPosition(p){
@@ -122,7 +122,7 @@
     detectLang();
     document.querySelectorAll('[data-sniper-i18n]').forEach(el=>{el.textContent=t(el.dataset.sniperI18n);});
     document.querySelectorAll('[data-sniper-placeholder]').forEach(el=>{el.placeholder=t(el.dataset.sniperPlaceholder);});
-    renderCandidates(); renderPositions();
+    renderCandidates(); renderPositions();updateSyncStatus(state.syncStatusKey||'saved');
   }
   function fmt(value,digits=5){return Number(value).toLocaleString(undefined,{maximumFractionDigits:digits});}
   function ageLabel(ms){
