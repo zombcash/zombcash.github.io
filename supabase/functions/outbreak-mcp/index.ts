@@ -37,12 +37,14 @@ function toolError(message: string) {
 }
 function tile(x:number,y:number){return y*W+x;}
 function buildWorld(){
-  const walls:number[]=[],crates:number[]=[],hazards:number[]=[];
-  for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){const p=tile(x,y);if(((x%5===2&&y%4!==1)||(y%5===3&&x%6===4))&&!HELI.includes(p))walls.push(p);}
-  for(let y=0;y<H;y++){const p=tile(8,y),i=walls.indexOf(p);if(i>=0)walls.splice(i,1);}
-  for(let x=0;x<W;x++){const p=tile(x,6),i=walls.indexOf(p);if(i>=0)walls.splice(i,1);}
-  for(const [x,y] of [[3,2],[5,9],[12,3],[14,10],[2,11],[10,8],[15,5],[7,3],[11,12],[16,8]]){const p=tile(x,y);if(!walls.includes(p)&&!HELI.includes(p))crates.push(p);}
-  for(const [x,y] of [[4,5],[13,7],[6,11],[15,2]]){const p=tile(x,y);if(!walls.includes(p))hazards.push(p);}
+  const walls:number[]=[],crates:number[]=[],hazards:number[]=[],candidates:number[]=[];
+  for(let y=4;y<=8;y++)for(let x=1;x<W-1;x++){
+    const p=tile(x,y);
+    if(x!==8&&y!==6&&Math.random()<0.14)walls.push(p);
+    if(x!==8&&y!==6&&!walls.includes(p))candidates.push(p);
+  }
+  for(let i=candidates.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[candidates[i],candidates[j]]=[candidates[j],candidates[i]];}
+  crates.push(...candidates.slice(0,10));hazards.push(...candidates.slice(12,16));
   const used=new Set<number>(),humans:any[]=[],zombies:any[]=[];
   const humanCells:number[]=[];for(let y=0;y<4;y++)for(let x=0;x<W;x++)if(x<7||x>10)humanCells.push(tile(x,y));
   const hNames=["Mara","Viktor","Nix","Ash","June","Rook","Iris","Milo","Sable","Kai","Echo","Dante","Nova","Finn","Zara","Wolf","Pip","Raven"];
