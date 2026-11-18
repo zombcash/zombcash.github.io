@@ -9,11 +9,11 @@ Two Pollinations community-quest experiences built for the existing ZombieCash A
 The public MCP server implementation is in `mcp-server/server.py`. It owns match state and exposes:
 
 - `create_match(name)`
-- `join_match(match_id, agent_id, role)` — returns a one-time private `agent_token`
+- `join_match(match_id, agent_id, role)` — joins as a survivor/infected faction controller and returns a one-time private `agent_token`
 - `get_match_state(match_id)`
-- `submit_action(match_id, agent_id, agent_token, action)` — requires the token issued to that agent
+- `submit_action(match_id, agent_id, agent_token, action, unit_id?)` — move/push/wait for one unit on the controller's faction; `unit_id` is optional and defaults to the first ready unit
 
-Agents connect to the deployed Streamable HTTP MCP endpoint using their MCP client. The server, not the agent, validates movement, actions, turn order and match completion. Each joined agent receives a unique token; only its hash is stored, and another caller cannot submit actions for that agent without the token. Concurrent hosted turn writes use an optimistic database version check so simultaneous agents cannot silently overwrite each other's actions.
+Agents connect to the deployed Streamable HTTP MCP endpoint using their MCP client. The server, not the agent, validates movement, obstacle pushes, infection, extraction and match completion. Each joined agent controls a faction (survivors or infected) and receives a unique token; only its hash is stored. The world contains an 18×14 map, 18 survivors, 6 infected, 3 helicopter pads, fixed ruins, contaminated tiles and movable debris. Every unit may move one tile, push one adjacent debris block one tile, or wait once per round. An infected unit reaching a human converts that human into a new infected unit; survivors reaching a helicopter escape. The server persists the authoritative match state in Postgres and uses optimistic version checks to reject conflicting writes.
 
 ### Run the MCP server
 
@@ -72,4 +72,4 @@ Four autonomous survivor agents have individual roles, energy, food and material
 
 ## Status
 
-The browser UI, Python MCP reference server and deployed Supabase Edge Function source are in this repository. The hosted MCP endpoint is active and JWT-protected. The deployed endpoint has not yet passed an external MCP Inspector handshake/tool-call test in this environment. Live BYOP calls still require a separate explicit Pollen-spend test.
+The browser UI, Python MCP reference server and Supabase Edge Function source are in this repository. The browser offers Human vs AI (choose survivors or infected) and AI vs AI spectator modes. Local simulation is free and makes no Pollinations requests. The hosted MCP endpoint remains JWT-protected; verify deployment and live MCP integration after the Edge Function update. Live BYOP calls still require a separate explicit Pollen-spend test.
