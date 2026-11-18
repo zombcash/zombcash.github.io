@@ -10,6 +10,7 @@ const path = require('path');
   if (await page.locator('#zw-outbreak-map .zw-cell').count() !== 252) throw new Error('Outbreak board must render 18x14 tactical map');
   if (await page.locator('#zw-unit-roster .zw-unit').count() !== 18) throw new Error('Outbreak must spawn a large survivor roster');
   await page.selectOption('#zw-game-mode', 'ai-ai');
+  await page.selectOption('#zw-ai-speed', '90');
   await page.locator('#zw-demo-start').click();
   await page.waitForFunction(() => document.querySelector('#zw-outbreak-turns').textContent.includes('1'), null, { timeout: 10000 });
   if (!(await page.locator('#zw-demo-turn').isDisabled())) throw new Error('Spectator mode must not allow manual turn control');
