@@ -482,11 +482,21 @@
     const settingsExtra=dashNode('section','zs-settings-extra');settingsExtra.id='zs-settings-extra';
     settingsExtra.append(dashNode('h3','', 'РЕКОМЕНДУЕМЫЕ ПАРАМЕТРЫ'));
     const presetList=dashNode('div','zs-preset-list');settingsExtra.append(presetList);
-    const presetDetails=dashNode('div','zs-preset-values');presetDetails.textContent='Осторожный: 0.01 SOL · TP 12% · SL 8% · ликвидность $20,000. Сбалансированный: 0.02 SOL · TP 20% · SL 12% · ликвидность $15,000.';settingsExtra.append(presetDetails);
-    const presetApply=dashNode('button','zs-apply-preset','ПРИМЕНИТЬ СБАЛАНСИРОВАННЫЙ ПРОФИЛЬ');presetApply.type='button';settingsExtra.append(presetApply);
-    const conservative=dashNode('button','zs-preset','ОСТОРОЖНЫЙ');const balanced=dashNode('button','zs-preset is-selected','СБАЛАНСИРОВАННЫЙ');const aggressive=dashNode('button','zs-preset','АГРЕССИВНЫЙ');[conservative,balanced,aggressive].forEach(b=>{b.type='button';presetList.append(b);});
-    presetApply.addEventListener('click',()=>{const p={capital:10,size:0.02,target:20,stop:12,network:0.00001,priority:0.0001,dex:0.5,slip:1.5,maxSize:0.05,liquidity:15000};const map={'sniper-size':p.size,'sniper-target':p.target,'sniper-stop':p.stop,'sniper-network':p.network,'sniper-priority':p.priority,'sniper-dex':p.dex,'sniper-slip':p.slip,'sniper-capital':p.capital,'sniper-max-size':p.maxSize,'sniper-liquidity':p.liquidity};Object.entries(map).forEach(([id,value])=>{const input=$(id);if(input){input.value=String(value);const slider=input.parentElement&&input.parentElement.querySelector('.zs-range');if(slider)slider.value=String(value);input.dispatchEvent(new Event('change',{bubbles:true}));}});terminal.capital=p.capital;terminal.maxTradeSize=p.maxSize;terminal.minLiquidity=p.liquidity;saveTerminal();renderDashboardState();});
-
+    const presetDetails=dashNode('div','zs-preset-values');presetDetails.textContent='Осторожный: 0.01 SOL · TP 12% · SL 8% · ликвидность $20,000. Сбалансированный: 0.02 SOL · TP 20% · SL 12% · ликвидность $15,000. Агрессивный: 0.05 SOL · TP 35% · SL 18% · ликвидность $30,000.';settingsExtra.append(presetDetails);
+    function applyProfile(p){
+      const map={'sniper-size':p.size,'sniper-target':p.target,'sniper-stop':p.stop,'sniper-network':p.network,'sniper-priority':p.priority,'sniper-dex':p.dex,'sniper-slip':p.slip,'sniper-capital':p.capital,'sniper-max-size':p.maxSize,'sniper-liquidity':p.liquidity};
+      Object.entries(map).forEach(([id,value])=>{const input=$(id);if(input){input.value=String(value);const slider=input.parentElement&&input.parentElement.querySelector('.zs-range');if(slider)slider.value=String(value);input.dispatchEvent(new Event('change',{bubbles:true}));}});
+      terminal.capital=p.capital;terminal.maxTradeSize=p.maxSize;terminal.minLiquidity=p.liquidity;
+      const amount=$('sniper-size');if(amount){amount.max=p.maxSize;const slider=amount.parentElement&&amount.parentElement.querySelector('.zs-range');if(slider)slider.max=p.maxSize;}
+      saveTerminal();renderDashboardState();
+    }
+    const profileData=[
+      ['ОСТОРОЖНЫЙ','Меньший размер сделки · выше фильтр ликвидности',{capital:10,size:0.01,target:12,stop:8,network:0.00001,priority:0.0001,dex:0.5,slip:1,maxSize:0.02,liquidity:20000}],
+      ['СБАЛАНСИРОВАННЫЙ','Рекомендуемый стартовый вариант для тестов',{capital:10,size:0.02,target:20,stop:12,network:0.00001,priority:0.0001,dex:0.5,slip:1.5,maxSize:0.05,liquidity:15000}],
+      ['АГРЕССИВНЫЙ','Больше волатильность и риск просадки',{capital:10,size:0.05,target:35,stop:18,network:0.00001,priority:0.0002,dex:1,slip:3,maxSize:0.05,liquidity:30000}]
+    ];
+    profileData.forEach((item)=>{const b=dashNode('button','zs-preset');b.type='button';b.append(dashNode('strong','',item[0]),dashNode('small','',item[1]));b.addEventListener('click',()=>{applyProfile(item[2]);presetDetails.textContent=item[0]+' — параметры применены. Все значения можно менять вручную.';logEvent('PRESET',item[0],'Paper settings applied');});presetList.append(b);});
+    const presetApply=dashNode('p','zs-foot','Выберите один из трёх профилей выше. Применение меняет только виртуальные параметры симуляции.');settingsExtra.append(presetApply);
     const center=dashNode('section','zs-panel zs-center');center.id='zs-center';const centerTitle=dashNode('h3','',dcopy().autopilot);centerTitle.id='zs-center-title';center.append(centerTitle);
     const portrait=dashNode('div','zs-portrait');const pic=dashNode('img','');pic.src='/assets/zombcash-survivor-640.avif';pic.alt='ZombieCash anime survivor heroine';portrait.append(pic,dashNode('b','','$ZOMBCASH SURVIVOR'));
     const core=dashNode('div','zs-core');const coreText=dashNode('div','');coreText.append(dashNode('strong','', '◉'),dashNode('strong','', 'AUTO SNIPER'),dashNode('span','', 'PAPER ENGINE'));core.append(coreText);
