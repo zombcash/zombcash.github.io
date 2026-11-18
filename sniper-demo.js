@@ -103,7 +103,7 @@
     const sellAfterCosts=sellGross*(1-c.dex)*(1-c.slip);
     const fixedFees=2*(c.network+c.priority);
     const dexBuy=position.buySol*c.dex;
-    const net=sellAfterCosts-position.buySol-dexBuy-fixedFees;
+    const net=sellAfterCosts-position.buySol-fixedFees;
     return {sellGross,sellAfterCosts,net,pct:position.buySol>0?net/position.buySol*100:0,fees:dexBuy+sellGross*c.dex+fixedFees};
   }
   function make(tag,cls,text){
