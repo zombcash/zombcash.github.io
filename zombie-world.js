@@ -73,7 +73,16 @@
       #zombcash-outbreak-world button,#zombcash-outbreak-world select{border-radius:8px;font-size:11px}
       #zombcash-outbreak-world .zw-outbreak-console{padding:12px;border:1px solid #64877d;border-radius:14px;background:linear-gradient(145deg,#0d1a20,#111b1c)}
       #zombcash-outbreak-world .zw-map-large{grid-template-columns:repeat(18,minmax(0,1fr));gap:2px;max-width:100%;padding:8px;touch-action:manipulation}
-      #zombcash-outbreak-world .zw-map-large .zw-cell{min-width:0;aspect-ratio:1;border-radius:3px;font-size:clamp(8px,1.25vw,16px);padding:0;cursor:pointer;position:relative}
+      #zombcash-outbreak-world .zw-map-large .zw-cell{min-width:0;aspect-ratio:1;border-radius:3px;font-size:clamp(8px,1.25vw,16px);padding:0;cursor:pointer;position:relative;display:grid;place-items:center;text-shadow:0 1px 3px #000b;box-shadow:inset 0 0 0 1px #ffffff0b;transition:filter .15s,transform .15s}
+      #zombcash-outbreak-world .zw-cell.zw-grass{background:linear-gradient(145deg,#52764d,#304e39);border-color:#73916a}
+      #zombcash-outbreak-world .zw-cell.zw-field{background:linear-gradient(145deg,#8c8950,#65683b);border-color:#c1b76b}
+      #zombcash-outbreak-world .zw-cell.zw-road{background:repeating-linear-gradient(90deg,#58616a 0 8px,#505861 8px 16px);border-color:#89939a}
+      #zombcash-outbreak-world .zw-cell.zw-building{background:linear-gradient(145deg,#9b7356,#55483e);border-color:#d3a77a}
+      #zombcash-outbreak-world .zw-cell.zw-wall.zw-building{background:linear-gradient(145deg,#9b7356,#55483e);border-color:#d3a77a}
+      #zombcash-outbreak-world .zw-cell.zw-park{background:radial-gradient(circle at 35% 35%,#83ad62,#315c3e);border-color:#9cc67b}
+      #zombcash-outbreak-world .zw-cell.zw-human{background:linear-gradient(145deg,#2e91e8,#174d86);border-color:#c3e8ff;box-shadow:0 0 9px #4cbbff75;z-index:1}
+      #zombcash-outbreak-world .zw-cell.zw-zombie{background:linear-gradient(145deg,#ed5974,#781e43);border-color:#ffc1c9;box-shadow:0 0 11px #ff547b90;animation:zw-pulse 1.5s infinite;z-index:1}
+      #zombcash-outbreak-world .zw-cell.zw-human,#zombcash-outbreak-world .zw-cell.zw-zombie{font-size:clamp(11px,1.65vw,20px)}
       #zombcash-outbreak-world .zw-map-large .zw-cell:focus-visible{outline:2px solid #fff;outline-offset:1px;z-index:2}
       #zombcash-outbreak-world .zw-cell.zw-selected{outline:3px solid #fff36a;outline-offset:-2px;z-index:2}
       #zombcash-outbreak-world .zw-cell.zw-acted{filter:saturate(.45);opacity:.72}
@@ -125,7 +134,7 @@
             <button id="zw-push-mode" type="button" aria-pressed="false">🧱 PUSH OBSTACLE: OFF</button>
           </div>
           <p class="zw-muted" id="zw-outbreak-command-hint">Select one of your units, then click an adjacent tile. Each unit can act once per round. You may push a movable obstacle instead.</p>
-          <div class="zw-legend" id="zw-outbreak-legend"><span>🧍 Survivors</span><span>🧟 Infected</span><span>🚁 Extraction</span><span>🧱 Movable debris</span><span>🏚️ Ruins</span></div>
+          <div class="zw-legend" id="zw-outbreak-legend"><span>👨 Men</span><span>👩 Women</span><span>🧒 Children</span><span>🧟 Infected</span><span>🏢 Buildings</span><span>━ Roads</span><span>🌳 Parks / fields</span><span>🚁 Extraction</span><span>🧱 Barricades</span><span>☣️ Danger</span></div>
           <div class="zw-map zw-map-large" id="zw-outbreak-map" role="grid" aria-label="Zombie Outbreak tactical game board"></div>
           <div class="zw-row zw-outbreak-stats">
             <span class="zw-stat" id="zw-escaped">0 ESCAPED</span><span class="zw-stat" id="zw-captured">0 INFECTED</span><span class="zw-stat" id="zw-outbreak-alive">0 ALIVE</span><span class="zw-stat" id="zw-outbreak-turns">ROUND 0</span><span class="zw-stat" id="zw-outbreak-score">SCORE 0 : 0</span>
@@ -264,7 +273,7 @@
   // Strategic outbreak engine: a wide living map, spreading infection, dynamic cover and two play modes.
   const BW=18,BH=14,BOARD=BW*BH,cellXY=p=>({x:p%BW,y:Math.floor(p/BW)}),tile=(x,y)=>y*BW+x;
   const dirs={north:[0,-1],south:[0,1],west:[-1,0],east:[1,0]};
-  const fixedWalls=new Set();
+  const fixedWalls=new Set(),roads=new Set(),parks=new Set(),fields=new Set();
   const heliPads=new Set([tile(0,0),tile(17,0),tile(8,13)]);
   let humans=[],zombies=[],crates=new Set(),hazards=new Set(),round=0,gameStarted=false,gameEnded=false,selectedUnit=null,pushMode=false,turnBusy=false,outbreakAiTimer=null,playerActed=new Set(),zombieActed=new Set(),escaped=0,infectedCount=0,gameMode='human-ai',playerSide='survivor';
   const outbreakCopy={
@@ -274,32 +283,41 @@
   const OT=key=>(outbreakCopy[document.documentElement.lang]||outbreakCopy.en)[key]||outbreakCopy.en[key]||key;
   function outbreakLog(message){feed('zw-outbreak-feed',message);const f=$('zw-outbreak-feed');while(f.children.length>24)f.lastElementChild.remove();}
   function makeMap(){
-    fixedWalls.clear();crates.clear();hazards.clear();selectedCrate=null;
-    // Procedural city blocks change every outbreak; the central cross keeps the map connected.
-    const candidates=[];
-    for(let y=4;y<=8;y++)for(let x=1;x<BW-1;x++){
-      const p=tile(x,y);if(x!==8&&y!==6&&Math.random()<0.14)fixedWalls.add(p);
-      if(x!==8&&y!==6&&!fixedWalls.has(p))candidates.push(p);
+    fixedWalls.clear();roads.clear();parks.clear();fields.clear();crates.clear();hazards.clear();selectedCrate=null;
+    // Readable miniature city: avenues, side streets, building blocks, parks and open ground.
+    for(let y=0;y<BH;y++)for(let x=0;x<BW;x++){
+      const p=tile(x,y);
+      if(x===5||x===12||y===4||y===9)roads.add(p);
+      else if((x<4&&y>9)||(x>13&&y<4))fields.add(p);
+      else if((x>=7&&x<=10&&y>=5&&y<=8)||((x<5||x>12)&&y>=5&&y<=8&&Math.random()<0.22))parks.add(p);
     }
+    for(let y=1;y<BH-1;y++)for(let x=1;x<BW-1;x++){
+      const p=tile(x,y);if(roads.has(p)||parks.has(p)||fields.has(p)||heliPads.has(p))continue;
+      if(x%3!==0&&y%3!==0&&Math.random()<0.54)fixedWalls.add(p);
+    }
+    const candidates=[];for(let p=0;p<BOARD;p++)if(!fixedWalls.has(p)&&!roads.has(p)&&!heliPads.has(p)&&!fields.has(p))candidates.push(p);
     for(let i=candidates.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[candidates[i],candidates[j]]=[candidates[j],candidates[i]];}
-    candidates.slice(0,10).forEach(p=>crates.add(p));
-    candidates.slice(12,16).forEach(p=>hazards.add(p));
-    // Keep all three extraction pads clear and preserve broad approach lanes.
+    candidates.slice(0,12).forEach(p=>crates.add(p));candidates.slice(14,19).forEach(p=>hazards.add(p));
     for(const p of heliPads)fixedWalls.delete(p);
   }
-  function freeCell(preferred,used){
+  function freeCell(preferred,used,minGap=3){
+    const valid=preferred.filter(p=>!used.has(p)&&!fixedWalls.has(p)&&!crates.has(p)&&!heliPads.has(p));
+    let best=null,bestScore=-1;
+    for(const p of valid){const {x,y}=cellXY(p);let nearest=99;for(const q of used){const c=cellXY(q);nearest=Math.min(nearest,Math.abs(x-c.x)+Math.abs(y-c.y));}const score=used.size?nearest:Math.random()*0.01;if(score>bestScore){best=p;bestScore=score;}}
+    if(best!==null&&(!used.size||bestScore>=minGap))return best;
     for(const p of preferred)if(!used.has(p)&&!fixedWalls.has(p)&&!crates.has(p)&&!heliPads.has(p))return p;
-    for(let p=0;p<BOARD;p++)if(!used.has(p)&&!fixedWalls.has(p)&&!crates.has(p)&&!heliPads.has(p))return p;
     return 0;
   }
   function newRoster(){
     makeMap();humans=[];zombies=[];const used=new Set();
     const humanNames=['Mara','Viktor','Nix','Ash','June','Rook','Iris','Milo','Sable','Kai','Echo','Dante','Nova','Finn','Zara','Wolf','Pip','Raven'];
-    const humanStarts=[];for(let y=0;y<4;y++)for(let x=0;x<BW;x++)if(x<7||x>10)humanStarts.push(tile(x,y));
-    for(let i=0;i<18;i++){const p=freeCell(humanStarts,used);used.add(p);humans.push({id:'H'+(i+1),name:humanNames[i],p,alive:true,acted:false,health:1,escape:false});}
-    const zombieStarts=[];for(let y=9;y<BH;y++)for(let x=0;x<BW;x++)if(x<7||x>10)zombieStarts.push(tile(x,y));
+    // Survivors begin in the western districts; the infected begin east of the central avenue.
+    const humanStarts=[];for(let y=1;y<BH-1;y++)for(let x=1;x<=8;x++){const p=tile(x,y);if(!fixedWalls.has(p)&&!crates.has(p)&&!heliPads.has(p)&&!hazards.has(p)&&!roads.has(p))humanStarts.push(p);}
+    const humanTypes=[['female','adult'],['male','adult'],['child','child'],['female','adult'],['female','adult'],['male','adult'],['female','adult'],['male','adult'],['female','adult'],['male','adult'],['female','adult'],['male','adult'],['female','adult'],['male','adult'],['female','adult'],['male','adult'],['child','child'],['child','child']];
+    for(let i=0;i<18;i++){const p=freeCell(humanStarts,used,3);used.add(p);humans.push({id:'H'+(i+1),name:humanNames[i],p,alive:true,acted:false,health:1,escape:false,gender:humanTypes[i][0],age:humanTypes[i][1]});}
+    const zombieStarts=[];for(let y=1;y<BH-1;y++)for(let x=9;x<BW-1;x++){const p=tile(x,y);if(!fixedWalls.has(p)&&!crates.has(p)&&!heliPads.has(p)&&!hazards.has(p)&&!roads.has(p)&&!used.has(p))zombieStarts.push(p);}
     const zombieNames=['Alpha','Brute','Howler','Stalker','Crawler','Warden'];
-    for(let i=0;i<6;i++){const p=freeCell(zombieStarts,used);used.add(p);zombies.push({id:'Z'+(i+1),name:zombieNames[i],p,alive:true,acted:false,elite:i===1});}
+    for(let i=0;i<6;i++){const p=freeCell(zombieStarts,used,3);used.add(p);zombies.push({id:'Z'+(i+1),name:zombieNames[i],p,alive:true,acted:false,elite:i===1});}
     round=0;escaped=0;infectedCount=0;selectedUnit=null;playerActed.clear();zombieActed.clear();gameEnded=false;gameStarted=false;pushMode=false;
     $('zw-demo-turn').disabled=true;$('zw-demo-start').disabled=false;$('zw-push-mode').setAttribute('aria-pressed','false');$('zw-push-mode').textContent=OT('pushOff');
     outbreakLog(OT('newWave'));drawOutbreak();
@@ -352,7 +370,7 @@
   function selectedSide(){return gameMode==='ai-ai'?null:playerSide;}
   function renderRoster(){
     const roster=$('zw-unit-roster'),side=selectedSide()||'survivor',units=sideActors(side);
-    roster.replaceChildren(...units.map(a=>{const b=document.createElement('button');b.type='button';b.className='zw-unit'+(selectedUnit===a.id?' is-selected':'')+(a.acted?' is-acted':'');b.disabled=!gameStarted||gameEnded||a.acted||gameMode==='ai-ai';b.innerHTML='<span>'+(side==='survivor'?'🧍':'🧟')+' '+a.name+'</span><small>'+a.id+'</small>';b.addEventListener('click',()=>{selectedUnit=a.id;drawOutbreak();});return b;}));
+    roster.replaceChildren(...units.map(a=>{const b=document.createElement('button');b.type='button';b.className='zw-unit'+(selectedUnit===a.id?' is-selected':'')+(a.acted?' is-acted':'');b.disabled=!gameStarted||gameEnded||a.acted||gameMode==='ai-ai';b.innerHTML='<span>'+(side==='survivor'?(a.age==='child'?'🧒':a.gender==='female'?'👩':'👨'):'🧟')+' '+a.name+'</span><small>'+a.id+'</small>';b.addEventListener('click',()=>{selectedUnit=a.id;drawOutbreak();});return b;}));
   }
   function paintOutbreakStats(){
     const aliveHumans=humans.filter(a=>a.alive).length,aliveZombies=zombies.filter(a=>a.alive).length;
@@ -364,11 +382,13 @@
     for(let p=0;p<BOARD;p++){
       const cell=document.createElement('button');cell.type='button';cell.className='zw-cell';cell.setAttribute('role','gridcell');cell.dataset.tile=String(p);cell.setAttribute('aria-label','Tile '+(p+1));
       const actor=occupant(p);
-      if(actor){cell.dataset.unitId=actor.id;cell.textContent=actor.id[0]==='Z'?'🧟':'🧍';cell.classList.add(actor.id[0]==='Z'?'zw-zombie':'zw-human');cell.title=actor.name+' · '+actor.id+(actor.acted?' · acted':' · ready');if(actor.id===selectedUnit)cell.classList.add('zw-selected');if(actor.acted)cell.classList.add('zw-acted');}
-      else if(heliPads.has(p)){cell.textContent='🚁';cell.classList.add('zw-heli');cell.title='Helicopter extraction';}
-      else if(crates.has(p)){cell.textContent='🧱';cell.classList.add('zw-crate');cell.title='Movable debris';}
-      else if(fixedWalls.has(p)){cell.textContent='🏚️';cell.classList.add('zw-wall');cell.title='Collapsed building';}
+      if(roads.has(p))cell.classList.add('zw-road');else if(fields.has(p))cell.classList.add('zw-field');else if(parks.has(p))cell.classList.add('zw-park');else cell.classList.add('zw-grass');
+      if(actor){cell.dataset.unitId=actor.id;cell.textContent=actor.id[0]==='Z'?'🧟':actor.age==='child'?'🧒':actor.gender==='female'?'👩':'👨';cell.classList.add(actor.id[0]==='Z'?'zw-zombie':'zw-human');cell.setAttribute('aria-label',(actor.id[0]==='Z'?'Infected: ':'Survivor: ')+actor.name);cell.title=actor.name+' · '+actor.id+(actor.acted?' · acted':' · ready');if(actor.id===selectedUnit)cell.classList.add('zw-selected');if(actor.acted)cell.classList.add('zw-acted');}
+      else if(heliPads.has(p)){cell.textContent='🚁';cell.classList.add('zw-heli');cell.title='Helicopter extraction zone';}
+      else if(crates.has(p)){cell.textContent='🧱';cell.classList.add('zw-crate');cell.title='Movable street barricade';}
+      else if(fixedWalls.has(p)){cell.textContent='🏢';cell.classList.add('zw-wall','zw-building');cell.title='Building footprint / impassable';}
       else if(hazards.has(p)){cell.textContent='☣️';cell.classList.add('zw-hazard');cell.title='Contaminated zone';}
+      else if(parks.has(p)&&p%5===0){cell.textContent='🌳';cell.title='City park';}
       else cell.textContent='';
       cell.addEventListener('click',()=>onTileClick(p));map.append(cell);
     }

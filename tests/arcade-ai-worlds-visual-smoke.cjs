@@ -14,6 +14,26 @@ const path = require('path');
   if (!(await page.locator('#zw-mcp-status').innerText()).includes('DEPLOYED')) throw new Error('MCP deployment status missing from live Arcade UI');
   if (!(await page.locator('#zw-mcp-endpoint').getAttribute('href')).startsWith('https://')) throw new Error('MCP endpoint link is not HTTPS');
   if (await page.locator('#zw-outbreak-map .zw-cell').count() !== 252) throw new Error('Live Arcade must render the 18x14 outbreak map');
+  const outbreakSpawnAudit = await page.evaluate(() => {
+    const cells = [...document.querySelectorAll('#zw-outbreak-map .zw-cell[data-unit-id]')];
+    const survivors = cells.filter(cell => cell.dataset.unitId.startsWith('H'));
+    const infected = cells.filter(cell => cell.dataset.unitId.startsWith('Z'));
+    const xOf = cell => Number(cell.dataset.tile) % 18;
+    const yOf = cell => Math.floor(Number(cell.dataset.tile) / 18);
+    return {
+      survivorCount: survivors.length,
+      infectedCount: infected.length,
+      survivorsWest: survivors.every(cell => xOf(cell) <= 8),
+      infectedEast: infected.every(cell => xOf(cell) >= 9),
+      survivorRows: new Set(survivors.map(yOf)).size,
+      infectedRows: new Set(infected.map(yOf)).size,
+      uniqueTiles: new Set(cells.map(cell => cell.dataset.tile)).size
+    };
+  });
+  if (outbreakSpawnAudit.survivorCount !== 18 || outbreakSpawnAudit.infectedCount !== 6) throw new Error('Outbreak must spawn 18 survivors and 6 infected units');
+  if (!outbreakSpawnAudit.survivorsWest || !outbreakSpawnAudit.infectedEast) throw new Error('Survivors and infected must start in separate city districts');
+  if (outbreakSpawnAudit.survivorRows < 4 || outbreakSpawnAudit.infectedRows < 3) throw new Error('Outbreak units are clustered into too few map rows');
+  if (outbreakSpawnAudit.uniqueTiles !== 24) throw new Error('Outbreak units must occupy distinct map tiles');
   await page.selectOption('#zw-game-mode', 'ai-ai');
   await page.selectOption('#zw-ai-speed', '90');
   await page.locator('#zw-demo-start').click();
