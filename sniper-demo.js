@@ -630,11 +630,30 @@
     @media(max-height:760px) and (min-width:761px){.sniper-demo.zs-fullscreen{grid-template-rows:0 38px 34px 56px minmax(0,1fr) 76px!important;padding:7px 12px!important;gap:5px!important}.zs-fullscreen .zs-panel{padding:9px 11px}.zs-fullscreen .zs-kpi{padding:7px 10px}.zs-fullscreen .zs-portrait{height:55px}.zs-fullscreen .zs-core{width:100px;min-height:82px}.zs-fullscreen .zs-chart{height:55px}.zs-fullscreen .zs-field{padding:3px 0}.zs-fullscreen .zs-field label{font-size:10px}.zs-fullscreen .zs-log{max-height:42px}}
     @media(max-width:760px){.sniper-demo.zs-fullscreen{display:block!important;overflow:auto!important;height:100dvh!important;padding:12px!important}.zs-fullscreen>.zs-head,.zs-fullscreen>.zs-nav,.zs-fullscreen>.zs-kpis,.zs-fullscreen>.zs-layout,.zs-fullscreen>#zs-journal-panel{display:block!important;margin-bottom:10px}.zs-fullscreen .zs-layout{height:auto;grid-template-columns:1fr}.zs-fullscreen .zs-right{min-height:520px}.zs-fullscreen .zs-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.zs-fullscreen .zs-kpis{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))}.zs-fullscreen .zs-log{grid-template-columns:1fr;max-height:150px}}
     `;
-    const header=dashNode('div','zs-head');const brand=dashNode('span','zs-brand','☣ ZOMBCASH');const title=dashNode('strong','zs-title','ZOMBIE SNIPER');const headActions=dashNode('div','zs-head-actions');headActions.append(dashNode('span','zs-demo',dcopy().demo));const expand=dashNode('button','zs-expand','⛶ FULL SCREEN');expand.type='button';expand.title='Open terminal full screen';expand.addEventListener('click',()=>{const on=root.classList.toggle('zs-fullscreen');document.body.classList.toggle('zs-lock',on);expand.textContent=on?'✕ EXIT FULL SCREEN':'⛶ FULL SCREEN';});headActions.append(expand);header.append(brand,title,headActions);
+    style.textContent += `
+    /* History view: collapse hidden KPI track and use the full position panel height */
+    .sniper-demo.zs-fullscreen.zs-history-mode{grid-template-rows:0 44px 38px 0 minmax(0,1fr) 94px!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-right{grid-template-rows:auto minmax(0,1fr)!important;align-content:stretch!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-position-section{height:100%;min-height:0!important}
+    @media(max-height:760px) and (min-width:761px){.sniper-demo.zs-fullscreen.zs-history-mode{grid-template-rows:0 38px 34px 0 minmax(0,1fr) 76px!important}}
+    `;
+    const header=dashNode('div','zs-head');const brand=dashNode('span','zs-brand','☣ ZOMBCASH');const title=dashNode('strong','zs-title','ZOMBIE SNIPER');const headActions=dashNode('div','zs-head-actions');headActions.append(dashNode('span','zs-demo',dcopy().demo));const expand=dashNode('button','zs-expand','⛶ FULL SCREEN');expand.type='button';expand.title='Open terminal full screen';function syncFullscreenButton(){const on=root.classList.contains('zs-fullscreen');document.body.classList.toggle('zs-lock',on);expand.textContent=on?'✕ EXIT FULL SCREEN':'⛶ FULL SCREEN';}
+    expand.addEventListener('click',async()=>{
+      if(document.fullscreenElement===root){try{await document.exitFullscreen();}catch(_){}return;}
+      if(!root.classList.contains('zs-fullscreen')){root.classList.add('zs-fullscreen');syncFullscreenButton();}
+      if(typeof root.requestFullscreen==='function'){try{await root.requestFullscreen();return;}catch(_){}}
+      else{root.classList.toggle('zs-fullscreen');syncFullscreenButton();}
+    });
+    document.addEventListener('fullscreenchange',()=>{
+      if(document.fullscreenElement===root)root.classList.add('zs-fullscreen');
+      else if(!document.fullscreenElement)root.classList.remove('zs-fullscreen');
+      syncFullscreenButton();
+    });headActions.append(expand);header.append(brand,title,headActions);
     const nav=dashNode('nav','zs-nav');nav.setAttribute('aria-label','Zombie Sniper navigation');
     const tabTargets=['sniper','stats','history','settings','help'];
     function selectTab(tab){
       root.dataset.activeTab=tab;
+      root.classList.toggle('zs-history-mode',tab==='history');
       nav.querySelectorAll('button[data-zs-nav]').forEach(b=>{const active=tabTargets[Number(b.dataset.zsNav)]===tab;b.classList.toggle('is-active',active);b.setAttribute('aria-selected',active?'true':'false');});
       left.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='settings');
       center.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='stats');
