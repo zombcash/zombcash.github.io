@@ -78,6 +78,7 @@
       #zombcash-outbreak-world .zw-cell.zw-field{background:linear-gradient(145deg,#8c8950,#65683b);border-color:#c1b76b}
       #zombcash-outbreak-world .zw-cell.zw-road{background:repeating-linear-gradient(90deg,#58616a 0 8px,#505861 8px 16px);border-color:#89939a}
       #zombcash-outbreak-world .zw-cell.zw-building{background:linear-gradient(145deg,#9b7356,#55483e);border-color:#d3a77a}
+      #zombcash-outbreak-world .zw-cell.zw-wall.zw-building{background:linear-gradient(145deg,#9b7356,#55483e);border-color:#d3a77a}
       #zombcash-outbreak-world .zw-cell.zw-park{background:radial-gradient(circle at 35% 35%,#83ad62,#315c3e);border-color:#9cc67b}
       #zombcash-outbreak-world .zw-cell.zw-human{background:linear-gradient(145deg,#2e91e8,#174d86);border-color:#c3e8ff;box-shadow:0 0 9px #4cbbff75;z-index:1}
       #zombcash-outbreak-world .zw-cell.zw-zombie{background:linear-gradient(145deg,#ed5974,#781e43);border-color:#ffc1c9;box-shadow:0 0 11px #ff547b90;animation:zw-pulse 1.5s infinite;z-index:1}
@@ -310,10 +311,11 @@
   function newRoster(){
     makeMap();humans=[];zombies=[];const used=new Set();
     const humanNames=['Mara','Viktor','Nix','Ash','June','Rook','Iris','Milo','Sable','Kai','Echo','Dante','Nova','Finn','Zara','Wolf','Pip','Raven'];
-    const humanStarts=[];for(let y=1;y<BH-1;y++)for(let x=1;x<BW-1;x++){const p=tile(x,y);if(!fixedWalls.has(p)&&!crates.has(p)&&!heliPads.has(p)&&!hazards.has(p)&&!roads.has(p))humanStarts.push(p);}
+    // Survivors begin in the western districts; the infected begin east of the central avenue.
+    const humanStarts=[];for(let y=1;y<BH-1;y++)for(let x=1;x<=8;x++){const p=tile(x,y);if(!fixedWalls.has(p)&&!crates.has(p)&&!heliPads.has(p)&&!hazards.has(p)&&!roads.has(p))humanStarts.push(p);}
     const humanTypes=[['female','adult'],['male','adult'],['child','child'],['female','adult'],['female','adult'],['male','adult'],['female','adult'],['male','adult'],['female','adult'],['male','adult'],['female','adult'],['male','adult'],['female','adult'],['male','adult'],['female','adult'],['male','adult'],['child','child'],['child','child']];
     for(let i=0;i<18;i++){const p=freeCell(humanStarts,used,3);used.add(p);humans.push({id:'H'+(i+1),name:humanNames[i],p,alive:true,acted:false,health:1,escape:false,gender:humanTypes[i][0],age:humanTypes[i][1]});}
-    const zombieStarts=[];for(let y=1;y<BH-1;y++)for(let x=1;x<BW-1;x++){const p=tile(x,y);if(!fixedWalls.has(p)&&!crates.has(p)&&!heliPads.has(p)&&!hazards.has(p)&&!roads.has(p)&&!used.has(p))zombieStarts.push(p);}
+    const zombieStarts=[];for(let y=1;y<BH-1;y++)for(let x=9;x<BW-1;x++){const p=tile(x,y);if(!fixedWalls.has(p)&&!crates.has(p)&&!heliPads.has(p)&&!hazards.has(p)&&!roads.has(p)&&!used.has(p))zombieStarts.push(p);}
     const zombieNames=['Alpha','Brute','Howler','Stalker','Crawler','Warden'];
     for(let i=0;i<6;i++){const p=freeCell(zombieStarts,used,3);used.add(p);zombies.push({id:'Z'+(i+1),name:zombieNames[i],p,alive:true,acted:false,elite:i===1});}
     round=0;escaped=0;infectedCount=0;selectedUnit=null;playerActed.clear();zombieActed.clear();gameEnded=false;gameStarted=false;pushMode=false;
