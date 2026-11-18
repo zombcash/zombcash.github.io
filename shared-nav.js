@@ -1608,7 +1608,7 @@
     document.querySelectorAll('iframe[data-aa], iframe[src*="acceptable.a-ads.com"], script[src*="acceptable.a-ads.com"]').forEach(node => node.remove());
     if (!isHomepage) {
       document.querySelectorAll('.aads-ad-section, .zsh-shared-ad, .outbreak-ad-unit, .arcade-ad-unit, .gallery-ad-unit, .field-manual-ad, .maker-ad-unit, .zc-adsterra-section, [data-zombcash-ad-slot]').forEach(node => node.remove());
-      document.querySelectorAll('script[src*="bauval.org"]').forEach(node => node.remove());
+      document.querySelectorAll('script[src*="bauval.org"]:not([src="https://bauval.org/14/26987a37c64c7c295763ca6d143e6d5c"])').forEach(node => node.remove());
     }
   };
 
