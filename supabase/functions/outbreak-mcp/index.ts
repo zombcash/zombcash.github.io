@@ -129,6 +129,7 @@ async function callTool(name:string,args:any){
   const matchId=requiredString(args,"match_id",64),row=await loadMatch(matchId);
   if(!row)throw new Error("Match not found");
   const m=row.state;
+  if(!m.world)throw new Error("This match uses retired 9x9 rules. Create a new 18x14 outbreak match.");
   if(name==="get_match_state")return publicState(m);
   if(name==="join_match"){
     const agentId=requiredString(args,"agent_id",48),role=requiredString(args,"role",16);
