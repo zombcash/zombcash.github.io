@@ -276,16 +276,17 @@
   function outbreakLog(message){feed('zw-outbreak-feed',message);const f=$('zw-outbreak-feed');while(f.children.length>24)f.lastElementChild.remove();}
   function makeMap(){
     fixedWalls.clear();crates.clear();hazards.clear();selectedCrate=null;
-    // Broken streets and ruined buildings form corridors but never seal the map.
-    for(let y=1;y<BH-1;y++)for(let x=1;x<BW-1;x++){
-      const p=tile(x,y);
-      if((x%5===2&&y%4!==1)||(y%5===3&&x%6===4)){if(!heliPads.has(p))fixedWalls.add(p);}
+    // Procedural city blocks change every outbreak; the central cross keeps the map connected.
+    const candidates=[];
+    for(let y=4;y<=8;y++)for(let x=1;x<BW-1;x++){
+      const p=tile(x,y);if(x!==8&&y!==6&&Math.random()<0.14)fixedWalls.add(p);
+      if(x!==8&&y!==6&&!fixedWalls.has(p))candidates.push(p);
     }
-    // Open lanes keep both sides connected; movable debris creates tactical choke points.
-    for(let y=0;y<BH;y++){fixedWalls.delete(tile(8,y));}
-    for(let x=0;x<BW;x++){fixedWalls.delete(tile(x,6));}
-    for(const p of [tile(3,2),tile(5,9),tile(12,3),tile(14,10),tile(2,11),tile(10,8),tile(15,5),tile(7,3),tile(11,12),tile(16,8)])if(!fixedWalls.has(p)&&!heliPads.has(p))crates.add(p);
-    for(const p of [tile(4,5),tile(13,7),tile(6,11),tile(15,2)])if(!fixedWalls.has(p))hazards.add(p);
+    for(let i=candidates.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[candidates[i],candidates[j]]=[candidates[j],candidates[i]];}
+    candidates.slice(0,10).forEach(p=>crates.add(p));
+    candidates.slice(12,16).forEach(p=>hazards.add(p));
+    // Keep all three extraction pads clear and preserve broad approach lanes.
+    for(const p of heliPads)fixedWalls.delete(p);
   }
   function freeCell(preferred,used){
     for(const p of preferred)if(!used.has(p)&&!fixedWalls.has(p)&&!crates.has(p)&&!heliPads.has(p))return p;
