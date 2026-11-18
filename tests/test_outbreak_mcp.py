@@ -45,8 +45,8 @@ class OutbreakServerTests(unittest.TestCase):
 
     def test_unit_moves_one_tile_and_cannot_act_twice(self):
         match_id, survivor, _ = self.setup_match()
-        # H7 starts at x=6, y=0; east is an open adjacent tile.
-        state = server.submit_action(match_id, "survivor-controller", survivor["agent_token"], "move_east", "H7")
+        # H6 starts at x=6, y=0; east is an open adjacent tile.
+        state = server.submit_action(match_id, "survivor-controller", survivor["agent_token"], "move_east", "H6")
         unit = next(a for a in state["units"]["survivors"] if a["id"] == "H7")
         self.assertEqual(unit["position"], 7)
         self.assertTrue(unit["acted"])
