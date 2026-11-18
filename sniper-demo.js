@@ -6,6 +6,9 @@
   const API = 'https://api.dexscreener.com';
   const WRAPPED_SOL = 'So11111111111111111111111111111111111111112';
   const STORAGE_KEY = 'zombcash_sniper_paper_v1';
+  const AUTH_API = 'https://zombcash-bot.fadehost.app';
+  const TOKEN_KEY = 'zombcash-survivor-token';
+  const PROFILE_KEY = 'zombcash-survivor-profile';
   const OFFICIAL_MINT = '6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump';
   const copy = {
     en: {
@@ -19,7 +22,7 @@
       token:'TOKEN', age:'PAIR AGE', liquidity:'LIQUIDITY', price:'PRICE (SOL)', action:'PAPER BUY',
       positions:'PAPER POSITIONS', noPositions:'No paper positions yet. Choose a candidate above to simulate a buy.',
       open:'OPEN', closed:'CLOSED', entry:'ENTRY', current:'CURRENT', net:'NET P/L', targetHit:'NET TARGET HIT — SIMULATED SELL',
-      stopHit:'NET STOP-LOSS HIT — SIMULATED SELL', manualClose:'CLOSE PAPER POSITION', saved:'Demo history is stored only in this browser on this device.',
+      stopHit:'NET STOP-LOSS HIT — SIMULATED SELL', manualClose:'CLOSE PAPER POSITION', saved:'Demo history is stored only in this browser on this device.', synced:'Demo history synced to your Telegram survivor profile.', loginToSync:'Log in with Telegram to sync demo history; otherwise it stays in this browser.', loginAgain:'Your Telegram session expired. Log in again to sync.', syncError:'Account sync is unavailable; this device copy is kept locally.',
       rules:'Net P/L includes both-side DEX fee and slippage assumptions plus network and priority fees for both transactions. The target is checked against net P/L, not token price movement.',
       cap:'Demo trade size is capped at 0.05 SOL. No wallet is created or funded. Live trading is disabled.',
       ageUnknown:'unknown', justNow:'just now', mins:'m ago', hours:'h ago', days:'d ago',
@@ -39,7 +42,7 @@
       token:'ТОКЕН', age:'ВОЗРАСТ ПАРЫ', liquidity:'ЛИКВИДНОСТЬ', price:'ЦЕНА (SOL)', action:'ДЕМО-ПОКУПКА',
       positions:'ДЕМО-ПОЗИЦИИ', noPositions:'Демо-позиций пока нет. Выберите токен выше, чтобы смоделировать покупку.',
       open:'ОТКРЫТА', closed:'ЗАКРЫТА', entry:'ВХОД', current:'ТЕКУЩАЯ', net:'ЧИСТЫЙ P/L', targetHit:'ЦЕЛЬ ПО ЧИСТОЙ ПРИБЫЛИ ДОСТИГНУТА — ДЕМО-ПРОДАЖА',
-      stopHit:'СТОП-ЛОСС ПО ЧИСТОМУ P/L ДОСТИГНУТ — ДЕМО-ПРОДАЖА', manualClose:'ЗАКРЫТЬ ДЕМО-ПОЗИЦИЮ', saved:'История демо хранится только в этом браузере на этом устройстве.',
+      stopHit:'СТОП-ЛОСС ПО ЧИСТОМУ P/L ДОСТИГНУТ — ДЕМО-ПРОДАЖА', manualClose:'ЗАКРЫТЬ ДЕМО-ПОЗИЦИЮ', saved:'История демо хранится только в этом браузере на этом устройстве.', synced:'История демо синхронизирована с профилем Telegram.', loginToSync:'Войдите через Telegram для синхронизации; иначе история останется в этом браузере.', loginAgain:'Сессия Telegram истекла. Войдите снова для синхронизации.', syncError:'Синхронизация недоступна; локальная копия сохранена.',
       rules:'Чистый P/L учитывает комиссии DEX и проскальзывание на обеих сторонах, а также сетевые и приоритетные комиссии обеих транзакций. Цель проверяется по чистому P/L, а не по изменению цены токена.',
       cap:'Размер демо-сделки ограничен 0,05 SOL. Кошелёк не создаётся и не пополняется. Реальная торговля отключена.',
       ageUnknown:'неизвестно', justNow:'только что', mins:' мин. назад', hours:' ч. назад', days:' дн. назад',
@@ -59,20 +62,60 @@
 
   const $ = id => document.getElementById(id);
   const state = { lang:'en', candidates:[], positions:[], timer:null, busy:false };
+  let activeStorageKey = '';
   function detectLang(){
     const path = location.pathname.split('/').filter(Boolean);
     const candidate = path.length && copy[path[0]] ? path[0] : (document.documentElement.lang || 'en');
     state.lang = copy[candidate] ? candidate : 'en';
   }
   const t = key => (copy[state.lang] && copy[state.lang][key]) || copy.en[key] || key;
+  function authToken(){try{return localStorage.getItem(TOKEN_KEY)||'';}catch(_){return '';}}
+  function telegramId(){try{const p=JSON.parse(localStorage.getItem(PROFILE_KEY)||'null');return p&&p.telegramId?String(p.telegramId):'';}catch(_){return '';}}
+  function storageKey(){const id=telegramId();return STORAGE_KEY+(id?'_'+id:'_guest');}
   function readStore(){
     try {
-      const value = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      const value = JSON.parse(localStorage.getItem(storageKey()) || '{}');
       state.positions = Array.isArray(value.positions) ? value.positions.slice(0,20) : [];
     } catch (_) { state.positions = []; }
   }
   function saveStore(){
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({positions:state.positions.slice(0,20),savedAt:Date.now()})); } catch (_) {}
+    try { localStorage.setItem(storageKey(), JSON.stringify({positions:state.positions.slice(0,20),savedAt:Date.now()})); } catch (_) {}
+  }
+  function updateSyncStatus(key){const node=document.querySelector('.sniper-demo [data-sniper-i18n="saved"]');if(node)node.textContent=t(key);}
+  function makeUuid(){if(window.crypto&&typeof window.crypto.randomUUID==='function')return window.crypto.randomUUID();return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);});}
+  function mapServerPosition(p){return {id:String(p.id),address:String(p.mint),symbol:String(p.symbol||'TOKEN'),name:String(p.name||''),buySol:Number(p.buySol),entryPrice:Number(p.entryPrice),lastPrice:Number(p.lastPrice),quantity:Number(p.quantity),netPnl:Number(p.netPnl||0),netPct:Number(p.netPct||0),status:p.status==='closed'?'closed':'open',exitReason:p.exitReason||null,openedAt:Number(p.openedAt)||Date.now(),closedAt:p.closedAt?Number(p.closedAt):null};}
+  async function persistPosition(p){
+    const token=authToken();if(!token)return;
+    try{
+      const response=await fetch(AUTH_API+'/api/sniper/paper',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({position:p}),cache:'no-store'});
+      if(response.status===401){updateSyncStatus('loginAgain');return;}
+      if(!response.ok){updateSyncStatus('syncError');return;}
+      const data=await response.json();if(data.position&&data.position.id)p.id=String(data.position.id);
+      saveStore();updateSyncStatus('synced');
+    }catch(_){updateSyncStatus('syncError');}
+  }
+  async function syncFromServer(){
+    const token=authToken();if(!token){updateSyncStatus('loginToSync');return;}
+    try{
+      const response=await fetch(AUTH_API+'/api/sniper/paper',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
+      if(response.status===401){updateSyncStatus('loginAgain');return;}
+      if(!response.ok){updateSyncStatus('syncError');return;}
+      const data=await response.json();
+      const remote=Array.isArray(data.positions)?data.positions.map(mapServerPosition):[];
+      if(remote.length){state.positions=remote;saveStore();renderPositions();}
+      else if(state.positions.length){for(const p of state.positions)await persistPosition(p);}
+      updateSyncStatus('synced');
+    }catch(_){updateSyncStatus('syncError');}
+  }
+  function checkAccountChange(){
+    const next=storageKey();
+    if(next===activeStorageKey)return;
+    activeStorageKey=next;state.positions=[];readStore();renderPositions();
+    if(authToken())syncFromServer();else updateSyncStatus('loginToSync');
+  }
+  async function clearServerHistory(){
+    const token=authToken();if(!token)return;
+    try{const response=await fetch(AUTH_API+'/api/sniper/paper/clear',{method:'POST',headers:{'Authorization':'Bearer '+token},cache:'no-store'});if(!response.ok)updateSyncStatus(response.status===401?'loginAgain':'syncError');else updateSyncStatus('synced');}catch(_){updateSyncStatus('syncError');}
   }
   function setText(id,key){ const el=$(id); if(el) el.textContent=t(key); }
   function translate(){
@@ -187,14 +230,14 @@
     if(!item||!Number.isFinite(item.priceNative)||item.priceNative<=0){alert(t('noPair'));return;}
     const c=getCosts();
     const quantity=buySol*(1-c.dex)*(1-c.slip)/item.priceNative;
-    const p={id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),address:item.address,symbol:item.symbol,name:item.name,buySol,entryPrice:item.priceNative,lastPrice:item.priceNative,quantity,openedAt:Date.now(),status:'open',netPnl:0,netPct:0,exitReason:null};
-    state.positions.push(p);saveStore();renderPositions();alert(t('buyOk'));
+    const p={id:makeUuid(),address:item.address,symbol:item.symbol,name:item.name,buySol,entryPrice:item.priceNative,lastPrice:item.priceNative,quantity,openedAt:Date.now(),status:'open',netPnl:0,netPct:0,exitReason:null};
+    state.positions.push(p);saveStore();renderPositions();persistPosition(p);alert(t('buyOk'));
   }
   function closePaper(id,reason){
     const p=state.positions.find(x=>x.id===id&&x.status==='open');if(!p)return;
     const m=metrics(p,p.lastPrice||p.entryPrice);
     p.status='closed';p.closedAt=Date.now();p.netPnl=m.net;p.netPct=m.pct;p.exitReason=reason;
-    saveStore();renderPositions();
+    saveStore();renderPositions();persistPosition(p);
   }
   async function updatePositions(){
     const open=state.positions.filter(p=>p.status==='open');
@@ -212,15 +255,19 @@
       }catch(_){}
     }
     saveStore();renderPositions();
+    for(const p of open)await persistPosition(p);
   }
   function init(){
-    readStore();translate();
+    readStore();activeStorageKey=storageKey();translate();
     $('sniper-refresh').addEventListener('click',refreshFeed);
-    $('sniper-clear').addEventListener('click',()=>{state.positions=[];saveStore();renderPositions();$('sniper-feed-status').textContent=t('cleared');});
+    $('sniper-clear').addEventListener('click',()=>{state.positions=[];saveStore();clearServerHistory();renderPositions();$('sniper-feed-status').textContent=t('cleared');});
     ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
-    refreshFeed();updatePositions();
-    state.timer=window.setInterval(()=>{refreshFeed();updatePositions();},30000);
+    refreshFeed();updatePositions();if(authToken())syncFromServer();else updateSyncStatus('loginToSync');
+    state.timer=window.setInterval(()=>{checkAccountChange();refreshFeed();updatePositions();},30000);
     document.addEventListener('zombcash:languagechange',translate);
+    document.addEventListener('zombcash:survivorlogin',()=>{checkAccountChange();syncFromServer();});
+    document.addEventListener('click',event=>{if(event.target&&event.target.closest&&event.target.closest('#survivor-logout'))Promise.resolve().then(checkAccountChange);});
+    window.addEventListener('storage',event=>{if(event.key===TOKEN_KEY||event.key===PROFILE_KEY)checkAccountChange();});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
