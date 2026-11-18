@@ -404,7 +404,7 @@
     if(escaped>=Math.ceil(totalHumans*.55)){gameEnded=true;outbreakLog(OT('winHumans'));}
     else if(aliveHumans===0||infectedCount>=Math.ceil(totalHumans*.7)){gameEnded=true;outbreakLog(OT('winZombies'));}
     else if(round>=32){gameEnded=true;outbreakLog(OT('draw'));}
-    $('zw-demo-turn').disabled=gameEnded;
+    $('zw-demo-turn').disabled=gameEnded||gameMode==='ai-ai';
   }
   async function resolveSide(side,delay=0){
     const units=sideActors(side);
