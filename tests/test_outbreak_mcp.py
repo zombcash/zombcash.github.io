@@ -47,11 +47,11 @@ class OutbreakServerTests(unittest.TestCase):
         match_id, survivor, _ = self.setup_match()
         # H6 starts at x=6, y=0; east is an open adjacent tile.
         state = server.submit_action(match_id, "survivor-controller", survivor["agent_token"], "move_east", "H6")
-        unit = next(a for a in state["units"]["survivors"] if a["id"] == "H7")
+        unit = next(a for a in state["units"]["survivors"] if a["id"] == "H6")
         self.assertEqual(unit["position"], 7)
         self.assertTrue(unit["acted"])
         with self.assertRaises(ValueError):
-            server.submit_action(match_id, "survivor-controller", survivor["agent_token"], "wait", "H7")
+            server.submit_action(match_id, "survivor-controller", survivor["agent_token"], "wait", "H6")
 
     def test_infected_contact_converts_human(self):
         match_id, _, infected = self.setup_match()
