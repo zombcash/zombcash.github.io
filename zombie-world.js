@@ -431,7 +431,7 @@
       turnBusy=true;
       try{await resolveSide('survivor',Number($('zw-ai-speed').value)||350);await resolveSide('infected',Number($('zw-ai-speed').value)||350);round++;humans.forEach(a=>a.acted=false);zombies.forEach(a=>a.acted=false);evaluateGame();drawOutbreak();if(!gameEnded)scheduleAiRound();}
       finally{turnBusy=false;}
-    },120);
+    },450);
   }
   $('zw-demo-start').addEventListener('click',()=>{
     if(gameEnded)newRoster();gameStarted=true;$('zw-demo-start').disabled=true;$('zw-demo-turn').disabled=false;
@@ -441,7 +441,7 @@
   });
   $('zw-demo-turn').addEventListener('click',resolveRound);
   $('zw-demo-reset').addEventListener('click',()=>{if(outbreakAiTimer)clearTimeout(outbreakAiTimer);newRoster();});
-  $('zw-game-mode').addEventListener('change',()=>{gameMode=$('zw-game-mode').value;});
+  $('zw-game-mode').addEventListener('change',()=>{gameMode=$('zw-game-mode').value;if(gameMode!=='ai-ai'&&outbreakAiTimer)clearTimeout(outbreakAiTimer);});
   $('zw-player-side').addEventListener('change',()=>{playerSide=$('zw-player-side').value;drawOutbreak();});
   $('zw-push-mode').addEventListener('click',()=>{pushMode=!pushMode;selectedCrate=null;$('zw-push-mode').setAttribute('aria-pressed',String(pushMode));$('zw-push-mode').textContent=OT(pushMode?'pushOn':'pushOff');});
   document.addEventListener('zombcash:languagechange',()=>{if($('zw-push-mode'))$('zw-push-mode').textContent=OT(pushMode?'pushOn':'pushOff');if($('zw-demo-start'))$('zw-demo-start').textContent=OT('start');if($('zw-demo-turn'))$('zw-demo-turn').textContent=OT('resolve');});
