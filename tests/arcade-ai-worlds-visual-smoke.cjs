@@ -15,6 +15,7 @@ const path = require('path');
   if (!(await page.locator('#zw-mcp-endpoint').getAttribute('href')).startsWith('https://')) throw new Error('MCP endpoint link is not HTTPS');
   if (await page.locator('#zw-outbreak-map .zw-cell').count() !== 252) throw new Error('Live Arcade must render the 18x14 outbreak map');
   await page.selectOption('#zw-game-mode', 'ai-ai');
+  await page.selectOption('#zw-ai-speed', '90');
   await page.locator('#zw-demo-start').click();
   await page.waitForFunction(() => document.querySelector('#zw-outbreak-turns').textContent.includes('1'), null, { timeout: 10000 });
   await page.evaluate(() => { document.documentElement.lang = 'ru'; document.dispatchEvent(new CustomEvent('zombcash:languagechange', { detail: { language: 'ru' } })); });
