@@ -217,7 +217,8 @@ def submit_action(match_id: str, agent_id: str, agent_token: str, action: str, u
                 match["events"].append(f"{victim['name']} was infected and joined the horde")
             elif any(a["alive"] and a["position"] == target for a in side):
                 raise ValueError("Tile occupied by an ally")
-            unit["position"] = target
+            else:
+                unit["position"] = target
             if controller["role"] == "survivor" and target in world["helipads"]:
                 unit["alive"] = False
                 unit["escaped"] = True
