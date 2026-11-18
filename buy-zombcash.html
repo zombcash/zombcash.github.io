@@ -116,11 +116,11 @@ body{background:radial-gradient(ellipse at 78% 2%,rgba(112,132,118,.13),transpar
 @media(max-width:760px){.sniper-demo .sniper-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.sniper-demo .sniper-candidate{grid-template-columns:1fr auto}.sniper-demo .sniper-candidate-stats{grid-column:1/-1;grid-row:2}.sniper-demo .sniper-link{grid-column:1;grid-row:3}.sniper-demo .sniper-action{grid-column:2;grid-row:3}}
 </style>
 <p class="sniper-kicker">AUTOMATED ENTRY // RISK CONTROL // PAPER EXECUTION</p>
-<div class="sniper-toolbar"><span class="sniper-demo-tag" data-sniper-i18n="demo">DEMO ONLY</span><span class="sniper-muted" data-sniper-i18n="cap">Demo trade size is capped at 0.05 SOL. No wallet is created or funded. Live trading is disabled.</span></div>
+<div class="sniper-toolbar"><span class="sniper-demo-tag" data-sniper-i18n="demo">DEMO ONLY</span><span class="sniper-muted" data-sniper-i18n="cap">Demo size is limited only by available virtual capital. No wallet or real transactions.</span></div>
 <h2 id="sniper-demo-title" data-sniper-i18n="title">ZOMBIE SNIPER // PAPER DEMO</h2>
 <p class="panel-lead" data-sniper-i18n="intro">Test the entry and exit rules against public DEX market data. This sandbox never connects a wallet and never submits a transaction.</p>
 <div class="sniper-controls">
-<div class="sniper-field"><label for="sniper-size" data-sniper-i18n="amount">PAPER BUY SIZE (SOL)</label><input id="sniper-size" type="number" min="0.001" max="0.05" step="0.001" value="0.01"></div>
+<div class="sniper-field"><label for="sniper-size" data-sniper-i18n="amount">PAPER BUY SIZE (SOL)</label><input id="sniper-size" type="number" min="0.001" max="10" step="0.001" value="0.01"></div>
 <div class="sniper-field"><label for="sniper-target" data-sniper-i18n="target">NET PROFIT TARGET (%)</label><input id="sniper-target" type="number" min="0.1" max="500" step="0.1" value="10"></div>
 <div class="sniper-field"><label for="sniper-stop" data-sniper-i18n="stop">NET STOP-LOSS (%)</label><input id="sniper-stop" type="number" min="0" max="99" step="0.5" value="20"></div>
 <div class="sniper-field"><label for="sniper-network" data-sniper-i18n="network">NETWORK FEE / TX (SOL)</label><input id="sniper-network" type="number" min="0" max="0.1" step="0.000001" value="0.00001"></div>
