@@ -173,7 +173,7 @@
       const resolved=await Promise.allSettled(list.map(async profile=>{
         const pair=await fetchPairs(profile.tokenAddress);
         if(!pair)return null;
-        return {address:profile.tokenAddress,name:pair.baseToken.name||'Unknown',symbol:pair.baseToken.symbol||'TOKEN',priceNative:Number(pair.priceNative),liquidityUsd:Number(pair.liquidity&&pair.liquidity.usd)||0,pairCreatedAt:Number(pair.pairCreatedAt)||0,url:pair.url||profile.url||'https://dexscreener.com/solana/'+profile.tokenAddress};
+        return {address:profile.tokenAddress,name:pair.baseToken.name||'Unknown',symbol:pair.baseToken.symbol||'TOKEN',priceNative:Number(pair.priceNative),liquidityUsd:Number(pair.liquidity&&pair.liquidity.usd)||0,pairCreatedAt:Number(pair.pairCreatedAt)||0,url:'https://dexscreener.com/solana/'+encodeURIComponent(profile.tokenAddress)};
       }));
       state.candidates=resolved.filter(x=>x.status==='fulfilled'&&x.value).map(x=>x.value).slice(0,8);
       $('sniper-feed-status').textContent=state.candidates.length?t('refreshDone'):t('noCandidates');
