@@ -356,6 +356,7 @@
     const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,(total>=0?'+':'')+total.toFixed(5)+' SOL'],[dcopy().trades,String(state.positions.length)],[dcopy().wins,closed.length?Math.round(wins/closed.length*100)+'%':'—'],[dcopy().active,String(open.length)]];
     host.replaceChildren();vals.forEach((v,i)=>{const card=dashNode('div','zs-kpi zs-kpi-'+i);card.append(dashNode('small','',v[0]),dashNode('strong','zs-counter',v[1]));host.append(card);});
     const mainChart=$('zs-main-chart');if(mainChart){mainChart.replaceChildren();const p=open[0];mainChart.append(sparkline(p?(p.priceHistory||[p.entryPrice,p.lastPrice||p.entryPrice]):[]));}
+    const centerSummary=$('zs-center-summary');if(centerSummary){centerSummary.replaceChildren();const p=open[0];if(p){const left=dashNode('div','zs-center-token');left.append(dashNode('small','',state.lang==='ru'?'ТЕКУЩАЯ ПОЗИЦИЯ':'CURRENT POSITION'),dashNode('strong','',String(p.symbol||'TOKEN').toUpperCase()),dashNode('span','',fmt(p.lastPrice||p.entryPrice,9)+' SOL'));const right=dashNode('div','zs-center-pnl '+((Number(p.netPnl)||0)>=0?'is-positive':'is-negative'));right.append(dashNode('strong','',(p.netPct>=0?'+':'')+fmt(p.netPct||0,2)+'%'),dashNode('span','',(p.netPnl>=0?'+':'')+fmt(p.netPnl||0,6)+' SOL'));centerSummary.append(left,right);}else{centerSummary.append(dashNode('div','zs-center-idle',state.lang==='ru'?'ОЖИДАНИЕ ПОДХОДЯЩЕГО SOL-ПУЛА':'WAITING FOR ELIGIBLE SOL POOL'));}}
     const statGrid=$('zs-stat-grid');if(statGrid){
       const avg=closed.length?closed.reduce((a,p)=>a+(Number(p.netPct)||0),0)/closed.length:0;
       const best=closed.length?Math.max(...closed.map(p=>Number(p.netPct)||0)):0;
@@ -442,6 +443,31 @@
     @media(max-width:1000px){.zs-layout{grid-template-columns:minmax(240px,1fr) minmax(190px,.8fr) minmax(280px,1.1fr)}.zs-fields{grid-template-columns:1fr}.zs-fullscreen .zs-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:760px){.zs-fullscreen{overflow:auto!important;display:block!important}.zs-fullscreen .zs-layout{height:auto;grid-template-columns:1fr}.zs-fullscreen .zs-right{min-height:340px}.zs-fullscreen .zs-panel{margin-bottom:8px}.zs-fullscreen .zs-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.zs-fullscreen .zs-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.zs-fullscreen .zs-log{max-height:140px}}
     @media(max-height:720px) and (min-width:761px){.zs-fullscreen{padding:6px 10px!important;grid-template-rows:auto auto auto minmax(0,1fr) auto!important}.zs-fullscreen .zs-portrait{height:54px}.zs-fullscreen .zs-core{min-height:80px;width:94px}.zs-fullscreen .zs-chart{height:48px}.zs-fullscreen .zs-kpi{padding:4px 7px}.zs-fullscreen .zs-field label{font-size:9px}}
+
+    /* Central trading cockpit v3 */
+    .zs-center{display:flex!important;flex-direction:column!important;gap:9px!important;min-height:0!important;overflow:hidden!important;background:radial-gradient(ellipse at 50% 0%,#354237 0%,#1b251e 42%,#101713 100%)!important}
+    .zs-center>.zs-center-title{flex:0 0 auto}
+    .zs-center .zs-portrait{flex:0 0 clamp(76px,11vh,108px)!important;height:clamp(76px,11vh,108px)!important;margin:0!important;border:1px solid #81947d88!important;box-shadow:0 8px 20px #0006!important}
+    .zs-center .zs-portrait img{object-position:50% 20%!important;filter:grayscale(.38) contrast(1.12) brightness(.78)!important}
+    .zs-center .zs-core{display:flex!important;flex:0 0 64px!important;width:100%!important;min-height:64px!important;aspect-ratio:auto!important;margin:0!important;padding:8px 14px!important;border-radius:5px!important;border:1px solid #778b78!important;background:linear-gradient(110deg,#26352a,#172019 62%,#202a22)!important;box-shadow:inset 0 1px #ffffff12,0 6px 18px #0004!important}
+    .zs-center .zs-core>div{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+    .zs-center .zs-core strong:first-child{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#a7bf9a;color:#142016;font-size:17px;box-shadow:0 0 15px #a7bf9a35}
+    .zs-center .zs-core strong:nth-child(2){font-size:15px;letter-spacing:.09em}
+    .zs-center .zs-core span{font-size:11px;letter-spacing:.13em;color:#bdcdb7}
+    .zs-center .zs-toggle{flex:0 0 40px!important;min-height:40px!important;margin:0!important;border-radius:4px!important;font-size:12px!important;letter-spacing:.06em!important}
+    .zs-center .zs-actions{flex:0 0 34px!important;margin:0!important}
+    .zs-center .zs-actions button{min-height:34px!important}
+    .zs-center-summary{display:flex;flex:0 0 auto;align-items:center;justify-content:space-between;gap:12px;min-height:54px;padding:8px 12px;border:1px solid #596c5c;border-radius:4px;background:linear-gradient(110deg,#111a14,#202b21);box-shadow:inset 0 1px #ffffff0b}
+    .zs-center-token{display:grid;gap:2px;min-width:0}.zs-center-token small{font-size:9px;letter-spacing:.11em;color:#aebbad}.zs-center-token strong{font-size:15px;letter-spacing:.05em;color:#edf2ea}.zs-center-token span{font-size:10px;color:#bdc9bc;font-variant-numeric:tabular-nums}
+    .zs-center-pnl{display:grid;gap:2px;text-align:right;font-variant-numeric:tabular-nums}.zs-center-pnl strong{font-size:22px;line-height:1;color:#c6d9ba}.zs-center-pnl span{font-size:10px;color:#b9c7b7}.zs-center-pnl.is-negative strong{color:#d49a9a}.zs-center-idle{font-size:10px;letter-spacing:.12em;color:#b8c6b6}
+    .zs-chart-panel{display:flex;flex:1 1 150px;flex-direction:column;gap:6px;min-height:130px;padding:9px 10px;border:1px solid #526457;border-radius:4px;background:linear-gradient(180deg,#111a14,#0c120f);overflow:hidden}
+    .zs-chart-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.zs-chart-head h3{margin:0!important;font-size:11px!important;letter-spacing:.09em}.zs-chart-range{font-size:9px;letter-spacing:.1em;color:#9eae9d}
+    .zs-chart{flex:1 1 auto!important;width:100%!important;height:auto!important;min-height:96px!important;margin:0!important;border:0!important;background:linear-gradient(180deg,#a8c79b13,transparent)!important}
+    .zs-chart svg{width:100%;height:100%;min-height:96px;display:block}
+    .zs-stats-extra{flex:1;min-height:0}
+    @media(max-height:760px) and (min-width:761px){.zs-center{gap:6px!important}.zs-center .zs-portrait{flex-basis:68px!important;height:68px!important}.zs-center .zs-core{flex-basis:54px!important;min-height:54px!important}.zs-center .zs-toggle{flex-basis:34px!important;min-height:34px!important}.zs-center-summary{min-height:46px;padding:6px 9px}.zs-center-pnl strong{font-size:18px}.zs-chart-panel{min-height:105px;padding:7px 9px}.zs-chart{min-height:75px!important}.zs-chart svg{min-height:75px}}
+    @media(max-width:760px){.zs-center{overflow:visible!important}.zs-chart-panel{min-height:150px}.zs-chart{min-height:110px!important}}
+
     @media(max-width:600px){.zs-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.zs-title{font-size:18px}.zs-logrow{grid-template-columns:55px 60px 70px 1fr;font-size:9px}.zs-panel{padding:9px}.zs-portrait{height:80px}}`;
 
 
@@ -590,8 +616,8 @@
     const statsPanel=dashNode('div','zs-stats-extra zs-tab-hidden');statsPanel.id='zs-stats-extra';
     const statsHeading=dashNode('h3','',state.lang==='ru'?'РЕЗУЛЬТАТЫ СИМУЛЯЦИИ':'SIMULATION PERFORMANCE');
     const statsGrid=dashNode('div','zs-stat-grid');statsGrid.id='zs-stat-grid';statsPanel.append(statsHeading,statsGrid);
-    const chartPanel=dashNode('div','');const chartTitle=dashNode('h3','',dcopy().chart);chartTitle.id='zs-chart-title';chartPanel.append(chartTitle);const chart=dashNode('div','zs-chart');chart.id='zs-main-chart';chartPanel.append(chart);
-    center.append(portrait,core,toggle,actions,chartPanel,statsPanel);
+    const centerSummary=dashNode('div','zs-center-summary');centerSummary.id='zs-center-summary';const chartPanel=dashNode('div','zs-chart-panel');const chartHead=dashNode('div','zs-chart-head');const chartTitle=dashNode('h3','',dcopy().chart);chartTitle.id='zs-chart-title';chartHead.append(chartTitle,dashNode('span','zs-chart-range','LIVE · 20 SEC'));chartPanel.append(chartHead);const chart=dashNode('div','zs-chart');chart.id='zs-main-chart';chartPanel.append(chart);
+    center.append(portrait,core,toggle,actions,centerSummary,chartPanel,statsPanel);
     const right=dashNode('section','zs-panel zs-right');const rightTitle=dashNode('h3','',dcopy().active);rightTitle.id='zs-right-title';right.append(rightTitle);const posSection=dashNode('div','zs-position-section');const posWrap=dashNode('div','zs-positions');posWrap.id='zs-positions-wrap';if(positions){positions.classList.add('zs-positions-inner');posWrap.append(positions);}posSection.append(posWrap);right.append(posSection);
     const launchPanel=dashNode('section','zs-panel zs-launch-panel');const launchTitle=dashNode('h3','',dcopy().launches);launchTitle.id='zs-launch-title';launchPanel.append(launchTitle);const toolbar=dashNode('div','sniper-toolbar');if(refresh)toolbar.append(refresh);if(status)toolbar.append(status);launchPanel.append(toolbar);const launchWrap=dashNode('div','zs-launches');if(candidates)launchWrap.append(candidates);launchPanel.append(launchWrap);
     right.append(launchPanel);layout.append(left,center,right);
