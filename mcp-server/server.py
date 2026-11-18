@@ -8,6 +8,7 @@ from __future__ import annotations
 import os
 import hashlib
 import secrets
+import random
 import time
 from typing import Any
 
@@ -32,26 +33,18 @@ def _map() -> tuple[set[int], set[int], set[int]]:
     walls: set[int] = set()
     crates: set[int] = set()
     hazards: set[int] = set()
-    for y in range(1, H - 1):
+    candidates: list[int] = []
+    for y in range(4, 9):
         for x in range(1, W - 1):
             p = _tile(x, y)
-            if (x % 5 == 2 and y % 4 != 1) or (y % 5 == 3 and x % 6 == 4):
-                if p not in HELI:
-                    walls.add(p)
-    for y in range(H):
-        walls.discard(_tile(8, y))
-    for x in range(W):
-        walls.discard(_tile(x, 6))
-    for x, y in [(3, 2), (5, 9), (12, 3), (14, 10), (2, 11), (10, 8), (15, 5), (7, 3), (11, 12), (16, 8)]:
-        p = _tile(x, y)
-        if p not in walls and p not in HELI:
-            crates.add(p)
-    for x, y in [(4, 5), (13, 7), (6, 11), (15, 2)]:
-        p = _tile(x, y)
-        if p not in walls:
-            hazards.add(p)
+            if x != 8 and y != 6 and random.random() < 0.14:
+                walls.add(p)
+            if x != 8 and y != 6 and p not in walls:
+                candidates.append(p)
+    random.shuffle(candidates)
+    crates.update(candidates[:10])
+    hazards.update(candidates[12:16])
     return walls, crates, hazards
-
 
 def _new_world() -> dict[str, Any]:
     walls, crates, hazards = _map()
