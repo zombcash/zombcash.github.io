@@ -320,8 +320,8 @@
   const terminal={auto:false,capital:10,minLiquidity:5000,logs:[],seen:[],lastAuto:0};
   const TERMINAL_KEY='zombcash_sniper_terminal_v1';
   const dcopy=()=>DASH_COPY[state.lang]||DASH_COPY.en;
-  function saveTerminal(){try{localStorage.setItem(TERMINAL_KEY,JSON.stringify(terminal));}catch(_){}}
-  function loadTerminal(){try{const v=JSON.parse(localStorage.getItem(TERMINAL_KEY)||'null');if(v&&typeof v==='object')Object.assign(terminal,v);}catch(_){}}
+  function saveTerminal(){try{terminal.settings={};['sniper-size','sniper-target','sniper-stop','sniper-network','sniper-priority','sniper-dex','sniper-slip'].forEach(id=>{const el=$(id);if(el)terminal.settings[id]=el.value;});localStorage.setItem(TERMINAL_KEY,JSON.stringify(terminal));}catch(_){}}
+  function loadTerminal(){try{const v=JSON.parse(localStorage.getItem(TERMINAL_KEY)||'null');if(v&&typeof v==='object'){Object.assign(terminal,v);if(v.settings)Object.keys(v.settings).forEach(id=>{const el=$(id);if(el)el.value=v.settings[id];});}}catch(_){}}
   function logEvent(kind,symbol,detail){terminal.logs.unshift({at:Date.now(),kind,symbol:symbol||'SYSTEM',detail:detail||''});terminal.logs=terminal.logs.slice(0,18);saveTerminal();renderLog();}
   function dashNode(tag,cls,txt){const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n;}
   function addRange(field,id,min,max,step){
@@ -355,6 +355,7 @@
     const available=Math.max(0,Number(terminal.capital||10)+closed.reduce((a,p)=>a+(Number(p.netPnl)||0),0)-used);
     const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,(total>=0?'+':'')+total.toFixed(5)+' SOL'],[dcopy().trades,String(state.positions.length)],[dcopy().wins,closed.length?Math.round(wins/closed.length*100)+'%':'—'],[dcopy().active,String(open.length)]];
     host.replaceChildren();vals.forEach((v,i)=>{const card=dashNode('div','zs-kpi zs-kpi-'+i);card.append(dashNode('small','',v[0]),dashNode('strong','zs-counter',v[1]));host.append(card);});
+    const mainChart=$('zs-main-chart');if(mainChart){mainChart.replaceChildren();const p=open[0];mainChart.append(sparkline(p?(p.priceHistory||[p.entryPrice,p.lastPrice||p.entryPrice]):[]));}
   }
   function renderLog(){
     const host=$('zs-log');if(!host)return;host.replaceChildren();
@@ -382,7 +383,7 @@
     @media(max-width:900px){.zs-layout{grid-template-columns:1fr 1fr}.zs-layout .zs-right{grid-column:1/-1}.zs-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
     @media(max-width:600px){.zs-layout{grid-template-columns:1fr}.zs-layout .zs-right{grid-column:auto}.zs-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.zs-title{order:3;width:100%}.zs-logrow{grid-template-columns:62px 72px 75px 1fr;font-size:10px}.zs-panel{padding:12px}.zs-portrait{min-height:140px}}`;
     const header=dashNode('div','zs-head');header.append(dashNode('span','zs-brand','☣ ZOMBCASH'),dashNode('strong','zs-title','◉ ZOMBIE SNIPER'),dashNode('span','zs-demo',dcopy().demo));
-    const nav=dashNode('nav','zs-nav');nav.setAttribute('aria-label','Zombie Sniper navigation');dcopy().nav.forEach((label,i)=>{const b=dashNode('button','',label);b.type='button';b.addEventListener('click',()=>{const target=[root,document.getElementById('zs-kpis'),document.getElementById('zs-log'),document.getElementById('zs-settings'),document.getElementById('zs-center')][i];target&&target.scrollIntoView({behavior:'smooth',block:'center'});});nav.append(b);});
+    const nav=dashNode('nav','zs-nav');nav.setAttribute('aria-label','Zombie Sniper navigation');dcopy().nav.forEach((label,i)=>{const b=dashNode('button','',label);b.dataset.zsNav=String(i);b.type='button';b.addEventListener('click',()=>{const target=[root,document.getElementById('zs-kpis'),document.getElementById('zs-log'),document.getElementById('zs-settings'),document.getElementById('zs-center')][i];target&&target.scrollIntoView({behavior:'smooth',block:'center'});});nav.append(b);});
     const kpis=dashNode('div','zs-kpis');kpis.id='zs-kpis';
     const layout=dashNode('div','zs-layout');const left=dashNode('section','zs-panel zs-left');left.id='zs-settings';left.append(dashNode('h3','',dcopy().settings));
     const fieldHost=dashNode('div','zs-fields');fields.forEach((f,i)=>{f.classList.add('zs-field');const input=f.querySelector('input');if(input){const lim={ 'sniper-size':[0.001,0.05,0.001], 'sniper-target':[0.1,100,0.1], 'sniper-stop':[0,99,0.5], 'sniper-network':[0,0.1,0.000001], 'sniper-priority':[0,0.1,0.000001], 'sniper-dex':[0,20,0.05], 'sniper-slip':[0,50,0.1] }[input.id];if(lim)addRange(f,input.id,...lim);}fieldHost.append(f);});
