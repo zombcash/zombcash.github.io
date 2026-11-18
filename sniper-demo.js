@@ -585,7 +585,9 @@
 
 
     /* Full-viewport trading terminal and position contract row */
-    .sniper-demo.zs-fullscreen{position:fixed!important;top:0!important;right:0!important;bottom:0!important;left:0!important;inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;min-height:100vh!important;min-height:100dvh!important;max-height:100vh!important;max-height:100dvh!important;z-index:2147483600!important;box-sizing:border-box!important;margin:0!important;border:0!important;border-radius:0!important;overflow:hidden!important}
+    .sniper-demo.zs-fullscreen{position:fixed!important;top:0!important;right:0!important;bottom:0!important;left:0!important;inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;min-height:100vh!important;min-height:100dvh!important;max-height:100vh!important;max-height:100dvh!important;z-index:2147483600!important;box-sizing:border-box!important;margin:0!important;border:0!important;border-radius:0!important;overflow:hidden!important;grid-template-rows:auto auto auto minmax(0,1fr)!important;align-content:stretch!important}
+    .zs-fullscreen .zs-layout{height:auto!important;min-height:0!important;align-self:stretch!important;min-width:0!important}
+    .zs-fullscreen .zs-left,.zs-fullscreen .zs-center,.zs-fullscreen .zs-right{height:100%!important;min-height:0!important;min-width:0!important}
     .zs-fullscreen .zs-layout{min-height:0!important;height:100%!important}
     .zs-fullscreen .zs-left,.zs-fullscreen .zs-center,.zs-fullscreen .zs-right{min-height:0!important;overflow:auto!important;overscroll-behavior:contain!important}
     .zs-fullscreen .zs-position-section{min-height:0!important;overflow:auto!important}
