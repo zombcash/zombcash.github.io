@@ -187,27 +187,24 @@
       link.href=item.url;link.target='_blank';link.rel='noopener noreferrer';
       row.append(main,stats,link,action);host.append(row);
     });
+    maybeAutoEnter();
   }
   function renderPositions(){
-    const host=$('sniper-positions'); if(!host)return;
-    host.replaceChildren();
-    if(!state.positions.length){host.append(make('p','sniper-muted',t('noPositions')));return;}
+    const host=$('sniper-positions');if(!host)return;host.replaceChildren();
+    if(!state.positions.length){host.append(make('p','sniper-muted',t('noPositions')));renderStats();return;}
     state.positions.slice().reverse().forEach(p=>{
       const row=make('div','sniper-position');
       const head=make('div','sniper-position-head');
       head.append(make('strong','',p.symbol+' · '+(p.status==='open'?t('open'):t('closed'))));
-      const net=make('strong',p.netPnl>=0?'sniper-positive':'sniper-negative',(p.netPnl>=0?'+':'')+fmt(p.netPnl,6)+' SOL');
-      head.append(net);
-      const detail=make('div','sniper-position-detail');
-      detail.textContent=t('entry')+': '+fmt(p.entryPrice,9)+' SOL · '+t('current')+': '+fmt(p.lastPrice||p.entryPrice,9)+' SOL · '+t('net')+': '+fmt(p.netPct||0,2)+'%';
-      row.append(head,detail);
-      if(p.status==='open'){
-        const close=make('button','sniper-action sniper-close',t('manualClose'));close.type='button';close.addEventListener('click',()=>closePaper(p.id,'manual'));row.append(close);
-      } else if(p.exitReason){
-        row.append(make('small','sniper-muted',p.exitReason==='target'?t('targetHit'):p.exitReason==='stop'?t('stopHit'):t('closed')));
-      }
+      head.append(make('strong',p.netPnl>=0?'sniper-positive':'sniper-negative',(p.netPnl>=0?'+':'')+fmt(p.netPnl,6)+' SOL'));
+      const detail=make('div','sniper-position-detail');detail.textContent=t('entry')+': '+fmt(p.entryPrice,9)+' SOL · '+t('current')+': '+fmt(p.lastPrice||p.entryPrice,9)+' SOL · '+t('net')+': '+fmt(p.netPct||0,2)+'%';
+      const graph=make('div','zs-position-chart');graph.append(sparkline(p.priceHistory&&p.priceHistory.length?p.priceHistory:[p.entryPrice,p.lastPrice||p.entryPrice]));
+      row.append(head,detail,graph);
+      if(p.status==='open'){const close=make('button','sniper-action sniper-close',dcopy().close||t('manualClose'));close.type='button';close.addEventListener('click',()=>closePaper(p.id,'manual'));row.append(close);}
+      else if(p.exitReason)row.append(make('small','sniper-muted',p.exitReason==='target'?t('targetHit'):p.exitReason==='stop'?t('stopHit'):t('closed')));
       host.append(row);
     });
+    renderStats();
   }
   async function fetchPairs(address){
     const r=await fetch(API+'/token-pairs/v1/solana/'+encodeURIComponent(address),{cache:'no-store'});
@@ -269,21 +266,25 @@
     }catch(_){$('sniper-feed-status').textContent=t('failed');}
     finally{state.busy=false;renderCandidates();}
   }
-  function openPaper(item){
-    if(state.positions.some(p=>p.status==='open')){alert(t('positionLimit'));return;}
+  function openPaper(item,automatic){
+    if(state.positions.some(p=>p.status==='open')){if(!automatic)alert(t('positionLimit'));return;}
     const buySol=Number($('sniper-size').value);
-    if(!Number.isFinite(buySol)||buySol<=0||buySol>0.05){alert(t('needAmount'));return;}
-    if(!item||!Number.isFinite(item.priceNative)||item.priceNative<=0){alert(t('noPair'));return;}
+    if(!Number.isFinite(buySol)||buySol<=0||buySol>0.05){if(!automatic)alert(t('needAmount'));return;}
+    if(!item||!Number.isFinite(item.priceNative)||item.priceNative<=0){if(!automatic)alert(t('noPair'));return;}
+    if(Number(item.liquidityUsd||0)<Number(terminal.minLiquidity||0)){if(!automatic)alert(state.lang==='ru'?'Ликвидность ниже установленного минимума.':'Token liquidity is below your configured minimum.');return;}
     const c=getCosts();
+    const closed=state.positions.filter(x=>x.status==='closed').reduce((a,x)=>a+(Number(x.netPnl)||0),0);
+    const used=state.positions.filter(x=>x.status==='open').reduce((a,x)=>a+(Number(x.buySol)||0),0);
+    if(buySol+used>Number(terminal.capital||10)+closed){if(!automatic)alert(state.lang==='ru'?'Недостаточно виртуального баланса.':'Insufficient virtual balance.');return;}
     const quantity=buySol*(1-c.dex)*(1-c.slip)/item.priceNative;
-    const p={id:makeUuid(),address:item.address,symbol:item.symbol,name:item.name,buySol,entryPrice:item.priceNative,lastPrice:item.priceNative,quantity,openedAt:Date.now(),status:'open',netPnl:0,netPct:0,exitReason:null,_ownerTelegramId:telegramId()||'guest'};
-    state.positions.push(p);saveStore();renderPositions();persistPosition(p);alert(t('buyOk'));
+    const p={id:makeUuid(),address:item.address,symbol:item.symbol,name:item.name,buySol,entryPrice:item.priceNative,lastPrice:item.priceNative,quantity,openedAt:Date.now(),status:'open',netPnl:0,netPct:0,exitReason:null,priceHistory:[item.priceNative],_ownerTelegramId:telegramId()||'guest'};
+    state.positions.push(p);saveStore();renderPositions();renderStats();persistPosition(p);logEvent('BUY',item.symbol,(automatic?'Auto demo entry':'Manual demo entry')+' · '+fmt(buySol,4)+' SOL');if(!automatic)alert(t('buyOk'));
   }
   function closePaper(id,reason){
     const p=state.positions.find(x=>x.id===id&&x.status==='open');if(!p)return;
     const m=metrics(p,p.lastPrice||p.entryPrice);
     p.status='closed';p.closedAt=Date.now();p.netPnl=m.net;p.netPct=m.pct;p.exitReason=reason;
-    saveStore();renderPositions();persistPosition(p);
+    saveStore();renderPositions();renderStats();persistPosition(p);logEvent('SELL',p.symbol,'Manual demo close · '+fmt(m.pct,2)+'%');
   }
   async function updatePositions(){
     const open=state.positions.filter(p=>p.status==='open');
@@ -292,26 +293,133 @@
         const pair=await fetchPairs(p.address);
         if(!pair)continue;
         p.lastPrice=Number(pair.priceNative)||p.lastPrice;
+        p.priceHistory=Array.isArray(p.priceHistory)?p.priceHistory:[];p.priceHistory.push(p.lastPrice);p.priceHistory=p.priceHistory.slice(-48);
         const m=metrics(p,p.lastPrice);
         p.netPnl=m.net;p.netPct=m.pct;
         const target=Number($('sniper-target').value)||10;
         const stop=Number($('sniper-stop').value)||0;
-        if(m.pct>=target){p.status='closed';p.closedAt=Date.now();p.exitReason='target';}
-        else if(stop>0&&m.pct<=-stop){p.status='closed';p.closedAt=Date.now();p.exitReason='stop';}
+        if(m.pct>=target){p.status='closed';p.closedAt=Date.now();p.exitReason='target';logEvent('SELL',p.symbol,'Net target reached · '+fmt(m.pct,2)+'%');}
+        else if(stop>0&&m.pct<=-stop){p.status='closed';p.closedAt=Date.now();p.exitReason='stop';logEvent('SELL',p.symbol,'Net stop-loss reached · '+fmt(m.pct,2)+'%');}
       }catch(_){}
     }
-    saveStore();renderPositions();
+    saveStore();renderPositions();renderStats();
     for(const p of open)await persistPosition(p);
   }
+
+  const DASH_COPY = {
+    en:{nav:['Sniper','Stats','History','Settings','Help'],balance:'Virtual balance',profit:'Total P/L',trades:'Trades',wins:'Win rate',active:'Open positions',settings:'SIMULATION SETTINGS',capital:'Starting capital (SOL)',minliq:'Minimum liquidity (USD)',autopilot:'AUTO SNIPER',armed:'AUTOSNIPER ACTIVE',paused:'AUTOSNIPER PAUSED',start:'START',pause:'PAUSE',stop:'STOP',launches:'LIVE LAUNCH FEED',journal:'SYSTEM LOG',empty:'No events yet',chart:'POSITION PERFORMANCE',demo:'DEMO MODE · PAPER TRADING',hint:'All settings are virtual and editable. No wallet or real transactions.',open:'OPEN',closed:'CLOSED',entry:'Entry',current:'Current',net:'Net',close:'Close demo position'},
+    ru:{nav:['Снайпер','Статистика','История','Настройки','Помощь'],balance:'Виртуальный баланс',profit:'Общий P/L',trades:'Сделки',wins:'Успешных',active:'Активные позиции',settings:'ПАРАМЕТРЫ СИМУЛЯЦИИ',capital:'Стартовый капитал (SOL)',minliq:'Мин. ликвидность (USD)',autopilot:'АВТОСНАЙПЕР',armed:'АВТОСНАЙПЕР АКТИВЕН',paused:'АВТОСНАЙПЕР НА ПАУЗЕ',start:'ЗАПУСТИТЬ',pause:'ПАУЗА',stop:'СТОП',launches:'ЛЕНТА ЗАПУСКОВ LIVE',journal:'ЖУРНАЛ СИСТЕМЫ',empty:'Событий пока нет',chart:'ДИНАМИКА ПОЗИЦИИ',demo:'ДЕМО-РЕЖИМ · PAPER TRADING',hint:'Все параметры виртуальные и редактируемые. Без кошелька и реальных транзакций.',open:'ОТКРЫТА',closed:'ЗАКРЫТА',entry:'Вход',current:'Сейчас',net:'Чистый P/L',close:'Закрыть демо-позицию'},
+    de:{nav:['Sniper','Statistik','Verlauf','Einstellungen','Hilfe'],balance:'Virtuelles Guthaben',profit:'Gesamt-P/L',trades:'Trades',wins:'Erfolgsquote',active:'Offene Positionen',settings:'SIMULATIONSEINSTELLUNGEN',capital:'Startkapital (SOL)',minliq:'Mindestliquidität (USD)',autopilot:'AUTO-SNIPER',armed:'AUTO-SNIPER AKTIV',paused:'AUTO-SNIPER PAUSIERT',start:'START',pause:'PAUSE',stop:'STOPP',launches:'LIVE TOKEN-STARTS',journal:'SYSTEMPROTOKOLL',empty:'Noch keine Ereignisse',chart:'POSITIONSVERLAUF',demo:'DEMO-MODUS · PAPER TRADING',hint:'Alle Werte sind virtuell und editierbar. Keine Wallet oder echten Transaktionen.',open:'OFFEN',closed:'GESCHLOSSEN',entry:'Einstieg',current:'Aktuell',net:'Netto',close:'Demo-Position schließen'},
+    fr:{nav:['Sniper','Stats','Historique','Réglages','Aide'],balance:'Solde virtuel',profit:'P/L total',trades:'Transactions',wins:'Taux de réussite',active:'Positions ouvertes',settings:'PARAMÈTRES DE SIMULATION',capital:'Capital initial (SOL)',minliq:'Liquidité minimale (USD)',autopilot:'AUTO-SNIPER',armed:'AUTO-SNIPER ACTIF',paused:'AUTO-SNIPER EN PAUSE',start:'DÉMARRER',pause:'PAUSE',stop:'ARRÊTER',launches:'NOUVEAUX TOKENS LIVE',journal:'JOURNAL SYSTÈME',empty:'Aucun événement',chart:'PERFORMANCE',demo:'MODE DÉMO · PAPER TRADING',hint:'Tous les paramètres sont virtuels et modifiables. Aucun portefeuille ni transaction réelle.',open:'OUVERTE',closed:'FERMÉE',entry:'Entrée',current:'Actuel',net:'Net',close:'Fermer la position démo'},
+    it:{nav:['Sniper','Statistiche','Cronologia','Impostazioni','Aiuto'],balance:'Saldo virtuale',profit:'P/L totale',trades:'Operazioni',wins:'Successi',active:'Posizioni aperte',settings:'PARAMETRI SIMULAZIONE',capital:'Capitale iniziale (SOL)',minliq:'Liquidità minima (USD)',autopilot:'AUTO-SNIPER',armed:'AUTO-SNIPER ATTIVO',paused:'AUTO-SNIPER IN PAUSA',start:'AVVIA',pause:'PAUSA',stop:'STOP',launches:'NUOVI TOKEN LIVE',journal:'LOG DI SISTEMA',empty:'Nessun evento',chart:'ANDAMENTO POSIZIONE',demo:'MODALITÀ DEMO · PAPER TRADING',hint:'Tutti i parametri sono virtuali e modificabili. Nessun wallet o trade reale.',open:'APERTA',closed:'CHIUSA',entry:'Ingresso',current:'Attuale',net:'Netto',close:'Chiudi posizione demo'},
+    ja:{nav:['スナイパー','統計','履歴','設定','ヘルプ'],balance:'仮想残高',profit:'合計損益',trades:'取引',wins:'勝率',active:'保有ポジション',settings:'シミュレーション設定',capital:'開始資金 (SOL)',minliq:'最低流動性 (USD)',autopilot:'自動スナイパー',armed:'自動スナイパー稼働中',paused:'自動スナイパー一時停止',start:'開始',pause:'一時停止',stop:'停止',launches:'ライブ新規トークン',journal:'システムログ',empty:'イベントはありません',chart:'ポジション推移',demo:'デモモード · PAPER TRADING',hint:'設定はすべて仮想で変更可能。ウォレットや実取引はありません。',open:'保有中',closed:'終了',entry:'購入',current:'現在',net:'純損益',close:'デモポジションを閉じる'},
+    'zh-CN':{nav:['狙击','统计','历史','设置','帮助'],balance:'虚拟余额',profit:'总盈亏',trades:'交易',wins:'胜率',active:'当前持仓',settings:'模拟参数',capital:'初始资金 (SOL)',minliq:'最低流动性 (USD)',autopilot:'自动狙击',armed:'自动狙击已启动',paused:'自动狙击已暂停',start:'启动',pause:'暂停',stop:'停止',launches:'实时新币',journal:'系统日志',empty:'暂无事件',chart:'持仓走势',demo:'模拟模式 · PAPER TRADING',hint:'所有参数均为可编辑的虚拟设置，不连接钱包，不进行真实交易。',open:'持有中',closed:'已关闭',entry:'买入',current:'当前',net:'净盈亏',close:'关闭模拟仓位'},
+    tr:{nav:['Sniper','İstatistik','Geçmiş','Ayarlar','Yardım'],balance:'Sanal bakiye',profit:'Toplam K/Z',trades:'İşlemler',wins:'Başarı oranı',active:'Açık pozisyonlar',settings:'SİMÜLASYON AYARLARI',capital:'Başlangıç sermayesi (SOL)',minliq:'Minimum likidite (USD)',autopilot:'OTOMATİK SNIPER',armed:'OTOMATİK SNIPER AKTİF',paused:'OTOMATİK SNIPER DURAKLATILDI',start:'BAŞLAT',pause:'DURAKLAT',stop:'DURDUR',launches:'CANLI TOKEN AKIŞI',journal:'SİSTEM GÜNLÜĞÜ',empty:'Henüz olay yok',chart:'POZİSYON GRAFİĞİ',demo:'DEMO MODU · PAPER TRADING',hint:'Tüm ayarlar sanaldır ve düzenlenebilir. Cüzdan veya gerçek işlem yoktur.',open:'AÇIK',closed:'KAPALI',entry:'Giriş',current:'Güncel',net:'Net',close:'Demo pozisyonunu kapat'},
+    hi:{nav:['स्नाइपर','आँकड़े','इतिहास','सेटिंग्स','मदद'],balance:'वर्चुअल बैलेंस',profit:'कुल P/L',trades:'ट्रेड',wins:'सफलता दर',active:'खुली पोज़िशन',settings:'सिमुलेशन सेटिंग्स',capital:'शुरुआती पूँजी (SOL)',minliq:'न्यूनतम लिक्विडिटी (USD)',autopilot:'ऑटो स्नाइपर',armed:'ऑटो स्नाइपर सक्रिय',paused:'ऑटो स्नाइपर रुका हुआ',start:'शुरू',pause:'रोकें',stop:'बंद',launches:'लाइव टोकन लॉन्च',journal:'सिस्टम लॉग',empty:'अभी कोई इवेंट नहीं',chart:'पोज़िशन प्रदर्शन',demo:'डेमो मोड · PAPER TRADING',hint:'सभी सेटिंग्स वर्चुअल और संपादन योग्य हैं। कोई वॉलेट या वास्तविक लेनदेन नहीं।',open:'खुली',closed:'बंद',entry:'एंट्री',current:'वर्तमान',net:'नेट',close:'डेमो पोज़िशन बंद करें'}
+  };
+  const terminal={auto:false,capital:10,minLiquidity:5000,logs:[],seen:[],lastAuto:0};
+  const TERMINAL_KEY='zombcash_sniper_terminal_v1';
+  const dcopy=()=>DASH_COPY[state.lang]||DASH_COPY.en;
+  function saveTerminal(){try{terminal.settings={};['sniper-size','sniper-target','sniper-stop','sniper-network','sniper-priority','sniper-dex','sniper-slip'].forEach(id=>{const el=$(id);if(el)terminal.settings[id]=el.value;});localStorage.setItem(TERMINAL_KEY,JSON.stringify(terminal));}catch(_){}}
+  function loadTerminal(){try{const v=JSON.parse(localStorage.getItem(TERMINAL_KEY)||'null');if(v&&typeof v==='object'){Object.assign(terminal,v);if(v.settings)Object.keys(v.settings).forEach(id=>{const el=$(id);if(el)el.value=v.settings[id];});}}catch(_){}}
+  function logEvent(kind,symbol,detail){terminal.logs.unshift({at:Date.now(),kind,symbol:symbol||'SYSTEM',detail:detail||''});terminal.logs=terminal.logs.slice(0,18);saveTerminal();renderLog();}
+  function dashNode(tag,cls,txt){const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n;}
+  function addRange(field,id,min,max,step){
+    const input=$(id);if(!input||!field)return;
+    const range=dashNode('input','zs-range');range.type='range';range.min=min;range.max=max;range.step=step;range.value=input.value;
+    input.classList.add('zs-number');input.addEventListener('input',()=>{range.value=input.value;saveTerminal();renderStats();});
+    range.addEventListener('input',()=>{input.value=range.value;input.dispatchEvent(new Event('change',{bubbles:true}));renderStats();});
+    field.append(range,input);
+  }
+  function addVirtualField(host,id,label,min,max,step,value,range=true){
+    const field=dashNode('div','zs-field');const fieldLabel=dashNode('label','',label);if(id==='sniper-capital')fieldLabel.id='zs-capital-label';if(id==='sniper-liquidity')fieldLabel.id='zs-liquidity-label';field.append(fieldLabel);
+    const input=dashNode('input','zs-number');input.id=id;input.type='number';input.min=min;input.max=max;input.step=step;input.value=value;
+    field.querySelector('label').htmlFor=id;
+    if(range){const slider=dashNode('input','zs-range');slider.type='range';slider.min=min;slider.max=max;slider.step=step;slider.value=value;slider.addEventListener('input',()=>{input.value=slider.value;input.dispatchEvent(new Event('change',{bubbles:true}));});input.addEventListener('input',()=>slider.value=input.value);field.append(slider);}
+    input.addEventListener('change',()=>{if(id==='sniper-capital')terminal.capital=Math.max(0,Number(input.value)||0);if(id==='sniper-liquidity')terminal.minLiquidity=Math.max(0,Number(input.value)||0);saveTerminal();renderStats();});
+    field.append(input);host.append(field);return field;
+  }
+  function sparkline(values){
+    const nums=(values||[]).filter(v=>Number.isFinite(Number(v))).map(Number);
+    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 180 48');svg.setAttribute('class','zs-spark');svg.setAttribute('role','img');svg.setAttribute('aria-label','Observed token price since simulated entry');
+    if(nums.length<2)return svg;
+    const lo=Math.min(...nums),hi=Math.max(...nums),span=hi-lo||Math.max(hi*.001,1e-12);
+    const points=nums.map((v,i)=>((i/(nums.length-1))*176+2)+','+(44-((v-lo)/span)*38)).join(' ');
+    const line=document.createElementNS(svg.namespaceURI,'polyline');line.setAttribute('points',points);line.setAttribute('fill','none');line.setAttribute('stroke',nums[nums.length-1]>=nums[0]?'#00f59a':'#ff4d8d');line.setAttribute('stroke-width','2.2');line.setAttribute('stroke-linecap','round');line.setAttribute('stroke-linejoin','round');svg.append(line);return svg;
+  }
+  function renderStats(){
+    const host=$('zs-kpis');if(!host)return;
+    const total=state.positions.reduce((a,p)=>a+(Number(p.netPnl)||0),0);
+    const closed=state.positions.filter(p=>p.status==='closed'),wins=closed.filter(p=>(Number(p.netPnl)||0)>0).length;
+    const open=state.positions.filter(p=>p.status==='open'),used=open.reduce((a,p)=>a+(Number(p.buySol)||0),0);
+    const available=Math.max(0,Number(terminal.capital||10)+closed.reduce((a,p)=>a+(Number(p.netPnl)||0),0)-used);
+    const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,(total>=0?'+':'')+total.toFixed(5)+' SOL'],[dcopy().trades,String(state.positions.length)],[dcopy().wins,closed.length?Math.round(wins/closed.length*100)+'%':'—'],[dcopy().active,String(open.length)]];
+    host.replaceChildren();vals.forEach((v,i)=>{const card=dashNode('div','zs-kpi zs-kpi-'+i);card.append(dashNode('small','',v[0]),dashNode('strong','zs-counter',v[1]));host.append(card);});
+    const mainChart=$('zs-main-chart');if(mainChart){mainChart.replaceChildren();const p=open[0];mainChart.append(sparkline(p?(p.priceHistory||[p.entryPrice,p.lastPrice||p.entryPrice]):[]));}
+  }
+  function renderLog(){
+    const host=$('zs-log');if(!host)return;host.replaceChildren();
+    if(!terminal.logs.length){host.append(dashNode('p','sniper-muted',dcopy().empty));return;}
+    terminal.logs.slice(0,12).forEach(e=>{const row=dashNode('div','zs-logrow');row.append(dashNode('time','',new Date(e.at).toLocaleTimeString()),dashNode('b','zs-logkind',e.kind),dashNode('strong','',e.symbol),dashNode('span','',e.detail));host.append(row);});
+  }
+  function renderDashboardState(){
+    const btn=$('zs-auto-toggle');if(btn){btn.classList.toggle('is-on',!!terminal.auto);btn.textContent=terminal.auto?dcopy().armed:dcopy().paused;}
+    const nav=document.querySelectorAll('[data-zs-nav]');nav.forEach(b=>{const i=Number(b.dataset.zsNav);if(dcopy().nav[i])b.textContent=dcopy().nav[i];});
+    [['zs-settings-title',dcopy().settings],['zs-center-title',dcopy().autopilot],['zs-right-title',dcopy().active],['zs-launch-title',dcopy().launches],['zs-log-title',dcopy().journal],['zs-chart-title',dcopy().chart]].forEach(([id,label])=>{const el=$(id);if(el)el.textContent=label;});
+    const capLabel=$('zs-capital-label'),liqLabel=$('zs-liquidity-label');if(capLabel)capLabel.textContent=dcopy().capital;if(liqLabel)liqLabel.textContent=dcopy().minliq;
+    renderStats();renderLog();
+  }
+  function maybeAutoEnter(){
+    if(!terminal.auto||state.positions.some(p=>p.status==='open')||Date.now()-terminal.lastAuto<90000)return;
+    const item=state.candidates.find(c=>c.source==='pumpportal'&&c.priceNative>0&&Number(c.liquidityUsd)>=Number(terminal.minLiquidity||0)&&!terminal.seen.includes(c.address));
+    if(!item)return;
+    terminal.seen.push(item.address);terminal.seen=terminal.seen.slice(-250);terminal.lastAuto=Date.now();saveTerminal();
+    openPaper(item,true);
+  }
+  function buildDashboard(){
+    const root=$('zombie-sniper-demo');if(!root||root.dataset.zsBuilt)return;
+    root.dataset.zsBuilt='1';loadTerminal();
+    const fields=['sniper-size','sniper-target','sniper-stop','sniper-network','sniper-priority','sniper-dex','sniper-slip'].map(id=>$(id)?.closest('.sniper-field')).filter(Boolean);
+    const candidates=$('sniper-candidates'),positions=$('sniper-positions'),refresh=$('sniper-refresh'),clear=$('sniper-clear'),status=$('sniper-feed-status');
+    const style=dashNode('style','');style.textContent=`.sniper-demo{position:relative;overflow:hidden;border:1px solid rgba(255,72,190,.48)!important;border-radius:24px!important;padding:clamp(14px,2.4vw,28px)!important;background:radial-gradient(ellipse at 50% 15%,#23102b 0,transparent 38%),linear-gradient(145deg,#080b12,#090d14 60%,#120b1a)!important;box-shadow:0 0 45px #c32eff18,inset 0 0 35px #00e5b51a!important;color:#f5f5fb}
+    .zs-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:4px 0 16px;border-bottom:1px solid #a84bc955}.zs-brand{font:900 clamp(19px,3vw,31px)/1 Orbitron,system-ui;color:#a5ff4b;text-shadow:0 0 18px #a5ff4b66}.zs-title{font:900 clamp(22px,3.8vw,40px)/1 Orbitron,system-ui;color:#fff;text-shadow:0 0 18px #ff4bb5aa}.zs-demo{border:1px solid #ff4bc7;border-radius:99px;padding:8px 14px;color:#ff83d7;font:800 10px Orbitron;box-shadow:0 0 16px #ff4bc755}.zs-nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:14px 0}.zs-nav button{border:1px solid #7951a7;background:#151325;color:#eee;border-radius:12px;padding:9px 15px;font-weight:800;cursor:pointer}.zs-nav button:first-child{border-color:#00e5a8;box-shadow:0 0 16px #00e5a855}.zs-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:12px 0 18px}.zs-kpi{min-width:0;padding:13px;border:1px solid #7652a6;border-radius:16px;background:linear-gradient(135deg,#0d1a20,#160f20);box-shadow:inset 0 0 18px #00e5a814}.zs-kpi small{display:block;color:#b9c3d4;font-size:11px}.zs-kpi strong{display:block;margin-top:5px;font:900 clamp(16px,2vw,23px) Orbitron;color:#fff;font-variant-numeric:tabular-nums;transition:all .35s}.zs-kpi-1 strong,.zs-kpi-3 strong{color:#00f59a;text-shadow:0 0 14px #00f59a55}.zs-layout{display:grid;grid-template-columns:minmax(250px,1.05fr) minmax(240px,.85fr) minmax(280px,1.1fr);gap:14px;align-items:stretch}.zs-panel{min-width:0;padding:15px;border:1px solid #b34acb;border-radius:18px;background:linear-gradient(145deg,#10131eeb,#070d14f2);box-shadow:0 0 22px #a43cff17}.zs-panel h3{margin:0 0 12px;color:#68ffc9;font:800 13px Orbitron;letter-spacing:.04em}.zs-fields{display:grid;gap:9px}.zs-field{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;align-items:center;padding:8px 0;border-bottom:1px solid #ffffff12}.zs-field label{grid-column:1/-1;color:#dfe3ee;font-size:11px;font-weight:700}.zs-field .zs-range{grid-column:1;width:100%;accent-color:#00e6a5;min-width:0}.zs-field .zs-number{grid-column:2;width:100px;min-height:30px;padding:5px 7px;border:1px solid #394458;border-radius:8px;background:#080e18;color:#fff;text-align:right;font:700 12px system-ui}.zs-range{appearance:auto;height:8px}.zs-portrait{position:relative;min-height:185px;border-radius:16px;overflow:hidden;background:#160d20;display:flex;align-items:flex-end;justify-content:center}.zs-portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 23%;opacity:.95}.zs-portrait:after{content:'';position:absolute;inset:35% 0 0;background:linear-gradient(transparent,#080d16)}.zs-portrait b{z-index:1;margin:0 0 12px;color:#fff;font:900 14px Orbitron;text-shadow:0 0 12px #ff4bc7}.zs-core{display:grid;place-items:center;min-height:180px;text-align:center;border:1px solid #ff4bc7;border-radius:50%;width:min(100%,220px);aspect-ratio:1;margin:0 auto 12px;background:radial-gradient(circle,#24122b,#080c16 65%);box-shadow:0 0 22px #ff4bc755,inset 0 0 22px #00edb533}.zs-core strong{display:block;color:#fff;font:900 17px Orbitron}.zs-core span{display:block;color:#00f59a;font-weight:900}.zs-toggle{border:1px solid #00f59a;border-radius:99px;background:#071c19;color:#00f59a;padding:10px 14px;font-weight:900;cursor:pointer;width:100%;margin:8px 0}.zs-toggle.is-on{background:#00d98a;color:#04120d;box-shadow:0 0 22px #00f59a66}.zs-actions{display:flex;gap:8px}.zs-actions button{flex:1}.zs-chart{width:100%;height:72px;margin-top:12px;border-radius:10px;background:linear-gradient(180deg,#00e59d17,transparent);border:1px solid #00e59d22}.zs-positions,.zs-launches{max-height:420px;overflow:auto}.zs-launches .sniper-candidate{grid-template-columns:1fr auto;gap:8px;padding:10px 0}.zs-launches .sniper-candidate-stats{grid-column:1/-1}.zs-launches .sniper-link{display:none}.zs-launches .sniper-action{grid-column:2;grid-row:1}.zs-positions .sniper-position{display:grid;grid-template-columns:1fr auto;gap:8px;padding:12px 0;border-top:1px solid #ffffff1a}.zs-position-chart{grid-column:1/-1}.zs-spark{width:100%;height:42px;display:block;background:linear-gradient(180deg,#00f59a0d,transparent);border-radius:8px}.zs-log{display:grid;gap:4px}.zs-logrow{display:grid;grid-template-columns:76px 84px 90px 1fr;gap:8px;padding:7px 9px;border-top:1px solid #ffffff12;font-size:11px;color:#d8deea}.zs-logkind{color:#00f59a}.zs-foot{margin-top:12px;color:#aeb8c7;font-size:11px}.zs-hidden{display:none!important}.sniper-demo .sniper-muted{color:#aeb8c7!important}.sniper-demo .sniper-action{border-radius:9px!important;background:linear-gradient(90deg,#00d99a,#00f59a)!important;color:#03140f!important;border:0!important}.sniper-demo .sniper-close{background:transparent!important;border:1px solid #ff4b9b!important;color:#ff8bc0!important}
+    @media(max-width:900px){.zs-layout{grid-template-columns:1fr 1fr}.zs-layout .zs-right{grid-column:1/-1}.zs-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media(max-width:600px){.zs-layout{grid-template-columns:1fr}.zs-layout .zs-right{grid-column:auto}.zs-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.zs-title{order:3;width:100%}.zs-logrow{grid-template-columns:62px 72px 75px 1fr;font-size:10px}.zs-panel{padding:12px}.zs-portrait{min-height:140px}}`;
+    const header=dashNode('div','zs-head');header.append(dashNode('span','zs-brand','☣ ZOMBCASH'),dashNode('strong','zs-title','◉ ZOMBIE SNIPER'),dashNode('span','zs-demo',dcopy().demo));
+    const nav=dashNode('nav','zs-nav');nav.setAttribute('aria-label','Zombie Sniper navigation');dcopy().nav.forEach((label,i)=>{const b=dashNode('button','',label);b.dataset.zsNav=String(i);b.type='button';b.addEventListener('click',()=>{const target=[root,document.getElementById('zs-kpis'),document.getElementById('zs-log'),document.getElementById('zs-settings'),document.getElementById('zs-center')][i];target&&target.scrollIntoView({behavior:'smooth',block:'center'});});nav.append(b);});
+    const kpis=dashNode('div','zs-kpis');kpis.id='zs-kpis';
+    const layout=dashNode('div','zs-layout');const left=dashNode('section','zs-panel zs-left');left.id='zs-settings';const leftTitle=dashNode('h3','',dcopy().settings);leftTitle.id='zs-settings-title';left.append(leftTitle);
+    const fieldHost=dashNode('div','zs-fields');fields.forEach((f,i)=>{f.classList.add('zs-field');const input=f.querySelector('input');if(input){const lim={ 'sniper-size':[0.001,0.05,0.001], 'sniper-target':[0.1,100,0.1], 'sniper-stop':[0,99,0.5], 'sniper-network':[0,0.1,0.000001], 'sniper-priority':[0,0.1,0.000001], 'sniper-dex':[0,20,0.05], 'sniper-slip':[0,50,0.1] }[input.id];if(lim)addRange(f,input.id,...lim);}fieldHost.append(f);});
+    addVirtualField(fieldHost,'sniper-capital',dcopy().capital,0.1,1000,0.1,terminal.capital||10);
+    addVirtualField(fieldHost,'sniper-liquidity',dcopy().minliq,0,1000000,100,terminal.minLiquidity||5000);
+    left.append(fieldHost,dashNode('p','zs-foot',dcopy().hint));
+    const center=dashNode('section','zs-panel zs-center');center.id='zs-center';const centerTitle=dashNode('h3','',dcopy().autopilot);centerTitle.id='zs-center-title';center.append(centerTitle);
+    const portrait=dashNode('div','zs-portrait');const pic=dashNode('img','');pic.src='data:image/webp;base64,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';pic.alt='ZombieCash anime survivor heroine';portrait.append(pic,dashNode('b','','$ZOMBCASH SURVIVOR'));
+    const core=dashNode('div','zs-core');const coreText=dashNode('div','');coreText.append(dashNode('strong','', '◉'),dashNode('strong','', 'AUTO SNIPER'),dashNode('span','', 'PAPER ENGINE'));core.append(coreText);
+    const toggle=dashNode('button','zs-toggle',dcopy().paused);toggle.id='zs-auto-toggle';toggle.type='button';toggle.addEventListener('click',()=>{terminal.auto=!terminal.auto;saveTerminal();renderDashboardState();logEvent(terminal.auto?'ARMED':'PAUSED','SYSTEM',terminal.auto?'Auto-entry enabled for eligible demo candidates':'Auto-entry paused');if(terminal.auto){refreshFeed();maybeAutoEnter();}});
+    const actions=dashNode('div','zs-actions');const pause=dashNode('button','sniper-action sniper-close',dcopy().pause);pause.type='button';pause.addEventListener('click',()=>{terminal.auto=false;saveTerminal();renderDashboardState();logEvent('PAUSE','SYSTEM','Auto-entry paused; open position remains');});
+    const stop=dashNode('button','sniper-action sniper-close',dcopy().stop);stop.type='button';stop.addEventListener('click',()=>{terminal.auto=false;saveTerminal();renderDashboardState();logEvent('STOP','SYSTEM','Auto-entry stopped; no live orders exist');});actions.append(pause,stop);
+    const chartPanel=dashNode('div','');const chartTitle=dashNode('h3','',dcopy().chart);chartTitle.id='zs-chart-title';chartPanel.append(chartTitle);const chart=dashNode('div','zs-chart');chart.id='zs-main-chart';chartPanel.append(chart);
+    center.append(portrait,core,toggle,actions,chartPanel);
+    const right=dashNode('section','zs-panel zs-right');const rightTitle=dashNode('h3','',dcopy().active);rightTitle.id='zs-right-title';right.append(rightTitle);const posWrap=dashNode('div','zs-positions');posWrap.id='zs-positions-wrap';if(positions){positions.classList.add('zs-positions-inner');posWrap.append(positions);}right.append(posWrap);
+    const launchPanel=dashNode('section','zs-panel zs-launch-panel');const launchTitle=dashNode('h3','',dcopy().launches);launchTitle.id='zs-launch-title';launchPanel.append(launchTitle);const toolbar=dashNode('div','sniper-toolbar');if(refresh)toolbar.append(refresh);if(status)toolbar.append(status);launchPanel.append(toolbar);const launchWrap=dashNode('div','zs-launches');if(candidates)launchWrap.append(candidates);launchPanel.append(launchWrap);
+    layout.append(left,center,right,launchPanel);
+    const journal=dashNode('section','zs-panel');const logTitle=dashNode('h3','',dcopy().journal);logTitle.id='zs-log-title';journal.append(logTitle);const log=dashNode('div','zs-log');log.id='zs-log';journal.append(log);
+    const clearBar=dashNode('div','sniper-toolbar');if(clear)clearBar.append(clear);journal.append(clearBar);
+    const foot=dashNode('p','zs-foot',dcopy().hint+' '+t('source'));
+    root.replaceChildren(style,header,nav,kpis,layout,journal,foot);
+    renderDashboardState();renderPositions();renderCandidates();
+  }
+
   function init(){
-    readStore();activeStorageKey=storageKey();translate();
+    readStore();activeStorageKey=storageKey();detectLang();buildDashboard();translate();
     $('sniper-refresh').addEventListener('click',refreshFeed);
     $('sniper-clear').addEventListener('click',()=>{state.positions=[];saveStore();clearServerHistory();renderPositions();$('sniper-feed-status').textContent=t('cleared');});
     ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
     refreshFeed();if(authToken())syncFromServer().then(updatePositions);else{updateSyncStatus('loginToSync');updatePositions();}
     state.timer=window.setInterval(()=>{checkAccountChange();refreshFeed();},10000);
-    state.positionTimer=window.setInterval(()=>{updatePositions();},30000);
-    document.addEventListener('zombcash:languagechange',translate);
+    state.positionTimer=window.setInterval(()=>{updatePositions();},15000);
+    document.addEventListener('zombcash:languagechange',()=>{detectLang();translate();if($('zs-kpis')){const old=$('zs-kpis');old.previousSibling;renderDashboardState();}});
     document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer().then(updatePositions);});
     document.addEventListener('click',event=>{if(event.target&&event.target.closest&&event.target.closest('#survivor-logout'))Promise.resolve().then(checkAccountChange);});
     window.addEventListener('storage',event=>{if(event.key===TOKEN_KEY||event.key===PROFILE_KEY){if(!checkAccountChange()&&authToken())syncFromServer().then(updatePositions);}});
