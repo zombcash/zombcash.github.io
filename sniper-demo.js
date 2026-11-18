@@ -191,7 +191,7 @@
   function renderPositions(){
     const host=$('sniper-positions'); if(!host)return;
     host.replaceChildren();
-    if(!state.positions.length){host.append(make('p','sniper-muted',t('noPositions')));return;}
+    if(!state.positions.length){host.append(make('p','sniper-muted',t('noPositions')));renderTerminal();return;}
     state.positions.slice().reverse().forEach(p=>{
       const row=make('div','sniper-position');
       const head=make('div','sniper-position-head');
@@ -208,6 +208,7 @@
       }
       host.append(row);
     });
+    renderTerminal();
   }
   async function fetchPairs(address){
     const r=await fetch(API+'/token-pairs/v1/solana/'+encodeURIComponent(address),{cache:'no-store'});
@@ -267,17 +268,184 @@
       state.candidates=resolved.filter(x=>x.status==='fulfilled'&&x.value).map(x=>x.value).slice(0,8);
       $('sniper-feed-status').textContent=liveConnected?t('liveConnected'):(state.candidates.length?t('liveDisconnected'):t('noCandidates'));
     }catch(_){$('sniper-feed-status').textContent=t('failed');}
-    finally{state.busy=false;renderCandidates();}
+    finally{state.busy=false;renderCandidates();runAutoEntry();renderTerminal();}
   }
-  function openPaper(item){
-    if(state.positions.some(p=>p.status==='open')){alert(t('positionLimit'));return;}
+  function openPaper(item,automatic=false){
+    if(state.positions.some(p=>p.status==='open')){if(!automatic)alert(t('positionLimit'));return;}
     const buySol=Number($('sniper-size').value);
     if(!Number.isFinite(buySol)||buySol<=0||buySol>0.05){alert(t('needAmount'));return;}
-    if(!item||!Number.isFinite(item.priceNative)||item.priceNative<=0){alert(t('noPair'));return;}
+    if(!item||!Number.isFinite(item.priceNative)||item.priceNative<=0){if(!automatic)alert(t('noPair'));return;}
+    if(terminalStats().available<buySol){if(!automatic)alert('Insufficient virtual balance');return;}
     const c=getCosts();
     const quantity=buySol*(1-c.dex)*(1-c.slip)/item.priceNative;
     const p={id:makeUuid(),address:item.address,symbol:item.symbol,name:item.name,buySol,entryPrice:item.priceNative,lastPrice:item.priceNative,quantity,openedAt:Date.now(),status:'open',netPnl:0,netPct:0,exitReason:null,_ownerTelegramId:telegramId()||'guest'};
-    state.positions.push(p);saveStore();renderPositions();persistPosition(p);alert(t('buyOk'));
+    state.positions.push(p);saveStore();renderPositions();persistPosition(p);logTerminal('BUY',(automatic?'AUTO ':'')+p.symbol,'Paper buy '+fmt(buySol,4)+' SOL · liquidity 
+  }
+  function closePaper(id,reason){
+    const p=state.positions.find(x=>x.id===id&&x.status==='open');if(!p)return;
+    const m=metrics(p,p.lastPrice||p.entryPrice);
+    p.status='closed';p.closedAt=Date.now();p.netPnl=m.net;p.netPct=m.pct;p.exitReason=reason;
+    saveStore();renderPositions();persistPosition(p);logTerminal('SELL',p.symbol+' closed',reason+' · net '+(m.net>=0?'+':'')+fmt(m.net,6)+' SOL ('+fmt(m.pct,2)+'%)');
+  }
+  async function updatePositions(){
+    const open=state.positions.filter(p=>p.status==='open');
+    for(const p of open){
+      try{
+        const pair=await fetchPairs(p.address);
+        if(!pair)continue;
+        p.lastPrice=Number(pair.priceNative)||p.lastPrice;
+        const m=metrics(p,p.lastPrice);
+        p.netPnl=m.net;p.netPct=m.pct;
+        const target=terminal.target;
+        const stop=terminal.stop;
+        if(m.pct>=target){p.status='closed';p.closedAt=Date.now();p.exitReason='target';logTerminal('SELL',p.symbol+' target reached','Net '+fmt(m.pct,2)+'% · '+fmt(m.net,6)+' SOL');}
+        else if(stop>0&&m.pct<=-stop){p.status='closed';p.closedAt=Date.now();p.exitReason='stop';logTerminal('SELL',p.symbol+' stop loss','Net '+fmt(m.pct,2)+'% · '+fmt(m.net,6)+' SOL');}
+      }catch(_){}
+    }
+    saveStore();renderPositions();renderTerminal();
+    for(const p of open)await persistPosition(p);
+  }
+
+  const TERMINAL_KEY='zombcash_sniper_terminal_v1';
+  const terminalDefaults={capital:1,trade:0.01,target:10,stop:20,minLiquidity:5000,auto:false};
+  let terminal={...terminalDefaults};
+  let eventLog=[];
+  function loadTerminal(){
+    try{terminal={...terminalDefaults,...JSON.parse(localStorage.getItem(TERMINAL_KEY)||'{}')};}catch(_){terminal={...terminalDefaults};}
+    terminal.capital=Math.max(0.05,Math.min(100,Number(terminal.capital)||1));
+    terminal.trade=Math.max(0.001,Math.min(0.05,Number(terminal.trade)||0.01));
+    terminal.target=Math.max(0.1,Math.min(500,Number(terminal.target)||10));
+    terminal.stop=Math.max(0,Math.min(99,Number(terminal.stop)||20));
+    terminal.minLiquidity=Math.max(0,Math.min(10000000,Number(terminal.minLiquidity)||5000));
+    terminal.auto=terminal.auto===true;
+    try{eventLog=JSON.parse(localStorage.getItem(TERMINAL_KEY+'_events')||'[]').slice(0,40);}catch(_){eventLog=[];}
+  }
+  function saveTerminal(){try{localStorage.setItem(TERMINAL_KEY,JSON.stringify(terminal));localStorage.setItem(TERMINAL_KEY+'_events',JSON.stringify(eventLog.slice(0,40)));}catch(_){}}
+  function logTerminal(kind,title,detail){
+    eventLog.unshift({at:Date.now(),kind,title,detail});eventLog=eventLog.slice(0,40);saveTerminal();renderTerminal();
+  }
+  function terminalStats(){
+    const realized=state.positions.filter(p=>p.status==='closed').reduce((a,p)=>a+(Number(p.netPnl)||0),0);
+    const invested=state.positions.filter(p=>p.status==='open').reduce((a,p)=>a+(Number(p.buySol)||0),0);
+    const floating=state.positions.filter(p=>p.status==='open').reduce((a,p)=>a+(Number(p.netPnl)||0),0);
+    return {realized,invested,floating,available:terminal.capital+realized-invested,equity:terminal.capital+realized+floating};
+  }
+  function ensureTerminal(){
+    if($('sniper-terminal'))return;
+    const root=$('.sniper-demo');if(!root)return;
+    const style=make('style','');
+    style.textContent=`
+      .sniper-terminal{margin:18px 0 24px;padding:clamp(14px,2.5vw,22px);border:1px solid rgba(126,220,184,.32);background:radial-gradient(ellipse at 10% 0%,rgba(42,116,91,.22),transparent 45%),linear-gradient(145deg,#0b1716,#090e12);box-shadow:0 0 32px rgba(40,190,140,.08);color:#e6f4ed}
+      .sniper-terminal-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+      .sniper-terminal-stat{padding:13px;border:1px solid #78998b35;background:#07100f;border-radius:9px;min-width:0}
+      .sniper-terminal-stat small{display:block;color:#8da99c;font-size:10px;letter-spacing:.09em;text-transform:uppercase}
+      .sniper-terminal-stat strong{display:block;margin-top:7px;font:700 clamp(17px,2.4vw,25px) ui-monospace,monospace;color:#b7f4d2;overflow-wrap:anywhere}
+      .sniper-terminal-stat.profit strong{color:#75f0b4;text-shadow:0 0 14px #4ee59b55}
+      .sniper-terminal-stat.loss strong{color:#ff9c9c}
+      .sniper-terminal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+      .sniper-terminal-head b{font:700 12px Orbitron,system-ui;letter-spacing:.13em;color:#b7e9d0}
+      .sniper-terminal-toggle{border:1px solid #6bd6a4;background:#123d30;color:#c9ffe4;padding:10px 15px;border-radius:7px;font-weight:800;cursor:pointer}
+      .sniper-terminal-toggle.off{border-color:#66766f;background:#18201e;color:#aab8b1}
+      .sniper-terminal-settings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}
+      .sniper-terminal-setting{padding:10px;border:1px solid #78998b2b;border-radius:8px;background:#0b1413}
+      .sniper-terminal-setting label{display:flex;justify-content:space-between;gap:8px;color:#b5c9bf;font-size:11px;margin-bottom:9px}
+      .sniper-terminal-setting output{color:#9bf0c3;font-weight:800;font-variant-numeric:tabular-nums}
+      .sniper-terminal-setting input{accent-color:#69dba5;min-height:18px;padding:0;background:transparent;border:0}
+      .sniper-terminal-log{max-height:220px;overflow:auto;border-top:1px solid #78998b35;margin-top:14px}
+      .sniper-terminal-event{display:grid;grid-template-columns:58px minmax(0,1fr) auto;gap:9px;align-items:center;padding:10px 2px;border-bottom:1px solid #78998b22;font-size:12px}
+      .sniper-terminal-event small{color:#82988e}.sniper-terminal-event strong{color:#dcebe3}.sniper-terminal-event em{font-style:normal;color:#8de9b8;font-weight:700}
+      .sniper-terminal-pulse{display:inline-block;width:7px;height:7px;border-radius:50%;background:#65e5a3;box-shadow:0 0 12px #65e5a3;animation:sniperPulse 1.5s infinite}
+      @keyframes sniperPulse{50%{opacity:.35;box-shadow:0 0 2px #65e5a3}}
+      @media(max-width:760px){.sniper-terminal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sniper-terminal-settings{grid-template-columns:repeat(2,minmax(0,1fr))}.sniper-terminal-event{grid-template-columns:48px minmax(0,1fr)}.sniper-terminal-event em{grid-column:2}}
+      @media(max-width:430px){.sniper-terminal-settings{grid-template-columns:1fr}}
+      @media(prefers-reduced-motion:reduce){.sniper-terminal-pulse{animation:none}}
+    `;
+    const panel=make('section','sniper-terminal');panel.id='sniper-terminal';
+    panel.innerHTML=`
+      <div class="sniper-terminal-head"><b><span class="sniper-terminal-pulse"></span> ZOMBIE SNIPER / SIMULATION CONTROL</b><button type="button" class="sniper-terminal-toggle off" id="sniper-auto-toggle">AUTO MODE: OFF</button></div>
+      <div class="sniper-terminal-grid">
+        <div class="sniper-terminal-stat"><small>Virtual equity</small><strong id="sniper-equity">1.0000 SOL</strong></div>
+        <div class="sniper-terminal-stat"><small>Available balance</small><strong id="sniper-available">1.0000 SOL</strong></div>
+        <div class="sniper-terminal-stat profit"><small>Realized P/L</small><strong id="sniper-realized">+0.0000 SOL</strong></div>
+        <div class="sniper-terminal-stat"><small>Open positions / floating</small><strong id="sniper-open">0 / 0.0000</strong></div>
+      </div>
+      <div class="sniper-terminal-settings" id="sniper-terminal-settings">
+        <div class="sniper-terminal-setting"><label>Starting capital <output data-out="capital">1 SOL</output></label><input type="range" min="0.05" max="20" step="0.05" data-setting="capital"></div>
+        <div class="sniper-terminal-setting"><label>Trade size <output data-out="trade">0.01 SOL</output></label><input type="range" min="0.001" max="0.05" step="0.001" data-setting="trade"></div>
+        <div class="sniper-terminal-setting"><label>Net take profit <output data-out="target">10%</output></label><input type="range" min="0.5" max="100" step="0.5" data-setting="target"></div>
+        <div class="sniper-terminal-setting"><label>Net stop loss <output data-out="stop">20%</output></label><input type="range" min="0" max="80" step="1" data-setting="stop"></div>
+        <div class="sniper-terminal-setting"><label>Minimum liquidity <output data-out="minLiquidity">$5,000</output></label><input type="range" min="0" max="100000" step="1000" data-setting="minLiquidity"></div>
+      </div>
+      <div class="sniper-muted">All settings are editable for testing. Auto mode only simulates trades with virtual SOL; it never connects a wallet or sends transactions.</div>
+      <div class="sniper-section-title">LIVE SIMULATION EVENT LOG</div><div class="sniper-terminal-log" id="sniper-terminal-log" aria-live="polite"></div>`;
+    const intro=root.querySelector('[data-sniper-i18n="intro"]');
+    if(intro)intro.insertAdjacentElement('afterend',style),intro.insertAdjacentElement('afterend',panel);else root.prepend(style,panel);
+    panel.querySelectorAll('[data-setting]').forEach(input=>input.addEventListener('input',()=>{
+      const key=input.dataset.setting;terminal[key]=Number(input.value);
+      if(key==='trade')$('sniper-size').value=terminal.trade;
+      if(key==='target')$('sniper-target').value=terminal.target;
+      if(key==='stop')$('sniper-stop').value=terminal.stop;
+      saveTerminal();renderTerminal();updatePositions();
+    }));
+    $('sniper-auto-toggle').addEventListener('click',()=>{
+      terminal.auto=!terminal.auto;saveTerminal();renderTerminal();
+      logTerminal('SYS',terminal.auto?'Automatic demo enabled':'Automatic demo paused','New eligible launches will be simulated only while enabled.');
+    });
+    renderTerminal();
+  }
+  function renderTerminal(){
+    const panel=$('sniper-terminal');if(!panel)return;
+    const stats=terminalStats();
+    const set=(id,value)=>{const n=$(id);if(n)n.textContent=value;};
+    set('sniper-equity',fmt(stats.equity,4)+' SOL');set('sniper-available',fmt(stats.available,4)+' SOL');
+    set('sniper-realized',(stats.realized>=0?'+':'')+fmt(stats.realized,4)+' SOL');
+    set('sniper-open',state.positions.filter(p=>p.status==='open').length+' / '+(stats.floating>=0?'+':'')+fmt(stats.floating,4)+' SOL');
+    const realized=$('sniper-realized');if(realized)realized.style.color=stats.realized>=0?'#75f0b4':'#ff9c9c';
+    const toggle=$('sniper-auto-toggle');if(toggle){toggle.textContent='AUTO MODE: '+(terminal.auto?'ON':'OFF');toggle.classList.toggle('off',!terminal.auto);}
+    panel.querySelectorAll('[data-setting]').forEach(input=>{input.value=terminal[input.dataset.setting];});
+    panel.querySelectorAll('[data-out]').forEach(out=>{const k=out.dataset.out;out.textContent=k==='capital'?fmt(terminal[k],2)+' SOL':k==='trade'?fmt(terminal[k],3)+' SOL':k==='minLiquidity'?'
+    readStore();activeStorageKey=storageKey();loadTerminal();translate();ensureTerminal();
+    $('sniper-refresh').addEventListener('click',refreshFeed);
+    $('sniper-clear').addEventListener('click',()=>{state.positions=[];saveStore();clearServerHistory();renderPositions();$('sniper-feed-status').textContent=t('cleared');});
+    ['sniper-network','sniper-priority','sniper-dex','sniper-slip'].forEach(id=>$(id).addEventListener('change',updatePositions));
+    refreshFeed();if(authToken())syncFromServer().then(updatePositions);else{updateSyncStatus('loginToSync');updatePositions();}
+    state.timer=window.setInterval(()=>{checkAccountChange();refreshFeed();},10000);
+    state.positionTimer=window.setInterval(()=>{updatePositions();},15000);
+    document.addEventListener('zombcash:languagechange',translate);
+    document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer().then(updatePositions);});
+    document.addEventListener('click',event=>{if(event.target&&event.target.closest&&event.target.closest('#survivor-logout'))Promise.resolve().then(checkAccountChange);});
+    window.addEventListener('storage',event=>{if(event.key===TOKEN_KEY||event.key===PROFILE_KEY){if(!checkAccountChange()&&authToken())syncFromServer().then(updatePositions);}});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();+fmt(terminal[k],0):fmt(terminal[k],1)+'%';});
+    const log=$('sniper-terminal-log');if(log){log.replaceChildren();if(!eventLog.length)log.append(make('p','sniper-muted','No events yet. Enable AUTO MODE to start paper simulation.'));eventLog.slice(0,20).forEach(e=>{const row=make('div','sniper-terminal-event');row.append(make('small', '',new Date(e.at).toLocaleTimeString()));row.append(make('strong','',e.title+' · '+e.detail));row.append(make('em','',e.kind));log.append(row);});}
+  }
+  function runAutoEntry(){
+    if(!terminal.auto)return;
+    const open=state.positions.filter(p=>p.status==='open');
+    if(open.length>=1)return;
+    const stats=terminalStats();if(stats.available<terminal.trade)return;
+    const candidate=state.candidates.find(c=>c.priceNative>0&&c.liquidityUsd>=terminal.minLiquidity&&!state.positions.some(p=>p.address===c.address&&Date.now()-(p.openedAt||0)<3600000));
+    if(!candidate)return;
+    const prior=$('sniper-size').value;$('sniper-size').value=String(terminal.trade);
+    openPaper(candidate,true);$('sniper-size').value=prior;
+  }
+
+  function init(){
+    readStore();activeStorageKey=storageKey();translate();
+    $('sniper-refresh').addEventListener('click',refreshFeed);
+    $('sniper-clear').addEventListener('click',()=>{state.positions=[];saveStore();clearServerHistory();renderPositions();$('sniper-feed-status').textContent=t('cleared');});
+    ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
+    refreshFeed();if(authToken())syncFromServer().then(updatePositions);else{updateSyncStatus('loginToSync');updatePositions();}
+    state.timer=window.setInterval(()=>{checkAccountChange();refreshFeed();},10000);
+    state.positionTimer=window.setInterval(()=>{updatePositions();},30000);
+    document.addEventListener('zombcash:languagechange',translate);
+    document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer().then(updatePositions);});
+    document.addEventListener('click',event=>{if(event.target&&event.target.closest&&event.target.closest('#survivor-logout'))Promise.resolve().then(checkAccountChange);});
+    window.addEventListener('storage',event=>{if(event.key===TOKEN_KEY||event.key===PROFILE_KEY){if(!checkAccountChange()&&authToken())syncFromServer().then(updatePositions);}});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();+fmt(item.liquidityUsd,0));if(!automatic)alert(t('buyOk'));
   }
   function closePaper(id,reason){
     const p=state.positions.find(x=>x.id===id&&x.status==='open');if(!p)return;
@@ -303,6 +471,132 @@
     saveStore();renderPositions();
     for(const p of open)await persistPosition(p);
   }
+
+  const TERMINAL_KEY='zombcash_sniper_terminal_v1';
+  const terminalDefaults={capital:1,trade:0.01,target:10,stop:20,minLiquidity:5000,auto:false};
+  let terminal={...terminalDefaults};
+  let eventLog=[];
+  function loadTerminal(){
+    try{terminal={...terminalDefaults,...JSON.parse(localStorage.getItem(TERMINAL_KEY)||'{}')};}catch(_){terminal={...terminalDefaults};}
+    terminal.capital=Math.max(0.05,Math.min(100,Number(terminal.capital)||1));
+    terminal.trade=Math.max(0.001,Math.min(0.05,Number(terminal.trade)||0.01));
+    terminal.target=Math.max(0.1,Math.min(500,Number(terminal.target)||10));
+    terminal.stop=Math.max(0,Math.min(99,Number(terminal.stop)||20));
+    terminal.minLiquidity=Math.max(0,Math.min(10000000,Number(terminal.minLiquidity)||5000));
+    terminal.auto=terminal.auto===true;
+    try{eventLog=JSON.parse(localStorage.getItem(TERMINAL_KEY+'_events')||'[]').slice(0,40);}catch(_){eventLog=[];}
+  }
+  function saveTerminal(){try{localStorage.setItem(TERMINAL_KEY,JSON.stringify(terminal));localStorage.setItem(TERMINAL_KEY+'_events',JSON.stringify(eventLog.slice(0,40)));}catch(_){}}
+  function logTerminal(kind,title,detail){
+    eventLog.unshift({at:Date.now(),kind,title,detail});eventLog=eventLog.slice(0,40);saveTerminal();renderTerminal();
+  }
+  function terminalStats(){
+    const realized=state.positions.filter(p=>p.status==='closed').reduce((a,p)=>a+(Number(p.netPnl)||0),0);
+    const invested=state.positions.filter(p=>p.status==='open').reduce((a,p)=>a+(Number(p.buySol)||0),0);
+    const floating=state.positions.filter(p=>p.status==='open').reduce((a,p)=>a+(Number(p.netPnl)||0),0);
+    return {realized,invested,floating,available:terminal.capital+realized-invested,equity:terminal.capital+realized+floating};
+  }
+  function ensureTerminal(){
+    if($('sniper-terminal'))return;
+    const root=$('.sniper-demo');if(!root)return;
+    const style=make('style','');
+    style.textContent=`
+      .sniper-terminal{margin:18px 0 24px;padding:clamp(14px,2.5vw,22px);border:1px solid rgba(126,220,184,.32);background:radial-gradient(ellipse at 10% 0%,rgba(42,116,91,.22),transparent 45%),linear-gradient(145deg,#0b1716,#090e12);box-shadow:0 0 32px rgba(40,190,140,.08);color:#e6f4ed}
+      .sniper-terminal-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+      .sniper-terminal-stat{padding:13px;border:1px solid #78998b35;background:#07100f;border-radius:9px;min-width:0}
+      .sniper-terminal-stat small{display:block;color:#8da99c;font-size:10px;letter-spacing:.09em;text-transform:uppercase}
+      .sniper-terminal-stat strong{display:block;margin-top:7px;font:700 clamp(17px,2.4vw,25px) ui-monospace,monospace;color:#b7f4d2;overflow-wrap:anywhere}
+      .sniper-terminal-stat.profit strong{color:#75f0b4;text-shadow:0 0 14px #4ee59b55}
+      .sniper-terminal-stat.loss strong{color:#ff9c9c}
+      .sniper-terminal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+      .sniper-terminal-head b{font:700 12px Orbitron,system-ui;letter-spacing:.13em;color:#b7e9d0}
+      .sniper-terminal-toggle{border:1px solid #6bd6a4;background:#123d30;color:#c9ffe4;padding:10px 15px;border-radius:7px;font-weight:800;cursor:pointer}
+      .sniper-terminal-toggle.off{border-color:#66766f;background:#18201e;color:#aab8b1}
+      .sniper-terminal-settings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}
+      .sniper-terminal-setting{padding:10px;border:1px solid #78998b2b;border-radius:8px;background:#0b1413}
+      .sniper-terminal-setting label{display:flex;justify-content:space-between;gap:8px;color:#b5c9bf;font-size:11px;margin-bottom:9px}
+      .sniper-terminal-setting output{color:#9bf0c3;font-weight:800;font-variant-numeric:tabular-nums}
+      .sniper-terminal-setting input{accent-color:#69dba5;min-height:18px;padding:0;background:transparent;border:0}
+      .sniper-terminal-log{max-height:220px;overflow:auto;border-top:1px solid #78998b35;margin-top:14px}
+      .sniper-terminal-event{display:grid;grid-template-columns:58px minmax(0,1fr) auto;gap:9px;align-items:center;padding:10px 2px;border-bottom:1px solid #78998b22;font-size:12px}
+      .sniper-terminal-event small{color:#82988e}.sniper-terminal-event strong{color:#dcebe3}.sniper-terminal-event em{font-style:normal;color:#8de9b8;font-weight:700}
+      .sniper-terminal-pulse{display:inline-block;width:7px;height:7px;border-radius:50%;background:#65e5a3;box-shadow:0 0 12px #65e5a3;animation:sniperPulse 1.5s infinite}
+      @keyframes sniperPulse{50%{opacity:.35;box-shadow:0 0 2px #65e5a3}}
+      @media(max-width:760px){.sniper-terminal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sniper-terminal-settings{grid-template-columns:repeat(2,minmax(0,1fr))}.sniper-terminal-event{grid-template-columns:48px minmax(0,1fr)}.sniper-terminal-event em{grid-column:2}}
+      @media(max-width:430px){.sniper-terminal-settings{grid-template-columns:1fr}}
+      @media(prefers-reduced-motion:reduce){.sniper-terminal-pulse{animation:none}}
+    `;
+    const panel=make('section','sniper-terminal');panel.id='sniper-terminal';
+    panel.innerHTML=`
+      <div class="sniper-terminal-head"><b><span class="sniper-terminal-pulse"></span> ZOMBIE SNIPER / SIMULATION CONTROL</b><button type="button" class="sniper-terminal-toggle off" id="sniper-auto-toggle">AUTO MODE: OFF</button></div>
+      <div class="sniper-terminal-grid">
+        <div class="sniper-terminal-stat"><small>Virtual equity</small><strong id="sniper-equity">1.0000 SOL</strong></div>
+        <div class="sniper-terminal-stat"><small>Available balance</small><strong id="sniper-available">1.0000 SOL</strong></div>
+        <div class="sniper-terminal-stat profit"><small>Realized P/L</small><strong id="sniper-realized">+0.0000 SOL</strong></div>
+        <div class="sniper-terminal-stat"><small>Open positions / floating</small><strong id="sniper-open">0 / 0.0000</strong></div>
+      </div>
+      <div class="sniper-terminal-settings" id="sniper-terminal-settings">
+        <div class="sniper-terminal-setting"><label>Starting capital <output data-out="capital">1 SOL</output></label><input type="range" min="0.05" max="20" step="0.05" data-setting="capital"></div>
+        <div class="sniper-terminal-setting"><label>Trade size <output data-out="trade">0.01 SOL</output></label><input type="range" min="0.001" max="0.05" step="0.001" data-setting="trade"></div>
+        <div class="sniper-terminal-setting"><label>Net take profit <output data-out="target">10%</output></label><input type="range" min="0.5" max="100" step="0.5" data-setting="target"></div>
+        <div class="sniper-terminal-setting"><label>Net stop loss <output data-out="stop">20%</output></label><input type="range" min="0" max="80" step="1" data-setting="stop"></div>
+        <div class="sniper-terminal-setting"><label>Minimum liquidity <output data-out="minLiquidity">$5,000</output></label><input type="range" min="0" max="100000" step="1000" data-setting="minLiquidity"></div>
+      </div>
+      <div class="sniper-muted">All settings are editable for testing. Auto mode only simulates trades with virtual SOL; it never connects a wallet or sends transactions.</div>
+      <div class="sniper-section-title">LIVE SIMULATION EVENT LOG</div><div class="sniper-terminal-log" id="sniper-terminal-log" aria-live="polite"></div>`;
+    const intro=root.querySelector('[data-sniper-i18n="intro"]');
+    if(intro)intro.insertAdjacentElement('afterend',style),intro.insertAdjacentElement('afterend',panel);else root.prepend(style,panel);
+    panel.querySelectorAll('[data-setting]').forEach(input=>input.addEventListener('input',()=>{
+      const key=input.dataset.setting;terminal[key]=Number(input.value);
+      if(key==='trade')$('sniper-size').value=terminal.trade;
+      if(key==='target')$('sniper-target').value=terminal.target;
+      if(key==='stop')$('sniper-stop').value=terminal.stop;
+      saveTerminal();renderTerminal();updatePositions();
+    }));
+    $('sniper-auto-toggle').addEventListener('click',()=>{
+      terminal.auto=!terminal.auto;saveTerminal();renderTerminal();
+      logTerminal('SYS',terminal.auto?'Automatic demo enabled':'Automatic demo paused','New eligible launches will be simulated only while enabled.');
+    });
+    renderTerminal();
+  }
+  function renderTerminal(){
+    const panel=$('sniper-terminal');if(!panel)return;
+    const stats=terminalStats();
+    const set=(id,value)=>{const n=$(id);if(n)n.textContent=value;};
+    set('sniper-equity',fmt(stats.equity,4)+' SOL');set('sniper-available',fmt(stats.available,4)+' SOL');
+    set('sniper-realized',(stats.realized>=0?'+':'')+fmt(stats.realized,4)+' SOL');
+    set('sniper-open',state.positions.filter(p=>p.status==='open').length+' / '+(stats.floating>=0?'+':'')+fmt(stats.floating,4)+' SOL');
+    const realized=$('sniper-realized');if(realized)realized.style.color=stats.realized>=0?'#75f0b4':'#ff9c9c';
+    const toggle=$('sniper-auto-toggle');if(toggle){toggle.textContent='AUTO MODE: '+(terminal.auto?'ON':'OFF');toggle.classList.toggle('off',!terminal.auto);}
+    panel.querySelectorAll('[data-setting]').forEach(input=>{input.value=terminal[input.dataset.setting];});
+    panel.querySelectorAll('[data-out]').forEach(out=>{const k=out.dataset.out;out.textContent=k==='capital'?fmt(terminal[k],2)+' SOL':k==='trade'?fmt(terminal[k],3)+' SOL':k==='minLiquidity'?'
+    readStore();activeStorageKey=storageKey();loadTerminal();translate();ensureTerminal();
+    $('sniper-refresh').addEventListener('click',refreshFeed);
+    $('sniper-clear').addEventListener('click',()=>{state.positions=[];saveStore();clearServerHistory();renderPositions();$('sniper-feed-status').textContent=t('cleared');});
+    ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
+    refreshFeed();if(authToken())syncFromServer().then(updatePositions);else{updateSyncStatus('loginToSync');updatePositions();}
+    state.timer=window.setInterval(()=>{checkAccountChange();refreshFeed();},10000);
+    state.positionTimer=window.setInterval(()=>{updatePositions();},30000);
+    document.addEventListener('zombcash:languagechange',translate);
+    document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer().then(updatePositions);});
+    document.addEventListener('click',event=>{if(event.target&&event.target.closest&&event.target.closest('#survivor-logout'))Promise.resolve().then(checkAccountChange);});
+    window.addEventListener('storage',event=>{if(event.key===TOKEN_KEY||event.key===PROFILE_KEY){if(!checkAccountChange()&&authToken())syncFromServer().then(updatePositions);}});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();+fmt(terminal[k],0):fmt(terminal[k],1)+'%';});
+    const log=$('sniper-terminal-log');if(log){log.replaceChildren();if(!eventLog.length)log.append(make('p','sniper-muted','No events yet. Enable AUTO MODE to start paper simulation.'));eventLog.slice(0,20).forEach(e=>{const row=make('div','sniper-terminal-event');row.append(make('small', '',new Date(e.at).toLocaleTimeString()));row.append(make('strong','',e.title+' · '+e.detail));row.append(make('em','',e.kind));log.append(row);});}
+  }
+  function runAutoEntry(){
+    if(!terminal.auto)return;
+    const open=state.positions.filter(p=>p.status==='open');
+    if(open.length>=1)return;
+    const stats=terminalStats();if(stats.available<terminal.trade)return;
+    const candidate=state.candidates.find(c=>c.priceNative>0&&c.liquidityUsd>=terminal.minLiquidity&&!state.positions.some(p=>p.address===c.address&&Date.now()-(p.openedAt||0)<3600000));
+    if(!candidate)return;
+    const prior=$('sniper-size').value;$('sniper-size').value=String(terminal.trade);
+    openPaper(candidate,true);$('sniper-size').value=prior;
+  }
+
   function init(){
     readStore();activeStorageKey=storageKey();translate();
     $('sniper-refresh').addEventListener('click',refreshFeed);
