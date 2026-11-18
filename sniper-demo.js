@@ -762,12 +762,17 @@
       // native Fullscreen API: it hides Chrome's tabs/address bar and Windows UI.
       mountDashboardOverlay();
       root.classList.add('zs-fullscreen');
+      // Pin the app to the actual browser content viewport. Inline important
+      // styles avoid inherited page-panel sizing and competing stylesheet rules.
+      const viewportStyles={position:'fixed',top:'0px',right:'0px',bottom:'0px',left:'0px',width:'auto',height:'auto',minHeight:'0px',maxHeight:'none',margin:'0px',boxSizing:'border-box',zIndex:'2147483600',overflow:'hidden'};
+      Object.entries(viewportStyles).forEach(([key,value])=>root.style.setProperty(key,value,'important'));
       root.dataset.nativeFullscreen='0';
       syncFullscreenButton();
     }
     function exitDashboardFullscreen(){
       root.dataset.nativeFullscreen='0';
       root.classList.remove('zs-fullscreen');
+      ['position','top','right','bottom','left','width','height','min-height','max-height','margin','box-sizing','z-index','overflow'].forEach(key=>root.style.removeProperty(key));
       syncFullscreenButton();
       restoreDashboardToPage();
     }
