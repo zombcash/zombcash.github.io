@@ -116,13 +116,16 @@
     }
     const label = document.createElement('p'); label.textContent = t('connect'); bodyNode.append(label, widgetNode);
     statusNode.textContent = '';
+    renderLoginOptions();
+  }
+  function renderLoginOptions() {
     widgetNode.innerHTML = '';
     const button = document.createElement('button');
     button.type = 'button';
     button.textContent = t('connect');
     button.addEventListener('click', beginBotLogin);
     widgetNode.append(button);
-    // QR login option (backup method)
+    // QR login option (backup method); always restore it after an expired challenge.
     const qrButton = document.createElement('button');
     qrButton.type = 'button';
     qrButton.textContent = t('qrLogin');
@@ -176,8 +179,8 @@
         const statusResponse = await fetch(API + '/api/auth/telegram/status?nonce=' + encodeURIComponent(data.nonce), {cache:'no-store'});
         const statusData = await statusResponse.json().catch(() => ({}));
         if (statusResponse.status === 410) {
+          renderLoginOptions();
           statusNode.textContent = t('error');
-          widgetNode.innerHTML = '';
           isBusy = false;
           return;
         }
@@ -193,12 +196,12 @@
           return;
         }
       }
+      renderLoginOptions();
       statusNode.textContent = t('error');
-      widgetNode.innerHTML = '';
       isBusy = false;
     } catch (_) {
+      renderLoginOptions();
       statusNode.textContent = t('error');
-      widgetNode.innerHTML = '';
       isBusy = false;
     }
   }
