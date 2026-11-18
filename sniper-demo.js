@@ -201,7 +201,7 @@
       const graph=make('div','zs-position-chart');graph.append(sparkline(p.priceHistory&&p.priceHistory.length?p.priceHistory:[p.entryPrice,p.lastPrice||p.entryPrice]));
       row.append(head,detail,graph);
       if(p.status==='open'){const close=make('button','sniper-action sniper-close',dcopy().close||t('manualClose'));close.type='button';close.addEventListener('click',()=>closePaper(p.id,'manual'));row.append(close);}
-      else if(p.exitReason)row.append(make('small','sniper-muted',p.exitReason==='target'?t('targetHit'):p.exitReason==='stop'?t('stopHit'):t('closed')));
+      else if(p.exitReason){const reasons={stagnant:state.lang==='ru'?'Нет движения более минуты — переход к следующему запуску':'No movement for over a minute — rotating to next launch',target:t('targetHit'),stop:t('stopHit')};row.append(make('small','sniper-muted',reasons[p.exitReason]||t('closed')));}
       host.append(row);
     });
     renderStats();
@@ -277,7 +277,7 @@
     const used=state.positions.filter(x=>x.status==='open').reduce((a,x)=>a+(Number(x.buySol)||0),0);
     if(buySol+used>Number(terminal.capital||10)+closed){if(!automatic)alert(state.lang==='ru'?'Недостаточно виртуального баланса.':'Insufficient virtual balance.');return;}
     const quantity=buySol*(1-c.dex)*(1-c.slip)/item.priceNative;
-    const p={id:makeUuid(),address:item.address,symbol:item.symbol,name:item.name,buySol,entryPrice:item.priceNative,lastPrice:item.priceNative,quantity,openedAt:Date.now(),status:'open',netPnl:0,netPct:0,exitReason:null,priceHistory:[item.priceNative],_ownerTelegramId:telegramId()||'guest'};
+    const now=Date.now();const p={id:makeUuid(),address:item.address,symbol:item.symbol,name:item.name,buySol,entryPrice:item.priceNative,lastPrice:item.priceNative,lastObservedPrice:item.priceNative,lastMovementAt:now,lastQuoteAt:now,quantity,openedAt:now,status:'open',netPnl:0,netPct:0,exitReason:null,priceHistory:[item.priceNative],_ownerTelegramId:telegramId()||'guest'};
     state.positions.push(p);saveStore();renderPositions();renderStats();persistPosition(p);logEvent('BUY',item.symbol,(automatic?'Auto demo entry':'Manual demo entry')+' · '+fmt(buySol,4)+' SOL');if(!automatic)alert(t('buyOk'));
   }
   function closePaper(id,reason){
@@ -288,22 +288,35 @@
   }
   async function updatePositions(){
     const open=state.positions.filter(p=>p.status==='open');
+    let rotated=false;
     for(const p of open){
       try{
         const pair=await fetchPairs(p.address);
         if(!pair)continue;
-        p.lastPrice=Number(pair.priceNative)||p.lastPrice;
-        p.priceHistory=Array.isArray(p.priceHistory)?p.priceHistory:[];p.priceHistory.push(p.lastPrice);p.priceHistory=p.priceHistory.slice(-48);
-        const m=metrics(p,p.lastPrice);
-        p.netPnl=m.net;p.netPct=m.pct;
+        const now=Date.now(),price=Number(pair.priceNative);
+        if(!Number.isFinite(price)||price<=0)continue;
+        p.lastQuoteAt=now;
+        const previous=Number(p.lastObservedPrice||p.lastPrice||p.entryPrice);
+        const movePct=previous>0?Math.abs((price-previous)/previous*100):0;
+        const threshold=Math.max(0.001,Number($('sniper-min-move')&&$('sniper-min-move').value)||0.2);
+        if(movePct>=threshold){p.lastMovementAt=now;p.lastObservedPrice=price;}
+        p.lastPrice=price;
+        p.priceHistory=Array.isArray(p.priceHistory)?p.priceHistory:[];p.priceHistory.push(price);p.priceHistory=p.priceHistory.slice(-48);
+        const m=metrics(p,price);p.netPnl=m.net;p.netPct=m.pct;
         const target=Number($('sniper-target').value)||10;
         const stop=Number($('sniper-stop').value)||0;
-        if(m.pct>=target){p.status='closed';p.closedAt=Date.now();p.exitReason='target';logEvent('SELL',p.symbol,'Net target reached · '+fmt(m.pct,2)+'%');}
-        else if(stop>0&&m.pct<=-stop){p.status='closed';p.closedAt=Date.now();p.exitReason='stop';logEvent('SELL',p.symbol,'Net stop-loss reached · '+fmt(m.pct,2)+'%');}
+        const idleSeconds=Math.max(15,Number($('sniper-idle-timeout')&&$('sniper-idle-timeout').value)||60);
+        if(m.pct>=target){p.status='closed';p.closedAt=now;p.exitReason='target';logEvent('SELL',p.symbol,'Net target reached · '+fmt(m.pct,2)+'%');rotated=true;}
+        else if(stop>0&&m.pct<=-stop){p.status='closed';p.closedAt=now;p.exitReason='stop';logEvent('SELL',p.symbol,'Net stop-loss reached · '+fmt(m.pct,2)+'%');rotated=true;}
+        else if(now-Number(p.lastMovementAt||p.openedAt)>=idleSeconds*1000){
+          p.status='closed';p.closedAt=now;p.exitReason='stagnant';
+          logEvent('ROTATE',p.symbol,'No price movement ≥ '+threshold+'% for '+idleSeconds+'s; moving to next launch');rotated=true;
+        }
       }catch(_){}
     }
     saveStore();renderPositions();renderStats();
     for(const p of open)await persistPosition(p);
+    if(rotated&&terminal.auto){terminal.lastAuto=0;maybeAutoEnter();}
   }
 
   const DASH_COPY = {
@@ -317,10 +330,10 @@
     tr:{nav:['Sniper','İstatistik','Geçmiş','Ayarlar','Yardım'],balance:'Sanal bakiye',profit:'Toplam K/Z',trades:'İşlemler',wins:'Başarı oranı',active:'Açık pozisyonlar',settings:'SİMÜLASYON AYARLARI',capital:'Başlangıç sermayesi (SOL)',minliq:'Minimum likidite (USD)',maxsize:'Maksimum işlem boyutu (SOL)',autopilot:'OTOMATİK SNIPER',armed:'OTOMATİK SNIPER AKTİF',paused:'OTOMATİK SNIPER DURAKLATILDI',start:'BAŞLAT',pause:'DURAKLAT',stop:'DURDUR',launches:'CANLI TOKEN AKIŞI',journal:'SİSTEM GÜNLÜĞÜ',empty:'Henüz olay yok',chart:'POZİSYON GRAFİĞİ',demo:'DEMO MODU · PAPER TRADING',hint:'Tüm ayarlar sanaldır ve düzenlenebilir. Cüzdan veya gerçek işlem yoktur.',open:'AÇIK',closed:'KAPALI',entry:'Giriş',current:'Güncel',net:'Net',close:'Demo pozisyonunu kapat'},
     hi:{nav:['स्नाइपर','आँकड़े','इतिहास','सेटिंग्स','मदद'],balance:'वर्चुअल बैलेंस',profit:'कुल P/L',trades:'ट्रेड',wins:'सफलता दर',active:'खुली पोज़िशन',settings:'सिमुलेशन सेटिंग्स',capital:'शुरुआती पूँजी (SOL)',minliq:'न्यूनतम लिक्विडिटी (USD)',maxsize:'अधिकतम ट्रेड आकार (SOL)',autopilot:'ऑटो स्नाइपर',armed:'ऑटो स्नाइपर सक्रिय',paused:'ऑटो स्नाइपर रुका हुआ',start:'शुरू',pause:'रोकें',stop:'बंद',launches:'लाइव टोकन लॉन्च',journal:'सिस्टम लॉग',empty:'अभी कोई इवेंट नहीं',chart:'पोज़िशन प्रदर्शन',demo:'डेमो मोड · PAPER TRADING',hint:'सभी सेटिंग्स वर्चुअल और संपादन योग्य हैं। कोई वॉलेट या वास्तविक लेनदेन नहीं।',open:'खुली',closed:'बंद',entry:'एंट्री',current:'वर्तमान',net:'नेट',close:'डेमो पोज़िशन बंद करें'}
   };
-  const terminal={auto:false,capital:10,minLiquidity:5000,maxTradeSize:0.05,logs:[],seen:[],lastAuto:0};
+  const terminal={auto:false,capital:10,minLiquidity:5000,maxTradeSize:0.05,idleTimeout:60,minMovePct:0.2,logs:[],seen:[],lastAuto:0};
   const TERMINAL_KEY='zombcash_sniper_terminal_v1';
   const dcopy=()=>DASH_COPY[state.lang]||DASH_COPY.en;
-  function saveTerminal(){try{terminal.settings={};['sniper-size','sniper-target','sniper-stop','sniper-network','sniper-priority','sniper-dex','sniper-slip'].forEach(id=>{const el=$(id);if(el)terminal.settings[id]=el.value;});localStorage.setItem(TERMINAL_KEY,JSON.stringify(terminal));}catch(_){}}
+  function saveTerminal(){try{terminal.settings={};['sniper-size','sniper-target','sniper-stop','sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-idle-timeout','sniper-min-move'].forEach(id=>{const el=$(id);if(el)terminal.settings[id]=el.value;});localStorage.setItem(TERMINAL_KEY,JSON.stringify(terminal));}catch(_){}}
   function loadTerminal(){try{const v=JSON.parse(localStorage.getItem(TERMINAL_KEY)||'null');if(v&&typeof v==='object'){Object.assign(terminal,v);if(v.settings)Object.keys(v.settings).forEach(id=>{const el=$(id);if(el)el.value=v.settings[id];});}}catch(_){}}
   function logEvent(kind,symbol,detail){terminal.logs.unshift({at:Date.now(),kind,symbol:symbol||'SYSTEM',detail:detail||''});terminal.logs=terminal.logs.slice(0,18);saveTerminal();renderLog();}
   function dashNode(tag,cls,txt){const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n;}
@@ -336,7 +349,7 @@
     const input=dashNode('input','zs-number');input.id=id;input.type='number';input.min=min;input.max=max;input.step=step;input.value=value;
     field.querySelector('label').htmlFor=id;
     if(range){const slider=dashNode('input','zs-range');slider.type='range';slider.min=min;slider.max=max;slider.step=step;slider.value=value;slider.addEventListener('input',()=>{input.value=slider.value;input.dispatchEvent(new Event('change',{bubbles:true}));});input.addEventListener('input',()=>slider.value=input.value);field.append(slider);}
-    input.addEventListener('change',()=>{if(id==='sniper-capital')terminal.capital=Math.max(0,Number(input.value)||0);if(id==='sniper-liquidity')terminal.minLiquidity=Math.max(0,Number(input.value)||0);if(id==='sniper-max-size'){terminal.maxTradeSize=Math.max(0.001,Math.min(10,Number(input.value)||0.05));const size=$('sniper-size');if(size){size.max=terminal.maxTradeSize;const slider=size.parentElement&&size.parentElement.querySelector('.zs-range');if(slider)slider.max=terminal.maxTradeSize;if(Number(size.value)>terminal.maxTradeSize){size.value=terminal.maxTradeSize;if(slider)slider.value=size.value;}}}saveTerminal();renderStats();});
+    input.addEventListener('change',()=>{if(id==='sniper-capital')terminal.capital=Math.max(0,Number(input.value)||0);if(id==='sniper-liquidity')terminal.minLiquidity=Math.max(0,Number(input.value)||0);if(id==='sniper-idle-timeout')terminal.idleTimeout=Math.max(15,Number(input.value)||60);if(id==='sniper-min-move')terminal.minMovePct=Math.max(0.05,Number(input.value)||0.2);if(id==='sniper-max-size'){terminal.maxTradeSize=Math.max(0.001,Math.min(10,Number(input.value)||0.05));const size=$('sniper-size');if(size){size.max=terminal.maxTradeSize;const slider=size.parentElement&&size.parentElement.querySelector('.zs-range');if(slider)slider.max=terminal.maxTradeSize;if(Number(size.value)>terminal.maxTradeSize){size.value=terminal.maxTradeSize;if(slider)slider.value=size.value;}}}saveTerminal();renderStats();});
     field.append(input);host.append(field);return field;
   }
   function sparkline(values){
@@ -380,7 +393,7 @@
     renderStats();renderLog();
   }
   function maybeAutoEnter(){
-    if(!terminal.auto||state.positions.some(p=>p.status==='open')||Date.now()-terminal.lastAuto<90000)return;
+    if(!terminal.auto||state.positions.some(p=>p.status==='open'))return;
     const item=state.candidates.find(c=>c.source==='pumpportal'&&c.priceNative>0&&Number(c.liquidityUsd)>=Number(terminal.minLiquidity||0)&&!terminal.seen.includes(c.address));
     if(!item)return;
     terminal.seen.push(item.address);terminal.seen=terminal.seen.slice(-250);terminal.lastAuto=Date.now();saveTerminal();
@@ -444,6 +457,12 @@
     @media(max-width:760px){.zs-fullscreen{overflow:auto!important;display:block!important}.zs-fullscreen .zs-layout{height:auto;grid-template-columns:1fr}.zs-fullscreen .zs-right{min-height:340px}.zs-fullscreen .zs-panel{margin-bottom:8px}.zs-fullscreen .zs-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.zs-fullscreen .zs-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.zs-fullscreen .zs-log{max-height:140px}}
     @media(max-height:720px) and (min-width:761px){.zs-fullscreen{padding:6px 10px!important;grid-template-rows:auto auto auto minmax(0,1fr) auto!important}.zs-fullscreen .zs-portrait{height:54px}.zs-fullscreen .zs-core{min-height:80px;width:94px}.zs-fullscreen .zs-chart{height:48px}.zs-fullscreen .zs-kpi{padding:4px 7px}.zs-fullscreen .zs-field label{font-size:9px}}
 
+    .zs-positions .sniper-position{grid-template-columns:minmax(0,1fr)!important;align-items:start!important;gap:6px!important;padding:12px 4px!important}
+    .zs-positions .sniper-position-head{display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:space-between!important;gap:5px 12px!important;min-width:0!important}
+    .zs-positions .sniper-position-head strong{min-width:0!important;overflow-wrap:anywhere!important;font-size:12px!important;line-height:1.4!important}
+    .zs-positions .sniper-position-detail{font-size:10px!important;line-height:1.5!important;overflow-wrap:anywhere!important;color:#bfc9bf!important}
+    .zs-positions .zs-position-chart{width:100%!important;max-height:42px!important;overflow:hidden!important}
+    .zs-positions .zs-position-chart .zs-spark{width:100%!important;height:38px!important}
     /* Central trading cockpit v3 */
     .zs-center{display:flex!important;flex-direction:column!important;gap:9px!important;min-height:0!important;overflow:hidden!important;background:radial-gradient(ellipse at 50% 0%,#354237 0%,#1b251e 42%,#101713 100%)!important}
     .zs-center>.zs-center-title{flex:0 0 auto}
@@ -605,6 +624,8 @@
     addVirtualField(fieldHost,'sniper-capital',dcopy().capital,0.1,1000,0.1,terminal.capital||10);
     addVirtualField(fieldHost,'sniper-max-size',dcopy().maxsize,0.001,10,0.001,terminal.maxTradeSize||0.05);
     addVirtualField(fieldHost,'sniper-liquidity',dcopy().minliq,0,1000000,100,terminal.minLiquidity||5000);
+    addVirtualField(fieldHost,'sniper-idle-timeout',state.lang==='ru'?'ТАЙМ-АУТ БЕЗ ДВИЖЕНИЯ (СЕК.)':'NO-MOVEMENT TIMEOUT (SEC)',15,300,5,terminal.idleTimeout||60);
+    addVirtualField(fieldHost,'sniper-min-move',state.lang==='ru'?'МИН. ДВИЖЕНИЕ ЦЕНЫ (%)':'MINIMUM PRICE MOVE (%)',0.05,2,0.05,terminal.minMovePct||0.2);
     const sizeInput=$('sniper-size');if(sizeInput){sizeInput.max=terminal.maxTradeSize||0.05;const sizeSlider=sizeInput.parentElement&&sizeInput.parentElement.querySelector('.zs-range');if(sizeSlider)sizeSlider.max=sizeInput.max;}
     left.append(fieldHost,presetPanel,dashNode('p','zs-foot',dcopy().hint));
     const center=dashNode('section','zs-panel zs-center');center.id='zs-center';const centerTitle=dashNode('h3','',dcopy().autopilot);centerTitle.id='zs-center-title';center.append(centerTitle);
@@ -636,7 +657,7 @@
     ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
     refreshFeed();if(authToken())syncFromServer().then(updatePositions);else{updateSyncStatus('loginToSync');updatePositions();}
     state.timer=window.setInterval(()=>{checkAccountChange();if(!document.hidden)refreshFeed();},15000);
-    state.positionTimer=window.setInterval(()=>{if(!document.hidden)updatePositions();},20000);
+    state.positionTimer=window.setInterval(()=>{if(!document.hidden)updatePositions();},10000);
     document.addEventListener('keydown',event=>{if(event.key==='Escape'&&$('zombie-sniper-demo')?.classList.contains('zs-fullscreen')){$('zombie-sniper-demo').classList.remove('zs-fullscreen');document.body.classList.remove('zs-lock');const b=document.querySelector('.zs-expand');if(b)b.textContent='⛶ FULL SCREEN';}});
     document.addEventListener('zombcash:languagechange',()=>{detectLang();translate();if($('zs-kpis'))renderDashboardState();});
     document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer().then(updatePositions);});
