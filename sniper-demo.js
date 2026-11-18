@@ -282,9 +282,10 @@
       head.append(identity,pnl);
       const detail=make('div','zs-position-metrics');
       const metric=(label,value)=>{const cell=make('div','zs-position-metric');cell.append(make('small','',label),make('strong','',value));detail.append(cell);};
-      metric(state.lang==='ru'?'ВХОД':'ENTRY',fmt(p.entryPrice,9)+' SOL');
-      metric(state.lang==='ru'?'ТЕКУЩАЯ':'CURRENT',fmt(p.lastPrice||p.entryPrice,9)+' SOL');
-      metric('NET P/L',fmt(p.netPct||0,2)+'%');
+      metric(state.lang==='ru'?'РАЗМЕР СДЕЛКИ':'TRADE SIZE',fmt(p.buySol||0,6)+' SOL');
+      metric(state.lang==='ru'?'ЦЕНА ВХОДА':'ENTRY PRICE',fmt(p.entryPrice,9)+' SOL');
+      metric(state.lang==='ru'?'ТЕКУЩАЯ ЦЕНА':'CURRENT PRICE',fmt(p.lastPrice||p.entryPrice,9)+' SOL');
+      metric('NET P/L',((Number(p.netPnl)||0)>=0?'+':'')+fmt(p.netPnl||0,6)+' SOL ('+((Number(p.netPct)||0)>=0?'+':'')+fmt(p.netPct||0,2)+'%)');
       const contract=make('div','zs-position-contract');
       const contractLabel=make('small','',state.lang==='ru'?'КОНТРАКТ':'CONTRACT');
       const address=String(p.address||'');
@@ -612,7 +613,7 @@
     .zs-positions .zs-position-status.is-open{background:#314233!important;color:#d4e2ce!important}.zs-positions .zs-position-status.is-closed{background:#282d2a!important;color:#b8c0b8!important}
     .zs-positions .zs-position-pnl{display:block!important;position:static!important;flex:0 0 auto!important;text-align:right!important;font-size:15px!important;line-height:1.25!important;font-variant-numeric:tabular-nums!important;white-space:nowrap!important}
     .zs-positions .zs-position-pnl.is-positive{color:#b8d0ad!important}.zs-positions .zs-position-pnl.is-negative{color:#d99b9b!important}
-    .zs-positions .zs-position-metrics{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;width:100%!important;min-width:0!important}
+    .zs-positions .zs-position-metrics{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important;width:100%!important;min-width:0!important}
     .zs-positions .zs-position-metric{display:flex!important;flex-direction:column!important;gap:3px!important;min-width:0!important;padding:6px 7px!important;border:1px solid #ffffff12!important;border-radius:3px!important;background:#080e0b66!important}
     .zs-positions .zs-position-metric small{font-size:8px!important;line-height:1.2!important;letter-spacing:.08em!important;color:#9eaa9e!important}
     .zs-positions .zs-position-metric strong{font-size:10px!important;line-height:1.3!important;color:#dce4da!important;overflow-wrap:anywhere!important;font-variant-numeric:tabular-nums!important}
