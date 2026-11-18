@@ -795,7 +795,7 @@
     ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
     refreshFeed();if(authToken())syncFromServer().then(updatePositions);else{updateSyncStatus('loginToSync');updatePositions();}
     state.timer=window.setInterval(()=>{checkAccountChange();if(!document.hidden)refreshFeed();},15000);
-    state.positionTimer=window.setInterval(()=>{if(!document.hidden)updatePositions();},10000);
+    state.positionTimer=window.setInterval(()=>{if(!document.hidden){if(authToken())syncFromServer().then(updatePositions);else updatePositions();}},10000);
     document.addEventListener('keydown',event=>{if(event.key==='Escape'&&root.classList.contains('zs-fullscreen')&&!document.fullscreenElement){root.classList.remove('zs-fullscreen');root.dataset.nativeFullscreen='0';document.body.classList.remove('zs-lock');restoreDashboardToPage();const b=root.querySelector('.zs-expand');if(b)b.textContent='⛶ FULL SCREEN';}});
     document.addEventListener('zombcash:languagechange',()=>{detectLang();translate();if($('zs-kpis'))renderDashboardState();});
     document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer().then(updatePositions);});
