@@ -505,7 +505,7 @@
     // Registered users are entered by the persistent server paper engine. Do not
     // create a duplicate browser-side position for the same Mint.
     if(authToken())return;
-    if(!terminal.auto||state.positions.some(p=>p.status==='open'))return;
+    if(!terminal.auto)return; // Paper demo may hold multiple positions; virtual capital remains the only sizing limit.
     const now=Date.now();
     const item=state.candidates.find(c=>{
       if(c.source!=='pumpportal'||!c.tradeStreamingEnabled||!(c.priceNative>0)||terminal.seen.includes(c.address))return false;
