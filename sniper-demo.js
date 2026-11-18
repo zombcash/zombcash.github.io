@@ -75,7 +75,7 @@
   function readStore(){
     try {
       const value = JSON.parse(localStorage.getItem(storageKey()) || '{}');
-      state.positions = Array.isArray(value.positions) ? value.positions.slice(0,20) : [];
+      state.positions = Array.isArray(value.positions) ? value.positions.slice(0,20).map(p=>({...p,_ownerTelegramId:telegramId()||'guest'})) : [];
     } catch (_) { state.positions = []; }
   }
   function saveStore(){
@@ -83,39 +83,45 @@
   }
   function updateSyncStatus(key){state.syncStatusKey=key;const node=document.querySelector('.sniper-demo [data-sniper-i18n="saved"]');if(node)node.textContent=t(key);}
   function makeUuid(){if(window.crypto&&typeof window.crypto.randomUUID==='function')return window.crypto.randomUUID();return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);});}
-  function mapServerPosition(p){return {id:String(p.id),address:String(p.mint),symbol:String(p.symbol||'TOKEN'),name:String(p.name||''),buySol:Number(p.buySol),entryPrice:Number(p.entryPrice),lastPrice:Number(p.lastPrice),quantity:Number(p.quantity),netPnl:Number(p.netPnl||0),netPct:Number(p.netPct||0),status:p.status==='closed'?'closed':'open',exitReason:p.exitReason||null,openedAt:Number(p.openedAt)||Date.now(),closedAt:p.closedAt?Number(p.closedAt):null};}
+  function mapServerPosition(p){return {id:String(p.id),address:String(p.mint),symbol:String(p.symbol||'TOKEN'),name:String(p.name||''),buySol:Number(p.buySol),entryPrice:Number(p.entryPrice),lastPrice:Number(p.lastPrice),quantity:Number(p.quantity),netPnl:Number(p.netPnl||0),netPct:Number(p.netPct||0),status:p.status==='closed'?'closed':'open',exitReason:p.exitReason||null,openedAt:Number(p.openedAt)||Date.now(),closedAt:p.closedAt?Number(p.closedAt):null,_ownerTelegramId:telegramId()};}
   async function persistPosition(p){
-    const token=authToken();if(!token)return;
+    const token=authToken(),accountId=telegramId();
+    if(!token||!accountId||p._ownerTelegramId!==accountId)return;
+    const payload={...p};delete payload._ownerTelegramId;
     try{
-      const response=await fetch(AUTH_API+'/api/sniper/paper',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({position:p}),cache:'no-store'});
+      const response=await fetch(AUTH_API+'/api/sniper/paper',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({position:payload}),cache:'no-store'});
+      if(telegramId()!==accountId||authToken()!==token)return;
       if(response.status===401){updateSyncStatus('loginAgain');return;}
       if(!response.ok){updateSyncStatus('syncError');return;}
       const data=await response.json();if(data.position&&data.position.id)p.id=String(data.position.id);
       saveStore();updateSyncStatus('synced');
-    }catch(_){updateSyncStatus('syncError');}
+    }catch(_){if(telegramId()===accountId&&authToken()===token)updateSyncStatus('syncError');}
   }
   async function syncFromServer(){
-    const token=authToken();if(!token){updateSyncStatus('loginToSync');return;}
+    const token=authToken(),accountId=telegramId();if(!token||!accountId){updateSyncStatus('loginToSync');return;}
     try{
       const response=await fetch(AUTH_API+'/api/sniper/paper',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
+      if(telegramId()!==accountId||authToken()!==token)return;
       if(response.status===401){updateSyncStatus('loginAgain');return;}
       if(!response.ok){updateSyncStatus('syncError');return;}
       const data=await response.json();
+      if(telegramId()!==accountId||authToken()!==token)return;
       const remote=Array.isArray(data.positions)?data.positions.map(mapServerPosition):[];
       if(remote.length){state.positions=remote;saveStore();renderPositions();}
       else if(state.positions.length){for(const p of state.positions)await persistPosition(p);}
       updateSyncStatus('synced');
-    }catch(_){updateSyncStatus('syncError');}
+    }catch(_){if(telegramId()===accountId&&authToken()===token)updateSyncStatus('syncError');}
   }
   function checkAccountChange(){
     const next=storageKey();
-    if(next===activeStorageKey)return;
+    if(next===activeStorageKey)return false;
     activeStorageKey=next;state.positions=[];readStore();renderPositions();
     if(authToken())syncFromServer();else updateSyncStatus('loginToSync');
+    return true;
   }
   async function clearServerHistory(){
-    const token=authToken();if(!token)return;
-    try{const response=await fetch(AUTH_API+'/api/sniper/paper/clear',{method:'POST',headers:{'Authorization':'Bearer '+token},cache:'no-store'});if(!response.ok)updateSyncStatus(response.status===401?'loginAgain':'syncError');else updateSyncStatus('synced');}catch(_){updateSyncStatus('syncError');}
+    const token=authToken(),accountId=telegramId();if(!token||!accountId)return;
+    try{const response=await fetch(AUTH_API+'/api/sniper/paper/clear',{method:'POST',headers:{'Authorization':'Bearer '+token},cache:'no-store'});if(telegramId()!==accountId||authToken()!==token)return;if(!response.ok)updateSyncStatus(response.status===401?'loginAgain':'syncError');else updateSyncStatus('synced');}catch(_){if(telegramId()===accountId&&authToken()===token)updateSyncStatus('syncError');}
   }
   function setText(id,key){ const el=$(id); if(el) el.textContent=t(key); }
   function translate(){
@@ -230,7 +236,7 @@
     if(!item||!Number.isFinite(item.priceNative)||item.priceNative<=0){alert(t('noPair'));return;}
     const c=getCosts();
     const quantity=buySol*(1-c.dex)*(1-c.slip)/item.priceNative;
-    const p={id:makeUuid(),address:item.address,symbol:item.symbol,name:item.name,buySol,entryPrice:item.priceNative,lastPrice:item.priceNative,quantity,openedAt:Date.now(),status:'open',netPnl:0,netPct:0,exitReason:null};
+    const p={id:makeUuid(),address:item.address,symbol:item.symbol,name:item.name,buySol,entryPrice:item.priceNative,lastPrice:item.priceNative,quantity,openedAt:Date.now(),status:'open',netPnl:0,netPct:0,exitReason:null,_ownerTelegramId:telegramId()||'guest'};
     state.positions.push(p);saveStore();renderPositions();persistPosition(p);alert(t('buyOk'));
   }
   function closePaper(id,reason){
@@ -262,12 +268,12 @@
     $('sniper-refresh').addEventListener('click',refreshFeed);
     $('sniper-clear').addEventListener('click',()=>{state.positions=[];saveStore();clearServerHistory();renderPositions();$('sniper-feed-status').textContent=t('cleared');});
     ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
-    refreshFeed();updatePositions();if(authToken())syncFromServer();else updateSyncStatus('loginToSync');
+    refreshFeed();if(authToken())syncFromServer().then(updatePositions);else{updateSyncStatus('loginToSync');updatePositions();}
     state.timer=window.setInterval(()=>{checkAccountChange();refreshFeed();updatePositions();},30000);
     document.addEventListener('zombcash:languagechange',translate);
-    document.addEventListener('zombcash:survivorlogin',()=>{checkAccountChange();syncFromServer();});
+    document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer();});
     document.addEventListener('click',event=>{if(event.target&&event.target.closest&&event.target.closest('#survivor-logout'))Promise.resolve().then(checkAccountChange);});
-    window.addEventListener('storage',event=>{if(event.key===TOKEN_KEY||event.key===PROFILE_KEY)checkAccountChange();});
+    window.addEventListener('storage',event=>{if(event.key===TOKEN_KEY||event.key===PROFILE_KEY){if(!checkAccountChange()&&authToken())syncFromServer();}});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
