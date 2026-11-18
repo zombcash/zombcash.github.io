@@ -97,6 +97,28 @@
       saveStore();updateSyncStatus('synced');
     }catch(_){if(telegramId()===accountId&&authToken()===token)updateSyncStatus('syncError');}
   }
+  async function setServerPaperEnabled(enabled){
+    const token=authToken();
+    if(!token)return true; // Guest demo remains local-only.
+    try{
+      const response=await fetch(AUTH_API+'/api/sniper/settings',{
+        method:'POST',
+        headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+        body:JSON.stringify({enabled:!!enabled,mode:'paper'}),
+        cache:'no-store'
+      });
+      if(!response.ok){
+        const data=await response.json().catch(()=>({}));
+        window.alert(data.error||'Could not update server paper engine settings.');
+        return false;
+      }
+      return true;
+    }catch(_){
+      window.alert(state.lang==='ru'?'Не удалось связаться с серверным демо-снайпером.':'Could not reach the server paper engine.');
+      return false;
+    }
+  }
+
   async function refreshWalletInfo(){
     const panel=$('zs-wallet-panel');if(!panel)return;
     panel.replaceChildren();
@@ -111,6 +133,10 @@
       const response=await fetch(AUTH_API+'/api/sniper/wallet',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
       if(!response.ok)throw new Error('wallet lookup '+response.status);
       const data=await response.json(),wallet=data.wallet;
+      if(data.trading&&data.trading.mode==='paper'){
+        const serverEnabled=!!data.trading.enabled;
+        if(terminal.auto!==serverEnabled){terminal.auto=serverEnabled;saveTerminal();renderDashboardState();}
+      }
       if(!wallet||!wallet.publicKey){
         panel.append(dashNode('small','',state.lang==='ru'?'Кошелёк создаётся или временно недоступен.':'Wallet is provisioning or temporarily unavailable.'));
         return;
@@ -475,7 +501,7 @@
     openPaper(item,true);
   }
 
-  function showLaunchConfirm(){
+  async function showLaunchConfirm(){
     const n=id=>Number($(id)&&$(id).value);
     const errors=[];
     if(!(n('sniper-size')>0))errors.push('Размер сделки должен быть больше нуля.');
@@ -501,6 +527,7 @@
     
     lines.push('Запустить автоснайпер в ДЕМО-РЕЖИМЕ? Реальных транзакций не будет.');
     if(!window.confirm(lines.join('\n')))return;
+    if(!await setServerPaperEnabled(true))return;
     terminal.auto=true;saveTerminal();renderDashboardState();
     logEvent('ARMED','SYSTEM','Подтверждён paper mode · '+n('sniper-size')+' SOL');
     refreshFeed();maybeAutoEnter();
@@ -804,9 +831,9 @@
     const center=dashNode('section','zs-panel zs-center');center.id='zs-center';const centerTitle=dashNode('h3','',dcopy().autopilot);centerTitle.id='zs-center-title';center.append(centerTitle);
     const portrait=dashNode('div','zs-portrait');const pic=dashNode('img','');pic.src='/assets/zombcash-survivor-640.avif';pic.alt='ZombieCash anime survivor heroine';portrait.append(pic,dashNode('b','','$ZOMBCASH SURVIVOR'));
     const core=dashNode('div','zs-core');const coreText=dashNode('div','');coreText.append(dashNode('strong','', '◉'),dashNode('strong','', 'AUTO SNIPER'),dashNode('span','', 'PAPER ENGINE'));core.append(coreText);
-    const toggle=dashNode('button','zs-toggle',dcopy().paused);toggle.id='zs-auto-toggle';toggle.type='button';toggle.addEventListener('click',()=>{if(terminal.auto){terminal.auto=false;saveTerminal();renderDashboardState();logEvent('PAUSED','SYSTEM','Auto-entry paused');}else showLaunchConfirm();});
-    const actions=dashNode('div','zs-actions');const pause=dashNode('button','sniper-action sniper-close',dcopy().pause);pause.type='button';pause.addEventListener('click',()=>{terminal.auto=false;saveTerminal();renderDashboardState();logEvent('PAUSE','SYSTEM','Auto-entry paused; open position remains');});
-    const stop=dashNode('button','sniper-action sniper-close',dcopy().stop);stop.type='button';stop.addEventListener('click',()=>{terminal.auto=false;saveTerminal();renderDashboardState();logEvent('STOP','SYSTEM','Auto-entry stopped; no live orders exist');});actions.append(pause,stop);
+    const toggle=dashNode('button','zs-toggle',dcopy().paused);toggle.id='zs-auto-toggle';toggle.type='button';toggle.addEventListener('click',async()=>{if(terminal.auto){if(!await setServerPaperEnabled(false))return;terminal.auto=false;saveTerminal();renderDashboardState();logEvent('PAUSED','SYSTEM','Server paper engine paused; open position remains managed.');}else showLaunchConfirm();});
+    const actions=dashNode('div','zs-actions');const pause=dashNode('button','sniper-action sniper-close',dcopy().pause);pause.type='button';pause.addEventListener('click',async()=>{if(!await setServerPaperEnabled(false))return;terminal.auto=false;saveTerminal();renderDashboardState();logEvent('PAUSE','SYSTEM','Server paper engine paused; open position remains managed.');});
+    const stop=dashNode('button','sniper-action sniper-close',dcopy().stop);stop.type='button';stop.addEventListener('click',async()=>{if(!await setServerPaperEnabled(false))return;terminal.auto=false;saveTerminal();renderDashboardState();logEvent('STOP','SYSTEM','Server paper engine stopped; no live orders exist');});actions.append(pause,stop);
     const statsPanel=dashNode('div','zs-stats-extra zs-tab-hidden');statsPanel.id='zs-stats-extra';
     const statsHeading=dashNode('h3','',state.lang==='ru'?'РЕЗУЛЬТАТЫ СИМУЛЯЦИИ':'SIMULATION PERFORMANCE');
     const statsGrid=dashNode('div','zs-stat-grid');statsGrid.id='zs-stat-grid';statsPanel.append(statsHeading,statsGrid);
