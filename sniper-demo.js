@@ -495,6 +495,9 @@
     renderStats();renderLog();
   }
   function maybeAutoEnter(){
+    // Registered users are entered by the persistent server paper engine. Do not
+    // create a duplicate browser-side position for the same Mint.
+    if(authToken())return;
     if(!terminal.auto||state.positions.some(p=>p.status==='open'))return;
     const now=Date.now();
     const item=state.candidates.find(c=>{
