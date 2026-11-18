@@ -116,10 +116,14 @@
 <p class="eyebrow">SOLANA OUTBREAK INTELLIGENCE // DAILY LAUNCH RADAR</p><h2 id="soi-title">Bugünün yeni Solana lansmanları</h2><p class="muted">Keşfedilen lansmanlar, ilk 60 dakika, tanıtım ve doğrulanmış piyasa olayları için araştırma modülü. Yukarıdaki ZOMBCASH metriklerinden ayrıdır.</p>
 <div class="soi-toolbar"><div class="soi-status" aria-live="polite"><span class="soi-status-dot"></span><span id="soi-status">Günlük rapor kontrol ediliyor…</span></div>
 <div class="soi-controls" role="group" aria-label="Tüm lansmanlar"><button type="button" class="is-active" data-soi-filter="all">Tüm lansmanlar</button><button type="button" class="" data-soi-filter="no-socials">Sosyal bağlantı yok</button><button type="button" class="" data-soi-filter="promoted">Boost / reklam</button><button type="button" class="" data-soi-filter="million">$1 milyon+</button></div></div>
-<div class="soi-summary" aria-live="polite"><div class="soi-stat"><small>Bugünkü lansmanlar</small><strong id="soi-count">—</strong></div><div class="soi-stat"><small>Sosyal bağlantı bulunamadı</small><strong id="soi-no-socials">—</strong></div><div class="soi-stat"><small>Doğrulanmış tanıtım</small><strong id="soi-promoted">—</strong></div><div class="soi-stat"><small>$1 milyon piyasa değerine ulaştı</small><strong id="soi-million">—</strong></div></div>
-<div class="soi-report-meta"><span id="soi-report-date">Rapor tarihi: —</span><span id="soi-report-updated">Güncellendi: —</span><span id="soi-coverage">Kapsam: —</span></div>
-<div class="soi-table-wrap"><table class="soi-table"><thead><tr><th>Token / mint</th><th>Lansman</th><th>Piyasa değeri</th><th>Likidite</th><th>İlk 60 dk</th><th>Sinyaller</th></tr></thead><tbody id="soi-launches"><tr><td colspan="6">Doğrulanmış günlük rapor bekleniyor…</td></tr></tbody></table></div>
-<p class="soi-empty" id="soi-empty" hidden>Bu filtre için kayıt yok. Bu, lansman olmadığı anlamına gelmez; yalnızca belirtilen kaynak kapsamı içinde algılanan olaylar gösterilir.</p><p class="soi-method" id="soi-method">Veri kaynağı: bağımsız SOI toplayıcısı. Canlı toplama bağlanıp doğrulandıktan sonra rapor yayınlanır. Test veya uydurma değer gösterilmez.</p>
+<div class="soi-summary" aria-live="polite"><div class="soi-stat"><small id="soi-count-label">Launches · rolling 24h</small><strong id="soi-count">—</strong></div><div class="soi-stat"><small>Sosyal bağlantı bulunamadı</small><strong id="soi-no-socials">—</strong></div><div class="soi-stat"><small>Doğrulanmış tanıtım</small><strong id="soi-promoted">—</strong></div><div class="soi-stat"><small>$1 milyon piyasa değerine ulaştı</small><strong id="soi-million">—</strong></div></div>
+<div class="soi-summary soi-activity-summary" aria-live="polite"><div class="soi-stat"><small id="soi-buys-label">Buys · rolling 24h</small><strong id="soi-buys">—</strong></div><div class="soi-stat"><small id="soi-sells-label">Sells · rolling 24h</small><strong id="soi-sells">—</strong></div><div class="soi-stat"><small id="soi-pools-label">Pools created · rolling 24h</small><strong id="soi-pools">—</strong></div><div class="soi-stat"><small id="soi-observations-label">On-chain observations · rolling 24h</small><strong id="soi-observations">—</strong></div></div>
+<div class="soi-report-meta"><span id="soi-report-date">Rolling window: —</span><span id="soi-report-updated">Updated: —</span><span id="soi-coverage">Coverage: —</span></div>
+<div class="soi-table-wrap"><table class="soi-table"><thead><tr><th>Token / mint</th><th>Launch</th><th>Market Cap</th><th>Liquidity</th><th>First 60 min</th><th>Signals</th></tr></thead><tbody id="soi-launches"><tr><td colspan="6">Waiting for a verified rolling report…</td></tr></tbody></table></div>
+<p class="soi-empty" id="soi-empty" hidden>No records match this filter. This does not mean no launches occurred; only events detected within the stated source coverage are included.</p>
+<h3 id="soi-history-title">Daily activity history (UTC)</h3><p class="soi-method" id="soi-history-note">The history accumulates from stored observations. Missing historical coverage is not reconstructed or guessed.</p>
+<div class="soi-table-wrap"><table class="soi-table"><thead><tr id="soi-history-head"><th>Date</th><th>Launches</th><th>Pools</th><th>Buys</th><th>Sells</th><th>Unique mints</th><th>Observations</th></tr></thead><tbody id="soi-history"><tr><td colspan="7">Waiting for daily history…</td></tr></tbody></table></div>
+<p class="soi-method" id="soi-method">Veri kaynağı: bağımsız SOI toplayıcısı. Canlı toplama bağlanıp doğrulandıktan sonra rapor yayınlanır. Test veya uydurma değer gösterilmez.</p>
 <p class="soi-links"><a href="https://github.com/vovik777-beep/solana-outbreak-intelligence" target="_blank" rel="noopener noreferrer">SOI deposu ↗</a> · <a href="https://github.com/pollinations/pollinations/issues/19174" target="_blank" rel="noopener noreferrer">MCP Quest #19174 ↗</a></p></section>
 <section>
 <h2>Bağımsız piyasa verisi kaynakları</h2>
@@ -156,7 +160,7 @@
 <p>© 2026 ZombieCash</p>
 </footer>
 </main><script src="/market-data-live.js?v=20261118-i18n1" defer></script>
-<script src="/soi-launch-radar.js?v=20261118-i18n3" defer></script>
+<script src="/soi-launch-radar.js?v=20261118-rolling24h1" defer></script>
 <script src="/shared-nav.js?v=nav-main-wrap-20261104-12" defer></script>
 <script src="/language.js?v=i18n-persist-route-20261104-10" defer></script>
 </body></html>
