@@ -35,15 +35,35 @@ function toolResult(value: unknown) {
 function toolError(message: string) {
   return { content: [{ type: "text", text: message }], isError: true };
 }
-function publicState(m: any) {
+function tile(x:number,y:number){return y*W+x;}
+function buildWorld(){
+  const walls:number[]=[],crates:number[]=[],hazards:number[]=[];
+  for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){const p=tile(x,y);if(((x%5===2&&y%4!==1)||(y%5===3&&x%6===4))&&!HELI.includes(p))walls.push(p);}
+  for(let y=0;y<H;y++){const p=tile(8,y),i=walls.indexOf(p);if(i>=0)walls.splice(i,1);}
+  for(let x=0;x<W;x++){const p=tile(x,6),i=walls.indexOf(p);if(i>=0)walls.splice(i,1);}
+  for(const [x,y] of [[3,2],[5,9],[12,3],[14,10],[2,11],[10,8],[15,5],[7,3],[11,12],[16,8]]){const p=tile(x,y);if(!walls.includes(p)&&!HELI.includes(p))crates.push(p);}
+  for(const [x,y] of [[4,5],[13,7],[6,11],[15,2]]){const p=tile(x,y);if(!walls.includes(p))hazards.push(p);}
+  const used=new Set<number>(),humans:any[]=[],zombies:any[]=[];
+  const humanCells:number[]=[];for(let y=0;y<4;y++)for(let x=0;x<W;x++)if(x<7||x>10)humanCells.push(tile(x,y));
+  const hNames=["Mara","Viktor","Nix","Ash","June","Rook","Iris","Milo","Sable","Kai","Echo","Dante","Nova","Finn","Zara","Wolf","Pip","Raven"];
+  for(let i=0;i<hNames.length;i++){const p=humanCells.find(p=>!used.has(p)&&!walls.includes(p)&&!crates.includes(p)&&!HELI.includes(p))!;used.add(p);humans.push({id:"H"+(i+1),name:hNames[i],position:p,alive:true,escaped:false,acted:false});}
+  const zombieCells:number[]=[];for(let y=9;y<H;y++)for(let x=0;x<W;x++)if(x<7||x>10)zombieCells.push(tile(x,y));
+  const zNames=["Alpha","Brute","Howler","Stalker","Crawler","Warden"];
+  for(let i=0;i<zNames.length;i++){const p=zombieCells.find(p=>!used.has(p)&&!walls.includes(p)&&!crates.includes(p)&&!HELI.includes(p))!;used.add(p);zombies.push({id:"Z"+(i+1),name:zNames[i],position:p,alive:true,acted:false});}
+  return {walls,crates,hazards,helipads:[...HELI],humans,zombies,escaped:0,infected:0};
+}
+function publicState(m:any){
+  const w=m.world;
   return {
-    match_id: m.id, name: m.name, turn: m.turn, status: m.status,
-    players: Object.values(m.players).map((p: any) => ({
-      agent_id: p.agent_id, role: p.role, position: p.position, health: p.health,
-      food: p.food, wood: p.wood, acted_turn: p.acted_turn,
-    })),
-    map: { width: W, height: H, walls: [...WALLS, ...(m.barricades || [])].sort((a: number, b: number) => a-b) },
-    events: m.events.slice(-12),
+    match_id:m.id,name:m.name,turn:m.turn,status:m.status,
+    controllers:Object.values(m.players).map((p:any)=>({agent_id:p.agent_id,role:p.role})),
+    units:{
+      survivors:w.humans.map((a:any)=>({id:a.id,name:a.name,position:a.position,alive:a.alive,escaped:a.escaped,acted:a.acted})),
+      infected:w.zombies.map((a:any)=>({id:a.id,name:a.name,position:a.position,alive:a.alive,acted:a.acted})),
+    },
+    map:{width:W,height:H,walls:w.walls,movable_obstacles:w.crates,hazards:w.hazards,helicopters:w.helipads},
+    score:{escaped:w.escaped,infected:w.infected,survivors_alive:w.humans.filter((a:any)=>a.alive).length,zombies_alive:w.zombies.filter((a:any)=>a.alive).length},
+    events:m.events.slice(-20),
   };
 }
 async function dbRequest(path: string, init: RequestInit = {}) {
