@@ -165,19 +165,20 @@
   var status=document.getElementById("soi-status");
   if(!status)return;
   var initial=status.textContent.trim();
+  var messages={"js":"SOI：JavaScript 错误 — ","script":"SOI：脚本未启动。请检查 soi-launch-radar.js 是否加载","timeout":"SOI：报告服务器在 30 秒内没有响应"};
   window.addEventListener("error",function(event){
     if(event.filename&&event.filename.indexOf("soi-launch-radar.js")!==-1){
       status.dataset.state="error";
-      status.textContent="SOI: ошибка JavaScript — "+(event.message||"неизвестная ошибка");
+      status.textContent=messages.js+(event.message||"unknown error");
     }
   },true);
   window.setTimeout(function(){
     if(status.textContent.trim()===initial){
       status.dataset.state="error";
-      status.textContent="SOI: скрипт не запустился. Проверьте загрузку soi-launch-radar.js";
+      status.textContent=messages.script;
     }else if(status.dataset.state==="loading"){
       status.dataset.state="error";
-      status.textContent="SOI: сервер отчёта не ответил за 30 секунд";
+      status.textContent=messages.timeout;
     }
   },30000);
 })();
