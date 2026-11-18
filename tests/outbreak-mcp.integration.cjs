@@ -40,21 +40,29 @@ async function tool(name, args = {}) {
     if (!names.includes(name)) throw new Error('Missing MCP tool: ' + name);
   }
 
-  const created = await tool('create_match', { name: 'CI integration match' });
+  const created = await tool('create_match', { name: 'CI strategic outbreak' });
   const matchId = created.match_id;
+  if (created.map?.width !== 18 || created.map?.height !== 14) throw new Error('MCP did not create the large tactical map');
+  if (created.units?.survivors?.length !== 18 || created.units?.infected?.length !== 6) throw new Error('MCP did not create the large survivor and infected groups');
   const survivor = await tool('join_match', { match_id: matchId, agent_id: 'ci-survivor', role: 'survivor' });
   const infected = await tool('join_match', { match_id: matchId, agent_id: 'ci-infected', role: 'infected' });
-  if (!survivor.agent_token || !infected.agent_token) throw new Error('Agent tokens were not issued');
+  if (!survivor.agent_token || !infected.agent_token) throw new Error('Faction controller tokens were not issued');
 
-  const spoofed = await tool('submit_action', { match_id: matchId, agent_id: 'ci-survivor', agent_token: 'invalid-token', action: 'wait' });
-  if (!spoofed.isError) throw new Error('Server accepted an invalid agent token');
+  const spoofed = await tool('submit_action', { match_id: matchId, agent_id: 'ci-survivor', agent_token: 'invalid-token', unit_id: 'H1', action: 'wait' });
+  if (!spoofed.isError) throw new Error('Server accepted an invalid faction controller token');
 
-  const first = await tool('submit_action', { match_id: matchId, agent_id: 'ci-survivor', agent_token: survivor.agent_token, action: 'wait' });
-  if (first.turn !== 0) throw new Error('Turn advanced before every active agent acted');
-  const second = await tool('submit_action', { match_id: matchId, agent_id: 'ci-infected', agent_token: infected.agent_token, action: 'wait' });
-  if (second.turn !== 1) throw new Error('Turn did not advance after all agents acted');
+  const first = await tool('submit_action', { match_id: matchId, agent_id: 'ci-survivor', agent_token: survivor.agent_token, unit_id: 'H1', action: 'wait' });
+  const h1 = first.units.survivors.find(unit => unit.id === 'H1');
+  if (!h1?.acted) throw new Error('Server did not record the survivor unit action');
+  const duplicate = await tool('submit_action', { match_id: matchId, agent_id: 'ci-survivor', agent_token: survivor.agent_token, unit_id: 'H1', action: 'wait' });
+  if (!duplicate.isError) throw new Error('Server allowed the same unit to act twice in one round');
 
+  const second = await tool('submit_action', { match_id: matchId, agent_id: 'ci-infected', agent_token: infected.agent_token, unit_id: 'Z1', action: 'wait' });
+  const z1 = second.units.infected.find(unit => unit.id === 'Z1');
+  if (!z1?.acted) throw new Error('Server did not record the infected unit action');
   const persisted = await tool('get_match_state', { match_id: matchId });
-  if (persisted.turn !== 1 || persisted.players.length !== 2) throw new Error('Match state did not persist across MCP requests');
-  console.log('Live MCP integration passed: initialize, tools/list, create/join, token security, turn resolution, persistent state.');
+  if (persisted.turn !== 0 || persisted.controllers.length !== 2 || !persisted.units.survivors.find(unit => unit.id === 'H1')?.acted) {
+    throw new Error('Match state did not persist across MCP requests');
+  }
+  console.log('Live MCP integration passed: initialize, tools/list, 18x14 world, faction join, token security, per-unit actions and persistent state.');
 })().catch(error => { console.error(error); process.exit(1); });

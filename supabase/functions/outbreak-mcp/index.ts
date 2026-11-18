@@ -7,10 +7,11 @@ const SECRET_KEYS = JSON.parse(Deno.env.get("SUPABASE_SECRET_KEYS") || "{}");
 const DB_KEY = SECRET_KEYS.default || Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 if (!DB_KEY) throw new Error("Supabase server secret is not configured");
 
-const W = 9, H = 9, MAX_PLAYERS = 8;
-const WALLS = [10, 19, 28, 37, 46, 55, 64];
+const W = 18, H = 14, MAX_PLAYERS = 8;
+const HELI = [0, 17, 8 + 13 * W];
+const DIRS: Record<string, [number, number]> = { north: [0,-1], south: [0,1], west: [-1,0], east: [1,0] };
 const ROLES = new Set(["survivor", "infected"]);
-const ACTIONS = new Set(["move_north", "move_south", "move_east", "move_west", "scavenge", "barricade", "attack", "wait"]);
+const ACTIONS = new Set([...Object.keys(DIRS).map(d => "move_"+d), ...Object.keys(DIRS).map(d => "push_"+d), "wait"]);
 const PROTOCOLS = ["2025-03-26", "2025-06-18", "2025-11-25"];
 
 const cors = {
@@ -34,15 +35,37 @@ function toolResult(value: unknown) {
 function toolError(message: string) {
   return { content: [{ type: "text", text: message }], isError: true };
 }
-function publicState(m: any) {
+function tile(x:number,y:number){return y*W+x;}
+function buildWorld(){
+  const walls:number[]=[],crates:number[]=[],hazards:number[]=[],candidates:number[]=[];
+  for(let y=4;y<=8;y++)for(let x=1;x<W-1;x++){
+    const p=tile(x,y);
+    if(x!==8&&y!==6&&Math.random()<0.14)walls.push(p);
+    if(x!==8&&y!==6&&!walls.includes(p))candidates.push(p);
+  }
+  for(let i=candidates.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[candidates[i],candidates[j]]=[candidates[j],candidates[i]];}
+  crates.push(...candidates.slice(0,10));hazards.push(...candidates.slice(12,16));
+  const used=new Set<number>(),humans:any[]=[],zombies:any[]=[];
+  const humanCells:number[]=[];for(let y=0;y<4;y++)for(let x=0;x<W;x++)if(x<7||x>10)humanCells.push(tile(x,y));
+  const hNames=["Mara","Viktor","Nix","Ash","June","Rook","Iris","Milo","Sable","Kai","Echo","Dante","Nova","Finn","Zara","Wolf","Pip","Raven"];
+  for(let i=0;i<hNames.length;i++){const p=humanCells.find(p=>!used.has(p)&&!walls.includes(p)&&!crates.includes(p)&&!HELI.includes(p))!;used.add(p);humans.push({id:"H"+(i+1),name:hNames[i],position:p,alive:true,escaped:false,acted:false});}
+  const zombieCells:number[]=[];for(let y=9;y<H;y++)for(let x=0;x<W;x++)if(x<7||x>10)zombieCells.push(tile(x,y));
+  const zNames=["Alpha","Brute","Howler","Stalker","Crawler","Warden"];
+  for(let i=0;i<zNames.length;i++){const p=zombieCells.find(p=>!used.has(p)&&!walls.includes(p)&&!crates.includes(p)&&!HELI.includes(p))!;used.add(p);zombies.push({id:"Z"+(i+1),name:zNames[i],position:p,alive:true,acted:false});}
+  return {walls,crates,hazards,helipads:[...HELI],humans,zombies,escaped:0,infected:0};
+}
+function publicState(m:any){
+  const w=m.world;
   return {
-    match_id: m.id, name: m.name, turn: m.turn, status: m.status,
-    players: Object.values(m.players).map((p: any) => ({
-      agent_id: p.agent_id, role: p.role, position: p.position, health: p.health,
-      food: p.food, wood: p.wood, acted_turn: p.acted_turn,
-    })),
-    map: { width: W, height: H, walls: [...WALLS, ...(m.barricades || [])].sort((a: number, b: number) => a-b) },
-    events: m.events.slice(-12),
+    match_id:m.id,name:m.name,turn:m.turn,status:m.status,
+    controllers:Object.values(m.players).map((p:any)=>({agent_id:p.agent_id,role:p.role})),
+    units:{
+      survivors:w.humans.map((a:any)=>({id:a.id,name:a.name,position:a.position,alive:a.alive,escaped:a.escaped,acted:a.acted})),
+      infected:w.zombies.map((a:any)=>({id:a.id,name:a.name,position:a.position,alive:a.alive,acted:a.acted})),
+    },
+    map:{width:W,height:H,walls:w.walls,movable_obstacles:w.crates,hazards:w.hazards,helicopters:w.helipads},
+    score:{escaped:w.escaped,infected:w.infected,survivors_alive:w.humans.filter((a:any)=>a.alive).length,zombies_alive:w.zombies.filter((a:any)=>a.alive).length},
+    events:m.events.slice(-20),
   };
 }
 async function dbRequest(path: string, init: RequestInit = {}) {
@@ -92,95 +115,92 @@ function requiredString(args: any, key: string, max: number) {
   if (typeof value !== "string" || !value.trim() || value.length > max) throw new Error(`${key} must be a non-empty string of at most ${max} characters`);
   return value.trim();
 }
-async function callTool(name: string, args: any) {
-  if (name === "create_match") {
-    const matchName = typeof args?.name === "string" ? args.name.trim().slice(0, 48) || "Outbreak" : "Outbreak";
-    const id = crypto.randomUUID().replaceAll("-", "").slice(0, 12);
-    const match = { id, name: matchName, turn: 0, status: "waiting", players: {}, barricades: [], events: ["Match created"], created: new Date().toISOString() };
-    await saveMatch(match);
-    return publicState(match);
+function finishIfNeeded(m:any){
+  const w=m.world,alive=w.humans.filter((a:any)=>a.alive).length;
+  if(w.escaped>=10){m.status="finished";m.events.push("SURVIVORS WIN: evacuation threshold reached");}
+  else if(alive===0||w.infected>=13){m.status="finished";m.events.push("OUTBREAK WINS: the horde consumed the evacuation zone");}
+  else if(m.turn>=32){m.status="finished";m.events.push("QUARANTINE COLLAPSED: turn limit reached");}
+}
+async function callTool(name:string,args:any){
+  if(name==="create_match"){
+    const matchName=typeof args?.name==="string"?args.name.trim().slice(0,48)||"Zombie Outbreak":"Zombie Outbreak";
+    const id=crypto.randomUUID().replaceAll("-","").slice(0,12);
+    const match={id,name:matchName,turn:0,status:"waiting",players:{},world:buildWorld(),events:["Quarantine breached. 18 survivors, 6 infected."],created:new Date().toISOString()};
+    await saveMatch(match);return publicState(match);
   }
-  const matchId = requiredString(args, "match_id", 64);
-  const matchRow = await loadMatch(matchId);
-  if (!matchRow) throw new Error("Match not found");
-  const match = matchRow.state;
-  if (name === "get_match_state") return publicState(match);
-  if (name === "join_match") {
-    const agentId = requiredString(args, "agent_id", 48);
-    const role = requiredString(args, "role", 16);
-    if (!ROLES.has(role)) throw new Error("role must be survivor or infected");
-    if (match.players[agentId]) throw new Error("Agent ID is already taken in this match. Choose a new agent_id.");
-    if (Object.keys(match.players).length >= MAX_PLAYERS) throw new Error("Match is full");
-    if (match.status === "finished") throw new Error("Match is finished");
-    const agentToken = crypto.randomUUID() + crypto.randomUUID();
-    match.players[agentId] = { agent_id: agentId, role, position: role === "survivor" ? 0 : 80, health: 3, food: 2, wood: 0, acted_turn: -1, token_hash: await tokenHash(agentToken) };
-    match.status = Object.keys(match.players).length >= 2 ? "running" : "waiting";
-    match.events.push(`${agentId} joined as ${role}`);
-    await saveMatch(match, matchRow.updated_at);
-    return { ...publicState(match), agent_token: agentToken, token_notice: "Store this token securely. It is shown only once and is required to submit actions for this agent." };
+  const matchId=requiredString(args,"match_id",64),row=await loadMatch(matchId);
+  if(!row)throw new Error("Match not found");
+  const m=row.state;
+  if(!m.world)throw new Error("This match uses retired 9x9 rules. Create a new 18x14 outbreak match.");
+  if(name==="get_match_state")return publicState(m);
+  if(name==="join_match"){
+    const agentId=requiredString(args,"agent_id",48),role=requiredString(args,"role",16);
+    if(!ROLES.has(role))throw new Error("role must be survivor or infected");
+    if(m.players[agentId])throw new Error("Agent ID is already taken in this match");
+    if(Object.keys(m.players).length>=MAX_PLAYERS)throw new Error("Match is full");
+    if(m.status==="finished")throw new Error("Match is finished");
+    const token=crypto.randomUUID()+crypto.randomUUID();
+    m.players[agentId]={agent_id:agentId,role,token_hash:await tokenHash(token)};
+    const roles=new Set(Object.values(m.players).map((p:any)=>p.role));
+    m.status=roles.has("survivor")&&roles.has("infected")?"running":"waiting";
+    m.events.push(`${agentId} joined as ${role} controller`);
+    await saveMatch(m,row.updated_at);
+    return {...publicState(m),agent_token:token,token_notice:"Store this token securely. It is shown only once and is required to submit actions."};
   }
-  if (name === "submit_action") {
-    const agentId = requiredString(args, "agent_id", 48);
-    const action = requiredString(args, "action", 32);
-    const agentToken = requiredString(args, "agent_token", 128);
-    const player = match.players[agentId];
-    if (!player) throw new Error("Agent has not joined this match");
-    if (!player.token_hash || await tokenHash(agentToken) !== player.token_hash) throw new Error("Invalid agent token");
-    if (match.status !== "running") throw new Error("Match needs at least two agents");
-    if (!ACTIONS.has(action)) throw new Error("Unsupported action");
-    if (player.acted_turn === match.turn) throw new Error("Agent already acted this turn");
-    const pos = player.position;
-    const target = ({ move_north: pos-W, move_south: pos+W, move_west: pos-1, move_east: pos+1 } as Record<string, number>)[action];
-    if (action.startsWith("move_")) {
-      if (target === undefined || target < 0 || target >= W*H || WALLS.includes(target) || (match.barricades || []).includes(target) ||
-          (action === "move_west" && pos % W === 0) || (action === "move_east" && pos % W === W-1)) throw new Error("Illegal move");
-      player.position = target;
-    } else if (action === "scavenge") {
-      player.food += 1;
-    } else if (action === "barricade") {
-      if (player.wood < 1) player.wood += 1;
-      else {
-        const cell = Math.min(W*H-1, Math.max(0, player.position + W));
-        if (!WALLS.includes(cell) && !match.barricades.includes(cell)) {
-          player.wood -= 1; match.barricades.push(cell);
-          match.events.push(`${agentId} built a barricade at ${cell}`);
-        } else match.events.push(`${agentId} could not build a barricade`);
+  if(name==="submit_action"){
+    const agentId=requiredString(args,"agent_id",48),action=requiredString(args,"action",32),token=requiredString(args,"agent_token",128);
+    const controller=m.players[agentId];if(!controller)throw new Error("Agent has not joined this match");
+    if(!controller.token_hash||await tokenHash(token)!==controller.token_hash)throw new Error("Invalid agent token");
+    if(m.status!=="running")throw new Error("Match needs both faction controllers and must be running");
+    if(!ACTIONS.has(action))throw new Error("Unsupported action");
+    const w=m.world,side=controller.role==="survivor"?w.humans:w.zombies;
+    const unitId=typeof args.unit_id==="string"?args.unit_id:"";
+    const unit=unitId?side.find((a:any)=>a.id===unitId):side.find((a:any)=>a.alive&&!a.acted);
+    if(!unit||!unit.alive)throw new Error("Unit not found or no longer active on your faction");
+    if(unit.acted)throw new Error("Unit already acted this round");
+    if(action==="wait"){unit.acted=true;m.events.push(`${agentId} ordered ${unit.id} to hold position`);}
+    else{
+      const [dx,dy]=DIRS[action.split("_",2)[1]],x=unit.position%W,y=Math.floor(unit.position/W),tx=x+dx,ty=y+dy;
+      if(tx<0||tx>=W||ty<0||ty>=H)throw new Error("Illegal move: outside map");
+      const target=ty*W+tx;
+      if(action.startsWith("push_")){
+        if(!w.crates.includes(target))throw new Error("No movable obstacle adjacent in that direction");
+        const bx=tx+dx,by=ty+dy;if(bx<0||bx>=W||by<0||by>=H)throw new Error("Cannot push obstacle outside map");
+        const beyond=by*W+bx,occupied=[...w.humans,...w.zombies].some((a:any)=>a.alive&&a.position===beyond);
+        if(w.walls.includes(beyond)||w.crates.includes(beyond)||w.helipads.includes(beyond)||occupied)throw new Error("Obstacle destination is blocked");
+        w.crates=w.crates.filter((p:number)=>p!==target);w.crates.push(beyond);unit.acted=true;m.events.push(`${unit.id} pushed debris from ${target} to ${beyond}`);
+      }else{
+        if(w.walls.includes(target)||w.crates.includes(target))throw new Error("Illegal move: blocked tile");
+        const opponents=controller.role==="survivor"?w.zombies:w.humans;
+        const victim=opponents.find((a:any)=>a.alive&&a.position===target);
+        if(victim){
+          if(controller.role!=="infected")throw new Error("Tile occupied by another faction");
+          victim.alive=false;w.infected++;
+          w.zombies.push({id:"Z"+(w.zombies.length+1),name:victim.name+" · turned",position:target,alive:true,acted:false});
+          m.events.push(`${victim.name} was infected and joined the horde`);
+        }else if(side.some((a:any)=>a.alive&&a.position===target))throw new Error("Tile occupied by an ally");
+        else unit.position=target;
+        if(controller.role==="survivor"&&w.helipads.includes(target)){unit.alive=false;unit.escaped=true;w.escaped++;m.events.push(`${unit.name} escaped by helicopter`);}
+        unit.acted=true;m.events.push(`${unit.id}: ${action}`);
       }
-    } else if (action === "attack") {
-      const opponents = Object.values(match.players).filter((p: any) =>
-        p.health > 0 && p.role !== player.role &&
-        Math.abs(p.position % W - pos % W) + Math.abs(Math.floor(p.position / W) - Math.floor(pos / W)) <= 1
-      ) as any[];
-      if (opponents.length) {
-        opponents[0].health = Math.max(0, opponents[0].health - 1);
-        if (opponents[0].health === 0) match.events.push(`${opponents[0].agent_id} was eliminated`);
-      } else match.events.push(`${agentId} attacked but found no target`);
     }
-    player.acted_turn = match.turn;
-    match.events.push(`${agentId}: ${action}`);
-    const active = Object.values(match.players).filter((p: any) => p.health > 0) as any[];
-    if (active.length && active.every((p: any) => p.acted_turn === match.turn)) match.turn += 1;
-    const hasSurvivor = active.some((p: any) => p.role === "survivor");
-    const hasInfected = active.some((p: any) => p.role === "infected");
-    if (!hasSurvivor || !hasInfected) match.status = "finished";
-    await saveMatch(match, matchRow.updated_at);
-    return publicState(match);
+    const active=[...w.humans,...w.zombies].filter((a:any)=>a.alive);
+    if(active.length&&active.every((a:any)=>a.acted)){m.turn++;active.forEach((a:any)=>a.acted=false);m.events.push(`Round ${m.turn} begins`);}
+    finishIfNeeded(m);await saveMatch(m,row.updated_at);return publicState(m);
   }
   throw new Error(`Unknown tool: ${name}`);
 }
-
-const TOOLS = [
-  { name: "create_match", description: "Create a shared ZombieCash Outbreak match. Returns match_id for other agents to join.", inputSchema: { type: "object", properties: { name: { type: "string", description: "Optional match name" } }, additionalProperties: false } },
-  { name: "join_match", description: "Join a match as a survivor or infected agent.", inputSchema: { type: "object", properties: { match_id: { type: "string" }, agent_id: { type: "string" }, role: { type: "string", enum: ["survivor", "infected"] } }, required: ["match_id", "agent_id", "role"], additionalProperties: false } },
-  { name: "get_match_state", description: "Read the authoritative state of a shared match.", inputSchema: { type: "object", properties: { match_id: { type: "string" } }, required: ["match_id"], additionalProperties: false } },
-  { name: "submit_action", description: "Submit one legal action for the current turn. Requires the private agent_token returned by join_match. Supported actions: move_north, move_south, move_east, move_west, scavenge, barricade, attack, wait.", inputSchema: { type: "object", properties: { match_id: { type: "string" }, agent_id: { type: "string" }, agent_token: { type: "string" }, action: { type: "string", enum: [...ACTIONS] } }, required: ["match_id", "agent_id", "agent_token", "action"], additionalProperties: false } },
+const TOOLS=[
+  {name:"create_match",description:"Create an 18x14 ZombieCash Outbreak map with 18 survivors, 6 infected, movable debris and helicopter extraction zones.",inputSchema:{type:"object",properties:{name:{type:"string",description:"Optional match name"}},additionalProperties:false}},
+  {name:"join_match",description:"Join as the survivor or infected faction controller. A controller can command all units on its side.",inputSchema:{type:"object",properties:{match_id:{type:"string"},agent_id:{type:"string"},role:{type:"string",enum:["survivor","infected"]}},required:["match_id","agent_id","role"],additionalProperties:false}},
+  {name:"get_match_state",description:"Read the authoritative 18x14 map, all units, score and recent events.",inputSchema:{type:"object",properties:{match_id:{type:"string"}},required:["match_id"],additionalProperties:false}},
+  {name:"submit_action",description:"Move one unit one tile, push an adjacent movable obstacle one tile, or wait. Each unit acts once per round. Optional unit_id selects a unit; otherwise the first ready unit is selected.",inputSchema:{type:"object",properties:{match_id:{type:"string"},agent_id:{type:"string"},agent_token:{type:"string"},unit_id:{type:"string"},action:{type:"string",enum:[...ACTIONS]}},required:["match_id","agent_id","agent_token","action"],additionalProperties:false}},
 ];
-
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method === "GET") {
     if (req.headers.get("accept")?.includes("text/event-stream")) return new Response(null, { status: 405, headers: { ...cors, Allow: "POST, OPTIONS" } });
-    return json({ name: "ZombieCash Outbreak MCP", status: "active", transport: "Streamable HTTP", endpoint: "/functions/v1/outbreak-mcp", tools: TOOLS.map(t => t.name) });
+    return json({ name: "ZombieCash Outbreak MCP", status: "active", transport: "Streamable HTTP", endpoint: "/functions/v1/outbreak-mcp", tools: TOOLS.map(t => t.name), map: { width: W, height: H }, units: { survivors: 18, infected: 6 } });
   }
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405, { Allow: "GET, POST, OPTIONS" });
 
@@ -195,8 +215,8 @@ Deno.serve(async (req: Request) => {
     return json({ jsonrpc: "2.0", id: body.id, result: {
       protocolVersion,
       capabilities: { tools: { listChanged: false } },
-      serverInfo: { name: "zombcash-outbreak", version: "1.0.0" },
-      instructions: "ZombieCash Outbreak multiplayer arena. Create a match, join as survivor or infected, inspect state, and submit one action per turn. Match state persists in the ZombieCash Supabase database."
+      serverInfo: { name: "zombcash-outbreak", version: "2.0.0" },
+      instructions: "ZombieCash Outbreak strategic multiplayer. Create an 18x14 match, join as survivor or infected faction controller, inspect all units, and submit one-tile move/push/wait actions for each unit. Humans can escape by helicopter; infected convert humans on contact. State persists in Supabase."
     } }, 200, { "Mcp-Protocol-Version": protocolVersion });
   }
   if (body.method === "ping") return json({ jsonrpc: "2.0", id: body.id, result: {} });
