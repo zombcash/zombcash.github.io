@@ -110,6 +110,14 @@
 .soi-first-hour{font-variant-numeric:tabular-nums}
 .soi-coverage-chip{display:inline-block;padding:3px 7px;border:1px solid #59654e;color:#d0d7c1;font-size:10px;letter-spacing:.04em}
 .soi-empty{background:rgba(0,0,0,.2)}
+.soi-source-health{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin:12px 0 18px}
+.soi-source-card{border:1px solid #3c4739;background:linear-gradient(145deg,rgba(22,29,21,.9),rgba(7,10,8,.85));padding:11px 12px;min-width:0}
+.soi-source-card header{display:flex;justify-content:space-between;gap:8px;align-items:center;margin:0 0 7px;padding:0;border:0;background:none}
+.soi-source-card strong{font:600 11px/1.4 system-ui,sans-serif;color:#e6eadc;overflow-wrap:anywhere}
+.soi-source-status{font:700 9px system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:#c6d1b5}
+.soi-source-status[data-state="error"]{color:#d49b87}
+.soi-source-metrics{font:10px/1.55 system-ui,sans-serif;color:#aeb5a5;overflow-wrap:anywhere}
+@media(max-width:700px){.soi-source-health{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.soi-radar{padding:18px 13px}.soi-toolbar{align-items:flex-start}.soi-actions{width:100%}.soi-controls{width:100%}.soi-controls button{flex:1}.soi-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.soi-report-meta{display:grid;gap:6px}}
 @media(max-width:700px){.market-live .metrics,.soi-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.market-live .market-table{font-size:11px}.market-live .market-table th,.market-live .market-table td{padding:8px 5px}.market-live .chart{height:360px}}
 </style>
@@ -145,6 +153,7 @@
 <div class="soi-summary" aria-live="polite"><div class="soi-stat"><small id="soi-count-label">Launches · rolling 24h</small><strong id="soi-count">—</strong></div><div class="soi-stat"><small>No social links found</small><strong id="soi-no-socials">—</strong></div><div class="soi-stat"><small>Confirmed promotion</small><strong id="soi-promoted">—</strong></div><div class="soi-stat"><small>Reached $1m Market Cap</small><strong id="soi-million">—</strong></div></div>
 <div class="soi-summary soi-activity-summary" aria-live="polite"><div class="soi-stat"><small id="soi-buys-label">Buys · rolling 24h</small><strong id="soi-buys">—</strong></div><div class="soi-stat"><small id="soi-sells-label">Sells · rolling 24h</small><strong id="soi-sells">—</strong></div><div class="soi-stat"><small id="soi-pools-label">Pools created · rolling 24h</small><strong id="soi-pools">—</strong></div><div class="soi-stat"><small id="soi-observations-label">On-chain observations · rolling 24h</small><strong id="soi-observations">—</strong></div></div>
 <div class="soi-report-meta"><span id="soi-report-date">Rolling window: —</span><span id="soi-report-updated">Updated: —</span><span id="soi-coverage">Coverage: —</span></div>
+<div class="soi-source-health" id="soi-source-health" hidden aria-live="polite"></div>
 <div class="soi-table-wrap"><table class="soi-table"><thead><tr><th>Token / mint</th><th>Launch</th><th>Market Cap</th><th>Liquidity</th><th>First 60 min</th><th>Signals &amp; evidence</th></tr></thead><tbody id="soi-launches"><tr><td colspan="6">Waiting for a verified rolling report…</td></tr></tbody></table></div>
 <p class="soi-empty" id="soi-empty" hidden>No records match this filter. This does not mean no launches occurred; only events detected within the stated source coverage are included.</p>
 <h3 id="soi-history-title">Daily activity history (UTC)</h3><p class="soi-method" id="soi-history-note">The history accumulates from stored observations. Missing historical coverage is not reconstructed or guessed.</p>
