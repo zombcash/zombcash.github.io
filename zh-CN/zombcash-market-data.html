@@ -160,6 +160,28 @@
 <p>© 2026 ZombieCash</p>
 </footer>
 </main><script src="/market-data-live.js?v=20261118-i18n1" defer></script>
+<script>
+(function(){
+  var status=document.getElementById("soi-status");
+  if(!status)return;
+  var initial=status.textContent.trim();
+  window.addEventListener("error",function(event){
+    if(event.filename&&event.filename.indexOf("soi-launch-radar.js")!==-1){
+      status.dataset.state="error";
+      status.textContent="SOI: ошибка JavaScript — "+(event.message||"неизвестная ошибка");
+    }
+  },true);
+  window.setTimeout(function(){
+    if(status.textContent.trim()===initial){
+      status.dataset.state="error";
+      status.textContent="SOI: скрипт не запустился. Проверьте загрузку soi-launch-radar.js";
+    }else if(status.dataset.state==="loading"){
+      status.dataset.state="error";
+      status.textContent="SOI: сервер отчёта не ответил за 30 секунд";
+    }
+  },30000);
+})();
+</script>
 <script src="/soi-launch-radar.js?v=20261118-rolling24h3" defer></script>
 <script src="/shared-nav.js?v=nav-main-wrap-20261104-12" defer></script>
 <script src="/language.js?v=i18n-persist-route-20261104-10" defer></script>
