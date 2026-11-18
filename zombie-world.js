@@ -133,7 +133,7 @@
             <button id="zw-push-mode" type="button" aria-pressed="false">🧱 PUSH OBSTACLE: OFF</button>
           </div>
           <p class="zw-muted" id="zw-outbreak-command-hint">Select one of your units, then click an adjacent tile. Each unit can act once per round. You may push a movable obstacle instead.</p>
-          <div class="zw-legend" id="zw-outbreak-legend"><span>🧍 Survivors</span><span>🧟 Infected</span><span>🚁 Extraction</span><span>🧱 Movable debris</span><span>🏚️ Ruins</span></div>
+          <div class="zw-legend" id="zw-outbreak-legend"><span>👨 Men</span><span>👩 Women</span><span>🧒 Children</span><span>🧟 Infected</span><span>🏢 Buildings</span><span>━ Roads</span><span>🌳 Parks / fields</span><span>🚁 Extraction</span><span>🧱 Barricades</span><span>☣️ Danger</span></div>
           <div class="zw-map zw-map-large" id="zw-outbreak-map" role="grid" aria-label="Zombie Outbreak tactical game board"></div>
           <div class="zw-row zw-outbreak-stats">
             <span class="zw-stat" id="zw-escaped">0 ESCAPED</span><span class="zw-stat" id="zw-captured">0 INFECTED</span><span class="zw-stat" id="zw-outbreak-alive">0 ALIVE</span><span class="zw-stat" id="zw-outbreak-turns">ROUND 0</span><span class="zw-stat" id="zw-outbreak-score">SCORE 0 : 0</span>
@@ -384,7 +384,7 @@
       if(actor){cell.dataset.unitId=actor.id;cell.textContent=actor.id[0]==='Z'?'🧟':actor.age==='child'?'🧒':actor.gender==='female'?'👩':'👨';cell.classList.add(actor.id[0]==='Z'?'zw-zombie':'zw-human');cell.setAttribute('aria-label',(actor.id[0]==='Z'?'Infected: ':'Survivor: ')+actor.name);cell.title=actor.name+' · '+actor.id+(actor.acted?' · acted':' · ready');if(actor.id===selectedUnit)cell.classList.add('zw-selected');if(actor.acted)cell.classList.add('zw-acted');}
       else if(heliPads.has(p)){cell.textContent='🚁';cell.classList.add('zw-heli');cell.title='Helicopter extraction zone';}
       else if(crates.has(p)){cell.textContent='🧱';cell.classList.add('zw-crate');cell.title='Movable street barricade';}
-      else if(fixedWalls.has(p)){cell.textContent='🏢';cell.classList.add('zw-wall');cell.title='Building footprint / impassable';}
+      else if(fixedWalls.has(p)){cell.textContent='🏢';cell.classList.add('zw-wall','zw-building');cell.title='Building footprint / impassable';}
       else if(hazards.has(p)){cell.textContent='☣️';cell.classList.add('zw-hazard');cell.title='Contaminated zone';}
       else if(parks.has(p)&&Math.random()<0.015){cell.textContent='🌳';cell.title='City park';}
       else cell.textContent='';
