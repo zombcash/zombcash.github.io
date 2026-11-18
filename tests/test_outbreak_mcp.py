@@ -60,6 +60,8 @@ class OutbreakServerTests(unittest.TestCase):
         zombie = next(a for a in match["world"]["zombies"] if a["id"] == "Z1")
         human["position"] = server._tile(4, 5)
         zombie["position"] = server._tile(3, 5)
+        match["world"]["walls"] = [p for p in match["world"]["walls"] if p not in (server._tile(4, 5), server._tile(3, 5))]
+        match["world"]["crates"] = [p for p in match["world"]["crates"] if p not in (server._tile(4, 5), server._tile(3, 5))]
         state = server.submit_action(match_id, "infected-controller", infected["agent_token"], "move_east", "Z1")
         self.assertEqual(state["score"]["infected"], 1)
         self.assertEqual(state["score"]["survivors_alive"], 17)
