@@ -631,25 +631,33 @@
     @media(max-width:760px){.sniper-demo.zs-fullscreen{display:block!important;overflow:auto!important;height:100dvh!important;padding:12px!important}.zs-fullscreen>.zs-head,.zs-fullscreen>.zs-nav,.zs-fullscreen>.zs-kpis,.zs-fullscreen>.zs-layout,.zs-fullscreen>#zs-journal-panel{display:block!important;margin-bottom:10px}.zs-fullscreen .zs-layout{height:auto;grid-template-columns:1fr}.zs-fullscreen .zs-right{min-height:520px}.zs-fullscreen .zs-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.zs-fullscreen .zs-kpis{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))}.zs-fullscreen .zs-log{grid-template-columns:1fr;max-height:150px}}
     `;
     style.textContent += `
-    /* History view: compact cards and a readable, taller system log */
-    .sniper-demo.zs-fullscreen.zs-history-mode{grid-template-rows:0 44px 38px 0 minmax(0,1fr) 156px!important}
+    /* History: compact trade rows; reserve real viewport space for the event log */
+    .sniper-demo.zs-fullscreen.zs-history-mode{grid-template-rows:0 44px 38px 0 minmax(0,1fr) 196px!important}
     .sniper-demo.zs-fullscreen.zs-history-mode .zs-right{grid-template-rows:auto minmax(0,1fr)!important;align-content:stretch!important}
     .sniper-demo.zs-fullscreen.zs-history-mode .zs-position-section{height:100%;min-height:0!important}
-    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions-inner{gap:5px!important;padding:3px!important}
-    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-card{gap:5px!important;padding:8px!important}
-    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-topline{gap:6px!important}
-    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-symbol{font-size:13px!important}
-    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-pnl{font-size:13px!important}
-    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-metrics{gap:5px!important}
-    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-metric{padding:5px 7px!important;gap:2px!important}
-    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-chart{height:16px!important;max-height:16px!important;opacity:.65!important}
-    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-chart .zs-spark{height:16px!important;max-height:16px!important}
-    .sniper-demo.zs-fullscreen.zs-history-mode #zs-journal-panel{display:flex!important;flex-direction:column!important;gap:5px!important;min-height:0!important;padding:8px 12px!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions-inner{gap:4px!important;padding:2px!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-card{gap:4px!important;padding:5px 7px!important;border-radius:4px!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-topline{gap:4px!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-symbol{font-size:12px!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-status{padding:2px 5px!important;font-size:8px!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-pnl{font-size:12px!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-metrics{gap:4px!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-metric{padding:3px 6px!important;gap:1px!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-metric small{font-size:7px!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-metric strong{font-size:9px!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-contract{min-height:21px!important;padding:3px 6px!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-contract small{font-size:7px!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-address{font-size:9px!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-copy-address{min-height:20px!important;padding:2px 6px!important;font-size:8px!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-chart{display:none!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions .zs-position-reason{font-size:8px!important;line-height:1.2!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode #zs-journal-panel{display:flex!important;flex-direction:column!important;gap:5px!important;min-height:0!important;padding:8px 12px!important;overflow:hidden!important}
     .sniper-demo.zs-fullscreen.zs-history-mode #zs-journal-panel h3{flex:0 0 auto!important;margin:0!important}
-    .sniper-demo.zs-fullscreen.zs-history-mode #zs-log{flex:1 1 auto!important;min-height:0!important;max-height:none!important;overflow:auto!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-content:start!important}
+    .sniper-demo.zs-fullscreen.zs-history-mode #zs-log{display:grid!important;flex:1 1 auto!important;min-height:0!important;height:auto!important;max-height:none!important;overflow:auto!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-content:start!important}
     .sniper-demo.zs-fullscreen.zs-history-mode #zs-log .zs-logrow{padding:5px 7px!important}
-    @media(max-height:760px) and (min-width:761px){.sniper-demo.zs-fullscreen.zs-history-mode{grid-template-rows:0 38px 34px 0 minmax(0,1fr) 132px!important}}
-    @media(max-width:760px){.sniper-demo.zs-fullscreen.zs-history-mode{display:block!important;overflow:auto!important}.sniper-demo.zs-fullscreen.zs-history-mode #zs-journal-panel{min-height:150px!important}.sniper-demo.zs-fullscreen.zs-history-mode #zs-log{max-height:110px!important}}
+    .sniper-demo.zs-fullscreen.zs-history-mode #zs-journal-panel>.sniper-toolbar{flex:0 0 auto!important;margin:0!important}
+    @media(max-height:760px) and (min-width:761px){.sniper-demo.zs-fullscreen.zs-history-mode{grid-template-rows:0 38px 34px 0 minmax(0,1fr) 180px!important}}
+    @media(max-width:760px){.sniper-demo.zs-fullscreen.zs-history-mode{display:block!important;overflow:auto!important}.sniper-demo.zs-fullscreen.zs-history-mode #zs-journal-panel{min-height:180px!important}.sniper-demo.zs-fullscreen.zs-history-mode #zs-log{max-height:135px!important}}
     `;
     const header=dashNode('div','zs-head');const brand=dashNode('span','zs-brand','☣ ZOMBCASH');const title=dashNode('strong','zs-title','ZOMBIE SNIPER');const headActions=dashNode('div','zs-head-actions');headActions.append(dashNode('span','zs-demo',dcopy().demo));const expand=dashNode('button','zs-expand','⛶ FULL SCREEN');expand.type='button';expand.title='Open terminal full screen';function syncFullscreenButton(){const on=root.classList.contains('zs-fullscreen');document.body.classList.toggle('zs-lock',on);expand.textContent=on?'✕ EXIT FULL SCREEN':'⛶ FULL SCREEN';}
     expand.addEventListener('click',async()=>{
