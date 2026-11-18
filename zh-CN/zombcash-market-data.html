@@ -116,10 +116,14 @@
 <p class="eyebrow">SOLANA OUTBREAK INTELLIGENCE // DAILY LAUNCH RADAR</p><h2 id="soi-title">今日 Solana 新项目</h2><p class="muted">研究模块：发现新项目、首60分钟、推广活动和已确认的市场事件。与上方 ZOMBCASH 指标分开统计。</p>
 <div class="soi-toolbar"><div class="soi-status" aria-live="polite"><span class="soi-status-dot"></span><span id="soi-status">正在检查每日报告…</span></div>
 <div class="soi-controls" role="group" aria-label="全部项目"><button type="button" class="is-active" data-soi-filter="all">全部项目</button><button type="button" class="" data-soi-filter="no-socials">没有社交链接</button><button type="button" class="" data-soi-filter="promoted">Boost / 广告</button><button type="button" class="" data-soi-filter="million">$100万+</button></div></div>
-<div class="soi-summary" aria-live="polite"><div class="soi-stat"><small>今日项目数</small><strong id="soi-count">—</strong></div><div class="soi-stat"><small>未发现社交链接</small><strong id="soi-no-socials">—</strong></div><div class="soi-stat"><small>已确认推广</small><strong id="soi-promoted">—</strong></div><div class="soi-stat"><small>市值达到 $100万</small><strong id="soi-million">—</strong></div></div>
-<div class="soi-report-meta"><span id="soi-report-date">报告日期： —</span><span id="soi-report-updated">更新时间： —</span><span id="soi-coverage">覆盖范围： —</span></div>
-<div class="soi-table-wrap"><table class="soi-table"><thead><tr><th>代币 / Mint</th><th>上线时间</th><th>市值</th><th>流动性</th><th>首60分钟</th><th>信号</th></tr></thead><tbody id="soi-launches"><tr><td colspan="6">等待已验证的每日报告…</td></tr></tbody></table></div>
-<p class="soi-empty" id="soi-empty" hidden>此筛选条件下没有记录。这并不表示没有新项目；这里只包含数据源覆盖范围内检测到的事件。</p><p class="soi-method" id="soi-method">数据源：独立 SOI 收集器。实时采集连接并验证后发布报告。不显示测试或虚构数据。</p>
+<div class="soi-summary" aria-live="polite"><div class="soi-stat"><small id="soi-count-label">Launches · rolling 24h</small><strong id="soi-count">—</strong></div><div class="soi-stat"><small>未发现社交链接</small><strong id="soi-no-socials">—</strong></div><div class="soi-stat"><small>已确认推广</small><strong id="soi-promoted">—</strong></div><div class="soi-stat"><small>市值达到 $100万</small><strong id="soi-million">—</strong></div></div>
+<div class="soi-summary soi-activity-summary" aria-live="polite"><div class="soi-stat"><small id="soi-buys-label">Buys · rolling 24h</small><strong id="soi-buys">—</strong></div><div class="soi-stat"><small id="soi-sells-label">Sells · rolling 24h</small><strong id="soi-sells">—</strong></div><div class="soi-stat"><small id="soi-pools-label">Pools created · rolling 24h</small><strong id="soi-pools">—</strong></div><div class="soi-stat"><small id="soi-observations-label">On-chain observations · rolling 24h</small><strong id="soi-observations">—</strong></div></div>
+<div class="soi-report-meta"><span id="soi-report-date">Rolling window: —</span><span id="soi-report-updated">Updated: —</span><span id="soi-coverage">Coverage: —</span></div>
+<div class="soi-table-wrap"><table class="soi-table"><thead><tr><th>Token / mint</th><th>Launch</th><th>Market Cap</th><th>Liquidity</th><th>First 60 min</th><th>Signals</th></tr></thead><tbody id="soi-launches"><tr><td colspan="6">Waiting for a verified rolling report…</td></tr></tbody></table></div>
+<p class="soi-empty" id="soi-empty" hidden>No records match this filter. This does not mean no launches occurred; only events detected within the stated source coverage are included.</p>
+<h3 id="soi-history-title">Daily activity history (UTC)</h3><p class="soi-method" id="soi-history-note">The history accumulates from stored observations. Missing historical coverage is not reconstructed or guessed.</p>
+<div class="soi-table-wrap"><table class="soi-table"><thead><tr id="soi-history-head"><th>Date</th><th>Launches</th><th>Pools</th><th>Buys</th><th>Sells</th><th>Unique mints</th><th>Observations</th></tr></thead><tbody id="soi-history"><tr><td colspan="7">Waiting for daily history…</td></tr></tbody></table></div>
+<p class="soi-method" id="soi-method">数据源：独立 SOI 收集器。实时采集连接并验证后发布报告。不显示测试或虚构数据。</p>
 <p class="soi-links"><a href="https://github.com/vovik777-beep/solana-outbreak-intelligence" target="_blank" rel="noopener noreferrer">SOI 仓库 ↗</a> · <a href="https://github.com/pollinations/pollinations/issues/19174" target="_blank" rel="noopener noreferrer">MCP Quest #19174 ↗</a></p></section>
 <section>
 <h2>独立市场数据资源</h2>
@@ -156,7 +160,7 @@
 <p>© 2026 ZombieCash</p>
 </footer>
 </main><script src="/market-data-live.js?v=20261118-i18n1" defer></script>
-<script src="/soi-launch-radar.js?v=20261118-i18n3" defer></script>
+<script src="/soi-launch-radar.js?v=20261118-rolling24h1" defer></script>
 <script src="/shared-nav.js?v=nav-main-wrap-20261104-12" defer></script>
 <script src="/language.js?v=i18n-persist-route-20261104-10" defer></script>
 </body></html>
