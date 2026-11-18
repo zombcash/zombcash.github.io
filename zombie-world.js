@@ -71,6 +71,30 @@
       #zombcash-outbreak-world .zw-site.is-danger{border-color:#ff8294;background:linear-gradient(145deg,#70394f,#3a2639);box-shadow:0 0 12px #ff647550}
       #zombcash-outbreak-world .zw-feed{border-radius:10px;background:linear-gradient(180deg,#101c29,#0b1718);border-color:#547a78}
       #zombcash-outbreak-world button,#zombcash-outbreak-world select{border-radius:8px;font-size:11px}
+      #zombcash-outbreak-world .zw-outbreak-console{padding:12px;border:1px solid #64877d;border-radius:14px;background:linear-gradient(145deg,#0d1a20,#111b1c)}
+      #zombcash-outbreak-world .zw-map-large{grid-template-columns:repeat(18,minmax(0,1fr));gap:2px;max-width:100%;padding:8px;touch-action:manipulation}
+      #zombcash-outbreak-world .zw-map-large .zw-cell{min-width:0;aspect-ratio:1;border-radius:3px;font-size:clamp(8px,1.25vw,16px);padding:0;cursor:pointer;position:relative}
+      #zombcash-outbreak-world .zw-map-large .zw-cell:focus-visible{outline:2px solid #fff;outline-offset:1px;z-index:2}
+      #zombcash-outbreak-world .zw-cell.zw-selected{outline:3px solid #fff36a;outline-offset:-2px;z-index:2}
+      #zombcash-outbreak-world .zw-cell.zw-acted{filter:saturate(.45);opacity:.72}
+      #zombcash-outbreak-world .zw-cell.zw-crate{background:repeating-linear-gradient(45deg,#b68b51,#b68b51 4px,#76532f 4px,#76532f 8px);border-color:#f0c17b}
+      #zombcash-outbreak-world .zw-cell.zw-hazard{background:radial-gradient(circle,#6a4c65,#34283e);border-color:#c18bb8}
+      #zombcash-outbreak-world .zw-cell.zw-human{background:linear-gradient(145deg,#62a9ff,#254f98);border-color:#b8dcff;box-shadow:0 0 8px #4c91ff65}
+      #zombcash-outbreak-world .zw-cell.zw-zombie{background:linear-gradient(145deg,#f16d82,#81264b);border-color:#ffc1c9;box-shadow:0 0 10px #ff547b75;animation:zw-pulse 1.5s infinite}
+      #zombcash-outbreak-world .zw-cell.zw-heli{background:radial-gradient(circle,#f7ffbd,#6fe6a4 60%,#1d756c);border-color:#efffce;box-shadow:0 0 14px #6effb880}
+      #zombcash-outbreak-world .zw-outbreak-lower{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:12px;margin-top:12px}
+      #zombcash-outbreak-world .zw-unit-panel,#zombcash-outbreak-world .zw-feed-panel{padding:12px;margin:0}
+      #zombcash-outbreak-world .zw-unit-roster{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;max-height:240px;overflow:auto}
+      #zombcash-outbreak-world .zw-unit{display:flex;justify-content:space-between;gap:5px;align-items:center;padding:6px 8px;border:1px solid #526f68;border-radius:6px;background:#13251f;color:#eaf7ee;font-size:11px;cursor:pointer}
+      #zombcash-outbreak-world .zw-unit.is-selected{border-color:#f2ff82;box-shadow:0 0 10px #eaff6a45}
+      #zombcash-outbreak-world .zw-unit.is-acted{opacity:.45}
+      #zombcash-outbreak-world .zw-unit small{color:#b9d5c7}
+      #zombcash-outbreak-world .zw-feed-panel .zw-feed{height:240px}
+      #zombcash-outbreak-world .zw-outbreak-stats{gap:6px}
+      #zombcash-outbreak-world .zw-outbreak-console select{min-width:110px}
+      #zombcash-outbreak-world .zw-outbreak-console button[aria-pressed="true"]{background:#7b4b35;border-color:#ffc27d}
+      @media(max-width:760px){#zombcash-outbreak-world .zw-map-large{gap:1px;padding:3px}#zombcash-outbreak-world .zw-map-large .zw-cell{font-size:clamp(6px,2.3vw,12px);border-radius:1px}#zombcash-outbreak-world .zw-outbreak-lower{grid-template-columns:1fr}#zombcash-outbreak-world .zw-unit-roster{grid-template-columns:repeat(3,minmax(0,1fr))}}
+      @media(max-width:420px){#zombcash-outbreak-world .zw-unit-roster{grid-template-columns:repeat(2,minmax(0,1fr))}}
       @keyframes zw-pulse{50%{filter:brightness(1.3);transform:scale(.96)}}
       @media(max-width:700px){#zombcash-outbreak-world .zw-grid{grid-template-columns:1fr}#zombcash-outbreak-world .zw-map{max-width:100%}#zombcash-outbreak-world .zw-district-map{grid-template-columns:repeat(2,minmax(0,1fr))}}
     </style>
@@ -85,15 +109,32 @@
         <div class="zw-row"><span class="zw-stat" id="zw-mcp-status">MCP SERVER: DEPLOYED · HTTPS</span></div>
         <a class="zw-endpoint" id="zw-mcp-endpoint" href="https://owmiywvmtdjyeyfxlpdp.supabase.co/functions/v1/outbreak-mcp" target="_blank" rel="noopener noreferrer">https://owmiywvmtdjyeyfxlpdp.supabase.co/functions/v1/outbreak-mcp</a>
         <p class="zw-muted"><a href="https://pollinations.ai/?ref=badge" target="_blank" rel="noopener noreferrer">Made with pollinations.ai</a></p>
-        <div class="zw-row">
-          <button class="primary" id="zw-demo-start" type="button">START LOCAL MATCH</button>
-          <button id="zw-demo-turn" type="button" disabled>ADVANCE TURN</button>
-          <button id="zw-demo-reset" type="button">RESET</button>
+        <div class="zw-outbreak-console">
+          <div class="zw-row">
+            <label for="zw-game-mode">GAME MODE</label>
+            <select id="zw-game-mode"><option value="human-ai">HUMAN vs AI</option><option value="ai-ai">AI vs AI · SPECTATOR</option></select>
+            <label for="zw-player-side">YOUR FACTION</label>
+            <select id="zw-player-side"><option value="survivor">🧍 SURVIVORS</option><option value="infected">🧟 INFECTED</option></select>
+            <label for="zw-ai-speed">AI SPEED</label>
+            <select id="zw-ai-speed"><option value="900">TACTICAL</option><option value="350">FAST</option><option value="90">TURBO</option></select>
+          </div>
+          <div class="zw-row">
+            <button class="primary" id="zw-demo-start" type="button">START OUTBREAK</button>
+            <button id="zw-demo-turn" type="button" disabled>END TURN / RESOLVE</button>
+            <button id="zw-demo-reset" type="button">NEW MAP</button>
+            <button id="zw-push-mode" type="button" aria-pressed="false">🧱 PUSH OBSTACLE: OFF</button>
+          </div>
+          <p class="zw-muted" id="zw-command-hint">Select one of your units, then click an adjacent tile. Each unit can act once per round. You may push a movable obstacle instead.</p>
+          <div class="zw-legend" id="zw-outbreak-legend"><span>🧍 Survivors</span><span>🧟 Infected</span><span>🚁 Extraction</span><span>🧱 Movable debris</span><span>🏚️ Ruins</span></div>
+          <div class="zw-map zw-map-large" id="zw-outbreak-map" role="grid" aria-label="Zombie Outbreak tactical game board"></div>
+          <div class="zw-row zw-outbreak-stats">
+            <span class="zw-stat" id="zw-escaped">0 ESCAPED</span><span class="zw-stat" id="zw-captured">0 INFECTED</span><span class="zw-stat" id="zw-outbreak-alive">0 ALIVE</span><span class="zw-stat" id="zw-outbreak-turns">ROUND 0</span><span class="zw-stat" id="zw-outbreak-score">SCORE 0 : 0</span>
+          </div>
+          <div class="zw-outbreak-lower">
+            <div class="zw-card zw-unit-panel"><h4 class="zw-title">UNIT ROSTER</h4><div id="zw-unit-roster" class="zw-unit-roster"></div></div>
+            <div class="zw-card zw-feed-panel"><h4 class="zw-title">OUTBREAK TRANSMISSION</h4><div class="zw-feed" id="zw-outbreak-feed" aria-live="polite"><p id="zw-outbreak-ready">The quarantine zone is waiting. Start a new outbreak.</p></div></div>
+          </div>
         </div>
-        <div class="zw-legend" id="zw-outbreak-legend"><span>🧍 Survivor</span><span>🧟 Infected</span><span>🟩 Extraction</span><span>▥ Ruins</span></div>
-        <div class="zw-map" id="zw-outbreak-map" aria-label="Local outbreak game board"></div>
-        <div class="zw-row"><span class="zw-stat" id="zw-escaped">0 / 2 ESCAPED</span><span class="zw-stat" id="zw-captured">0 CAPTURED</span><span class="zw-stat" id="zw-outbreak-turns">TURN 0</span></div>
-        <div class="zw-feed" id="zw-outbreak-feed" aria-live="polite"><p id="zw-outbreak-ready">Local demo is ready. The shared multiplayer MCP endpoint is deployed; connect an MCP client using the instructions in ZOMBIECASH_AI_WORLDS.md.</p></div>
         <p class="zw-muted" id="zw-mcp-tools">MCP tools: create_match, join_match, get_match_state, submit_action. Server-side validation prevents illegal moves and impersonation.</p>
       </article>
       <article class="zw-card" aria-labelledby="zw-world-title">
@@ -217,52 +258,189 @@
   });
   updateCommandControls();
 
-  // Local outbreak: survivors must reach extraction while the infected hunts them.
-  const size=9, walls=new Set([10,19,28,37,46,55,64]), actors=[{id:'S1',name:'Mara',role:'survivor',p:0},{id:'S2',name:'Viktor',role:'survivor',p:8},{id:'I1',name:'Stalker',role:'infected',p:72}];
-  const exitTile=80;
-  let outbreakTurn=0,outbreakStarted=false,escaped=0,captured=0,outbreakEnded=false;
-  function pathStep(from,to){
-    const queue=[[from,[]]],seen=new Set([from]);
-    while(queue.length){const [at,path]=queue.shift();if(at===to)return path[0]??from;
-      const x=at%size,y=Math.floor(at/size);
-      for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy,np=ny*size+nx;if(nx<0||nx>=size||ny<0||ny>=size||walls.has(np)||seen.has(np))continue;seen.add(np);queue.push([np,[...path,np]])}
-    }return from;
-  }
-  const paintOutbreakStats=()=>{$('zw-escaped').textContent=escaped+' / 2 '+L('escaped');$('zw-captured').textContent=captured+' '+L('captured');$('zw-outbreak-turns').textContent=L('turnLabel')+' '+outbreakTurn;};
-  const drawOutbreak=()=>{
-    const map=$('zw-outbreak-map');map.replaceChildren();
-    for(let i=0;i<size*size;i++){
-      const cell=document.createElement('div');cell.className='zw-cell';
-      const actor=actors.find(a=>a.p===i&&a.role!=='escaped'&&a.role!=='captured');
-      if(actor){cell.classList.add(actor.role==='infected'?'zw-infected':'zw-survivor');cell.textContent=actor.role==='infected'?'🧟':'🧍';cell.title=actor.name+(actor.role==='infected'?' · infected':' · survivor')}
-      else if(i===exitTile){cell.classList.add('zw-exit');cell.textContent='🚁';cell.title='Extraction point'}
-      else if(walls.has(i)){cell.classList.add('zw-wall');cell.textContent='🧱';cell.title='Blocked ruins'}
-      else {cell.textContent='';cell.title='Safe street'}
-      map.append(cell);
-    }paintOutbreakStats();
+  // Strategic outbreak engine: a wide living map, spreading infection, dynamic cover and two play modes.
+  const BW=18,BH=14,BOARD=BW*BH,cellXY=p=>({x:p%BW,y:Math.floor(p/BW)}),tile=(x,y)=>y*BW+x;
+  const dirs={north:[0,-1],south:[0,1],west:[-1,0],east:[1,0]};
+  const fixedWalls=new Set();
+  const heliPads=new Set([tile(0,0),tile(17,0),tile(8,13)]);
+  let humans=[],zombies=[],crates=new Set(),hazards=new Set(),round=0,gameStarted=false,gameEnded=false,selectedUnit=null,pushMode=false,turnBusy=false,autoTimer=null,playerActed=new Set(),zombieActed=new Set(),escaped=0,infectedCount=0,gameMode='human-ai',playerSide='survivor';
+  const outbreakCopy={
+    en:{hint:'Select one of your units, then click an adjacent tile. Each unit acts once per round. Push mode lets you move one debris block instead.',start:'START OUTBREAK',resolve:'END TURN / RESOLVE',pushOn:'🧱 PUSH OBSTACLE: ON',pushOff:'🧱 PUSH OBSTACLE: OFF',ready:'The quarantine zone is waiting. Start a new outbreak.',noUnit:'Select one of your active units first.',badMove:'That move is blocked or out of reach.',infected:'has been infected and joins the horde.',escaped:'reached the helicopter and escaped.',round:'ROUND',humans:'HUMANS',zombies:'INFECTED',score:'SCORE',winHumans:'SURVIVORS WIN — the evacuation threshold was reached.',winZombies:'THE OUTBREAK WINS — the horde consumed the evacuation zone.',draw:'THE QUARANTINE COLLAPSED — the city is lost.',newWave:'New outbreak generated. The city is never the same twice.',aiHuman:'Human vs AI',aiAi:'AI vs AI · spectator',turnHuman:'Your faction: ',turnAI:'AI is planning the next move…',pushLog:'The obstacle was shoved one tile.',selected:'Selected: ',humanTurn:'YOUR TURN',zombieTurn:'INFECTED TURN',allActed:'All your units have acted. Resolve the opposing faction.',roundStart:'Round ',escapeTarget:'Evacuate survivors by helicopter or stop the infection from spreading.'},
+    ru:{hint:'Выбери своего участника, затем нажми на соседнюю клетку. Каждый участник действует один раз за раунд. Режим толкания позволяет сдвинуть один блок завалов.',start:'НАЧАТЬ ВСПЫШКУ',resolve:'ЗАВЕРШИТЬ ХОД / РЕЗОЛВ',pushOn:'🧱 ТОЛКАТЬ ПРЕПЯТСТВИЕ: ВКЛ',pushOff:'🧱 ТОЛКАТЬ ПРЕПЯТСТВИЕ: ВЫКЛ',ready:'Зона карантина ждёт. Начни новую вспышку.',noUnit:'Сначала выбери активного участника своей команды.',badMove:'Клетка занята, заблокирована или слишком далеко.',infected:'заражён и присоединяется к орде.',escaped:'добрался до вертолёта и эвакуировался.',round:'РАУНД',humans:'ЛЮДИ',zombies:'ЗАРАЖЕНЫ',score:'СЧЁТ',winHumans:'ПОБЕДА ВЫЖИВШИХ — удалось эвакуировать достаточно людей.',winZombies:'ПОБЕДА ОРДЫ — заражение захватило зону эвакуации.',draw:'КАРАНТИН РУХНУЛ — город потерян.',newWave:'Новая вспышка. План города каждый раз меняется.',aiHuman:'Человек против ИИ',aiAi:'ИИ против ИИ · наблюдение',turnHuman:'Твоя сторона: ',turnAI:'ИИ планирует следующий ход…',pushLog:'Препятствие сдвинуто на одну клетку.',selected:'Выбран: ',humanTurn:'ТВОЙ ХОД',zombieTurn:'ХОД ЗАРАЖЁННЫХ',allActed:'Все твои участники походили. Заверши ход, чтобы действовал противник.',roundStart:'Раунд ',escapeTarget:'Эвакуируй выживших вертолётом или останови распространение инфекции.'}
   };
-  const resetOutbreak=()=>{
-    actors[0].p=0;actors[0].role='survivor';actors[1].p=8;actors[1].role='survivor';actors[2].p=72;actors[2].role='infected';
-    outbreakTurn=0;escaped=0;captured=0;outbreakStarted=false;outbreakEnded=false;
-    $('zw-demo-turn').disabled=true;$('zw-mcp-status').textContent=L('mcpStatus');
-    $('zw-outbreak-feed').replaceChildren();feed('zw-outbreak-feed','Mission ready: guide both survivors to the helicopter. The infected moves after them.');drawOutbreak();
-  };
-  $('zw-demo-start').addEventListener('click',()=>{if(outbreakEnded)resetOutbreak();outbreakStarted=true;$('zw-demo-turn').disabled=false;feed('zw-outbreak-feed',L('missionStart'));});
-  $('zw-demo-turn').addEventListener('click',()=>{
-    if(!outbreakStarted||outbreakEnded)return;outbreakTurn++;
-    for(const survivor of actors.filter(a=>a.role==='survivor')){
-      const next=pathStep(survivor.p,exitTile);if(next===survivor.p)continue;
-      survivor.p=next;
-      if(survivor.p===exitTile){survivor.role='escaped';escaped++;feed('zw-outbreak-feed',L('survivorEscaped').replace('{name}',survivor.name));}
+  const OT=key=>(outbreakCopy[document.documentElement.lang]||outbreakCopy.en)[key]||outbreakCopy.en[key]||key;
+  function outbreakLog(message){feed('zw-outbreak-feed',message);const f=$('zw-outbreak-feed');while(f.children.length>24)f.lastElementChild.remove();}
+  function makeMap(){
+    fixedWalls.clear();crates.clear();hazards.clear();
+    // Broken streets and ruined buildings form corridors but never seal the map.
+    for(let y=1;y<BH-1;y++)for(let x=1;x<BW-1;x++){
+      const p=tile(x,y);
+      if((x%5===2&&y%4!==1)||(y%5===3&&x%6===4)){if(!heliPads.has(p))fixedWalls.add(p);}
     }
-    const hunter=actors.find(a=>a.role==='infected');
-    if(hunter){const targets=actors.filter(a=>a.role==='survivor');if(targets.length){targets.sort((a,b)=>Math.abs(a.p%size-hunter.p%size)+Math.abs(Math.floor(a.p/size)-Math.floor(hunter.p/size))-(Math.abs(b.p%size-hunter.p%size)+Math.abs(Math.floor(b.p/size)-Math.floor(hunter.p/size))));const target=targets[0];hunter.p=pathStep(hunter.p,target.p);if(hunter.p===target.p){target.role='captured';captured++;feed('zw-outbreak-feed',L('survivorCaught').replace('{name}',target.name));}else feed('zw-outbreak-feed',L('infectedHunts').replace('{name}',target.name));}}
-    if(escaped===2){outbreakEnded=true;feed('zw-outbreak-feed',L('missionWon'));}
-    else if(captured===2||outbreakTurn>=18){outbreakEnded=true;feed('zw-outbreak-feed',captured===2?L('missionLost'):L('missionTimeout'));}
-    if(outbreakEnded)$('zw-demo-turn').disabled=true;
-    drawOutbreak();
+    // Open lanes keep both sides connected; movable debris creates tactical choke points.
+    for(let y=0;y<BH;y++){fixedWalls.delete(tile(8,y));}
+    for(let x=0;x<BW;x++){fixedWalls.delete(tile(x,6));}
+    for(const p of [tile(3,2),tile(5,9),tile(12,3),tile(14,10),tile(2,11),tile(10,8),tile(15,5),tile(7,3),tile(11,12),tile(16,8)])if(!fixedWalls.has(p)&&!heliPads.has(p))crates.add(p);
+    for(const p of [tile(4,5),tile(13,7),tile(6,11),tile(15,2)])if(!fixedWalls.has(p))hazards.add(p);
+  }
+  function freeCell(preferred,used){
+    for(const p of preferred)if(!used.has(p)&&!fixedWalls.has(p)&&!crates.has(p)&&!heliPads.has(p))return p;
+    for(let p=0;p<BOARD;p++)if(!used.has(p)&&!fixedWalls.has(p)&&!crates.has(p)&&!heliPads.has(p))return p;
+    return 0;
+  }
+  function newRoster(){
+    makeMap();humans=[];zombies=[];const used=new Set();
+    const humanNames=['Mara','Viktor','Nix','Ash','June','Rook','Iris','Milo','Sable','Kai','Echo','Dante','Nova','Finn','Zara','Wolf','Pip','Raven'];
+    const humanStarts=[];for(let y=0;y<4;y++)for(let x=0;x<BW;x++)if(x<7||x>10)humanStarts.push(tile(x,y));
+    for(let i=0;i<18;i++){const p=freeCell(humanStarts,used);used.add(p);humans.push({id:'H'+(i+1),name:humanNames[i],p,alive:true,acted:false,health:1,escape:false});}
+    const zombieStarts=[];for(let y=9;y<BH;y++)for(let x=0;x<BW;x++)if(x<7||x>10)zombieStarts.push(tile(x,y));
+    const zombieNames=['Alpha','Brute','Howler','Stalker','Crawler','Warden'];
+    for(let i=0;i<6;i++){const p=freeCell(zombieStarts,used);used.add(p);zombies.push({id:'Z'+(i+1),name:zombieNames[i],p,alive:true,acted:false,elite:i===1});}
+    round=0;escaped=0;infectedCount=0;selectedUnit=null;playerActed.clear();zombieActed.clear();gameEnded=false;gameStarted=false;pushMode=false;
+    $('zw-demo-turn').disabled=true;$('zw-demo-start').disabled=false;$('zw-push-mode').setAttribute('aria-pressed','false');$('zw-push-mode').textContent=OT('pushOff');
+    outbreakLog(OT('newWave'));drawOutbreak();
+  }
+  const allActors=()=>[...humans.filter(a=>a.alive),...zombies.filter(a=>a.alive)];
+  const occupant=p=>allActors().find(a=>a.p===p);
+  const neighbors=p=>{const {x,y}=cellXY(p);return Object.values(dirs).map(([dx,dy])=>({x:x+dx,y:y+dy,p:tile(x+dx,y+dy)})).filter(n=>n.x>=0&&n.x<BW&&n.y>=0&&n.y<BH&&!fixedWalls.has(n.p));};
+  const blocked=p=>fixedWalls.has(p)||crates.has(p)||!!occupant(p);
+  function pathNext(from,to,allowOccupied=false){
+    const queue=[from],prev=new Map([[from,null]]);
+    while(queue.length){const at=queue.shift();if(at===to)break;for(const n of neighbors(at)){if(prev.has(n.p)||crates.has(n.p)||(!allowOccupied&&occupant(n.p)))continue;prev.set(n.p,at);queue.push(n.p);}}
+    if(!prev.has(to))return from;let step=to;while(prev.get(step)!==from&&prev.get(step)!==null)step=prev.get(step);return step;
+  }
+  function nearestTarget(actor,targets){return targets.filter(t=>t.alive).sort((a,b)=>distance(actor.p,a.p)-distance(actor.p,b.p))[0]||null;}
+  const distance=(a,b)=>Math.abs(a%BW-b%BW)+Math.abs(Math.floor(a/BW)-Math.floor(b/BW));
+  function infectHuman(h,z){if(!h.alive)return;h.alive=false;zombies.push({id:'Z'+(zombies.length+1),name:h.name+' · turned',p:h.p,alive:true,acted:false,elite:false});infectedCount++;outbreakLog('🧟 '+h.name+' '+OT('infected'));}
+  function moveActor(actor,target){
+    if(!actor||!actor.alive||distance(actor.p,target)!==1||fixedWalls.has(target)||crates.has(target))return false;
+    const victim=occupant(target);
+    if(actor.id[0]==='Z'&&victim&&victim.id[0]==='H'){infectHuman(victim,actor);actor.p=target;return true;}
+    if(victim)return false;
+    actor.p=target;
+    if(actor.id[0]==='H'&&heliPads.has(target)){actor.alive=false;actor.escape=true;escaped++;outbreakLog('🚁 '+actor.name+' '+OT('escaped'));}
+    return true;
+  }
+  function pushCrate(actor,crate,target){
+    if(!actor||!actor.alive||distance(actor.p,crate)!==1||!crates.has(crate)||distance(crate,target)!==1||blocked(target)||heliPads.has(target))return false;
+    crates.delete(crate);crates.add(target);actor.acted=true;outbreakLog('🧱 '+OT('pushLog'));return true;
+  }
+  function aiMove(actor){
+    if(!actor.alive)return;
+    const isZombie=actor.id[0]==='Z';
+    if(isZombie){
+      const target=nearestTarget(actor,humans);
+      if(!target)return;
+      const next=pathNext(actor.p,target.p,true);
+      if(next!==actor.p)moveActor(actor,next);
+      else{const near=neighbors(actor.p).find(n=>{const a=occupant(n.p);return a&&a.id[0]==='H';});if(near)infectHuman(occupant(near.p),actor);}
+    }else{
+      const safePads=[...heliPads].filter(p=>!occupant(p));
+      const nearestZombie=nearestTarget(actor,zombies);
+      let target=safePads.sort((a,b)=>distance(actor.p,a)-distance(actor.p,b))[0];
+      const threat=nearestZombie&&distance(actor.p,nearestZombie.p)<=5;
+      if(threat){const options=neighbors(actor.p).filter(n=>!blocked(n.p));options.sort((a,b)=>Math.min(...zombies.filter(z=>z.alive).map(z=>distance(a.p,z.p)))-Math.min(...zombies.filter(z=>z.alive).map(z=>distance(b.p,z.p))));if(options.length)target=options[0].p;}
+      if(target!==undefined){const next=pathNext(actor.p,target);if(next!==actor.p)moveActor(actor,next);}
+    }
+    actor.acted=true;
+  }
+  function sideActors(side){return (side==='survivor'?humans:zombies).filter(a=>a.alive);}
+  function selectedSide(){return gameMode==='ai-ai'?null:playerSide;}
+  function renderRoster(){
+    const roster=$('zw-unit-roster'),side=selectedSide()||'survivor',units=sideActors(side);
+    roster.replaceChildren(...units.map(a=>{const b=document.createElement('button');b.type='button';b.className='zw-unit'+(selectedUnit===a.id?' is-selected':'')+(a.acted?' is-acted':'');b.disabled=!gameStarted||gameEnded||a.acted||gameMode==='ai-ai';b.innerHTML='<span>'+(side==='survivor'?'🧍':'🧟')+' '+a.name+'</span><small>'+a.id+'</small>';b.addEventListener('click',()=>{selectedUnit=a.id;drawOutbreak();});return b;}));
+  }
+  function paintOutbreakStats(){
+    const aliveHumans=humans.filter(a=>a.alive).length,aliveZombies=zombies.filter(a=>a.alive).length;
+    $('zw-escaped').textContent=escaped+' ESCAPED';$('zw-captured').textContent=infectedCount+' INFECTED';$('zw-outbreak-alive').textContent=(aliveHumans+aliveZombies)+' ALIVE';$('zw-outbreak-turns').textContent=OT('round')+' '+round;
+    $('zw-outbreak-score').textContent=OT('score')+' '+(escaped+aliveHumans)+' : '+(infectedCount+aliveZombies);
+  }
+  function drawOutbreak(){
+    const map=$('zw-outbreak-map');map.replaceChildren();
+    for(let p=0;p<BOARD;p++){
+      const cell=document.createElement('button');cell.type='button';cell.className='zw-cell';cell.setAttribute('role','gridcell');cell.setAttribute('aria-label','Tile '+(p+1));
+      const actor=occupant(p);
+      if(actor){cell.textContent=actor.id[0]==='Z'?'🧟':'🧍';cell.classList.add(actor.id[0]==='Z'?'zw-zombie':'zw-human');cell.title=actor.name+' · '+actor.id+(actor.acted?' · acted':' · ready');if(actor.id===selectedUnit)cell.classList.add('zw-selected');if(actor.acted)cell.classList.add('zw-acted');}
+      else if(heliPads.has(p)){cell.textContent='🚁';cell.classList.add('zw-heli');cell.title='Helicopter extraction';}
+      else if(crates.has(p)){cell.textContent='🧱';cell.classList.add('zw-crate');cell.title='Movable debris';}
+      else if(fixedWalls.has(p)){cell.textContent='🏚️';cell.classList.add('zw-wall');cell.title='Collapsed building';}
+      else if(hazards.has(p)){cell.textContent='☣️';cell.classList.add('zw-hazard');cell.title='Contaminated zone';}
+      else cell.textContent='';
+      cell.addEventListener('click',()=>onTileClick(p));map.append(cell);
+    }
+    paintOutbreakStats();renderRoster();
+    $('zw-command-hint').textContent=gameMode==='ai-ai'?OT('aiAi'):OT('hint');
+  }
+  function onTileClick(p){
+    if(!gameStarted||gameEnded||turnBusy||gameMode==='ai-ai')return;
+    const side=selectedSide(),list=sideActors(side);
+    if(pushMode){
+      if(!selectedUnit){outbreakLog(OT('noUnit'));return;}
+      const actor=list.find(a=>a.id===selectedUnit),near=neighbors(actor.p).find(n=>n.p===p);
+      if(crates.has(p)&&near){selectedCrate=p;drawOutbreak();return;}
+      if(selectedCrate!==null&&distance(selectedCrate,p)===1&&pushCrate(actor,selectedCrate,p)){actor.acted=true;playerActed.add(actor.id);selectedCrate=null;drawOutbreak();checkPlayerTurn();return;}
+      outbreakLog(OT('badMove'));return;
+    }
+    const hit=occupant(p);
+    if(hit&&hit.id[0]===(side==='survivor'?'H':'Z')&&!hit.acted){selectedUnit=hit.id;drawOutbreak();return;}
+    const actor=list.find(a=>a.id===selectedUnit);
+    if(!actor){outbreakLog(OT('noUnit'));return;}
+    if(moveActor(actor,p)){actor.acted=true;playerActed.add(actor.id);selectedUnit=null;drawOutbreak();checkPlayerTurn();}
+    else outbreakLog(OT('badMove'));
+  }
+  let selectedCrate=null;
+  function checkPlayerTurn(){
+    const pending=sideActors(selectedSide()).filter(a=>!a.acted).length;
+    $('zw-demo-turn').disabled=pending>0;
+    if(!pending)outbreakLog(OT('allActed'));
+  }
+  function evaluateGame(){
+    const aliveHumans=humans.filter(a=>a.alive).length,aliveZombies=zombies.filter(a=>a.alive).length,totalHumans=humans.length;
+    if(escaped>=Math.ceil(totalHumans*.55)){gameEnded=true;outbreakLog(OT('winHumans'));}
+    else if(aliveHumans===0||infectedCount>=Math.ceil(totalHumans*.7)){gameEnded=true;outbreakLog(OT('winZombies'));}
+    else if(round>=32){gameEnded=true;outbreakLog(OT('draw'));}
+    $('zw-demo-turn').disabled=gameEnded;
+  }
+  async function resolveSide(side,delay=0){
+    const units=sideActors(side);
+    for(const actor of units){if(gameEnded)break;if(delay)await new Promise(r=>setTimeout(r,delay));if(!actor.acted){aiMove(actor);drawOutbreak();}}
+  }
+  async function resolveRound(){
+    if(turnBusy||!gameStarted||gameEnded)return;
+    turnBusy=true;$('zw-demo-turn').disabled=true;
+    try{
+      const enemy=playerSide==='survivor'?'infected':'survivor';
+      await resolveSide(enemy,Number($('zw-ai-speed').value)||350);
+      // Any surviving humans that share a tile edge with an infected are at immediate risk.
+      for(const z of zombies.filter(a=>a.alive)){const adjacent=neighbors(z.p).map(n=>occupant(n.p)).find(a=>a&&a.id[0]==='H');if(adjacent)infectHuman(adjacent,z);}
+      round++;humans.forEach(a=>a.acted=false);zombies.forEach(a=>a.acted=false);playerActed.clear();zombieActed.clear();selectedUnit=null;selectedCrate=null;
+      evaluateGame();drawOutbreak();
+      if(!gameEnded&&gameMode==='ai-ai')scheduleAiRound();
+      else if(!gameEnded)$('zw-demo-turn').disabled=false;
+    }finally{turnBusy=false;}
+  }
+  function scheduleAiRound(){
+    if(autoTimer)clearTimeout(autoTimer);
+    autoTimer=setTimeout(async()=>{
+      if(gameEnded||!gameStarted||turnBusy)return;
+      turnBusy=true;
+      try{await resolveSide('survivor',Number($('zw-ai-speed').value)||350);await resolveSide('infected',Number($('zw-ai-speed').value)||350);round++;humans.forEach(a=>a.acted=false);zombies.forEach(a=>a.acted=false);evaluateGame();drawOutbreak();if(!gameEnded)scheduleAiRound();}
+      finally{turnBusy=false;}
+    },120);
+  }
+  $('zw-demo-start').addEventListener('click',()=>{
+    if(gameEnded)newRoster();gameStarted=true;$('zw-demo-start').disabled=true;$('zw-demo-turn').disabled=false;
+    gameMode=$('zw-game-mode').value;playerSide=$('zw-player-side').value;
+    outbreakLog(OT('turnHuman')+(playerSide==='survivor'?'SURVIVORS':'INFECTED')+'. '+OT('escapeTarget'));
+    if(gameMode==='ai-ai'){ $('zw-demo-turn').disabled=true;scheduleAiRound();}else drawOutbreak();
   });
-  $('zw-demo-reset').addEventListener('click',resetOutbreak);resetOutbreak();
+  $('zw-demo-turn').addEventListener('click',resolveRound);
+  $('zw-demo-reset').addEventListener('click',()=>{if(autoTimer)clearTimeout(autoTimer);newRoster();});
+  $('zw-game-mode').addEventListener('change',()=>{gameMode=$('zw-game-mode').value;});
+  $('zw-player-side').addEventListener('change',()=>{playerSide=$('zw-player-side').value;drawOutbreak();});
+  $('zw-push-mode').addEventListener('click',()=>{pushMode=!pushMode;selectedCrate=null;$('zw-push-mode').setAttribute('aria-pressed',String(pushMode));$('zw-push-mode').textContent=OT(pushMode?'pushOn':'pushOff');});
+  document.addEventListener('zombcash:languagechange',()=>{if($('zw-push-mode'))$('zw-push-mode').textContent=OT(pushMode?'pushOn':'pushOff');if($('zw-demo-start'))$('zw-demo-start').textContent=OT('start');if($('zw-demo-turn'))$('zw-demo-turn').textContent=OT('resolve');});
+  newRoster();
 
   // Seven-day survival campaign. Every action changes shared resources and the settlement's fate.
   const initial=()=>[
