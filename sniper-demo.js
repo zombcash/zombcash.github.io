@@ -104,7 +104,15 @@
       const response=await fetch(AUTH_API+'/api/sniper/settings',{
         method:'POST',
         headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},
-        body:JSON.stringify({enabled:!!enabled,mode:'paper'}),
+        body:JSON.stringify({
+          enabled:!!enabled,mode:'paper',
+          paperCapitalSol:Number($('sniper-capital')&&$('sniper-capital').value)||10,
+          maxTradeSol:Math.min(0.05,Number($('sniper-size')&&$('sniper-size').value)||0.05),
+          takeProfitPct:Number($('sniper-target')&&$('sniper-target').value)||10,
+          stopLossPct:Number($('sniper-stop')&&$('sniper-stop').value)||5,
+          minPriceMovePct:Number($('sniper-min-move')&&$('sniper-min-move').value)||0.2,
+          idleExitSeconds:Number($('sniper-idle-timeout')&&$('sniper-idle-timeout').value)||60
+        }),
         cache:'no-store'
       });
       if(!response.ok){
@@ -821,7 +829,7 @@
 
     const fieldHost=dashNode('div','zs-fields');fields.forEach((f,i)=>{f.classList.add('zs-field');const input=f.querySelector('input');if(input){const lim={ 'sniper-size':[0.001,10,0.001], 'sniper-target':[0.1,100,0.1], 'sniper-stop':[0,99,0.5], 'sniper-network':[0,0.1,0.000001], 'sniper-priority':[0,0.1,0.000001], 'sniper-dex':[0,20,0.05], 'sniper-slip':[0,50,0.1] }[input.id];if(lim)addRange(f,input.id,...lim);}fieldHost.append(f);});
     addVirtualField(fieldHost,'sniper-capital',dcopy().capital,0.1,1000,0.1,terminal.capital||10);
-    addVirtualField(fieldHost,'sniper-max-size',dcopy().maxsize,0.001,10,0.001,terminal.maxTradeSize||0.05);
+    addVirtualField(fieldHost,'sniper-max-size',dcopy().maxsize,0.001,0.05,0.001,Math.min(0.05,terminal.maxTradeSize||0.05));
     addVirtualField(fieldHost,'sniper-liquidity',dcopy().minliq,0,1000000,100,terminal.minLiquidity||5000);
     addVirtualField(fieldHost,'sniper-idle-timeout',state.lang==='ru'?'ТАЙМ-АУТ БЕЗ ДВИЖЕНИЯ (СЕК.)':'NO-MOVEMENT TIMEOUT (SEC)',15,300,5,terminal.idleTimeout||60);
     addVirtualField(fieldHost,'sniper-min-move',state.lang==='ru'?'МИН. ДВИЖЕНИЕ ЦЕНЫ (%)':'MINIMUM PRICE MOVE (%)',0.05,2,0.05,terminal.minMovePct||0.2);
