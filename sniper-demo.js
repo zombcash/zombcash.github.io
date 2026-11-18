@@ -193,7 +193,7 @@
     const host=$('sniper-positions');if(!host)return;
     host.replaceChildren();
     if(!state.positions.length){host.append(make('p','sniper-muted',t('noPositions')));renderStats();return;}
-    state.positions.slice().reverse().forEach(p=>{
+    state.positions.slice().sort((a,b)=>{if(a.status!==b.status)return a.status==='open'?-1:1;return Number(b.openedAt||0)-Number(a.openedAt||0);}).forEach(p=>{
       const row=make('article','sniper-position zs-position-card');
       const head=make('div','zs-position-topline');
       const identity=make('div','zs-position-identity');
@@ -206,8 +206,19 @@
       metric(state.lang==='ru'?'ВХОД':'ENTRY',fmt(p.entryPrice,9)+' SOL');
       metric(state.lang==='ru'?'ТЕКУЩАЯ':'CURRENT',fmt(p.lastPrice||p.entryPrice,9)+' SOL');
       metric('NET P/L',fmt(p.netPct||0,2)+'%');
+      const contract=make('div','zs-position-contract');
+      const contractLabel=make('small','',state.lang==='ru'?'КОНТРАКТ':'CONTRACT');
+      const address=String(p.address||'');
+      const addressText=make('code','zs-position-address',address?address.slice(0,7)+'…'+address.slice(-7):(state.lang==='ru'?'Адрес недоступен':'Address unavailable'));
+      const copyBtn=make('button','zs-copy-address',state.lang==='ru'?'КОПИРОВАТЬ':'COPY');
+      copyBtn.type='button';copyBtn.disabled=!address;copyBtn.addEventListener('click',async()=>{
+        try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(address);else{const temp=document.createElement('textarea');temp.value=address;temp.style.position='fixed';temp.style.opacity='0';document.body.append(temp);temp.select();document.execCommand('copy');temp.remove();}
+          copyBtn.textContent=state.lang==='ru'?'СКОПИРОВАНО':'COPIED';window.setTimeout(()=>{copyBtn.textContent=state.lang==='ru'?'КОПИРОВАТЬ':'COPY';},1300);
+        }catch(_){copyBtn.textContent=state.lang==='ru'?'ОШИБКА':'FAILED';}
+      });
+      contract.append(contractLabel,addressText,copyBtn);
       const graph=make('div','zs-position-chart');graph.append(sparkline(p.priceHistory&&p.priceHistory.length?p.priceHistory:[p.entryPrice,p.lastPrice||p.entryPrice]));
-      row.append(head,detail,graph);
+      row.append(head,detail,contract,graph);
       if(p.status==='open'){const close=make('button','sniper-action sniper-close zs-position-close',dcopy().close||t('manualClose'));close.type='button';close.addEventListener('click',()=>closePaper(p.id,'manual'));row.append(close);}
       else if(p.exitReason){const reasons={stagnant:state.lang==='ru'?'Нет движения более минуты · переход к следующему запуску':'No movement · rotated to next launch',target:t('targetHit'),stop:t('stopHit')};row.append(make('small','zs-position-reason',reasons[p.exitReason]||t('closed')));}
       host.append(row);
@@ -472,6 +483,22 @@
     .zs-positions .zs-position-chart{width:100%!important;max-height:42px!important;overflow:hidden!important}
     .zs-positions .zs-position-chart .zs-spark{width:100%!important;height:38px!important}
 
+
+    /* Full-viewport trading terminal and position contract row */
+    .sniper-demo.zs-fullscreen{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;max-height:100dvh!important;z-index:2147483600!important;box-sizing:border-box!important;margin:0!important;border:0!important;border-radius:0!important;overflow:hidden!important}
+    .zs-fullscreen .zs-layout{min-height:0!important;height:100%!important}
+    .zs-fullscreen .zs-left,.zs-fullscreen .zs-center,.zs-fullscreen .zs-right{min-height:0!important;overflow:auto!important;overscroll-behavior:contain!important}
+    .zs-fullscreen .zs-position-section{min-height:0!important;overflow:auto!important}
+    .zs-fullscreen .zs-positions-inner{min-height:0!important;overflow:visible!important}
+    .zs-positions .zs-position-contract{display:flex!important;align-items:center!important;gap:8px!important;min-width:0!important;width:100%!important;padding:6px 7px!important;border:1px solid #ffffff17!important;border-radius:3px!important;background:#080e0b88!important;box-sizing:border-box!important}
+    .zs-positions .zs-position-contract small{flex:0 0 auto!important;color:#9eaa9e!important;font-size:8px!important;letter-spacing:.08em!important}
+    .zs-positions .zs-position-address{display:block!important;flex:1 1 auto!important;min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;color:#d5dfd3!important;font:10px ui-monospace,monospace!important}
+    .zs-positions .zs-copy-address{flex:0 0 auto!important;min-height:26px!important;padding:4px 8px!important;border:1px solid #697a6b!important;border-radius:3px!important;background:#29352d!important;color:#dce6d9!important;font:700 9px system-ui!important;cursor:pointer!important}
+    .zs-positions .zs-copy-address:disabled{opacity:.45!important;cursor:not-allowed!important}
+    .zs-fullscreen .zs-head-actions{flex-wrap:nowrap!important}
+    .zs-fullscreen .zs-expand{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:32px!important;white-space:nowrap!important;position:relative!important;z-index:2!important}
+    @media(max-width:760px){.zs-fullscreen .zs-layout{height:auto!important}.zs-fullscreen .zs-left,.zs-fullscreen .zs-center,.zs-fullscreen .zs-right{overflow:visible!important}.zs-positions .zs-position-contract{flex-wrap:wrap!important}}
+
     /* Position monitor cards: explicit, non-overlapping information hierarchy */
     .zs-positions-inner{display:flex!important;flex-direction:column!important;gap:8px!important;padding:4px!important;min-width:0!important}
     .zs-positions .zs-position-card{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:8px!important;width:100%!important;min-width:0!important;box-sizing:border-box!important;padding:12px!important;border:1px solid #536357!important;border-radius:5px!important;background:linear-gradient(135deg,#1c2520,#101714)!important;overflow:hidden!important}
@@ -603,7 +630,7 @@
     @media(max-height:760px) and (min-width:761px){.sniper-demo.zs-fullscreen{grid-template-rows:0 38px 34px 56px minmax(0,1fr) 76px!important;padding:7px 12px!important;gap:5px!important}.zs-fullscreen .zs-panel{padding:9px 11px}.zs-fullscreen .zs-kpi{padding:7px 10px}.zs-fullscreen .zs-portrait{height:55px}.zs-fullscreen .zs-core{width:100px;min-height:82px}.zs-fullscreen .zs-chart{height:55px}.zs-fullscreen .zs-field{padding:3px 0}.zs-fullscreen .zs-field label{font-size:10px}.zs-fullscreen .zs-log{max-height:42px}}
     @media(max-width:760px){.sniper-demo.zs-fullscreen{display:block!important;overflow:auto!important;height:100dvh!important;padding:12px!important}.zs-fullscreen>.zs-head,.zs-fullscreen>.zs-nav,.zs-fullscreen>.zs-kpis,.zs-fullscreen>.zs-layout,.zs-fullscreen>#zs-journal-panel{display:block!important;margin-bottom:10px}.zs-fullscreen .zs-layout{height:auto;grid-template-columns:1fr}.zs-fullscreen .zs-right{min-height:520px}.zs-fullscreen .zs-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.zs-fullscreen .zs-kpis{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))}.zs-fullscreen .zs-log{grid-template-columns:1fr;max-height:150px}}
     `;
-    const header=dashNode('div','zs-head');const brand=dashNode('span','zs-brand','☣ ZOMBCASH');const title=dashNode('strong','zs-title','ZOMBIE SNIPER');const headActions=dashNode('div','zs-head-actions');headActions.append(dashNode('span','zs-demo',dcopy().demo));const expand=dashNode('button','zs-expand','⛶ FULL SCREEN');expand.type='button';expand.title='Open terminal full screen';expand.addEventListener('click',()=>{const on=root.classList.toggle('zs-fullscreen');document.body.classList.toggle('zs-lock',on);expand.textContent=on?'✕ CLOSE':'⛶ FULL SCREEN';});headActions.append(expand);header.append(brand,title,headActions);
+    const header=dashNode('div','zs-head');const brand=dashNode('span','zs-brand','☣ ZOMBCASH');const title=dashNode('strong','zs-title','ZOMBIE SNIPER');const headActions=dashNode('div','zs-head-actions');headActions.append(dashNode('span','zs-demo',dcopy().demo));const expand=dashNode('button','zs-expand','⛶ FULL SCREEN');expand.type='button';expand.title='Open terminal full screen';expand.addEventListener('click',()=>{const on=root.classList.toggle('zs-fullscreen');document.body.classList.toggle('zs-lock',on);expand.textContent=on?'✕ EXIT FULL SCREEN':'⛶ FULL SCREEN';});headActions.append(expand);header.append(brand,title,headActions);
     const nav=dashNode('nav','zs-nav');nav.setAttribute('aria-label','Zombie Sniper navigation');
     const tabTargets=['sniper','stats','history','settings','help'];
     function selectTab(tab){
@@ -676,7 +703,7 @@
     const foot=dashNode('p','zs-foot',dcopy().hint+' '+t('source'));
     const helpPanel=dashNode('section','zs-panel zs-help zs-tab-hidden');helpPanel.innerHTML='';const helpTitle=dashNode('h3','',state.lang==='ru'?'СПРАВКА И БЕЗОПАСНОСТЬ':'HELP & SAFETY');helpPanel.append(helpTitle,dashNode('p','zs-foot',state.lang==='ru'?'Это симулятор. Все сделки виртуальные. Реальные кошельки, ключи и транзакции не используются.':'This is a paper-trading simulator. No live wallets, private keys or transactions are used.'),dashNode('p','zs-foot',state.lang==='ru'?'Настройте размер сделки, комиссии, проскальзывание, стоп-лосс и цель чистой прибыли. Автовход использует только новые запуски с доступной SOL-парой и заданной минимальной ликвидностью.':'Adjust trade size, fees, slippage, stop loss and net profit target. Auto-entry only uses new launches with a live SOL pair and your minimum liquidity threshold.'));
     root.replaceChildren(style,header,nav,kpis,layout,journal,helpPanel,foot);
-    renderDashboardState();renderPositions();renderCandidates();selectTab('sniper');
+    renderDashboardState();renderPositions();renderCandidates();selectTab('sniper');root.classList.add('zs-fullscreen');document.body.classList.add('zs-lock');expand.textContent='✕ EXIT FULL SCREEN';
   }
 
   function init(){
