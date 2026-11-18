@@ -226,8 +226,12 @@
     $('zw-world-mode').textContent=userKey?L('liveMode'):L('localMode');
     updateCommandControls();
     $('zw-auto').textContent=auto?L('autoOn'):L('autoOff');
-    $('zw-outbreak-legend').textContent=L('legend');
     paintOutbreakStats();
+    if($('zw-demo-start'))$('zw-demo-start').textContent=OT('start');
+    if($('zw-demo-turn'))$('zw-demo-turn').textContent=OT('resolve');
+    if($('zw-push-mode'))$('zw-push-mode').textContent=OT(pushMode?'pushOn':'pushOff');
+    if($('zw-command-hint'))$('zw-command-hint').textContent=gameMode==='ai-ai'?OT('aiAi'):OT('hint');
+    if($('zw-outbreak-objective'))$('zw-outbreak-objective').textContent=OT('escapeTarget');
     renderExpedition();
   }
   document.addEventListener('zombcash:languagechange', applyLocale);
@@ -271,7 +275,7 @@
   const OT=key=>(outbreakCopy[document.documentElement.lang]||outbreakCopy.en)[key]||outbreakCopy.en[key]||key;
   function outbreakLog(message){feed('zw-outbreak-feed',message);const f=$('zw-outbreak-feed');while(f.children.length>24)f.lastElementChild.remove();}
   function makeMap(){
-    fixedWalls.clear();crates.clear();hazards.clear();
+    fixedWalls.clear();crates.clear();hazards.clear();selectedCrate=null;
     // Broken streets and ruined buildings form corridors but never seal the map.
     for(let y=1;y<BH-1;y++)for(let x=1;x<BW-1;x++){
       const p=tile(x,y);
@@ -306,7 +310,7 @@
   const blocked=p=>fixedWalls.has(p)||crates.has(p)||!!occupant(p);
   function pathNext(from,to,allowOccupied=false){
     const queue=[from],prev=new Map([[from,null]]);
-    while(queue.length){const at=queue.shift();if(at===to)break;for(const n of neighbors(at)){if(prev.has(n.p)||crates.has(n.p)||(!allowOccupied&&occupant(n.p)))continue;prev.set(n.p,at);queue.push(n.p);}}
+    while(queue.length){const at=queue.shift();if(at===to)break;for(const n of neighbors(at)){if(prev.has(n.p)||crates.has(n.p)||(occupant(n.p)&&(!allowOccupied||n.p!==to)))continue;prev.set(n.p,at);queue.push(n.p);}}
     if(!prev.has(to))return from;let step=to;while(prev.get(step)!==from&&prev.get(step)!==null)step=prev.get(step);return step;
   }
   function nearestTarget(actor,targets){return targets.filter(t=>t.alive).sort((a,b)=>distance(actor.p,a.p)-distance(actor.p,b.p))[0]||null;}
