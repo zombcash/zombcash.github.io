@@ -184,7 +184,20 @@
         stats.append(make('span','','MOVE '+(m.priceChangePct==null?'—':fmt(m.priceChangePct,2)+'%')));
         stats.append(make('span','',t('price')+': '+(item.priceNative>0?fmt(item.priceNative,9):t('waitingForPool'))+' SOL'));
       }else{
-        stats.append(make('span','',t('liquidity')+': 
+        stats.append(make('span','',t('liquidity')+': USD '+fmt(item.liquidityUsd,0)));
+        stats.append(make('span','',t('price')+': '+(item.priceNative>0?fmt(item.priceNative,9):t('waitingForPool'))));
+      }
+      const action=make('button','sniper-action',item.priceNative>0?t('action'):t('waitingForPool'));
+      action.type='button';
+      action.disabled=!(item.priceNative>0);
+      action.addEventListener('click',()=>openPaper(item));
+      const link=make('a','sniper-link',item.source==='pumpportal'?'PUMP.FUN ↗':'DEXSCREENER ↗');
+      link.href=item.source==='pumpportal'?'https://pump.fun/coin/'+encodeURIComponent(item.address):item.url;
+      link.target='_blank';link.rel='noopener noreferrer';
+      row.append(main,stats,link,action);host.append(row);
+    });
+    maybeAutoEnter();
+  }
   function renderPositions(){
     const host=$('sniper-positions');if(!host)return;
     host.replaceChildren();
