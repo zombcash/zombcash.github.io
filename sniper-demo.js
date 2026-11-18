@@ -385,6 +385,38 @@
     terminal.seen.push(item.address);terminal.seen=terminal.seen.slice(-250);terminal.lastAuto=Date.now();saveTerminal();
     openPaper(item,true);
   }
+
+  function showLaunchConfirm(){
+    const n=id=>Number($(id)&&$(id).value);
+    const errors=[];
+    if(!(n('sniper-size')>0))errors.push('Размер сделки должен быть больше нуля.');
+    if(n('sniper-size')>n('sniper-max-size'))errors.push('Размер сделки выше максимума.');
+    if(n('sniper-size')>n('sniper-capital'))errors.push('Размер сделки выше виртуального капитала.');
+    if(!(n('sniper-capital')>0))errors.push('Капитал должен быть больше нуля.');
+    if(!(n('sniper-target')>0))errors.push('Цель прибыли должна быть больше нуля.');
+    if(errors.length){window.alert('Нельзя запустить:\n'+errors.join('\n'));return;}
+    const lines=[
+      'ПРОВЕРКА ПЕРЕД ЗАПУСКОМ',
+      'Капитал: '+n('sniper-capital')+' SOL',
+      'Размер сделки: '+n('sniper-size')+' SOL',
+      'Take Profit: +'+n('sniper-target')+'%',
+      'Stop Loss: -'+n('sniper-stop')+'%',
+      'Мин. ликвидность: $'+n('sniper-liquidity'),
+      'DEX / сторона: '+n('sniper-dex')+'%',
+      'Проскальзывание / сторона: '+n('sniper-slip')+'%',
+      'Сеть / приоритет: '+n('sniper-network')+' / '+n('sniper-priority')+' SOL'
+    ];
+    if(n('sniper-slip')>5)lines.push('⚠ Проскальзывание выше 5% на сторону.');
+    if(n('sniper-dex')>2)lines.push('⚠ Комиссия DEX выше 2% на сторону.');
+    if(n('sniper-size')>0.05)lines.push('⚠ Сделка выше стартовой рекомендации 0,05 SOL.');
+    if(n('sniper-liquidity')<5000)lines.push('⚠ Минимальная ликвидность ниже $5 000.');
+    lines.push('Запустить автоснайпер в ДЕМО-РЕЖИМЕ? Реальных транзакций не будет.');
+    if(!window.confirm(lines.join('\n')))return;
+    terminal.auto=true;saveTerminal();renderDashboardState();
+    logEvent('ARMED','SYSTEM','Подтверждён paper mode · '+n('sniper-size')+' SOL');
+    refreshFeed();maybeAutoEnter();
+  }
+
   function buildDashboard(){
     const root=$('zombie-sniper-demo');if(!root||root.dataset.zsBuilt)return;
     root.dataset.zsBuilt='1';loadTerminal();
@@ -414,6 +446,18 @@
 
 
     style.textContent += `
+
+    .zs-left{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(90deg,#151c18f4 0%,#151c18e8 58%,#151c18b8 100%),url('/assets/zombcash-survivor-640.avif') right center/auto 100% no-repeat!important}
+    .zs-left:before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#101713 0%,#101713d9 60%,#10171377 100%)}
+    .zs-presets{margin-top:13px;padding:11px;border:1px solid #69796766;border-radius:5px;background:#0c130fbb;backdrop-filter:blur(4px)}
+    .zs-presets h3{margin:0 0 5px!important;color:#d9e3d4!important;font-size:11px!important}
+    .zs-preset-note{margin:0 0 8px;color:#aeb9ae;font-size:10px;line-height:1.45}
+    .zs-preset-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+    .zs-preset-btn{min-height:31px;padding:7px 8px;border:1px solid #59685d;border-radius:3px;background:#202a23;color:#dce5da;font-size:10px;font-weight:750;cursor:pointer}
+    .zs-preset-btn:hover,.zs-preset-btn.is-selected{border-color:#a8bc9d;background:#3a4b3b;color:#fff}
+    .zs-preset-applied{min-height:14px;margin:6px 0 0;color:#b9d3aa;font-size:10px}
+    @media(max-width:760px){.zs-preset-buttons{grid-template-columns:1fr}}
+
     /* Cinematic terminal refinement */
     .zs-stats-extra{margin-top:10px;padding-top:10px;border-top:1px solid #ffffff19}.zs-stats-extra h3{margin-bottom:10px}.zs-stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.zs-stat-card{padding:13px;border:1px solid #536157;border-radius:4px;background:#121a15}.zs-stat-card small{display:block;color:#b9c4b9;font-size:10px;letter-spacing:.07em}.zs-stat-card strong{display:block;margin-top:7px;color:#e8eee5;font-size:clamp(17px,1.5vw,22px);font-variant-numeric:tabular-nums}.zs-stat-card .zs-negative{color:#d99b9b}
 
@@ -471,16 +515,40 @@
     dcopy().nav.forEach((label,i)=>{const b=dashNode('button','',label);b.dataset.zsNav=String(i);b.type='button';b.setAttribute('role','tab');b.addEventListener('click',()=>selectTab(tabTargets[i]||'sniper'));nav.append(b);});
     const kpis=dashNode('div','zs-kpis');kpis.id='zs-kpis';
     const layout=dashNode('div','zs-layout');const left=dashNode('section','zs-panel zs-left');left.id='zs-settings';const leftTitle=dashNode('h3','',dcopy().settings);leftTitle.id='zs-settings-title';left.append(leftTitle);
+
+    const presetPanel=dashNode('section','zs-presets');presetPanel.id='zs-presets';
+    presetPanel.append(dashNode('h3','',state.lang==='ru'?'РЕКОМЕНДУЕМЫЕ ПРОФИЛИ':'RECOMMENDED PROFILES'));
+    presetPanel.append(dashNode('p','zs-preset-note',state.lang==='ru'?'Готовые наборы для виртуальных испытаний. Меняют только демо-параметры.':'Ready-made paper-testing profiles. Demo settings only.'));
+    const presetButtons=dashNode('div','zs-preset-buttons');
+    const presets=[
+      {id:'conservative',label:state.lang==='ru'?'Консервативный':'Conservative',v:{capital:10,size:0.02,target:8,stop:10,network:0.00001,priority:0.00005,dex:0.5,slip:0.5,max:0.05,liq:20000}},
+      {id:'balanced',label:state.lang==='ru'?'Сбалансированный':'Balanced',v:{capital:10,size:0.05,target:12,stop:15,network:0.00001,priority:0.0001,dex:0.5,slip:1,max:0.05,liq:10000}},
+      {id:'aggressive',label:state.lang==='ru'?'Агрессивный':'Aggressive',v:{capital:10,size:0.05,target:20,stop:25,network:0.00002,priority:0.0002,dex:0.5,slip:2,max:0.05,liq:5000}}
+    ];
+    presets.forEach(p=>{
+      const b=dashNode('button','zs-preset-btn',p.label);b.type='button';b.dataset.preset=p.id;
+      b.addEventListener('click',()=>{
+        const v=p.v,map={'sniper-size':v.size,'sniper-target':v.target,'sniper-stop':v.stop,'sniper-network':v.network,'sniper-priority':v.priority,'sniper-dex':v.dex,'sniper-slip':v.slip,'sniper-capital':v.capital,'sniper-max-size':v.max,'sniper-liquidity':v.liq};
+        Object.entries(map).forEach(([id,value])=>{const el=$(id);if(el){el.value=String(value);const r=el.parentElement&&el.parentElement.querySelector('.zs-range');if(r)r.value=String(value);}});
+        terminal.capital=v.capital;terminal.maxTradeSize=v.max;terminal.minLiquidity=v.liq;terminal.selectedPreset=p.id;saveTerminal();renderStats();
+        presetButtons.querySelectorAll('button').forEach(x=>x.classList.toggle('is-selected',x===b));
+        applied.textContent=(state.lang==='ru'?'Применён профиль: ':'Applied profile: ')+p.label;logEvent('PRESET','SYSTEM',p.label+' profile applied');
+      });
+      presetButtons.append(b);
+    });
+    const applied=dashNode('p','zs-preset-applied','');applied.id='zs-preset-applied';
+    presetPanel.append(presetButtons,applied);
+
     const fieldHost=dashNode('div','zs-fields');fields.forEach((f,i)=>{f.classList.add('zs-field');const input=f.querySelector('input');if(input){const lim={ 'sniper-size':[0.001,10,0.001], 'sniper-target':[0.1,100,0.1], 'sniper-stop':[0,99,0.5], 'sniper-network':[0,0.1,0.000001], 'sniper-priority':[0,0.1,0.000001], 'sniper-dex':[0,20,0.05], 'sniper-slip':[0,50,0.1] }[input.id];if(lim)addRange(f,input.id,...lim);}fieldHost.append(f);});
     addVirtualField(fieldHost,'sniper-capital',dcopy().capital,0.1,1000,0.1,terminal.capital||10);
     addVirtualField(fieldHost,'sniper-max-size',dcopy().maxsize,0.001,10,0.001,terminal.maxTradeSize||0.05);
     addVirtualField(fieldHost,'sniper-liquidity',dcopy().minliq,0,1000000,100,terminal.minLiquidity||5000);
     const sizeInput=$('sniper-size');if(sizeInput){sizeInput.max=terminal.maxTradeSize||0.05;const sizeSlider=sizeInput.parentElement&&sizeInput.parentElement.querySelector('.zs-range');if(sizeSlider)sizeSlider.max=sizeInput.max;}
-    left.append(fieldHost,dashNode('p','zs-foot',dcopy().hint));
+    left.append(fieldHost,presetPanel,dashNode('p','zs-foot',dcopy().hint));
     const center=dashNode('section','zs-panel zs-center');center.id='zs-center';const centerTitle=dashNode('h3','',dcopy().autopilot);centerTitle.id='zs-center-title';center.append(centerTitle);
     const portrait=dashNode('div','zs-portrait');const pic=dashNode('img','');pic.src='/assets/zombcash-survivor-640.avif';pic.alt='ZombieCash anime survivor heroine';portrait.append(pic,dashNode('b','','$ZOMBCASH SURVIVOR'));
     const core=dashNode('div','zs-core');const coreText=dashNode('div','');coreText.append(dashNode('strong','', '◉'),dashNode('strong','', 'AUTO SNIPER'),dashNode('span','', 'PAPER ENGINE'));core.append(coreText);
-    const toggle=dashNode('button','zs-toggle',dcopy().paused);toggle.id='zs-auto-toggle';toggle.type='button';toggle.addEventListener('click',()=>{terminal.auto=!terminal.auto;saveTerminal();renderDashboardState();logEvent(terminal.auto?'ARMED':'PAUSED','SYSTEM',terminal.auto?'Auto-entry enabled for eligible demo candidates':'Auto-entry paused');if(terminal.auto){refreshFeed();maybeAutoEnter();}});
+    const toggle=dashNode('button','zs-toggle',dcopy().paused);toggle.id='zs-auto-toggle';toggle.type='button';toggle.addEventListener('click',()=>{if(terminal.auto){terminal.auto=false;saveTerminal();renderDashboardState();logEvent('PAUSED','SYSTEM','Auto-entry paused');}else showLaunchConfirm();});
     const actions=dashNode('div','zs-actions');const pause=dashNode('button','sniper-action sniper-close',dcopy().pause);pause.type='button';pause.addEventListener('click',()=>{terminal.auto=false;saveTerminal();renderDashboardState();logEvent('PAUSE','SYSTEM','Auto-entry paused; open position remains');});
     const stop=dashNode('button','sniper-action sniper-close',dcopy().stop);stop.type='button';stop.addEventListener('click',()=>{terminal.auto=false;saveTerminal();renderDashboardState();logEvent('STOP','SYSTEM','Auto-entry stopped; no live orders exist');});actions.append(pause,stop);
     const statsPanel=dashNode('div','zs-stats-extra zs-tab-hidden');statsPanel.id='zs-stats-extra';
