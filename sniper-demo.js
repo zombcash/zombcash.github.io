@@ -282,9 +282,10 @@
       head.append(identity,pnl);
       const detail=make('div','zs-position-metrics');
       const metric=(label,value)=>{const cell=make('div','zs-position-metric');cell.append(make('small','',label),make('strong','',value));detail.append(cell);};
-      metric(state.lang==='ru'?'ВХОД':'ENTRY',fmt(p.entryPrice,9)+' SOL');
-      metric(state.lang==='ru'?'ТЕКУЩАЯ':'CURRENT',fmt(p.lastPrice||p.entryPrice,9)+' SOL');
-      metric('NET P/L',fmt(p.netPct||0,2)+'%');
+      metric(state.lang==='ru'?'РАЗМЕР СДЕЛКИ':'TRADE SIZE',fmt(p.buySol||0,6)+' SOL');
+      metric(state.lang==='ru'?'ЦЕНА ВХОДА':'ENTRY PRICE',fmt(p.entryPrice,9)+' SOL');
+      metric(state.lang==='ru'?'ТЕКУЩАЯ ЦЕНА':'CURRENT PRICE',fmt(p.lastPrice||p.entryPrice,9)+' SOL');
+      metric(state.lang==='ru'?'ТЕКУЩАЯ ПРИБЫЛЬ / УБЫТОК':'CURRENT P/L',((Number(p.netPnl)||0)>=0?'+':'')+fmt(p.netPnl||0,6)+' SOL · '+((Number(p.netPct)||0)>=0?'+':'')+fmt(p.netPct||0,2)+'%');
       const contract=make('div','zs-position-contract');
       const contractLabel=make('small','',state.lang==='ru'?'КОНТРАКТ':'CONTRACT');
       const address=String(p.address||'');
@@ -473,7 +474,7 @@
     const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,(total>=0?'+':'')+total.toFixed(5)+' SOL'],[dcopy().trades,String(state.positions.length)],[dcopy().wins,closed.length?Math.round(wins/closed.length*100)+'%':'—'],[dcopy().active,String(open.length)]];
     host.replaceChildren();vals.forEach((v,i)=>{const card=dashNode('div','zs-kpi zs-kpi-'+i);card.append(dashNode('small','',v[0]),dashNode('strong','zs-counter',v[1]));host.append(card);});
     const mainChart=$('zs-main-chart');if(mainChart){mainChart.replaceChildren();const p=open[0];mainChart.append(sparkline(p?(p.priceHistory||[p.entryPrice,p.lastPrice||p.entryPrice]):[]));}
-    const centerSummary=$('zs-center-summary');if(centerSummary){centerSummary.replaceChildren();const p=open[0];if(p){const left=dashNode('div','zs-center-token');left.append(dashNode('small','',state.lang==='ru'?'ТЕКУЩАЯ ПОЗИЦИЯ':'CURRENT POSITION'),dashNode('strong','',String(p.symbol||'TOKEN').toUpperCase()),dashNode('span','',fmt(p.lastPrice||p.entryPrice,9)+' SOL'));const right=dashNode('div','zs-center-pnl '+((Number(p.netPnl)||0)>=0?'is-positive':'is-negative'));right.append(dashNode('strong','',(p.netPct>=0?'+':'')+fmt(p.netPct||0,2)+'%'),dashNode('span','',(p.netPnl>=0?'+':'')+fmt(p.netPnl||0,6)+' SOL'));centerSummary.append(left,right);}else{centerSummary.append(dashNode('div','zs-center-idle',state.lang==='ru'?'ОЖИДАНИЕ ПОДХОДЯЩЕГО SOL-ПУЛА':'WAITING FOR ELIGIBLE SOL POOL'));}}
+    const centerSummary=$('zs-center-summary');if(centerSummary){centerSummary.replaceChildren();const p=open[0];if(p){const left=dashNode('div','zs-center-token');left.append(dashNode('small','',state.lang==='ru'?'ТЕКУЩАЯ ПОЗИЦИЯ':'CURRENT POSITION'),dashNode('strong','',String(p.symbol||'TOKEN').toUpperCase()),dashNode('span','',(state.lang==='ru'?'ВЛОЖЕНО: ':'SIZE: ')+fmt(p.buySol||0,6)+' SOL'),dashNode('span','',(state.lang==='ru'?'ЦЕНА: ':'PRICE: ')+fmt(p.lastPrice||p.entryPrice,9)+' SOL'));const right=dashNode('div','zs-center-pnl '+((Number(p.netPnl)||0)>=0?'is-positive':'is-negative'));right.append(dashNode('small','',state.lang==='ru'?'ТЕКУЩАЯ ПРИБЫЛЬ / УБЫТОК':'CURRENT PROFIT / LOSS'),dashNode('strong','',(p.netPnl>=0?'+':'')+fmt(p.netPnl||0,6)+' SOL'),dashNode('span','',(p.netPct>=0?'+':'')+fmt(p.netPct||0,2)+'%'));centerSummary.append(left,right);}else{centerSummary.append(dashNode('div','zs-center-idle',state.lang==='ru'?'ОЖИДАНИЕ ПОДХОДЯЩЕГО SOL-ПУЛА':'WAITING FOR ELIGIBLE SOL POOL'));}}
     const statGrid=$('zs-stat-grid');if(statGrid){
       const avg=closed.length?closed.reduce((a,p)=>a+(Number(p.netPct)||0),0)/closed.length:0;
       const best=closed.length?Math.max(...closed.map(p=>Number(p.netPct)||0)):0;
@@ -612,7 +613,7 @@
     .zs-positions .zs-position-status.is-open{background:#314233!important;color:#d4e2ce!important}.zs-positions .zs-position-status.is-closed{background:#282d2a!important;color:#b8c0b8!important}
     .zs-positions .zs-position-pnl{display:block!important;position:static!important;flex:0 0 auto!important;text-align:right!important;font-size:15px!important;line-height:1.25!important;font-variant-numeric:tabular-nums!important;white-space:nowrap!important}
     .zs-positions .zs-position-pnl.is-positive{color:#b8d0ad!important}.zs-positions .zs-position-pnl.is-negative{color:#d99b9b!important}
-    .zs-positions .zs-position-metrics{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;width:100%!important;min-width:0!important}
+    .zs-positions .zs-position-metrics{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important;width:100%!important;min-width:0!important}
     .zs-positions .zs-position-metric{display:flex!important;flex-direction:column!important;gap:3px!important;min-width:0!important;padding:6px 7px!important;border:1px solid #ffffff12!important;border-radius:3px!important;background:#080e0b66!important}
     .zs-positions .zs-position-metric small{font-size:8px!important;line-height:1.2!important;letter-spacing:.08em!important;color:#9eaa9e!important}
     .zs-positions .zs-position-metric strong{font-size:10px!important;line-height:1.3!important;color:#dce4da!important;overflow-wrap:anywhere!important;font-variant-numeric:tabular-nums!important}
@@ -701,7 +702,7 @@
     /* Cinematic terminal refinement */
     .zs-stats-extra{margin-top:10px;padding-top:10px;border-top:1px solid #ffffff19}.zs-stats-extra h3{margin-bottom:10px}.zs-stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.zs-stat-card{padding:13px;border:1px solid #536157;border-radius:4px;background:#121a15}.zs-stat-card small{display:block;color:#b9c4b9;font-size:10px;letter-spacing:.07em}.zs-stat-card strong{display:block;margin-top:7px;color:#e8eee5;font-size:clamp(17px,1.5vw,22px);font-variant-numeric:tabular-nums}.zs-stat-card .zs-negative{color:#d99b9b}
 
-    .sniper-demo.zs-fullscreen{display:grid!important;grid-template-rows:0 44px 38px 64px minmax(0,1fr) 94px!important;gap:7px!important;padding:12px 16px!important;background:radial-gradient(ellipse at 16% 0%,#303832 0,transparent 35%),linear-gradient(145deg,#151a18,#090e0d 55%,#1a201d)!important}
+    .sniper-demo.zs-fullscreen{display:grid!important;grid-template-rows:0 44px 38px 64px minmax(0,1fr) 0px!important;gap:7px!important;padding:12px 16px!important;background:radial-gradient(ellipse at 16% 0%,#303832 0,transparent 35%),linear-gradient(145deg,#151a18,#090e0d 55%,#1a201d)!important}
     .sniper-demo.zs-fullscreen>style{display:none!important}
     .sniper-demo.zs-fullscreen>.zs-head{grid-row:2;min-height:0;padding:0 4px 7px;align-self:stretch}
     .sniper-demo.zs-fullscreen>.zs-nav{grid-row:3;align-self:center}
