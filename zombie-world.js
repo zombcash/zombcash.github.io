@@ -267,7 +267,7 @@
   const dirs={north:[0,-1],south:[0,1],west:[-1,0],east:[1,0]};
   const fixedWalls=new Set();
   const heliPads=new Set([tile(0,0),tile(17,0),tile(8,13)]);
-  let humans=[],zombies=[],crates=new Set(),hazards=new Set(),round=0,gameStarted=false,gameEnded=false,selectedUnit=null,pushMode=false,turnBusy=false,autoTimer=null,playerActed=new Set(),zombieActed=new Set(),escaped=0,infectedCount=0,gameMode='human-ai',playerSide='survivor';
+  let humans=[],zombies=[],crates=new Set(),hazards=new Set(),round=0,gameStarted=false,gameEnded=false,selectedUnit=null,pushMode=false,turnBusy=false,outbreakAiTimer=null,playerActed=new Set(),zombieActed=new Set(),escaped=0,infectedCount=0,gameMode='human-ai',playerSide='survivor';
   const outbreakCopy={
     en:{hint:'Select one of your units, then click an adjacent tile. Each unit acts once per round. Push mode lets you move one debris block instead.',start:'START OUTBREAK',resolve:'END TURN / RESOLVE',pushOn:'🧱 PUSH OBSTACLE: ON',pushOff:'🧱 PUSH OBSTACLE: OFF',ready:'The quarantine zone is waiting. Start a new outbreak.',noUnit:'Select one of your active units first.',badMove:'That move is blocked or out of reach.',infected:'has been infected and joins the horde.',escaped:'reached the helicopter and escaped.',round:'ROUND',humans:'HUMANS',zombies:'INFECTED',score:'SCORE',winHumans:'SURVIVORS WIN — the evacuation threshold was reached.',winZombies:'THE OUTBREAK WINS — the horde consumed the evacuation zone.',draw:'THE QUARANTINE COLLAPSED — the city is lost.',newWave:'New outbreak generated. The city is never the same twice.',aiHuman:'Human vs AI',aiAi:'AI vs AI · spectator',turnHuman:'Your faction: ',turnAI:'AI is planning the next move…',pushLog:'The obstacle was shoved one tile.',selected:'Selected: ',humanTurn:'YOUR TURN',zombieTurn:'INFECTED TURN',allActed:'All your units have acted. Resolve the opposing faction.',roundStart:'Round ',escapeTarget:'Evacuate survivors by helicopter or stop the infection from spreading.'},
     ru:{hint:'Выбери своего участника, затем нажми на соседнюю клетку. Каждый участник действует один раз за раунд. Режим толкания позволяет сдвинуть один блок завалов.',start:'НАЧАТЬ ВСПЫШКУ',resolve:'ЗАВЕРШИТЬ ХОД / РЕЗОЛВ',pushOn:'🧱 ТОЛКАТЬ ПРЕПЯТСТВИЕ: ВКЛ',pushOff:'🧱 ТОЛКАТЬ ПРЕПЯТСТВИЕ: ВЫКЛ',ready:'Зона карантина ждёт. Начни новую вспышку.',noUnit:'Сначала выбери активного участника своей команды.',badMove:'Клетка занята, заблокирована или слишком далеко.',infected:'заражён и присоединяется к орде.',escaped:'добрался до вертолёта и эвакуировался.',round:'РАУНД',humans:'ЛЮДИ',zombies:'ЗАРАЖЕНЫ',score:'СЧЁТ',winHumans:'ПОБЕДА ВЫЖИВШИХ — удалось эвакуировать достаточно людей.',winZombies:'ПОБЕДА ОРДЫ — заражение захватило зону эвакуации.',draw:'КАРАНТИН РУХНУЛ — город потерян.',newWave:'Новая вспышка. План города каждый раз меняется.',aiHuman:'Человек против ИИ',aiAi:'ИИ против ИИ · наблюдение',turnHuman:'Твоя сторона: ',turnAI:'ИИ планирует следующий ход…',pushLog:'Препятствие сдвинуто на одну клетку.',selected:'Выбран: ',humanTurn:'ТВОЙ ХОД',zombieTurn:'ХОД ЗАРАЖЁННЫХ',allActed:'Все твои участники походили. Заверши ход, чтобы действовал противник.',roundStart:'Раунд ',escapeTarget:'Эвакуируй выживших вертолётом или останови распространение инфекции.'}
@@ -424,8 +424,8 @@
     }finally{turnBusy=false;}
   }
   function scheduleAiRound(){
-    if(autoTimer)clearTimeout(autoTimer);
-    autoTimer=setTimeout(async()=>{
+    if(outbreakAiTimer)clearTimeout(outbreakAiTimer);
+    outbreakAiTimer=setTimeout(async()=>{
       if(gameEnded||!gameStarted||turnBusy)return;
       turnBusy=true;
       try{await resolveSide('survivor',Number($('zw-ai-speed').value)||350);await resolveSide('infected',Number($('zw-ai-speed').value)||350);round++;humans.forEach(a=>a.acted=false);zombies.forEach(a=>a.acted=false);evaluateGame();drawOutbreak();if(!gameEnded)scheduleAiRound();}
@@ -439,7 +439,7 @@
     if(gameMode==='ai-ai'){ $('zw-demo-turn').disabled=true;scheduleAiRound();}else drawOutbreak();
   });
   $('zw-demo-turn').addEventListener('click',resolveRound);
-  $('zw-demo-reset').addEventListener('click',()=>{if(autoTimer)clearTimeout(autoTimer);newRoster();});
+  $('zw-demo-reset').addEventListener('click',()=>{if(outbreakAiTimer)clearTimeout(outbreakAiTimer);newRoster();});
   $('zw-game-mode').addEventListener('change',()=>{gameMode=$('zw-game-mode').value;});
   $('zw-player-side').addEventListener('change',()=>{playerSide=$('zw-player-side').value;drawOutbreak();});
   $('zw-push-mode').addEventListener('click',()=>{pushMode=!pushMode;selectedCrate=null;$('zw-push-mode').setAttribute('aria-pressed',String(pushMode));$('zw-push-mode').textContent=OT(pushMode?'pushOn':'pushOff');});
