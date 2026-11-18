@@ -22,6 +22,56 @@
 </head><body><main class="buy-wrap">
 <div class="buy-hero"><p class="eyebrow">SURVIVOR HANDELSPLATZ // SOLANA</p><h1>$ZOMBCASH KAUFEN</h1><p class="lead">Tausche direkt auf dieser Seite mit Jupiter. Verbinde eine Solana-Wallet, wähle den Kauf- oder Verkaufsbetrag, prüfe das Angebot und bestätige nur Transaktionen, die du verstehst.</p><figure class="field-figure" style="margin:24px 0;padding:10px;border:1px solid #344536;border-radius:14px;background:#0b1410"><img src="/images/jupiter-swap-terminal-card.svg" alt="Jupiter-Swap-Terminal mit Wallet-Verbindung, verifizierter ZOMBCASH-Mint-Adresse, Kursangebot und Transaktionsprüfung." width="1200" height="675" loading="lazy" decoding="async" style="display:block;width:100%;height:auto;border-radius:9px"><figcaption style="color:#aab8ad;font-size:13px;padding:10px 4px 2px">Jupiter-Swap-Terminal mit Wallet-Verbindung, verifizierter ZOMBCASH-Mint-Adresse, Kursangebot und Transaktionsprüfung.</figcaption></figure><p class="identity-note" style="max-width:900px;color:#a6b5a5;font-size:14px;line-height:1.6">Dies ist die offizielle Anleitung zum ZombieCash-Projekttoken ($ZOMBCASH). Suchanfragen können auch <strong>Zombie Cash</strong> oder <strong>ZombCash</strong> enthalten. Bei <strong>Cash Zombie</strong> oder <strong>CashZombie</strong> prüfen Sie vor jeder Aktion die vollständige Solana-Mint-Adresse.</p></div>
 <section class="panel" id="swap"><h2>JUPITER SWAP TERMINAL</h2><p class="panel-lead">Der vollständige Jupiter-Swap ist unten eingebettet. Verbinde deine Wallet im Widget. Kaufe mit SOL oder einem anderen unterstützten Asset oder drehe die Token-Richtung um, um ZOMBCASH zu verkaufen.</p><div class="jupiter-frame"><div id="jupiter-plugin"></div><p id="widget-fallback" class="jupiter-note">Jupiter Swap wird geladen… Falls das Terminal nicht erscheint, öffne Jupiter direkt. <a href="https://jup.ag/swap/SOL-6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">Jupiter ↗</a></p></div><p class="jupiter-note">Das Widget wird von Jupiter bereitgestellt. Wallet-Verbindung und Swaps erfolgen über Jupiter und deine Wallet; ZombieCash fragt niemals nach deiner Wiederherstellungsphrase.</p></section>
+<section class="panel sniper-demo" id="zombie-sniper-demo" aria-labelledby="sniper-demo-title">
+<style>
+.sniper-demo{border:1px solid rgba(177,198,154,.35);padding:clamp(16px,3vw,26px);background:linear-gradient(145deg,rgba(22,31,27,.94),rgba(8,13,14,.96))}
+.sniper-demo .sniper-kicker{color:#b1c69a;font:700 10px/1.5 Orbitron,system-ui,sans-serif;letter-spacing:.18em}
+.sniper-demo h2{margin:8px 0 10px;font-size:clamp(22px,3vw,30px)}
+.sniper-demo .sniper-demo-tag{display:inline-block;padding:5px 9px;border:1px solid #b1c69a66;color:#c7d9b5;font:700 10px/1.4 Orbitron,system-ui,sans-serif;letter-spacing:.12em}
+.sniper-demo .sniper-muted{color:#aab5ad;font-size:13px;line-height:1.6}
+.sniper-demo .sniper-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0}
+.sniper-demo .sniper-field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.sniper-demo .sniper-field label{color:#aebbb0;font-size:10px;font-weight:700;letter-spacing:.07em}
+.sniper-demo input{width:100%;min-width:0;min-height:40px;padding:9px 10px;border:1px solid #536257;border-radius:2px;background:#080e0d;color:#edf5eb;font:600 14px system-ui}
+.sniper-demo .sniper-section-title{margin:24px 0 10px;padding-top:14px;border-top:1px solid rgba(184,198,190,.17);font:700 13px/1.5 Orbitron,system-ui,sans-serif;letter-spacing:.08em;color:#dbe4dc}
+.sniper-demo .sniper-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:12px 0}
+.sniper-demo .sniper-candidate,.sniper-demo .sniper-position{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto auto;align-items:center;gap:12px;padding:13px 0;border-top:1px solid rgba(184,198,190,.13)}
+.sniper-demo .sniper-candidate-main{min-width:0;display:grid;gap:4px}.sniper-demo .sniper-token-name{overflow-wrap:anywhere;color:#e4eadf}
+.sniper-demo .sniper-candidate-stats{display:grid;gap:4px;color:#c3cec4;font-size:12px;font-variant-numeric:tabular-nums}
+.sniper-demo .sniper-link{font-size:10px;white-space:nowrap}
+.sniper-demo .sniper-action{min-height:36px;padding:8px 11px;border:1px solid #a9bf91;background:#a9bf91;color:#101610;border-radius:0;font:800 10px/1.3 Orbitron,system-ui,sans-serif;cursor:pointer}
+.sniper-demo .sniper-close{background:transparent;color:#c6d3c6;border-color:#66776a}
+.sniper-demo .sniper-position{grid-template-columns:1fr auto;gap:8px}
+.sniper-demo .sniper-position-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+.sniper-demo .sniper-position-detail{grid-column:1/-1;color:#aab5ad;font-size:12px}
+.sniper-demo .sniper-positive{color:#b7d89d}.sniper-demo .sniper-negative{color:#e1a6a6}
+.sniper-demo .sniper-notice{margin:14px 0;padding:12px 14px;border-left:2px solid #9c9b83;background:#121817;color:#c3cec4;font-size:12px;line-height:1.6}
+@media(max-width:760px){.sniper-demo .sniper-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.sniper-demo .sniper-candidate{grid-template-columns:1fr auto}.sniper-demo .sniper-candidate-stats{grid-column:1/-1;grid-row:2}.sniper-demo .sniper-link{grid-column:1;grid-row:3}.sniper-demo .sniper-action{grid-column:2;grid-row:3}}
+</style>
+<p class="sniper-kicker">AUTOMATED ENTRY // RISK CONTROL // PAPER EXECUTION</p>
+<div class="sniper-toolbar"><span class="sniper-demo-tag" data-sniper-i18n="demo">DEMO ONLY</span><span class="sniper-muted" data-sniper-i18n="cap">Demo trade size is capped at 0.05 SOL. No wallet is created or funded. Live trading is disabled.</span></div>
+<h2 id="sniper-demo-title" data-sniper-i18n="title">ZOMBIE SNIPER // PAPER DEMO</h2>
+<p class="panel-lead" data-sniper-i18n="intro">Test the entry and exit rules against public DEX market data. This sandbox never connects a wallet and never submits a transaction.</p>
+<div class="sniper-controls">
+<div class="sniper-field"><label for="sniper-size" data-sniper-i18n="amount">PAPER BUY SIZE (SOL)</label><input id="sniper-size" type="number" min="0.001" max="0.05" step="0.001" value="0.01"></div>
+<div class="sniper-field"><label for="sniper-target" data-sniper-i18n="target">NET PROFIT TARGET (%)</label><input id="sniper-target" type="number" min="0.1" max="500" step="0.1" value="10"></div>
+<div class="sniper-field"><label for="sniper-stop" data-sniper-i18n="stop">NET STOP-LOSS (%)</label><input id="sniper-stop" type="number" min="0" max="99" step="0.5" value="20"></div>
+<div class="sniper-field"><label for="sniper-network" data-sniper-i18n="network">NETWORK FEE / TX (SOL)</label><input id="sniper-network" type="number" min="0" max="0.1" step="0.000001" value="0.00001"></div>
+<div class="sniper-field"><label for="sniper-priority" data-sniper-i18n="priority">PRIORITY FEE / TX (SOL)</label><input id="sniper-priority" type="number" min="0" max="0.1" step="0.000001" value="0.0001"></div>
+<div class="sniper-field"><label for="sniper-dex" data-sniper-i18n="dex">DEX FEE / SIDE (%)</label><input id="sniper-dex" type="number" min="0" max="20" step="0.05" value="0.5"></div>
+<div class="sniper-field"><label for="sniper-slip" data-sniper-i18n="slip">SLIPPAGE / SIDE (%)</label><input id="sniper-slip" type="number" min="0" max="50" step="0.1" value="1"></div>
+</div>
+<p class="sniper-notice" data-sniper-i18n="assumptions">Editable cost assumptions — not live transaction quotes. Actual costs depend on the route, congestion, liquidity and wallet account state.</p>
+<p class="sniper-muted" data-sniper-i18n="rules">Net P/L includes both-side DEX fee and slippage assumptions plus network and priority fees for both transactions. The target is checked against net P/L, not token price movement.</p>
+<div class="sniper-section-title" data-sniper-i18n="candidates">LATEST SOLANA TOKEN PROFILES</div>
+<div class="sniper-toolbar"><button class="btn secondary" id="sniper-refresh" type="button" data-sniper-i18n="refresh">REFRESH TOKEN FEED</button><span class="sniper-muted" id="sniper-feed-status" role="status" aria-live="polite" data-sniper-i18n="loading">Scanning the latest public token profiles…</span></div>
+<div id="sniper-candidates" aria-live="polite"><p class="sniper-muted">Scanning…</p></div>
+<div class="sniper-section-title" data-sniper-i18n="positions">PAPER POSITIONS</div>
+<div id="sniper-positions" aria-live="polite"><p class="sniper-muted" data-sniper-i18n="noPositions">No paper positions yet. Choose a candidate above to simulate a buy.</p></div>
+<div class="sniper-toolbar"><button class="btn secondary" id="sniper-clear" type="button" data-sniper-i18n="clear">CLEAR LOCAL DEMO HISTORY</button><span class="sniper-muted" data-sniper-i18n="saved">Demo history is stored only in this browser on this device.</span></div>
+<p class="sniper-notice" data-sniper-i18n="source">Source: DexScreener latest token profiles + current token-pair snapshots. A profile is not proof of a fresh launch; indexing can be delayed and this is not a first-minute launch feed.</p>
+</section>
+
 <section class="panel"><h2>Offizielle ZOMBCASH-Mint-Adresse</h2><div class="mint"><code id="zombcash-mint">6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump</code><button class="btn" id="copy-mint" type="button">MINT-ADRESSE KOPIEREN</button></div><p class="jupiter-note">Kopiere die vollständige Mint-Adresse und prüfe jedes Zeichen vor dem Swap.</p><div class="cta-row"><a class="btn secondary" href="https://dexscreener.com/solana/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump" target="_blank" rel="noopener noreferrer">TOKEN AUF DEXSCREENER ANSEHEN ↗</a><a class="btn secondary" href="/de/zombcash-buying-guide.html">VOLLSTÄNDIGE KAUFANLEITUNG ↗</a></div></section>
 <div class="guide-grid"><section class="guide-card"><h2>01 // WALLET EINRICHTEN</h2><p>Wenn du bereits eine Solana-Wallet hast, öffne die offizielle App oder Browser-Erweiterung. Andernfalls installiere <a href="https://phantom.app/" target="_blank" rel="noopener noreferrer">Phantom</a> oder <a href="https://solflare.com/" target="_blank" rel="noopener noreferrer">Solflare</a> nur über offizielle Quellen. Bewahre die Wiederherstellungsphrase offline auf und teile sie niemals.</p></section>
 <section class="guide-card"><h2>02 // MIT SOL AUFLADEN</h2><p>Für Token-Käufe und Netzwerkgebühren brauchst du SOL in derselben Solana-Wallet. Kaufe SOL über einen seriösen Dienst und sende es über das <strong>Solana-Netzwerk</strong> an deine Wallet. Prüfe die Adresse sorgfältig und teste nach Möglichkeit zuerst mit einem kleinen Betrag. Behalte SOL für Gebühren.</p></section>
@@ -35,4 +85,4 @@
 (function(){const mint='6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump';const button=document.getElementById('copy-mint');button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(mint);button.textContent='COPIED';}catch(_){button.textContent='Automatisches Kopieren fehlgeschlagen. Kopiere die Mint-Adresse manuell.';}});
 function init(){if(!window.Jupiter||typeof window.Jupiter.init!=='function'){document.getElementById('widget-fallback').style.display='block';return;}try{window.Jupiter.init({displayMode:'integrated',integratedTargetId:'jupiter-plugin',defaultExplorer:'Solscan',formProps:{initialInputMint:'So11111111111111111111111111111111111111112',initialOutputMint:mint,swapMode:'ExactInOrOut'},branding:{name:'ZombieCash',logoUri:'https://zombcash.github.io/zombcash-hand-logo.svg'}});document.getElementById('widget-fallback').style.display='none';}catch(_){document.getElementById('widget-fallback').style.display='block';}}
 window.addEventListener('load',init);})();
-</script><script src="/shared-nav.js?v=nav-main-wrap-20261104-12" defer></script><script src="/language.js?v=i18n-persist-route-20261104-10" defer></script></body></html>
+</script><script src="/sniper-demo.js?v=sniper-paper-demo-20261118" defer></script><script src="/shared-nav.js?v=nav-main-wrap-20261104-12" defer></script><script src="/language.js?v=i18n-persist-route-20261104-10" defer></script></body></html>
