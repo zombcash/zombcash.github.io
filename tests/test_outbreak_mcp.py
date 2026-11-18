@@ -67,6 +67,16 @@ class OutbreakServerTests(unittest.TestCase):
         self.assertEqual(state["score"]["survivors_alive"], 17)
         self.assertEqual(len(state["units"]["infected"]), 7)
 
+    def test_round_advances_only_after_every_active_unit_acts(self):
+        match_id, survivor, infected = self.setup_match()
+        for index in range(1, 19):
+            state = server.submit_action(match_id, "survivor-controller", survivor["agent_token"], "wait", f"H{index}")
+        self.assertEqual(state["turn"], 0)
+        for index in range(1, 7):
+            state = server.submit_action(match_id, "infected-controller", infected["agent_token"], "wait", f"Z{index}")
+        self.assertEqual(state["turn"], 1)
+        self.assertFalse(any(unit["acted"] for unit in state["units"]["survivors"] + state["units"]["infected"]))
+
     def test_obstacle_can_be_pushed_one_tile(self):
         match_id, survivor, _ = self.setup_match()
         match = server.MATCHES[match_id]
