@@ -97,8 +97,41 @@
       saveStore();updateSyncStatus('synced');
     }catch(_){if(telegramId()===accountId&&authToken()===token)updateSyncStatus('syncError');}
   }
+  async function refreshWalletInfo(){
+    const panel=$('zs-wallet-panel');if(!panel)return;
+    panel.replaceChildren();
+    const title=dashNode('strong','',state.lang==='ru'?'ВАШ SOLANA-КОШЕЛЁК':'YOUR SOLANA WALLET');
+    panel.append(title);
+    const token=authToken();
+    if(!token){
+      panel.append(dashNode('small','',state.lang==='ru'?'Войдите через Telegram — для профиля будет создан отдельный кошелёк.':'Sign in with Telegram to create your dedicated wallet.'));
+      return;
+    }
+    try{
+      const response=await fetch(AUTH_API+'/api/sniper/wallet',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
+      if(!response.ok)throw new Error('wallet lookup '+response.status);
+      const data=await response.json(),wallet=data.wallet;
+      if(!wallet||!wallet.publicKey){
+        panel.append(dashNode('small','',state.lang==='ru'?'Кошелёк создаётся или временно недоступен.':'Wallet is provisioning or temporarily unavailable.'));
+        return;
+      }
+      const address=String(wallet.publicKey);
+      const line=dashNode('code','zs-wallet-address',address.slice(0,8)+'…'+address.slice(-8));
+      line.title=address;
+      const copy=dashNode('button','zs-copy-address',state.lang==='ru'?'КОПИРОВАТЬ':'COPY');
+      copy.type='button';
+      copy.addEventListener('click',async()=>{
+        try{await navigator.clipboard.writeText(address);copy.textContent=state.lang==='ru'?'СКОПИРОВАНО':'COPIED';}
+        catch(_){copy.textContent=state.lang==='ru'?'ОШИБКА':'FAILED';}
+      });
+      panel.append(line,copy,dashNode('small','',state.lang==='ru'?'Ключ хранится в защищённом хранилище. В демо-режиме средства не используются.':'Private key is held in protected server storage. Paper mode never uses wallet funds.'));
+    }catch(_){
+      panel.append(dashNode('small','',state.lang==='ru'?'Не удалось загрузить адрес кошелька.':'Could not load wallet address.'));
+    }
+  }
+
   async function syncFromServer(){
-    const token=authToken(),accountId=telegramId();if(!token||!accountId){updateSyncStatus('loginToSync');return;}
+    const token=authToken(),accountId=telegramId();if(!token||!accountId){updateSyncStatus('loginToSync');refreshWalletInfo();return;}
     try{
       const response=await fetch(AUTH_API+'/api/sniper/paper',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
       if(telegramId()!==accountId||authToken()!==token)return;
@@ -110,6 +143,7 @@
       if(remote.length){state.positions=remote;saveStore();renderPositions();}
       else if(state.positions.length){for(const p of state.positions)await persistPosition(p);}
       updateSyncStatus('synced');
+      refreshWalletInfo();
     }catch(_){if(telegramId()===accountId&&authToken()===token)updateSyncStatus('syncError');}
   }
   function checkAccountChange(){
@@ -765,7 +799,8 @@
     addVirtualField(fieldHost,'sniper-idle-timeout',state.lang==='ru'?'ТАЙМ-АУТ БЕЗ ДВИЖЕНИЯ (СЕК.)':'NO-MOVEMENT TIMEOUT (SEC)',15,300,5,terminal.idleTimeout||60);
     addVirtualField(fieldHost,'sniper-min-move',state.lang==='ru'?'МИН. ДВИЖЕНИЕ ЦЕНЫ (%)':'MINIMUM PRICE MOVE (%)',0.05,2,0.05,terminal.minMovePct||0.2);
     const sizeInput=$('sniper-size');if(sizeInput){sizeInput.max=terminal.maxTradeSize||0.05;const sizeSlider=sizeInput.parentElement&&sizeInput.parentElement.querySelector('.zs-range');if(sizeSlider)sizeSlider.max=sizeInput.max;}
-    left.append(fieldHost,presetPanel,dashNode('p','zs-foot',dcopy().hint));
+    const walletPanel=dashNode('div','zs-foot');walletPanel.id='zs-wallet-panel';
+    left.append(fieldHost,presetPanel,walletPanel,dashNode('p','zs-foot',dcopy().hint));
     const center=dashNode('section','zs-panel zs-center');center.id='zs-center';const centerTitle=dashNode('h3','',dcopy().autopilot);centerTitle.id='zs-center-title';center.append(centerTitle);
     const portrait=dashNode('div','zs-portrait');const pic=dashNode('img','');pic.src='/assets/zombcash-survivor-640.avif';pic.alt='ZombieCash anime survivor heroine';portrait.append(pic,dashNode('b','','$ZOMBCASH SURVIVOR'));
     const core=dashNode('div','zs-core');const coreText=dashNode('div','');coreText.append(dashNode('strong','', '◉'),dashNode('strong','', 'AUTO SNIPER'),dashNode('span','', 'PAPER ENGINE'));core.append(coreText);
