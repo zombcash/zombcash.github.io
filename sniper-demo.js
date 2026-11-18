@@ -552,7 +552,13 @@
     const rootAnchor=document.createComment('zombie-sniper-home');
     if(rootHome)rootHome.insertBefore(rootAnchor,root);
     function mountDashboardOverlay(){if(root.parentNode!==document.body)document.body.appendChild(root);}
-    function restoreDashboardToPage(){if(rootAnchor.parentNode){rootAnchor.parentNode.insertBefore(root,rootAnchor);rootAnchor.remove();}}loadTerminal();
+    // Keep the placeholder permanently in the original page flow. Reusing it
+    // makes repeated enter/exit cycles restore the exact same DOM position.
+    function restoreDashboardToPage(){
+      if(rootAnchor.parentNode){rootAnchor.parentNode.insertBefore(root,rootAnchor);return;}
+      if(rootHome&&rootHome.isConnected){rootHome.appendChild(rootAnchor);rootHome.insertBefore(root,rootAnchor);}
+    }
+    loadTerminal();
     const fields=['sniper-size','sniper-target','sniper-stop','sniper-network','sniper-priority','sniper-dex','sniper-slip'].map(id=>$(id)?.closest('.sniper-field')).filter(Boolean);
     const candidates=$('sniper-candidates'),positions=$('sniper-positions'),refresh=$('sniper-refresh'),clear=$('sniper-clear'),status=$('sniper-feed-status');
     const style=dashNode('style','');style.textContent=`.sniper-demo{position:relative;overflow:hidden;border:1px solid #68736d!important;border-radius:8px!important;padding:clamp(12px,1.5vw,20px)!important;background:linear-gradient(145deg,#171c1b,#0b1010 58%,#151a18)!important;box-shadow:0 12px 40px #0008,inset 0 0 0 1px #ffffff08!important;color:#e5e9e4;font-family:Inter,system-ui,sans-serif}
@@ -764,28 +770,37 @@
     `;
     const header=dashNode('div','zs-head');const brand=dashNode('span','zs-brand','☣ ZOMBCASH');const title=dashNode('strong','zs-title','ZOMBIE SNIPER');const headActions=dashNode('div','zs-head-actions');headActions.append(dashNode('span','zs-demo',dcopy().demo));const expand=dashNode('button','zs-expand','⛶ FULL SCREEN');expand.type='button';expand.title='Open terminal full screen';function syncFullscreenButton(){const on=root.classList.contains('zs-fullscreen');document.body.classList.toggle('zs-lock',on);expand.textContent=on?'✕ EXIT FULL SCREEN':'⛶ FULL SCREEN';}
     function enterDashboardFullscreen(){
-      // Expand only inside the current browser tab viewport. Never request the
-      // native Fullscreen API: it hides Chrome's tabs/address bar and Windows UI.
+      // Use the browser content viewport; keep Chrome's browser chrome visible.
       mountDashboardOverlay();
       root.classList.add('zs-fullscreen');
-      // Pin the app to the actual browser content viewport. Inline important
-      // styles avoid inherited page-panel sizing and competing stylesheet rules.
       const viewportStyles={position:'fixed',top:'0px',right:'0px',bottom:'0px',left:'0px',width:'100vw',height:'100vh',minHeight:'100vh',maxHeight:'none',margin:'0px',boxSizing:'border-box',zIndex:'2147483600',overflow:'hidden'};
-      Object.entries(viewportStyles).forEach(([key,value])=>root.style.setProperty(key,value,'important'));root.style.setProperty('height','100dvh','important');root.style.setProperty('min-height','100dvh','important');
+      Object.entries(viewportStyles).forEach(([key,value])=>root.style.setProperty(key,value,'important'));
+      root.style.setProperty('height','100dvh','important');
+      root.style.setProperty('min-height','100dvh','important');
       root.dataset.nativeFullscreen='0';
       syncFullscreenButton();
     }
     function exitDashboardFullscreen(){
-      root.dataset.nativeFullscreen='0';
       root.classList.remove('zs-fullscreen');
       ['position','top','right','bottom','left','width','height','min-height','max-height','margin','box-sizing','z-index','overflow'].forEach(key=>root.style.removeProperty(key));
-      syncFullscreenButton();
+      root.dataset.nativeFullscreen='0';
+      document.body.classList.remove('zs-lock');
       restoreDashboardToPage();
+      syncFullscreenButton();
     }
+    // One exit path for both the visible control and Escape. This prevents
+    // stale fixed inline styles from leaving an invisible full-screen layer.
+    document.addEventListener('keydown',event=>{
+      if(event.key==='Escape'&&root.classList.contains('zs-fullscreen')){
+        event.preventDefault();
+        exitDashboardFullscreen();
+      }
+    });
     expand.addEventListener('click',()=>{
-      if(root.classList.contains('zs-fullscreen')){exitDashboardFullscreen();return;}
-      enterDashboardFullscreen();
-    });headActions.append(expand);header.append(brand,title,headActions);
+      if(root.classList.contains('zs-fullscreen'))exitDashboardFullscreen();
+      else enterDashboardFullscreen();
+    });
+    headActions.append(expand);header.append(brand,title,headActions);
     const nav=dashNode('nav','zs-nav');nav.setAttribute('aria-label','Zombie Sniper navigation');
     const tabTargets=['sniper','stats','history','settings','help'];
     function selectTab(tab){
@@ -859,7 +874,7 @@
     const foot=dashNode('p','zs-foot',dcopy().hint+' '+t('source'));
     const helpPanel=dashNode('section','zs-panel zs-help zs-tab-hidden');helpPanel.innerHTML='';const helpTitle=dashNode('h3','',state.lang==='ru'?'СПРАВКА И БЕЗОПАСНОСТЬ':'HELP & SAFETY');helpPanel.append(helpTitle,dashNode('p','zs-foot',state.lang==='ru'?'Это симулятор. Все сделки виртуальные. Реальные кошельки, ключи и транзакции не используются.':'This is a paper-trading simulator. No live wallets, private keys or transactions are used.'),dashNode('p','zs-foot',state.lang==='ru'?'Настройте размер сделки, комиссии, проскальзывание, стоп-лосс и цель чистой прибыли. Автовход использует только новые запуски с доступной SOL-парой и заданной минимальной ликвидностью.':'Adjust trade size, fees, slippage, stop loss and net profit target. Auto-entry only uses new launches with a live SOL pair and your minimum liquidity threshold.'));
     root.replaceChildren(style,header,nav,kpis,layout,journal,helpPanel,foot);
-    renderDashboardState();renderPositions();renderCandidates();selectTab('sniper');mountDashboardOverlay();root.classList.add('zs-fullscreen');document.body.classList.add('zs-lock');expand.textContent='✕ EXIT FULL SCREEN';
+    renderDashboardState();renderPositions();renderCandidates();selectTab('sniper');enterDashboardFullscreen();
   }
 
   function init(){
@@ -873,7 +888,7 @@
     updateRuntimeIndicator();window.setInterval(updateRuntimeIndicator,1000);
     state.timer=window.setInterval(()=>{checkAccountChange();if(!document.hidden)refreshFeed();},15000);
     state.positionTimer=window.setInterval(()=>{if(!document.hidden){if(authToken())syncFromServer();else updatePositions();}},10000);
-    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&root.classList.contains('zs-fullscreen')&&!document.fullscreenElement){root.classList.remove('zs-fullscreen');root.dataset.nativeFullscreen='0';document.body.classList.remove('zs-lock');restoreDashboardToPage();const b=root.querySelector('.zs-expand');if(b)b.textContent='⛶ FULL SCREEN';}});
+
     document.addEventListener('zombcash:languagechange',()=>{detectLang();translate();if($('zs-kpis'))renderDashboardState();});
     document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer();});
     document.addEventListener('click',event=>{if(event.target&&event.target.closest&&event.target.closest('#survivor-logout'))Promise.resolve().then(checkAccountChange);});
