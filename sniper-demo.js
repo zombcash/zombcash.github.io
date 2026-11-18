@@ -190,18 +190,26 @@
     maybeAutoEnter();
   }
   function renderPositions(){
-    const host=$('sniper-positions');if(!host)return;host.replaceChildren();
+    const host=$('sniper-positions');if(!host)return;
+    host.replaceChildren();
     if(!state.positions.length){host.append(make('p','sniper-muted',t('noPositions')));renderStats();return;}
     state.positions.slice().reverse().forEach(p=>{
-      const row=make('div','sniper-position');
-      const head=make('div','sniper-position-head');
-      head.append(make('strong','',p.symbol+' · '+(p.status==='open'?t('open'):t('closed'))));
-      head.append(make('strong',p.netPnl>=0?'sniper-positive':'sniper-negative',(p.netPnl>=0?'+':'')+fmt(p.netPnl,6)+' SOL'));
-      const detail=make('div','sniper-position-detail');detail.textContent=t('entry')+': '+fmt(p.entryPrice,9)+' SOL · '+t('current')+': '+fmt(p.lastPrice||p.entryPrice,9)+' SOL · '+t('net')+': '+fmt(p.netPct||0,2)+'%';
+      const row=make('article','sniper-position zs-position-card');
+      const head=make('div','zs-position-topline');
+      const identity=make('div','zs-position-identity');
+      identity.append(make('strong','zs-position-symbol',String(p.symbol||'TOKEN').toUpperCase()));
+      identity.append(make('span','zs-position-status '+(p.status==='open'?'is-open':'is-closed'),p.status==='open'?(state.lang==='ru'?'ОТКРЫТА':'OPEN'):(state.lang==='ru'?'ЗАКРЫТА':'CLOSED')));
+      const pnl=make('strong','zs-position-pnl '+(Number(p.netPnl)>=0?'is-positive':'is-negative'),(p.netPnl>=0?'+':'')+fmt(p.netPnl||0,6)+' SOL');
+      head.append(identity,pnl);
+      const detail=make('div','zs-position-metrics');
+      const metric=(label,value)=>{const cell=make('div','zs-position-metric');cell.append(make('small','',label),make('strong','',value));detail.append(cell);};
+      metric(state.lang==='ru'?'ВХОД':'ENTRY',fmt(p.entryPrice,9)+' SOL');
+      metric(state.lang==='ru'?'ТЕКУЩАЯ':'CURRENT',fmt(p.lastPrice||p.entryPrice,9)+' SOL');
+      metric('NET P/L',fmt(p.netPct||0,2)+'%');
       const graph=make('div','zs-position-chart');graph.append(sparkline(p.priceHistory&&p.priceHistory.length?p.priceHistory:[p.entryPrice,p.lastPrice||p.entryPrice]));
       row.append(head,detail,graph);
-      if(p.status==='open'){const close=make('button','sniper-action sniper-close',dcopy().close||t('manualClose'));close.type='button';close.addEventListener('click',()=>closePaper(p.id,'manual'));row.append(close);}
-      else if(p.exitReason){const reasons={stagnant:state.lang==='ru'?'Нет движения более минуты — переход к следующему запуску':'No movement for over a minute — rotating to next launch',target:t('targetHit'),stop:t('stopHit')};row.append(make('small','sniper-muted',reasons[p.exitReason]||t('closed')));}
+      if(p.status==='open'){const close=make('button','sniper-action sniper-close zs-position-close',dcopy().close||t('manualClose'));close.type='button';close.addEventListener('click',()=>closePaper(p.id,'manual'));row.append(close);}
+      else if(p.exitReason){const reasons={stagnant:state.lang==='ru'?'Нет движения более минуты · переход к следующему запуску':'No movement · rotated to next launch',target:t('targetHit'),stop:t('stopHit')};row.append(make('small','zs-position-reason',reasons[p.exitReason]||t('closed')));}
       host.append(row);
     });
     renderStats();
@@ -463,6 +471,27 @@
     .zs-positions .sniper-position-detail{font-size:10px!important;line-height:1.5!important;overflow-wrap:anywhere!important;color:#bfc9bf!important}
     .zs-positions .zs-position-chart{width:100%!important;max-height:42px!important;overflow:hidden!important}
     .zs-positions .zs-position-chart .zs-spark{width:100%!important;height:38px!important}
+
+    /* Position monitor cards: explicit, non-overlapping information hierarchy */
+    .zs-positions-inner{display:flex!important;flex-direction:column!important;gap:8px!important;padding:4px!important;min-width:0!important}
+    .zs-positions .zs-position-card{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:8px!important;width:100%!important;min-width:0!important;box-sizing:border-box!important;padding:12px!important;border:1px solid #536357!important;border-radius:5px!important;background:linear-gradient(135deg,#1c2520,#101714)!important;overflow:hidden!important}
+    .zs-positions .zs-position-topline{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;width:100%!important;min-width:0!important}
+    .zs-positions .zs-position-identity{display:flex!important;flex-direction:row!important;align-items:center!important;flex-wrap:wrap!important;gap:7px!important;min-width:0!important}
+    .zs-positions .zs-position-symbol{display:block!important;position:static!important;max-width:100%!important;font-size:15px!important;line-height:1.25!important;letter-spacing:.04em!important;color:#eef2ec!important;overflow-wrap:anywhere!important}
+    .zs-positions .zs-position-status{display:inline-flex!important;align-items:center!important;padding:3px 7px!important;border:1px solid #637464!important;border-radius:3px!important;font-size:9px!important;line-height:1.2!important;letter-spacing:.08em!important;color:#c3d0c0!important;white-space:nowrap!important}
+    .zs-positions .zs-position-status.is-open{background:#314233!important;color:#d4e2ce!important}.zs-positions .zs-position-status.is-closed{background:#282d2a!important;color:#b8c0b8!important}
+    .zs-positions .zs-position-pnl{display:block!important;position:static!important;flex:0 0 auto!important;text-align:right!important;font-size:15px!important;line-height:1.25!important;font-variant-numeric:tabular-nums!important;white-space:nowrap!important}
+    .zs-positions .zs-position-pnl.is-positive{color:#b8d0ad!important}.zs-positions .zs-position-pnl.is-negative{color:#d99b9b!important}
+    .zs-positions .zs-position-metrics{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;width:100%!important;min-width:0!important}
+    .zs-positions .zs-position-metric{display:flex!important;flex-direction:column!important;gap:3px!important;min-width:0!important;padding:6px 7px!important;border:1px solid #ffffff12!important;border-radius:3px!important;background:#080e0b66!important}
+    .zs-positions .zs-position-metric small{font-size:8px!important;line-height:1.2!important;letter-spacing:.08em!important;color:#9eaa9e!important}
+    .zs-positions .zs-position-metric strong{font-size:10px!important;line-height:1.3!important;color:#dce4da!important;overflow-wrap:anywhere!important;font-variant-numeric:tabular-nums!important}
+    .zs-positions .zs-position-chart{display:block!important;width:100%!important;height:40px!important;min-width:0!important;overflow:hidden!important;grid-column:auto!important}
+    .zs-positions .zs-position-chart .zs-spark{display:block!important;width:100%!important;height:40px!important}
+    .zs-positions .zs-position-close{align-self:flex-start!important;min-width:150px!important;min-height:30px!important}
+    .zs-positions .zs-position-reason{display:block!important;position:static!important;max-width:100%!important;font-size:10px!important;line-height:1.4!important;color:#bdc9b9!important;overflow-wrap:anywhere!important}
+    @media(max-width:520px){.zs-positions .zs-position-metrics{grid-template-columns:1fr!important}.zs-positions .zs-position-topline{align-items:flex-start!important;flex-direction:column!important}.zs-positions .zs-position-pnl{text-align:left!important}}
+
     /* Central trading cockpit v3 */
     .zs-center{display:flex!important;flex-direction:column!important;gap:9px!important;min-height:0!important;overflow:hidden!important;background:radial-gradient(ellipse at 50% 0%,#354237 0%,#1b251e 42%,#101713 100%)!important}
     .zs-center>.zs-center-title{flex:0 0 auto}
