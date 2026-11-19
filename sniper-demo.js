@@ -1048,12 +1048,25 @@
       Object.entries(viewportStyles).forEach(([key,value])=>root.style.setProperty(key,value,'important'));
       root.style.setProperty('height','100dvh','important');
       root.style.setProperty('min-height','100dvh','important');
+      if(root.dataset.activeTab==='wallet'){
+        root.style.setProperty('grid-template-rows','0px 44px 38px 0px minmax(0,1fr) 0px','important');
+        layout.style.setProperty('display','none','important');
+        walletView.style.setProperty('display','block','important');
+        walletView.style.setProperty('grid-row','5','important');
+        walletView.style.setProperty('width','100%','important');
+        walletView.style.setProperty('max-width','none','important');
+        walletView.style.setProperty('height','100%','important');
+        walletView.style.setProperty('min-height','0','important');
+        walletView.style.setProperty('overflow','auto','important');
+      }
       root.dataset.nativeFullscreen='0';
       syncFullscreenButton();
     }
     function exitDashboardFullscreen(){
       root.classList.remove('zs-fullscreen');
-      ['position','top','right','bottom','left','width','height','min-height','max-height','margin','box-sizing','z-index','overflow'].forEach(key=>root.style.removeProperty(key));
+      ['position','top','right','bottom','left','width','height','min-height','max-height','margin','box-sizing','z-index','overflow','grid-template-rows'].forEach(key=>root.style.removeProperty(key));
+      layout.style.removeProperty('display');
+      ['display','grid-row','width','max-width','height','min-height','overflow'].forEach(key=>walletView.style.removeProperty(key));
       root.dataset.nativeFullscreen='0';
       document.body.classList.remove('zs-lock');
       restoreDashboardToPage();
