@@ -109,7 +109,7 @@
           paperCapitalSol:Number($('sniper-capital')&&$('sniper-capital').value)||10,
           maxTradeSol:Math.min(Number($('sniper-capital')&&$('sniper-capital').value)||10,Number($('sniper-size')&&$('sniper-size').value)||0.01),
           maxOpenPositions:Math.max(1,Math.min(20,Math.round(Number($('sniper-max-open')&&$('sniper-max-open').value)||4))),
-          maxDailyLossSol:Math.max(0,Math.min(1000,Number($('sniper-max-daily-loss')&&$('sniper-max-daily-loss').value)||1)),
+          maxDailyLossSol:Math.max(0,Math.min(1000,Number.isFinite(Number($('sniper-max-daily-loss')&&$('sniper-max-daily-loss').value))?Number($('sniper-max-daily-loss').value):1)),
           minBuyCount:Math.max(1,Math.min(100,Math.round(Number($('sniper-min-buys')&&$('sniper-min-buys').value)||3))),
           takeProfitPct:Number($('sniper-target')&&$('sniper-target').value)||10,
           stopLossPct:Number($('sniper-stop')&&$('sniper-stop').value)||5,
