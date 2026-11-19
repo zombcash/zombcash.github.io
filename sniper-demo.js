@@ -488,9 +488,11 @@
     const host=$('zs-kpis');if(!host)return;
     const closed=state.positions.filter(p=>p.status==='closed');
     const open=state.positions.filter(p=>p.status==='open');
-    const wins=closed.filter(p=>(Number(p.netPnl)||0)>0).length;
+    const now=Date.now();
+    if(!terminal.sessionStartedAt){terminal.sessionStartedAt=Number(terminal.startedAt)||now;terminal.sessionBaseCapital=Number(terminal.capital)||10;terminal.equityHistory=[];}
     const sessionPositions=state.positions.filter(p=>Number(p.openedAt||0)>=Number(terminal.sessionStartedAt||0));
     const sessionClosed=sessionPositions.filter(p=>p.status==='closed');
+    const wins=sessionClosed.filter(p=>(Number(p.netPnl)||0)>0).length;
     const realized=sessionClosed.reduce((a,p)=>a+(Number(p.netPnl)||0),0);
     const openPnl=open.reduce((a,p)=>a+(Number(p.netPnl)||0),0);
     const total=realized+openPnl;
@@ -499,8 +501,6 @@
     const buyVolume=sessionPositions.reduce((a,p)=>a+(Number(p.buySol)||0),0);
     const sellVolume=sessionClosed.reduce((a,p)=>a+(Number(p.quantity)||0)*(Number(p.lastPrice||p.entryPrice)||0),0);
     const turnover=buyVolume+sellVolume;
-    const now=Date.now();
-    if(!terminal.sessionStartedAt){terminal.sessionStartedAt=Number(terminal.startedAt)||now;terminal.sessionBaseCapital=Number(terminal.capital)||10;terminal.equityHistory=[];}
     const equity=(Number(terminal.sessionBaseCapital)||Number(terminal.capital)||10)+total;
     terminal.equityHistory=Array.isArray(terminal.equityHistory)?terminal.equityHistory:[];
     const last=terminal.equityHistory[terminal.equityHistory.length-1];
@@ -508,7 +508,7 @@
     terminal.equityHistory=terminal.equityHistory.slice(-240);
     const equityDelta=equity-(Number(terminal.sessionBaseCapital)||Number(terminal.capital)||10);
     const equityPct=(Number(terminal.sessionBaseCapital)||Number(terminal.capital)||10)>0?equityDelta/(Number(terminal.sessionBaseCapital)||Number(terminal.capital)||10)*100:0;
-    const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,(total>=0?'+':'')+total.toFixed(5)+' SOL'],[dcopy().trades,String(closed.length)],[dcopy().wins,closed.length?Math.round(wins/closed.length*100)+'%':'—'],[dcopy().active,String(open.length)],[(state.lang==='ru'?'ОБОРОТ SOL ЗА СЕССИЮ':'SESSION SOL VOLUME'),turnover.toFixed(5)+' SOL']];
+    const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,(total>=0?'+':'')+total.toFixed(5)+' SOL'],[dcopy().trades,String(sessionClosed.length)],[dcopy().wins,sessionClosed.length?Math.round(wins/sessionClosed.length*100)+'%':'—'],[dcopy().active,String(open.length)],[(state.lang==='ru'?'ОБОРОТ SOL ЗА СЕССИЮ':'SESSION SOL VOLUME'),turnover.toFixed(5)+' SOL']];
     host.replaceChildren();vals.forEach((v,i)=>{const card=dashNode('div','zs-kpi zs-kpi-'+i);card.append(dashNode('small','',v[0]),dashNode('strong','zs-counter',v[1]));host.append(card);});
     const mainChart=$('zs-main-chart');if(mainChart){mainChart.replaceChildren();mainChart.setAttribute('aria-label','Session capital performance in SOL');mainChart.append(sparkline(terminal.equityHistory.map(x=>Number(x.value))));}
     const centerSummary=$('zs-center-summary');if(centerSummary){centerSummary.replaceChildren();const left=dashNode('div','zs-center-token');left.append(dashNode('small','',state.lang==='ru'?'ОТКРЫТЫЕ СДЕЛКИ · ВСЕГО':'OPEN POSITIONS · AGGREGATE'),dashNode('strong','',(state.lang==='ru'?'ВЛОЖЕНО: ':'INVESTED: ')+fmt(used,6)+' SOL'),dashNode('span','',(state.lang==='ru'?'ОБОРОТ СЕССИИ: ':'SESSION VOLUME: ')+fmt(turnover,6)+' SOL'),dashNode('span','',(state.lang==='ru'?'ОТКРЫТЫХ ПОЗИЦИЙ: ':'OPEN POSITIONS: ')+open.length));const right=dashNode('div','zs-center-pnl '+(openPnl>=0?'is-positive':'is-negative'));right.append(dashNode('small','',state.lang==='ru'?'ТЕКУЩИЙ P/L ОТКРЫТЫХ СДЕЛОК':'OPEN POSITIONS · LIVE P/L'),dashNode('strong','',(openPnl>=0?'+':'')+fmt(openPnl,6)+' SOL'),dashNode('span','',(used>0?(openPnl>=0?'+':'')+fmt(openPnl/used*100,2)+'%':'0.00%')+' · '+(equityDelta>=0?'+':'')+fmt(equityDelta,6)+' SOL ('+(equityPct>=0?'+':'')+fmt(equityPct,2)+'%)'));centerSummary.append(left,right);}
