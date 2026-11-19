@@ -275,12 +275,13 @@
     });
     maybeAutoEnter();
   }
-  function renderPositions(){
+  function renderPositions(mode='open'){
     const host=$('sniper-positions');if(!host)return;
     host.replaceChildren();
-    const openPositions=state.positions.filter(p=>p.status==='open');
-    if(!openPositions.length){host.append(make('p','sniper-muted',state.lang==='ru'?'Сейчас нет открытых сделок':'No open positions right now'));renderStats();return;}
-    openPositions.slice().sort((a,b)=>Number(b.openedAt||0)-Number(a.openedAt||0)).forEach(p=>{
+    const historyMode=mode==='history';
+    const visiblePositions=state.positions.filter(p=>historyMode?p.status==='closed':p.status==='open');
+    if(!visiblePositions.length){host.append(make('p','sniper-muted',historyMode?(state.lang==='ru'?'Закрытых сделок пока нет':'No closed trades yet'):(state.lang==='ru'?'Сейчас нет открытых сделок':'No open positions right now'));renderStats();return;}
+    visiblePositions.slice().sort((a,b)=>Number((historyMode?b.closedAt:b.openedAt)||0)-Number((historyMode?a.closedAt:a.openedAt)||0)).forEach(p=>{
       const row=make('article','sniper-position zs-position-card');
       const head=make('div','zs-position-topline');
       const identity=make('div','zs-position-identity');
@@ -292,8 +293,8 @@
       const metric=(label,value)=>{const cell=make('div','zs-position-metric');cell.append(make('small','',label),make('strong','',value));detail.append(cell);};
       metric(state.lang==='ru'?'РАЗМЕР СДЕЛКИ':'TRADE SIZE',fmt(p.buySol||0,6)+' SOL');
       metric(state.lang==='ru'?'ЦЕНА ВХОДА':'ENTRY PRICE',fmt(p.entryPrice,9)+' SOL');
-      metric(state.lang==='ru'?'ТЕКУЩАЯ ЦЕНА':'CURRENT PRICE',fmt(p.lastPrice||p.entryPrice,9)+' SOL');
-      metric(state.lang==='ru'?'ТЕКУЩАЯ ПРИБЫЛЬ / УБЫТОК':'CURRENT P/L',((Number(p.netPnl)||0)>=0?'+':'')+fmt(p.netPnl||0,6)+' SOL · '+((Number(p.netPct)||0)>=0?'+':'')+fmt(p.netPct||0,2)+'%');
+      metric(historyMode?(state.lang==='ru'?'ЦЕНА ВЫХОДА':'EXIT PRICE'):(state.lang==='ru'?'ТЕКУЩАЯ ЦЕНА':'CURRENT PRICE'),fmt(p.lastPrice||p.entryPrice,9)+' SOL');
+      metric(historyMode?(state.lang==='ru'?'ИТОГ СДЕЛКИ':'TRADE RESULT'):(state.lang==='ru'?'ТЕКУЩАЯ ПРИБЫЛЬ / УБЫТОК':'CURRENT P/L'),((Number(p.netPnl)||0)>=0?'+':'')+fmt(p.netPnl||0,6)+' SOL · '+((Number(p.netPct)||0)>=0?'+':'')+fmt(p.netPct||0,2)+'%');
       const contract=make('div','zs-position-contract');
       const contractLabel=make('small','',state.lang==='ru'?'КОНТРАКТ':'CONTRACT');
       const address=String(p.address||'');
@@ -308,6 +309,7 @@
       const graph=make('div','zs-position-chart');graph.append(sparkline(p.priceHistory&&p.priceHistory.length?p.priceHistory:[p.entryPrice,p.lastPrice||p.entryPrice]));
       row.append(head,detail,contract,graph);
       if(p.status==='open'){const close=make('button','sniper-action sniper-close zs-position-close',dcopy().close||t('manualClose'));close.type='button';close.addEventListener('click',()=>closePaper(p.id,'manual'));row.append(close);}
+      else if(historyMode){const closedAt=Number(p.closedAt)||0;row.append(make('small','zs-position-reason',(state.lang==='ru'?'ЗАКРЫТА: ':'CLOSED: ')+(closedAt?new Date(closedAt).toLocaleString():'—')+(p.exitReason?' · '+String(p.exitReason).toUpperCase():'')));}
       host.append(row);
     });
     renderStats();
@@ -855,14 +857,16 @@
       nav.querySelectorAll('button[data-zs-nav]').forEach(b=>{const active=tabTargets[Number(b.dataset.zsNav)]===tab;b.classList.toggle('is-active',active);b.setAttribute('aria-selected',active?'true':'false');});
       left.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='settings');
       center.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='stats');
-      right.classList.toggle('zs-tab-hidden',tab!=='sniper');
+      right.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='history');
       launchPanel.classList.toggle('zs-tab-hidden',tab!=='sniper');
-      posSection.classList.toggle('zs-tab-hidden',tab!=='sniper');
+      posSection.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='history');
+      if(tab==='history'){rightTitle.textContent=state.lang==='ru'?'ИСТОРИЯ СДЕЛОК':'TRADE HISTORY';renderPositions('history');}
+      else{rightTitle.textContent=dcopy().active;}
       journal.classList.toggle('zs-tab-hidden',tab!=='history');
       kpis.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='stats');
       helpPanel.classList.toggle('zs-tab-hidden',tab!=='help');
       layout.classList.toggle('zs-stats-layout',tab==='stats');layout.classList.toggle('zs-single-layout',tab==='history'||tab==='settings');layout.classList.toggle('zs-tab-hidden',tab==='help');
-      if(tab==='history')renderPositions();
+      
       if(tab==='stats'){renderStats();statsPanel.classList.remove('zs-tab-hidden');portrait.classList.add('zs-tab-hidden');core.classList.add('zs-tab-hidden');toggle.classList.add('zs-tab-hidden');uptime.classList.add('zs-tab-hidden');chartPanel.classList.add('zs-tab-hidden');}
       else{statsPanel.classList.add('zs-tab-hidden');portrait.classList.remove('zs-tab-hidden');core.classList.remove('zs-tab-hidden');toggle.classList.remove('zs-tab-hidden');uptime.classList.remove('zs-tab-hidden');chartPanel.classList.remove('zs-tab-hidden');}
     }
