@@ -61,7 +61,7 @@
   };
 
   const $ = id => document.getElementById(id);
-  const state = { lang:'en', candidates:[], positions:[], timer:null, positionTimer:null, busy:false, syncStatusKey:'saved', historyRevision:0 };
+  const state = { lang:'en', candidates:[], positions:[], timer:null, positionTimer:null, busy:false, syncStatusKey:'saved', historyRevision:0, feed:{connected:false,pumpdevEnabled:false,pumpdevConnected:false,pumpdevStatus:'unknown',paperEngineEnabled:false,paperEngineStatus:'waiting_for_trade_data_source'} };
   let activeStorageKey = '';
   function detectLang(){
     const path = location.pathname.split('/').filter(Boolean);
@@ -339,6 +339,7 @@
       if(!liveResponse.ok)throw new Error('launch stream '+liveResponse.status);
       const liveData=await liveResponse.json();
       const feed=liveData.feed||{};
+      state.feed={...state.feed,...feed};
       const launches=Array.isArray(liveData.launches)?liveData.launches:[];
       const now=Date.now();
       state.candidates=launches.map(launch=>{
@@ -354,13 +355,17 @@
           url:'https://pump.fun/coin/'+encodeURIComponent(address),source:'pumpportal',
           status:launch.status||'detected',tradeStreamingEnabled:!!feed.tradeStreamingEnabled};
       }).filter(item=>item.address&&item.eventAt&&now-item.eventAt>=0&&now-item.eventAt<=10*60*1000).slice(0,12);
+      const tradeReady=!!(feed.pumpdevEnabled&&feed.pumpdevConnected);
+      const engineReady=!!feed.paperEngineEnabled;
+      const pumpStatus=String(feed.pumpdevStatus||'disabled').toUpperCase().replace(/_/g,' ');
       if(state.candidates.length){
         $('sniper-feed-status').textContent=feed.connected
-          ? (feed.tradeStreamingEnabled?'LIVE MINT + BONDING-CURVE TRADES':'MINT STREAM CONNECTED · TRADE API KEY REQUIRED')
+          ? (tradeReady?(engineReady?'PUMPDEV TRADE FEED + PAPER ENGINE READY':'PUMPDEV CONNECTED · PAPER ENGINE PAUSED ('+String(feed.paperEngineStatus||'waiting').toUpperCase().replace(/_/g,' ')+')'):'MINT STREAM CONNECTED · PUMPDEV '+pumpStatus)
           : 'LAUNCH STREAM OFFLINE';
       }else{
-        $('sniper-feed-status').textContent=feed.tradeStreamingEnabled?'WAITING FOR NEW MINTS':'TRADE STREAM REQUIRES PUMPPORTAL API KEY';
+        $('sniper-feed-status').textContent=tradeReady?(engineReady?'PUMPDEV READY · WAITING FOR NEW MINTS':'PUMPDEV CONNECTED · PAPER ENGINE PAUSED'):'PUMPDEV TRADE FEED '+pumpStatus;
       }
+      renderDashboardState();
     }catch(_){
       // DEX profiles are display-only fallback; they cannot trigger automatic first-minute entry.
       try{
@@ -582,7 +587,8 @@
     terminal.logs.slice(0,12).forEach(e=>{const row=dashNode('div','zs-logrow');row.append(dashNode('time','',new Date(e.at).toLocaleTimeString()),dashNode('b','zs-logkind',e.kind),dashNode('strong','',e.symbol),dashNode('span','',e.detail));host.append(row);});
   }
   function renderDashboardState(){
-    const btn=$('zs-auto-toggle');if(btn){btn.classList.toggle('is-on',!!terminal.auto);btn.textContent=terminal.auto?dcopy().armed:dcopy().paused;}
+    const feedReady=!!(state.feed&&state.feed.pumpdevEnabled&&state.feed.pumpdevConnected&&state.feed.paperEngineEnabled);
+    const btn=$('zs-auto-toggle');if(btn){btn.classList.toggle('is-on',!!terminal.auto&&feedReady);btn.textContent=terminal.auto&&feedReady?dcopy().armed:dcopy().paused;if(terminal.auto&&!feedReady)btn.title=state.lang==='ru'?'Автодемо ожидает подключения PumpDev и активного Paper Engine.':'Auto demo is waiting for PumpDev and the server paper engine.';else btn.removeAttribute('title');}}
     const nav=document.querySelectorAll('[data-zs-nav]');nav.forEach(b=>{const i=Number(b.dataset.zsNav);if(dcopy().nav[i])b.textContent=dcopy().nav[i];});
     [['zs-settings-title',dcopy().settings],['zs-center-title',dcopy().autopilot],['zs-right-title',dcopy().active],['zs-launch-title',dcopy().launches],['zs-log-title',dcopy().journal],['zs-chart-title',state.lang==='ru'?'ДИНАМИКА КАПИТАЛА ЗА СЕССИЮ':'SESSION EQUITY CURVE']].forEach(([id,label])=>{const el=$(id);if(el)el.textContent=label;});
     const capLabel=$('zs-capital-label'),liqLabel=$('zs-liquidity-label');if(capLabel)capLabel.textContent=dcopy().capital;if(liqLabel)liqLabel.textContent=dcopy().minliq;
@@ -595,7 +601,7 @@
     if(!terminal.auto)return; // Paper demo may hold multiple positions; virtual capital remains the only sizing limit.
     const now=Date.now();
     const item=state.candidates.find(c=>{
-      if(c.source!=='pumpportal'||!c.tradeStreamingEnabled||!(c.priceNative>0)||terminal.seen.includes(c.address))return false;
+      if(c.source!=='pumpportal'||!state.feed.pumpdevEnabled||!state.feed.pumpdevConnected||!state.feed.paperEngineEnabled||!(c.priceNative>0)||terminal.seen.includes(c.address))return false;
       const age=now-Number(c.eventAt||0),m=c.firstMinute||{};
       const buys=Number(m.buyCount||0),sells=Number(m.sellCount||0);
       const net=Number(m.netSol||0),move=Number(m.priceChangePct||0);
@@ -609,6 +615,12 @@
   }
 
   async function showLaunchConfirm(){
+    await refreshFeed();
+    const feed=state.feed||{};
+    if(!(feed.pumpdevEnabled&&feed.pumpdevConnected&&feed.paperEngineEnabled)){
+      window.alert(state.lang==='ru'?'Автодемо пока недоступно: необходимы подключённый PumpDev и активный серверный Paper Engine. Ручные виртуальные покупки остаются доступны.':'Auto demo is unavailable: PumpDev must be connected and the server Paper Engine must be enabled. Manual virtual buys remain available.');
+      return;
+    }
     const n=id=>Number($(id)&&$(id).value);
     const errors=[];
     if(!(n('sniper-size')>0))errors.push('Размер сделки должен быть больше нуля.');
