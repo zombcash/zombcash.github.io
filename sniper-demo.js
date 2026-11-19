@@ -83,7 +83,7 @@
   }
   function updateSyncStatus(key){state.syncStatusKey=key;const node=document.querySelector('.sniper-demo [data-sniper-i18n="saved"]');if(node)node.textContent=t(key);}
   function makeUuid(){if(window.crypto&&typeof window.crypto.randomUUID==='function')return window.crypto.randomUUID();return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);});}
-  function mapServerPosition(p){return {id:String(p.id),address:String(p.mint),symbol:String(p.symbol||'TOKEN'),name:String(p.name||''),buySol:Number(p.buySol),entryPrice:Number(p.entryPrice),lastPrice:Number(p.lastPrice),quantity:Number(p.quantity),netPnl:Number(p.netPnl||0),netPct:Number(p.netPct||0),status:p.status==='closed'?'closed':'open',exitReason:p.exitReason||null,openedAt:Number(p.openedAt)||Date.now(),closedAt:p.closedAt?Number(p.closedAt):null,_ownerTelegramId:telegramId()};}
+  function mapServerPosition(p){return {id:String(p.id),address:String(p.mint),symbol:String(p.symbol||'TOKEN'),name:String(p.name||''),buySol:Number(p.buySol),entryPrice:Number(p.entryPrice),lastPrice:Number(p.lastPrice),quantity:Number(p.quantity),netPnl:Number(p.netPnl||0),netPct:Number(p.netPct||0),status:p.status==='closed'?'closed':'open',exitReason:p.exitReason||null,openedAt:Number(p.openedAt)||Date.now(),closedAt:p.closedAt?Number(p.closedAt):null,sellSol:Number(p.sellSol)||0,_ownerTelegramId:telegramId()};}
   async function persistPosition(p){
     const token=authToken(),accountId=telegramId();
     if(!token||!accountId||p._ownerTelegramId!==accountId)return;
@@ -498,17 +498,19 @@
   function renderStats(){
     const host=$('zs-kpis');if(!host)return;
     const sessionStart=Number(terminal.startedAt)||0;
-    const closed=state.positions.filter(p=>p.status==='closed'&&(!sessionStart||Number(p.openedAt||0)>=sessionStart)),wins=closed.filter(p=>(Number(p.netPnl)||0)>0).length;
+    const closed=state.positions.filter(p=>p.status==='closed'&&(!sessionStart||Number(p.closedAt||p.openedAt||0)>=sessionStart)),wins=closed.filter(p=>(Number(p.netPnl)||0)>0).length;
     const losses=closed.filter(p=>(Number(p.netPnl)||0)<0).length;
     const session=recordEquitySnapshot(),open=session.open;
     const used=open.reduce((a,p)=>a+(Number(p.buySol)||0),0);
     const available=Math.max(0,session.baseline+session.realized-used);
-    const turnover=state.positions.filter(p=>p.status==='open'||!sessionStart||Number(p.openedAt||0)>=sessionStart||Number(p.closedAt||0)>=sessionStart).reduce((a,p)=>a+(Number(p.buySol)||0)+(Number(p.sellSol)||0),0);
+    const sessionTrades=state.positions.filter(p=>p.status==='open'||!sessionStart||Number(p.openedAt||0)>=sessionStart||Number(p.closedAt||0)>=sessionStart);
+    const turnover=sessionTrades.reduce((a,p)=>a+(Number(p.buySol)||0)+(Number(p.sellSol)||((p.status==='closed')?(Number(p.quantity)||0)*(Number(p.lastPrice)||Number(p.entryPrice)||0):0)),0);
     const decided=wins+losses;
     const winRate=decided?Math.round(wins/decided*100)+'%':'—';
-    const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,(session.realized>=0?'+':'')+session.realized.toFixed(5)+' SOL'],[state.lang==='ru'?'ЗАКРЫТЫЕ СДЕЛКИ':'CLOSED TRADES',String(closed.length)],[state.lang==='ru'?'ПОБЕДЫ / ПОРАЖЕНИЯ':'WINS / LOSSES',wins+' / '+losses],[dcopy().wins,winRate],[state.lang==='ru'?'ОБОРОТ ЗА СЕССИЮ':'SESSION TURNOVER',turnover.toFixed(5)+' SOL'],[dcopy().active,String(open.length)]];
+    const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,((session.realized+session.unrealized)>=0?'+':'')+(session.realized+session.unrealized).toFixed(5)+' SOL'],[state.lang==='ru'?'ЗАКРЫТЫЕ СДЕЛКИ':'CLOSED TRADES',String(closed.length)],[state.lang==='ru'?'ПОБЕДЫ / ПОРАЖЕНИЯ':'WINS / LOSSES',wins+' / '+losses],[dcopy().wins,winRate],[state.lang==='ru'?'ОБОРОТ ЗА СЕССИЮ':'SESSION TURNOVER',turnover.toFixed(5)+' SOL'],[dcopy().active,String(open.length)]];
     host.replaceChildren();vals.forEach((v,i)=>{const card=dashNode('div','zs-kpi zs-kpi-'+i);card.append(dashNode('small','',v[0]),dashNode('strong','zs-counter',v[1]));host.append(card);});
-    const mainChart=$('zs-main-chart');if(mainChart){mainChart.replaceChildren();const history=(terminal.equityHistory||[]).map(x=>Number(x.value)).filter(Number.isFinite);mainChart.append(sparkline(history.length>1?history:[session.baseline,session.equity]));}
+    const mainChart=$('zs-main-chart');if(mainChart){mainChart.replaceChildren();const history=(terminal.equityHistory||[]).map(x=>Number(x.value)).filter(Number.isFinite);const relative=history.length>1?history.map(v=>100*v/session.baseline):[100,100*session.equity/session.baseline];mainChart.append(sparkline(relative));}
+    const equityCaption=$('zs-equity-caption');if(equityCaption){const change=session.equity-session.baseline,pct=change/session.baseline*100;equityCaption.textContent=(state.lang==='ru'?'СТАРТ ':'START ')+session.baseline.toFixed(4)+' SOL · '+(state.lang==='ru'?'СЕЙЧАС ':'NOW ')+session.equity.toFixed(4)+' SOL · '+(change>=0?'+':'')+change.toFixed(5)+' SOL ('+(pct>=0?'+':'')+pct.toFixed(2)+'%)';}
     const centerSummary=$('zs-center-summary');if(centerSummary){
       centerSummary.replaceChildren();
       const left=dashNode('div','zs-center-token');
@@ -903,7 +905,7 @@
     const statsPanel=dashNode('div','zs-stats-extra zs-tab-hidden');statsPanel.id='zs-stats-extra';
     const statsHeading=dashNode('h3','',state.lang==='ru'?'РЕЗУЛЬТАТЫ СИМУЛЯЦИИ':'SIMULATION PERFORMANCE');
     const statsGrid=dashNode('div','zs-stat-grid');statsGrid.id='zs-stat-grid';statsPanel.append(statsHeading,statsGrid);
-    const centerSummary=dashNode('div','zs-center-summary');centerSummary.id='zs-center-summary';const chartPanel=dashNode('div','zs-chart-panel');const chartHead=dashNode('div','zs-chart-head');const chartTitle=dashNode('h3','',state.lang==='ru'?'ДИНАМИКА КАПИТАЛА ЗА СЕССИЮ':'SESSION EQUITY CURVE');chartTitle.id='zs-chart-title';chartHead.append(chartTitle,dashNode('span','zs-chart-range',state.lang==='ru'?'SOL · С НАЧАЛА СЕССИИ':'SOL · SINCE SESSION START'));chartPanel.append(chartHead,dashNode('small','zs-equity-caption',state.lang==='ru'?'Изменение капитала относительно стартового значения':'Capital change relative to session starting balance'));const chart=dashNode('div','zs-chart');chart.id='zs-main-chart';chartPanel.append(chart);
+    const centerSummary=dashNode('div','zs-center-summary');centerSummary.id='zs-center-summary';const chartPanel=dashNode('div','zs-chart-panel');const chartHead=dashNode('div','zs-chart-head');const chartTitle=dashNode('h3','',state.lang==='ru'?'ДИНАМИКА КАПИТАЛА ЗА СЕССИЮ':'SESSION EQUITY CURVE');chartTitle.id='zs-chart-title';chartHead.append(chartTitle,dashNode('span','zs-chart-range',state.lang==='ru'?'SOL · С НАЧАЛА СЕССИИ':'SOL · SINCE SESSION START'));chartPanel.append(chartHead,dashNode('small','zs-equity-caption',''));const chart=dashNode('div','zs-chart');chart.id='zs-main-chart';chartPanel.append(chart);
     center.append(portrait,core,toggle,uptime,centerSummary,chartPanel,statsPanel);
     const right=dashNode('section','zs-panel zs-right');const rightTitle=dashNode('h3','',dcopy().active);rightTitle.id='zs-right-title';right.append(rightTitle);const posSection=dashNode('div','zs-position-section');const posWrap=dashNode('div','zs-positions');posWrap.id='zs-positions-wrap';if(positions){positions.classList.add('zs-positions-inner');posWrap.append(positions);}posSection.append(posWrap);right.append(posSection);
     const launchPanel=dashNode('section','zs-panel zs-launch-panel');const launchTitle=dashNode('h3','',dcopy().launches);launchTitle.id='zs-launch-title';launchPanel.append(launchTitle);const toolbar=dashNode('div','sniper-toolbar');if(refresh)toolbar.append(refresh);if(status)toolbar.append(status);launchPanel.append(toolbar);const launchWrap=dashNode('div','zs-launches');if(candidates)launchWrap.append(candidates);launchPanel.append(launchWrap);
