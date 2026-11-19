@@ -574,7 +574,7 @@
     .zs-chart{width:100%;height:72px;margin-top:5px;border-radius:3px;background:linear-gradient(180deg,#a9b99c12,transparent);border:1px solid #69786b33}
     .zs-right{display:grid;grid-template-rows:auto minmax(0,.85fr) minmax(0,1.15fr);gap:6px}.zs-right>h3{margin:0!important;padding:0 0 4px;border-bottom:1px solid #ffffff18}.zs-launch-panel{min-height:0;overflow:hidden}.zs-positions,.zs-launches{max-height:none;min-height:0;overflow:auto;scrollbar-width:thin;scrollbar-color:#59665c #121816}.zs-launches .sniper-candidate{grid-template-columns:minmax(0,1fr) auto;gap:5px 8px;padding:9px 0;align-items:start}.zs-launches .sniper-candidate-main{min-width:0;display:grid;grid-template-columns:minmax(0,1fr);gap:4px}.zs-launches .sniper-token-name{display:block;min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.35}.zs-launches .sniper-token-address{display:block;min-width:0;white-space:normal;overflow-wrap:anywhere;word-break:break-all;line-height:1.4;color:#aeb8af}.zs-launches .sniper-candidate-stats{display:flex;flex-wrap:wrap;gap:5px 12px;min-width:0}.zs-launches .sniper-candidate-stats{grid-column:1/-1}.zs-launches .sniper-link{display:none}.zs-launches .sniper-action{grid-column:2;grid-row:1}.zs-positions .sniper-position{display:grid;grid-template-columns:1fr auto;gap:5px;padding:8px 0;border-top:1px solid #ffffff16}.zs-position-chart{grid-column:1/-1}.zs-spark{width:100%;height:34px;display:block;background:linear-gradient(180deg,#9db39b0b,transparent);border-radius:3px}
     .zs-log{display:grid;gap:2px;max-height:76px;overflow:auto}.zs-logrow{display:grid;grid-template-columns:65px 68px 82px 1fr;gap:7px;padding:5px 7px;border-top:1px solid #ffffff10;font-size:10px;color:#c9d0c9}.zs-logkind{color:#b8d0ad}.zs-foot{margin:4px 0 0;color:#aeb8af;font-size:10px;line-height:1.35}.zs-hidden{display:none!important}.sniper-demo .sniper-muted{color:#aeb8af!important}.sniper-demo .sniper-action{border-radius:3px!important;background:#a8b79f!important;color:#111812!important;border:1px solid #c2cdbb!important}.sniper-demo .sniper-close{background:transparent!important;border:1px solid #68776c!important;color:#d2dcd2!important}
-    .sniper-demo.zs-fullscreen{position:fixed!important;inset:0!important;z-index:2147483600!important;width:100vw!important;height:100vh!important;height:100dvh!important;min-height:100vh!important;min-height:100dvh!important;max-height:100vh!important;max-height:100dvh!important;box-sizing:border-box!important;margin:0!important;border:0!important;border-radius:0!important;padding:10px 14px!important;overflow:hidden!important;display:grid!important;grid-template-rows:auto auto auto minmax(0,1fr) 0 0 0!important;align-content:stretch!important;gap:4px!important;background:linear-gradient(145deg,#171c1b,#0b1010 58%,#151a18)!important}
+    .sniper-demo.zs-fullscreen{position:fixed!important;inset:0!important;z-index:2147483600!important;width:100vw!important;height:100vh!important;height:100dvh!important;min-height:100vh!important;min-height:100dvh!important;max-height:100vh!important;max-height:100dvh!important;box-sizing:border-box!important;margin:0!important;border:0!important;border-radius:0!important;padding:10px 14px!important;overflow:hidden!important;display:grid!important;grid-template-rows:auto auto auto minmax(0,1fr) 0 0 0!important;grid-auto-rows:0!important;align-content:stretch!important;gap:4px!important;background:linear-gradient(145deg,#171c1b,#0b1010 58%,#151a18)!important}
     .zs-fullscreen .zs-head{min-height:34px;padding-bottom:5px}.zs-fullscreen .zs-nav{margin:2px 0}.zs-fullscreen .zs-kpis{margin:1px 0 4px}.zs-fullscreen .zs-layout{height:auto!important;min-height:0!important;align-self:stretch}.zs-fullscreen .zs-panel{padding:8px 10px}.zs-fullscreen .zs-portrait{height:76px}.zs-fullscreen .zs-core{min-height:94px;width:min(100%,118px)}.zs-fullscreen .zs-chart{height:62px}.zs-fullscreen .zs-log{max-height:58px}.zs-fullscreen .zs-foot{font-size:9px;margin:0}.zs-fullscreen>.zs-foot{display:none!important}.zs-fullscreen .zs-field{padding:2px 0}.zs-fullscreen .zs-field .zs-number{min-height:24px}.zs-fullscreen .zs-kpi{padding:6px 9px}
     .zs-fullscreen .zs-right{grid-template-rows:auto minmax(0,.85fr) minmax(0,1.15fr)}.zs-fullscreen .zs-positions,.zs-fullscreen .zs-launches{overflow:auto}
     body.zs-lock{overflow:hidden!important}
@@ -768,7 +768,7 @@
     @media(max-height:760px) and (min-width:761px){.sniper-demo.zs-fullscreen.zs-history-mode{grid-template-rows:0 38px 34px 0 minmax(0,1fr) 180px!important}}
     @media(max-width:760px){.sniper-demo.zs-fullscreen.zs-history-mode{display:block!important;overflow:auto!important}.sniper-demo.zs-fullscreen.zs-history-mode #zs-journal-panel{min-height:180px!important}.sniper-demo.zs-fullscreen.zs-history-mode #zs-log{max-height:135px!important}}
     `;
-    const header=dashNode('div','zs-head');const brand=dashNode('span','zs-brand','☣ ZOMBCASH');const title=dashNode('strong','zs-title','ZOMBIE SNIPER');const headActions=dashNode('div','zs-head-actions');headActions.append(dashNode('span','zs-demo',dcopy().demo));const expand=dashNode('button','zs-expand','⛶ FULL SCREEN');expand.type='button';expand.title='Open terminal full screen';function syncFullscreenButton(){const on=root.classList.contains('zs-fullscreen');document.body.classList.toggle('zs-lock',on);expand.textContent=on?'✕ EXIT FULL SCREEN':'⛶ FULL SCREEN';}
+    const header=dashNode('div','zs-head');const brand=dashNode('span','zs-brand','☣ ZOMBCASH');const title=dashNode('strong','zs-title','ZOMBIE SNIPER');const headActions=dashNode('div','zs-head-actions');headActions.append(dashNode('span','zs-demo',dcopy().demo));const expand=dashNode('button','zs-expand','⛶ FULL SCREEN');expand.type='button';expand.title='Open terminal full screen';const refreshResultsBtn=dashNode('button','zs-refresh-results','↻ REFRESH RESULTS');refreshResultsBtn.type='button';refreshResultsBtn.title='Synchronize paper positions and refresh P/L';function syncFullscreenButton(){const on=root.classList.contains('zs-fullscreen');document.body.classList.toggle('zs-lock',on);expand.textContent=on?'✕ EXIT FULL SCREEN':'⛶ FULL SCREEN';}
     function enterDashboardFullscreen(){
       // Use the browser content viewport; keep Chrome's browser chrome visible.
       mountDashboardOverlay();
@@ -796,11 +796,12 @@
         exitDashboardFullscreen();
       }
     });
+    refreshResultsBtn.addEventListener('click',refreshResultsNow);
     expand.addEventListener('click',()=>{
       if(root.classList.contains('zs-fullscreen'))exitDashboardFullscreen();
       else enterDashboardFullscreen();
     });
-    headActions.append(expand);header.append(brand,title,headActions);
+    headActions.append(refreshResultsBtn,expand);header.append(brand,title,headActions);
     const nav=dashNode('nav','zs-nav');nav.setAttribute('aria-label','Zombie Sniper navigation');
     const tabTargets=['sniper','stats','history','settings','help'];
     function selectTab(tab){
@@ -877,6 +878,27 @@
     renderDashboardState();renderPositions();renderCandidates();selectTab('sniper');enterDashboardFullscreen();
   }
 
+  async function refreshResultsNow(){
+    if(state.resultsRefreshing)return;
+    state.resultsRefreshing=true;
+    const button=$('zs-refresh-results');
+    if(button){button.disabled=true;button.textContent='UPDATING…';}
+    try{
+      // Registered accounts first pull the persistent server ledger, then
+      // refresh market quotes so the displayed P/L is not left at an old snapshot.
+      if(authToken())await syncFromServer();
+      await updatePositions();
+      renderDashboardState();
+      renderPositions();
+      if(button)button.textContent='UPDATED '+new Date().toLocaleTimeString();
+    }catch(_){
+      if(button)button.textContent='UPDATE FAILED';
+    }finally{
+      state.resultsRefreshing=false;
+      if(button)button.disabled=false;
+    }
+  }
+
   function init(){
     readStore();activeStorageKey=storageKey();detectLang();buildDashboard();translate();
     $('sniper-refresh').addEventListener('click',refreshFeed);
@@ -887,7 +909,8 @@
     if(terminal.auto&&!Number(terminal.startedAt)){terminal.startedAt=Date.now();saveTerminal();}const updateRuntimeIndicator=()=>{const node=$('zs-runtime-indicator');if(!node)return;const running=!!terminal.auto;const elapsed=running?Math.max(0,Math.floor((Date.now()-(Number(terminal.startedAt)||Date.now()))/1000)):0;const hh=String(Math.floor(elapsed/3600)).padStart(2,'0');const mm=String(Math.floor((elapsed%3600)/60)).padStart(2,'0');const ss=String(elapsed%60).padStart(2,'0');node.classList.toggle('is-running',running);node.classList.toggle('is-offline',!running);node.textContent=(state.lang==='ru'?(running?'АВТОТОРГОВЛЯ · РАБОТАЕТ':'АВТОТОРГОВЛЯ · ОСТАНОВЛЕНА'):(running?'AUTO TRADING · RUNNING':'AUTO TRADING · STOPPED'))+'  '+hh+':'+mm+':'+ss;};
     updateRuntimeIndicator();window.setInterval(updateRuntimeIndicator,1000);
     state.timer=window.setInterval(()=>{checkAccountChange();if(!document.hidden)refreshFeed();},15000);
-    state.positionTimer=window.setInterval(()=>{if(!document.hidden){if(authToken())syncFromServer();else updatePositions();}},10000);
+    state.positionTimer=window.setInterval(()=>{if(!document.hidden)refreshResultsNow();},10000);
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden){refreshFeed();refreshResultsNow();}});
 
     document.addEventListener('zombcash:languagechange',()=>{detectLang();translate();if($('zs-kpis'))renderDashboardState();});
     document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer();});
