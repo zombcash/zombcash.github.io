@@ -61,7 +61,7 @@
   };
 
   const $ = id => document.getElementById(id);
-  const state = { lang:'en', candidates:[], positions:[], timer:null, positionTimer:null, busy:false, syncStatusKey:'saved' };
+  const state = { lang:'en', candidates:[], positions:[], timer:null, positionTimer:null, busy:false, syncStatusKey:'saved', historyRevision:0 };
   let activeStorageKey = '';
   function detectLang(){
     const path = location.pathname.split('/').filter(Boolean);
@@ -167,14 +167,14 @@
   }
 
   async function syncFromServer(){
-    const token=authToken(),accountId=telegramId();if(!token||!accountId){updateSyncStatus('loginToSync');refreshWalletInfo();return;}
+    const token=authToken(),accountId=telegramId(),revision=state.historyRevision;if(!token||!accountId){updateSyncStatus('loginToSync');refreshWalletInfo();return;}
     try{
       const response=await fetch(AUTH_API+'/api/sniper/paper',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
-      if(telegramId()!==accountId||authToken()!==token)return;
+      if(revision!==state.historyRevision||telegramId()!==accountId||authToken()!==token)return;
       if(response.status===401){updateSyncStatus('loginAgain');return;}
       if(!response.ok){updateSyncStatus('syncError');return;}
       const data=await response.json();
-      if(telegramId()!==accountId||authToken()!==token)return;
+      if(revision!==state.historyRevision||telegramId()!==accountId||authToken()!==token)return;
       const remote=Array.isArray(data.positions)?data.positions.map(mapServerPosition):[];
       const local=state.positions.slice();
       const merged=new Map(local.map(p=>[String(p.id),p]));
@@ -196,9 +196,10 @@
   }
   async function clearServerHistory(){
     const token=authToken(),accountId=telegramId();if(!token||!accountId)return true;
+    const revision=++state.historyRevision;
     try{
       const response=await fetch(AUTH_API+'/api/sniper/paper/clear',{method:'POST',headers:{'Authorization':'Bearer '+token},cache:'no-store'});
-      if(telegramId()!==accountId||authToken()!==token)return false;
+      if(revision!==state.historyRevision||telegramId()!==accountId||authToken()!==token)return false;
       if(!response.ok){updateSyncStatus(response.status===401?'loginAgain':'syncError');return false;}
       const result=await response.json().catch(()=>({}));
       if(result.ok!==true){updateSyncStatus('syncError');return false;}
