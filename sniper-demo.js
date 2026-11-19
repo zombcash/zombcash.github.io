@@ -460,6 +460,21 @@
   const terminal={auto:false,startedAt:0,capital:10,minLiquidity:5000,maxTradeSize:10,maxOpenPositions:4,idleTimeout:60,minMovePct:0.2,logs:[],seen:[],lastAuto:0,sessionStartCapital:10,equityHistory:[]};
   const TERMINAL_KEY='zombcash_sniper_terminal_v1';
   const dcopy=()=>DASH_COPY[state.lang]||DASH_COPY.en;
+  function renderHelpPanel(){
+    const helpPanel=$('zs-help-panel');
+    if(!helpPanel)return;
+    const data=HELP_COPY[state.lang]||HELP_COPY.en;
+    helpPanel.replaceChildren();
+    helpPanel.append(dashNode('h3','zs-help-heading',data.title),dashNode('p','zs-help-notice',data.notice));
+    const grid=dashNode('div','zs-help-grid');
+    data.sections.forEach(([heading,body])=>{
+      const card=dashNode('article','zs-help-card');
+      card.append(dashNode('h4','',heading),dashNode('p','',body));
+      grid.append(card);
+    });
+    helpPanel.append(grid);
+  }
+
   const HELP_COPY = {
     en:{title:'HELP & SAFETY',notice:'PAPER DEMO IS AVAILABLE NOW. LIVE TRADING IS NOT ENABLED. Registration is required for a personal profile and wallet provisioning, but signing up does not activate real trades.',sections:[
       ['01 / PAPER DEMO','Explore the launch feed, adjust the strategy settings and start or pause Auto Sniper. Every order is simulated with virtual SOL. No blockchain transaction is signed or sent, and demo profit/loss is not real money.'],
@@ -1041,19 +1056,7 @@
     const journal=dashNode('section','zs-panel');journal.id='zs-journal-panel';const logTitle=dashNode('h3','',dcopy().journal);logTitle.id='zs-log-title';journal.append(logTitle);const log=dashNode('div','zs-log');log.id='zs-log';journal.append(log);
     const clearBar=dashNode('div','sniper-toolbar');if(clear)clearBar.append(clear);journal.append(clearBar);
     const foot=dashNode('p','zs-foot',dcopy().hint+' '+t('source'));
-    const helpPanel=dashNode('section','zs-panel zs-help zs-tab-hidden');
-    const renderHelp=()=>{
-      const data=HELP_COPY[state.lang]||HELP_COPY.en;
-      helpPanel.replaceChildren();
-      helpPanel.append(dashNode('h3','zs-help-heading',data.title),dashNode('p','zs-help-notice',data.notice));
-      const grid=dashNode('div','zs-help-grid');
-      data.sections.forEach(([heading,body])=>{
-        const card=dashNode('article','zs-help-card');
-        card.append(dashNode('h4','',heading),dashNode('p','',body));
-        grid.append(card);
-      });
-      helpPanel.append(grid);
-    };
+    const helpPanel=dashNode('section','zs-panel zs-help zs-tab-hidden');helpPanel.id='zs-help-panel';
     style.textContent += `
       .zs-help{display:block!important;min-height:0;overflow:auto!important;padding:clamp(14px,2vw,24px)!important}
       .zs-help-heading{margin:0 0 12px!important;font-size:clamp(16px,1.5vw,21px)!important;letter-spacing:.1em;color:#e2e9df}
@@ -1064,7 +1067,7 @@
       .zs-help-card p{margin:0;color:#c4cec3;font:500 13px/1.65 Rajdhani,system-ui,sans-serif}
       @media(max-width:760px){.zs-help-grid{grid-template-columns:1fr;gap:9px}.zs-help-card{padding:12px}.zs-help-notice{font-size:12px}}
     `;
-    renderHelp();
+    renderHelpPanel();
     root.replaceChildren(style,header,nav,kpis,layout,journal,helpPanel,foot);
     renderDashboardState();renderPositions();renderCandidates();selectTab('sniper');
   }
@@ -1124,7 +1127,7 @@
     state.positionTimer=window.setInterval(()=>{if(!document.hidden)refreshResultsNow();},10000);
     document.addEventListener('visibilitychange',()=>{if(!document.hidden){refreshFeed();refreshResultsNow();}});
 
-    document.addEventListener('zombcash:languagechange',()=>{detectLang();translate();if($('zs-kpis'))renderDashboardState();if($('zs-kpis'))renderHelp();});
+    document.addEventListener('zombcash:languagechange',()=>{detectLang();translate();if($('zs-kpis'))renderDashboardState();if($('zs-kpis'))renderHelpPanel();});
     document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer();});
     document.addEventListener('click',event=>{if(event.target&&event.target.closest&&event.target.closest('#survivor-logout'))Promise.resolve().then(checkAccountChange);});
     window.addEventListener('storage',event=>{if(event.key===TOKEN_KEY||event.key===PROFILE_KEY){if(!checkAccountChange()&&authToken())syncFromServer().then(updatePositions);}});
