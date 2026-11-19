@@ -112,6 +112,7 @@
           maxDailyLossSol:Math.max(0,Math.min(1000,Number(($('sniper-max-daily-loss')||{}).value??1))),
           minBuyCount:Math.max(1,Math.min(100,Math.round(Number($('sniper-min-buys')&&$('sniper-min-buys').value)||3))),
           creatorPolicy:state.creatorFilter,
+          requireSocials:!!state.requireSocials,
           takeProfitPct:Number($('sniper-target')&&$('sniper-target').value)||10,
           stopLossPct:Number($('sniper-stop')&&$('sniper-stop').value)||5,
           minPriceMovePct:Number($('sniper-min-move')&&$('sniper-min-move').value)||0.2,
@@ -148,7 +149,9 @@
       if(data.trading&&data.trading.mode==='paper'){
         const settings=data.trading;
         if(['any','first','repeat'].includes(settings.creatorPolicy))state.creatorFilter=settings.creatorPolicy;
+        if(typeof settings.requireSocials==='boolean')state.requireSocials=settings.requireSocials;
         const creatorSelect=document.querySelector('.zs-creator-select');if(creatorSelect)creatorSelect.value=state.creatorFilter;
+        const socialsCheck=document.querySelector('.zs-filter-label input[type="checkbox"]');if(socialsCheck)socialsCheck.checked=state.requireSocials;
         const serverValues={
           'sniper-capital':settings.paperCapitalSol,'sniper-size':settings.maxTradeSol,
           'sniper-target':settings.takeProfitPct,'sniper-stop':settings.stopLossPct,
@@ -1149,7 +1152,7 @@
     const sourceSelect=dashNode('select','zs-source-select');sourceSelect.setAttribute('aria-label','Candidate source');
     [['all','ALL SOURCES'],['pumpportal','PUMP.FUN LAUNCHES'],['boosts','BOOST MONITOR'],['community','ZOMBIE LAB / COMMUNITY']].forEach(([v,label])=>{const option=document.createElement('option');option.value=v;option.textContent=state.lang==='ru'?({'all':'ВСЕ ИСТОЧНИКИ','pumpportal':'ЗАПУСКИ PUMP.FUN','boosts':'BOOST MONITOR','community':'ZOMBIE LAB / СООБЩЕСТВО'}[v]):label;sourceSelect.append(option);});
     sourceSelect.value=state.source;sourceSelect.addEventListener('change',()=>{state.source=sourceSelect.value;refreshFeed();});
-    const socialsLabel=dashNode('label','zs-filter-label');const socialsCheck=dashNode('input','');socialsCheck.type='checkbox';socialsCheck.checked=state.requireSocials;socialsCheck.addEventListener('change',()=>{state.requireSocials=socialsCheck.checked;renderCandidates();});socialsLabel.append(socialsCheck,dashNode('span','',state.lang==='ru'?'ТОЛЬКО С СОЦСЕТЯМИ':'SOCIALS ONLY'));
+    const socialsLabel=dashNode('label','zs-filter-label');const socialsCheck=dashNode('input','');socialsCheck.type='checkbox';socialsCheck.checked=state.requireSocials;socialsCheck.addEventListener('change',()=>{state.requireSocials=socialsCheck.checked;renderCandidates();if(terminal.auto&&authToken())setServerPaperEnabled(true);});socialsLabel.append(socialsCheck,dashNode('span','',state.lang==='ru'?'ТОЛЬКО С СОЦСЕТЯМИ':'SOCIALS ONLY'));
     const nameFilter=dashNode('input','zs-name-filter');nameFilter.type='search';nameFilter.placeholder=state.lang==='ru'?'Фильтр названия / тикера':'Filter name / ticker';nameFilter.value=state.nameQuery;nameFilter.addEventListener('input',()=>{state.nameQuery=nameFilter.value;renderCandidates();});
     const creatorSelect=dashNode('select','zs-creator-select');creatorSelect.setAttribute('aria-label','Creator history');
     [['any','ANY DEV'],['first','FIRST SEEN'],['repeat','REPEAT DEV']].forEach(([v,label])=>{const option=document.createElement('option');option.value=v;option.textContent=state.lang==='ru'?({'any':'ЛЮБОЙ DEV','first':'ВПЕРВЫЕ В ЛЕНТЕ','repeat':'ПОВТОРНЫЙ DEV'}[v]):label;creatorSelect.append(option);});
