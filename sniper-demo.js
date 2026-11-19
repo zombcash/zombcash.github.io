@@ -111,6 +111,7 @@
           maxOpenPositions:Math.max(1,Math.min(20,Math.round(Number($('sniper-max-open')&&$('sniper-max-open').value)||4))),
           maxDailyLossSol:Math.max(0,Math.min(1000,Number(($('sniper-max-daily-loss')||{}).value??1))),
           minBuyCount:Math.max(1,Math.min(100,Math.round(Number($('sniper-min-buys')&&$('sniper-min-buys').value)||3))),
+          creatorPolicy:state.creatorFilter,
           takeProfitPct:Number($('sniper-target')&&$('sniper-target').value)||10,
           stopLossPct:Number($('sniper-stop')&&$('sniper-stop').value)||5,
           minPriceMovePct:Number($('sniper-min-move')&&$('sniper-min-move').value)||0.2,
@@ -146,6 +147,8 @@
       const data=await response.json(),wallet=data.wallet;
       if(data.trading&&data.trading.mode==='paper'){
         const settings=data.trading;
+        if(['any','first','repeat'].includes(settings.creatorPolicy))state.creatorFilter=settings.creatorPolicy;
+        const creatorSelect=document.querySelector('.zs-creator-select');if(creatorSelect)creatorSelect.value=state.creatorFilter;
         const serverValues={
           'sniper-capital':settings.paperCapitalSol,'sniper-size':settings.maxTradeSol,
           'sniper-target':settings.takeProfitPct,'sniper-stop':settings.stopLossPct,
