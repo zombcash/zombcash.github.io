@@ -720,7 +720,12 @@
     if(!terminal.auto)return; // Paper demo may hold multiple positions; virtual capital remains the only sizing limit.
     const now=Date.now();
     const item=state.candidates.find(c=>{
-      if(c.source!=='pumpportal'||!state.feed.pumpdevConnected||!(c.priceNative>0)||terminal.seen.includes(c.address))return false;
+      if(c.source!=='pumpportal'||(state.source!=='all'&&state.source!=='pumpportal')||!state.feed.pumpdevConnected||!(c.priceNative>0)||terminal.seen.includes(c.address))return false;
+      if(state.requireSocials&&c.hasSocials!==true)return false;
+      const q=String(state.nameQuery||'').trim().toLowerCase();
+      if(q&&!(String(c.name||'')+' '+String(c.symbol||'')).toLowerCase().includes(q))return false;
+      if(state.creatorFilter==='repeat'&&c.creatorHistoryStatus!=='repeat')return false;
+      if(state.creatorFilter==='first'&&c.creatorHistoryStatus!=='first_seen')return false;
       const age=now-Number(c.eventAt||0),m=c.firstMinute||{};
       const buys=Number(m.buyCount||0),sells=Number(m.sellCount||0);
       const net=Number(m.netSol||0),move=Number(m.priceChangePct||0);
