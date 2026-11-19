@@ -460,6 +460,87 @@
   const terminal={auto:false,startedAt:0,capital:10,minLiquidity:5000,maxTradeSize:10,maxOpenPositions:4,idleTimeout:60,minMovePct:0.2,logs:[],seen:[],lastAuto:0,sessionStartCapital:10,equityHistory:[]};
   const TERMINAL_KEY='zombcash_sniper_terminal_v1';
   const dcopy=()=>DASH_COPY[state.lang]||DASH_COPY.en;
+  function renderHelpPanel(){
+    const helpPanel=$('zs-help-panel');
+    if(!helpPanel)return;
+    const data=HELP_COPY[state.lang]||HELP_COPY.en;
+    helpPanel.replaceChildren();
+    helpPanel.append(dashNode('h3','zs-help-heading',data.title),dashNode('p','zs-help-notice',data.notice));
+    const grid=dashNode('div','zs-help-grid');
+    data.sections.forEach(([heading,body])=>{
+      const card=dashNode('article','zs-help-card');
+      card.append(dashNode('h4','',heading),dashNode('p','',body));
+      grid.append(card);
+    });
+    helpPanel.append(grid);
+  }
+
+  const HELP_COPY = {
+    en:{title:'HELP & SAFETY',notice:'PAPER DEMO IS AVAILABLE NOW. LIVE TRADING IS NOT ENABLED. Registration is required for a personal profile and wallet provisioning, but signing up does not activate real trades.',sections:[
+      ['01 / PAPER DEMO','Explore the launch feed, adjust the strategy settings and start or pause Auto Sniper. Every order is simulated with virtual SOL. No blockchain transaction is signed or sent, and demo profit/loss is not real money.'],
+      ['02 / REGISTER YOUR ACCOUNT','On the ZombieCash website, choose JOIN THE SURVIVORS / REGISTER WITH TELEGRAM. Confirm the sign-in in Telegram, then return to the site. Your verified Telegram profile keeps your settings and trade history separate from other users. Registered users can sync demo history across devices.'],
+      ['03 / YOUR UNIQUE SOLANA WALLET','After successful registration, ZombieCash automatically creates one unique managed Solana wallet for your account. On later logins, the same wallet is reused. You can see its public address in Sniper Settings. The private signing key is stored in protected server-side encrypted storage and is never displayed in the page. This is a project-managed wallet, not a browser-extension wallet.'],
+      ['04 / FUNDING & LIVE TRADING','Live trading is currently locked for every account. The wallet being created does not mean it is ready for deposits or real orders. Do not send SOL or tokens to it yet. If Live Trading is officially enabled later, the site will show the required funding steps and confirmation controls. Registration alone will not switch Demo into Live mode.'],
+      ['05 / SECURITY FIRST','Never share your Telegram login code, wallet recovery phrase or private key. Use only the official zombcash.github.io website and the Telegram sign-in opened from it. Check every order setting and token address. New-token trading is highly risky; you can lose the full amount once real trading is officially available.']
+    ]},
+    ru:{title:'СПРАВКА И БЕЗОПАСНОСТЬ',notice:'СЕЙЧАС ДОСТУПЕН ТОЛЬКО ДЕМО-РЕЖИМ. РЕАЛЬНАЯ ТОРГОВЛЯ ПОКА ОТКЛЮЧЕНА. Регистрация нужна для личного профиля и создания кошелька, но сама по себе не включает реальные сделки.',sections:[
+      ['01 / ДЕМО-РЕЖИМ','Изучай ленту запусков, меняй параметры стратегии, запускай и ставь на паузу Auto Sniper. Все покупки и продажи моделируются на виртуальных SOL. Блокчейн-транзакции не подписываются и не отправляются. Демо-прибыль и убыток — не реальные деньги.'],
+      ['02 / РЕГИСТРАЦИЯ НА САЙТЕ','На сайте ZombieCash нажми JOIN THE SURVIVORS / REGISTER WITH TELEGRAM. Подтверди вход в Telegram и вернись на сайт. Подтверждённый Telegram-профиль закрепляет за тобой личные настройки и отдельную историю сделок. У зарегистрированных пользователей демо-история синхронизируется между устройствами.'],
+      ['03 / ТВОЙ ЛИЧНЫЙ SOLANA-КОШЕЛЁК','После успешной регистрации ZombieCash автоматически создаёт для твоего аккаунта отдельный управляемый Solana-кошелёк. При следующих входах используется тот же адрес. Публичный адрес можно посмотреть во вкладке Settings. Приватный ключ хранится на сервере в защищённом зашифрованном хранилище и не показывается на странице. Это кошелёк под управлением проекта, а не расширение Phantom в твоём браузере.'],
+      ['04 / ПОПОЛНЕНИЕ И РЕАЛЬНАЯ ТОРГОВЛЯ','Сейчас Live Trading заблокирован для всех аккаунтов. Создание кошелька не означает, что он готов принимать депозиты или выполнять реальные сделки. Пока не отправляй на него SOL или токены. Если реальная торговля будет официально включена, сайт отдельно покажет инструкции по пополнению и подтверждению. Одна регистрация не переключает Demo в Live.'],
+      ['05 / ПРАВИЛА БЕЗОПАСНОСТИ','Никому не сообщай код входа Telegram, seed-фразу или приватный ключ. Используй только официальный сайт zombcash.github.io и переход к Telegram из него. Проверяй параметры каждой сделки и адрес токена. Торговля новыми токенами крайне рискованна: после официального запуска реальной торговли можно потерять всю внесённую сумму.']
+    ]},
+    de:{title:'HILFE & SICHERHEIT',notice:'DER PAPER-DEMO-MODUS IST VERFÜGBAR. ECHTER HANDEL IST NOCH NICHT FREIGESCHALTET. Die Registrierung erstellt dein Profil und deine Wallet, aktiviert aber keine echten Trades.',sections:[
+      ['01 / PAPER-DEMO','Sieh dir den Launch-Feed an, passe die Strategie an und starte oder pausiere Auto Sniper. Alle Käufe und Verkäufe werden mit virtuellem SOL simuliert. Es werden keine Blockchain-Transaktionen signiert oder gesendet. Demo-Gewinne und -Verluste sind kein echtes Geld.'],
+      ['02 / KONTO REGISTRIEREN','Wähle auf der ZombieCash-Website JOIN THE SURVIVORS / REGISTER WITH TELEGRAM. Bestätige die Anmeldung in Telegram und kehre zur Website zurück. Dein bestätigtes Telegram-Profil erhält eigene Einstellungen und eine getrennte Handelshistorie. Demo-Verläufe registrierter Nutzer können geräteübergreifend synchronisiert werden.'],
+      ['03 / DEINE EINZIGARTIGE SOLANA-WALLET','Nach der Registrierung erstellt ZombieCash automatisch eine eigene verwaltete Solana-Wallet für dein Konto. Bei späteren Anmeldungen wird dieselbe Wallet verwendet. Die öffentliche Adresse findest du unter Settings. Der private Signierschlüssel wird verschlüsselt in einem geschützten Serverspeicher aufbewahrt und niemals auf der Seite angezeigt. Dies ist eine vom Projekt verwaltete Wallet, keine Browser-Erweiterungs-Wallet.'],
+      ['04 / EINZAHLUNG & LIVE-HANDEL','Live Trading ist derzeit für alle Konten gesperrt. Die Erstellung der Wallet bedeutet nicht, dass sie Einzahlungen oder echte Orders annehmen kann. Sende vorerst kein SOL und keine Token dorthin. Bei einer offiziellen Freischaltung zeigt die Website eigene Einzahlungs- und Bestätigungsschritte. Eine Registrierung allein aktiviert den Live-Modus nicht.'],
+      ['05 / SICHERHEIT','Teile niemals deinen Telegram-Anmeldecode, deine Wiederherstellungsphrase oder deinen privaten Schlüssel. Nutze nur zombcash.github.io und den dort gestarteten Telegram-Login. Prüfe jede Order und Token-Adresse. Der Handel mit neuen Token ist sehr riskant; später kannst du den gesamten eingesetzten Betrag verlieren.']
+    ]},
+    fr:{title:'AIDE & SÉCURITÉ',notice:'LE MODE DÉMO EST DISPONIBLE. LE TRADING RÉEL N’EST PAS ENCORE ACTIVÉ. L’inscription crée votre profil et votre portefeuille, mais n’autorise pas les transactions réelles.',sections:[
+      ['01 / MODE DÉMO','Consultez le flux de lancements, modifiez la stratégie et démarrez ou mettez Auto Sniper en pause. Tous les achats et ventes sont simulés avec des SOL virtuels. Aucune transaction blockchain n’est signée ni envoyée. Les gains et pertes de démonstration ne sont pas de l’argent réel.'],
+      ['02 / CRÉER VOTRE COMPTE','Sur le site ZombieCash, choisissez JOIN THE SURVIVORS / REGISTER WITH TELEGRAM. Confirmez la connexion dans Telegram, puis revenez sur le site. Votre profil Telegram vérifié conserve vos paramètres et votre historique séparément. Les utilisateurs inscrits peuvent synchroniser leur historique démo entre appareils.'],
+      ['03 / VOTRE PORTEFEUILLE SOLANA UNIQUE','Après l’inscription, ZombieCash crée automatiquement un portefeuille Solana géré et unique pour votre compte. Le même portefeuille est réutilisé lors des prochaines connexions. Son adresse publique apparaît dans Settings. La clé privée de signature est conservée dans un stockage serveur chiffré et protégé ; elle n’est jamais affichée sur la page. Il s’agit d’un portefeuille géré par le projet, pas d’une extension de navigateur.'],
+      ['04 / DÉPÔTS ET TRADING RÉEL','Le Live Trading est actuellement verrouillé pour tous les comptes. La création du portefeuille ne signifie pas qu’il peut recevoir des dépôts ou passer des ordres réels. N’y envoyez pas de SOL ni de tokens pour le moment. Si le trading réel est officiellement activé, le site affichera les étapes de financement et de confirmation. L’inscription seule n’active pas le mode Live.'],
+      ['05 / SÉCURITÉ','Ne partagez jamais votre code de connexion Telegram, votre phrase de récupération ou votre clé privée. Utilisez uniquement zombcash.github.io et la connexion Telegram lancée depuis ce site. Vérifiez chaque ordre et chaque adresse de token. Le trading de nouveaux tokens est très risqué : vous pourriez perdre la totalité du montant engagé.']
+    ]},
+    it:{title:'AIUTO E SICUREZZA',notice:'LA DEMO È DISPONIBILE. IL TRADING REALE NON È ANCORA ATTIVO. La registrazione crea il profilo e il wallet, ma non abilita le operazioni reali.',sections:[
+      ['01 / MODALITÀ DEMO','Esplora il feed dei lanci, modifica la strategia e avvia o metti in pausa Auto Sniper. Acquisti e vendite sono simulati con SOL virtuali. Nessuna transazione blockchain viene firmata o inviata. Profitti e perdite demo non sono denaro reale.'],
+      ['02 / REGISTRA IL TUO ACCOUNT','Sul sito ZombieCash scegli JOIN THE SURVIVORS / REGISTER WITH TELEGRAM. Conferma l’accesso su Telegram e torna al sito. Il profilo Telegram verificato mantiene impostazioni e cronologia separate dagli altri utenti. Gli utenti registrati possono sincronizzare la cronologia demo tra dispositivi.'],
+      ['03 / IL TUO WALLET SOLANA UNICO','Dopo la registrazione, ZombieCash crea automaticamente un wallet Solana gestito e unico per il tuo account. Ai successivi accessi viene riutilizzato lo stesso wallet. L’indirizzo pubblico è visibile in Settings. La chiave privata di firma è conservata in un archivio server protetto e cifrato e non viene mai mostrata nella pagina. È un wallet gestito dal progetto, non un’estensione del browser.'],
+      ['04 / DEPOSITI E TRADING REALE','Il Live Trading è attualmente bloccato per tutti gli account. La creazione del wallet non significa che sia pronto a ricevere depositi o eseguire ordini reali. Per ora non inviare SOL o token. Se il trading reale verrà attivato ufficialmente, il sito mostrerà le istruzioni per il finanziamento e la conferma. La sola registrazione non attiva la modalità Live.'],
+      ['05 / SICUREZZA','Non condividere mai il codice di accesso Telegram, la frase di recupero o la chiave privata. Usa solo zombcash.github.io e il login Telegram avviato da quel sito. Controlla ogni ordine e indirizzo del token. Il trading di nuovi token è molto rischioso: potresti perdere l’intero importo investito.']
+    ]},
+    ja:{title:'ヘルプと安全',notice:'現在利用できるのはデモモードのみです。実取引はまだ有効化されていません。登録すると個人プロフィールとウォレットが作成されますが、登録だけで実取引は開始されません。',sections:[
+      ['01 / デモモード','ローンチフィードを確認し、戦略設定を変更してAuto Sniperを開始または一時停止できます。売買はすべて仮想SOLによるシミュレーションです。ブロックチェーン取引への署名や送信は行われません。デモの損益は実際のお金ではありません。'],
+      ['02 / アカウント登録','ZombieCashサイトでJOIN THE SURVIVORS / REGISTER WITH TELEGRAMを選択します。Telegramでログインを承認し、サイトに戻ってください。認証済みTelegramプロフィールに個別の設定と取引履歴が保存されます。登録ユーザーはデモ履歴を複数端末で同期できます。'],
+      ['03 / あなた専用のSolanaウォレット','登録が完了すると、ZombieCashがアカウントごとに固有の管理型Solanaウォレットを自動作成します。次回以降のログインでは同じウォレットを使用します。公開アドレスはSettingsで確認できます。署名用秘密鍵はサーバー側の保護された暗号化ストレージに保存され、ページには表示されません。これはプロジェクト管理型ウォレットで、ブラウザー拡張ウォレットではありません。'],
+      ['04 / 入金と実取引','現在、Live Tradingはすべてのアカウントでロックされています。ウォレットが作成されても、入金や実注文の準備ができたことを意味しません。現時点ではSOLやトークンを送らないでください。実取引が正式に有効化された場合、サイトに入金手順と確認操作が表示されます。登録だけではLiveモードになりません。'],
+      ['05 / セキュリティ','Telegramログインコード、リカバリーフレーズ、秘密鍵を誰にも共有しないでください。zombcash.github.ioと、そこから開始するTelegramログインのみを使用してください。注文設定とトークンアドレスを毎回確認してください。新規トークン取引は非常に危険で、投じた資金をすべて失う可能性があります。']
+    ]},
+    'zh-CN':{title:'帮助与安全',notice:'目前仅开放模拟模式，真实交易尚未启用。注册会创建个人档案和钱包，但注册本身不会开启真实交易。',sections:[
+      ['01 / 模拟模式','查看新币列表、调整策略参数，并启动或暂停 Auto Sniper。所有买卖均使用虚拟 SOL 模拟，不会签名或发送任何区块链交易。模拟盈亏不是真实资金。'],
+      ['02 / 注册账户','在 ZombieCash 网站点击 JOIN THE SURVIVORS / REGISTER WITH TELEGRAM。前往 Telegram 确认登录，然后返回网站。经过验证的 Telegram 档案会保存独立的设置和交易历史。注册用户可以在不同设备间同步模拟历史。'],
+      ['03 / 你的专属 Solana 钱包','注册成功后，ZombieCash 会为每个账户自动创建一个独立的托管型 Solana 钱包。以后登录时会继续使用同一个钱包。你可以在 Settings 中查看公开地址。用于签名的私钥保存在服务器端受保护的加密存储中，不会显示在网页上。这是项目托管的钱包，不是浏览器扩展钱包。'],
+      ['04 / 充值与真实交易','目前所有账户的 Live Trading 均已锁定。钱包创建并不代表它已准备好接收充值或执行真实订单。现在请勿向该地址发送 SOL 或代币。如果未来正式开放真实交易，网站会显示充值步骤和确认操作。仅注册并不会启用 Live 模式。'],
+      ['05 / 安全须知','绝不要分享 Telegram 登录验证码、钱包助记词或私钥。只使用 zombcash.github.io 以及从该网站打开的 Telegram 登录。每次都要核对订单设置和代币地址。新币交易风险极高，未来进行真实交易时可能损失全部投入资金。']
+    ]},
+    tr:{title:'YARDIM VE GÜVENLİK',notice:'ŞU ANDA YALNIZCA DEMO MODU AÇIKTIR. GERÇEK İŞLEM HENÜZ ETKİN DEĞİLDİR. Kayıt profilinizi ve cüzdanınızı oluşturur; tek başına gerçek işlemleri açmaz.',sections:[
+      ['01 / DEMO MODU','Yeni token akışını inceleyin, strateji ayarlarını değiştirin ve Auto Sniper’ı başlatın veya duraklatın. Tüm alım ve satımlar sanal SOL ile simüle edilir. Hiçbir blokzincir işlemi imzalanmaz veya gönderilmez. Demo kâr/zararı gerçek para değildir.'],
+      ['02 / HESABINI KAYDET','ZombieCash sitesinde JOIN THE SURVIVORS / REGISTER WITH TELEGRAM seçeneğine tıklayın. Telegram üzerinden girişi onaylayıp siteye dönün. Doğrulanmış Telegram profiliniz ayarlarınızı ve işlem geçmişinizi diğer kullanıcılardan ayrı tutar. Kayıtlı kullanıcılar demo geçmişini cihazlar arasında eşitleyebilir.'],
+      ['03 / SANA ÖZEL SOLANA CÜZDANI','Kayıt tamamlandıktan sonra ZombieCash hesabınız için otomatik olarak benzersiz, yönetilen bir Solana cüzdanı oluşturur. Sonraki girişlerde aynı cüzdan kullanılır. Genel adresinizi Settings bölümünde görebilirsiniz. İmzalama özel anahtarı sunucu tarafında korumalı ve şifreli depoda tutulur; sayfada gösterilmez. Bu, proje tarafından yönetilen bir cüzdandır; tarayıcı eklentisi cüzdanı değildir.'],
+      ['04 / FONLAMA VE GERÇEK İŞLEM','Live Trading şu anda tüm hesaplar için kilitlidir. Cüzdanın oluşturulması, para yatırmaya veya gerçek emir vermeye hazır olduğu anlamına gelmez. Şimdilik bu adrese SOL veya token göndermeyin. Gerçek işlem resmen açılırsa site fonlama adımlarını ve onay kontrollerini gösterecektir. Yalnızca kayıt olmak Live modunu açmaz.'],
+      ['05 / GÜVENLİK','Telegram giriş kodunuzu, kurtarma ifadenizi veya özel anahtarınızı kimseyle paylaşmayın. Yalnızca zombcash.github.io ve bu siteden başlatılan Telegram girişini kullanın. Her emri ve token adresini kontrol edin. Yeni token işlemleri çok risklidir; gerçek işlem açıldığında yatırdığınız tutarın tamamını kaybedebilirsiniz.']
+    ]},
+    hi:{title:'सहायता और सुरक्षा',notice:'अभी केवल डेमो मोड उपलब्ध है। वास्तविक ट्रेडिंग अभी सक्षम नहीं है। पंजीकरण से व्यक्तिगत प्रोफ़ाइल और वॉलेट बनता है, लेकिन केवल पंजीकरण से वास्तविक ट्रेड शुरू नहीं होते।',sections:[
+      ['01 / डेमो मोड','लॉन्च फ़ीड देखें, रणनीति सेटिंग बदलें और Auto Sniper शुरू या रोकें। सभी खरीद-बिक्री वर्चुअल SOL से सिम्युलेट होती हैं। कोई ब्लॉकचेन लेनदेन साइन या भेजा नहीं जाता। डेमो लाभ/हानि असली पैसा नहीं है।'],
+      ['02 / अपना खाता पंजीकृत करें','ZombieCash वेबसाइट पर JOIN THE SURVIVORS / REGISTER WITH TELEGRAM चुनें। Telegram में लॉगिन की पुष्टि करें और साइट पर लौटें। सत्यापित Telegram प्रोफ़ाइल आपकी सेटिंग और ट्रेड इतिहास को अलग रखती है। पंजीकृत उपयोगकर्ता डेमो इतिहास को अलग-अलग डिवाइस पर सिंक कर सकते हैं।'],
+      ['03 / आपका अलग Solana वॉलेट','पंजीकरण सफल होने के बाद ZombieCash आपके खाते के लिए अपने आप एक अलग managed Solana wallet बनाता है। अगली बार लॉगिन करने पर वही वॉलेट उपयोग होगा। सार्वजनिक पता Settings में दिखेगा। साइनिंग की निजी कुंजी सर्वर के सुरक्षित एन्क्रिप्टेड स्टोरेज में रखी जाती है और पेज पर कभी नहीं दिखाई जाती। यह प्रोजेक्ट द्वारा प्रबंधित वॉलेट है, ब्राउज़र एक्सटेंशन वॉलेट नहीं।'],
+      ['04 / फंडिंग और वास्तविक ट्रेडिंग','Live Trading अभी सभी खातों के लिए लॉक है। वॉलेट बन जाने का अर्थ यह नहीं कि उसमें जमा किया जा सकता है या वास्तविक ऑर्डर दिए जा सकते हैं। अभी इस पते पर SOL या टोकन न भेजें। यदि वास्तविक ट्रेडिंग आधिकारिक रूप से शुरू होती है, तो साइट फंडिंग और पुष्टि के चरण दिखाएगी। केवल पंजीकरण से Live मोड चालू नहीं होता।'],
+      ['05 / सुरक्षा','अपना Telegram लॉगिन कोड, रिकवरी फ़्रेज़ या निजी कुंजी किसी को न दें। केवल zombcash.github.io और वहीं से शुरू किए गए Telegram लॉगिन का उपयोग करें। हर ऑर्डर सेटिंग और टोकन पता जाँचें। नए टोकन का ट्रेड बहुत जोखिम भरा है; वास्तविक ट्रेडिंग शुरू होने पर पूरी राशि खो सकती है।']
+    ]}
+  };
+
   function saveTerminal(){try{terminal.settings={};['sniper-size','sniper-target','sniper-stop','sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-idle-timeout','sniper-min-move','sniper-max-open'].forEach(id=>{const el=$(id);if(el)terminal.settings[id]=el.value;});localStorage.setItem(TERMINAL_KEY,JSON.stringify(terminal));}catch(_){}}
   function loadTerminal(){try{const v=JSON.parse(localStorage.getItem(TERMINAL_KEY)||'null');if(v&&typeof v==='object'){Object.assign(terminal,v);if(v.settings)Object.keys(v.settings).forEach(id=>{const el=$(id);if(el)el.value=v.settings[id];});}}catch(_){}}
   function logEvent(kind,symbol,detail){terminal.logs.unshift({at:Date.now(),kind,symbol:symbol||'SYSTEM',detail:detail||''});terminal.logs=terminal.logs.slice(0,18);saveTerminal();renderLog();}
@@ -975,7 +1056,18 @@
     const journal=dashNode('section','zs-panel');journal.id='zs-journal-panel';const logTitle=dashNode('h3','',dcopy().journal);logTitle.id='zs-log-title';journal.append(logTitle);const log=dashNode('div','zs-log');log.id='zs-log';journal.append(log);
     const clearBar=dashNode('div','sniper-toolbar');if(clear)clearBar.append(clear);journal.append(clearBar);
     const foot=dashNode('p','zs-foot',dcopy().hint+' '+t('source'));
-    const helpPanel=dashNode('section','zs-panel zs-help zs-tab-hidden');helpPanel.innerHTML='';const helpTitle=dashNode('h3','',state.lang==='ru'?'СПРАВКА И БЕЗОПАСНОСТЬ':'HELP & SAFETY');helpPanel.append(helpTitle,dashNode('p','zs-foot',state.lang==='ru'?'Это симулятор. Все сделки виртуальные. Реальные кошельки, ключи и транзакции не используются.':'This is a paper-trading simulator. No live wallets, private keys or transactions are used.'),dashNode('p','zs-foot',state.lang==='ru'?'Настройте размер сделки, комиссии, проскальзывание, стоп-лосс и цель чистой прибыли. Автовход использует только новые запуски с доступной SOL-парой и заданной минимальной ликвидностью.':'Adjust trade size, fees, slippage, stop loss and net profit target. Auto-entry only uses new launches with a live SOL pair and your minimum liquidity threshold.'));
+    const helpPanel=dashNode('section','zs-panel zs-help zs-tab-hidden');helpPanel.id='zs-help-panel';
+    style.textContent += `
+      .zs-help{display:block!important;min-height:0;overflow:auto!important;padding:clamp(14px,2vw,24px)!important}
+      .zs-help-heading{margin:0 0 12px!important;font-size:clamp(16px,1.5vw,21px)!important;letter-spacing:.1em;color:#e2e9df}
+      .zs-help-notice{margin:0 0 16px;padding:13px 16px;border:1px solid #8c9a7b;border-left:4px solid #b3c39f;border-radius:4px;background:linear-gradient(100deg,#303a30,#1b241e);color:#f0f3e9;font-size:13px;line-height:1.65;font-weight:650}
+      .zs-help-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-content:start}
+      .zs-help-card{min-width:0;padding:14px 16px;border:1px solid #465449;border-radius:5px;background:linear-gradient(145deg,#18221b,#101713);box-shadow:inset 0 1px #ffffff09}
+      .zs-help-card h4{margin:0 0 8px;color:#c5d3ba;font:750 11px/1.45 Orbitron,system-ui,sans-serif;letter-spacing:.06em}
+      .zs-help-card p{margin:0;color:#c4cec3;font:500 13px/1.65 Rajdhani,system-ui,sans-serif}
+      @media(max-width:760px){.zs-help-grid{grid-template-columns:1fr;gap:9px}.zs-help-card{padding:12px}.zs-help-notice{font-size:12px}}
+    `;
+    renderHelpPanel();
     root.replaceChildren(style,header,nav,kpis,layout,journal,helpPanel,foot);
     renderDashboardState();renderPositions();renderCandidates();selectTab('sniper');
   }
@@ -1035,7 +1127,7 @@
     state.positionTimer=window.setInterval(()=>{if(!document.hidden)refreshResultsNow();},10000);
     document.addEventListener('visibilitychange',()=>{if(!document.hidden){refreshFeed();refreshResultsNow();}});
 
-    document.addEventListener('zombcash:languagechange',()=>{detectLang();translate();if($('zs-kpis'))renderDashboardState();});
+    document.addEventListener('zombcash:languagechange',()=>{detectLang();translate();if($('zs-kpis'))renderDashboardState();if($('zs-kpis'))renderHelpPanel();});
     document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer();});
     document.addEventListener('click',event=>{if(event.target&&event.target.closest&&event.target.closest('#survivor-logout'))Promise.resolve().then(checkAccountChange);});
     window.addEventListener('storage',event=>{if(event.key===TOKEN_KEY||event.key===PROFILE_KEY){if(!checkAccountChange()&&authToken())syncFromServer().then(updatePositions);}});
