@@ -178,6 +178,31 @@
       refreshBalance.addEventListener('click',loadBalance);
       balanceRow.append(balanceLabel,balanceValue,refreshBalance);
       const depositNote=dashNode('small','zs-wallet-note',state.lang==='ru'?'Для пополнения отправляйте только SOL в сети Solana на этот адрес. Не отправляйте токены других сетей.':'To fund this wallet, send native SOL on Solana only. Do not send assets from other networks.');
+      const reconciliationRow=dashNode('div','zs-wallet-reconciliation');
+      const reconciliationStatus=dashNode('small','zs-wallet-reconciliation-status',state.lang==='ru'?'СВЕРКА: ИСХОДНАЯ ТОЧКА НЕ ЗАДАНА':'RECONCILIATION: BASELINE NOT SET');
+      const setBaseline=dashNode('button','zs-wallet-set-baseline',state.lang==='ru'?'ЗАДАТЬ ИСХОДНУЮ ТОЧКУ':'SET BASELINE');
+      setBaseline.type='button';
+      setBaseline.addEventListener('click',async()=>{
+        setBaseline.disabled=true;
+        reconciliationStatus.textContent=state.lang==='ru'?'ПОЛУЧЕНИЕ БАЛАНСА И SLOT…':'READING BALANCE AND SLOT…';
+        try{
+          const baselineResponse=await fetch(AUTH_API+'/api/sniper/wallet/reconciliation/baseline',{
+            method:'POST',headers:{'Authorization':'Bearer '+token},cache:'no-store'
+          });
+          const baselineData=await baselineResponse.json().catch(()=>({}));
+          if(!baselineResponse.ok)throw new Error(baselineData.error||'Baseline unavailable');
+          const created=!!(baselineData.baseline&&baselineData.baseline.created);
+          reconciliationStatus.textContent=created
+            ?(state.lang==='ru'?'ИСХОДНАЯ ТОЧКА СОХРАНЕНА · ИСТОРИЯ ЕЩЁ НЕ СВЕРЕНА':'BASELINE SAVED · HISTORY NOT YET RECONCILED')
+            :(state.lang==='ru'?'ИСХОДНАЯ ТОЧКА УЖЕ СУЩЕСТВУЕТ · НЕ ИЗМЕНЕНА':'EXISTING BASELINE PRESERVED · NOT OVERWRITTEN');
+          setBaseline.textContent=state.lang==='ru'?'ТОЧКА ЗАДАНА':'BASELINE SET';
+          setBaseline.disabled=true;
+        }catch(_){
+          reconciliationStatus.textContent=state.lang==='ru'?'НЕ УДАЛОСЬ ЗАДАТЬ ТОЧКУ':'COULD NOT SET BASELINE';
+          setBaseline.disabled=false;
+        }
+      });
+      reconciliationRow.append(reconciliationStatus,setBaseline);
       const activityTitle=dashNode('strong','zs-wallet-activity-title',state.lang==='ru'?'ПОСЛЕДНИЕ ОПЕРАЦИИ':'RECENT ACTIVITY');
       const activityList=dashNode('div','zs-wallet-activity');
       let activityCursor=null;
@@ -227,7 +252,7 @@
           activityList.append(error);
         }finally{activityLoading=false;}
       };
-      panel.append(balanceRow,depositNote,activityTitle,activityList,dashNode('small','',state.lang==='ru'?'Приватный ключ хранится на сервере. Демо-режим не отправляет реальные сделки.':'Private key stays server-side. Paper mode never sends real trades.'));
+      panel.append(balanceRow,depositNote,reconciliationRow,activityTitle,activityList,dashNode('small','',state.lang==='ru'?'Приватный ключ хранится на сервере. Демо-режим не отправляет реальные сделки.':'Private key stays server-side. Paper mode never sends real trades.'));
       loadBalance();loadActivity();
     }catch(_){
       panel.append(dashNode('small','',state.lang==='ru'?'Не удалось загрузить адрес кошелька.':'Could not load wallet address.'));
