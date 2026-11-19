@@ -131,11 +131,15 @@
 
   async function refreshWalletInfo(){
     const panel=$('zs-wallet-panel');if(!panel)return;
+    const token=authToken();
+    if(panel.dataset.loading==='true')return;
+    if(panel.dataset.loaded==='true'&&panel.dataset.token===token)return;
+    panel.dataset.loading='true';
+    panel.dataset.token=token;
     panel.replaceChildren();
     const title=dashNode('strong','',state.lang==='ru'?'ВАШ SOLANA-КОШЕЛЁК':'YOUR SOLANA WALLET');
     panel.append(title);
-    const token=authToken();
-    if(!token){panel.append(dashNode('small','',state.lang==='ru'?'Войдите через Telegram — для профиля будет создан отдельный кошелёк.':'Sign in with Telegram to create your dedicated wallet.'));return;}
+    if(!token){panel.append(dashNode('small','',state.lang==='ru'?'Войдите через Telegram — для профиля будет создан отдельный кошелёк.':'Sign in with Telegram to create your dedicated wallet.'));panel.dataset.loading='false';panel.dataset.loaded='true';return;}
     const provision=dashNode('button','zs-wallet-provision',state.lang==='ru'?'СОЗДАТЬ / ПРОВЕРИТЬ КОШЕЛЁК':'CREATE / CHECK WALLET');provision.type='button';provision.addEventListener('click',async()=>{provision.disabled=true;provision.textContent=state.lang==='ru'?'ПРОВЕРКА…':'CHECKING…';try{const result=await fetch(AUTH_API+'/api/sniper/wallet/provision',{method:'POST',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},cache:'no-store'});const body=await result.json().catch(()=>({}));if(!result.ok)throw new Error(body.error||'Wallet provisioning failed');await refreshWalletInfo();}catch(error){panel.append(dashNode('small','zs-wallet-error',error.message||'Wallet provisioning unavailable'));provision.disabled=false;provision.textContent=state.lang==='ru'?'ПОВТОРИТЬ':'RETRY';}});panel.append(provision);
     try{
       const response=await fetch(AUTH_API+'/api/sniper/wallet',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
@@ -147,6 +151,7 @@
       }
       if(!wallet||!wallet.publicKey){
         panel.append(dashNode('small','',state.lang==='ru'?'Кошелёк создаётся или временно недоступен.':'Wallet is provisioning or temporarily unavailable.'));
+        panel.dataset.loading='false';panel.dataset.loaded='true';
         return;
       }
       const address=String(wallet.publicKey);
@@ -253,9 +258,11 @@
         }finally{activityLoading=false;}
       };
       panel.append(balanceRow,depositNote,reconciliationRow,activityTitle,activityList,dashNode('small','',state.lang==='ru'?'Приватный ключ хранится на сервере. Демо-режим не отправляет реальные сделки.':'Private key stays server-side. Paper mode never sends real trades.'));
+      panel.dataset.loading='false';panel.dataset.loaded='true';
       loadBalance();loadActivity();
     }catch(error){
       panel.append(dashNode('small','zs-wallet-error',(state.lang==='ru'?'ОШИБКА КОШЕЛЬКА: ':'WALLET ERROR: ')+(error&&error.message?error.message:(state.lang==='ru'?'сеть недоступна':'network unavailable'))));
+      panel.dataset.loading='false';panel.dataset.loaded='true';
     }
   }
 
@@ -1193,7 +1200,7 @@
       @media(max-width:760px){.zs-help-grid{grid-template-columns:1fr;gap:9px}.zs-help-card{padding:12px}.zs-help-notice{font-size:12px}}
     `;
     renderHelpPanel();
-    style.textContent += '.zs-wallet-activity{display:grid;gap:8px;width:100%}.zs-wallet-activity-item{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid rgba(184,198,190,.12);font-size:12px}.zs-wallet-activity-item a{color:#c4d2b2;text-decoration:underline}.zs-wallet-activity-item small{opacity:.7}'+ ' .zs-wallet-balance{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:14px 0;border-top:1px solid rgba(184,198,190,.18);border-bottom:1px solid rgba(184,198,190,.18)}.zs-wallet-balance strong{font-size:20px;color:#c4d2b2}.zs-wallet-refresh{margin-left:auto;background:transparent;border:1px solid #9eaf8d;color:#c4d2b2;padding:8px 12px;cursor:pointer}.zs-wallet-note{color:#c3b99c;line-height:1.6}'+'.zs-wallet-view{max-width:900px;min-height:300px;padding:clamp(18px,3vw,30px)!important}.zs-wallet-view h3{font:750 18px/1.4 Orbitron,system-ui,sans-serif;letter-spacing:.1em;color:#e1e5df;margin:0 0 12px}#zs-wallet-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;padding:18px;border:1px solid rgba(184,198,190,.22);background:rgba(8,13,14,.7);margin-top:20px}#zs-wallet-panel strong,#zs-wallet-panel small{grid-column:1/-1}#zs-wallet-panel code{overflow-wrap:anywhere;color:#c4d2b2;font-size:13px}.zs-wallet-provision,.zs-copy-address{border:1px solid #9eaf8d;background:#a9bf91;color:#101610;padding:10px 14px;font-weight:800;cursor:pointer}.zs-wallet-provision:disabled{opacity:.55;cursor:wait}.zs-wallet-error{color:#e1a6a6}';
+    style.textContent += '.zs-wallet-view{width:100%!important;max-width:none!important;min-width:0!important;min-height:0!important;box-sizing:border-box!important}.zs-wallet-view #zs-wallet-panel{display:grid!important;grid-template-columns:minmax(0,1fr)!important;align-items:stretch!important;width:100%!important;max-width:none!important;min-width:0!important;box-sizing:border-box!important;gap:12px!important}.zs-wallet-view #zs-wallet-panel>*{grid-column:1/-1!important;min-width:0!important}.zs-wallet-view #zs-wallet-panel code{display:block!important;max-width:100%!important;overflow-wrap:anywhere!important;word-break:break-word!important}.zs-wallet-view #zs-wallet-panel .zs-wallet-balance{display:flex!important;grid-column:1/-1!important;flex-wrap:wrap!important;min-width:0!important}.zs-wallet-view #zs-wallet-panel .zs-wallet-refresh{margin-left:auto!important}.sniper-demo.zs-fullscreen[data-active-tab="wallet"]{grid-template-rows:0 44px 38px minmax(0,1fr)!important;grid-auto-rows:0!important;min-height:0!important}.sniper-demo.zs-fullscreen[data-active-tab="wallet"]>.zs-wallet-view{grid-row:4!important;display:block!important;width:100%!important;max-width:none!important;height:100%!important;min-height:0!important;overflow:auto!important;align-self:stretch!important}.sniper-demo.zs-fullscreen[data-active-tab="wallet"] #zs-wallet-panel{grid-template-columns:minmax(0,1fr)!important}.sniper-demo.zs-fullscreen[data-active-tab="wallet"]>.zs-layout{display:none!important}.zs-wallet-view #zs-wallet-panel>*{overflow-wrap:anywhere!important}'+'.zs-wallet-activity{display:grid;gap:8px;width:100%}.zs-wallet-activity-item{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid rgba(184,198,190,.12);font-size:12px}.zs-wallet-activity-item a{color:#c4d2b2;text-decoration:underline}.zs-wallet-activity-item small{opacity:.7}'+ ' .zs-wallet-balance{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:14px 0;border-top:1px solid rgba(184,198,190,.18);border-bottom:1px solid rgba(184,198,190,.18)}.zs-wallet-balance strong{font-size:20px;color:#c4d2b2}.zs-wallet-refresh{margin-left:auto;background:transparent;border:1px solid #9eaf8d;color:#c4d2b2;padding:8px 12px;cursor:pointer}.zs-wallet-note{color:#c3b99c;line-height:1.6}'+'.zs-wallet-view{max-width:900px;min-height:300px;padding:clamp(18px,3vw,30px)!important}.zs-wallet-view h3{font:750 18px/1.4 Orbitron,system-ui,sans-serif;letter-spacing:.1em;color:#e1e5df;margin:0 0 12px}#zs-wallet-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;padding:18px;border:1px solid rgba(184,198,190,.22);background:rgba(8,13,14,.7);margin-top:20px}#zs-wallet-panel strong,#zs-wallet-panel small{grid-column:1/-1}#zs-wallet-panel code{overflow-wrap:anywhere;color:#c4d2b2;font-size:13px}.zs-wallet-provision,.zs-copy-address{border:1px solid #9eaf8d;background:#a9bf91;color:#101610;padding:10px 14px;font-weight:800;cursor:pointer}.zs-wallet-provision:disabled{opacity:.55;cursor:wait}.zs-wallet-error{color:#e1a6a6}';
     root.replaceChildren(style,header,nav,kpis,layout,journal,helpPanel,walletView,foot);
     renderDashboardState();renderPositions();renderCandidates();selectTab('sniper');
   }
