@@ -33,3 +33,13 @@
 - Bumped `buy-zombcash.html` script cache key to `sniper-short-viewport-fill-v11-20261119`.
 - PR is open and its SEO smoke workflow is still running. Do not report deployed or visually verified until merged, deployment succeeds, and the user/browser confirms the new geometry.
 - No trading rules, PAPER settings, bot cadence, or `zombcash-world` repository were changed.
+
+
+## 2026-11-19 — Smooth price chart rendering (PR #514)
+
+- Reproduced the user's report against the live source: the chart was rendered as an SVG `polyline`, so each quote interval appeared as a sharp straight segment; position refresh cadence is 10 seconds.
+- Replaced the presentation line with a bounded Catmull–Rom cubic Bezier path. The recorded `priceHistory` samples remain unchanged; only the visual path is smoothed, so raw observations remain suitable for later analysis.
+- Corrected the chart label from `LIVE · 20 SEC` to `LIVE · 10 SEC`, matching the existing quote refresh interval.
+- Updated `buy-zombcash.html` cache key to `sniper-smooth-chart-v12-20261119`.
+- PR [#514](https://github.com/zombcash/zombcash.github.io/pull/514) merged as `1f252a7fd79d7e9ed995117c2a615d8a933f51b4`. GitHub Pages deployment workflow was queued at the time of this log entry; confirm completion before asking for a browser hard refresh.
+- No entry thresholds, position limits, PAPER mode, aggregator cadence, or bot code changed. No live trading enabled.
