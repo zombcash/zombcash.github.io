@@ -145,6 +145,27 @@
       if(!response.ok)throw new Error('wallet lookup '+response.status);
       const data=await response.json(),wallet=data.wallet;
       if(data.trading&&data.trading.mode==='paper'){
+        const settings=data.trading;
+        const serverValues={
+          'sniper-capital':settings.paperCapitalSol,'sniper-size':settings.maxTradeSol,
+          'sniper-target':settings.takeProfitPct,'sniper-stop':settings.stopLossPct,
+          'sniper-min-move':settings.minPriceMovePct,'sniper-idle-timeout':settings.idleExitSeconds,
+          'sniper-max-open':settings.maxOpenPositions,'sniper-min-buys':settings.minBuyCount,
+          'sniper-max-daily-loss':settings.maxDailyLossSol
+        };
+        Object.entries(serverValues).forEach(([id,value])=>{
+          const input=$(id);if(value===undefined||value===null||!input)return;
+          input.value=String(value);
+          const slider=input.parentElement&&input.parentElement.querySelector('.zs-range');
+          if(slider)slider.value=String(value);
+        });
+        terminal.capital=Number(settings.paperCapitalSol)||terminal.capital;
+        terminal.maxOpenPositions=Number(settings.maxOpenPositions)||terminal.maxOpenPositions;
+        terminal.maxDailyLossSol=Number(settings.maxDailyLossSol)||terminal.maxDailyLossSol||1;
+        terminal.minBuyCount=Number(settings.minBuyCount)||terminal.minBuyCount||3;
+        saveTerminal();
+      }
+      if(data.trading&&data.trading.mode==='paper'){
         const serverEnabled=!!data.trading.enabled;
         if(terminal.auto!==serverEnabled){terminal.auto=serverEnabled;terminal.startedAt=serverEnabled?(terminal.startedAt||Date.now()):0;saveTerminal();renderDashboardState();}
       }
