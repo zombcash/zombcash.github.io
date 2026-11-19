@@ -275,7 +275,13 @@
     });
     maybeAutoEnter();
   }
-  function renderPositions(mode='open'){
+  function renderPositions(mode){
+    // Background refreshes and server syncs call renderPositions() without a mode.
+    // Preserve the selected tab so an update cannot replace closed-trade history with open positions.
+    if(!mode){
+      const dashboard=document.querySelector('.sniper-demo');
+      mode=dashboard&&dashboard.dataset.activeTab==='history'?'history':'open';
+    }
     const host=$('sniper-positions');if(!host)return;
     host.replaceChildren();
     const historyMode=mode==='history';
