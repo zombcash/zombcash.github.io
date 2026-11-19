@@ -61,7 +61,7 @@
   };
 
   const $ = id => document.getElementById(id);
-  const state = { lang:'en', candidates:[], positions:[], timer:null, positionTimer:null, busy:false, syncStatusKey:'saved', historyRevision:0, feed:{connected:false,pumpdevEnabled:false,pumpdevConnected:false,pumpdevStatus:'unknown',paperEngineEnabled:false,paperEngineStatus:'waiting_for_trade_data_source'} };
+  const state = { lang:'en', candidates:[], positions:[], timer:null, positionTimer:null, busy:false, syncStatusKey:'saved', historyRevision:0, source:'all', requireSocials:true, nameQuery:'', creatorFilter:'any', feed:{connected:false,pumpdevEnabled:false,pumpdevConnected:false,pumpdevStatus:'unknown',paperEngineEnabled:false,paperEngineStatus:'waiting_for_trade_data_source'} };
   let activeStorageKey = '';
   function detectLang(){
     const path = location.pathname.split('/').filter(Boolean);
@@ -295,11 +295,20 @@
   function renderCandidates(){
     const host=$('sniper-candidates'); if(!host)return;
     host.replaceChildren();
-    if(!state.candidates.length){
-      host.append(make('p','sniper-muted',state.busy?t('loading'):t('noCandidates')));
+    const visible = state.candidates.filter(item=>{
+      if(state.requireSocials && item.hasSocials!==true)return false;
+      const q=String(state.nameQuery||'').trim().toLowerCase();
+      if(q && !(String(item.name||'')+' '+String(item.symbol||'')).toLowerCase().includes(q))return false;
+      if(state.creatorFilter==='repeat' && item.creatorHistoryStatus!=='repeat')return false;
+      if(state.creatorFilter==='first' && item.creatorHistoryStatus!=='first_seen')return false;
+      return true;
+    });
+    if(!visible.length){
+      const msg=state.candidates.length?(state.lang==='ru'?'Нет монет, соответствующих фильтрам. Ослабьте фильтры или выберите другой источник.':'No coins match the active filters. Relax a filter or choose another source.'):(state.busy?t('loading'):t('noCandidates'));
+      host.append(make('p','sniper-muted',msg));
       return;
     }
-    state.candidates.forEach(item=>{
+    visible.forEach(item=>{
       const row=make('div','sniper-candidate');
       const main=make('div','sniper-candidate-main');
       main.append(make('strong','sniper-token-name',item.symbol+' · '+item.name));
@@ -382,50 +391,37 @@
     if(state.busy)return;
     state.busy=true;renderCandidates();
     try{
-      const liveResponse=await fetch(AUTH_API+'/api/sniper/launches?limit=30',{cache:'no-store'});
-      if(!liveResponse.ok)throw new Error('launch stream '+liveResponse.status);
-      const liveData=await liveResponse.json();
+      const [candidateResponse,launchResponse]=await Promise.all([
+        fetch(AUTH_API+'/api/sniper/candidates?source='+encodeURIComponent(state.source)+'&limit=40',{cache:'no-store'}),
+        fetch(AUTH_API+'/api/sniper/launches?limit=40',{cache:'no-store'})
+      ]);
+      if(!candidateResponse.ok)throw new Error('candidate source '+candidateResponse.status);
+      const candidateData=await candidateResponse.json();
+      const liveData=launchResponse.ok?await launchResponse.json():{};
       const feed=liveData.feed||{};
       state.feed={...state.feed,...feed};
-      const launches=Array.isArray(liveData.launches)?liveData.launches:[];
+      const launchMap=new Map((Array.isArray(liveData.launches)?liveData.launches:[]).map(x=>[String(x.mint||''),x]));
       const now=Date.now();
-      state.candidates=launches.map(launch=>{
-        const address=String(launch.mint||'');
-        const firstMinute=launch.firstMinute||{};
-        const curvePrice=Number(firstMinute.lastPriceSol)>0
-          ? Number(firstMinute.lastPriceSol)
-          : (Number(launch.vSolInBondingCurve)>0&&Number(launch.vTokensInBondingCurve)>0
-            ? Number(launch.vSolInBondingCurve)/Number(launch.vTokensInBondingCurve) : 0);
-        const eventAt=Number(launch.eventAt)||Number(launch.receivedAt)||0;
-        return {address,name:launch.name||'New launch',symbol:launch.symbol||'TOKEN',
-          priceNative:curvePrice,liquidityUsd:0,pairCreatedAt:eventAt,eventAt,firstMinute,
-          url:'https://pump.fun/coin/'+encodeURIComponent(address),source:'pumpportal',
-          status:launch.status||'detected',tradeStreamingEnabled:!!feed.tradeStreamingEnabled};
-      }).filter(item=>item.address&&item.eventAt&&now-item.eventAt>=0&&now-item.eventAt<=10*60*1000).slice(0,12);
+      state.candidates=(Array.isArray(candidateData.candidates)?candidateData.candidates:[]).map(item=>{
+        const address=String(item.mint||'');
+        const live=launchMap.get(address)||{};
+        const firstMinute=item.firstMinute||live.firstMinute||{};
+        const eventAt=Number(item.eventAt)||Number(live.eventAt)||0;
+        const curvePrice=Number(firstMinute.lastPriceSol)>0?Number(firstMinute.lastPriceSol):Number(item.priceSol)||0;
+        const source=item.source||'community';
+        return {...item,address,name:item.name||'Unknown',symbol:item.symbol||'TOKEN',
+          priceNative:curvePrice,liquidityUsd:Number(item.liquidityUsd)||0,eventAt,
+          firstMinute,source,tradeStreamingEnabled:!!feed.tradeStreamingEnabled,
+          creatorHistoryStatus:item.creatorHistoryStatus||'unknown'};
+      }).filter(item=>item.address&&item.address!==OFFICIAL_MINT);
       const tradeReady=!!feed.pumpdevConnected;
-      if(state.candidates.length){
-        $('sniper-feed-status').textContent=feed.connected?(tradeReady?'PUMPDEV TRADE FEED CONNECTED · PAPER DEMO READY':'MINT STREAM CONNECTED · PUMPDEV '+String(feed.pumpdevStatus||'disabled').toUpperCase().replace(/_/g,' ')):'LAUNCH STREAM OFFLINE';
-      }else{
-        $('sniper-feed-status').textContent=tradeReady?'PUMPDEV CONNECTED · WAITING FOR NEW MINTS':'PUMPDEV TRADE FEED '+String(feed.pumpdevStatus||'disabled').toUpperCase().replace(/_/g,' ');
-      }
+      const visibleSources=[...new Set(state.candidates.flatMap(x=>x.sources||[x.source]))];
+      $('sniper-feed-status').textContent=(state.lang==='ru'?'ИСТОЧНИКИ: ':'SOURCES: ')+(visibleSources.join(' · ')||'—')+
+        (tradeReady?' · PUMPDEV TRADE STREAM READY':' · PAPER FEED '+String(feed.pumpdevStatus||'waiting').toUpperCase().replace(/_/g,' '));
       renderDashboardState();
-    }catch(_){
-      // DEX profiles are display-only fallback; they cannot trigger automatic first-minute entry.
-      try{
-        const r=await fetch(API+'/token-profiles/latest/v1',{cache:'no-store'});
-        if(!r.ok)throw new Error('profile feed '+r.status);
-        const profiles=await r.json();
-        const list=(Array.isArray(profiles)?profiles:[]).filter(x=>x&&x.chainId==='solana'&&x.tokenAddress&&x.tokenAddress!==OFFICIAL_MINT).slice(0,8);
-        const resolved=await Promise.allSettled(list.map(async profile=>{
-          const pair=await fetchPairs(profile.tokenAddress);if(!pair)return null;
-          return {address:profile.tokenAddress,name:pair.baseToken.name||'Unknown',symbol:pair.baseToken.symbol||'TOKEN',
-            priceNative:Number(pair.priceNative),liquidityUsd:Number(pair.liquidity&&pair.liquidity.usd)||0,
-            pairCreatedAt:Number(pair.pairCreatedAt)||0,eventAt:0,firstMinute:null,source:'dexscreener',
-            url:'https://dexscreener.com/solana/'+encodeURIComponent(profile.tokenAddress)};
-        }));
-        state.candidates=resolved.filter(x=>x.status==='fulfilled'&&x.value).map(x=>x.value).slice(0,8);
-        $('sniper-feed-status').textContent=state.candidates.length?'DEXSCREENER DISPLAY FALLBACK · AUTO ENTRY DISABLED':t('failed');
-      }catch(__){state.candidates=[];$('sniper-feed-status').textContent=t('failed');}
+    }catch(error){
+      state.candidates=[];
+      $('sniper-feed-status').textContent=(state.lang==='ru'?'ИСТОЧНИКИ НЕДОСТУПНЫ: ':'SOURCES UNAVAILABLE: ')+String(error&&error.message||'error').slice(0,70);
     }finally{state.busy=false;renderCandidates();}
   }
   function openPaper(item,automatic){
@@ -948,7 +944,7 @@
     .zs-toggle{min-height:38px;font-size:11px;letter-spacing:.05em;background:#354337;border-color:#9aaa91}.zs-toggle.is-on{background:#a8b99d;color:#111811}.zs-actions{margin:7px 0 12px}.zs-actions button{min-height:34px;font-size:10px}
     .zs-chart{height:84px;border-color:#65746566;background:linear-gradient(180deg,#b5c5a412,transparent)}
     .zs-right{grid-template-rows:auto minmax(0,.88fr) minmax(0,1.12fr);gap:9px}.zs-right>h3{padding-bottom:7px}.zs-position-section{min-height:0;overflow:auto;border:1px solid #344139;border-radius:4px;padding:0 10px;background:#0d1411}.zs-positions{max-height:none;min-height:0;overflow:visible}.zs-positions-inner{display:grid;gap:2px}.zs-positions .sniper-position{grid-template-columns:minmax(0,1fr) auto;padding:9px 0;gap:6px}.zs-position-head strong:first-child{font-size:13px;color:#e6ece4}.zs-position-detail{font-size:11px;line-height:1.45}.zs-position-chart{max-height:36px}.zs-spark{height:34px}
-    .zs-launch-panel{display:flex;flex-direction:column;min-height:0;padding:10px 12px}.zs-launch-panel h3{margin-bottom:7px}.zs-launch-panel .sniper-toolbar{display:flex;align-items:center;gap:9px;margin:0 0 7px;min-height:30px}.zs-launch-panel #sniper-feed-status{font-size:10px;line-height:1.3}.zs-launch-panel #sniper-refresh{min-height:29px;padding:6px 10px;font-size:9px;white-space:nowrap}.zs-launches{flex:1;min-height:0;max-height:none;overflow:auto;padding:0 7px;border:1px solid #36433a;border-radius:4px;background:#0d1411;scrollbar-width:thin}
+    .zs-launch-panel{display:flex;flex-direction:column;min-height:0;padding:10px 12px}.zs-launch-panel h3{margin-bottom:7px}.zs-source-select,.zs-name-filter,.zs-creator-select{min-width:0;max-width:100%;background:#101914;color:#dce7da;border:1px solid #526458;padding:6px 8px;font-size:10px}.zs-filter-label{display:flex;align-items:center;gap:4px;color:#cbd6c8;font-size:9px;white-space:nowrap}.zs-filter-label input{accent-color:#a8c59a}.zs-launch-panel .sniper-toolbar{display:flex;align-items:center;gap:9px;margin:0 0 7px;min-height:30px}.zs-launch-panel #sniper-feed-status{font-size:10px;line-height:1.3}.zs-launch-panel #sniper-refresh{min-height:29px;padding:6px 10px;font-size:9px;white-space:nowrap}.zs-launches{flex:1;min-height:0;max-height:none;overflow:auto;padding:0 7px;border:1px solid #36433a;border-radius:4px;background:#0d1411;scrollbar-width:thin}
     .zs-launches #sniper-candidates{display:grid}.zs-launches .sniper-candidate{grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;padding:9px 3px;border-top:1px solid #ffffff12}.zs-launches .sniper-candidate-main{gap:3px}.zs-launches .sniper-token-name{font-size:12px;line-height:1.25;color:#e6ebe4}.zs-launches .sniper-candidate-main small{font-size:10px;line-height:1.25}.zs-launches .sniper-candidate-stats{grid-column:1;grid-row:2;display:flex;flex-wrap:wrap;gap:5px 12px;font-size:10px;color:#bac5ba}.zs-launches .sniper-link{display:none}.zs-launches .sniper-action{grid-column:2;grid-row:1/3;align-self:center;min-width:94px;min-height:30px;padding:6px 9px;font-size:9px}.zs-launches .sniper-action:disabled{background:#38423b!important;border-color:#526056!important;color:#bdc6bc!important;opacity:1}
     .zs-log{grid-template-columns:repeat(3,minmax(0,1fr));max-height:58px;overflow:auto}.zs-logrow{grid-template-columns:55px 52px minmax(50px,auto);gap:5px;padding:5px 7px;font-size:10px}.zs-logrow span{grid-column:1/-1;color:#aeb9af}.zs-logkind{font-size:9px;letter-spacing:.05em}
     .zs-foot{font-size:10px}.zs-fullscreen .zs-foot{display:none!important}
@@ -1104,7 +1100,16 @@
     const centerSummary=dashNode('div','zs-center-summary');centerSummary.id='zs-center-summary';const chartPanel=dashNode('div','zs-chart-panel');const chartHead=dashNode('div','zs-chart-head');const chartTitle=dashNode('h3','',state.lang==='ru'?'ДИНАМИКА КАПИТАЛА ЗА СЕССИЮ':'SESSION EQUITY CURVE');chartTitle.id='zs-chart-title';chartHead.append(chartTitle,dashNode('span','zs-chart-range',state.lang==='ru'?'SOL · С НАЧАЛА СЕССИИ':'SOL · SINCE SESSION START'));chartPanel.append(chartHead,dashNode('small','zs-equity-caption',''));const chart=dashNode('div','zs-chart');chart.id='zs-main-chart';chartPanel.append(chart);
     center.append(portrait,core,toggle,uptime,centerSummary,chartPanel,statsPanel);
     const right=dashNode('section','zs-panel zs-right');const rightTitle=dashNode('h3','',dcopy().active);rightTitle.id='zs-right-title';right.append(rightTitle);const posSection=dashNode('div','zs-position-section');const posWrap=dashNode('div','zs-positions');posWrap.id='zs-positions-wrap';if(positions){positions.classList.add('zs-positions-inner');posWrap.append(positions);}posSection.append(posWrap);right.append(posSection);
-    const launchPanel=dashNode('section','zs-panel zs-launch-panel');const launchTitle=dashNode('h3','',dcopy().launches);launchTitle.id='zs-launch-title';launchPanel.append(launchTitle);const toolbar=dashNode('div','sniper-toolbar');if(refresh)toolbar.append(refresh);if(status)toolbar.append(status);launchPanel.append(toolbar);const launchWrap=dashNode('div','zs-launches');if(candidates)launchWrap.append(candidates);launchPanel.append(launchWrap);
+    const launchPanel=dashNode('section','zs-panel zs-launch-panel');const launchTitle=dashNode('h3','',dcopy().launches);launchTitle.id='zs-launch-title';launchPanel.append(launchTitle);const toolbar=dashNode('div','sniper-toolbar');
+    const sourceSelect=dashNode('select','zs-source-select');sourceSelect.setAttribute('aria-label','Candidate source');
+    [['all','ALL SOURCES'],['pumpportal','PUMP.FUN LAUNCHES'],['boosts','BOOST MONITOR'],['community','ZOMBIE LAB / COMMUNITY']].forEach(([v,label])=>{const option=document.createElement('option');option.value=v;option.textContent=state.lang==='ru'?({'all':'ВСЕ ИСТОЧНИКИ','pumpportal':'ЗАПУСКИ PUMP.FUN','boosts':'BOOST MONITOR','community':'ZOMBIE LAB / СООБЩЕСТВО'}[v]):label;sourceSelect.append(option);});
+    sourceSelect.value=state.source;sourceSelect.addEventListener('change',()=>{state.source=sourceSelect.value;refreshFeed();});
+    const socialsLabel=dashNode('label','zs-filter-label');const socialsCheck=dashNode('input','');socialsCheck.type='checkbox';socialsCheck.checked=state.requireSocials;socialsCheck.addEventListener('change',()=>{state.requireSocials=socialsCheck.checked;renderCandidates();});socialsLabel.append(socialsCheck,dashNode('span','',state.lang==='ru'?'ТОЛЬКО С СОЦСЕТЯМИ':'SOCIALS ONLY'));
+    const nameFilter=dashNode('input','zs-name-filter');nameFilter.type='search';nameFilter.placeholder=state.lang==='ru'?'Фильтр названия / тикера':'Filter name / ticker';nameFilter.value=state.nameQuery;nameFilter.addEventListener('input',()=>{state.nameQuery=nameFilter.value;renderCandidates();});
+    const creatorSelect=dashNode('select','zs-creator-select');creatorSelect.setAttribute('aria-label','Creator history');
+    [['any','ANY DEV'],['first','FIRST SEEN'],['repeat','REPEAT DEV']].forEach(([v,label])=>{const option=document.createElement('option');option.value=v;option.textContent=state.lang==='ru'?({'any':'ЛЮБОЙ DEV','first':'ВПЕРВЫЕ В ЛЕНТЕ','repeat':'ПОВТОРНЫЙ DEV'}[v]):label;creatorSelect.append(option);});
+    creatorSelect.value=state.creatorFilter;creatorSelect.addEventListener('change',()=>{state.creatorFilter=creatorSelect.value;renderCandidates();});
+    toolbar.append(sourceSelect,socialsLabel,nameFilter,creatorSelect);if(refresh)toolbar.append(refresh);if(status)toolbar.append(status);launchPanel.append(toolbar);const launchWrap=dashNode('div','zs-launches');if(candidates)launchWrap.append(candidates);launchPanel.append(launchWrap);
     right.append(launchPanel);layout.append(left,center,right);
     const journal=dashNode('section','zs-panel');journal.id='zs-journal-panel';const logTitle=dashNode('h3','',dcopy().journal);logTitle.id='zs-log-title';journal.append(logTitle);const log=dashNode('div','zs-log');log.id='zs-log';journal.append(log);
     const clearBar=dashNode('div','sniper-toolbar');if(clear)clearBar.append(clear);journal.append(clearBar);
