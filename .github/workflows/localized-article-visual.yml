@@ -100,6 +100,7 @@ jobs:
         run: |
           node --check shared-nav.js
           node --check language.js
+          node --check sniper-demo.js
       - name: Install Playwright and Chromium
         run: |
           npm init -y
@@ -116,6 +117,8 @@ jobs:
           exit 1
       - name: Test localized article pages and all nine Field Manual landing pages
         run: node tests/localized-article-visual.cjs
+      - name: Test Zombie Sniper Help in all nine languages and responsive layouts
+        run: node tests/sniper-help-i18n.cjs
       - name: Upload screenshots and diagnostics
         if: always()
         uses: actions/upload-artifact@v4
