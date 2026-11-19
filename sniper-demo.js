@@ -1058,7 +1058,7 @@
     const foot=dashNode('p','zs-foot',dcopy().hint+' '+t('source'));
     const helpPanel=dashNode('section','zs-panel zs-help zs-tab-hidden');helpPanel.id='zs-help-panel';
     style.textContent += `
-      .zs-help{display:block!important;min-height:0;overflow:auto!important;padding:clamp(14px,2vw,24px)!important}
+      .zs-help{min-height:0;overflow:auto!important;padding:clamp(14px,2vw,24px)!important}
       .zs-help-heading{margin:0 0 12px!important;font-size:clamp(16px,1.5vw,21px)!important;letter-spacing:.1em;color:#e2e9df}
       .zs-help-notice{margin:0 0 16px;padding:13px 16px;border:1px solid #8c9a7b;border-left:4px solid #b3c39f;border-radius:4px;background:linear-gradient(100deg,#303a30,#1b241e);color:#f0f3e9;font-size:13px;line-height:1.65;font-weight:650}
       .zs-help-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-content:start}
