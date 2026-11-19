@@ -75,11 +75,11 @@
   function readStore(){
     try {
       const value = JSON.parse(localStorage.getItem(storageKey()) || '{}');
-      state.positions = Array.isArray(value.positions) ? value.positions.slice(0,20).map(p=>({...p,_ownerTelegramId:telegramId()||'guest'})) : [];
+      state.positions = Array.isArray(value.positions) ? value.positions.slice(0,50).map(p=>({...p,_ownerTelegramId:telegramId()||'guest'})) : [];
     } catch (_) { state.positions = []; }
   }
   function saveStore(){
-    try { localStorage.setItem(storageKey(), JSON.stringify({positions:state.positions.slice(0,20),savedAt:Date.now()})); } catch (_) {}
+    try { localStorage.setItem(storageKey(), JSON.stringify({positions:state.positions.slice(0,50),savedAt:Date.now()})); } catch (_) {}
   }
   function updateSyncStatus(key){state.syncStatusKey=key;const node=document.querySelector('.sniper-demo [data-sniper-i18n="saved"]');if(node)node.textContent=t(key);}
   function makeUuid(){if(window.crypto&&typeof window.crypto.randomUUID==='function')return window.crypto.randomUUID();return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);});}
@@ -179,7 +179,7 @@
       const local=state.positions.slice();
       const merged=new Map(local.map(p=>[String(p.id),p]));
       remote.forEach(p=>merged.set(String(p.id),p));
-      state.positions=Array.from(merged.values()).sort((a,b)=>Number(b.openedAt||0)-Number(a.openedAt||0)).slice(0,20);
+      state.positions=Array.from(merged.values()).sort((a,b)=>Number(b.openedAt||0)-Number(a.openedAt||0)).slice(0,50);
       saveStore();renderPositions();
       const remoteIds=new Set(remote.map(p=>String(p.id)));
       for(const p of state.positions){if(!remoteIds.has(String(p.id)))await persistPosition(p);}
@@ -195,8 +195,15 @@
     return true;
   }
   async function clearServerHistory(){
-    const token=authToken(),accountId=telegramId();if(!token||!accountId)return;
-    try{const response=await fetch(AUTH_API+'/api/sniper/paper/clear',{method:'POST',headers:{'Authorization':'Bearer '+token},cache:'no-store'});if(telegramId()!==accountId||authToken()!==token)return;if(!response.ok)updateSyncStatus(response.status===401?'loginAgain':'syncError');else updateSyncStatus('synced');}catch(_){if(telegramId()===accountId&&authToken()===token)updateSyncStatus('syncError');}
+    const token=authToken(),accountId=telegramId();if(!token||!accountId)return true;
+    try{
+      const response=await fetch(AUTH_API+'/api/sniper/paper/clear',{method:'POST',headers:{'Authorization':'Bearer '+token},cache:'no-store'});
+      if(telegramId()!==accountId||authToken()!==token)return false;
+      if(!response.ok){updateSyncStatus(response.status===401?'loginAgain':'syncError');return false;}
+      const result=await response.json().catch(()=>({}));
+      if(result.ok!==true){updateSyncStatus('syncError');return false;}
+      updateSyncStatus('synced');return true;
+    }catch(_){if(telegramId()===accountId&&authToken()===token)updateSyncStatus('syncError');return false;}
   }
   function setText(id,key){ const el=$(id); if(el) el.textContent=t(key); }
   function translate(){
@@ -275,7 +282,8 @@
     });
     maybeAutoEnter();
   }
-  function renderPositions(mode='open'){
+  function renderPositions(mode){
+    if(!mode)mode=$('zombie-sniper-demo')?.dataset.activeTab==='history'?'history':'open';
     const host=$('sniper-positions');if(!host)return;
     host.replaceChildren();
     const historyMode=mode==='history';
@@ -995,7 +1003,28 @@
   function init(){
     readStore();activeStorageKey=storageKey();detectLang();buildDashboard();translate();
     $('sniper-refresh').addEventListener('click',refreshFeed);
-    $('sniper-clear').addEventListener('click',()=>{state.positions=[];saveStore();clearServerHistory();renderPositions();$('sniper-feed-status').textContent=t('cleared');});
+    $('sniper-clear').addEventListener('click',async()=>{
+      const button=$('sniper-clear');
+      if(button)button.disabled=true;
+      try{
+        if(!await clearServerHistory())return;
+        state.positions=[];
+        saveStore();
+        const now=Date.now();
+        terminal.logs=[];
+        terminal.equityHistory=[];
+        terminal.seen=[];
+        terminal.lastAuto=0;
+        terminal.startedAt=terminal.auto?now:0;
+        terminal.stoppedAt=terminal.auto?0:now;
+        terminal.sessionStartCapital=Math.max(0.000001,Number($('sniper-capital')&&$('sniper-capital').value)||Number(terminal.capital)||10);
+        if(terminal.auto)terminal.equityHistory=[{at:now,value:terminal.sessionStartCapital}];
+        saveTerminal();
+        renderDashboardState();
+        renderPositions();
+        if($('sniper-feed-status'))$('sniper-feed-status').textContent=t('cleared');
+      }finally{if(button)button.disabled=false;}
+    });
     ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
     ['sniper-capital','sniper-size','sniper-target','sniper-stop','sniper-min-move','sniper-idle-timeout','sniper-network','sniper-priority','sniper-dex','sniper-slip'].forEach(id=>$(id)?.addEventListener('change',()=>{if(terminal.auto&&authToken())setServerPaperEnabled(true);}));
     refreshFeed();if(authToken())syncFromServer();else{updateSyncStatus('loginToSync');updatePositions();}
