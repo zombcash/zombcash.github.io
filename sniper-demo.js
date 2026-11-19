@@ -461,10 +461,10 @@
     input.addEventListener('change',()=>{if(id==='sniper-capital'){terminal.capital=Math.max(0,Number(input.value)||0);terminal.maxTradeSize=terminal.capital;const size=$('sniper-size');if(size){size.max=Math.max(0.001,terminal.capital);const slider=size.parentElement&&size.parentElement.querySelector('.zs-range');if(slider)slider.max=size.max;}}if(id==='sniper-liquidity')terminal.minLiquidity=Math.max(0,Number(input.value)||0);if(id==='sniper-idle-timeout')terminal.idleTimeout=Math.max(15,Number(input.value)||60);if(id==='sniper-min-move')terminal.minMovePct=Math.max(0.05,Number(input.value)||0.2);if(id==='sniper-max-size'){terminal.maxTradeSize=Math.max(0.001,Math.min(10,Number(input.value)||0.05));const size=$('sniper-size');if(size){size.max=terminal.maxTradeSize;const slider=size.parentElement&&size.parentElement.querySelector('.zs-range');if(slider)slider.max=terminal.maxTradeSize;if(Number(size.value)>terminal.maxTradeSize){size.value=terminal.maxTradeSize;if(slider)slider.value=size.value;}}}saveTerminal();renderStats();});
     field.append(input);host.append(field);return field;
   }
-  function sparkline(values){
+  function sparkline(values,ariaLabel='Observed token price since simulated entry'){
     // Keep the recorded observations untouched; smooth only the SVG presentation.
     const nums=(values||[]).filter(v=>Number.isFinite(Number(v))&&Number(v)>0).map(Number);
-    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 180 48');svg.setAttribute('class','zs-spark');svg.setAttribute('role','img');svg.setAttribute('aria-label','Observed token price since simulated entry');
+    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 180 48');svg.setAttribute('class','zs-spark');svg.setAttribute('role','img');svg.setAttribute('aria-label',ariaLabel);
     if(nums.length<2)return svg;
     const lo=Math.min(...nums),hi=Math.max(...nums),span=hi-lo||Math.max(Math.abs(hi)*.001,1e-12);
     const pts=nums.map((v,i)=>({x:2+(i/(nums.length-1))*176,y:44-((v-lo)/span)*38}));
@@ -509,7 +509,7 @@
     const winRate=decided?Math.round(wins/decided*100)+'%':'—';
     const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,((session.realized+session.unrealized)>=0?'+':'')+(session.realized+session.unrealized).toFixed(5)+' SOL'],[state.lang==='ru'?'ЗАКРЫТЫЕ СДЕЛКИ':'CLOSED TRADES',String(closed.length)],[state.lang==='ru'?'ПОБЕДЫ / ПОРАЖЕНИЯ':'WINS / LOSSES',wins+' / '+losses],[dcopy().wins,winRate],[state.lang==='ru'?'ОБОРОТ ЗА СЕССИЮ':'SESSION TURNOVER',turnover.toFixed(5)+' SOL'],[dcopy().active,String(open.length)]];
     host.replaceChildren();vals.forEach((v,i)=>{const card=dashNode('div','zs-kpi zs-kpi-'+i);card.append(dashNode('small','',v[0]),dashNode('strong','zs-counter',v[1]));host.append(card);});
-    const mainChart=$('zs-main-chart');if(mainChart){mainChart.replaceChildren();const history=(terminal.equityHistory||[]).map(x=>Number(x.value)).filter(Number.isFinite);const relative=history.length>1?history.map(v=>100*v/session.baseline):[100,100*session.equity/session.baseline];mainChart.append(sparkline(relative));}
+    const mainChart=$('zs-main-chart');if(mainChart){mainChart.replaceChildren();const history=(terminal.equityHistory||[]).map(x=>Number(x.value)).filter(Number.isFinite);const relative=history.length>1?history.map(v=>100*v/session.baseline):[100,100*session.equity/session.baseline];mainChart.append(sparkline(relative,state.lang==='ru'?'Изменение капитала с начала сессии':'Session capital change since start'));}
     const equityCaption=$('zs-equity-caption');if(equityCaption){const change=session.equity-session.baseline,pct=change/session.baseline*100;equityCaption.textContent=(state.lang==='ru'?'СТАРТ ':'START ')+session.baseline.toFixed(4)+' SOL · '+(state.lang==='ru'?'СЕЙЧАС ':'NOW ')+session.equity.toFixed(4)+' SOL · '+(change>=0?'+':'')+change.toFixed(5)+' SOL ('+(pct>=0?'+':'')+pct.toFixed(2)+'%)';}
     const centerSummary=$('zs-center-summary');if(centerSummary){
       centerSummary.replaceChildren();
@@ -536,7 +536,7 @@
   function renderDashboardState(){
     const btn=$('zs-auto-toggle');if(btn){btn.classList.toggle('is-on',!!terminal.auto);btn.textContent=terminal.auto?dcopy().armed:dcopy().paused;}
     const nav=document.querySelectorAll('[data-zs-nav]');nav.forEach(b=>{const i=Number(b.dataset.zsNav);if(dcopy().nav[i])b.textContent=dcopy().nav[i];});
-    [['zs-settings-title',dcopy().settings],['zs-center-title',dcopy().autopilot],['zs-right-title',dcopy().active],['zs-launch-title',dcopy().launches],['zs-log-title',dcopy().journal],['zs-chart-title',dcopy().chart]].forEach(([id,label])=>{const el=$(id);if(el)el.textContent=label;});
+    [['zs-settings-title',dcopy().settings],['zs-center-title',dcopy().autopilot],['zs-right-title',dcopy().active],['zs-launch-title',dcopy().launches],['zs-log-title',dcopy().journal],['zs-chart-title',state.lang==='ru'?'ДИНАМИКА КАПИТАЛА ЗА СЕССИЮ':'SESSION EQUITY CURVE']].forEach(([id,label])=>{const el=$(id);if(el)el.textContent=label;});
     const capLabel=$('zs-capital-label'),liqLabel=$('zs-liquidity-label');if(capLabel)capLabel.textContent=dcopy().capital;if(liqLabel)liqLabel.textContent=dcopy().minliq;
     renderStats();renderLog();
   }
