@@ -995,6 +995,7 @@
       else{statsPanel.classList.add('zs-tab-hidden');portrait.classList.remove('zs-tab-hidden');core.classList.remove('zs-tab-hidden');toggle.classList.remove('zs-tab-hidden');uptime.classList.remove('zs-tab-hidden');chartPanel.classList.remove('zs-tab-hidden');}
     }
     dcopy().nav.forEach((label,i)=>{if(i===5)label=state.lang==='ru'?'КОШЕЛЁК':'WALLET';const b=dashNode('button','',label);b.dataset.zsNav=String(i);b.type='button';b.setAttribute('role','tab');b.addEventListener('click',()=>selectTab(tabTargets[i]||'sniper'));nav.append(b);});
+    const walletTab=dashNode('button','',state.lang==='ru'?'КОШЕЛЁК':'WALLET');walletTab.dataset.zsNav='5';walletTab.type='button';walletTab.setAttribute('role','tab');walletTab.addEventListener('click',()=>selectTab('wallet'));nav.append(walletTab);
     const kpis=dashNode('div','zs-kpis');kpis.id='zs-kpis';
     const layout=dashNode('div','zs-layout');const left=dashNode('section','zs-panel zs-left');left.id='zs-settings';const leftTitle=dashNode('h3','',dcopy().settings);leftTitle.id='zs-settings-title';left.append(leftTitle);
 
