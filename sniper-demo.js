@@ -462,12 +462,25 @@
     field.append(input);host.append(field);return field;
   }
   function sparkline(values){
-    const nums=(values||[]).filter(v=>Number.isFinite(Number(v))).map(Number);
+    // Keep the recorded observations untouched; smooth only the SVG presentation.
+    const nums=(values||[]).filter(v=>Number.isFinite(Number(v))&&Number(v)>0).map(Number);
     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 180 48');svg.setAttribute('class','zs-spark');svg.setAttribute('role','img');svg.setAttribute('aria-label','Observed token price since simulated entry');
     if(nums.length<2)return svg;
-    const lo=Math.min(...nums),hi=Math.max(...nums),span=hi-lo||Math.max(hi*.001,1e-12);
-    const points=nums.map((v,i)=>((i/(nums.length-1))*176+2)+','+(44-((v-lo)/span)*38)).join(' ');
-    const line=document.createElementNS(svg.namespaceURI,'polyline');line.setAttribute('points',points);line.setAttribute('fill','none');line.setAttribute('stroke',nums[nums.length-1]>=nums[0]?'#00f59a':'#ff4d8d');line.setAttribute('stroke-width','2.2');line.setAttribute('stroke-linecap','round');line.setAttribute('stroke-linejoin','round');svg.append(line);return svg;
+    const lo=Math.min(...nums),hi=Math.max(...nums),span=hi-lo||Math.max(Math.abs(hi)*.001,1e-12);
+    const pts=nums.map((v,i)=>({x:2+(i/(nums.length-1))*176,y:44-((v-lo)/span)*38}));
+    // Catmull-Rom -> cubic Bezier. Control handles are limited to each segment
+    // to avoid visual overshoot while preserving every real observation point.
+    let d='M '+pts[0].x.toFixed(2)+' '+pts[0].y.toFixed(2);
+    const tension=0.16;
+    for(let i=0;i<pts.length-1;i++){
+      const p0=pts[Math.max(0,i-1)],p1=pts[i],p2=pts[i+1],p3=pts[Math.min(pts.length-1,i+2)];
+      const dx1=(p2.x-p0.x)*tension,dy1=(p2.y-p0.y)*tension;
+      const dx2=(p3.x-p1.x)*tension,dy2=(p3.y-p1.y)*tension;
+      const c1={x:p1.x+dx1,y:Math.max(Math.min(p1.y+dy1,Math.max(p1.y,p2.y)),Math.min(p1.y,p2.y))};
+      const c2={x:p2.x-dx2,y:Math.max(Math.min(p2.y-dy2,Math.max(p1.y,p2.y)),Math.min(p1.y,p2.y))};
+      d+=' C '+c1.x.toFixed(2)+' '+c1.y.toFixed(2)+' '+c2.x.toFixed(2)+' '+c2.y.toFixed(2)+' '+p2.x.toFixed(2)+' '+p2.y.toFixed(2);
+    }
+    const line=document.createElementNS(svg.namespaceURI,'path');line.setAttribute('d',d);line.setAttribute('fill','none');line.setAttribute('stroke',nums[nums.length-1]>=nums[0]?'#00f59a':'#ff4d8d');line.setAttribute('stroke-width','2.2');line.setAttribute('stroke-linecap','round');line.setAttribute('stroke-linejoin','round');line.setAttribute('vector-effect','non-scaling-stroke');svg.append(line);return svg;
   }
   function renderStats(){
     const host=$('zs-kpis');if(!host)return;
@@ -866,7 +879,7 @@
     const statsPanel=dashNode('div','zs-stats-extra zs-tab-hidden');statsPanel.id='zs-stats-extra';
     const statsHeading=dashNode('h3','',state.lang==='ru'?'РЕЗУЛЬТАТЫ СИМУЛЯЦИИ':'SIMULATION PERFORMANCE');
     const statsGrid=dashNode('div','zs-stat-grid');statsGrid.id='zs-stat-grid';statsPanel.append(statsHeading,statsGrid);
-    const centerSummary=dashNode('div','zs-center-summary');centerSummary.id='zs-center-summary';const chartPanel=dashNode('div','zs-chart-panel');const chartHead=dashNode('div','zs-chart-head');const chartTitle=dashNode('h3','',dcopy().chart);chartTitle.id='zs-chart-title';chartHead.append(chartTitle,dashNode('span','zs-chart-range','LIVE · 20 SEC'));chartPanel.append(chartHead);const chart=dashNode('div','zs-chart');chart.id='zs-main-chart';chartPanel.append(chart);
+    const centerSummary=dashNode('div','zs-center-summary');centerSummary.id='zs-center-summary';const chartPanel=dashNode('div','zs-chart-panel');const chartHead=dashNode('div','zs-chart-head');const chartTitle=dashNode('h3','',dcopy().chart);chartTitle.id='zs-chart-title';chartHead.append(chartTitle,dashNode('span','zs-chart-range','LIVE · 10 SEC'));chartPanel.append(chartHead);const chart=dashNode('div','zs-chart');chart.id='zs-main-chart';chartPanel.append(chart);
     center.append(portrait,core,toggle,uptime,centerSummary,chartPanel,statsPanel);
     const right=dashNode('section','zs-panel zs-right');const rightTitle=dashNode('h3','',dcopy().active);rightTitle.id='zs-right-title';right.append(rightTitle);const posSection=dashNode('div','zs-position-section');const posWrap=dashNode('div','zs-positions');posWrap.id='zs-positions-wrap';if(positions){positions.classList.add('zs-positions-inner');posWrap.append(positions);}posSection.append(posWrap);right.append(posSection);
     const launchPanel=dashNode('section','zs-panel zs-launch-panel');const launchTitle=dashNode('h3','',dcopy().launches);launchTitle.id='zs-launch-title';launchPanel.append(launchTitle);const toolbar=dashNode('div','sniper-toolbar');if(refresh)toolbar.append(refresh);if(status)toolbar.append(status);launchPanel.append(toolbar);const launchWrap=dashNode('div','zs-launches');if(candidates)launchWrap.append(candidates);launchPanel.append(launchWrap);
