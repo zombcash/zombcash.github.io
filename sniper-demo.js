@@ -1013,6 +1013,14 @@
     style.textContent += `
     /* History: compact trade rows; reserve real viewport space for the event log */
     .sniper-demo.zs-fullscreen.zs-history-mode{grid-template-rows:0 44px 38px 0 minmax(0,1fr) 196px!important}
+    /* Keep the normal History tab compact; scroll inside its two history panes. */
+    .sniper-demo.zs-history-mode:not(.zs-fullscreen)>.zs-layout{height:clamp(260px,48vh,430px)!important;min-height:260px!important;max-height:430px!important;overflow:hidden!important;align-self:start!important}
+    .sniper-demo.zs-history-mode:not(.zs-fullscreen) .zs-right{grid-template-rows:auto minmax(0,1fr)!important;height:100%!important;min-height:0!important;overflow:hidden!important}
+    .sniper-demo.zs-history-mode:not(.zs-fullscreen) .zs-position-section{min-height:0!important;max-height:100%!important;overflow-y:auto!important;overscroll-behavior:contain}
+    .sniper-demo.zs-history-mode:not(.zs-fullscreen)>.zs-layout+.zs-panel#zs-journal-panel{display:flex!important;flex-direction:column!important;gap:6px!important;height:190px!important;min-height:0!important;max-height:190px!important;overflow:hidden!important;margin-top:8px!important;padding:9px 12px!important}
+    .sniper-demo.zs-history-mode:not(.zs-fullscreen) #zs-journal-panel h3,.sniper-demo.zs-history-mode:not(.zs-fullscreen) #zs-journal-panel>.sniper-toolbar{flex:0 0 auto!important;margin:0!important}
+    .sniper-demo.zs-history-mode:not(.zs-fullscreen) #zs-log{flex:1 1 auto!important;min-height:0!important;height:auto!important;max-height:none!important;overflow-y:auto!important;overscroll-behavior:contain;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-content:start!important}
+    @media(max-width:760px){.sniper-demo.zs-history-mode:not(.zs-fullscreen)>.zs-layout{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important}.sniper-demo.zs-history-mode:not(.zs-fullscreen) .zs-right{height:360px!important;min-height:360px!important}.sniper-demo.zs-history-mode:not(.zs-fullscreen)>.zs-layout+.zs-panel#zs-journal-panel{height:190px!important;max-height:190px!important}.sniper-demo.zs-history-mode:not(.zs-fullscreen) #zs-log{grid-template-columns:1fr!important}}
     .sniper-demo.zs-fullscreen.zs-history-mode .zs-right{grid-template-rows:auto minmax(0,1fr)!important;align-content:stretch!important}
     .sniper-demo.zs-fullscreen.zs-history-mode .zs-position-section{height:100%;min-height:0!important}
     .sniper-demo.zs-fullscreen.zs-history-mode .zs-positions-inner{gap:4px!important;padding:2px!important}
