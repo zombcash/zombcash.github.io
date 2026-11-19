@@ -158,7 +158,28 @@
         try{await navigator.clipboard.writeText(address);copy.textContent=state.lang==='ru'?'СКОПИРОВАНО':'COPIED';}
         catch(_){copy.textContent=state.lang==='ru'?'ОШИБКА':'FAILED';}
       });
-      panel.append(line,copy,dashNode('small','',state.lang==='ru'?'Ключ хранится в защищённом хранилище. В демо-режиме средства не используются.':'Private key is held in protected server storage. Paper mode never uses wallet funds.'));
+      panel.append(line,copy);
+      const balanceRow=dashNode('div','zs-wallet-balance');
+      const balanceLabel=dashNode('small','',state.lang==='ru'?'БАЛАНС SOL':'SOL BALANCE');
+      const balanceValue=dashNode('strong','zs-wallet-balance-value',state.lang==='ru'?'ЗАГРУЗКА…':'LOADING…');
+      const refreshBalance=dashNode('button','zs-wallet-refresh',state.lang==='ru'?'ОБНОВИТЬ':'REFRESH');
+      refreshBalance.type='button';
+      const loadBalance=async()=>{
+        refreshBalance.disabled=true;balanceValue.textContent=state.lang==='ru'?'ЗАГРУЗКА…':'LOADING…';
+        try{
+          const balanceResponse=await fetch(AUTH_API+'/api/sniper/wallet/balance',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
+          const balanceData=await balanceResponse.json().catch(()=>({}));
+          if(!balanceResponse.ok)throw new Error(balanceData.error||'Balance unavailable');
+          balanceValue.textContent=Number(balanceData.sol).toLocaleString(undefined,{minimumFractionDigits:4,maximumFractionDigits:9})+' SOL';
+          balanceValue.title=state.lang==='ru'?'Подтверждено сетью Solana':'Confirmed on Solana';
+        }catch(_){balanceValue.textContent=state.lang==='ru'?'НЕДОСТУПЕН':'UNAVAILABLE';}
+        finally{refreshBalance.disabled=false;}
+      };
+      refreshBalance.addEventListener('click',loadBalance);
+      balanceRow.append(balanceLabel,balanceValue,refreshBalance);
+      const depositNote=dashNode('small','zs-wallet-note',state.lang==='ru'?'Для пополнения отправляйте только SOL в сети Solana на этот адрес. Не отправляйте токены других сетей.':'To fund this wallet, send native SOL on Solana only. Do not send assets from other networks.');
+      panel.append(balanceRow,depositNote,dashNode('small','',state.lang==='ru'?'Приватный ключ хранится на сервере. В демо-режиме реальные средства не используются.':'Private key stays server-side. Paper mode never uses real funds.'));
+      loadBalance();
     }catch(_){
       panel.append(dashNode('small','',state.lang==='ru'?'Не удалось загрузить адрес кошелька.':'Could not load wallet address.'));
     }
@@ -1072,7 +1093,7 @@
       @media(max-width:760px){.zs-help-grid{grid-template-columns:1fr;gap:9px}.zs-help-card{padding:12px}.zs-help-notice{font-size:12px}}
     `;
     renderHelpPanel();
-    style.textContent += '.zs-wallet-view{max-width:900px;min-height:300px;padding:clamp(18px,3vw,30px)!important}.zs-wallet-view h3{font:750 18px/1.4 Orbitron,system-ui,sans-serif;letter-spacing:.1em;color:#e1e5df;margin:0 0 12px}#zs-wallet-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;padding:18px;border:1px solid rgba(184,198,190,.22);background:rgba(8,13,14,.7);margin-top:20px}#zs-wallet-panel strong,#zs-wallet-panel small{grid-column:1/-1}#zs-wallet-panel code{overflow-wrap:anywhere;color:#c4d2b2;font-size:13px}.zs-wallet-provision,.zs-copy-address{border:1px solid #9eaf8d;background:#a9bf91;color:#101610;padding:10px 14px;font-weight:800;cursor:pointer}.zs-wallet-provision:disabled{opacity:.55;cursor:wait}.zs-wallet-error{color:#e1a6a6}';
+    style.textContent += ' .zs-wallet-balance{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:14px 0;border-top:1px solid rgba(184,198,190,.18);border-bottom:1px solid rgba(184,198,190,.18)}.zs-wallet-balance strong{font-size:20px;color:#c4d2b2}.zs-wallet-refresh{margin-left:auto;background:transparent;border:1px solid #9eaf8d;color:#c4d2b2;padding:8px 12px;cursor:pointer}.zs-wallet-note{color:#c3b99c;line-height:1.6}'+'.zs-wallet-view{max-width:900px;min-height:300px;padding:clamp(18px,3vw,30px)!important}.zs-wallet-view h3{font:750 18px/1.4 Orbitron,system-ui,sans-serif;letter-spacing:.1em;color:#e1e5df;margin:0 0 12px}#zs-wallet-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;padding:18px;border:1px solid rgba(184,198,190,.22);background:rgba(8,13,14,.7);margin-top:20px}#zs-wallet-panel strong,#zs-wallet-panel small{grid-column:1/-1}#zs-wallet-panel code{overflow-wrap:anywhere;color:#c4d2b2;font-size:13px}.zs-wallet-provision,.zs-copy-address{border:1px solid #9eaf8d;background:#a9bf91;color:#101610;padding:10px 14px;font-weight:800;cursor:pointer}.zs-wallet-provision:disabled{opacity:.55;cursor:wait}.zs-wallet-error{color:#e1a6a6}';
     root.replaceChildren(style,header,nav,kpis,layout,journal,helpPanel,walletView,foot);
     renderDashboardState();renderPositions();renderCandidates();selectTab('sniper');
   }
