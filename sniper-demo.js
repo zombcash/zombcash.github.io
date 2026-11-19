@@ -178,8 +178,28 @@
       refreshBalance.addEventListener('click',loadBalance);
       balanceRow.append(balanceLabel,balanceValue,refreshBalance);
       const depositNote=dashNode('small','zs-wallet-note',state.lang==='ru'?'Для пополнения отправляйте только SOL в сети Solana на этот адрес. Не отправляйте токены других сетей.':'To fund this wallet, send native SOL on Solana only. Do not send assets from other networks.');
-      panel.append(balanceRow,depositNote,dashNode('small','',state.lang==='ru'?'Приватный ключ хранится на сервере. В демо-режиме реальные средства не используются.':'Private key stays server-side. Paper mode never uses real funds.'));
-      loadBalance();
+      const activityTitle=dashNode('strong','zs-wallet-activity-title',state.lang==='ru'?'ПОСЛЕДНИЕ ОПЕРАЦИИ':'RECENT ACTIVITY');
+      const activityList=dashNode('div','zs-wallet-activity');
+      const loadActivity=async()=>{
+        activityList.replaceChildren(dashNode('small','',state.lang==='ru'?'ЗАГРУЗКА…':'LOADING…'));
+        try{
+          const activityResponse=await fetch(AUTH_API+'/api/sniper/wallet/activity',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
+          const activityData=await activityResponse.json().catch(()=>({}));
+          if(!activityResponse.ok)throw new Error('Activity unavailable');
+          activityList.replaceChildren();
+          if(!activityData.activity||!activityData.activity.length){activityList.append(dashNode('small','',state.lang==='ru'?'Операций пока нет.':'No transactions yet.'));return;}
+          activityData.activity.forEach(item=>{
+            const entry=dashNode('div','zs-wallet-activity-item');
+            const detail=dashNode('span','',item.failed?(state.lang==='ru'?'ОШИБКА':'FAILED'):(state.lang==='ru'?'ПОДТВЕРЖДЕНО':'CONFIRMED'));
+            const time=dashNode('small','',item.blockTime?new Date(item.blockTime*1000).toLocaleString():'—');
+            const link=dashNode('a','',String(item.signature).slice(0,10)+'…'+String(item.signature).slice(-8));
+            link.href='https://solscan.io/tx/'+encodeURIComponent(item.signature);link.target='_blank';link.rel='noopener noreferrer';
+            entry.append(detail,time,link);activityList.append(entry);
+          });
+        }catch(_){activityList.replaceChildren(dashNode('small','',state.lang==='ru'?'История временно недоступна.':'Activity temporarily unavailable.'));}
+      };
+      panel.append(balanceRow,depositNote,activityTitle,activityList,dashNode('small','',state.lang==='ru'?'Приватный ключ хранится на сервере. Демо-режим не отправляет реальные сделки.':'Private key stays server-side. Paper mode never sends real trades.'));
+      loadBalance();loadActivity();
     }catch(_){
       panel.append(dashNode('small','',state.lang==='ru'?'Не удалось загрузить адрес кошелька.':'Could not load wallet address.'));
     }
@@ -1093,7 +1113,7 @@
       @media(max-width:760px){.zs-help-grid{grid-template-columns:1fr;gap:9px}.zs-help-card{padding:12px}.zs-help-notice{font-size:12px}}
     `;
     renderHelpPanel();
-    style.textContent += ' .zs-wallet-balance{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:14px 0;border-top:1px solid rgba(184,198,190,.18);border-bottom:1px solid rgba(184,198,190,.18)}.zs-wallet-balance strong{font-size:20px;color:#c4d2b2}.zs-wallet-refresh{margin-left:auto;background:transparent;border:1px solid #9eaf8d;color:#c4d2b2;padding:8px 12px;cursor:pointer}.zs-wallet-note{color:#c3b99c;line-height:1.6}'+'.zs-wallet-view{max-width:900px;min-height:300px;padding:clamp(18px,3vw,30px)!important}.zs-wallet-view h3{font:750 18px/1.4 Orbitron,system-ui,sans-serif;letter-spacing:.1em;color:#e1e5df;margin:0 0 12px}#zs-wallet-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;padding:18px;border:1px solid rgba(184,198,190,.22);background:rgba(8,13,14,.7);margin-top:20px}#zs-wallet-panel strong,#zs-wallet-panel small{grid-column:1/-1}#zs-wallet-panel code{overflow-wrap:anywhere;color:#c4d2b2;font-size:13px}.zs-wallet-provision,.zs-copy-address{border:1px solid #9eaf8d;background:#a9bf91;color:#101610;padding:10px 14px;font-weight:800;cursor:pointer}.zs-wallet-provision:disabled{opacity:.55;cursor:wait}.zs-wallet-error{color:#e1a6a6}';
+    style.textContent += '.zs-wallet-activity{display:grid;gap:8px;width:100%}.zs-wallet-activity-item{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid rgba(184,198,190,.12);font-size:12px}.zs-wallet-activity-item a{color:#c4d2b2;text-decoration:underline}.zs-wallet-activity-item small{opacity:.7}'+ ' .zs-wallet-balance{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:14px 0;border-top:1px solid rgba(184,198,190,.18);border-bottom:1px solid rgba(184,198,190,.18)}.zs-wallet-balance strong{font-size:20px;color:#c4d2b2}.zs-wallet-refresh{margin-left:auto;background:transparent;border:1px solid #9eaf8d;color:#c4d2b2;padding:8px 12px;cursor:pointer}.zs-wallet-note{color:#c3b99c;line-height:1.6}'+'.zs-wallet-view{max-width:900px;min-height:300px;padding:clamp(18px,3vw,30px)!important}.zs-wallet-view h3{font:750 18px/1.4 Orbitron,system-ui,sans-serif;letter-spacing:.1em;color:#e1e5df;margin:0 0 12px}#zs-wallet-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;padding:18px;border:1px solid rgba(184,198,190,.22);background:rgba(8,13,14,.7);margin-top:20px}#zs-wallet-panel strong,#zs-wallet-panel small{grid-column:1/-1}#zs-wallet-panel code{overflow-wrap:anywhere;color:#c4d2b2;font-size:13px}.zs-wallet-provision,.zs-copy-address{border:1px solid #9eaf8d;background:#a9bf91;color:#101610;padding:10px 14px;font-weight:800;cursor:pointer}.zs-wallet-provision:disabled{opacity:.55;cursor:wait}.zs-wallet-error{color:#e1a6a6}';
     root.replaceChildren(style,header,nav,kpis,layout,journal,helpPanel,walletView,foot);
     renderDashboardState();renderPositions();renderCandidates();selectTab('sniper');
   }
