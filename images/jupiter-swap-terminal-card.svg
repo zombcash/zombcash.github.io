@@ -1,63 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
 <title id="title">ZombieCash Solana swap guide</title>
-<desc id="desc">A restrained trade-desk graphic showing three steps before a swap: connect a wallet, verify the official mint, and review the quote and transaction before signing.</desc>
+<desc id="desc">Three steps before a ZOMBCASH swap through Jupiter: connect a trusted wallet, verify the official mint, and review the quote and transaction before signing.</desc>
 <defs>
-  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#090e0d"/><stop offset=".55" stop-color="#111a17"/><stop offset="1" stop-color="#0a1012"/></linearGradient>
-  <radialGradient id="glow"><stop stop-color="#91ad78" stop-opacity=".16"/><stop offset="1" stop-color="#91ad78" stop-opacity="0"/></radialGradient>
-  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#a8bd9a" stroke-opacity=".055"/></pattern>
-  <linearGradient id="card" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#17231d"/><stop offset="1" stop-color="#101715"/></linearGradient>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#090e0d"/><stop offset=".55" stop-color="#111a17"/><stop offset="1" stop-color="#0a1012"/></linearGradient>
+ <radialGradient id="glow"><stop stop-color="#91ad78" stop-opacity=".17"/><stop offset="1" stop-color="#91ad78" stop-opacity="0"/></radialGradient>
+ <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#a8bd9a" stroke-opacity=".05"/></pattern>
+ <linearGradient id="card" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#17231d"/><stop offset="1" stop-color="#101715"/></linearGradient>
 </defs>
-<rect width="1200" height="675" fill="url(#bg)"/>
-<rect width="1200" height="675" fill="url(#grid)"/>
-<circle cx="930" cy="320" r="420" fill="url(#glow)"/>
-<rect x="0" y="0" width="1200" height="5" fill="#a8bd91" opacity=".9"/>
+<rect width="1200" height="520" fill="url(#bg)"/><rect width="1200" height="520" fill="url(#grid)"/><circle cx="930" cy="260" r="360" fill="url(#glow)"/><rect width="1200" height="4" fill="#a8bd91"/>
 <g font-family="Arial,Helvetica,sans-serif">
-  <text x="72" y="92" fill="#b4c59f" font-size="15" font-weight="700" letter-spacing="4">ZOMBCASH  /  SOLANA TRADE DESK</text>
-  <text x="72" y="184" fill="#edf1e9" font-size="47" font-weight="700" letter-spacing="-1.5">SWAP WITH</text>
-  <text x="72" y="239" fill="#edf1e9" font-size="47" font-weight="700" letter-spacing="-1.5">CONFIDENCE.</text>
-  <rect x="72" y="270" width="58" height="3" fill="#a8bd91"/>
-  <text x="72" y="320" fill="#b9c4bb" font-size="21">A simple checklist before every</text>
-  <text x="72" y="350" fill="#b9c4bb" font-size="21">ZOMBCASH swap through Jupiter.</text>
-  <text x="72" y="435" fill="#8f9d93" font-size="13" font-weight="700" letter-spacing="2">THREE STEPS. NO BLIND SIGNING.</text>
-  <g transform="translate(72 470)">
-    <circle cx="10" cy="8" r="8" fill="#a8bd91"/><path d="M6 8l3 3 6-7" fill="none" stroke="#101710" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    <text x="30" y="13" fill="#d8e0d6" font-size="15">Verify the mint</text>
-    <circle cx="205" cy="8" r="8" fill="#a8bd91"/><path d="M201 8l3 3 6-7" fill="none" stroke="#101710" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    <text x="225" y="13" fill="#d8e0d6" font-size="15">Review the quote</text>
+ <text x="64" y="66" fill="#b4c59f" font-size="14" font-weight="700" letter-spacing="3.5">ZOMBCASH  /  SOLANA TRADE DESK</text>
+ <text x="64" y="151" fill="#edf1e9" font-size="47" font-weight="700" letter-spacing="-1.5">SWAP WITH</text>
+ <text x="64" y="204" fill="#edf1e9" font-size="47" font-weight="700" letter-spacing="-1.5">CONFIDENCE.</text>
+ <rect x="64" y="230" width="54" height="3" fill="#a8bd91"/>
+ <text x="64" y="275" fill="#b9c4bb" font-size="19">A simple checklist before every</text><text x="64" y="303" fill="#b9c4bb" font-size="19">ZOMBCASH swap through Jupiter.</text>
+ <text x="64" y="371" fill="#8f9d93" font-size="12" font-weight="700" letter-spacing="2">THREE STEPS. NO BLIND SIGNING.</text>
+ <g transform="translate(64 397)">
+  <circle cx="8" cy="7" r="7" fill="#a8bd91"/><path d="M4 7l3 3 5-6" fill="none" stroke="#101710" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><text x="27" y="12" fill="#d8e0d6" font-size="14">Verify the mint</text>
+  <circle cx="190" cy="7" r="7" fill="#a8bd91"/><path d="M186 7l3 3 5-6" fill="none" stroke="#101710" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><text x="209" y="12" fill="#d8e0d6" font-size="14">Review the quote</text>
+ </g>
+ <g transform="translate(635 28)">
+  <rect width="500" height="430" rx="18" fill="url(#card)" stroke="#536653" stroke-opacity=".8"/>
+  <path d="M1 18Q1 1 18 1H482Q499 1 499 18" fill="none" stroke="#b3c49d" stroke-opacity=".55"/>
+  <text x="30" y="42" fill="#b4c59f" font-size="11" font-weight="700" letter-spacing="2.2">BEFORE YOU APPROVE</text>
+  <text x="30" y="76" fill="#edf1e9" font-size="23" font-weight="700">Your swap checklist</text>
+  <g transform="translate(24 98)">
+   <rect width="452" height="78" rx="10" fill="#111b17" stroke="#405345"/><circle cx="36" cy="39" r="17" fill="#26372b" stroke="#829879"/><text x="36" y="45" text-anchor="middle" fill="#dce7d5" font-size="15" font-weight="700">01</text><text x="68" y="34" fill="#e7eee5" font-size="17" font-weight="700">Connect your wallet</text><text x="68" y="56" fill="#9eaca1" font-size="12">Use your trusted Solana wallet</text><path d="M420 32l6 7-6 7" fill="none" stroke="#9eb18e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
-  <g transform="translate(650 104)">
-    <rect x="0" y="0" width="470" height="462" rx="20" fill="url(#card)" stroke="#536653" stroke-opacity=".75"/>
-    <path d="M1 20Q1 1 20 1H450Q469 1 469 20" fill="none" stroke="#b3c49d" stroke-opacity=".6"/>
-    <text x="36" y="54" fill="#b4c59f" font-size="12" font-weight="700" letter-spacing="2.5">BEFORE YOU APPROVE</text>
-    <text x="36" y="91" fill="#edf1e9" font-size="25" font-weight="700">Your swap checklist</text>
-    <g transform="translate(30 126)">
-      <rect width="410" height="82" rx="12" fill="#111b17" stroke="#405345"/>
-      <circle cx="38" cy="41" r="18" fill="#26372b" stroke="#829879"/>
-      <text x="38" y="47" text-anchor="middle" fill="#dce7d5" font-size="16" font-weight="700">01</text>
-      <text x="72" y="35" fill="#e7eee5" font-size="18" font-weight="700">Connect your wallet</text>
-      <text x="72" y="58" fill="#9eaca1" font-size="13">Use your trusted Solana wallet</text>
-      <path d="M378 34l7 7-7 7" fill="none" stroke="#9eb18e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </g>
-    <g transform="translate(30 224)">
-      <rect width="410" height="82" rx="12" fill="#111b17" stroke="#718768" stroke-width="1.4"/>
-      <circle cx="38" cy="41" r="18" fill="#34452f" stroke="#a8bd91"/>
-      <text x="38" y="47" text-anchor="middle" fill="#edf3e8" font-size="16" font-weight="700">02</text>
-      <text x="72" y="35" fill="#e7eee5" font-size="18" font-weight="700">Verify the ZOMBCASH mint</text>
-      <text x="72" y="58" fill="#b6c5ad" font-size="13">Match the full official address</text>
-      <path d="M378 34l7 7-7 7" fill="none" stroke="#a8bd91" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </g>
-    <g transform="translate(30 322)">
-      <rect width="410" height="82" rx="12" fill="#111b17" stroke="#405345"/>
-      <circle cx="38" cy="41" r="18" fill="#26372b" stroke="#829879"/>
-      <text x="38" y="47" text-anchor="middle" fill="#dce7d5" font-size="16" font-weight="700">03</text>
-      <text x="72" y="35" fill="#e7eee5" font-size="18" font-weight="700">Review before signing</text>
-      <text x="72" y="58" fill="#9eaca1" font-size="13">Check output, fees and slippage</text>
-      <path d="M378 34l7 7-7 7" fill="none" stroke="#9eb18e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </g>
-    <text x="36" y="440" fill="#9eac9f" font-size="12">JUPITER HANDLES THE SWAP  /  YOU CONTROL THE SIGNATURE</text>
+  <g transform="translate(24 188)">
+   <rect width="452" height="78" rx="10" fill="#111b17" stroke="#718768" stroke-width="1.4"/><circle cx="36" cy="39" r="17" fill="#34452f" stroke="#a8bd91"/><text x="36" y="45" text-anchor="middle" fill="#edf3e8" font-size="15" font-weight="700">02</text><text x="68" y="34" fill="#e7eee5" font-size="17" font-weight="700">Verify the ZOMBCASH mint</text><text x="68" y="56" fill="#b6c5ad" font-size="12">Match the full official address</text><path d="M420 32l6 7-6 7" fill="none" stroke="#a8bd91" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
-  <path d="M72 600H1128" stroke="#536653" stroke-opacity=".65"/>
-  <text x="72" y="635" fill="#aebd9f" font-size="13" font-weight="700" letter-spacing="3">VERIFY FIRST  ·  NEVER SIGN BLIND</text>
-  <text x="1128" y="635" text-anchor="end" fill="#77857c" font-size="12" letter-spacing="1.5">ZOMBCASH // SURVIVOR TRADE DESK</text>
-</g>
-</svg>
+  <g transform="translate(24 278)">
+   <rect width="452" height="78" rx="10" fill="#111b17" stroke="#405345"/><circle cx="36" cy="39" r="17" fill="#26372b" stroke="#829879"/><text x="36" y="45" text-anchor="middle" fill="#dce7d5" font-size="15" font-weight="700">03</text><text x="68" y="34" fill="#e7eee5" font-size="17" font-weight="700">Review before signing</text><text x="68" y="56" fill="#9eaca1" font-size="12">Check output, fees and slippage</text><path d="M420 32l6 7-6 7" fill="none" stroke="#9eb18e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="30" y="400" fill="#9eac9f" font-size="10.5">JUPITER HANDLES THE SWAP  /  YOU CONTROL THE SIGNATURE</text>
+ </g>
+ <path d="M64 475H1136" stroke="#536653" stroke-opacity=".65"/><text x="64" y="500" fill="#aebd9f" font-size="11" font-weight="700" letter-spacing="2.5">VERIFY FIRST  ·  NEVER SIGN BLIND</text><text x="1136" y="500" text-anchor="end" fill="#77857c" font-size="10" letter-spacing="1.2">ZOMBCASH // SURVIVOR TRADE DESK</text>
+</g></svg>
