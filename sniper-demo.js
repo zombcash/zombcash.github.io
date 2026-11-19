@@ -1105,6 +1105,13 @@
     const tabTargets=['sniper','stats','history','settings','help','wallet'];
     function selectTab(tab){
       root.dataset.activeTab=tab;
+      // Full-screen wallet mode previously left !important inline styles behind,
+      // hiding the trading layout even after another tab was selected.
+      if(root.classList.contains('zs-fullscreen')){
+        root.style.removeProperty('grid-template-rows');
+        layout.style.removeProperty('display');
+        ['display','grid-row','width','max-width','height','min-height','overflow'].forEach(key=>walletView.style.removeProperty(key));
+      }
       root.classList.toggle('zs-history-mode',tab==='history');
       nav.querySelectorAll('button[data-zs-nav]').forEach(b=>{const active=tabTargets[Number(b.dataset.zsNav)]===tab;b.classList.toggle('is-active',active);b.setAttribute('aria-selected',active?'true':'false');});
       left.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='settings');
