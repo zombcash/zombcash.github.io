@@ -1153,7 +1153,7 @@
     const nameFilter=dashNode('input','zs-name-filter');nameFilter.type='search';nameFilter.placeholder=state.lang==='ru'?'Фильтр названия / тикера':'Filter name / ticker';nameFilter.value=state.nameQuery;nameFilter.addEventListener('input',()=>{state.nameQuery=nameFilter.value;renderCandidates();});
     const creatorSelect=dashNode('select','zs-creator-select');creatorSelect.setAttribute('aria-label','Creator history');
     [['any','ANY DEV'],['first','FIRST SEEN'],['repeat','REPEAT DEV']].forEach(([v,label])=>{const option=document.createElement('option');option.value=v;option.textContent=state.lang==='ru'?({'any':'ЛЮБОЙ DEV','first':'ВПЕРВЫЕ В ЛЕНТЕ','repeat':'ПОВТОРНЫЙ DEV'}[v]):label;creatorSelect.append(option);});
-    creatorSelect.value=state.creatorFilter;creatorSelect.addEventListener('change',()=>{state.creatorFilter=creatorSelect.value;renderCandidates();});
+    creatorSelect.value=state.creatorFilter;creatorSelect.addEventListener('change',()=>{state.creatorFilter=creatorSelect.value;renderCandidates();if(terminal.auto&&authToken())setServerPaperEnabled(true);});
     toolbar.append(sourceSelect,socialsLabel,nameFilter,creatorSelect);if(refresh)toolbar.append(refresh);if(status)toolbar.append(status);launchPanel.append(toolbar);const launchWrap=dashNode('div','zs-launches');if(candidates)launchWrap.append(candidates);launchPanel.append(launchWrap);
     right.append(launchPanel);layout.append(left,center,right);
     const journal=dashNode('section','zs-panel');journal.id='zs-journal-panel';const logTitle=dashNode('h3','',dcopy().journal);logTitle.id='zs-log-title';journal.append(logTitle);const log=dashNode('div','zs-log');log.id='zs-log';journal.append(log);
