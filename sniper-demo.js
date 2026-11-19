@@ -83,7 +83,7 @@
   }
   function updateSyncStatus(key){state.syncStatusKey=key;const node=document.querySelector('.sniper-demo [data-sniper-i18n="saved"]');if(node)node.textContent=t(key);}
   function makeUuid(){if(window.crypto&&typeof window.crypto.randomUUID==='function')return window.crypto.randomUUID();return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);});}
-  function mapServerPosition(p){return {id:String(p.id),address:String(p.mint),symbol:String(p.symbol||'TOKEN'),name:String(p.name||''),buySol:Number(p.buySol),entryPrice:Number(p.entryPrice),lastPrice:Number(p.lastPrice),quantity:Number(p.quantity),netPnl:Number(p.netPnl||0),netPct:Number(p.netPct||0),status:p.status==='closed'?'closed':'open',exitReason:p.exitReason||null,openedAt:Number(p.openedAt)||Date.now(),closedAt:p.closedAt?Number(p.closedAt):null,_ownerTelegramId:telegramId()};}
+  function mapServerPosition(p){return {id:String(p.id),address:String(p.mint),symbol:String(p.symbol||'TOKEN'),name:String(p.name||''),buySol:Number(p.buySol),entryPrice:Number(p.entryPrice),lastPrice:Number(p.lastPrice),quantity:Number(p.quantity),netPnl:Number(p.netPnl||0),netPct:Number(p.netPct||0),status:p.status==='closed'?'closed':'open',exitReason:p.exitReason||null,openedAt:Number(p.openedAt)||Date.now(),closedAt:p.closedAt?Number(p.closedAt):null,sellSol:Number(p.sellSol)||0,_ownerTelegramId:telegramId()};}
   async function persistPosition(p){
     const token=authToken(),accountId=telegramId();
     if(!token||!accountId||p._ownerTelegramId!==accountId)return;
@@ -273,8 +273,9 @@
   function renderPositions(){
     const host=$('sniper-positions');if(!host)return;
     host.replaceChildren();
-    if(!state.positions.length){host.append(make('p','sniper-muted',t('noPositions')));renderStats();return;}
-    state.positions.slice().sort((a,b)=>{if(a.status!==b.status)return a.status==='open'?-1:1;return Number(b.openedAt||0)-Number(a.openedAt||0);}).forEach(p=>{
+    const openPositions=state.positions.filter(p=>p.status==='open');
+    if(!openPositions.length){host.append(make('p','sniper-muted',state.lang==='ru'?'Сейчас нет открытых сделок':'No open positions right now'));renderStats();return;}
+    openPositions.slice().sort((a,b)=>Number(b.openedAt||0)-Number(a.openedAt||0)).forEach(p=>{
       const row=make('article','sniper-position zs-position-card');
       const head=make('div','zs-position-topline');
       const identity=make('div','zs-position-identity');
@@ -302,7 +303,6 @@
       const graph=make('div','zs-position-chart');graph.append(sparkline(p.priceHistory&&p.priceHistory.length?p.priceHistory:[p.entryPrice,p.lastPrice||p.entryPrice]));
       row.append(head,detail,contract,graph);
       if(p.status==='open'){const close=make('button','sniper-action sniper-close zs-position-close',dcopy().close||t('manualClose'));close.type='button';close.addEventListener('click',()=>closePaper(p.id,'manual'));row.append(close);}
-      else if(p.exitReason){const reasons={stagnant:state.lang==='ru'?'Нет движения более минуты · переход к следующему запуску':'No movement · rotated to next launch',target:t('targetHit'),stop:t('stopHit')};row.append(make('small','zs-position-reason',reasons[p.exitReason]||t('closed')));}
       host.append(row);
     });
     renderStats();
@@ -381,7 +381,7 @@
   function closePaper(id,reason){
     const p=state.positions.find(x=>x.id===id&&x.status==='open');if(!p)return;
     const m=metrics(p,p.lastPrice||p.entryPrice);
-    p.status='closed';p.closedAt=Date.now();p.netPnl=m.net;p.netPct=m.pct;p.exitReason=reason;
+    p.status='closed';p.closedAt=Date.now();p.netPnl=m.net;p.netPct=m.pct;p.sellSol=m.sellGross;p.exitReason=reason;
     saveStore();renderPositions();renderStats();persistPosition(p);logEvent('SELL',p.symbol,'Manual demo close · '+fmt(m.pct,2)+'%');
   }
   async function updatePositions(){
@@ -413,10 +413,10 @@
         const target=Number($('sniper-target').value)||10;
         const stop=Number($('sniper-stop').value)||0;
         const idleSeconds=Math.max(15,Number($('sniper-idle-timeout')&&$('sniper-idle-timeout').value)||60);
-        if(m.pct>=target){p.status='closed';p.closedAt=now;p.exitReason='target';logEvent('SELL',p.symbol,'Net target reached · '+fmt(m.pct,2)+'%');rotated=true;}
-        else if(stop>0&&m.pct<=-stop){p.status='closed';p.closedAt=now;p.exitReason='stop';logEvent('SELL',p.symbol,'Net stop-loss reached · '+fmt(m.pct,2)+'%');rotated=true;}
+        if(m.pct>=target){p.status='closed';p.closedAt=now;p.sellSol=m.sellGross;p.exitReason='target';logEvent('SELL',p.symbol,'Net target reached · '+fmt(m.pct,2)+'%');rotated=true;}
+        else if(stop>0&&m.pct<=-stop){p.status='closed';p.closedAt=now;p.sellSol=m.sellGross;p.exitReason='stop';logEvent('SELL',p.symbol,'Net stop-loss reached · '+fmt(m.pct,2)+'%');rotated=true;}
         else if(now-Number(p.lastMovementAt||p.openedAt)>=idleSeconds*1000){
-          p.status='closed';p.closedAt=now;p.exitReason='stagnant';
+          p.status='closed';p.closedAt=now;p.sellSol=m.sellGross;p.exitReason='stagnant';
           logEvent('ROTATE',p.symbol,'No price movement ≥ '+threshold+'% for '+idleSeconds+'s; moving to next launch');rotated=true;
         }
       }catch(_){}
@@ -439,7 +439,7 @@
   };
   const START_CONFIRM_COPY={"en":["STARTUP CHECK","Virtual capital","Paper trade size","Take Profit","Stop Loss","DEX fee / side","Slippage / side","Network / priority fees","Slippage exceeds 5% per side.","DEX fee exceeds 2% per side.","Trade size is above the 0.05 SOL starter suggestion.","Start Auto Sniper in PAPER DEMO mode? No real transactions will be sent.","Start demo","Cancel"],"ru":["ПРОВЕРКА ПЕРЕД ЗАПУСКОМ","Виртуальный капитал","Размер демо-сделки","Тейк-профит","Стоп-лосс","Комиссия DEX / сторона","Проскальзывание / сторона","Сеть / приоритетные комиссии","Проскальзывание выше 5% на сторону.","Комиссия DEX выше 2% на сторону.","Размер сделки выше стартовой рекомендации 0,05 SOL.","Запустить автоснайпер в ДЕМО-РЕЖИМЕ? Реальных транзакций не будет.","Запустить демо","Отмена"],"de":["STARTPRÜFUNG","Virtuelles Kapital","Demo-Handelsgröße","Take-Profit","Stop-Loss","DEX-Gebühr / Seite","Slippage / Seite","Netzwerk- / Prioritätsgebühr","Slippage über 5 % pro Seite.","DEX-Gebühr über 2 % pro Seite.","Handelsgröße über der Startempfehlung von 0,05 SOL.","Auto-Sniper im PAPER-DEMO-Modus starten? Es werden keine echten Transaktionen gesendet.","Demo starten","Abbrechen"],"fr":["VÉRIFICATION AVANT DÉMARRAGE","Capital virtuel","Taille de la transaction démo","Take-profit","Stop-loss","Frais DEX / côté","Glissement / côté","Frais réseau / priorité","Glissement supérieur à 5 % par côté.","Frais DEX supérieurs à 2 % par côté.","Taille supérieure à la recommandation initiale de 0,05 SOL.","Lancer Auto Sniper en mode démo papier ? Aucune transaction réelle ne sera envoyée.","Lancer la démo","Annuler"],"it":["CONTROLLO PRIMA DELL'AVVIO","Capitale virtuale","Dimensione operazione demo","Take profit","Stop loss","Commissione DEX / lato","Slippage / lato","Commissioni rete / priorità","Slippage superiore al 5% per lato.","Commissione DEX superiore al 2% per lato.","Dimensione superiore al suggerimento iniziale di 0,05 SOL.","Avviare Auto Sniper in modalità demo? Non verranno inviate transazioni reali.","Avvia demo","Annulla"],"ja":["起動前の確認","仮想資金","デモ取引額","利確","損切り","DEX手数料 / 片道","スリッページ / 片道","ネットワーク / 優先手数料","片道スリッページが5%を超えています。","片道DEX手数料が2%を超えています。","取引額が初期推奨額0.05 SOLを超えています。","ペーパーデモモードでAuto Sniperを起動しますか？実際の取引は送信されません。","デモを開始","キャンセル"],"zh-CN":["启动前检查","虚拟资金","模拟交易金额","止盈","止损","DEX费用 / 单边","滑点 / 单边","网络 / 优先费用","单边滑点超过5%。","单边DEX费用超过2%。","交易金额高于0.05 SOL的初始建议值。","以模拟模式启动自动狙击？不会发送真实交易。","启动模拟","取消"],"tr":["BAŞLATMA ÖNCESİ KONTROL","Sanal sermaye","Demo işlem miktarı","Kâr al","Zarar durdur","DEX ücreti / taraf","Kayma / taraf","Ağ / öncelik ücretleri","Taraf başına kayma %5'i aşıyor.","Taraf başına DEX ücreti %2'yi aşıyor.","İşlem boyutu 0,05 SOL başlangıç önerisini aşıyor.","Auto Sniper demo modunda başlatılsın mı? Gerçek işlem gönderilmeyecek.","Demoyu başlat","İptal"],"hi":["शुरू करने से पहले जाँच","वर्चुअल पूँजी","डेमो ट्रेड राशि","टेक प्रॉफ़िट","स्टॉप लॉस","DEX शुल्क / पक्ष","स्लिपेज / पक्ष","नेटवर्क / प्राथमिकता शुल्क","प्रति पक्ष स्लिपेज 5% से अधिक है।","प्रति पक्ष DEX शुल्क 2% से अधिक है।","ट्रेड राशि 0.05 SOL की शुरुआती अनुशंसा से अधिक है।","क्या Auto Sniper को डेमो मोड में शुरू करें? कोई वास्तविक लेनदेन नहीं भेजा जाएगा।","डेमो शुरू करें","रद्द करें"]};
   function showCenteredConfirm(rows){return new Promise(resolve=>{const labels=START_CONFIRM_COPY[state.lang]||START_CONFIRM_COPY.en;let d=document.getElementById('zs-start-confirm');if(d)d.remove();d=document.createElement('dialog');d.id='zs-start-confirm';d.style.cssText='width:min(560px,calc(100vw - 32px));max-width:560px;max-height:82vh;padding:0;border:1px solid #71836e;border-radius:16px;background:#101a17;color:#edf3e9;box-shadow:0 24px 80px #000b;overflow:hidden;margin:auto';const st=document.createElement('style');st.textContent='#zs-start-confirm::backdrop{background:rgba(0,0,0,.72);backdrop-filter:blur(3px)}#zs-start-confirm .zs-h{padding:18px 22px;border-bottom:1px solid #405148;font-weight:800;letter-spacing:.08em}#zs-start-confirm .zs-b{padding:18px 22px;overflow:auto;max-height:calc(82vh - 130px);font-size:14px;line-height:1.65}#zs-start-confirm .zs-r{padding:4px 0;border-bottom:1px solid #293831}#zs-start-confirm .zs-w{color:#f0c27b}#zs-start-confirm .zs-f{display:flex;justify-content:flex-end;gap:10px;padding:14px 20px;background:#0b1311;border-top:1px solid #405148}#zs-start-confirm button{border:1px solid #81977b;border-radius:9px;padding:10px 18px;font-weight:800;cursor:pointer}#zs-start-confirm .zs-ok{background:#b9c9ad;color:#111a14}#zs-start-confirm .zs-cancel{background:#1b2a24;color:#e7eee5}';const head=document.createElement('div');head.className='zs-h';head.textContent=labels[0];const body=document.createElement('div');body.className='zs-b';rows.forEach(row=>{const p=document.createElement('div');p.className='zs-r'+(row.warn?' zs-w':'');p.textContent=row.text;body.append(p)});const foot=document.createElement('div');foot.className='zs-f';const cancel=document.createElement('button');cancel.className='zs-cancel';cancel.textContent=labels[13];const ok=document.createElement('button');ok.className='zs-ok';ok.textContent=labels[12];foot.append(cancel,ok);d.append(st,head,body,foot);document.body.append(d);const done=v=>{if(d.open)d.close();d.remove();resolve(v)};cancel.addEventListener('click',()=>done(false));ok.addEventListener('click',()=>done(true));d.addEventListener('cancel',e=>{e.preventDefault();done(false)},{once:true});d.showModal()})}
-  const terminal={auto:false,startedAt:0,capital:10,minLiquidity:5000,maxTradeSize:10,idleTimeout:60,minMovePct:0.2,logs:[],seen:[],lastAuto:0};
+  const terminal={auto:false,startedAt:0,capital:10,minLiquidity:5000,maxTradeSize:10,idleTimeout:60,minMovePct:0.2,logs:[],seen:[],lastAuto:0,sessionStartCapital:10,equityHistory:[]};
   const TERMINAL_KEY='zombcash_sniper_terminal_v1';
   const dcopy=()=>DASH_COPY[state.lang]||DASH_COPY.en;
   function saveTerminal(){try{terminal.settings={};['sniper-size','sniper-target','sniper-stop','sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-idle-timeout','sniper-min-move'].forEach(id=>{const el=$(id);if(el)terminal.settings[id]=el.value;});localStorage.setItem(TERMINAL_KEY,JSON.stringify(terminal));}catch(_){}}
@@ -461,10 +461,10 @@
     input.addEventListener('change',()=>{if(id==='sniper-capital'){terminal.capital=Math.max(0,Number(input.value)||0);terminal.maxTradeSize=terminal.capital;const size=$('sniper-size');if(size){size.max=Math.max(0.001,terminal.capital);const slider=size.parentElement&&size.parentElement.querySelector('.zs-range');if(slider)slider.max=size.max;}}if(id==='sniper-liquidity')terminal.minLiquidity=Math.max(0,Number(input.value)||0);if(id==='sniper-idle-timeout')terminal.idleTimeout=Math.max(15,Number(input.value)||60);if(id==='sniper-min-move')terminal.minMovePct=Math.max(0.05,Number(input.value)||0.2);if(id==='sniper-max-size'){terminal.maxTradeSize=Math.max(0.001,Math.min(10,Number(input.value)||0.05));const size=$('sniper-size');if(size){size.max=terminal.maxTradeSize;const slider=size.parentElement&&size.parentElement.querySelector('.zs-range');if(slider)slider.max=terminal.maxTradeSize;if(Number(size.value)>terminal.maxTradeSize){size.value=terminal.maxTradeSize;if(slider)slider.value=size.value;}}}saveTerminal();renderStats();});
     field.append(input);host.append(field);return field;
   }
-  function sparkline(values){
+  function sparkline(values,ariaLabel='Observed token price since simulated entry'){
     // Keep the recorded observations untouched; smooth only the SVG presentation.
     const nums=(values||[]).filter(v=>Number.isFinite(Number(v))&&Number(v)>0).map(Number);
-    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 180 48');svg.setAttribute('class','zs-spark');svg.setAttribute('role','img');svg.setAttribute('aria-label','Observed token price since simulated entry');
+    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 180 48');svg.setAttribute('class','zs-spark');svg.setAttribute('role','img');svg.setAttribute('aria-label',ariaLabel);
     if(nums.length<2)return svg;
     const lo=Math.min(...nums),hi=Math.max(...nums),span=hi-lo||Math.max(Math.abs(hi)*.001,1e-12);
     const pts=nums.map((v,i)=>({x:2+(i/(nums.length-1))*176,y:44-((v-lo)/span)*38}));
@@ -482,25 +482,51 @@
     }
     const line=document.createElementNS(svg.namespaceURI,'path');line.setAttribute('d',d);line.setAttribute('fill','none');line.setAttribute('stroke',nums[nums.length-1]>=nums[0]?'#00f59a':'#ff4d8d');line.setAttribute('stroke-width','2.2');line.setAttribute('stroke-linecap','round');line.setAttribute('stroke-linejoin','round');line.setAttribute('vector-effect','non-scaling-stroke');svg.append(line);return svg;
   }
+  function recordEquitySnapshot(){
+    const open=state.positions.filter(p=>p.status==='open');
+    const sessionStart=Number(terminal.startedAt)||0;
+    const closed=state.positions.filter(p=>p.status==='closed'&&(!sessionStart||Number(p.closedAt||p.openedAt||0)>=sessionStart));
+    const realized=closed.reduce((a,p)=>a+(Number(p.netPnl)||0),0);
+    const unrealized=open.reduce((a,p)=>a+(Number(p.netPnl)||0),0);
+    const baseline=Math.max(0.000001,Number(terminal.sessionStartCapital)||Number(terminal.capital)||10);
+    const equity=baseline+realized+unrealized;
+    terminal.equityHistory=Array.isArray(terminal.equityHistory)?terminal.equityHistory:[];
+    const now=Date.now(),last=terminal.equityHistory[terminal.equityHistory.length-1];
+    if(!last||now-Number(last.at)>=5000){terminal.equityHistory.push({at:now,value:equity});terminal.equityHistory=terminal.equityHistory.slice(-180);saveTerminal();}
+    return {baseline,equity,realized,unrealized,open};
+  }
   function renderStats(){
     const host=$('zs-kpis');if(!host)return;
-    const total=state.positions.reduce((a,p)=>a+(Number(p.netPnl)||0),0);
-    const closed=state.positions.filter(p=>p.status==='closed'),wins=closed.filter(p=>(Number(p.netPnl)||0)>0).length;
-    const open=state.positions.filter(p=>p.status==='open'),used=open.reduce((a,p)=>a+(Number(p.buySol)||0),0);
-    const available=Math.max(0,Number(terminal.capital||10)+closed.reduce((a,p)=>a+(Number(p.netPnl)||0),0)-used);
-    const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,(total>=0?'+':'')+total.toFixed(5)+' SOL'],[dcopy().trades,String(state.positions.length)],[dcopy().wins,closed.length?Math.round(wins/closed.length*100)+'%':'—'],[dcopy().active,String(open.length)]];
+    const sessionStart=Number(terminal.startedAt)||0;
+    const closed=state.positions.filter(p=>p.status==='closed'&&(!sessionStart||Number(p.closedAt||p.openedAt||0)>=sessionStart)),wins=closed.filter(p=>(Number(p.netPnl)||0)>0).length;
+    const losses=closed.filter(p=>(Number(p.netPnl)||0)<0).length;
+    const session=recordEquitySnapshot(),open=session.open;
+    const used=open.reduce((a,p)=>a+(Number(p.buySol)||0),0);
+    const available=Math.max(0,session.baseline+session.realized-used);
+    const sessionTrades=state.positions.filter(p=>p.status==='open'||!sessionStart||Number(p.openedAt||0)>=sessionStart||Number(p.closedAt||0)>=sessionStart);
+    const turnover=sessionTrades.reduce((a,p)=>a+(Number(p.buySol)||0)+(Number(p.sellSol)||((p.status==='closed')?(Number(p.quantity)||0)*(Number(p.lastPrice)||Number(p.entryPrice)||0):0)),0);
+    const decided=wins+losses;
+    const winRate=decided?Math.round(wins/decided*100)+'%':'—';
+    const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,((session.realized+session.unrealized)>=0?'+':'')+(session.realized+session.unrealized).toFixed(5)+' SOL'],[state.lang==='ru'?'ЗАКРЫТЫЕ СДЕЛКИ':'CLOSED TRADES',String(closed.length)],[state.lang==='ru'?'ПОБЕДЫ / ПОРАЖЕНИЯ':'WINS / LOSSES',wins+' / '+losses],[dcopy().wins,winRate],[state.lang==='ru'?'ОБОРОТ ЗА СЕССИЮ':'SESSION TURNOVER',turnover.toFixed(5)+' SOL'],[dcopy().active,String(open.length)]];
     host.replaceChildren();vals.forEach((v,i)=>{const card=dashNode('div','zs-kpi zs-kpi-'+i);card.append(dashNode('small','',v[0]),dashNode('strong','zs-counter',v[1]));host.append(card);});
-    const mainChart=$('zs-main-chart');if(mainChart){mainChart.replaceChildren();const p=open[0];mainChart.append(sparkline(p?(p.priceHistory||[p.entryPrice,p.lastPrice||p.entryPrice]):[]));}
-    const centerSummary=$('zs-center-summary');if(centerSummary){centerSummary.replaceChildren();const p=open[0];if(p){const left=dashNode('div','zs-center-token');left.append(dashNode('small','',state.lang==='ru'?'ТЕКУЩАЯ ПОЗИЦИЯ':'CURRENT POSITION'),dashNode('strong','',String(p.symbol||'TOKEN').toUpperCase()),dashNode('span','',(state.lang==='ru'?'ВЛОЖЕНО: ':'SIZE: ')+fmt(p.buySol||0,6)+' SOL'),dashNode('span','',(state.lang==='ru'?'ЦЕНА: ':'PRICE: ')+fmt(p.lastPrice||p.entryPrice,9)+' SOL'));const right=dashNode('div','zs-center-pnl '+((Number(p.netPnl)||0)>=0?'is-positive':'is-negative'));right.append(dashNode('small','',state.lang==='ru'?'ТЕКУЩАЯ ПРИБЫЛЬ / УБЫТОК':'CURRENT PROFIT / LOSS'),dashNode('strong','',(p.netPnl>=0?'+':'')+fmt(p.netPnl||0,6)+' SOL'),dashNode('span','',(p.netPct>=0?'+':'')+fmt(p.netPct||0,2)+'%'));centerSummary.append(left,right);}else{centerSummary.append(dashNode('div','zs-center-idle',state.lang==='ru'?'ОЖИДАНИЕ ПОДХОДЯЩЕГО SOL-ПУЛА':'WAITING FOR ELIGIBLE SOL POOL'));}}
+    const mainChart=$('zs-main-chart');if(mainChart){mainChart.replaceChildren();const history=(terminal.equityHistory||[]).map(x=>Number(x.value)).filter(Number.isFinite);const relative=history.length>1?history.map(v=>100*v/session.baseline):[100,100*session.equity/session.baseline];mainChart.append(sparkline(relative,state.lang==='ru'?'Изменение капитала с начала сессии':'Session capital change since start'));}
+    const equityCaption=$('zs-equity-caption');if(equityCaption){const change=session.equity-session.baseline,pct=change/session.baseline*100;equityCaption.textContent=(state.lang==='ru'?'СТАРТ ':'START ')+session.baseline.toFixed(4)+' SOL · '+(state.lang==='ru'?'СЕЙЧАС ':'NOW ')+session.equity.toFixed(4)+' SOL · '+(change>=0?'+':'')+change.toFixed(5)+' SOL ('+(pct>=0?'+':'')+pct.toFixed(2)+'%)';}
+    const centerSummary=$('zs-center-summary');if(centerSummary){
+      centerSummary.replaceChildren();
+      const left=dashNode('div','zs-center-token');
+      left.append(dashNode('small','',state.lang==='ru'?'СУММА ОТКРЫТЫХ СДЕЛОК':'TOTAL OPEN EXPOSURE'),dashNode('strong','',used.toFixed(5)+' SOL'),dashNode('span','',(state.lang==='ru'?'ОТКРЫТЫХ ПОЗИЦИЙ: ':'OPEN POSITIONS: ')+open.length));
+      const pct=used>0?session.unrealized/used*100:0;
+      const right=dashNode('div','zs-center-pnl '+(session.unrealized>=0?'is-positive':'is-negative'));
+      right.append(dashNode('small','',state.lang==='ru'?'ТЕКУЩАЯ ПРИБЫЛЬ / УБЫТОК':'LIVE UNREALIZED P/L'),dashNode('strong','',(session.unrealized>=0?'+':'')+session.unrealized.toFixed(6)+' SOL'),dashNode('span','',(pct>=0?'+':'')+pct.toFixed(2)+'%'));
+      centerSummary.append(left,right);
+    }
     const statGrid=$('zs-stat-grid');if(statGrid){
       const avg=closed.length?closed.reduce((a,p)=>a+(Number(p.netPct)||0),0)/closed.length:0;
       const best=closed.length?Math.max(...closed.map(p=>Number(p.netPct)||0)):0;
       const worst=closed.length?Math.min(...closed.map(p=>Number(p.netPct)||0)):0;
-      const realized=closed.reduce((a,p)=>a+(Number(p.netPnl)||0),0);
-      const items=[[state.lang==='ru'?'РЕАЛИЗОВАННЫЙ P/L':'REALIZED P/L',(realized>=0?'+':'')+realized.toFixed(5)+' SOL'],[state.lang==='ru'?'СРЕДНИЙ РЕЗУЛЬТАТ':'AVERAGE RESULT',(avg>=0?'+':'')+avg.toFixed(2)+'%'],[state.lang==='ru'?'ЛУЧШАЯ СДЕЛКА':'BEST TRADE',(best>=0?'+':'')+best.toFixed(2)+'%'],[state.lang==='ru'?'ХУДШАЯ СДЕЛКА':'WORST TRADE',worst.toFixed(2)+'%']];
+      const items=[[state.lang==='ru'?'РЕАЛИЗОВАННЫЙ P/L':'REALIZED P/L',(session.realized>=0?'+':'')+session.realized.toFixed(5)+' SOL'],[state.lang==='ru'?'СРЕДНИЙ РЕЗУЛЬТАТ':'AVERAGE RESULT',(avg>=0?'+':'')+avg.toFixed(2)+'%'],[state.lang==='ru'?'ЛУЧШАЯ СДЕЛКА':'BEST TRADE',(best>=0?'+':'')+best.toFixed(2)+'%'],[state.lang==='ru'?'ХУДШАЯ СДЕЛКА':'WORST TRADE',worst.toFixed(2)+'%']];
       statGrid.replaceChildren();items.forEach((v,i)=>{const card=dashNode('div','zs-stat-card');card.append(dashNode('small','',v[0]),dashNode('strong',i===3&&worst<0?'zs-negative':'',v[1]));statGrid.append(card);});
     }
-
   }
   function renderLog(){
     const host=$('zs-log');if(!host)return;host.replaceChildren();
@@ -510,7 +536,7 @@
   function renderDashboardState(){
     const btn=$('zs-auto-toggle');if(btn){btn.classList.toggle('is-on',!!terminal.auto);btn.textContent=terminal.auto?dcopy().armed:dcopy().paused;}
     const nav=document.querySelectorAll('[data-zs-nav]');nav.forEach(b=>{const i=Number(b.dataset.zsNav);if(dcopy().nav[i])b.textContent=dcopy().nav[i];});
-    [['zs-settings-title',dcopy().settings],['zs-center-title',dcopy().autopilot],['zs-right-title',dcopy().active],['zs-launch-title',dcopy().launches],['zs-log-title',dcopy().journal],['zs-chart-title',dcopy().chart]].forEach(([id,label])=>{const el=$(id);if(el)el.textContent=label;});
+    [['zs-settings-title',dcopy().settings],['zs-center-title',dcopy().autopilot],['zs-right-title',dcopy().active],['zs-launch-title',dcopy().launches],['zs-log-title',dcopy().journal],['zs-chart-title',state.lang==='ru'?'ДИНАМИКА КАПИТАЛА ЗА СЕССИЮ':'SESSION EQUITY CURVE']].forEach(([id,label])=>{const el=$(id);if(el)el.textContent=label;});
     const capLabel=$('zs-capital-label'),liqLabel=$('zs-liquidity-label');if(capLabel)capLabel.textContent=dcopy().capital;if(liqLabel)liqLabel.textContent=dcopy().minliq;
     renderStats();renderLog();
   }
@@ -551,7 +577,7 @@
     rows.push({text:c[11]});
     if(!await showCenteredConfirm(rows))return;
     if(!await setServerPaperEnabled(true))return;
-    terminal.auto=true;terminal.startedAt=terminal.startedAt||Date.now();saveTerminal();renderDashboardState();
+    terminal.auto=true;terminal.startedAt=Date.now();terminal.sessionStartCapital=Number($('sniper-capital').value)||10;terminal.equityHistory=[{at:terminal.startedAt,value:terminal.sessionStartCapital}];saveTerminal();renderDashboardState();
     logEvent('ARMED','SYSTEM','Подтверждён paper mode · '+n('sniper-size')+' SOL');
     refreshFeed();maybeAutoEnter();
   }
@@ -578,14 +604,14 @@
     .zs-head{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:38px;padding:0 0 8px;border-bottom:1px solid #65706855}.zs-brand{font:900 clamp(17px,2vw,25px)/1 system-ui;color:#c3d0c2;letter-spacing:.08em}.zs-title{font:800 clamp(19px,2.5vw,30px)/1 system-ui;color:#e8ece8;letter-spacing:.07em}.zs-demo{border:1px solid #78857b;border-radius:3px;padding:6px 10px;color:#d0d8d0;font:700 10px system-ui;letter-spacing:.08em;background:#202724}
     .zs-head-actions{display:flex;align-items:center;gap:8px}.zs-expand{border:1px solid #718078;border-radius:3px;background:#29312d;color:#eef1ec;padding:8px 12px;font:700 11px system-ui;cursor:pointer}.zs-expand:hover{background:#39443d}
     .zs-nav{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-start;margin:6px 0}.zs-nav button{border:1px solid #515e56;background:#202724;color:#dce2dc;border-radius:3px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer}.zs-nav button.is-active,.zs-nav button[aria-selected=true]{border-color:#b7c8b0;background:#465246;color:#fff;box-shadow:inset 0 -2px #b7c8b0}.zs-tab-hidden{display:none!important}.zs-stats-layout,.zs-single-layout{grid-template-columns:minmax(0,1fr)!important}.zs-stats-layout .zs-center{max-width:none}.zs-stats-layout .zs-core{width:110px;min-height:110px}
-    .zs-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:3px 0 8px}.zs-kpi{min-width:0;padding:8px 11px;border:1px solid #4d5a52;border-radius:4px;background:linear-gradient(135deg,#202724,#141a18)}.zs-kpi small{display:block;color:#aeb8af;font-size:10px;letter-spacing:.04em}.zs-kpi strong{display:block;margin-top:3px;font:800 clamp(15px,1.6vw,21px) system-ui;color:#e7ece6;font-variant-numeric:tabular-nums;transition:color .25s}.zs-kpi-1 strong,.zs-kpi-3 strong{color:#b8d0ad}
+    .zs-kpis{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px;margin:3px 0 8px}.zs-kpi{min-width:0;padding:8px 11px;border:1px solid #4d5a52;border-radius:4px;background:linear-gradient(135deg,#202724,#141a18)}.zs-kpi small{display:block;color:#aeb8af;font-size:10px;letter-spacing:.04em}.zs-kpi strong{display:block;margin-top:3px;font:800 clamp(15px,1.6vw,21px) system-ui;color:#e7ece6;font-variant-numeric:tabular-nums;transition:color .25s}.zs-kpi-1 strong,.zs-kpi-3 strong{color:#b8d0ad}
     .zs-layout{display:grid;grid-template-columns:minmax(270px,1.02fr) minmax(210px,.78fr) minmax(340px,1.28fr);gap:9px;align-items:stretch;min-height:0;height:100%}.zs-panel{min-width:0;min-height:0;padding:10px 12px;border:1px solid #526057;border-radius:5px;background:linear-gradient(145deg,#1a211e,#101614);box-shadow:inset 0 1px #ffffff08}.zs-panel h3{margin:0 0 7px;color:#c6d0c6;font:800 11px system-ui;letter-spacing:.09em}
     .zs-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 10px}.zs-field{display:grid;grid-template-columns:minmax(0,1fr) 76px;gap:3px 7px;align-items:center;padding:4px 0;border-bottom:1px solid #ffffff10;min-width:0}.zs-field label{grid-column:1/-1;color:#c1cac2;font-size:10px;font-weight:650;line-height:1.2}.zs-field .zs-range{grid-column:1;width:100%;accent-color:#9eae9c;min-width:0}.zs-field .zs-number{grid-column:2;width:76px;min-height:27px;padding:4px 6px;border:1px solid #4b5850;border-radius:3px;background:#0d1311;color:#f0f2ee;text-align:right;font:650 11px system-ui}.zs-range{appearance:auto;height:6px}
     .zs-portrait{position:relative;height:92px;border-radius:4px;overflow:hidden;background:#202724;display:flex;align-items:flex-end;justify-content:flex-start;margin-bottom:7px}.zs-portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 25%;filter:grayscale(.72) contrast(1.08) brightness(.7);opacity:.88}.zs-portrait:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#0b100ee8,transparent 70%),linear-gradient(0deg,#0b100eaa,transparent 65%)}.zs-portrait b{z-index:1;margin:0 0 8px 12px;color:#e3e8e1;font:800 11px system-ui;letter-spacing:.12em}
     .zs-core{display:grid;place-items:center;min-height:112px;text-align:center;border:1px solid #758278;border-radius:50%;width:min(100%,142px);aspect-ratio:1;margin:0 auto 7px;background:radial-gradient(circle,#28332d,#101613 68%);box-shadow:inset 0 0 20px #aab9a311}.zs-core strong{display:block;color:#e9eee8;font:800 13px system-ui;letter-spacing:.06em}.zs-core span{display:block;color:#b8d0ad;font-size:11px;font-weight:800}
     .zs-toggle{border:1px solid #82917f;border-radius:3px;background:#29332c;color:#e8eee6;padding:7px 10px;font-weight:800;font-size:11px;cursor:pointer;width:100%;margin:3px 0}.zs-toggle.is-on{background:#71856e;color:#0d140f}.zs-actions{display:flex;gap:6px}.zs-actions button{flex:1;min-height:30px;padding:5px 8px;font-size:10px}
     .zs-chart{width:100%;height:72px;margin-top:5px;border-radius:3px;background:linear-gradient(180deg,#a9b99c12,transparent);border:1px solid #69786b33}
-    .zs-right{display:grid;grid-template-rows:auto minmax(0,.85fr) minmax(0,1.15fr);gap:6px}.zs-right>h3{margin:0!important;padding:0 0 4px;border-bottom:1px solid #ffffff18}.zs-launch-panel{min-height:0;overflow:hidden}.zs-positions,.zs-launches{max-height:none;min-height:0;overflow:auto;scrollbar-width:thin;scrollbar-color:#59665c #121816}.zs-launches .sniper-candidate{grid-template-columns:minmax(0,1fr) auto;gap:5px 8px;padding:9px 0;align-items:start}.zs-launches .sniper-candidate-main{min-width:0;display:grid;grid-template-columns:minmax(0,1fr);gap:4px}.zs-launches .sniper-token-name{display:block;min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.35}.zs-launches .sniper-token-address{display:block;min-width:0;white-space:normal;overflow-wrap:anywhere;word-break:break-all;line-height:1.4;color:#aeb8af}.zs-launches .sniper-candidate-stats{display:flex;flex-wrap:wrap;gap:5px 12px;min-width:0}.zs-launches .sniper-candidate-stats{grid-column:1/-1}.zs-launches .sniper-link{display:none}.zs-launches .sniper-action{grid-column:2;grid-row:1}.zs-positions .sniper-position{display:grid;grid-template-columns:1fr auto;gap:5px;padding:8px 0;border-top:1px solid #ffffff16}.zs-position-chart{grid-column:1/-1}.zs-spark{width:100%;height:34px;display:block;background:linear-gradient(180deg,#9db39b0b,transparent);border-radius:3px}
+    .zs-right{display:grid;grid-template-rows:auto minmax(0,1fr);gap:6px}.zs-right>h3{margin:0!important;padding:0 0 4px;border-bottom:1px solid #ffffff18}.zs-launch-panel{min-height:0;overflow:hidden}.zs-positions,.zs-launches{max-height:none;min-height:0;overflow:auto;scrollbar-width:thin;scrollbar-color:#59665c #121816}.zs-launches .sniper-candidate{grid-template-columns:minmax(0,1fr) auto;gap:5px 8px;padding:9px 0;align-items:start}.zs-launches .sniper-candidate-main{min-width:0;display:grid;grid-template-columns:minmax(0,1fr);gap:4px}.zs-launches .sniper-token-name{display:block;min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.35}.zs-launches .sniper-token-address{display:block;min-width:0;white-space:normal;overflow-wrap:anywhere;word-break:break-all;line-height:1.4;color:#aeb8af}.zs-launches .sniper-candidate-stats{display:flex;flex-wrap:wrap;gap:5px 12px;min-width:0}.zs-launches .sniper-candidate-stats{grid-column:1/-1}.zs-launches .sniper-link{display:none}.zs-launches .sniper-action{grid-column:2;grid-row:1}.zs-positions .sniper-position{display:grid;grid-template-columns:1fr auto;gap:5px;padding:8px 0;border-top:1px solid #ffffff16}.zs-position-chart{grid-column:1/-1}.zs-spark{width:100%;height:34px;display:block;background:linear-gradient(180deg,#9db39b0b,transparent);border-radius:3px}
     .zs-log{display:grid;gap:2px;max-height:76px;overflow:auto}.zs-logrow{display:grid;grid-template-columns:65px 68px 82px 1fr;gap:7px;padding:5px 7px;border-top:1px solid #ffffff10;font-size:10px;color:#c9d0c9}.zs-logkind{color:#b8d0ad}.zs-foot{margin:4px 0 0;color:#aeb8af;font-size:10px;line-height:1.35}.zs-hidden{display:none!important}.sniper-demo .sniper-muted{color:#aeb8af!important}.sniper-demo .sniper-action{border-radius:3px!important;background:#a8b79f!important;color:#111812!important;border:1px solid #c2cdbb!important}.sniper-demo .sniper-close{background:transparent!important;border:1px solid #68776c!important;color:#d2dcd2!important}
     .sniper-demo.zs-fullscreen{position:fixed!important;inset:0!important;z-index:2147483600!important;width:100vw!important;height:100vh!important;height:100dvh!important;min-height:100vh!important;min-height:100dvh!important;max-height:100vh!important;max-height:100dvh!important;box-sizing:border-box!important;margin:0!important;border:0!important;border-radius:0!important;padding:10px 14px!important;overflow:hidden!important;display:grid!important;grid-template-rows:auto auto auto minmax(0,1fr) 0 0 0!important;grid-auto-rows:0!important;align-content:stretch!important;gap:4px!important;background:linear-gradient(145deg,#171c1b,#0b1010 58%,#151a18)!important}
     .zs-fullscreen .zs-head{min-height:34px;padding-bottom:5px}.zs-fullscreen .zs-nav{margin:2px 0}.zs-fullscreen .zs-kpis{margin:1px 0 4px}.zs-fullscreen .zs-layout{height:auto!important;min-height:0!important;align-self:stretch}.zs-fullscreen .zs-panel{padding:8px 10px}.zs-fullscreen .zs-portrait{height:76px}.zs-fullscreen .zs-core{min-height:94px;width:min(100%,118px)}.zs-fullscreen .zs-chart{height:62px}.zs-fullscreen .zs-log{max-height:58px}.zs-fullscreen .zs-foot{font-size:9px;margin:0}.zs-fullscreen>.zs-foot{display:none!important}.zs-fullscreen .zs-field{padding:2px 0}.zs-fullscreen .zs-field .zs-number{min-height:24px}.zs-fullscreen .zs-kpi{padding:6px 9px}
@@ -656,7 +682,7 @@
     .zs-center .zs-actions button{min-height:34px!important}.zs-center .zs-runtime-indicator{flex:0 0 auto}
     .zs-center-summary{display:flex;flex:0 0 auto;align-items:center;justify-content:space-between;gap:12px;min-height:54px;padding:8px 12px;border:1px solid #596c5c;border-radius:4px;background:linear-gradient(110deg,#111a14,#202b21);box-shadow:inset 0 1px #ffffff0b}
     .zs-center-token{display:grid;gap:2px;min-width:0}.zs-center-token small{font-size:9px;letter-spacing:.11em;color:#aebbad}.zs-center-token strong{font-size:15px;letter-spacing:.05em;color:#edf2ea}.zs-center-token span{font-size:10px;color:#bdc9bc;font-variant-numeric:tabular-nums}
-    .zs-center-pnl{display:grid;gap:2px;text-align:right;font-variant-numeric:tabular-nums}.zs-center-pnl strong{font-size:22px;line-height:1;color:#c6d9ba}.zs-center-pnl span{font-size:10px;color:#b9c7b7}.zs-center-pnl.is-negative strong{color:#d49a9a}.zs-center-idle{font-size:10px;letter-spacing:.12em;color:#b8c6b6}
+    .zs-center-pnl{display:grid;gap:2px;text-align:right;font-variant-numeric:tabular-nums}.zs-center-pnl strong{font-size:22px;line-height:1;color:#c6d9ba}.zs-center-pnl span{font-size:10px;color:#b9c7b7}.zs-equity-caption{font-size:9px;color:#9eae9d;letter-spacing:.04em}.zs-center-pnl.is-negative strong{color:#d49a9a}.zs-center-idle{font-size:10px;letter-spacing:.12em;color:#b8c6b6}
     .zs-chart-panel{display:flex;flex:1 1 150px;flex-direction:column;gap:6px;min-height:130px;padding:9px 10px;border:1px solid #526457;border-radius:4px;background:linear-gradient(180deg,#111a14,#0c120f);overflow:hidden}
     .zs-chart-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.zs-chart-head h3{margin:0!important;font-size:11px!important;letter-spacing:.09em}.zs-chart-range{font-size:9px;letter-spacing:.1em;color:#9eae9d}
     .zs-chart{flex:1 1 auto!important;width:100%!important;height:auto!important;min-height:96px!important;margin:0!important;border:0!important;background:linear-gradient(180deg,#a8c79b13,transparent)!important}
@@ -824,9 +850,9 @@
       nav.querySelectorAll('button[data-zs-nav]').forEach(b=>{const active=tabTargets[Number(b.dataset.zsNav)]===tab;b.classList.toggle('is-active',active);b.setAttribute('aria-selected',active?'true':'false');});
       left.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='settings');
       center.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='stats');
-      right.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='history');
+      right.classList.toggle('zs-tab-hidden',tab!=='sniper');
       launchPanel.classList.toggle('zs-tab-hidden',tab!=='sniper');
-      posSection.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='history');
+      posSection.classList.toggle('zs-tab-hidden',tab!=='sniper');
       journal.classList.toggle('zs-tab-hidden',tab!=='history');
       kpis.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='stats');
       helpPanel.classList.toggle('zs-tab-hidden',tab!=='help');
@@ -874,16 +900,16 @@
     const center=dashNode('section','zs-panel zs-center');center.id='zs-center';const centerTitle=dashNode('h3','',dcopy().autopilot);centerTitle.id='zs-center-title';center.append(centerTitle);
     const portrait=dashNode('div','zs-portrait');const pic=dashNode('img','');pic.src='/assets/zombcash-survivor-640.avif';pic.alt='ZombieCash anime survivor heroine';portrait.append(pic,dashNode('b','','$ZOMBCASH SURVIVOR'));
     const core=dashNode('div','zs-core');const coreText=dashNode('div','');coreText.append(dashNode('strong','', '◉'),dashNode('strong','', 'AUTO SNIPER'),dashNode('span','', 'PAPER ENGINE'));core.append(coreText);
-    const toggle=dashNode('button','zs-toggle',dcopy().paused);toggle.id='zs-auto-toggle';toggle.type='button';toggle.addEventListener('click',async()=>{if(terminal.auto){if(!await setServerPaperEnabled(false))return;terminal.auto=false;terminal.startedAt=0;terminal.stoppedAt=Date.now();saveTerminal();renderDashboardState();logEvent('PAUSED','SYSTEM','Paper engine paused; open paper position remains managed.');}else showLaunchConfirm();});
+    const toggle=dashNode('button','zs-toggle',dcopy().paused);toggle.id='zs-auto-toggle';toggle.type='button';toggle.addEventListener('click',async()=>{if(terminal.auto){if(!await setServerPaperEnabled(false))return;terminal.auto=false;terminal.stoppedAt=Date.now();saveTerminal();renderDashboardState();logEvent('PAUSED','SYSTEM','Paper engine paused; open paper position remains managed.');}else showLaunchConfirm();});
     const uptime=dashNode('div','zs-runtime-indicator');uptime.id='zs-runtime-indicator';uptime.setAttribute('role','status');
     const statsPanel=dashNode('div','zs-stats-extra zs-tab-hidden');statsPanel.id='zs-stats-extra';
     const statsHeading=dashNode('h3','',state.lang==='ru'?'РЕЗУЛЬТАТЫ СИМУЛЯЦИИ':'SIMULATION PERFORMANCE');
     const statsGrid=dashNode('div','zs-stat-grid');statsGrid.id='zs-stat-grid';statsPanel.append(statsHeading,statsGrid);
-    const centerSummary=dashNode('div','zs-center-summary');centerSummary.id='zs-center-summary';const chartPanel=dashNode('div','zs-chart-panel');const chartHead=dashNode('div','zs-chart-head');const chartTitle=dashNode('h3','',dcopy().chart);chartTitle.id='zs-chart-title';chartHead.append(chartTitle,dashNode('span','zs-chart-range','LIVE · 10 SEC'));chartPanel.append(chartHead);const chart=dashNode('div','zs-chart');chart.id='zs-main-chart';chartPanel.append(chart);
+    const centerSummary=dashNode('div','zs-center-summary');centerSummary.id='zs-center-summary';const chartPanel=dashNode('div','zs-chart-panel');const chartHead=dashNode('div','zs-chart-head');const chartTitle=dashNode('h3','',state.lang==='ru'?'ДИНАМИКА КАПИТАЛА ЗА СЕССИЮ':'SESSION EQUITY CURVE');chartTitle.id='zs-chart-title';chartHead.append(chartTitle,dashNode('span','zs-chart-range',state.lang==='ru'?'SOL · С НАЧАЛА СЕССИИ':'SOL · SINCE SESSION START'));chartPanel.append(chartHead,dashNode('small','zs-equity-caption',''));const chart=dashNode('div','zs-chart');chart.id='zs-main-chart';chartPanel.append(chart);
     center.append(portrait,core,toggle,uptime,centerSummary,chartPanel,statsPanel);
     const right=dashNode('section','zs-panel zs-right');const rightTitle=dashNode('h3','',dcopy().active);rightTitle.id='zs-right-title';right.append(rightTitle);const posSection=dashNode('div','zs-position-section');const posWrap=dashNode('div','zs-positions');posWrap.id='zs-positions-wrap';if(positions){positions.classList.add('zs-positions-inner');posWrap.append(positions);}posSection.append(posWrap);right.append(posSection);
     const launchPanel=dashNode('section','zs-panel zs-launch-panel');const launchTitle=dashNode('h3','',dcopy().launches);launchTitle.id='zs-launch-title';launchPanel.append(launchTitle);const toolbar=dashNode('div','sniper-toolbar');if(refresh)toolbar.append(refresh);if(status)toolbar.append(status);launchPanel.append(toolbar);const launchWrap=dashNode('div','zs-launches');if(candidates)launchWrap.append(candidates);launchPanel.append(launchWrap);
-    right.append(launchPanel);layout.append(left,center,right);
+    center.append(launchPanel);layout.append(left,center,right);
     const journal=dashNode('section','zs-panel');journal.id='zs-journal-panel';const logTitle=dashNode('h3','',dcopy().journal);logTitle.id='zs-log-title';journal.append(logTitle);const log=dashNode('div','zs-log');log.id='zs-log';journal.append(log);
     const clearBar=dashNode('div','sniper-toolbar');if(clear)clearBar.append(clear);journal.append(clearBar);
     const foot=dashNode('p','zs-foot',dcopy().hint+' '+t('source'));
