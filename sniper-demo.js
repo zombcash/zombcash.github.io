@@ -977,7 +977,7 @@
     const foot=dashNode('p','zs-foot',dcopy().hint+' '+t('source'));
     const helpPanel=dashNode('section','zs-panel zs-help zs-tab-hidden');helpPanel.innerHTML='';const helpTitle=dashNode('h3','',state.lang==='ru'?'СПРАВКА И БЕЗОПАСНОСТЬ':'HELP & SAFETY');helpPanel.append(helpTitle,dashNode('p','zs-foot',state.lang==='ru'?'Это симулятор. Все сделки виртуальные. Реальные кошельки, ключи и транзакции не используются.':'This is a paper-trading simulator. No live wallets, private keys or transactions are used.'),dashNode('p','zs-foot',state.lang==='ru'?'Настройте размер сделки, комиссии, проскальзывание, стоп-лосс и цель чистой прибыли. Автовход использует только новые запуски с доступной SOL-парой и заданной минимальной ликвидностью.':'Adjust trade size, fees, slippage, stop loss and net profit target. Auto-entry only uses new launches with a live SOL pair and your minimum liquidity threshold.'));
     root.replaceChildren(style,header,nav,kpis,layout,journal,helpPanel,foot);
-    renderDashboardState();renderPositions();renderCandidates();selectTab('sniper');enterDashboardFullscreen();
+    renderDashboardState();renderPositions();renderCandidates();selectTab('sniper');
   }
 
   async function refreshResultsNow(){
