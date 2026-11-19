@@ -161,7 +161,7 @@
         });
         terminal.capital=Number(settings.paperCapitalSol)||terminal.capital;
         terminal.maxOpenPositions=Number(settings.maxOpenPositions)||terminal.maxOpenPositions;
-        terminal.maxDailyLossSol=Number(settings.maxDailyLossSol)||terminal.maxDailyLossSol||1;
+        terminal.maxDailyLossSol=Number.isFinite(Number(settings.maxDailyLossSol))?Number(settings.maxDailyLossSol):(terminal.maxDailyLossSol??1);
         terminal.minBuyCount=Number(settings.minBuyCount)||terminal.minBuyCount||3;
         saveTerminal();
       }
