@@ -221,15 +221,33 @@
     if (welcome) welcome.textContent = t.welcome;
   }
   const modelBadge = panel.querySelector("[data-zfa-model]");
-  async function refreshModelBadge(data) {
+  async function refreshModelBadge(data, requestState) {
+    if (!modelBadge) return;
+    if (requestState === 'pending') {
+      modelBadge.textContent = 'REQUEST · WAITING FOR AI RESPONSE';
+      modelBadge.title = 'The assistant request is in progress.';
+      return;
+    }
+    if (requestState === 'failed') {
+      modelBadge.textContent = 'REQUEST FAILED · LAST PROVIDER NOT CONFIRMED';
+      modelBadge.title = 'The latest chat request failed. A configured or previously successful provider may be unavailable.';
+      return;
+    }
     try {
       const info = data || await fetch("https://zombcash-bot.fadehost.app/api/assistant/status", {cache:"no-store"}).then(r => r.ok ? r.json() : null);
-      if (!info || !modelBadge) return;
-      const provider = info.provider || "AI";
-      const model = info.model || info.configured_primary || "Not reported";
-      modelBadge.textContent = (info.mode === "fallback" ? "FALLBACK · " : info.mode === "live" ? "LIVE · " : "PRIMARY · ") + provider + " / " + model;
-      modelBadge.title = info.updated_at ? "Last successful model response" : "Configured primary model; live model appears after a response";
-    } catch (_) { if (modelBadge) modelBadge.textContent = "ENGINE · STATUS UNAVAILABLE"; }
+      if (!info) throw new Error("status unavailable");
+      const hasSuccess = Number.isFinite(Number(info.updated_at)) && Number(info.updated_at) > 0;
+      const age = hasSuccess ? Math.max(0, Math.floor(Date.now() / 1000 - Number(info.updated_at))) : null;
+      const stale = age !== null && age > 300;
+      const provider = info.provider || (info.configured_primary ? "Google Gemini" : info.configured_fallback ? "Pollinations" : "No provider");
+      const model = info.model || info.configured_primary || info.configured_fallback || "Not reported";
+      modelBadge.textContent = hasSuccess
+        ? (stale ? "STALE LAST OK · " : "LAST OK · ") + provider + " / " + model
+        : "UNVERIFIED · CONFIGURED PROVIDER ONLY";
+      modelBadge.title = hasSuccess
+        ? "Last successful response " + age + " seconds ago; not a live health check."
+        : "No successful assistant response recorded since this process started.";
+    } catch (_) { modelBadge.textContent = "ENGINE · STATUS UNAVAILABLE"; }
   }
   refreshModelBadge();
   function openPanel() {
@@ -256,6 +274,7 @@
     input.value = '';
     const t = copy[getLang()];
     const status = addMessage(t.thinking,'status');
+    refreshModelBadge(null, 'pending');
     try {
       const response = await fetch(API, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,history:history.slice(-8),language:getLang(),page:location.pathname}),cache:'no-store'});
       const data = await response.json().catch(()=>({}));
@@ -268,6 +287,7 @@
     } catch (_) {
       status.remove();
       addMessage(t.error);
+      refreshModelBadge(null, 'failed');
       history.pop();
     } finally {
       busy = false; send.disabled = false; input.disabled = false; input.focus();
