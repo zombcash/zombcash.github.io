@@ -504,7 +504,8 @@
     const used=open.reduce((a,p)=>a+(Number(p.buySol)||0),0);
     const available=Math.max(0,session.baseline+session.realized-used);
     const turnover=state.positions.filter(p=>p.status==='open'||!sessionStart||Number(p.openedAt||0)>=sessionStart||Number(p.closedAt||0)>=sessionStart).reduce((a,p)=>a+(Number(p.buySol)||0)+(Number(p.sellSol)||0),0);
-    const winRate=closed.length?Math.round(wins/closed.length*100)+'%':'—';
+    const decided=wins+losses;
+    const winRate=decided?Math.round(wins/decided*100)+'%':'—';
     const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,(session.realized>=0?'+':'')+session.realized.toFixed(5)+' SOL'],[state.lang==='ru'?'ЗАКРЫТЫЕ СДЕЛКИ':'CLOSED TRADES',String(closed.length)],[state.lang==='ru'?'ПОБЕДЫ / ПОРАЖЕНИЯ':'WINS / LOSSES',wins+' / '+losses],[dcopy().wins,winRate],[state.lang==='ru'?'ОБОРОТ ЗА СЕССИЮ':'SESSION TURNOVER',turnover.toFixed(5)+' SOL'],[dcopy().active,String(open.length)]];
     host.replaceChildren();vals.forEach((v,i)=>{const card=dashNode('div','zs-kpi zs-kpi-'+i);card.append(dashNode('small','',v[0]),dashNode('strong','zs-counter',v[1]));host.append(card);});
     const mainChart=$('zs-main-chart');if(mainChart){mainChart.replaceChildren();const history=(terminal.equityHistory||[]).map(x=>Number(x.value)).filter(Number.isFinite);mainChart.append(sparkline(history.length>1?history:[session.baseline,session.equity]));}
