@@ -12,18 +12,28 @@
       const response = await fetch("https://zombcash-bot.fadehost.app/api/assistant/status", {cache:"no-store"});
       if (!response.ok) throw new Error("status unavailable");
       const data = await response.json();
-      const isLive = data.mode === "live";
-      const isFallback = data.mode === "fallback";
-      model.textContent = data.model || data.configured_primary || "Model not reported";
-      provider.textContent = isFallback ? "Pollinations fallback is serving the assistant" : isLive ? "Google Gemini is serving the assistant" : data.configured_primary ? "Primary model configured · live engine appears after first reply" : "Waiting for an AI provider";
-      mode.textContent = isFallback ? "FALLBACK" : isLive ? "LIVE" : "READY";
-      mode.title = data.updated_at ? "Last successful assistant response" : "Configured primary model";
+      const hasSuccess = Number.isFinite(Number(data.updated_at)) && Number(data.updated_at) > 0;
+      const age = hasSuccess ? Math.max(0, Math.floor(Date.now() / 1000 - Number(data.updated_at))) : null;
+      const stale = age !== null && age > 300;
+      const providerName = data.provider || (data.configured_primary ? "Google Gemini" : data.configured_fallback ? "Pollinations" : "No provider");
+      const modelName = data.model || data.configured_primary || data.configured_fallback || "Not reported";
+      model.textContent = modelName;
+      if (hasSuccess) {
+        provider.textContent = "Last successful response: " + providerName + (stale ? " · last success " + Math.floor(age / 60) + " min ago" : " · recently confirmed");
+        mode.textContent = stale ? "STALE" : "LAST OK";
+        mode.title = "Last successful response only; this is not a live health check.";
+      } else {
+        provider.textContent = "Configured only — no successful response recorded since this process started";
+        mode.textContent = "UNVERIFIED";
+        mode.title = "Provider configuration is not proof that requests are currently succeeding.";
+      }
     } catch (_) {
       model.textContent = "STATUS UNAVAILABLE";
       provider.textContent = "Could not reach the assistant status endpoint";
       mode.textContent = "OFFLINE";
+      mode.title = "The status endpoint could not be reached.";
     }
   }
   refresh();
-  window.setInterval(refresh, 30000);
+  window.setInterval(refresh, 15000);
 })();
