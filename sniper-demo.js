@@ -192,9 +192,17 @@
             const entry=dashNode('div','zs-wallet-activity-item');
             const detail=dashNode('span','',item.failed?(state.lang==='ru'?'ОШИБКА':'FAILED'):(state.lang==='ru'?'ПОДТВЕРЖДЕНО':'CONFIRMED'));
             const time=dashNode('small','',item.blockTime?new Date(item.blockTime*1000).toLocaleString():'—');
+            const amountText=typeof item.netSol==='number'
+              ?(item.netSol>0?'+':'')+item.netSol.toFixed(9)+' SOL '+(state.lang==='ru'?'(чистое изменение)':'(net change)')
+              :(state.lang==='ru'?'Сумма недоступна':'Amount unavailable');
+            const amount=dashNode('small','',amountText);
+            const feeText=typeof item.feeSol==='number'
+              ?(state.lang==='ru'?'Комиссия сети: ':'Network fee: ')+item.feeSol.toFixed(9)+' SOL'
+              :(state.lang==='ru'?'Комиссия недоступна':'Network fee unavailable');
+            const fee=dashNode('small','',feeText);
             const link=dashNode('a','',String(item.signature).slice(0,10)+'…'+String(item.signature).slice(-8));
             link.href='https://solscan.io/tx/'+encodeURIComponent(item.signature);link.target='_blank';link.rel='noopener noreferrer';
-            entry.append(detail,time,link);activityList.append(entry);
+            entry.append(detail,time,amount,fee,link);activityList.append(entry);
           });
         }catch(_){activityList.replaceChildren(dashNode('small','',state.lang==='ru'?'История временно недоступна.':'Activity temporarily unavailable.'));}
       };
