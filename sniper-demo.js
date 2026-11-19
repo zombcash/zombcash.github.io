@@ -108,6 +108,9 @@
           enabled:!!enabled,mode:'paper',
           paperCapitalSol:Number($('sniper-capital')&&$('sniper-capital').value)||10,
           maxTradeSol:Math.min(Number($('sniper-capital')&&$('sniper-capital').value)||10,Number($('sniper-size')&&$('sniper-size').value)||0.01),
+          maxOpenPositions:Math.max(1,Math.min(20,Math.round(Number($('sniper-max-open')&&$('sniper-max-open').value)||4))),
+          maxDailyLossSol:Math.max(0,Math.min(1000,Number($('sniper-max-daily-loss')&&$('sniper-max-daily-loss').value)||1)),
+          minBuyCount:Math.max(1,Math.min(100,Math.round(Number($('sniper-min-buys')&&$('sniper-min-buys').value)||3))),
           takeProfitPct:Number($('sniper-target')&&$('sniper-target').value)||10,
           stopLossPct:Number($('sniper-stop')&&$('sniper-stop').value)||5,
           minPriceMovePct:Number($('sniper-min-move')&&$('sniper-min-move').value)||0.2,
@@ -589,7 +592,7 @@
     ]}
   };
 
-  function saveTerminal(){try{terminal.settings={};['sniper-size','sniper-target','sniper-stop','sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-idle-timeout','sniper-min-move','sniper-max-open'].forEach(id=>{const el=$(id);if(el)terminal.settings[id]=el.value;});localStorage.setItem(TERMINAL_KEY,JSON.stringify(terminal));}catch(_){}}
+  function saveTerminal(){try{terminal.settings={};['sniper-size','sniper-target','sniper-stop','sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-idle-timeout','sniper-min-move','sniper-max-open','sniper-min-buys','sniper-max-daily-loss'].forEach(id=>{const el=$(id);if(el)terminal.settings[id]=el.value;});localStorage.setItem(TERMINAL_KEY,JSON.stringify(terminal));}catch(_){}}
   function loadTerminal(){try{const v=JSON.parse(localStorage.getItem(TERMINAL_KEY)||'null');if(v&&typeof v==='object'){Object.assign(terminal,v);if(v.settings)Object.keys(v.settings).forEach(id=>{const el=$(id);if(el)el.value=v.settings[id];});}}catch(_){}}
   function logEvent(kind,symbol,detail){terminal.logs.unshift({at:Date.now(),kind,symbol:symbol||'SYSTEM',detail:detail||''});terminal.logs=terminal.logs.slice(0,18);saveTerminal();renderLog();}
   function dashNode(tag,cls,txt){const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n;}
@@ -1082,6 +1085,8 @@
     addVirtualField(fieldHost,'sniper-liquidity',dcopy().minliq,0,1000000,100,terminal.minLiquidity||5000);
     addVirtualField(fieldHost,'sniper-idle-timeout',state.lang==='ru'?'ТАЙМ-АУТ БЕЗ ДВИЖЕНИЯ (СЕК.)':'NO-MOVEMENT TIMEOUT (SEC)',15,300,5,terminal.idleTimeout||60);
     addVirtualField(fieldHost,'sniper-min-move',state.lang==='ru'?'МИН. ДВИЖЕНИЕ ЦЕНЫ (%)':'MINIMUM PRICE MOVE (%)',0.05,2,0.05,terminal.minMovePct||0.2);
+    addVirtualField(fieldHost,'sniper-min-buys',state.lang==='ru'?'МИН. ПОКУПОК В ПЕРВОЙ МИНУТЕ':'MINIMUM FIRST-MINUTE BUYS',1,30,1,terminal.minBuyCount||3);
+    addVirtualField(fieldHost,'sniper-max-daily-loss',state.lang==='ru'?'МАКС. ДНЕВНОЙ УБЫТОК (SOL)':'MAX DAILY LOSS (SOL)',0.01,10,0.01,terminal.maxDailyLossSol||1);
     const maxOpenField=addVirtualField(fieldHost,'sniper-max-open',state.lang==='ru'?'МАКС. ОТКРЫТЫХ СДЕЛОК':'MAX SIMULTANEOUS OPEN TRADES',0,10,1,Number.isFinite(Number(terminal.maxOpenPositions))?Number(terminal.maxOpenPositions):4);
     const maxOpenInput=$('sniper-max-open');
     if(maxOpenInput){
@@ -1187,7 +1192,7 @@
       }finally{if(button)button.disabled=false;}
     });
     ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
-    ['sniper-capital','sniper-size','sniper-target','sniper-stop','sniper-min-move','sniper-idle-timeout','sniper-network','sniper-priority','sniper-dex','sniper-slip'].forEach(id=>$(id)?.addEventListener('change',()=>{if(terminal.auto&&authToken())setServerPaperEnabled(true);}));
+    ['sniper-capital','sniper-size','sniper-target','sniper-stop','sniper-min-move','sniper-idle-timeout','sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-min-buys','sniper-max-daily-loss','sniper-max-open'].forEach(id=>$(id)?.addEventListener('change',()=>{if(terminal.auto&&authToken())setServerPaperEnabled(true);}));
     refreshFeed();if(authToken())syncFromServer();else{updateSyncStatus('loginToSync');updatePositions();}
     if(terminal.auto&&!Number(terminal.startedAt)){terminal.startedAt=Date.now();saveTerminal();}const updateRuntimeIndicator=()=>{const node=$('zs-runtime-indicator');if(!node)return;const running=!!terminal.auto;const elapsed=running?Math.max(0,Math.floor((Date.now()-(Number(terminal.startedAt)||Date.now()))/1000)):0;const hh=String(Math.floor(elapsed/3600)).padStart(2,'0');const mm=String(Math.floor((elapsed%3600)/60)).padStart(2,'0');const ss=String(elapsed%60).padStart(2,'0');node.classList.toggle('is-running',running);node.classList.toggle('is-offline',!running);node.textContent=(state.lang==='ru'?(running?'АВТОТОРГОВЛЯ · РАБОТАЕТ':'АВТОТОРГОВЛЯ · ОСТАНОВЛЕНА'):(running?'AUTO TRADING · RUNNING':'AUTO TRADING · STOPPED'))+'  '+hh+':'+mm+':'+ss;};
     updateRuntimeIndicator();window.setInterval(updateRuntimeIndicator,1000);
