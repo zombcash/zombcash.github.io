@@ -1108,14 +1108,14 @@
     addVirtualField(fieldHost,'sniper-min-move',state.lang==='ru'?'МИН. ДВИЖЕНИЕ ЦЕНЫ (%)':'MINIMUM PRICE MOVE (%)',0.05,2,0.05,terminal.minMovePct||0.2);
     addVirtualField(fieldHost,'sniper-min-buys',state.lang==='ru'?'МИН. ПОКУПОК В ПЕРВОЙ МИНУТЕ':'MINIMUM FIRST-MINUTE BUYS',1,30,1,terminal.minBuyCount||3);
     addVirtualField(fieldHost,'sniper-max-daily-loss',state.lang==='ru'?'МАКС. ДНЕВНОЙ УБЫТОК (SOL)':'MAX DAILY LOSS (SOL)',0.01,10,0.01,terminal.maxDailyLossSol||1);
-    const maxOpenField=addVirtualField(fieldHost,'sniper-max-open',state.lang==='ru'?'МАКС. ОТКРЫТЫХ СДЕЛОК':'MAX SIMULTANEOUS OPEN TRADES',0,10,1,Number.isFinite(Number(terminal.maxOpenPositions))?Number(terminal.maxOpenPositions):4);
+    const maxOpenField=addVirtualField(fieldHost,'sniper-max-open',state.lang==='ru'?'МАКС. ОТКРЫТЫХ СДЕЛОК':'MAX SIMULTANEOUS OPEN TRADES',1,20,1,Number.isFinite(Number(terminal.maxOpenPositions))?Number(terminal.maxOpenPositions):4);
     const maxOpenInput=$('sniper-max-open');
     if(maxOpenInput){
       maxOpenInput.value=String(Math.max(0,Math.min(10,Math.round(Number(maxOpenInput.value)))));
       terminal.maxOpenPositions=Number(maxOpenInput.value);
       const valueLabel=dashNode('strong','zs-limit-value',String(terminal.maxOpenPositions));
       maxOpenField.append(valueLabel);
-      const syncLimit=()=>{terminal.maxOpenPositions=Math.max(0,Math.min(10,Math.round(Number(maxOpenInput.value)||0)));maxOpenInput.value=String(terminal.maxOpenPositions);valueLabel.textContent=String(terminal.maxOpenPositions);saveTerminal();};
+      const syncLimit=()=>{terminal.maxOpenPositions=Math.max(1,Math.min(20,Math.round(Number(maxOpenInput.value)||1)));maxOpenInput.value=String(terminal.maxOpenPositions);valueLabel.textContent=String(terminal.maxOpenPositions);saveTerminal();};
       maxOpenInput.addEventListener('input',syncLimit);
       maxOpenInput.addEventListener('change',syncLimit);
     }
