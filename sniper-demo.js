@@ -273,8 +273,9 @@
   function renderPositions(){
     const host=$('sniper-positions');if(!host)return;
     host.replaceChildren();
-    if(!state.positions.length){host.append(make('p','sniper-muted',t('noPositions')));renderStats();return;}
-    state.positions.slice().sort((a,b)=>{if(a.status!==b.status)return a.status==='open'?-1:1;return Number(b.openedAt||0)-Number(a.openedAt||0);}).forEach(p=>{
+    const openPositions=state.positions.filter(p=>p.status==='open');
+    if(!openPositions.length){host.append(make('p','sniper-muted',state.lang==='ru'?'Сейчас нет открытых сделок':'No open positions right now'));renderStats();return;}
+    openPositions.slice().sort((a,b)=>Number(b.openedAt||0)-Number(a.openedAt||0)).forEach(p=>{
       const row=make('article','sniper-position zs-position-card');
       const head=make('div','zs-position-topline');
       const identity=make('div','zs-position-identity');
@@ -302,7 +303,6 @@
       const graph=make('div','zs-position-chart');graph.append(sparkline(p.priceHistory&&p.priceHistory.length?p.priceHistory:[p.entryPrice,p.lastPrice||p.entryPrice]));
       row.append(head,detail,contract,graph);
       if(p.status==='open'){const close=make('button','sniper-action sniper-close zs-position-close',dcopy().close||t('manualClose'));close.type='button';close.addEventListener('click',()=>closePaper(p.id,'manual'));row.append(close);}
-      else if(p.exitReason){const reasons={stagnant:state.lang==='ru'?'Нет движения более минуты · переход к следующему запуску':'No movement · rotated to next launch',target:t('targetHit'),stop:t('stopHit')};row.append(make('small','zs-position-reason',reasons[p.exitReason]||t('closed')));}
       host.append(row);
     });
     renderStats();
@@ -381,7 +381,7 @@
   function closePaper(id,reason){
     const p=state.positions.find(x=>x.id===id&&x.status==='open');if(!p)return;
     const m=metrics(p,p.lastPrice||p.entryPrice);
-    p.status='closed';p.closedAt=Date.now();p.netPnl=m.net;p.netPct=m.pct;p.exitReason=reason;
+    p.status='closed';p.closedAt=Date.now();p.netPnl=m.net;p.netPct=m.pct;p.sellSol=m.sellGross;p.exitReason=reason;
     saveStore();renderPositions();renderStats();persistPosition(p);logEvent('SELL',p.symbol,'Manual demo close · '+fmt(m.pct,2)+'%');
   }
   async function updatePositions(){
@@ -413,10 +413,10 @@
         const target=Number($('sniper-target').value)||10;
         const stop=Number($('sniper-stop').value)||0;
         const idleSeconds=Math.max(15,Number($('sniper-idle-timeout')&&$('sniper-idle-timeout').value)||60);
-        if(m.pct>=target){p.status='closed';p.closedAt=now;p.exitReason='target';logEvent('SELL',p.symbol,'Net target reached · '+fmt(m.pct,2)+'%');rotated=true;}
-        else if(stop>0&&m.pct<=-stop){p.status='closed';p.closedAt=now;p.exitReason='stop';logEvent('SELL',p.symbol,'Net stop-loss reached · '+fmt(m.pct,2)+'%');rotated=true;}
+        if(m.pct>=target){p.status='closed';p.closedAt=now;p.sellSol=m.sellGross;p.exitReason='target';logEvent('SELL',p.symbol,'Net target reached · '+fmt(m.pct,2)+'%');rotated=true;}
+        else if(stop>0&&m.pct<=-stop){p.status='closed';p.closedAt=now;p.sellSol=m.sellGross;p.exitReason='stop';logEvent('SELL',p.symbol,'Net stop-loss reached · '+fmt(m.pct,2)+'%');rotated=true;}
         else if(now-Number(p.lastMovementAt||p.openedAt)>=idleSeconds*1000){
-          p.status='closed';p.closedAt=now;p.exitReason='stagnant';
+          p.status='closed';p.closedAt=now;p.sellSol=m.sellGross;p.exitReason='stagnant';
           logEvent('ROTATE',p.symbol,'No price movement ≥ '+threshold+'% for '+idleSeconds+'s; moving to next launch');rotated=true;
         }
       }catch(_){}
@@ -439,7 +439,7 @@
   };
   const START_CONFIRM_COPY={"en":["STARTUP CHECK","Virtual capital","Paper trade size","Take Profit","Stop Loss","DEX fee / side","Slippage / side","Network / priority fees","Slippage exceeds 5% per side.","DEX fee exceeds 2% per side.","Trade size is above the 0.05 SOL starter suggestion.","Start Auto Sniper in PAPER DEMO mode? No real transactions will be sent.","Start demo","Cancel"],"ru":["ПРОВЕРКА ПЕРЕД ЗАПУСКОМ","Виртуальный капитал","Размер демо-сделки","Тейк-профит","Стоп-лосс","Комиссия DEX / сторона","Проскальзывание / сторона","Сеть / приоритетные комиссии","Проскальзывание выше 5% на сторону.","Комиссия DEX выше 2% на сторону.","Размер сделки выше стартовой рекомендации 0,05 SOL.","Запустить автоснайпер в ДЕМО-РЕЖИМЕ? Реальных транзакций не будет.","Запустить демо","Отмена"],"de":["STARTPRÜFUNG","Virtuelles Kapital","Demo-Handelsgröße","Take-Profit","Stop-Loss","DEX-Gebühr / Seite","Slippage / Seite","Netzwerk- / Prioritätsgebühr","Slippage über 5 % pro Seite.","DEX-Gebühr über 2 % pro Seite.","Handelsgröße über der Startempfehlung von 0,05 SOL.","Auto-Sniper im PAPER-DEMO-Modus starten? Es werden keine echten Transaktionen gesendet.","Demo starten","Abbrechen"],"fr":["VÉRIFICATION AVANT DÉMARRAGE","Capital virtuel","Taille de la transaction démo","Take-profit","Stop-loss","Frais DEX / côté","Glissement / côté","Frais réseau / priorité","Glissement supérieur à 5 % par côté.","Frais DEX supérieurs à 2 % par côté.","Taille supérieure à la recommandation initiale de 0,05 SOL.","Lancer Auto Sniper en mode démo papier ? Aucune transaction réelle ne sera envoyée.","Lancer la démo","Annuler"],"it":["CONTROLLO PRIMA DELL'AVVIO","Capitale virtuale","Dimensione operazione demo","Take profit","Stop loss","Commissione DEX / lato","Slippage / lato","Commissioni rete / priorità","Slippage superiore al 5% per lato.","Commissione DEX superiore al 2% per lato.","Dimensione superiore al suggerimento iniziale di 0,05 SOL.","Avviare Auto Sniper in modalità demo? Non verranno inviate transazioni reali.","Avvia demo","Annulla"],"ja":["起動前の確認","仮想資金","デモ取引額","利確","損切り","DEX手数料 / 片道","スリッページ / 片道","ネットワーク / 優先手数料","片道スリッページが5%を超えています。","片道DEX手数料が2%を超えています。","取引額が初期推奨額0.05 SOLを超えています。","ペーパーデモモードでAuto Sniperを起動しますか？実際の取引は送信されません。","デモを開始","キャンセル"],"zh-CN":["启动前检查","虚拟资金","模拟交易金额","止盈","止损","DEX费用 / 单边","滑点 / 单边","网络 / 优先费用","单边滑点超过5%。","单边DEX费用超过2%。","交易金额高于0.05 SOL的初始建议值。","以模拟模式启动自动狙击？不会发送真实交易。","启动模拟","取消"],"tr":["BAŞLATMA ÖNCESİ KONTROL","Sanal sermaye","Demo işlem miktarı","Kâr al","Zarar durdur","DEX ücreti / taraf","Kayma / taraf","Ağ / öncelik ücretleri","Taraf başına kayma %5'i aşıyor.","Taraf başına DEX ücreti %2'yi aşıyor.","İşlem boyutu 0,05 SOL başlangıç önerisini aşıyor.","Auto Sniper demo modunda başlatılsın mı? Gerçek işlem gönderilmeyecek.","Demoyu başlat","İptal"],"hi":["शुरू करने से पहले जाँच","वर्चुअल पूँजी","डेमो ट्रेड राशि","टेक प्रॉफ़िट","स्टॉप लॉस","DEX शुल्क / पक्ष","स्लिपेज / पक्ष","नेटवर्क / प्राथमिकता शुल्क","प्रति पक्ष स्लिपेज 5% से अधिक है।","प्रति पक्ष DEX शुल्क 2% से अधिक है।","ट्रेड राशि 0.05 SOL की शुरुआती अनुशंसा से अधिक है।","क्या Auto Sniper को डेमो मोड में शुरू करें? कोई वास्तविक लेनदेन नहीं भेजा जाएगा।","डेमो शुरू करें","रद्द करें"]};
   function showCenteredConfirm(rows){return new Promise(resolve=>{const labels=START_CONFIRM_COPY[state.lang]||START_CONFIRM_COPY.en;let d=document.getElementById('zs-start-confirm');if(d)d.remove();d=document.createElement('dialog');d.id='zs-start-confirm';d.style.cssText='width:min(560px,calc(100vw - 32px));max-width:560px;max-height:82vh;padding:0;border:1px solid #71836e;border-radius:16px;background:#101a17;color:#edf3e9;box-shadow:0 24px 80px #000b;overflow:hidden;margin:auto';const st=document.createElement('style');st.textContent='#zs-start-confirm::backdrop{background:rgba(0,0,0,.72);backdrop-filter:blur(3px)}#zs-start-confirm .zs-h{padding:18px 22px;border-bottom:1px solid #405148;font-weight:800;letter-spacing:.08em}#zs-start-confirm .zs-b{padding:18px 22px;overflow:auto;max-height:calc(82vh - 130px);font-size:14px;line-height:1.65}#zs-start-confirm .zs-r{padding:4px 0;border-bottom:1px solid #293831}#zs-start-confirm .zs-w{color:#f0c27b}#zs-start-confirm .zs-f{display:flex;justify-content:flex-end;gap:10px;padding:14px 20px;background:#0b1311;border-top:1px solid #405148}#zs-start-confirm button{border:1px solid #81977b;border-radius:9px;padding:10px 18px;font-weight:800;cursor:pointer}#zs-start-confirm .zs-ok{background:#b9c9ad;color:#111a14}#zs-start-confirm .zs-cancel{background:#1b2a24;color:#e7eee5}';const head=document.createElement('div');head.className='zs-h';head.textContent=labels[0];const body=document.createElement('div');body.className='zs-b';rows.forEach(row=>{const p=document.createElement('div');p.className='zs-r'+(row.warn?' zs-w':'');p.textContent=row.text;body.append(p)});const foot=document.createElement('div');foot.className='zs-f';const cancel=document.createElement('button');cancel.className='zs-cancel';cancel.textContent=labels[13];const ok=document.createElement('button');ok.className='zs-ok';ok.textContent=labels[12];foot.append(cancel,ok);d.append(st,head,body,foot);document.body.append(d);const done=v=>{if(d.open)d.close();d.remove();resolve(v)};cancel.addEventListener('click',()=>done(false));ok.addEventListener('click',()=>done(true));d.addEventListener('cancel',e=>{e.preventDefault();done(false)},{once:true});d.showModal()})}
-  const terminal={auto:false,startedAt:0,capital:10,minLiquidity:5000,maxTradeSize:10,idleTimeout:60,minMovePct:0.2,logs:[],seen:[],lastAuto:0};
+  const terminal={auto:false,startedAt:0,capital:10,minLiquidity:5000,maxTradeSize:10,idleTimeout:60,minMovePct:0.2,logs:[],seen:[],lastAuto:0,sessionStartCapital:10,equityHistory:[]};
   const TERMINAL_KEY='zombcash_sniper_terminal_v1';
   const dcopy=()=>DASH_COPY[state.lang]||DASH_COPY.en;
   function saveTerminal(){try{terminal.settings={};['sniper-size','sniper-target','sniper-stop','sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-idle-timeout','sniper-min-move'].forEach(id=>{const el=$(id);if(el)terminal.settings[id]=el.value;});localStorage.setItem(TERMINAL_KEY,JSON.stringify(terminal));}catch(_){}}
@@ -482,25 +482,46 @@
     }
     const line=document.createElementNS(svg.namespaceURI,'path');line.setAttribute('d',d);line.setAttribute('fill','none');line.setAttribute('stroke',nums[nums.length-1]>=nums[0]?'#00f59a':'#ff4d8d');line.setAttribute('stroke-width','2.2');line.setAttribute('stroke-linecap','round');line.setAttribute('stroke-linejoin','round');line.setAttribute('vector-effect','non-scaling-stroke');svg.append(line);return svg;
   }
+  function recordEquitySnapshot(){
+    const open=state.positions.filter(p=>p.status==='open');
+    const closed=state.positions.filter(p=>p.status==='closed');
+    const realized=closed.reduce((a,p)=>a+(Number(p.netPnl)||0),0);
+    const unrealized=open.reduce((a,p)=>a+(Number(p.netPnl)||0),0);
+    const baseline=Math.max(0.000001,Number(terminal.sessionStartCapital)||Number(terminal.capital)||10);
+    const equity=baseline+realized+unrealized;
+    terminal.equityHistory=Array.isArray(terminal.equityHistory)?terminal.equityHistory:[];
+    const now=Date.now(),last=terminal.equityHistory[terminal.equityHistory.length-1];
+    if(!last||now-Number(last.at)>=5000){terminal.equityHistory.push({at:now,value:equity});terminal.equityHistory=terminal.equityHistory.slice(-180);saveTerminal();}
+    return {baseline,equity,realized,unrealized,open};
+  }
   function renderStats(){
     const host=$('zs-kpis');if(!host)return;
-    const total=state.positions.reduce((a,p)=>a+(Number(p.netPnl)||0),0);
     const closed=state.positions.filter(p=>p.status==='closed'),wins=closed.filter(p=>(Number(p.netPnl)||0)>0).length;
-    const open=state.positions.filter(p=>p.status==='open'),used=open.reduce((a,p)=>a+(Number(p.buySol)||0),0);
-    const available=Math.max(0,Number(terminal.capital||10)+closed.reduce((a,p)=>a+(Number(p.netPnl)||0),0)-used);
-    const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,(total>=0?'+':'')+total.toFixed(5)+' SOL'],[dcopy().trades,String(state.positions.length)],[dcopy().wins,closed.length?Math.round(wins/closed.length*100)+'%':'—'],[dcopy().active,String(open.length)]];
+    const losses=closed.filter(p=>(Number(p.netPnl)||0)<0).length;
+    const session=recordEquitySnapshot(),open=session.open;
+    const used=open.reduce((a,p)=>a+(Number(p.buySol)||0),0);
+    const available=Math.max(0,session.baseline+session.realized-used);
+    const turnover=state.positions.reduce((a,p)=>a+(Number(p.buySol)||0)+(Number(p.sellSol)||0),0);
+    const winRate=closed.length?Math.round(wins/closed.length*100)+'%':'—';
+    const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,(session.realized>=0?'+':'')+session.realized.toFixed(5)+' SOL'],[state.lang==='ru'?'ЗАКРЫТЫЕ СДЕЛКИ':'CLOSED TRADES',String(closed.length)],[state.lang==='ru'?'ПОБЕДЫ / ПОРАЖЕНИЯ':'WINS / LOSSES',wins+' / '+losses],[dcopy().wins,winRate],[state.lang==='ru'?'ОБОРОТ ЗА СЕССИЮ':'SESSION TURNOVER',turnover.toFixed(5)+' SOL'],[dcopy().active,String(open.length)]];
     host.replaceChildren();vals.forEach((v,i)=>{const card=dashNode('div','zs-kpi zs-kpi-'+i);card.append(dashNode('small','',v[0]),dashNode('strong','zs-counter',v[1]));host.append(card);});
-    const mainChart=$('zs-main-chart');if(mainChart){mainChart.replaceChildren();const p=open[0];mainChart.append(sparkline(p?(p.priceHistory||[p.entryPrice,p.lastPrice||p.entryPrice]):[]));}
-    const centerSummary=$('zs-center-summary');if(centerSummary){centerSummary.replaceChildren();const p=open[0];if(p){const left=dashNode('div','zs-center-token');left.append(dashNode('small','',state.lang==='ru'?'ТЕКУЩАЯ ПОЗИЦИЯ':'CURRENT POSITION'),dashNode('strong','',String(p.symbol||'TOKEN').toUpperCase()),dashNode('span','',(state.lang==='ru'?'ВЛОЖЕНО: ':'SIZE: ')+fmt(p.buySol||0,6)+' SOL'),dashNode('span','',(state.lang==='ru'?'ЦЕНА: ':'PRICE: ')+fmt(p.lastPrice||p.entryPrice,9)+' SOL'));const right=dashNode('div','zs-center-pnl '+((Number(p.netPnl)||0)>=0?'is-positive':'is-negative'));right.append(dashNode('small','',state.lang==='ru'?'ТЕКУЩАЯ ПРИБЫЛЬ / УБЫТОК':'CURRENT PROFIT / LOSS'),dashNode('strong','',(p.netPnl>=0?'+':'')+fmt(p.netPnl||0,6)+' SOL'),dashNode('span','',(p.netPct>=0?'+':'')+fmt(p.netPct||0,2)+'%'));centerSummary.append(left,right);}else{centerSummary.append(dashNode('div','zs-center-idle',state.lang==='ru'?'ОЖИДАНИЕ ПОДХОДЯЩЕГО SOL-ПУЛА':'WAITING FOR ELIGIBLE SOL POOL'));}}
+    const mainChart=$('zs-main-chart');if(mainChart){mainChart.replaceChildren();const history=(terminal.equityHistory||[]).map(x=>Number(x.value)).filter(Number.isFinite);mainChart.append(sparkline(history.length>1?history:[session.baseline,session.equity]));}
+    const centerSummary=$('zs-center-summary');if(centerSummary){
+      centerSummary.replaceChildren();
+      const left=dashNode('div','zs-center-token');
+      left.append(dashNode('small','',state.lang==='ru'?'СУММА ОТКРЫТЫХ СДЕЛОК':'TOTAL OPEN EXPOSURE'),dashNode('strong','',used.toFixed(5)+' SOL'),dashNode('span','',(state.lang==='ru'?'ОТКРЫТЫХ ПОЗИЦИЙ: ':'OPEN POSITIONS: ')+open.length));
+      const pct=used>0?session.unrealized/used*100:0;
+      const right=dashNode('div','zs-center-pnl '+(session.unrealized>=0?'is-positive':'is-negative'));
+      right.append(dashNode('small','',state.lang==='ru'?'ТЕКУЩАЯ ПРИБЫЛЬ / УБЫТОК':'LIVE UNREALIZED P/L'),dashNode('strong','',(session.unrealized>=0?'+':'')+session.unrealized.toFixed(6)+' SOL'),dashNode('span','',(pct>=0?'+':'')+pct.toFixed(2)+'%'));
+      centerSummary.append(left,right);
+    }
     const statGrid=$('zs-stat-grid');if(statGrid){
       const avg=closed.length?closed.reduce((a,p)=>a+(Number(p.netPct)||0),0)/closed.length:0;
       const best=closed.length?Math.max(...closed.map(p=>Number(p.netPct)||0)):0;
       const worst=closed.length?Math.min(...closed.map(p=>Number(p.netPct)||0)):0;
-      const realized=closed.reduce((a,p)=>a+(Number(p.netPnl)||0),0);
-      const items=[[state.lang==='ru'?'РЕАЛИЗОВАННЫЙ P/L':'REALIZED P/L',(realized>=0?'+':'')+realized.toFixed(5)+' SOL'],[state.lang==='ru'?'СРЕДНИЙ РЕЗУЛЬТАТ':'AVERAGE RESULT',(avg>=0?'+':'')+avg.toFixed(2)+'%'],[state.lang==='ru'?'ЛУЧШАЯ СДЕЛКА':'BEST TRADE',(best>=0?'+':'')+best.toFixed(2)+'%'],[state.lang==='ru'?'ХУДШАЯ СДЕЛКА':'WORST TRADE',worst.toFixed(2)+'%']];
+      const items=[[state.lang==='ru'?'РЕАЛИЗОВАННЫЙ P/L':'REALIZED P/L',(session.realized>=0?'+':'')+session.realized.toFixed(5)+' SOL'],[state.lang==='ru'?'СРЕДНИЙ РЕЗУЛЬТАТ':'AVERAGE RESULT',(avg>=0?'+':'')+avg.toFixed(2)+'%'],[state.lang==='ru'?'ЛУЧШАЯ СДЕЛКА':'BEST TRADE',(best>=0?'+':'')+best.toFixed(2)+'%'],[state.lang==='ru'?'ХУДШАЯ СДЕЛКА':'WORST TRADE',worst.toFixed(2)+'%']];
       statGrid.replaceChildren();items.forEach((v,i)=>{const card=dashNode('div','zs-stat-card');card.append(dashNode('small','',v[0]),dashNode('strong',i===3&&worst<0?'zs-negative':'',v[1]));statGrid.append(card);});
     }
-
   }
   function renderLog(){
     const host=$('zs-log');if(!host)return;host.replaceChildren();
@@ -551,7 +572,7 @@
     rows.push({text:c[11]});
     if(!await showCenteredConfirm(rows))return;
     if(!await setServerPaperEnabled(true))return;
-    terminal.auto=true;terminal.startedAt=terminal.startedAt||Date.now();saveTerminal();renderDashboardState();
+    terminal.auto=true;terminal.startedAt=Date.now();terminal.sessionStartCapital=Number($('sniper-capital').value)||10;terminal.equityHistory=[{at:terminal.startedAt,value:terminal.sessionStartCapital}];saveTerminal();renderDashboardState();
     logEvent('ARMED','SYSTEM','Подтверждён paper mode · '+n('sniper-size')+' SOL');
     refreshFeed();maybeAutoEnter();
   }
@@ -824,9 +845,9 @@
       nav.querySelectorAll('button[data-zs-nav]').forEach(b=>{const active=tabTargets[Number(b.dataset.zsNav)]===tab;b.classList.toggle('is-active',active);b.setAttribute('aria-selected',active?'true':'false');});
       left.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='settings');
       center.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='stats');
-      right.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='history');
+      right.classList.toggle('zs-tab-hidden',tab!=='sniper');
       launchPanel.classList.toggle('zs-tab-hidden',tab!=='sniper');
-      posSection.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='history');
+      posSection.classList.toggle('zs-tab-hidden',tab!=='sniper');
       journal.classList.toggle('zs-tab-hidden',tab!=='history');
       kpis.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='stats');
       helpPanel.classList.toggle('zs-tab-hidden',tab!=='help');
@@ -879,11 +900,11 @@
     const statsPanel=dashNode('div','zs-stats-extra zs-tab-hidden');statsPanel.id='zs-stats-extra';
     const statsHeading=dashNode('h3','',state.lang==='ru'?'РЕЗУЛЬТАТЫ СИМУЛЯЦИИ':'SIMULATION PERFORMANCE');
     const statsGrid=dashNode('div','zs-stat-grid');statsGrid.id='zs-stat-grid';statsPanel.append(statsHeading,statsGrid);
-    const centerSummary=dashNode('div','zs-center-summary');centerSummary.id='zs-center-summary';const chartPanel=dashNode('div','zs-chart-panel');const chartHead=dashNode('div','zs-chart-head');const chartTitle=dashNode('h3','',dcopy().chart);chartTitle.id='zs-chart-title';chartHead.append(chartTitle,dashNode('span','zs-chart-range','LIVE · 10 SEC'));chartPanel.append(chartHead);const chart=dashNode('div','zs-chart');chart.id='zs-main-chart';chartPanel.append(chart);
+    const centerSummary=dashNode('div','zs-center-summary');centerSummary.id='zs-center-summary';const chartPanel=dashNode('div','zs-chart-panel');const chartHead=dashNode('div','zs-chart-head');const chartTitle=dashNode('h3','',state.lang==='ru'?'ДИНАМИКА КАПИТАЛА ЗА СЕССИЮ':'SESSION EQUITY CURVE');chartTitle.id='zs-chart-title';chartHead.append(chartTitle,dashNode('span','zs-chart-range',state.lang==='ru'?'SOL · С НАЧАЛА СЕССИИ':'SOL · SINCE SESSION START'));chartPanel.append(chartHead,dashNode('small','zs-equity-caption',state.lang==='ru'?'Изменение капитала относительно стартового значения':'Capital change relative to session starting balance'));const chart=dashNode('div','zs-chart');chart.id='zs-main-chart';chartPanel.append(chart);
     center.append(portrait,core,toggle,uptime,centerSummary,chartPanel,statsPanel);
     const right=dashNode('section','zs-panel zs-right');const rightTitle=dashNode('h3','',dcopy().active);rightTitle.id='zs-right-title';right.append(rightTitle);const posSection=dashNode('div','zs-position-section');const posWrap=dashNode('div','zs-positions');posWrap.id='zs-positions-wrap';if(positions){positions.classList.add('zs-positions-inner');posWrap.append(positions);}posSection.append(posWrap);right.append(posSection);
     const launchPanel=dashNode('section','zs-panel zs-launch-panel');const launchTitle=dashNode('h3','',dcopy().launches);launchTitle.id='zs-launch-title';launchPanel.append(launchTitle);const toolbar=dashNode('div','sniper-toolbar');if(refresh)toolbar.append(refresh);if(status)toolbar.append(status);launchPanel.append(toolbar);const launchWrap=dashNode('div','zs-launches');if(candidates)launchWrap.append(candidates);launchPanel.append(launchWrap);
-    right.append(launchPanel);layout.append(left,center,right);
+    center.append(launchPanel);layout.append(left,center,right);
     const journal=dashNode('section','zs-panel');journal.id='zs-journal-panel';const logTitle=dashNode('h3','',dcopy().journal);logTitle.id='zs-log-title';journal.append(logTitle);const log=dashNode('div','zs-log');log.id='zs-log';journal.append(log);
     const clearBar=dashNode('div','sniper-toolbar');if(clear)clearBar.append(clear);journal.append(clearBar);
     const foot=dashNode('p','zs-foot',dcopy().hint+' '+t('source'));
