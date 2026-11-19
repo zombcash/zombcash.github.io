@@ -485,7 +485,7 @@
   function recordEquitySnapshot(){
     const open=state.positions.filter(p=>p.status==='open');
     const sessionStart=Number(terminal.startedAt)||0;
-    const closed=state.positions.filter(p=>p.status==='closed'&&(!sessionStart||Number(p.openedAt||0)>=sessionStart));
+    const closed=state.positions.filter(p=>p.status==='closed'&&(!sessionStart||Number(p.closedAt||p.openedAt||0)>=sessionStart));
     const realized=closed.reduce((a,p)=>a+(Number(p.netPnl)||0),0);
     const unrealized=open.reduce((a,p)=>a+(Number(p.netPnl)||0),0);
     const baseline=Math.max(0.000001,Number(terminal.sessionStartCapital)||Number(terminal.capital)||10);
@@ -503,7 +503,7 @@
     const session=recordEquitySnapshot(),open=session.open;
     const used=open.reduce((a,p)=>a+(Number(p.buySol)||0),0);
     const available=Math.max(0,session.baseline+session.realized-used);
-    const turnover=state.positions.filter(p=>p.status==='open'||!sessionStart||Number(p.openedAt||0)>=sessionStart).reduce((a,p)=>a+(Number(p.buySol)||0)+(Number(p.sellSol)||0),0);
+    const turnover=state.positions.filter(p=>p.status==='open'||!sessionStart||Number(p.openedAt||0)>=sessionStart||Number(p.closedAt||0)>=sessionStart).reduce((a,p)=>a+(Number(p.buySol)||0)+(Number(p.sellSol)||0),0);
     const winRate=closed.length?Math.round(wins/closed.length*100)+'%':'—';
     const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,(session.realized>=0?'+':'')+session.realized.toFixed(5)+' SOL'],[state.lang==='ru'?'ЗАКРЫТЫЕ СДЕЛКИ':'CLOSED TRADES',String(closed.length)],[state.lang==='ru'?'ПОБЕДЫ / ПОРАЖЕНИЯ':'WINS / LOSSES',wins+' / '+losses],[dcopy().wins,winRate],[state.lang==='ru'?'ОБОРОТ ЗА СЕССИЮ':'SESSION TURNOVER',turnover.toFixed(5)+' SOL'],[dcopy().active,String(open.length)]];
     host.replaceChildren();vals.forEach((v,i)=>{const card=dashNode('div','zs-kpi zs-kpi-'+i);card.append(dashNode('small','',v[0]),dashNode('strong','zs-counter',v[1]));host.append(card);});
