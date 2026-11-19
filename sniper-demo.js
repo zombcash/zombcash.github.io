@@ -274,8 +274,9 @@
   function renderPositions(){
     const host=$('sniper-positions');if(!host)return;
     host.replaceChildren();
-    if(!state.positions.length){host.append(make('p','sniper-muted',t('noPositions')));renderStats();return;}
-    (rootDashboardTab()==='history'?state.positions:state.positions.filter(p=>p.status==='open')).slice().sort((a,b)=>Number(b.openedAt||0)-Number(a.openedAt||0)).forEach(p=>{
+    const visiblePositions=rootDashboardTab()==='history'?state.positions:state.positions.filter(p=>p.status==='open');
+    if(!visiblePositions.length){host.append(make('p','sniper-muted',t('noPositions')));renderStats();return;}
+    visiblePositions.slice().sort((a,b)=>Number(b.openedAt||0)-Number(a.openedAt||0)).forEach(p=>{
       const row=make('article','sniper-position zs-position-card');
       const head=make('div','zs-position-topline');
       const identity=make('div','zs-position-identity');
@@ -488,13 +489,15 @@
     const closed=state.positions.filter(p=>p.status==='closed');
     const open=state.positions.filter(p=>p.status==='open');
     const wins=closed.filter(p=>(Number(p.netPnl)||0)>0).length;
-    const realized=closed.reduce((a,p)=>a+(Number(p.netPnl)||0),0);
+    const sessionPositions=state.positions.filter(p=>Number(p.openedAt||0)>=Number(terminal.sessionStartedAt||0));
+    const sessionClosed=sessionPositions.filter(p=>p.status==='closed');
+    const realized=sessionClosed.reduce((a,p)=>a+(Number(p.netPnl)||0),0);
     const openPnl=open.reduce((a,p)=>a+(Number(p.netPnl)||0),0);
     const total=realized+openPnl;
     const used=open.reduce((a,p)=>a+(Number(p.buySol)||0),0);
     const available=Math.max(0,Number(terminal.capital||10)+realized-used);
-    const buyVolume=state.positions.reduce((a,p)=>a+(Number(p.buySol)||0),0);
-    const sellVolume=closed.reduce((a,p)=>a+(Number(p.quantity)||0)*(Number(p.lastPrice||p.entryPrice)||0),0);
+    const buyVolume=sessionPositions.reduce((a,p)=>a+(Number(p.buySol)||0),0);
+    const sellVolume=sessionClosed.reduce((a,p)=>a+(Number(p.quantity)||0)*(Number(p.lastPrice||p.entryPrice)||0),0);
     const turnover=buyVolume+sellVolume;
     const now=Date.now();
     if(!terminal.sessionStartedAt){terminal.sessionStartedAt=Number(terminal.startedAt)||now;terminal.sessionBaseCapital=Number(terminal.capital)||10;terminal.equityHistory=[];}
@@ -516,7 +519,7 @@
       const worst=closed.length?Math.min(...closed.map(p=>Number(p.netPct)||0)):0;
       const realized=closed.reduce((a,p)=>a+(Number(p.netPnl)||0),0);
       const items=[[state.lang==='ru'?'РЕАЛИЗОВАННЫЙ P/L':'REALIZED P/L',(realized>=0?'+':'')+realized.toFixed(5)+' SOL'],[state.lang==='ru'?'P/L ОТКРЫТЫХ ПОЗИЦИЙ':'OPEN POSITIONS P/L',(openPnl>=0?'+':'')+openPnl.toFixed(5)+' SOL'],[state.lang==='ru'?'ОБОРОТ ЗА СЕССИЮ':'SESSION TURNOVER',turnover.toFixed(5)+' SOL'],[state.lang==='ru'?'СРЕДНИЙ РЕЗУЛЬТАТ':'AVERAGE RESULT',(avg>=0?'+':'')+avg.toFixed(2)+'%'],[state.lang==='ru'?'ЛУЧШАЯ СДЕЛКА':'BEST TRADE',(best>=0?'+':'')+best.toFixed(2)+'%'],[state.lang==='ru'?'ХУДШАЯ СДЕЛКА':'WORST TRADE',worst.toFixed(2)+'%']];
-      statGrid.replaceChildren();items.forEach((v,i)=>{const card=dashNode('div','zs-stat-card');card.append(dashNode('small','',v[0]),dashNode('strong',i===3&&worst<0?'zs-negative':'',v[1]));statGrid.append(card);});
+      statGrid.replaceChildren();items.forEach((v,i)=>{const card=dashNode('div','zs-stat-card');card.append(dashNode('small','',v[0]),dashNode('strong',i===5&&worst<0?'zs-negative':'',v[1]));statGrid.append(card);});
     }
 
   }
@@ -569,7 +572,7 @@
     rows.push({text:c[11]});
     if(!await showCenteredConfirm(rows))return;
     if(!await setServerPaperEnabled(true))return;
-    terminal.auto=true;terminal.startedAt=terminal.startedAt||Date.now();saveTerminal();renderDashboardState();
+    terminal.auto=true;terminal.startedAt=Date.now();terminal.sessionStartedAt=terminal.startedAt;terminal.sessionBaseCapital=Number($('sniper-capital')&&$('sniper-capital').value)||Number(terminal.capital)||10;terminal.equityHistory=[{at:terminal.sessionStartedAt,value:terminal.sessionBaseCapital}];saveTerminal();renderDashboardState();
     logEvent('ARMED','SYSTEM','Подтверждён paper mode · '+n('sniper-size')+' SOL');
     refreshFeed();maybeAutoEnter();
   }
