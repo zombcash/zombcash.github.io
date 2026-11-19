@@ -176,8 +176,13 @@
       const data=await response.json();
       if(telegramId()!==accountId||authToken()!==token)return;
       const remote=Array.isArray(data.positions)?data.positions.map(mapServerPosition):[];
-      if(remote.length){state.positions=remote;saveStore();renderPositions();}
-      else if(state.positions.length){for(const p of state.positions)await persistPosition(p);}
+      const local=state.positions.slice();
+      const merged=new Map(local.map(p=>[String(p.id),p]));
+      remote.forEach(p=>merged.set(String(p.id),p));
+      state.positions=Array.from(merged.values()).sort((a,b)=>Number(b.openedAt||0)-Number(a.openedAt||0)).slice(0,20);
+      saveStore();renderPositions();
+      const remoteIds=new Set(remote.map(p=>String(p.id)));
+      for(const p of state.positions){if(!remoteIds.has(String(p.id)))await persistPosition(p);}
       updateSyncStatus('synced');
       refreshWalletInfo();
     }catch(_){if(telegramId()===accountId&&authToken()===token)updateSyncStatus('syncError');}
