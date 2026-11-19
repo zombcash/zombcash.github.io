@@ -353,7 +353,7 @@
         stats.append(make('span','',t('price')+': '+(item.priceNative>0?fmt(item.priceNative,9):t('waitingForPool'))));
       }
       if(item.hasSocials!==null&&item.hasSocials!==undefined)stats.append(make('span','',item.hasSocials?'SOCIALS ✓':'SOCIALS —'));
-      if(item.creatorHistoryStatus&&item.creatorHistoryStatus!=='unknown')stats.append(make('span','', 'DEV '+(item.creatorHistoryStatus==='repeat'?'REPEAT':'FIRST SEEN')+(item.creatorLaunchCount?' · '+item.creatorLaunchCount:''));
+      if(item.creatorHistoryStatus&&item.creatorHistoryStatus!=='unknown')stats.append(make('span','', 'DEV '+(item.creatorHistoryStatus==='repeat'?'REPEAT':'FIRST SEEN')+(item.creatorLaunchCount?' · '+item.creatorLaunchCount:'')));
       if(Number(item.boostTotal||item.boostAmount)>0)stats.append(make('span','', 'BOOSTS '+Number(item.boostTotal||item.boostAmount)));
       if(Number(item.communityVotes)>0)stats.append(make('span','', 'COMMUNITY '+Number(item.communityVotes)+' votes · '+fmt(item.communityRating||0,1)+'/5'));
       const action=make('button','sniper-action',item.priceNative>0?t('action'):t('waitingForPool'));
