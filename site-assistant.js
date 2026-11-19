@@ -28,7 +28,7 @@
   host.innerHTML = `
     <button class="zfa-launch" type="button" aria-expanded="false" aria-controls="zfa-panel"><span class="zfa-orb" aria-hidden="true">✳</span><span class="zfa-launch-label">ASK AI</span><span class="zfa-pulse" aria-hidden="true"></span></button>
     <section class="zfa-panel" id="zfa-panel" role="dialog" aria-label="ZombieCash AI assistant" aria-modal="false" hidden>
-      <header class="zfa-head"><div class="zfa-avatar" aria-hidden="true">☣</div><div class="zfa-head-copy"><strong class="zfa-title">ZOMBIECASH AI</strong><small class="zfa-sub">The same community brain</small></div><button class="zfa-close" type="button" aria-label="Close assistant">×</button></header>
+      <header class="zfa-head"><div class="zfa-avatar" aria-hidden="true">☣</div><div class="zfa-head-copy"><strong class="zfa-title">ZOMBIECASH AI</strong><small class="zfa-sub">The same community brain</small><span class="zfa-model" data-zfa-model>ENGINE · CHECKING…</span></div><button class="zfa-close" type="button" aria-label="Close assistant">×</button></header>
       <div class="zfa-messages" role="log" aria-live="polite"></div>
       <form class="zfa-form"><textarea rows="1" maxlength="1200" aria-label="Message" placeholder="Ask the ZombieCash AI…" required></textarea><button type="submit" aria-label="Send message">➤</button></form>
       <p class="zfa-hint"></p>
@@ -47,6 +47,7 @@
   #zombcash-floating-assistant .zfa-avatar{display:grid;place-items:center;flex:0 0 39px;height:39px;border:1px solid #9bff45;border-radius:12px;color:#9bff45;font-size:22px;box-shadow:inset 0 0 20px #9bff4516}
   #zombcash-floating-assistant .zfa-head-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:4px}
   #zombcash-floating-assistant .zfa-title{font:800 11px/1.3 Orbitron,system-ui,sans-serif;letter-spacing:.5px;color:#e9f8df}
+  #zombcash-floating-assistant .zfa-model{display:block;margin-top:2px;color:#a6ff54;font:700 9px/1.3 Orbitron,system-ui,sans-serif;letter-spacing:.55px;overflow-wrap:anywhere}
   #zombcash-floating-assistant .zfa-sub{font:600 13px/1.2 Rajdhani,system-ui,sans-serif;color:#9fb39b}
   #zombcash-floating-assistant .zfa-close{width:35px;height:35px;border:1px solid #344a30;border-radius:9px;background:#0c160d;color:#d8ebd0;font-size:24px;cursor:pointer}
   #zombcash-floating-assistant .zfa-messages{display:flex;flex:1;min-height:0;flex-direction:column;gap:12px;overflow:auto;padding:15px;scroll-behavior:smooth}
@@ -219,6 +220,18 @@
     const welcome = messages.querySelector('[data-welcome]');
     if (welcome) welcome.textContent = t.welcome;
   }
+  const modelBadge = panel.querySelector("[data-zfa-model]");
+  async function refreshModelBadge(data) {
+    try {
+      const info = data || await fetch("https://zombcash-bot.fadehost.app/api/assistant/status", {cache:"no-store"}).then(r => r.ok ? r.json() : null);
+      if (!info || !modelBadge) return;
+      const provider = info.provider || "AI";
+      const model = info.model || info.configured_primary || "Not reported";
+      modelBadge.textContent = (info.mode === "fallback" ? "FALLBACK · " : info.mode === "live" ? "LIVE · " : "PRIMARY · ") + provider + " / " + model;
+      modelBadge.title = info.updated_at ? "Last successful model response" : "Configured primary model; live model appears after a response";
+    } catch (_) { if (modelBadge) modelBadge.textContent = "ENGINE · STATUS UNAVAILABLE"; }
+  }
+  refreshModelBadge();
   function openPanel() {
     panel.hidden = false;
     launch.setAttribute('aria-expanded','true');
@@ -249,6 +262,7 @@
       if (!response.ok || !data.reply) throw new Error(data.error || 'Request failed');
       status.remove();
       addMessage(data.reply);
+      refreshModelBadge(data);
       history.push({role:'assistant',content:data.reply});
       history = history.slice(-8);
     } catch (_) {
