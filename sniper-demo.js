@@ -135,10 +135,8 @@
     const title=dashNode('strong','',state.lang==='ru'?'ВАШ SOLANA-КОШЕЛЁК':'YOUR SOLANA WALLET');
     panel.append(title);
     const token=authToken();
-    if(!token){
-      panel.append(dashNode('small','',state.lang==='ru'?'Войдите через Telegram — для профиля будет создан отдельный кошелёк.':'Sign in with Telegram to create your dedicated wallet.'));
-      return;
-    }
+    if(!token){panel.append(dashNode('small','',state.lang==='ru'?'Войдите через Telegram — для профиля будет создан отдельный кошелёк.':'Sign in with Telegram to create your dedicated wallet.'));return;}
+    const provision=dashNode('button','zs-wallet-provision',state.lang==='ru'?'СОЗДАТЬ / ПРОВЕРИТЬ КОШЕЛЁК':'CREATE / CHECK WALLET');provision.type='button';provision.addEventListener('click',async()=>{provision.disabled=true;provision.textContent=state.lang==='ru'?'ПРОВЕРКА…':'CHECKING…';try{const result=await fetch(AUTH_API+'/api/sniper/wallet/provision',{method:'POST',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},cache:'no-store'});const body=await result.json().catch(()=>({}));if(!result.ok)throw new Error(body.error||'Wallet provisioning failed');await refreshWalletInfo();}catch(error){panel.append(dashNode('small','zs-wallet-error',error.message||'Wallet provisioning unavailable'));provision.disabled=false;provision.textContent=state.lang==='ru'?'ПОВТОРИТЬ':'RETRY';}});panel.append(provision);
     try{
       const response=await fetch(AUTH_API+'/api/sniper/wallet',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
       if(!response.ok)throw new Error('wallet lookup '+response.status);
@@ -152,7 +150,7 @@
         return;
       }
       const address=String(wallet.publicKey);
-      const line=dashNode('code','zs-wallet-address',address.slice(0,8)+'…'+address.slice(-8));
+      const line=dashNode('code','zs-wallet-address',address);
       line.title=address;
       const copy=dashNode('button','zs-copy-address',state.lang==='ru'?'КОПИРОВАТЬ':'COPY');
       copy.type='button';
@@ -976,7 +974,7 @@
     });
     headActions.append(refreshResultsBtn,expand);header.append(brand,title,headActions);
     const nav=dashNode('nav','zs-nav');nav.setAttribute('aria-label','Zombie Sniper navigation');
-    const tabTargets=['sniper','stats','history','settings','help'];
+    const tabTargets=['sniper','stats','history','settings','help','wallet'];
     function selectTab(tab){
       root.dataset.activeTab=tab;
       root.classList.toggle('zs-history-mode',tab==='history');
@@ -991,12 +989,13 @@
       journal.classList.toggle('zs-tab-hidden',tab!=='history');
       kpis.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='stats');
       helpPanel.classList.toggle('zs-tab-hidden',tab!=='help');
-      layout.classList.toggle('zs-stats-layout',tab==='stats');layout.classList.toggle('zs-single-layout',tab==='history'||tab==='settings');layout.classList.toggle('zs-tab-hidden',tab==='help');
+      layout.classList.toggle('zs-stats-layout',tab==='stats');layout.classList.toggle('zs-single-layout',tab==='history'||tab==='settings');walletView.classList.toggle('zs-tab-hidden',tab!=='wallet');if(tab==='wallet')refreshWalletInfo();layout.classList.toggle('zs-tab-hidden',tab==='help');
       
       if(tab==='stats'){renderStats();statsPanel.classList.remove('zs-tab-hidden');portrait.classList.add('zs-tab-hidden');core.classList.add('zs-tab-hidden');toggle.classList.add('zs-tab-hidden');uptime.classList.add('zs-tab-hidden');chartPanel.classList.add('zs-tab-hidden');}
       else{statsPanel.classList.add('zs-tab-hidden');portrait.classList.remove('zs-tab-hidden');core.classList.remove('zs-tab-hidden');toggle.classList.remove('zs-tab-hidden');uptime.classList.remove('zs-tab-hidden');chartPanel.classList.remove('zs-tab-hidden');}
     }
-    dcopy().nav.forEach((label,i)=>{const b=dashNode('button','',label);b.dataset.zsNav=String(i);b.type='button';b.setAttribute('role','tab');b.addEventListener('click',()=>selectTab(tabTargets[i]||'sniper'));nav.append(b);});
+    dcopy().nav.forEach((label,i)=>{if(i===5)label=state.lang==='ru'?'КОШЕЛЁК':'WALLET';const b=dashNode('button','',label);b.dataset.zsNav=String(i);b.type='button';b.setAttribute('role','tab');b.addEventListener('click',()=>selectTab(tabTargets[i]||'sniper'));nav.append(b);});
+    const walletTab=dashNode('button','',state.lang==='ru'?'КОШЕЛЁК':'WALLET');walletTab.dataset.zsNav='5';walletTab.type='button';walletTab.setAttribute('role','tab');walletTab.addEventListener('click',()=>selectTab('wallet'));nav.append(walletTab);
     const kpis=dashNode('div','zs-kpis');kpis.id='zs-kpis';
     const layout=dashNode('div','zs-layout');const left=dashNode('section','zs-panel zs-left');left.id='zs-settings';const leftTitle=dashNode('h3','',dcopy().settings);leftTitle.id='zs-settings-title';left.append(leftTitle);
 
@@ -1042,7 +1041,9 @@
     }
     const sizeInput=$('sniper-size');if(sizeInput){sizeInput.max=Math.max(0.001,Number(terminal.capital)||10);const sizeSlider=sizeInput.parentElement&&sizeInput.parentElement.querySelector('.zs-range');if(sizeSlider)sizeSlider.max=sizeInput.max;}
     const walletPanel=dashNode('div','zs-foot');walletPanel.id='zs-wallet-panel';
-    left.append(fieldHost,presetPanel,walletPanel,dashNode('p','zs-foot',dcopy().hint));
+    left.append(fieldHost,presetPanel,dashNode('p','zs-foot',dcopy().hint));
+    const walletView=dashNode('section','zs-panel zs-wallet-view zs-tab-hidden');walletView.id='zs-wallet-view';
+    walletView.append(dashNode('h3','',state.lang==='ru'?'УПРАВЛЕНИЕ SOLANA-КОШЕЛЬКОМ':'SOLANA WALLET'),dashNode('p','zs-foot',state.lang==='ru'?'Кошелёк привязан к вашему профилю. Приватный ключ хранится только на сервере.':'Your wallet is linked to your Survivor profile. The private key stays server-side.'),walletPanel);
     const center=dashNode('section','zs-panel zs-center');center.id='zs-center';const centerTitle=dashNode('h3','',dcopy().autopilot);centerTitle.id='zs-center-title';center.append(centerTitle);
     const portrait=dashNode('div','zs-portrait');const pic=dashNode('img','');pic.src='/assets/zombcash-survivor-640.avif';pic.alt='ZombieCash anime survivor heroine';portrait.append(pic,dashNode('b','','$ZOMBCASH SURVIVOR'));
     const core=dashNode('div','zs-core');const coreText=dashNode('div','');coreText.append(dashNode('strong','', '◉'),dashNode('strong','', 'AUTO SNIPER'),dashNode('span','', 'PAPER ENGINE'));core.append(coreText);
@@ -1071,7 +1072,8 @@
       @media(max-width:760px){.zs-help-grid{grid-template-columns:1fr;gap:9px}.zs-help-card{padding:12px}.zs-help-notice{font-size:12px}}
     `;
     renderHelpPanel();
-    root.replaceChildren(style,header,nav,kpis,layout,journal,helpPanel,foot);
+    style.textContent += '.zs-wallet-view{max-width:900px;min-height:300px;padding:clamp(18px,3vw,30px)!important}.zs-wallet-view h3{font:750 18px/1.4 Orbitron,system-ui,sans-serif;letter-spacing:.1em;color:#e1e5df;margin:0 0 12px}#zs-wallet-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;padding:18px;border:1px solid rgba(184,198,190,.22);background:rgba(8,13,14,.7);margin-top:20px}#zs-wallet-panel strong,#zs-wallet-panel small{grid-column:1/-1}#zs-wallet-panel code{overflow-wrap:anywhere;color:#c4d2b2;font-size:13px}.zs-wallet-provision,.zs-copy-address{border:1px solid #9eaf8d;background:#a9bf91;color:#101610;padding:10px 14px;font-weight:800;cursor:pointer}.zs-wallet-provision:disabled{opacity:.55;cursor:wait}.zs-wallet-error{color:#e1a6a6}';
+    root.replaceChildren(style,header,nav,kpis,layout,journal,helpPanel,walletView,foot);
     renderDashboardState();renderPositions();renderCandidates();selectTab('sniper');
   }
 
