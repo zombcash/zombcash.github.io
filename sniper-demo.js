@@ -489,6 +489,36 @@
     }
     const line=document.createElementNS(svg.namespaceURI,'path');line.setAttribute('d',d);line.setAttribute('fill','none');line.setAttribute('stroke',nums[nums.length-1]>=nums[0]?'#00f59a':'#ff4d8d');line.setAttribute('stroke-width','2.2');line.setAttribute('stroke-linecap','round');line.setAttribute('stroke-linejoin','round');line.setAttribute('vector-effect','non-scaling-stroke');svg.append(line);return svg;
   }
+  function equityChart(points,lang='en'){
+    const data=(points||[]).filter(p=>Number.isFinite(Number(p.at))&&Number.isFinite(Number(p.value))).slice(-180);
+    const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');
+    svg.setAttribute('viewBox','0 0 340 154');svg.setAttribute('preserveAspectRatio','none');svg.setAttribute('class','zs-equity-svg');svg.setAttribute('role','img');
+    svg.setAttribute('aria-label',lang==='ru'?'График капитала: сумма SOL по вертикали, время сессии по горизонтали':'Equity chart: SOL on vertical axis, session time on horizontal axis');
+    const add=(tag,attrs,textValue)=>{const el=document.createElementNS(ns,tag);Object.entries(attrs||{}).forEach(([k,v])=>el.setAttribute(k,String(v)));if(textValue!==undefined)el.textContent=textValue;svg.append(el);return el;};
+    const x0=48,x1=332,y0=12,y1=116,w=x1-x0,h=y1-y0;
+    if(!data.length){add('text',{x:170,y:72,'text-anchor':'middle',fill:'#9eae9d','font-size':10},lang==='ru'?'Ожидание данных сессии':'Waiting for session data');return svg;}
+    let vals=data.map(p=>Number(p.value)),lo=Math.min(...vals),hi=Math.max(...vals);
+    const pad=(hi-lo)*.12||Math.max(Math.abs(hi)*.002,0.00001);lo=Math.max(0,lo-pad);hi+=pad;
+    const span=hi-lo||1,first=Number(data[0].at),last=Number(data[data.length-1].at),duration=Math.max(1,last-first);
+    const x=p=>x0+((Number(p.at)-first)/duration)*w,y=v=>y1-((Number(v)-lo)/span)*h;
+    for(let i=0;i<4;i++){
+      const v=hi-(hi-lo)*i/3,yy=y(v);
+      add('line',{x1:x0,y1:yy,x2:x1,y2:yy,stroke:'#809080',opacity:.23,'stroke-width':.7});
+      add('text',{x:x0-6,y:yy+3,'text-anchor':'end',fill:'#aebbad','font-size':9},v.toFixed(3));
+    }
+    const labels=[data[0],data[Math.floor((data.length-1)/2)],data[data.length-1]];
+    labels.forEach((p,i)=>{const xx=x(p),label=new Date(Number(p.at)).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});add('line',{x1:xx,y1:y1,x2:xx,y2:y1+3,stroke:'#9eae9d',opacity:.6});add('text',{x:xx,y:132,'text-anchor':i===0?'start':i===2?'end':'middle',fill:'#aebbad','font-size':9},label);});
+    add('line',{x1:x0,y1:y0,x2:x0,y2:y1,stroke:'#aebbad',opacity:.55});
+    add('line',{x1:x0,y1:y1,x2:x1,y2:y1,stroke:'#aebbad',opacity:.55});
+    if(data.length===1){add('circle',{cx:x(data[0]),cy:y(data[0].value),r:3.5,fill:'#00e99a'});}
+    else{
+      const d=data.map((p,i)=>(i?'L':'M')+' '+x(p).toFixed(2)+' '+y(p.value).toFixed(2)).join(' ');
+      add('path',{d,fill:'none',stroke:Number(data[data.length-1].value)>=Number(data[0].value)?'#00e99a':'#ff4d8d','stroke-width':2.2,'stroke-linecap':'round','stroke-linejoin':'round'});
+      add('circle',{cx:x(data[data.length-1]),cy:y(data[data.length-1].value),r:2.8,fill:Number(data[data.length-1].value)>=Number(data[0].value)?'#00e99a':'#ff4d8d'});
+    }
+    add('text',{x:7,y:9,fill:'#91a18f','font-size':8},'SOL');
+    return svg;
+  }
   function recordEquitySnapshot(){
     const open=state.positions.filter(p=>p.status==='open');
     const sessionStart=Number(terminal.startedAt)||0;
@@ -516,7 +546,7 @@
     const winRate=decided?Math.round(wins/decided*100)+'%':'—';
     const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,((session.realized+session.unrealized)>=0?'+':'')+(session.realized+session.unrealized).toFixed(5)+' SOL'],[state.lang==='ru'?'ЗАКРЫТЫЕ СДЕЛКИ':'CLOSED TRADES',String(closed.length)],[state.lang==='ru'?'ПОБЕДЫ / ПОРАЖЕНИЯ':'WINS / LOSSES',wins+' / '+losses],[dcopy().wins,winRate],[state.lang==='ru'?'ОБОРОТ ЗА СЕССИЮ':'SESSION TURNOVER',turnover.toFixed(5)+' SOL'],[dcopy().active,String(open.length)]];
     host.replaceChildren();vals.forEach((v,i)=>{const card=dashNode('div','zs-kpi zs-kpi-'+i);card.append(dashNode('small','',v[0]),dashNode('strong','zs-counter',v[1]));host.append(card);});
-    const mainChart=$('zs-main-chart');if(mainChart){mainChart.replaceChildren();const history=(terminal.equityHistory||[]).map(x=>Number(x.value)).filter(Number.isFinite);const relative=history.length>1?history.map(v=>100*v/session.baseline):[100,100*session.equity/session.baseline];mainChart.append(sparkline(relative,state.lang==='ru'?'Изменение капитала с начала сессии':'Session capital change since start'));}
+    const mainChart=$('zs-main-chart');if(mainChart){mainChart.replaceChildren();const history=(terminal.equityHistory||[]).filter(x=>Number.isFinite(Number(x.at))&&Number.isFinite(Number(x.value)));if(!history.length)history.push({at:Date.now(),value:session.equity});mainChart.append(equityChart(history,state.lang));}
     const equityCaption=$('zs-equity-caption');if(equityCaption){const change=session.equity-session.baseline,pct=change/session.baseline*100;equityCaption.textContent=(state.lang==='ru'?'СТАРТ ':'START ')+session.baseline.toFixed(4)+' SOL · '+(state.lang==='ru'?'СЕЙЧАС ':'NOW ')+session.equity.toFixed(4)+' SOL · '+(change>=0?'+':'')+change.toFixed(5)+' SOL ('+(pct>=0?'+':'')+pct.toFixed(2)+'%)';}
     const centerSummary=$('zs-center-summary');if(centerSummary){
       centerSummary.replaceChildren();
@@ -617,7 +647,7 @@
     .zs-portrait{position:relative;height:92px;border-radius:4px;overflow:hidden;background:#202724;display:flex;align-items:flex-end;justify-content:flex-start;margin-bottom:7px}.zs-portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 25%;filter:grayscale(.72) contrast(1.08) brightness(.7);opacity:.88}.zs-portrait:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#0b100ee8,transparent 70%),linear-gradient(0deg,#0b100eaa,transparent 65%)}.zs-portrait b{z-index:1;margin:0 0 8px 12px;color:#e3e8e1;font:800 11px system-ui;letter-spacing:.12em}
     .zs-core{display:grid;place-items:center;min-height:112px;text-align:center;border:1px solid #758278;border-radius:50%;width:min(100%,142px);aspect-ratio:1;margin:0 auto 7px;background:radial-gradient(circle,#28332d,#101613 68%);box-shadow:inset 0 0 20px #aab9a311}.zs-core strong{display:block;color:#e9eee8;font:800 13px system-ui;letter-spacing:.06em}.zs-core span{display:block;color:#b8d0ad;font-size:11px;font-weight:800}
     .zs-toggle{border:1px solid #82917f;border-radius:3px;background:#29332c;color:#e8eee6;padding:7px 10px;font-weight:800;font-size:11px;cursor:pointer;width:100%;margin:3px 0}.zs-toggle.is-on{background:#71856e;color:#0d140f}.zs-actions{display:flex;gap:6px}.zs-actions button{flex:1;min-height:30px;padding:5px 8px;font-size:10px}
-    .zs-chart{width:100%;height:72px;margin-top:5px;border-radius:3px;background:linear-gradient(180deg,#a9b99c12,transparent);border:1px solid #69786b33}
+    .zs-chart{width:100%;height:126px;min-height:126px;margin-top:5px;border-radius:3px;background:linear-gradient(180deg,#a9b99c12,transparent);border:1px solid #69786b33}
     .zs-right{display:grid;grid-template-rows:auto minmax(0,1.45fr) minmax(150px,.75fr);gap:6px;min-height:0}.zs-right>h3{margin:0!important;padding:0 0 4px;border-bottom:1px solid #ffffff18}.zs-launch-panel{min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:5px}.zs-launch-panel>h3{margin:0!important;padding:0 0 4px;border-bottom:1px solid #ffffff18}.zs-launch-panel .zs-launches{flex:1 1 auto}.zs-positions,.zs-launches{max-height:none;min-height:0;overflow:auto;scrollbar-width:thin;scrollbar-color:#59665c #121816}.zs-launches .sniper-candidate{grid-template-columns:minmax(0,1fr) auto;gap:5px 8px;padding:9px 0;align-items:start}.zs-launches .sniper-candidate-main{min-width:0;display:grid;grid-template-columns:minmax(0,1fr);gap:4px}.zs-launches .sniper-token-name{display:block;min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.35}.zs-launches .sniper-token-address{display:block;min-width:0;white-space:normal;overflow-wrap:anywhere;word-break:break-all;line-height:1.4;color:#aeb8af}.zs-launches .sniper-candidate-stats{display:flex;flex-wrap:wrap;gap:5px 12px;min-width:0}.zs-launches .sniper-candidate-stats{grid-column:1/-1}.zs-launches .sniper-link{display:none}.zs-launches .sniper-action{grid-column:2;grid-row:1}.zs-positions .sniper-position{display:grid;grid-template-columns:1fr auto;gap:5px;padding:8px 0;border-top:1px solid #ffffff16}.zs-position-chart{grid-column:1/-1}.zs-spark{width:100%;height:34px;display:block;background:linear-gradient(180deg,#9db39b0b,transparent);border-radius:3px}
     .zs-log{display:grid;gap:2px;max-height:76px;overflow:auto}.zs-logrow{display:grid;grid-template-columns:65px 68px 82px 1fr;gap:7px;padding:5px 7px;border-top:1px solid #ffffff10;font-size:10px;color:#c9d0c9}.zs-logkind{color:#b8d0ad}.zs-foot{margin:4px 0 0;color:#aeb8af;font-size:10px;line-height:1.35}.zs-hidden{display:none!important}.sniper-demo .sniper-muted{color:#aeb8af!important}.sniper-demo .sniper-action{border-radius:3px!important;background:#a8b79f!important;color:#111812!important;border:1px solid #c2cdbb!important}.sniper-demo .sniper-close{background:transparent!important;border:1px solid #68776c!important;color:#d2dcd2!important}
     .sniper-demo.zs-fullscreen{position:fixed!important;inset:0!important;z-index:2147483600!important;width:100vw!important;height:100vh!important;height:100dvh!important;min-height:100vh!important;min-height:100dvh!important;max-height:100vh!important;max-height:100dvh!important;box-sizing:border-box!important;margin:0!important;border:0!important;border-radius:0!important;padding:10px 14px!important;overflow:hidden!important;display:grid!important;grid-template-rows:auto auto auto minmax(0,1fr) 0 0 0!important;grid-auto-rows:0!important;align-content:stretch!important;gap:4px!important;background:linear-gradient(145deg,#171c1b,#0b1010 58%,#151a18)!important}
@@ -693,7 +723,7 @@
     .zs-chart-panel{display:flex;flex:1 1 150px;flex-direction:column;gap:6px;min-height:130px;padding:9px 10px;border:1px solid #526457;border-radius:4px;background:linear-gradient(180deg,#111a14,#0c120f);overflow:hidden}
     .zs-chart-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.zs-chart-head h3{margin:0!important;font-size:11px!important;letter-spacing:.09em}.zs-chart-range{font-size:9px;letter-spacing:.1em;color:#9eae9d}
     .zs-chart{flex:1 1 auto!important;width:100%!important;height:auto!important;min-height:96px!important;margin:0!important;border:0!important;background:linear-gradient(180deg,#a8c79b13,transparent)!important}
-    .zs-chart svg{width:100%;height:100%;min-height:96px;display:block}
+    .zs-chart svg{width:100%;height:100%;min-height:126px;display:block}.zs-chart svg.zs-equity-svg{width:100%;height:126px;min-height:126px;display:block;overflow:visible}
     .zs-stats-extra{flex:1;min-height:0}
     @media(max-height:760px) and (min-width:761px){.zs-center{gap:6px!important}.zs-center .zs-portrait{flex-basis:68px!important;height:68px!important}.zs-center .zs-core{flex-basis:54px!important;min-height:54px!important}.zs-center .zs-toggle{flex-basis:34px!important;min-height:34px!important}.zs-center-summary{min-height:46px;padding:6px 9px}.zs-center-pnl strong{font-size:18px}.zs-chart-panel{min-height:105px;padding:7px 9px}.zs-chart{min-height:75px!important}.zs-chart svg{min-height:75px}}
     @media(max-width:760px){.zs-center{overflow:visible!important}.zs-chart-panel{min-height:150px}.zs-chart{min-height:110px!important}}
