@@ -24,3 +24,12 @@
 3. Inspect why registered paper-position records and the dashboard counters can diverge; reconcile server ledger, API response, and UI state before changing entry thresholds.
 4. Measure launch-to-first-trade coverage and actual paper entries over time. Preserve PAPER mode.
 5. Investigate SOI collection overlap and the independent news-worker JSON parsing failure.
+
+## 2026-11-19 — Short-viewport fullscreen panel sizing (PR #513)
+
+- Reviewed the user's fresh 1600×900 screenshot. The browser content viewport is under 760px tall because Chrome's tabs/toolbars/taskbar are outside the page viewport.
+- Confirmed the active `@media(max-height:760px)` fullscreen rule reserved a 76px sixth grid row for the journal panel even while the Sniper tab hides that panel. This left unused space below the three main columns.
+- PR [#513](https://github.com/zombcash/zombcash.github.io/pull/513) changes that unused row from 76px to 0px and adds an 8px top offset to the three-column workspace, keeping the columns stretched to the available bottom edge.
+- Bumped `buy-zombcash.html` script cache key to `sniper-short-viewport-fill-v11-20261119`.
+- PR is open and its SEO smoke workflow is still running. Do not report deployed or visually verified until merged, deployment succeeds, and the user/browser confirms the new geometry.
+- No trading rules, PAPER settings, bot cadence, or `zombcash-world` repository were changed.
