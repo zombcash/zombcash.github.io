@@ -978,6 +978,11 @@
     .sniper-demo.zs-fullscreen>.zs-nav{grid-row:3;align-self:center}
     .sniper-demo.zs-fullscreen>.zs-kpis{grid-row:4;align-self:stretch}
     .sniper-demo.zs-fullscreen>.zs-layout{grid-row:5;min-height:0;height:100%;align-self:stretch}
+    .sniper-demo.zs-fullscreen[data-active-tab="wallet"]{grid-template-rows:0 44px 38px 0 minmax(0,1fr) 0px!important}
+    .sniper-demo.zs-fullscreen[data-active-tab="wallet"]>.zs-layout{display:none!important}
+    .sniper-demo.zs-fullscreen[data-active-tab="wallet"]>.zs-wallet-view{grid-row:5!important;align-self:stretch!important;display:block!important;width:100%!important;max-width:none!important;height:100%!important;min-height:0!important;overflow:auto!important;box-sizing:border-box!important}
+    .sniper-demo.zs-fullscreen[data-active-tab="wallet"] #zs-wallet-panel{grid-template-columns:minmax(0,1fr) auto!important}
+    @media(max-width:760px){.sniper-demo.zs-fullscreen[data-active-tab="wallet"]{grid-template-rows:0 44px 38px minmax(0,1fr)!important}.sniper-demo.zs-fullscreen[data-active-tab="wallet"]>.zs-wallet-view{grid-row:4!important;height:auto!important;min-height:0!important}}
     .sniper-demo.zs-fullscreen>#zs-journal-panel{grid-row:6;min-height:0;overflow:hidden;padding:8px 12px}
     .sniper-demo.zs-fullscreen>.zs-help{grid-row:5;min-height:0;overflow:auto}
     .sniper-demo.zs-fullscreen>.zs-foot{display:none!important}
