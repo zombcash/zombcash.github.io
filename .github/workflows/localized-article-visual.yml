@@ -7,6 +7,7 @@ on:
     paths:
       - '.github/workflows/localized-article-visual.yml'
       - 'tests/localized-article-visual.cjs'
+      - 'tests/sniper-help-i18n.cjs'
       - 'avoid-fake-token-websites-wallet-scams.html'
       - 'check-liquidity-holder-distribution-solana.html'
       - 'how-to-research-solana-meme-coins.html'
@@ -47,6 +48,7 @@ on:
     paths:
       - '.github/workflows/localized-article-visual.yml'
       - 'tests/localized-article-visual.cjs'
+      - 'tests/sniper-help-i18n.cjs'
       - 'buy-zombcash.html'
       - '*/buy-zombcash.html'
       - 'transmission-zombie-fiction-rpg-guide.html'
