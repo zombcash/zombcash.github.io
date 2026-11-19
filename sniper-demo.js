@@ -61,7 +61,7 @@
   };
 
   const $ = id => document.getElementById(id);
-  const state = { lang:'en', candidates:[], positions:[], timer:null, positionTimer:null, busy:false, syncStatusKey:'saved', historyRevision:0, feed:{connected:false,pumpdevEnabled:false,pumpdevConnected:false,pumpdevStatus:'unknown',paperEngineEnabled:false,paperEngineStatus:'waiting_for_trade_data_source'} };
+  const state = { lang:'en', candidates:[], positions:[], timer:null, positionTimer:null, busy:false, syncStatusKey:'saved', historyRevision:0, source:'all', requireSocials:true, nameQuery:'', creatorFilter:'any', feed:{connected:false,pumpdevEnabled:false,pumpdevConnected:false,pumpdevStatus:'unknown',paperEngineEnabled:false,paperEngineStatus:'waiting_for_trade_data_source'} };
   let activeStorageKey = '';
   function detectLang(){
     const path = location.pathname.split('/').filter(Boolean);
@@ -108,6 +108,11 @@
           enabled:!!enabled,mode:'paper',
           paperCapitalSol:Number($('sniper-capital')&&$('sniper-capital').value)||10,
           maxTradeSol:Math.min(Number($('sniper-capital')&&$('sniper-capital').value)||10,Number($('sniper-size')&&$('sniper-size').value)||0.01),
+          maxOpenPositions:Math.max(1,Math.min(20,Math.round(Number($('sniper-max-open')&&$('sniper-max-open').value)||4))),
+          maxDailyLossSol:Math.max(0,Math.min(1000,Number(($('sniper-max-daily-loss')||{}).value??1))),
+          minBuyCount:Math.max(1,Math.min(100,Math.round(Number($('sniper-min-buys')&&$('sniper-min-buys').value)||3))),
+          creatorPolicy:state.creatorFilter,
+          requireSocials:!!state.requireSocials,
           takeProfitPct:Number($('sniper-target')&&$('sniper-target').value)||10,
           stopLossPct:Number($('sniper-stop')&&$('sniper-stop').value)||5,
           minPriceMovePct:Number($('sniper-min-move')&&$('sniper-min-move').value)||0.2,
@@ -145,6 +150,31 @@
       const response=await fetch(AUTH_API+'/api/sniper/wallet',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
       if(!response.ok){const failure=await response.json().catch(()=>({}));throw new Error(failure.error||('Wallet API HTTP '+response.status));}
       const data=await response.json(),wallet=data.wallet;
+      if(data.trading&&data.trading.mode==='paper'){
+        const settings=data.trading;
+        if(['any','first','repeat'].includes(settings.creatorPolicy))state.creatorFilter=settings.creatorPolicy;
+        if(typeof settings.requireSocials==='boolean')state.requireSocials=settings.requireSocials;
+        const creatorSelect=document.querySelector('.zs-creator-select');if(creatorSelect)creatorSelect.value=state.creatorFilter;
+        const socialsCheck=document.querySelector('.zs-filter-label input[type="checkbox"]');if(socialsCheck)socialsCheck.checked=state.requireSocials;
+        const serverValues={
+          'sniper-capital':settings.paperCapitalSol,'sniper-size':settings.maxTradeSol,
+          'sniper-target':settings.takeProfitPct,'sniper-stop':settings.stopLossPct,
+          'sniper-min-move':settings.minPriceMovePct,'sniper-idle-timeout':settings.idleExitSeconds,
+          'sniper-max-open':settings.maxOpenPositions,'sniper-min-buys':settings.minBuyCount,
+          'sniper-max-daily-loss':settings.maxDailyLossSol
+        };
+        Object.entries(serverValues).forEach(([id,value])=>{
+          const input=$(id);if(value===undefined||value===null||!input)return;
+          input.value=String(value);
+          const slider=input.parentElement&&input.parentElement.querySelector('.zs-range');
+          if(slider)slider.value=String(value);
+        });
+        terminal.capital=Number(settings.paperCapitalSol)||terminal.capital;
+        terminal.maxOpenPositions=Number(settings.maxOpenPositions)||terminal.maxOpenPositions;
+        terminal.maxDailyLossSol=Number.isFinite(Number(settings.maxDailyLossSol))?Number(settings.maxDailyLossSol):(terminal.maxDailyLossSol??1);
+        terminal.minBuyCount=Number(settings.minBuyCount)||terminal.minBuyCount||3;
+        saveTerminal();
+      }
       if(data.trading&&data.trading.mode==='paper'){
         const serverEnabled=!!data.trading.enabled;
         if(terminal.auto!==serverEnabled){terminal.auto=serverEnabled;terminal.startedAt=serverEnabled?(terminal.startedAt||Date.now()):0;saveTerminal();renderDashboardState();}
@@ -348,11 +378,20 @@
   function renderCandidates(){
     const host=$('sniper-candidates'); if(!host)return;
     host.replaceChildren();
-    if(!state.candidates.length){
-      host.append(make('p','sniper-muted',state.busy?t('loading'):t('noCandidates')));
+    const visible = state.candidates.filter(item=>{
+      if(state.requireSocials && item.hasSocials!==true)return false;
+      const q=String(state.nameQuery||'').trim().toLowerCase();
+      if(q && !(String(item.name||'')+' '+String(item.symbol||'')).toLowerCase().includes(q))return false;
+      if(state.creatorFilter==='repeat' && item.creatorHistoryStatus!=='repeat')return false;
+      if(state.creatorFilter==='first' && item.creatorHistoryStatus!=='first_seen')return false;
+      return true;
+    });
+    if(!visible.length){
+      const msg=state.candidates.length?(state.lang==='ru'?'Нет монет, соответствующих фильтрам. Ослабьте фильтры или выберите другой источник.':'No coins match the active filters. Relax a filter or choose another source.'):(state.busy?t('loading'):t('noCandidates'));
+      host.append(make('p','sniper-muted',msg));
       return;
     }
-    state.candidates.forEach(item=>{
+    visible.forEach(item=>{
       const row=make('div','sniper-candidate');
       const main=make('div','sniper-candidate-main');
       main.append(make('strong','sniper-token-name',item.symbol+' · '+item.name));
@@ -372,6 +411,10 @@
         stats.append(make('span','',t('liquidity')+': USD '+fmt(item.liquidityUsd,0)));
         stats.append(make('span','',t('price')+': '+(item.priceNative>0?fmt(item.priceNative,9):t('waitingForPool'))));
       }
+      if(item.hasSocials!==null&&item.hasSocials!==undefined)stats.append(make('span','',item.hasSocials?'SOCIALS ✓':'SOCIALS —'));
+      if(item.creatorHistoryStatus&&item.creatorHistoryStatus!=='unknown')stats.append(make('span','', 'DEV '+(item.creatorHistoryStatus==='repeat'?'REPEAT':'FIRST SEEN')+(item.creatorLaunchCount?' · '+item.creatorLaunchCount:'')));
+      if(Number(item.boostTotal||item.boostAmount)>0)stats.append(make('span','', 'BOOSTS '+Number(item.boostTotal||item.boostAmount)));
+      if(Number(item.communityVotes)>0)stats.append(make('span','', 'COMMUNITY '+Number(item.communityVotes)+' votes · '+fmt(item.communityRating||0,1)+'/5'));
       const action=make('button','sniper-action',item.priceNative>0?t('action'):t('waitingForPool'));
       action.type='button';
       action.disabled=!(item.priceNative>0);
@@ -435,57 +478,49 @@
     if(state.busy)return;
     state.busy=true;renderCandidates();
     try{
-      const liveResponse=await fetch(AUTH_API+'/api/sniper/launches?limit=30',{cache:'no-store'});
-      if(!liveResponse.ok)throw new Error('launch stream '+liveResponse.status);
-      const liveData=await liveResponse.json();
+      const [candidateResponse,launchResponse]=await Promise.all([
+        fetch(AUTH_API+'/api/sniper/candidates?source='+encodeURIComponent(state.source)+'&limit=40',{cache:'no-store'}),
+        fetch(AUTH_API+'/api/sniper/launches?limit=40',{cache:'no-store'})
+      ]);
+      if(!candidateResponse.ok)throw new Error('candidate source '+candidateResponse.status);
+      const candidateData=await candidateResponse.json();
+      const liveData=launchResponse.ok?await launchResponse.json():{};
       const feed=liveData.feed||{};
       state.feed={...state.feed,...feed};
-      const launches=Array.isArray(liveData.launches)?liveData.launches:[];
+      const launchMap=new Map((Array.isArray(liveData.launches)?liveData.launches:[]).map(x=>[String(x.mint||''),x]));
       const now=Date.now();
-      state.candidates=launches.map(launch=>{
-        const address=String(launch.mint||'');
-        const firstMinute=launch.firstMinute||{};
-        const curvePrice=Number(firstMinute.lastPriceSol)>0
-          ? Number(firstMinute.lastPriceSol)
-          : (Number(launch.vSolInBondingCurve)>0&&Number(launch.vTokensInBondingCurve)>0
-            ? Number(launch.vSolInBondingCurve)/Number(launch.vTokensInBondingCurve) : 0);
-        const eventAt=Number(launch.eventAt)||Number(launch.receivedAt)||0;
-        return {address,name:launch.name||'New launch',symbol:launch.symbol||'TOKEN',
-          priceNative:curvePrice,liquidityUsd:0,pairCreatedAt:eventAt,eventAt,firstMinute,
-          url:'https://pump.fun/coin/'+encodeURIComponent(address),source:'pumpportal',
-          status:launch.status||'detected',tradeStreamingEnabled:!!feed.tradeStreamingEnabled};
-      }).filter(item=>item.address&&item.eventAt&&now-item.eventAt>=0&&now-item.eventAt<=10*60*1000).slice(0,12);
+      state.candidates=(Array.isArray(candidateData.candidates)?candidateData.candidates:[]).map(item=>{
+        const address=String(item.mint||'');
+        const live=launchMap.get(address)||{};
+        const firstMinute=item.firstMinute||live.firstMinute||{};
+        const eventAt=Number(item.eventAt)||Number(live.eventAt)||0;
+        const curvePrice=Number(firstMinute.lastPriceSol)>0?Number(firstMinute.lastPriceSol):Number(item.priceSol)||0;
+        const source=item.source||'community';
+        return {...item,address,name:item.name||'Unknown',symbol:item.symbol||'TOKEN',
+          priceNative:curvePrice,liquidityUsd:Number(item.liquidityUsd)||0,eventAt,
+          firstMinute,source,tradeStreamingEnabled:!!feed.tradeStreamingEnabled,
+          creatorHistoryStatus:item.creatorHistoryStatus||'unknown'};
+      }).filter(item=>item.address&&item.address!==OFFICIAL_MINT);
       const tradeReady=!!feed.pumpdevConnected;
-      if(state.candidates.length){
-        $('sniper-feed-status').textContent=feed.connected?(tradeReady?'PUMPDEV TRADE FEED CONNECTED · PAPER DEMO READY':'MINT STREAM CONNECTED · PUMPDEV '+String(feed.pumpdevStatus||'disabled').toUpperCase().replace(/_/g,' ')):'LAUNCH STREAM OFFLINE';
-      }else{
-        $('sniper-feed-status').textContent=tradeReady?'PUMPDEV CONNECTED · WAITING FOR NEW MINTS':'PUMPDEV TRADE FEED '+String(feed.pumpdevStatus||'disabled').toUpperCase().replace(/_/g,' ');
-      }
+      const visibleSources=[...new Set(state.candidates.flatMap(x=>x.sources||[x.source]))];
+      $('sniper-feed-status').textContent=(state.lang==='ru'?'ИСТОЧНИКИ: ':'SOURCES: ')+(visibleSources.join(' · ')||'—')+
+        (tradeReady?' · PUMPDEV TRADE STREAM READY':' · PAPER FEED '+String(feed.pumpdevStatus||'waiting').toUpperCase().replace(/_/g,' '));
       renderDashboardState();
-    }catch(_){
-      // DEX profiles are display-only fallback; they cannot trigger automatic first-minute entry.
-      try{
-        const r=await fetch(API+'/token-profiles/latest/v1',{cache:'no-store'});
-        if(!r.ok)throw new Error('profile feed '+r.status);
-        const profiles=await r.json();
-        const list=(Array.isArray(profiles)?profiles:[]).filter(x=>x&&x.chainId==='solana'&&x.tokenAddress&&x.tokenAddress!==OFFICIAL_MINT).slice(0,8);
-        const resolved=await Promise.allSettled(list.map(async profile=>{
-          const pair=await fetchPairs(profile.tokenAddress);if(!pair)return null;
-          return {address:profile.tokenAddress,name:pair.baseToken.name||'Unknown',symbol:pair.baseToken.symbol||'TOKEN',
-            priceNative:Number(pair.priceNative),liquidityUsd:Number(pair.liquidity&&pair.liquidity.usd)||0,
-            pairCreatedAt:Number(pair.pairCreatedAt)||0,eventAt:0,firstMinute:null,source:'dexscreener',
-            url:'https://dexscreener.com/solana/'+encodeURIComponent(profile.tokenAddress)};
-        }));
-        state.candidates=resolved.filter(x=>x.status==='fulfilled'&&x.value).map(x=>x.value).slice(0,8);
-        $('sniper-feed-status').textContent=state.candidates.length?'DEXSCREENER DISPLAY FALLBACK · AUTO ENTRY DISABLED':t('failed');
-      }catch(__){state.candidates=[];$('sniper-feed-status').textContent=t('failed');}
+    }catch(error){
+      state.candidates=[];
+      $('sniper-feed-status').textContent=(state.lang==='ru'?'ИСТОЧНИКИ НЕДОСТУПНЫ: ':'SOURCES UNAVAILABLE: ')+String(error&&error.message||'error').slice(0,70);
     }finally{state.busy=false;renderCandidates();}
   }
   function openPaper(item,automatic){
     const openCount=state.positions.filter(p=>p.status==='open').length;
-    const maxOpen=Math.max(0,Math.min(10,Math.round(Number(terminal.maxOpenPositions??4))));
+    const maxOpen=Math.max(1,Math.min(20,Math.round(Number(terminal.maxOpenPositions??4))));
     if(maxOpen===0||openCount>=maxOpen){if(!automatic)alert(state.lang==='ru'?(maxOpen===0?'Открытие сделок отключено: лимит установлен на 0.':'Достигнут лимит одновременно открытых сделок ('+maxOpen+').'): (maxOpen===0?'New trades are disabled (limit is 0).':'Maximum simultaneous open trades reached ('+maxOpen+').'));return;}
     const buySol=Number($('sniper-size').value);
+    const todayStart=new Date();todayStart.setHours(0,0,0,0);
+    const todayLoss=state.positions.filter(p=>p.status==='closed'&&Number(p.closedAt||0)>=todayStart.getTime()&&Number(p.netPnl)<0)
+      .reduce((sum,p)=>sum+Math.abs(Number(p.netPnl)||0),0);
+    const dailyCap=Math.max(0,Number(terminal.maxDailyLossSol)||0);
+    if(dailyCap>0&&todayLoss>=dailyCap){if(!automatic)alert(state.lang==='ru'?'Достигнут дневной лимит убытка. Новые сделки остановлены.':'Daily loss limit reached. New trades are paused.');return;}
     const maxTrade=Math.max(0.001,Math.min(1000,Number($('sniper-capital')&&$('sniper-capital').value)||10));if(!Number.isFinite(buySol)||buySol<=0||buySol>maxTrade){if(!automatic)alert(state.lang==='ru'?'Размер сделки должен быть больше нуля и не превышать установленный максимум.':'Trade size must be positive and within your configured maximum.');return;}
     if(!item||!Number.isFinite(item.priceNative)||item.priceNative<=0){if(!automatic)alert(t('noPair'));return;}
     if(item.source!=='pumpportal'&&Number(item.liquidityUsd||0)<Number(terminal.minLiquidity||0)){if(!automatic)alert(state.lang==='ru'?'Ликвидность ниже установленного минимума.':'Token liquidity is below your configured minimum.');return;}
@@ -558,7 +593,7 @@
   };
   const START_CONFIRM_COPY={"en":["STARTUP CHECK","Virtual capital","Paper trade size","Take Profit","Stop Loss","DEX fee / side","Slippage / side","Network / priority fees","Slippage exceeds 5% per side.","DEX fee exceeds 2% per side.","Trade size is above the 0.05 SOL starter suggestion.","Start Auto Sniper in PAPER DEMO mode? No real transactions will be sent.","Start demo","Cancel"],"ru":["ПРОВЕРКА ПЕРЕД ЗАПУСКОМ","Виртуальный капитал","Размер демо-сделки","Тейк-профит","Стоп-лосс","Комиссия DEX / сторона","Проскальзывание / сторона","Сеть / приоритетные комиссии","Проскальзывание выше 5% на сторону.","Комиссия DEX выше 2% на сторону.","Размер сделки выше стартовой рекомендации 0,05 SOL.","Запустить автоснайпер в ДЕМО-РЕЖИМЕ? Реальных транзакций не будет.","Запустить демо","Отмена"],"de":["STARTPRÜFUNG","Virtuelles Kapital","Demo-Handelsgröße","Take-Profit","Stop-Loss","DEX-Gebühr / Seite","Slippage / Seite","Netzwerk- / Prioritätsgebühr","Slippage über 5 % pro Seite.","DEX-Gebühr über 2 % pro Seite.","Handelsgröße über der Startempfehlung von 0,05 SOL.","Auto-Sniper im PAPER-DEMO-Modus starten? Es werden keine echten Transaktionen gesendet.","Demo starten","Abbrechen"],"fr":["VÉRIFICATION AVANT DÉMARRAGE","Capital virtuel","Taille de la transaction démo","Take-profit","Stop-loss","Frais DEX / côté","Glissement / côté","Frais réseau / priorité","Glissement supérieur à 5 % par côté.","Frais DEX supérieurs à 2 % par côté.","Taille supérieure à la recommandation initiale de 0,05 SOL.","Lancer Auto Sniper en mode démo papier ? Aucune transaction réelle ne sera envoyée.","Lancer la démo","Annuler"],"it":["CONTROLLO PRIMA DELL'AVVIO","Capitale virtuale","Dimensione operazione demo","Take profit","Stop loss","Commissione DEX / lato","Slippage / lato","Commissioni rete / priorità","Slippage superiore al 5% per lato.","Commissione DEX superiore al 2% per lato.","Dimensione superiore al suggerimento iniziale di 0,05 SOL.","Avviare Auto Sniper in modalità demo? Non verranno inviate transazioni reali.","Avvia demo","Annulla"],"ja":["起動前の確認","仮想資金","デモ取引額","利確","損切り","DEX手数料 / 片道","スリッページ / 片道","ネットワーク / 優先手数料","片道スリッページが5%を超えています。","片道DEX手数料が2%を超えています。","取引額が初期推奨額0.05 SOLを超えています。","ペーパーデモモードでAuto Sniperを起動しますか？実際の取引は送信されません。","デモを開始","キャンセル"],"zh-CN":["启动前检查","虚拟资金","模拟交易金额","止盈","止损","DEX费用 / 单边","滑点 / 单边","网络 / 优先费用","单边滑点超过5%。","单边DEX费用超过2%。","交易金额高于0.05 SOL的初始建议值。","以模拟模式启动自动狙击？不会发送真实交易。","启动模拟","取消"],"tr":["BAŞLATMA ÖNCESİ KONTROL","Sanal sermaye","Demo işlem miktarı","Kâr al","Zarar durdur","DEX ücreti / taraf","Kayma / taraf","Ağ / öncelik ücretleri","Taraf başına kayma %5'i aşıyor.","Taraf başına DEX ücreti %2'yi aşıyor.","İşlem boyutu 0,05 SOL başlangıç önerisini aşıyor.","Auto Sniper demo modunda başlatılsın mı? Gerçek işlem gönderilmeyecek.","Demoyu başlat","İptal"],"hi":["शुरू करने से पहले जाँच","वर्चुअल पूँजी","डेमो ट्रेड राशि","टेक प्रॉफ़िट","स्टॉप लॉस","DEX शुल्क / पक्ष","स्लिपेज / पक्ष","नेटवर्क / प्राथमिकता शुल्क","प्रति पक्ष स्लिपेज 5% से अधिक है।","प्रति पक्ष DEX शुल्क 2% से अधिक है।","ट्रेड राशि 0.05 SOL की शुरुआती अनुशंसा से अधिक है।","क्या Auto Sniper को डेमो मोड में शुरू करें? कोई वास्तविक लेनदेन नहीं भेजा जाएगा।","डेमो शुरू करें","रद्द करें"]};
   function showCenteredConfirm(rows){return new Promise(resolve=>{const labels=START_CONFIRM_COPY[state.lang]||START_CONFIRM_COPY.en;let d=document.getElementById('zs-start-confirm');if(d)d.remove();d=document.createElement('dialog');d.id='zs-start-confirm';d.style.cssText='width:min(560px,calc(100vw - 32px));max-width:560px;max-height:82vh;padding:0;border:1px solid #71836e;border-radius:16px;background:#101a17;color:#edf3e9;box-shadow:0 24px 80px #000b;overflow:hidden;margin:auto';const st=document.createElement('style');st.textContent='#zs-start-confirm::backdrop{background:rgba(0,0,0,.72);backdrop-filter:blur(3px)}#zs-start-confirm .zs-h{padding:18px 22px;border-bottom:1px solid #405148;font-weight:800;letter-spacing:.08em}#zs-start-confirm .zs-b{padding:18px 22px;overflow:auto;max-height:calc(82vh - 130px);font-size:14px;line-height:1.65}#zs-start-confirm .zs-r{padding:4px 0;border-bottom:1px solid #293831}#zs-start-confirm .zs-w{color:#f0c27b}#zs-start-confirm .zs-f{display:flex;justify-content:flex-end;gap:10px;padding:14px 20px;background:#0b1311;border-top:1px solid #405148}#zs-start-confirm button{border:1px solid #81977b;border-radius:9px;padding:10px 18px;font-weight:800;cursor:pointer}#zs-start-confirm .zs-ok{background:#b9c9ad;color:#111a14}#zs-start-confirm .zs-cancel{background:#1b2a24;color:#e7eee5}';const head=document.createElement('div');head.className='zs-h';head.textContent=labels[0];const body=document.createElement('div');body.className='zs-b';rows.forEach(row=>{const p=document.createElement('div');p.className='zs-r'+(row.warn?' zs-w':'');p.textContent=row.text;body.append(p)});const foot=document.createElement('div');foot.className='zs-f';const cancel=document.createElement('button');cancel.className='zs-cancel';cancel.textContent=labels[13];const ok=document.createElement('button');ok.className='zs-ok';ok.textContent=labels[12];foot.append(cancel,ok);d.append(st,head,body,foot);document.body.append(d);const done=v=>{if(d.open)d.close();d.remove();resolve(v)};cancel.addEventListener('click',()=>done(false));ok.addEventListener('click',()=>done(true));d.addEventListener('cancel',e=>{e.preventDefault();done(false)},{once:true});d.showModal()})}
-  const terminal={auto:false,startedAt:0,capital:10,minLiquidity:5000,maxTradeSize:10,maxOpenPositions:4,idleTimeout:60,minMovePct:0.2,logs:[],seen:[],lastAuto:0,sessionStartCapital:10,equityHistory:[]};
+  const terminal={auto:false,startedAt:0,capital:10,minLiquidity:5000,maxTradeSize:10,maxOpenPositions:4,maxDailyLossSol:1,minBuyCount:3,idleTimeout:60,minMovePct:0.2,logs:[],seen:[],lastAuto:0,sessionStartCapital:10,equityHistory:[]};
   const TERMINAL_KEY='zombcash_sniper_terminal_v1';
   const dcopy=()=>DASH_COPY[state.lang]||DASH_COPY.en;
   function renderHelpPanel(){
@@ -642,7 +677,7 @@
     ]}
   };
 
-  function saveTerminal(){try{terminal.settings={};['sniper-size','sniper-target','sniper-stop','sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-idle-timeout','sniper-min-move','sniper-max-open'].forEach(id=>{const el=$(id);if(el)terminal.settings[id]=el.value;});localStorage.setItem(TERMINAL_KEY,JSON.stringify(terminal));}catch(_){}}
+  function saveTerminal(){try{terminal.settings={};['sniper-size','sniper-target','sniper-stop','sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-idle-timeout','sniper-min-move','sniper-max-open','sniper-min-buys','sniper-max-daily-loss'].forEach(id=>{const el=$(id);if(el)terminal.settings[id]=el.value;});localStorage.setItem(TERMINAL_KEY,JSON.stringify(terminal));}catch(_){}}
   function loadTerminal(){try{const v=JSON.parse(localStorage.getItem(TERMINAL_KEY)||'null');if(v&&typeof v==='object'){Object.assign(terminal,v);if(v.settings)Object.keys(v.settings).forEach(id=>{const el=$(id);if(el)el.value=v.settings[id];});}}catch(_){}}
   function logEvent(kind,symbol,detail){terminal.logs.unshift({at:Date.now(),kind,symbol:symbol||'SYSTEM',detail:detail||''});terminal.logs=terminal.logs.slice(0,18);saveTerminal();renderLog();}
   function dashNode(tag,cls,txt){const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n;}
@@ -658,7 +693,7 @@
     const input=dashNode('input','zs-number');input.id=id;input.type='number';input.min=min;input.max=max;input.step=step;input.value=value;
     field.querySelector('label').htmlFor=id;
     if(range){const slider=dashNode('input','zs-range');slider.type='range';slider.min=min;slider.max=max;slider.step=step;slider.value=value;slider.addEventListener('input',()=>{input.value=slider.value;input.dispatchEvent(new Event('change',{bubbles:true}));});input.addEventListener('input',()=>slider.value=input.value);field.append(slider);}
-    input.addEventListener('change',()=>{if(id==='sniper-capital'){terminal.capital=Math.max(0,Number(input.value)||0);terminal.maxTradeSize=terminal.capital;const size=$('sniper-size');if(size){size.max=Math.max(0.001,terminal.capital);const slider=size.parentElement&&size.parentElement.querySelector('.zs-range');if(slider)slider.max=size.max;}}if(id==='sniper-liquidity')terminal.minLiquidity=Math.max(0,Number(input.value)||0);if(id==='sniper-idle-timeout')terminal.idleTimeout=Math.max(15,Number(input.value)||60);if(id==='sniper-min-move')terminal.minMovePct=Math.max(0.05,Number(input.value)||0.2);if(id==='sniper-max-size'){terminal.maxTradeSize=Math.max(0.001,Math.min(10,Number(input.value)||0.05));const size=$('sniper-size');if(size){size.max=terminal.maxTradeSize;const slider=size.parentElement&&size.parentElement.querySelector('.zs-range');if(slider)slider.max=terminal.maxTradeSize;if(Number(size.value)>terminal.maxTradeSize){size.value=terminal.maxTradeSize;if(slider)slider.value=size.value;}}}saveTerminal();renderStats();});
+    input.addEventListener('change',()=>{if(id==='sniper-capital'){terminal.capital=Math.max(0,Number(input.value)||0);terminal.maxTradeSize=terminal.capital;const size=$('sniper-size');if(size){size.max=Math.max(0.001,terminal.capital);const slider=size.parentElement&&size.parentElement.querySelector('.zs-range');if(slider)slider.max=size.max;}}if(id==='sniper-liquidity')terminal.minLiquidity=Math.max(0,Number(input.value)||0);if(id==='sniper-idle-timeout')terminal.idleTimeout=Math.max(15,Number(input.value)||60);if(id==='sniper-min-move')terminal.minMovePct=Math.max(0,Number(input.value)||0.2);if(id==='sniper-min-buys')terminal.minBuyCount=Math.max(1,Math.min(100,Math.round(Number(input.value)||3)));if(id==='sniper-max-daily-loss')terminal.maxDailyLossSol=Math.max(0,Math.min(1000,Number(input.value)||0));if(id==='sniper-max-size'){terminal.maxTradeSize=Math.max(0.001,Math.min(10,Number(input.value)||0.05));const size=$('sniper-size');if(size){size.max=terminal.maxTradeSize;const slider=size.parentElement&&size.parentElement.querySelector('.zs-range');if(slider)slider.max=terminal.maxTradeSize;if(Number(size.value)>terminal.maxTradeSize){size.value=terminal.maxTradeSize;if(slider)slider.value=size.value;}}}saveTerminal();renderStats();});
     field.append(input);host.append(field);return field;
   }
   function sparkline(values,ariaLabel='Observed token price since simulated entry'){
@@ -777,13 +812,20 @@
     if(!terminal.auto)return; // Paper demo may hold multiple positions; virtual capital remains the only sizing limit.
     const now=Date.now();
     const item=state.candidates.find(c=>{
-      if(c.source!=='pumpportal'||!state.feed.pumpdevConnected||!(c.priceNative>0)||terminal.seen.includes(c.address))return false;
+      if(c.source!=='pumpportal'||(state.source!=='all'&&state.source!=='pumpportal')||!state.feed.pumpdevConnected||!(c.priceNative>0)||terminal.seen.includes(c.address))return false;
+      if(state.requireSocials&&c.hasSocials!==true)return false;
+      const q=String(state.nameQuery||'').trim().toLowerCase();
+      if(q&&!(String(c.name||'')+' '+String(c.symbol||'')).toLowerCase().includes(q))return false;
+      if(state.creatorFilter==='repeat'&&c.creatorHistoryStatus!=='repeat')return false;
+      if(state.creatorFilter==='first'&&c.creatorHistoryStatus!=='first_seen')return false;
       const age=now-Number(c.eventAt||0),m=c.firstMinute||{};
-      const buys=Number(m.buyCount||0),sells=Number(m.sellCount||0);
+      const buys=Number(m.buyCount||0),uniqueBuyers=Number(m.uniqueBuyers||0);
       const net=Number(m.netSol||0),move=Number(m.priceChangePct||0);
-      // Early-momentum demo: evaluate every newly observed mint during its configurable launch window.
-      // Buy/sell balance, net SOL and price movement remain visible as telemetry, not hard entry gates.
-      return age>=0&&age<=Math.max(60,Number(terminal.buyWindowSeconds||90))*1000&&Number(m.tradeCount||0)>=1;
+      const minBuys=Math.max(1,Number(terminal.minBuyCount)||3);
+      const minMove=Math.max(0,Number(terminal.minMovePct)||0.2);
+      // Apply the same observable entry gates as the registered server Paper Engine.
+      return age>=0&&age<=Math.max(5,Number(terminal.buyWindowSeconds||60))*1000
+        &&buys>=minBuys&&uniqueBuyers>=1&&net>0&&move>=minMove;
     });
     if(!item)return;
     terminal.seen.push(item.address);terminal.seen=terminal.seen.slice(-250);terminal.lastAuto=Date.now();saveTerminal();
@@ -1006,7 +1048,7 @@
     .zs-toggle{min-height:38px;font-size:11px;letter-spacing:.05em;background:#354337;border-color:#9aaa91}.zs-toggle.is-on{background:#a8b99d;color:#111811}.zs-actions{margin:7px 0 12px}.zs-actions button{min-height:34px;font-size:10px}
     .zs-chart{height:84px;border-color:#65746566;background:linear-gradient(180deg,#b5c5a412,transparent)}
     .zs-right{grid-template-rows:auto minmax(0,.88fr) minmax(0,1.12fr);gap:9px}.zs-right>h3{padding-bottom:7px}.zs-position-section{min-height:0;overflow:auto;border:1px solid #344139;border-radius:4px;padding:0 10px;background:#0d1411}.zs-positions{max-height:none;min-height:0;overflow:visible}.zs-positions-inner{display:grid;gap:2px}.zs-positions .sniper-position{grid-template-columns:minmax(0,1fr) auto;padding:9px 0;gap:6px}.zs-position-head strong:first-child{font-size:13px;color:#e6ece4}.zs-position-detail{font-size:11px;line-height:1.45}.zs-position-chart{max-height:36px}.zs-spark{height:34px}
-    .zs-launch-panel{display:flex;flex-direction:column;min-height:0;padding:10px 12px}.zs-launch-panel h3{margin-bottom:7px}.zs-launch-panel .sniper-toolbar{display:flex;align-items:center;gap:9px;margin:0 0 7px;min-height:30px}.zs-launch-panel #sniper-feed-status{font-size:10px;line-height:1.3}.zs-launch-panel #sniper-refresh{min-height:29px;padding:6px 10px;font-size:9px;white-space:nowrap}.zs-launches{flex:1;min-height:0;max-height:none;overflow:auto;padding:0 7px;border:1px solid #36433a;border-radius:4px;background:#0d1411;scrollbar-width:thin}
+    .zs-launch-panel{display:flex;flex-direction:column;min-height:0;padding:10px 12px}.zs-launch-panel h3{margin-bottom:7px}.zs-source-select,.zs-name-filter,.zs-creator-select{min-width:0;max-width:100%;background:#101914;color:#dce7da;border:1px solid #526458;padding:6px 8px;font-size:10px}.zs-filter-label{display:flex;align-items:center;gap:4px;color:#cbd6c8;font-size:9px;white-space:nowrap}.zs-filter-label input{accent-color:#a8c59a}.zs-launch-panel .sniper-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:0 0 7px;min-height:30px}.zs-launch-panel #sniper-feed-status{font-size:10px;line-height:1.3}.zs-launch-panel #sniper-refresh{min-height:29px;padding:6px 10px;font-size:9px;white-space:nowrap}.zs-launches{flex:1;min-height:0;max-height:none;overflow:auto;padding:0 7px;border:1px solid #36433a;border-radius:4px;background:#0d1411;scrollbar-width:thin}
     .zs-launches #sniper-candidates{display:grid}.zs-launches .sniper-candidate{grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;padding:9px 3px;border-top:1px solid #ffffff12}.zs-launches .sniper-candidate-main{gap:3px}.zs-launches .sniper-token-name{font-size:12px;line-height:1.25;color:#e6ebe4}.zs-launches .sniper-candidate-main small{font-size:10px;line-height:1.25}.zs-launches .sniper-candidate-stats{grid-column:1;grid-row:2;display:flex;flex-wrap:wrap;gap:5px 12px;font-size:10px;color:#bac5ba}.zs-launches .sniper-link{display:none}.zs-launches .sniper-action{grid-column:2;grid-row:1/3;align-self:center;min-width:94px;min-height:30px;padding:6px 9px;font-size:9px}.zs-launches .sniper-action:disabled{background:#38423b!important;border-color:#526056!important;color:#bdc6bc!important;opacity:1}
     .zs-log{grid-template-columns:repeat(3,minmax(0,1fr));max-height:58px;overflow:auto}.zs-logrow{grid-template-columns:55px 52px minmax(50px,auto);gap:5px;padding:5px 7px;font-size:10px}.zs-logrow span{grid-column:1/-1;color:#aeb9af}.zs-logkind{font-size:9px;letter-spacing:.05em}
     .zs-foot{font-size:10px}.zs-fullscreen .zs-foot{display:none!important}
@@ -1163,14 +1205,16 @@
     addVirtualField(fieldHost,'sniper-liquidity',dcopy().minliq,0,1000000,100,terminal.minLiquidity||5000);
     addVirtualField(fieldHost,'sniper-idle-timeout',state.lang==='ru'?'ТАЙМ-АУТ БЕЗ ДВИЖЕНИЯ (СЕК.)':'NO-MOVEMENT TIMEOUT (SEC)',15,300,5,terminal.idleTimeout||60);
     addVirtualField(fieldHost,'sniper-min-move',state.lang==='ru'?'МИН. ДВИЖЕНИЕ ЦЕНЫ (%)':'MINIMUM PRICE MOVE (%)',0.05,2,0.05,terminal.minMovePct||0.2);
-    const maxOpenField=addVirtualField(fieldHost,'sniper-max-open',state.lang==='ru'?'МАКС. ОТКРЫТЫХ СДЕЛОК':'MAX SIMULTANEOUS OPEN TRADES',0,10,1,Number.isFinite(Number(terminal.maxOpenPositions))?Number(terminal.maxOpenPositions):4);
+    addVirtualField(fieldHost,'sniper-min-buys',state.lang==='ru'?'МИН. ПОКУПОК В ПЕРВОЙ МИНУТЕ':'MINIMUM FIRST-MINUTE BUYS',1,30,1,terminal.minBuyCount||3);
+    addVirtualField(fieldHost,'sniper-max-daily-loss',state.lang==='ru'?'МАКС. ДНЕВНОЙ УБЫТОК (SOL)':'MAX DAILY LOSS (SOL)',0,1000,0.01,terminal.maxDailyLossSol??1,false);
+    const maxOpenField=addVirtualField(fieldHost,'sniper-max-open',state.lang==='ru'?'МАКС. ОТКРЫТЫХ СДЕЛОК':'MAX SIMULTANEOUS OPEN TRADES',1,20,1,Number.isFinite(Number(terminal.maxOpenPositions))?Number(terminal.maxOpenPositions):4);
     const maxOpenInput=$('sniper-max-open');
     if(maxOpenInput){
-      maxOpenInput.value=String(Math.max(0,Math.min(10,Math.round(Number(maxOpenInput.value)))));
+      maxOpenInput.value=String(Math.max(1,Math.min(20,Math.round(Number(maxOpenInput.value)))));
       terminal.maxOpenPositions=Number(maxOpenInput.value);
       const valueLabel=dashNode('strong','zs-limit-value',String(terminal.maxOpenPositions));
       maxOpenField.append(valueLabel);
-      const syncLimit=()=>{terminal.maxOpenPositions=Math.max(0,Math.min(10,Math.round(Number(maxOpenInput.value)||0)));maxOpenInput.value=String(terminal.maxOpenPositions);valueLabel.textContent=String(terminal.maxOpenPositions);saveTerminal();};
+      const syncLimit=()=>{terminal.maxOpenPositions=Math.max(1,Math.min(20,Math.round(Number(maxOpenInput.value)||1)));maxOpenInput.value=String(terminal.maxOpenPositions);valueLabel.textContent=String(terminal.maxOpenPositions);saveTerminal();};
       maxOpenInput.addEventListener('input',syncLimit);
       maxOpenInput.addEventListener('change',syncLimit);
     }
@@ -1190,7 +1234,16 @@
     const centerSummary=dashNode('div','zs-center-summary');centerSummary.id='zs-center-summary';const chartPanel=dashNode('div','zs-chart-panel');const chartHead=dashNode('div','zs-chart-head');const chartTitle=dashNode('h3','',state.lang==='ru'?'ДИНАМИКА КАПИТАЛА ЗА СЕССИЮ':'SESSION EQUITY CURVE');chartTitle.id='zs-chart-title';chartHead.append(chartTitle,dashNode('span','zs-chart-range',state.lang==='ru'?'SOL · С НАЧАЛА СЕССИИ':'SOL · SINCE SESSION START'));chartPanel.append(chartHead,dashNode('small','zs-equity-caption',''));const chart=dashNode('div','zs-chart');chart.id='zs-main-chart';chartPanel.append(chart);
     center.append(portrait,core,toggle,uptime,centerSummary,chartPanel,statsPanel);
     const right=dashNode('section','zs-panel zs-right');const rightTitle=dashNode('h3','',dcopy().active);rightTitle.id='zs-right-title';right.append(rightTitle);const posSection=dashNode('div','zs-position-section');const posWrap=dashNode('div','zs-positions');posWrap.id='zs-positions-wrap';if(positions){positions.classList.add('zs-positions-inner');posWrap.append(positions);}posSection.append(posWrap);right.append(posSection);
-    const launchPanel=dashNode('section','zs-panel zs-launch-panel');const launchTitle=dashNode('h3','',dcopy().launches);launchTitle.id='zs-launch-title';launchPanel.append(launchTitle);const toolbar=dashNode('div','sniper-toolbar');if(refresh)toolbar.append(refresh);if(status)toolbar.append(status);launchPanel.append(toolbar);const launchWrap=dashNode('div','zs-launches');if(candidates)launchWrap.append(candidates);launchPanel.append(launchWrap);
+    const launchPanel=dashNode('section','zs-panel zs-launch-panel');const launchTitle=dashNode('h3','',dcopy().launches);launchTitle.id='zs-launch-title';launchPanel.append(launchTitle);const toolbar=dashNode('div','sniper-toolbar');
+    const sourceSelect=dashNode('select','zs-source-select');sourceSelect.setAttribute('aria-label','Candidate source');
+    [['all','ALL SOURCES'],['pumpportal','PUMP.FUN LAUNCHES'],['boosts','BOOST MONITOR'],['community','ZOMBIE LAB / COMMUNITY']].forEach(([v,label])=>{const option=document.createElement('option');option.value=v;option.textContent=state.lang==='ru'?({'all':'ВСЕ ИСТОЧНИКИ','pumpportal':'ЗАПУСКИ PUMP.FUN','boosts':'BOOST MONITOR','community':'ZOMBIE LAB / СООБЩЕСТВО'}[v]):label;sourceSelect.append(option);});
+    sourceSelect.value=state.source;sourceSelect.addEventListener('change',()=>{state.source=sourceSelect.value;refreshFeed();});
+    const socialsLabel=dashNode('label','zs-filter-label');const socialsCheck=dashNode('input','');socialsCheck.type='checkbox';socialsCheck.checked=state.requireSocials;socialsCheck.addEventListener('change',()=>{state.requireSocials=socialsCheck.checked;renderCandidates();if(terminal.auto&&authToken())setServerPaperEnabled(true);});socialsLabel.append(socialsCheck,dashNode('span','',state.lang==='ru'?'ТОЛЬКО С СОЦСЕТЯМИ':'SOCIALS ONLY'));
+    const nameFilter=dashNode('input','zs-name-filter');nameFilter.type='search';nameFilter.placeholder=state.lang==='ru'?'Фильтр названия / тикера':'Filter name / ticker';nameFilter.value=state.nameQuery;nameFilter.addEventListener('input',()=>{state.nameQuery=nameFilter.value;renderCandidates();});
+    const creatorSelect=dashNode('select','zs-creator-select');creatorSelect.setAttribute('aria-label','Creator history');
+    [['any','ANY DEV'],['first','FIRST SEEN'],['repeat','REPEAT DEV']].forEach(([v,label])=>{const option=document.createElement('option');option.value=v;option.textContent=state.lang==='ru'?({'any':'ЛЮБОЙ DEV','first':'ВПЕРВЫЕ В ЛЕНТЕ','repeat':'ПОВТОРНЫЙ DEV'}[v]):label;creatorSelect.append(option);});
+    creatorSelect.value=state.creatorFilter;creatorSelect.addEventListener('change',()=>{state.creatorFilter=creatorSelect.value;renderCandidates();if(terminal.auto&&authToken())setServerPaperEnabled(true);});
+    toolbar.append(sourceSelect,socialsLabel,nameFilter,creatorSelect);if(refresh)toolbar.append(refresh);if(status)toolbar.append(status);launchPanel.append(toolbar);const launchWrap=dashNode('div','zs-launches');if(candidates)launchWrap.append(candidates);launchPanel.append(launchWrap);
     right.append(launchPanel);layout.append(left,center,right);
     const journal=dashNode('section','zs-panel');journal.id='zs-journal-panel';const logTitle=dashNode('h3','',dcopy().journal);logTitle.id='zs-log-title';journal.append(logTitle);const log=dashNode('div','zs-log');log.id='zs-log';journal.append(log);
     const clearBar=dashNode('div','sniper-toolbar');if(clear)clearBar.append(clear);journal.append(clearBar);
@@ -1260,7 +1313,7 @@
       }finally{if(button)button.disabled=false;}
     });
     ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
-    ['sniper-capital','sniper-size','sniper-target','sniper-stop','sniper-min-move','sniper-idle-timeout','sniper-network','sniper-priority','sniper-dex','sniper-slip'].forEach(id=>$(id)?.addEventListener('change',()=>{if(terminal.auto&&authToken())setServerPaperEnabled(true);}));
+    ['sniper-capital','sniper-size','sniper-target','sniper-stop','sniper-min-move','sniper-idle-timeout','sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-min-buys','sniper-max-daily-loss','sniper-max-open'].forEach(id=>$(id)?.addEventListener('change',()=>{if(terminal.auto&&authToken())setServerPaperEnabled(true);}));
     refreshFeed();if(authToken())syncFromServer();else{updateSyncStatus('loginToSync');updatePositions();}
     if(terminal.auto&&!Number(terminal.startedAt)){terminal.startedAt=Date.now();saveTerminal();}const updateRuntimeIndicator=()=>{const node=$('zs-runtime-indicator');if(!node)return;const running=!!terminal.auto;const elapsed=running?Math.max(0,Math.floor((Date.now()-(Number(terminal.startedAt)||Date.now()))/1000)):0;const hh=String(Math.floor(elapsed/3600)).padStart(2,'0');const mm=String(Math.floor((elapsed%3600)/60)).padStart(2,'0');const ss=String(elapsed%60).padStart(2,'0');node.classList.toggle('is-running',running);node.classList.toggle('is-offline',!running);node.textContent=(state.lang==='ru'?(running?'АВТОТОРГОВЛЯ · РАБОТАЕТ':'АВТОТОРГОВЛЯ · ОСТАНОВЛЕНА'):(running?'AUTO TRADING · RUNNING':'AUTO TRADING · STOPPED'))+'  '+hh+':'+mm+':'+ss;};
     updateRuntimeIndicator();window.setInterval(updateRuntimeIndicator,1000);
