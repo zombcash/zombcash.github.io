@@ -180,15 +180,23 @@
       const depositNote=dashNode('small','zs-wallet-note',state.lang==='ru'?'Для пополнения отправляйте только SOL в сети Solana на этот адрес. Не отправляйте токены других сетей.':'To fund this wallet, send native SOL on Solana only. Do not send assets from other networks.');
       const activityTitle=dashNode('strong','zs-wallet-activity-title',state.lang==='ru'?'ПОСЛЕДНИЕ ОПЕРАЦИИ':'RECENT ACTIVITY');
       const activityList=dashNode('div','zs-wallet-activity');
-      const loadActivity=async()=>{
-        activityList.replaceChildren(dashNode('small','',state.lang==='ru'?'ЗАГРУЗКА…':'LOADING…'));
+      let activityCursor=null;
+      let activityLoading=false;
+      const loadActivity=async(append=false)=>{
+        if(activityLoading)return;
+        activityLoading=true;
+        const loadMoreButton=activityList.querySelector('.zs-wallet-load-more');
+        if(loadMoreButton)loadMoreButton.disabled=true;
+        if(!append){activityCursor=null;activityList.replaceChildren(dashNode('small','',state.lang==='ru'?'ЗАГРУЗКА…':'LOADING…'));}
         try{
-          const activityResponse=await fetch(AUTH_API+'/api/sniper/wallet/activity',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
+          const query=activityCursor?'?before='+encodeURIComponent(activityCursor):'';
+          const activityResponse=await fetch(AUTH_API+'/api/sniper/wallet/activity'+query,{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
           const activityData=await activityResponse.json().catch(()=>({}));
           if(!activityResponse.ok)throw new Error('Activity unavailable');
-          activityList.replaceChildren();
-          if(!activityData.activity||!activityData.activity.length){activityList.append(dashNode('small','',state.lang==='ru'?'Операций пока нет.':'No transactions yet.'));return;}
-          activityData.activity.forEach(item=>{
+          if(!append)activityList.replaceChildren();
+          const items=Array.isArray(activityData.activity)?activityData.activity:[];
+          if(!items.length&&!append){activityList.append(dashNode('small','',state.lang==='ru'?'Операций пока нет.':'No transactions yet.'));}
+          items.forEach(item=>{
             const entry=dashNode('div','zs-wallet-activity-item');
             const detail=dashNode('span','',item.failed?(state.lang==='ru'?'ОШИБКА':'FAILED'):(state.lang==='ru'?'ПОДТВЕРЖДЕНО':'CONFIRMED'));
             const time=dashNode('small','',item.blockTime?new Date(item.blockTime*1000).toLocaleString():'—');
@@ -204,7 +212,20 @@
             link.href='https://solscan.io/tx/'+encodeURIComponent(item.signature);link.target='_blank';link.rel='noopener noreferrer';
             entry.append(detail,time,amount,fee,link);activityList.append(entry);
           });
-        }catch(_){activityList.replaceChildren(dashNode('small','',state.lang==='ru'?'История временно недоступна.':'Activity temporarily unavailable.'));}
+          activityCursor=activityData.pagination&&activityData.pagination.hasMore?activityData.pagination.nextCursor:null;
+          const oldButton=activityList.querySelector('.zs-wallet-load-more');
+          if(oldButton)oldButton.remove();
+          if(activityCursor){
+            const more=dashNode('button','zs-wallet-load-more',state.lang==='ru'?'ЗАГРУЗИТЬ ЕЩЁ':'LOAD OLDER');
+            more.type='button';
+            more.addEventListener('click',()=>loadActivity(true));
+            activityList.append(more);
+          }
+        }catch(_){
+          if(!append)activityList.replaceChildren();
+          const error=dashNode('small','',state.lang==='ru'?'История временно недоступна.':'Activity temporarily unavailable.');
+          activityList.append(error);
+        }finally{activityLoading=false;}
       };
       panel.append(balanceRow,depositNote,activityTitle,activityList,dashNode('small','',state.lang==='ru'?'Приватный ключ хранится на сервере. Демо-режим не отправляет реальные сделки.':'Private key stays server-side. Paper mode never sends real trades.'));
       loadBalance();loadActivity();
