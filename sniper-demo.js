@@ -139,7 +139,7 @@
     const provision=dashNode('button','zs-wallet-provision',state.lang==='ru'?'СОЗДАТЬ / ПРОВЕРИТЬ КОШЕЛЁК':'CREATE / CHECK WALLET');provision.type='button';provision.addEventListener('click',async()=>{provision.disabled=true;provision.textContent=state.lang==='ru'?'ПРОВЕРКА…':'CHECKING…';try{const result=await fetch(AUTH_API+'/api/sniper/wallet/provision',{method:'POST',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},cache:'no-store'});const body=await result.json().catch(()=>({}));if(!result.ok)throw new Error(body.error||'Wallet provisioning failed');await refreshWalletInfo();}catch(error){panel.append(dashNode('small','zs-wallet-error',error.message||'Wallet provisioning unavailable'));provision.disabled=false;provision.textContent=state.lang==='ru'?'ПОВТОРИТЬ':'RETRY';}});panel.append(provision);
     try{
       const response=await fetch(AUTH_API+'/api/sniper/wallet',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
-      if(!response.ok)throw new Error('wallet lookup '+response.status);
+      if(!response.ok){const failure=await response.json().catch(()=>({}));throw new Error(failure.error||('Wallet API HTTP '+response.status));}
       const data=await response.json(),wallet=data.wallet;
       if(data.trading&&data.trading.mode==='paper'){
         const serverEnabled=!!data.trading.enabled;
@@ -169,10 +169,10 @@
         try{
           const balanceResponse=await fetch(AUTH_API+'/api/sniper/wallet/balance',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
           const balanceData=await balanceResponse.json().catch(()=>({}));
-          if(!balanceResponse.ok)throw new Error(balanceData.error||'Balance unavailable');
+          if(!balanceResponse.ok)throw new Error((balanceData.error||'Balance API error')+' (HTTP '+balanceResponse.status+')');
           balanceValue.textContent=Number(balanceData.sol).toLocaleString(undefined,{minimumFractionDigits:4,maximumFractionDigits:9})+' SOL';
           balanceValue.title=state.lang==='ru'?'Подтверждено сетью Solana':'Confirmed on Solana';
-        }catch(_){balanceValue.textContent=state.lang==='ru'?'НЕДОСТУПЕН':'UNAVAILABLE';}
+        }catch(error){balanceValue.textContent=(state.lang==='ru'?'ОШИБКА: ':'ERROR: ')+(error&&error.message?error.message:(state.lang==='ru'?'сеть недоступна':'network unavailable'));}
         finally{refreshBalance.disabled=false;}
       };
       refreshBalance.addEventListener('click',loadBalance);
@@ -190,15 +190,15 @@
             method:'POST',headers:{'Authorization':'Bearer '+token},cache:'no-store'
           });
           const baselineData=await baselineResponse.json().catch(()=>({}));
-          if(!baselineResponse.ok)throw new Error(baselineData.error||'Baseline unavailable');
+          if(!baselineResponse.ok)throw new Error((baselineData.error||'Baseline API error')+' (HTTP '+baselineResponse.status+')');
           const created=!!(baselineData.baseline&&baselineData.baseline.created);
           reconciliationStatus.textContent=created
             ?(state.lang==='ru'?'ИСХОДНАЯ ТОЧКА СОХРАНЕНА · ИСТОРИЯ ЕЩЁ НЕ СВЕРЕНА':'BASELINE SAVED · HISTORY NOT YET RECONCILED')
             :(state.lang==='ru'?'ИСХОДНАЯ ТОЧКА УЖЕ СУЩЕСТВУЕТ · НЕ ИЗМЕНЕНА':'EXISTING BASELINE PRESERVED · NOT OVERWRITTEN');
           setBaseline.textContent=state.lang==='ru'?'ТОЧКА ЗАДАНА':'BASELINE SET';
           setBaseline.disabled=true;
-        }catch(_){
-          reconciliationStatus.textContent=state.lang==='ru'?'НЕ УДАЛОСЬ ЗАДАТЬ ТОЧКУ':'COULD NOT SET BASELINE';
+        }catch(error){
+          reconciliationStatus.textContent=(state.lang==='ru'?'ОШИБКА: ':'ERROR: ')+(error&&error.message?error.message:(state.lang==='ru'?'сеть недоступна':'network unavailable'));
           setBaseline.disabled=false;
         }
       });
@@ -217,7 +217,7 @@
           const query=activityCursor?'?before='+encodeURIComponent(activityCursor):'';
           const activityResponse=await fetch(AUTH_API+'/api/sniper/wallet/activity'+query,{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
           const activityData=await activityResponse.json().catch(()=>({}));
-          if(!activityResponse.ok)throw new Error('Activity unavailable');
+          if(!activityResponse.ok)throw new Error((activityData.error||'Activity API error')+' (HTTP '+activityResponse.status+')');
           if(!append)activityList.replaceChildren();
           const items=Array.isArray(activityData.activity)?activityData.activity:[];
           if(!items.length&&!append){activityList.append(dashNode('small','',state.lang==='ru'?'Операций пока нет.':'No transactions yet.'));}
@@ -246,16 +246,16 @@
             more.addEventListener('click',()=>loadActivity(true));
             activityList.append(more);
           }
-        }catch(_){
+        }catch(failure){
           if(!append)activityList.replaceChildren();
-          const error=dashNode('small','',state.lang==='ru'?'История временно недоступна.':'Activity temporarily unavailable.');
+          const error=dashNode('small','zs-wallet-error',(state.lang==='ru'?'ОШИБКА ЗАГРУЗКИ ИСТОРИИ: ':'ACTIVITY ERROR: ')+(failure&&failure.message?failure.message:(state.lang==='ru'?'сеть недоступна':'network unavailable')));
           activityList.append(error);
         }finally{activityLoading=false;}
       };
       panel.append(balanceRow,depositNote,reconciliationRow,activityTitle,activityList,dashNode('small','',state.lang==='ru'?'Приватный ключ хранится на сервере. Демо-режим не отправляет реальные сделки.':'Private key stays server-side. Paper mode never sends real trades.'));
       loadBalance();loadActivity();
-    }catch(_){
-      panel.append(dashNode('small','',state.lang==='ru'?'Не удалось загрузить адрес кошелька.':'Could not load wallet address.'));
+    }catch(error){
+      panel.append(dashNode('small','zs-wallet-error',(state.lang==='ru'?'ОШИБКА КОШЕЛЬКА: ':'WALLET ERROR: ')+(error&&error.message?error.message:(state.lang==='ru'?'сеть недоступна':'network unavailable'))));
     }
   }
 
