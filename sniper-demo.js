@@ -280,7 +280,7 @@
     host.replaceChildren();
     const historyMode=mode==='history';
     const visiblePositions=state.positions.filter(p=>historyMode?p.status==='closed':p.status==='open');
-    if(!visiblePositions.length){host.append(make('p','sniper-muted',historyMode?(state.lang==='ru'?'Закрытых сделок пока нет':'No closed trades yet'):(state.lang==='ru'?'Сейчас нет открытых сделок':'No open positions right now'));renderStats();return;}
+    if(!visiblePositions.length){host.append(make('p','sniper-muted',historyMode?(state.lang==='ru'?'Закрытых сделок пока нет':'No closed trades yet'):(state.lang==='ru'?'Сейчас нет открытых сделок':'No open positions right now')));renderStats();return;}
     visiblePositions.slice().sort((a,b)=>Number((historyMode?b.closedAt:b.openedAt)||0)-Number((historyMode?a.closedAt:a.openedAt)||0)).forEach(p=>{
       const row=make('article','sniper-position zs-position-card');
       const head=make('div','zs-position-topline');
