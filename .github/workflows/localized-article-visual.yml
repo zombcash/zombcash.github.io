@@ -8,6 +8,8 @@ on:
       - '.github/workflows/localized-article-visual.yml'
       - 'tests/localized-article-visual.cjs'
       - 'tests/sniper-help-i18n.cjs'
+      - 'tests/sniper-compact-layout.cjs'
+      - 'sniper-demo.js'
       - 'avoid-fake-token-websites-wallet-scams.html'
       - 'check-liquidity-holder-distribution-solana.html'
       - 'how-to-research-solana-meme-coins.html'
@@ -103,6 +105,7 @@ jobs:
           node --check shared-nav.js
           node --check language.js
           node --check sniper-demo.js
+          node --check tests/sniper-compact-layout.cjs
       - name: Install Playwright and Chromium
         run: |
           npm init -y
@@ -121,6 +124,8 @@ jobs:
         run: node tests/localized-article-visual.cjs
       - name: Test Zombie Sniper Help in all nine languages and responsive layouts
         run: node tests/sniper-help-i18n.cjs
+      - name: Test compact Zombie Sniper dashboard across desktop and mobile viewports
+        run: node tests/sniper-compact-layout.cjs
       - name: Upload screenshots and diagnostics
         if: always()
         uses: actions/upload-artifact@v4

@@ -1098,6 +1098,13 @@
     @media(max-width:760px){.sniper-demo.zs-fullscreen{display:block!important;overflow:auto!important;height:100dvh!important;padding:12px!important}.zs-fullscreen>.zs-head,.zs-fullscreen>.zs-nav,.zs-fullscreen>.zs-kpis,.zs-fullscreen>.zs-layout,.zs-fullscreen>#zs-journal-panel{display:block!important;margin-bottom:10px}.zs-fullscreen .zs-layout{height:auto;grid-template-columns:1fr}.zs-fullscreen .zs-right{min-height:520px}.zs-fullscreen .zs-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.zs-fullscreen .zs-kpis{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))}.zs-fullscreen .zs-log{grid-template-columns:1fr;max-height:150px}}
     `;
     style.textContent += `
+    /* Keep the Sniper tab compact in the article: fixed dashboard height, internal panel scrolling. */
+    .sniper-demo.zs-sniper-mode:not(.zs-fullscreen)>.zs-layout{height:clamp(520px,68vh,700px)!important;min-height:520px!important;max-height:700px!important;overflow:hidden!important;align-self:start!important;grid-template-columns:minmax(0,1.05fr) minmax(0,.85fr) minmax(0,1.1fr)!important}
+    .sniper-demo.zs-sniper-mode:not(.zs-fullscreen)>.zs-layout>.zs-left,.sniper-demo.zs-sniper-mode:not(.zs-fullscreen)>.zs-layout>.zs-center,.sniper-demo.zs-sniper-mode:not(.zs-fullscreen)>.zs-layout>.zs-right{min-width:0!important;min-height:0!important;height:100%!important;overflow-y:auto!important;overscroll-behavior:contain}
+    .sniper-demo.zs-sniper-mode:not(.zs-fullscreen) .zs-right{grid-template-rows:auto minmax(0,1fr) minmax(0,1fr)!important}
+    .sniper-demo.zs-sniper-mode:not(.zs-fullscreen) .zs-position-section,.sniper-demo.zs-sniper-mode:not(.zs-fullscreen) .zs-launches{min-height:0!important;max-height:100%!important;overflow-y:auto!important}
+    @media(max-width:760px){.sniper-demo.zs-sniper-mode:not(.zs-fullscreen)>.zs-layout{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;grid-template-columns:minmax(0,1fr)!important}.sniper-demo.zs-sniper-mode:not(.zs-fullscreen)>.zs-layout>.zs-left,.sniper-demo.zs-sniper-mode:not(.zs-fullscreen)>.zs-layout>.zs-center,.sniper-demo.zs-sniper-mode:not(.zs-fullscreen)>.zs-layout>.zs-right{height:auto!important;max-height:none!important;overflow:visible!important}.sniper-demo.zs-sniper-mode:not(.zs-fullscreen) .zs-right{min-height:520px!important}}
+
     /* History: compact trade rows; reserve real viewport space for the event log */
     .sniper-demo.zs-fullscreen.zs-history-mode{grid-template-rows:0 44px 38px 0 minmax(0,1fr) 196px!important}
     /* Keep the normal History tab compact; scroll inside its two history panes. */
@@ -1193,6 +1200,7 @@
         ['display','grid-row','width','max-width','height','min-height','overflow'].forEach(key=>walletView.style.removeProperty(key));
       }
       root.classList.toggle('zs-history-mode',tab==='history');
+      root.classList.toggle('zs-sniper-mode',tab==='sniper');
       nav.querySelectorAll('button[data-zs-nav]').forEach(b=>{const active=tabTargets[Number(b.dataset.zsNav)]===tab;b.classList.toggle('is-active',active);b.setAttribute('aria-selected',active?'true':'false');});
       left.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='settings');
       center.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='stats');
