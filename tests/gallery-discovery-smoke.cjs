@@ -4,7 +4,8 @@ const fs = require("fs");
 const path = require("path");
 const galleryData = JSON.parse(fs.readFileSync("gallery-data.json", "utf8"));
 const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]));
-const expectedGalleryCount = galleryData.items.length;
+const expectedGalleryCount = Math.min(200, galleryData.items.length);
+const firstPageItems = galleryData.items.slice(0, expectedGalleryCount);
 const installGalleryDataMock = page => page.addInitScript(data => {
   localStorage.setItem("zombcash-survivor-token", "smoke-survivor-session");
   const nativeFetch = window.fetch.bind(window);
@@ -23,10 +24,10 @@ if (galleryData.items.some(item => /\bZOMBIECASH\s+SITE\s+SPOTLIGHT\b/i.test(Str
 if (galleryData.items.some(item => (item.category_ids || []).includes("site-transmissions") || item.series === "site-transmissions" || /\bZOMBIECASH\s+SITE\s+TRANSMISSION\b/i.test(String(item.caption || "")))) throw new Error("Site Transmission screenshots must stay out of the gallery archive");
 for (const locale of ["en", "de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"]) { const pagePath = locale === "en" ? "gallery.html" : locale + "/gallery.html"; const pageHtml = fs.readFileSync(pagePath, "utf8"); if (/data-categories="site-transmissions"/.test(pageHtml)) throw new Error(locale + " gallery still contains Site Transmission screenshot cards"); }
 const targetLikeImageId = galleryData.items[0]?.id || "";
-const gallerySearchCorpus = galleryData.items.map(item =>
+const gallerySearchCorpus = firstPageItems.map(item =>
   [item.title || "", item.caption || "", ...(item.tags || [])].join(" ").toLowerCase()
 );
-const nonHorrorSearchItem = galleryData.items.find(item => !(item.category_ids || []).includes("nightmare-horror")) || galleryData.items[0];
+const nonHorrorSearchItem = firstPageItems.find(item => !(item.category_ids || []).includes("nightmare-horror")) || galleryData.items[0];
 const searchCandidates = String(nonHorrorSearchItem?.title || "") + " " + String(nonHorrorSearchItem?.caption || "");
 const gallerySearchWords = searchCandidates.toLowerCase().match(/[a-z0-9]{6,}/g) || [];
 const gallerySearchTerm = gallerySearchWords.find(word => gallerySearchCorpus.filter(text => text.includes(word)).length === 1) || gallerySearchWords[0] || "zombie";
