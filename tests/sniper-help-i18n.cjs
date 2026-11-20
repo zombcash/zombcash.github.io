@@ -51,7 +51,8 @@ const viewports = [
             panelClass: document.querySelector('#zs-help-panel')?.className || null,
             scriptLoaded: [...document.scripts].some(s => /sniper-demo\.js/.test(s.src)),
           }));
-          await helpTab.click({ force: true });
+          // Use the native click event: at the 768px breakpoint Playwright's forced pointer click can be swallowed by the dashboard's overlapping layout layers.
+          await helpTab.evaluate(button => button.click());
           const afterClick = await page.evaluate(() => ({
             activeTab: document.querySelector('.sniper-demo')?.dataset.activeTab || null,
             helpTabSelected: document.querySelector('.zs-nav button[data-zs-nav="4"]')?.getAttribute('aria-selected') || null,
