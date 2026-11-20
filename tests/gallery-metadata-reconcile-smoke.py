@@ -29,7 +29,7 @@ for item in items:
 # The Telegram archive is intentionally rolling and globally capped at the 200
 # newest image entries across all categories.
 sync_script = (Path(__file__).resolve().parents[1] / "scripts/sync_gallery.py").read_text(encoding="utf-8")
-limit_match = re.search(r"^MAX_TOTAL_ITEMS\\s*=\\s*(\\d+)", sync_script, re.M)
+limit_match = re.search(r"^MAX_TOTAL_ITEMS\s*=\s*(\d+)", sync_script, re.M)
 assert limit_match, "Gallery sync must declare its global rolling archive limit"
 global_limit = int(limit_match.group(1))
 assert global_limit == 200, f"Expected a 200-image gallery cap, got {global_limit}"
