@@ -12,6 +12,7 @@ on:
     - cron: "17 * * * *"
 permissions:
   contents: write
+# Rebuild the published static gallery after archive-limit changes.
 concurrency:
   group: zombie-gallery-sync
   cancel-in-progress: false
