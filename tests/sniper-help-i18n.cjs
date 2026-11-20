@@ -36,7 +36,7 @@ const viewports = [
           continue;
         }
         try {
-          await page.waitForSelector('#zs-help-panel', { timeout: 15000 });
+          await page.waitForSelector('#zs-help-panel', { state: 'attached', timeout: 15000 });
           await page.locator('[data-zs-nav="4"]').click();
           const panel = page.locator('#zs-help-panel');
           await panel.waitFor({ state: 'visible', timeout: 5000 });
