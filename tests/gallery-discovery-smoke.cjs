@@ -4,7 +4,8 @@ const fs = require("fs");
 const path = require("path");
 const galleryData = JSON.parse(fs.readFileSync("gallery-data.json", "utf8"));
 const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]));
-const expectedGalleryCount = galleryData.items.length;
+const expectedGalleryCount = Math.min(200, galleryData.items.length);
+const firstPageItems = galleryData.items.slice(0, expectedGalleryCount);
 const installGalleryDataMock = page => page.addInitScript(data => {
   localStorage.setItem("zombcash-survivor-token", "smoke-survivor-session");
   const nativeFetch = window.fetch.bind(window);
@@ -23,10 +24,10 @@ if (galleryData.items.some(item => /\bZOMBIECASH\s+SITE\s+SPOTLIGHT\b/i.test(Str
 if (galleryData.items.some(item => (item.category_ids || []).includes("site-transmissions") || item.series === "site-transmissions" || /\bZOMBIECASH\s+SITE\s+TRANSMISSION\b/i.test(String(item.caption || "")))) throw new Error("Site Transmission screenshots must stay out of the gallery archive");
 for (const locale of ["en", "de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"]) { const pagePath = locale === "en" ? "gallery.html" : locale + "/gallery.html"; const pageHtml = fs.readFileSync(pagePath, "utf8"); if (/data-categories="site-transmissions"/.test(pageHtml)) throw new Error(locale + " gallery still contains Site Transmission screenshot cards"); }
 const targetLikeImageId = galleryData.items[0]?.id || "";
-const gallerySearchCorpus = galleryData.items.map(item =>
+const gallerySearchCorpus = firstPageItems.map(item =>
   [item.title || "", item.caption || "", ...(item.tags || [])].join(" ").toLowerCase()
 );
-const nonHorrorSearchItem = galleryData.items.find(item => !(item.category_ids || []).includes("nightmare-horror")) || galleryData.items[0];
+const nonHorrorSearchItem = firstPageItems.find(item => !(item.category_ids || []).includes("nightmare-horror")) || galleryData.items[0];
 const searchCandidates = String(nonHorrorSearchItem?.title || "") + " " + String(nonHorrorSearchItem?.caption || "");
 const gallerySearchWords = searchCandidates.toLowerCase().match(/[a-z0-9]{6,}/g) || [];
 const gallerySearchTerm = gallerySearchWords.find(word => gallerySearchCorpus.filter(text => text.includes(word)).length === 1) || gallerySearchWords[0] || "zombie";
@@ -433,7 +434,7 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     await russian.goto("http://127.0.0.1:4173/ru/gallery.html", { waitUntil: "domcontentloaded" });
     await russian.waitForSelector(".gallery-toolbar");
     await russian.waitForFunction(expected => document.querySelectorAll("#gallery-grid .gallery-card").length === expected, expectedGalleryCount);
-    const visuallyReviewedIds = galleryData.items.filter(item => item.alt_review_status === "visual-reviewed").map(item => item.id);
+    const visuallyReviewedIds = firstPageItems.filter(item => item.alt_review_status === "visual-reviewed").map(item => item.id);
     const russianSampleIds = Array.from(new Set([
       ...galleryData.items.slice(0, 24).map(item => item.id),
       ...visuallyReviewedIds
@@ -525,6 +526,19 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       await localized.close();
     }
 
+    if (galleryData.items.length > 200) {
+      const nextPageButton = page.locator(".gallery-page-next");
+      if (!(await nextPageButton.isVisible())) throw new Error("Next 200-image page control is not visible");
+      await nextPageButton.click();
+      await page.waitForFunction(expectedId => {
+        const cards = document.querySelectorAll("#gallery-grid .gallery-card");
+        return cards.length > 0 && cards[0].dataset.galleryId === expectedId;
+      }, galleryData.items[200].id);
+      const secondPageCount = await page.locator("#gallery-grid .gallery-card").count();
+      if (secondPageCount !== Math.min(200, galleryData.items.length - 200)) throw new Error("Next page did not switch to the next 200 oldest images");
+      await page.locator(".gallery-page-prev").click();
+      await page.waitForFunction(expectedId => document.querySelector("#gallery-grid .gallery-card")?.dataset.galleryId === expectedId, galleryData.items[0].id);
+    }
     console.log(JSON.stringify({ status: "passed", initial, horror, search, reset, matching, oldestFirst, japaneseFilter, mobile: overflow, imageLoadAudit, imageNetworkEvents, recoveryChecks, localeAudit }));
   } finally {
     if (browser) await browser.close();

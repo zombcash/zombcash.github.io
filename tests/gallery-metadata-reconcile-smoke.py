@@ -8,7 +8,7 @@ items = data["items"]
 ids = [item["id"] for item in items]
 
 assert data.get("schema_version") == 2
-assert 1 <= len(items) <= 200, f"Expected 1–200 current gallery items, got {len(items)}"
+assert 1 <= len(items), f"Expected a non-empty full gallery archive, got {len(items)}"
 assert len(set(ids)) == len(items), "Duplicate gallery item IDs"
 
 def normalize_editorial_text(value):
@@ -26,16 +26,11 @@ for item in items:
         and not title.startswith(description)
         and not description.startswith(title)
     ), f"Description duplicates title/caption: {item['id']}"
-# The Telegram archive is intentionally rolling and globally capped at the 200
-# newest image entries across all categories.
+# Keep the full Telegram archive so the frontend can paginate it in 200-image batches.
 sync_script = (Path(__file__).resolve().parents[1] / "scripts/sync_gallery.py").read_text(encoding="utf-8")
-limit_match = re.search(r"^MAX_TOTAL_ITEMS\s*=\s*(\d+)", sync_script, re.M)
-assert limit_match, "Gallery sync must declare its global rolling archive limit"
-global_limit = int(limit_match.group(1))
-assert global_limit == 200, f"Expected a 200-image gallery cap, got {global_limit}"
-assert len(items) <= global_limit
+assert re.search(r"^PAGE_SIZE\s*=\s*200$", sync_script, re.M), "Gallery pages must contain 200 images"
 dates = [str(item.get("date") or "") for item in items]
-assert dates == sorted(dates, reverse=True), "Gallery data must be sorted newest first"
+assert dates == sorted(dates, reverse=True), "Gallery archive must be sorted newest first"
 patterns = {
     "nightmare-horror": re.compile(r"\bNIGHTMARE\s+DROP\b", re.I),
     "zombie-memes": re.compile(r"\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b", re.I),
@@ -53,7 +48,7 @@ for item in items:
     assert item.get("series") == category, f"Series/category mismatch: {item['id']}"
     category_counts[category] = category_counts.get(category, 0) + 1
     assert not re.search(r"\bZOMBIECASH\s+SITE\s+TRANSMISSION\b", caption, re.I), f"Site screenshot returned: {item['id']}"
-assert sum(category_counts.values()) == len(items), "Every retained image must count toward the global 200-image cap"
+assert sum(category_counts.values()) == len(items), "Every archived image must belong to exactly one category"
 assert not re.search(r'"site-transmissions"\s*:', sync_script), "Removed Site Transmissions category must not be registered in sync rules"
 assert re.search(r"ZOMBIECASH\\s\+SITE\\s\+TRANSMISSION", sync_script), "Site screenshot posts must be explicitly excluded from future sync"
 
@@ -82,4 +77,4 @@ assert not any(item.get("pinterest_status") in {"queued", "pending", "scheduled"
 published = [item for item in items if item.get("pinterest_status") == "published"]
 assert all(item.get("pinterest_pin_id") and item.get("pinterest_pin_url") for item in published), "Published pin record lacks historical pin identifiers"
 
-print(f"PASS: {len(items)} gallery items follow the global 200-image rolling archive policy ({category_counts}); {len(reviewed)} ALT-reviewed, {len(pending)} pending; all items have intrinsic dimensions; rights review remains required; {len(published)} historical Pinterest pins retained and all other items remain blocked from Pinterest pending rights review.")
+print(f"PASS: {len(items)} gallery items follow the full archive with 200-image pages ({category_counts}); {len(reviewed)} ALT-reviewed, {len(pending)} pending; all items have intrinsic dimensions; rights review remains required; {len(published)} historical Pinterest pins retained and all other items remain blocked from Pinterest pending rights review.")

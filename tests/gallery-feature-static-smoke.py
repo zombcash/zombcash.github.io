@@ -7,7 +7,7 @@ from pathlib import Path
 data = json.loads(Path("gallery-data.json").read_text(encoding="utf-8"))
 items = data["items"]
 ids = [item["id"] for item in items]
-assert 1 <= len(items) <= 200 and len(set(ids)) == len(items)
+assert 1 <= len(items) and len(set(ids)) == len(items)
 assert not any("ZOMBIECASH SITE SPOTLIGHT" in str(item.get("caption", "")).upper() for item in items), "Promotional SITE SPOTLIGHT posts must not appear in the gallery"
 honey_trap = next((item for item in items if "HONEY-TRAP APOCALYPSE" in str(item.get("caption", "")).upper()), None)
 if honey_trap:
@@ -67,16 +67,17 @@ class Cards(HTMLParser):
 html = Path("gallery.html").read_text(encoding="utf-8")
 parser = Cards()
 parser.feed(html)
-assert len(parser.cards) == len(items), f"Expected {len(items)} static crawlable cards, got {len(parser.cards)}"
+page_items = items[:200]
+assert len(parser.cards) == len(page_items), f"Expected first 200 static crawlable cards, got {len(parser.cards)}"
 actual_ids = {card["id"] for card in parser.cards}
-missing_ids = sorted(set(ids) - actual_ids)
-extra_ids = sorted(actual_ids - set(ids))
-assert actual_ids == set(ids), f"Gallery card ID mismatch: missing={missing_ids}, extra={extra_ids}, cards={len(parser.cards)}"
+missing_ids = sorted({item["id"] for item in page_items} - actual_ids)
+extra_ids = sorted(actual_ids - {item["id"] for item in page_items})
+assert actual_ids == {item["id"] for item in page_items}, f"Gallery first-page card ID mismatch: missing={missing_ids}, extra={extra_ids}, cards={len(parser.cards)}"
 assert all(card["anchor"] for card in parser.cards)
 assert all(len(card["images"]) == 1 for card in parser.cards)
 assert all(card["images"][0].get("alt", "").strip() for card in parser.cards)
 assert all(card["likes"] == 1 for card in parser.cards)
-item_by_id = {item["id"]: item for item in items}
+item_by_id = {item["id"]: item for item in page_items}
 for card in parser.cards:
     item = item_by_id[card["id"]]
     image = card["images"][0]
@@ -100,8 +101,8 @@ for locale in ("de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"):
     locale_parser = Cards()
     locale_parser.feed(page)
     locale_cards = {card["id"]: card for card in locale_parser.cards}
-    assert set(locale_cards) == set(ids), f"{locale} gallery card IDs do not match gallery-data.json"
-    for item in items:
+    assert set(locale_cards) == {item["id"] for item in page_items}, f"{locale} gallery first-page card IDs do not match gallery-data.json"
+    for item in page_items:
         card = locale_cards[item["id"]]
         image = card["images"][0]
         assert image.get("src") == item["image"], f"{locale} image source mismatch: {item['id']}"
@@ -123,5 +124,7 @@ js = Path("gallery.js").read_text(encoding="utf-8")
 for marker in ("gallery-toolbar", "gallery-lightbox-share", "/api/gallery/likes", "/api/gallery/like"):
     assert marker in js, marker
 assert "window.ZombieCashTrack = send;" in Path("script.js").read_text(encoding="utf-8")
+assert "PAGE_SIZE = 200" in js and "pageItems = visible.slice" in js, "Gallery must page the archive in 200-image batches"
+assert "gallery-pagination" in js and "NEXT 200" in js, "Gallery must expose next/previous 200-image controls"
 
-print(f"PASS: {len(items)} static gallery cards (maximum 200 total, newest first; categories: {category_counts}), {len(reviewed)} visually reviewed, {len(pending)} pending review and Pinterest-blocked, {len(missing_dimensions)} CDN dimension fallback(s) protected by the square CSS ratio, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")
+print(f"PASS: {len(items)} static gallery cards (first page of 200, newest first; categories: {category_counts}), {len(reviewed)} visually reviewed, {len(pending)} pending review and Pinterest-blocked, {len(missing_dimensions)} CDN dimension fallback(s) protected by the square CSS ratio, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")
