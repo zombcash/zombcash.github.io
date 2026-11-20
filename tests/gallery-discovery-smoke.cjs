@@ -434,7 +434,7 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     await russian.goto("http://127.0.0.1:4173/ru/gallery.html", { waitUntil: "domcontentloaded" });
     await russian.waitForSelector(".gallery-toolbar");
     await russian.waitForFunction(expected => document.querySelectorAll("#gallery-grid .gallery-card").length === expected, expectedGalleryCount);
-    const visuallyReviewedIds = galleryData.items.filter(item => item.alt_review_status === "visual-reviewed").map(item => item.id);
+    const visuallyReviewedIds = firstPageItems.filter(item => item.alt_review_status === "visual-reviewed").map(item => item.id);
     const russianSampleIds = Array.from(new Set([
       ...galleryData.items.slice(0, 24).map(item => item.id),
       ...visuallyReviewedIds
@@ -526,6 +526,19 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       await localized.close();
     }
 
+    if (galleryData.items.length > 200) {
+      const nextPageButton = page.locator(".gallery-page-next");
+      if (!(await nextPageButton.isVisible())) throw new Error("Next 200-image page control is not visible");
+      await nextPageButton.click();
+      await page.waitForFunction(expectedId => {
+        const cards = document.querySelectorAll("#gallery-grid .gallery-card");
+        return cards.length > 0 && cards[0].dataset.galleryId === expectedId;
+      }, galleryData.items[200].id);
+      const secondPageCount = await page.locator("#gallery-grid .gallery-card").count();
+      if (secondPageCount !== Math.min(200, galleryData.items.length - 200)) throw new Error("Next page did not switch to the next 200 oldest images");
+      await page.locator(".gallery-page-prev").click();
+      await page.waitForFunction(expectedId => document.querySelector("#gallery-grid .gallery-card")?.dataset.galleryId === expectedId, galleryData.items[0].id);
+    }
     console.log(JSON.stringify({ status: "passed", initial, horror, search, reset, matching, oldestFirst, japaneseFilter, mobile: overflow, imageLoadAudit, imageNetworkEvents, recoveryChecks, localeAudit }));
   } finally {
     if (browser) await browser.close();
