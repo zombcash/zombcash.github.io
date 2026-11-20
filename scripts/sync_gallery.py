@@ -15,7 +15,7 @@ CHANNEL = "ZOMBCASH"
 BASE_URL = f"https://t.me/s/{CHANNEL}"
 OUTPUT = Path("gallery-data.json")
 MAX_PAGES = 300
-MAX_PER_CATEGORY = 150
+MAX_TOTAL_ITEMS = 200
 # Classify all attached image posts, not only the three legacy series headers.
 # The order is intentional: explicit series/meme labels win over broad keywords.
 CATEGORY_PATTERNS = {
@@ -159,11 +159,9 @@ def main():
             item_id = item.get("id")
             if not item_id or item_id in all_items:
                 continue
-            if category_counts[category] >= MAX_PER_CATEGORY:
-                continue
             all_items[item_id] = item
             category_counts[category] += 1
-        if all(count >= MAX_PER_CATEGORY for count in category_counts.values()) or not oldest_id or oldest_id <= 1:
+        if len(all_items) >= MAX_TOTAL_ITEMS or not oldest_id or oldest_id <= 1:
             break
         next_before = oldest_id
         if before == next_before:
@@ -171,18 +169,12 @@ def main():
         before = next_before
         time.sleep(0.35)
 
-    # Keep up to MAX_PER_CATEGORY newest image entries in each category, then merge
-    # them into one date-sorted archive. This yields up to 1200 total images.
-    selected_by_category = {category: [] for category in CATEGORY_PATTERNS}
-    for item in sorted(all_items.values(), key=lambda item: (item.get("date") or "", item.get("post_id") or ""), reverse=True):
-        category = category_for_caption(item.get("caption"))
-        if category and len(selected_by_category[category]) < MAX_PER_CATEGORY:
-            selected_by_category[category].append(item)
+    # Keep one rolling archive of the 200 newest image entries across all categories.
     items = sorted(
-        [item for category_items in selected_by_category.values() for item in category_items],
+        all_items.values(),
         key=lambda item: (item.get("date") or "", item.get("post_id") or ""),
         reverse=True,
-    )
+    )[:MAX_TOTAL_ITEMS]
 
     # Preserve editorial review, ALT text, rights and Pinterest safeguards for
     # posts that remain in the rolling archive. New posts are never treated as
@@ -263,7 +255,7 @@ def main():
     }
     OUTPUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     final_counts = {category: sum(1 for item in items if category in (item.get("category_ids") or [])) for category in CATEGORY_PATTERNS}
-    print(f"Synced {len(items)} image entries from @{CHANNEL} into {OUTPUT} (up to {MAX_PER_CATEGORY} per category; counts: {final_counts})")
+    print(f"Synced {len(items)} image entries from @{CHANNEL} into {OUTPUT} (maximum {MAX_TOTAL_ITEMS} total; counts: {final_counts})")
 
 
 if __name__ == "__main__":
