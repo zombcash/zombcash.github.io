@@ -527,6 +527,8 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     }
 
     if (galleryData.items.length > 200) {
+      // Pagination expectations below follow the archive’s default newest-first order.
+      await page.locator(".gallery-sort").selectOption("newest");
       const nextPageButton = page.locator(".gallery-page-next");
       if (!(await nextPageButton.isVisible())) throw new Error("Next 200-image page control is not visible");
       await nextPageButton.click();
