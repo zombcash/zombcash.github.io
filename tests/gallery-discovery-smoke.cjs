@@ -24,7 +24,7 @@ if (galleryData.items.some(item => /\bZOMBIECASH\s+SITE\s+SPOTLIGHT\b/i.test(Str
 if (galleryData.items.some(item => (item.category_ids || []).includes("site-transmissions") || item.series === "site-transmissions" || /\bZOMBIECASH\s+SITE\s+TRANSMISSION\b/i.test(String(item.caption || "")))) throw new Error("Site Transmission screenshots must stay out of the gallery archive");
 for (const locale of ["en", "de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"]) { const pagePath = locale === "en" ? "gallery.html" : locale + "/gallery.html"; const pageHtml = fs.readFileSync(pagePath, "utf8"); if (/data-categories="site-transmissions"/.test(pageHtml)) throw new Error(locale + " gallery still contains Site Transmission screenshot cards"); }
 const targetLikeImageId = galleryData.items[0]?.id || "";
-const gallerySearchCorpus = firstPageItems.map(item =>
+const gallerySearchCorpus = galleryData.items.map(item =>
   [item.title || "", item.description || "", item.caption || "", item.series || "", ...(item.category_ids || []), ...(item.tags || [])].join(" ").toLowerCase()
 );
 const nonHorrorSearchItem = firstPageItems.find(item => !(item.category_ids || []).includes("nightmare-horror")) || galleryData.items[0];
