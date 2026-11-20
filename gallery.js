@@ -253,15 +253,15 @@
     }
 
     const controlText = {
-      en:{mostLiked:"Most liked",like:"LIKE",unlike:"LIKED",loginLike:"Log in with Telegram to like",likeError:"Could not update like. Try again.",categories:"Gallery categories",clear:"Clear filters",all:"ALL ART",search:"Search titles, captions or tags…",sort:"SORT",newest:"Newest first",oldest:"Oldest first",results:"RESULTS",empty:"No images match this filter."},
-      ru:{mostLiked:"Сначала популярные",like:"НРАВИТСЯ",unlike:"ОТМЕЧЕНО",loginLike:"Войдите через Telegram, чтобы отметить",likeError:"Не удалось обновить отметку. Попробуйте ещё раз.",categories:"Категории галереи",clear:"Сбросить фильтры",all:"ВСЕ РАБОТЫ",search:"Поиск по названию, описанию или тегам…",sort:"СОРТИРОВКА",newest:"Сначала новые",oldest:"Сначала старые",results:"НАЙДЕНО",empty:"По этому фильтру изображений нет."},
-      de:{mostLiked:"Am beliebtesten",like:"GEFÄLLT MIR",unlike:"GEFÄLLT DIR",loginLike:"Mit Telegram anmelden, um zu liken",likeError:"Like konnte nicht gespeichert werden. Bitte erneut versuchen.",categories:"Galeriekategorien",clear:"Filter zurücksetzen",all:"ALLE BILDER",search:"Titel, Beschreibungen oder Tags suchen…",sort:"SORTIEREN",newest:"Neueste zuerst",oldest:"Älteste zuerst",results:"ERGEBNISSE",empty:"Keine Bilder für diesen Filter."},
-      fr:{mostLiked:"Les plus aimées",like:"J’AIME",unlike:"AIMÉ",loginLike:"Connectez-vous avec Telegram pour aimer",likeError:"Impossible d’enregistrer le like. Réessayez.",categories:"Catégories de la galerie",clear:"Effacer les filtres",all:"TOUTES LES ŒUVRES",search:"Rechercher titres, descriptions ou tags…",sort:"TRIER",newest:"Plus récentes",oldest:"Plus anciennes",results:"RÉSULTATS",empty:"Aucune image ne correspond à ce filtre."},
-      it:{mostLiked:"Più apprezzate",like:"MI PIACE",unlike:"TI PIACE",loginLike:"Accedi con Telegram per mettere Mi piace",likeError:"Impossibile aggiornare il Mi piace. Riprova.",categories:"Categorie della galleria",clear:"Azzera filtri",all:"TUTTE LE OPERE",search:"Cerca titoli, descrizioni o tag…",sort:"ORDINA",newest:"Prima le più recenti",oldest:"Prima le più vecchie",results:"RISULTATI",empty:"Nessuna immagine corrisponde al filtro."},
-      ja:{mostLiked:"人気順",like:"いいね",unlike:"いいね済み",loginLike:"いいねするにはTelegramでログイン",likeError:"いいねを更新できません。再試行してください。",categories:"ギャラリーのカテゴリ",clear:"フィルターを解除",all:"すべての作品",search:"タイトル・説明・タグを検索…",sort:"並べ替え",newest:"新しい順",oldest:"古い順",results:"件数",empty:"条件に一致する画像はありません。"},
-      "zh-CN":{mostLiked:"最受欢迎",like:"点赞",unlike:"已点赞",loginLike:"使用 Telegram 登录后点赞",likeError:"点赞更新失败，请重试。",categories:"图库分类",clear:"清除筛选",all:"全部作品",search:"搜索标题、说明或标签…",sort:"排序",newest:"最新优先",oldest:"最早优先",results:"结果",empty:"没有符合筛选条件的图片。"},
-      tr:{mostLiked:"En çok beğenilen",like:"BEĞEN",unlike:"BEĞENİLDİ",loginLike:"Beğenmek için Telegram ile giriş yap",likeError:"Beğeni güncellenemedi. Tekrar dene.",categories:"Galeri kategorileri",clear:"Filtreleri temizle",all:"TÜM GÖRSELLER",search:"Başlık, açıklama veya etiket ara…",sort:"SIRALA",newest:"En yeni önce",oldest:"En eski önce",results:"SONUÇLAR",empty:"Bu filtreyle eşleşen görsel yok."},
-      hi:{mostLiked:"सबसे लोकप्रिय",like:"पसंद",unlike:"पसंद किया",loginLike:"पसंद करने के लिए Telegram से लॉग इन करें",likeError:"पसंद अपडेट नहीं हो सकी। फिर प्रयास करें।",categories:"गैलरी श्रेणियाँ",clear:"फ़िल्टर साफ़ करें",all:"सभी कलाकृतियाँ",search:"शीर्षक, विवरण या टैग खोजें…",sort:"क्रम",newest:"नवीनतम पहले",oldest:"सबसे पुरानी पहले",results:"परिणाम",empty:"इस फ़िल्टर से कोई इमेज नहीं मिली।"}
+      en:{previousPage:"← PREVIOUS 200",nextPage:"NEXT 200 →",page:"PAGE",mostLiked:"Most liked",like:"LIKE",unlike:"LIKED",loginLike:"Log in with Telegram to like",likeError:"Could not update like. Try again.",categories:"Gallery categories",clear:"Clear filters",all:"ALL ART",search:"Search titles, captions or tags…",sort:"SORT",newest:"Newest first",oldest:"Oldest first",results:"RESULTS",empty:"No images match this filter."},
+      ru:{previousPage:"← ПРЕДЫДУЩИЕ 200",nextPage:"СЛЕДУЮЩИЕ 200 →",page:"СТРАНИЦА",mostLiked:"Сначала популярные",like:"НРАВИТСЯ",unlike:"ОТМЕЧЕНО",loginLike:"Войдите через Telegram, чтобы отметить",likeError:"Не удалось обновить отметку. Попробуйте ещё раз.",categories:"Категории галереи",clear:"Сбросить фильтры",all:"ВСЕ РАБОТЫ",search:"Поиск по названию, описанию или тегам…",sort:"СОРТИРОВКА",newest:"Сначала новые",oldest:"Сначала старые",results:"НАЙДЕНО",empty:"По этому фильтру изображений нет."},
+      de:{previousPage:"← VORHERIGE 200",nextPage:"NÄCHSTE 200 →",page:"SEITE",mostLiked:"Am beliebtesten",like:"GEFÄLLT MIR",unlike:"GEFÄLLT DIR",loginLike:"Mit Telegram anmelden, um zu liken",likeError:"Like konnte nicht gespeichert werden. Bitte erneut versuchen.",categories:"Galeriekategorien",clear:"Filter zurücksetzen",all:"ALLE BILDER",search:"Titel, Beschreibungen oder Tags suchen…",sort:"SORTIEREN",newest:"Neueste zuerst",oldest:"Älteste zuerst",results:"ERGEBNISSE",empty:"Keine Bilder für diesen Filter."},
+      fr:{previousPage:"← 200 PRÉCÉDENTES",nextPage:"200 SUIVANTES →",page:"PAGE",mostLiked:"Les plus aimées",like:"J’AIME",unlike:"AIMÉ",loginLike:"Connectez-vous avec Telegram pour aimer",likeError:"Impossible d’enregistrer le like. Réessayez.",categories:"Catégories de la galerie",clear:"Effacer les filtres",all:"TOUTES LES ŒUVRES",search:"Rechercher titres, descriptions ou tags…",sort:"TRIER",newest:"Plus récentes",oldest:"Plus anciennes",results:"RÉSULTATS",empty:"Aucune image ne correspond à ce filtre."},
+      it:{previousPage:"← 200 PRECEDENTI",nextPage:"200 SUCCESSIVE →",page:"PAGINA",mostLiked:"Più apprezzate",like:"MI PIACE",unlike:"TI PIACE",loginLike:"Accedi con Telegram per mettere Mi piace",likeError:"Impossibile aggiornare il Mi piace. Riprova.",categories:"Categorie della galleria",clear:"Azzera filtri",all:"TUTTE LE OPERE",search:"Cerca titoli, descrizioni o tag…",sort:"ORDINA",newest:"Prima le più recenti",oldest:"Prima le più vecchie",results:"RISULTATI",empty:"Nessuna immagine corrisponde al filtro."},
+      ja:{previousPage:"← 前の200件",nextPage:"次の200件 →",page:"ページ",mostLiked:"人気順",like:"いいね",unlike:"いいね済み",loginLike:"いいねするにはTelegramでログイン",likeError:"いいねを更新できません。再試行してください。",categories:"ギャラリーのカテゴリ",clear:"フィルターを解除",all:"すべての作品",search:"タイトル・説明・タグを検索…",sort:"並べ替え",newest:"新しい順",oldest:"古い順",results:"件数",empty:"条件に一致する画像はありません。"},
+      "zh-CN":{previousPage:"← 上一组200张",nextPage:"下一组200张 →",page:"页码",mostLiked:"最受欢迎",like:"点赞",unlike:"已点赞",loginLike:"使用 Telegram 登录后点赞",likeError:"点赞更新失败，请重试。",categories:"图库分类",clear:"清除筛选",all:"全部作品",search:"搜索标题、说明或标签…",sort:"排序",newest:"最新优先",oldest:"最早优先",results:"结果",empty:"没有符合筛选条件的图片。"},
+      tr:{previousPage:"← ÖNCEKİ 200",nextPage:"SONRAKİ 200 →",page:"SAYFA",mostLiked:"En çok beğenilen",like:"BEĞEN",unlike:"BEĞENİLDİ",loginLike:"Beğenmek için Telegram ile giriş yap",likeError:"Beğeni güncellenemedi. Tekrar dene.",categories:"Galeri kategorileri",clear:"Filtreleri temizle",all:"TÜM GÖRSELLER",search:"Başlık, açıklama veya etiket ara…",sort:"SIRALA",newest:"En yeni önce",oldest:"En eski önce",results:"SONUÇLAR",empty:"Bu filtreyle eşleşen görsel yok."},
+      hi:{previousPage:"← पिछले 200",nextPage:"अगले 200 →",page:"पृष्ठ",mostLiked:"सबसे लोकप्रिय",like:"पसंद",unlike:"पसंद किया",loginLike:"पसंद करने के लिए Telegram से लॉग इन करें",likeError:"पसंद अपडेट नहीं हो सकी। फिर प्रयास करें।",categories:"गैलरी श्रेणियाँ",clear:"फ़िल्टर साफ़ करें",all:"सभी कलाकृतियाँ",search:"शीर्षक, विवरण या टैग खोजें…",sort:"क्रम",newest:"नवीनतम पहले",oldest:"सबसे पुरानी पहले",results:"परिणाम",empty:"इस फ़िल्टर से कोई इमेज नहीं मिली।"}
     };
     const categoryText = {
       en:{"zombie-memes":"Zombie Memes","nightmare-horror":"Nightmare & Horror","undead-after-dark":"Undead After Dark","zombie-characters":"Zombie Characters","apocalypse-survival":"Apocalypse & Survival","crypto-apocalypse":"Crypto Apocalypse","community-creations":"Community Creations"},
@@ -284,9 +284,22 @@
     const sortSelect = toolbar.querySelector(".gallery-sort");
     const resultsLabel = toolbar.querySelector(".gallery-results");
     const resetButton = toolbar.querySelector(".gallery-reset");
+    const pagination = document.createElement("nav");
+    pagination.className = "gallery-pagination";
+    pagination.setAttribute("aria-label", "Gallery pages");
+    pagination.innerHTML = '<button class="gallery-page-prev" type="button"></button><span class="gallery-page-status" aria-live="polite"></span><button class="gallery-page-next" type="button"></button>';
+    grid.parentElement.appendChild(pagination);
+    const previousPageButton = pagination.querySelector(".gallery-page-prev");
+    const nextPageButton = pagination.querySelector(".gallery-page-next");
+    const pageStatus = pagination.querySelector(".gallery-page-status");
+    previousPageButton.addEventListener("click", () => { if (pageIndex > 0) { pageIndex--; renderGallery(); grid.parentElement.scrollTo({top:0,behavior:"smooth"}); } });
+    nextPageButton.addEventListener("click", () => { pageIndex++; renderGallery(); grid.parentElement.scrollTo({top:0,behavior:"smooth"}); });
+
     let selectedCategory = "all";
     let searchTerm = "";
     let sortOrder = "newest";
+    const PAGE_SIZE = 200;
+    let pageIndex = 0;
 
     const renderToolbar = () => {
       const t = controlText[galleryLang] || controlText.en;
@@ -309,10 +322,10 @@
         button.className = "gallery-category-chip" + (selectedCategory === id ? " is-active" : "");
         button.textContent = label;
         button.setAttribute("aria-pressed", selectedCategory === id ? "true" : "false");
-        button.addEventListener("click", () => { selectedCategory = id; trackGalleryEvent("gallery_filter", id); renderToolbar(); renderGallery(); });
+        button.addEventListener("click", () => { selectedCategory = id; pageIndex = 0; trackGalleryEvent("gallery_filter", id); renderToolbar(); renderGallery(); });
         filterRow.appendChild(button);
       });
-      resultsLabel.textContent = t.results + ": " + grid.querySelectorAll(".gallery-card").length + " / " + items.length;
+      updatePagination(items.length, grid.querySelectorAll(".gallery-card").length);
     };
     const GALLERY_API = "https://zombcash-bot.fadehost.app";
     const loadGalleryLikeStats = async (force = false) => {
@@ -323,8 +336,7 @@
       const headers = {};
       if (token) headers.Authorization = "Bearer " + token;
       try {
-        // The API deliberately accepts at most 50 IDs per request. A 1200-image
-        // archive therefore loads its like stats in bounded batches.
+        // The API deliberately accepts at most 50 IDs per request; keep requests bounded.
         const batches = [];
         for (let index = 0; index < ids.length; index += 50) {
           batches.push(ids.slice(index, index + 50));
@@ -418,7 +430,10 @@
         }
         return sortOrder === "oldest" ? delta : -delta;
       });
-      grid.innerHTML = visible.length ? visible.map((item, index) => {
+      const pageCount = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+      pageIndex = Math.min(pageIndex, pageCount - 1);
+      const pageItems = visible.slice(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE);
+      grid.innerHTML = pageItems.length ? pageItems.map((item, index) => {
         const caption = cleanCaption(item.caption);
         const rawTitle = String(item.title || caption);
         const title = cleanCaption(rawTitle);
@@ -485,16 +500,29 @@
       renderToolbarCount();
       loadGalleryLikeStats();
     };
+    const updatePagination = (total, shown) => {
+      const t = controlText[galleryLang] || controlText.en;
+      const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
+      const start = total ? pageIndex * PAGE_SIZE + 1 : 0;
+      const end = Math.min(total, pageIndex * PAGE_SIZE + shown);
+      resultsLabel.textContent = t.results + ": " + start + "–" + end + " / " + total;
+      previousPageButton.textContent = t.previousPage;
+      nextPageButton.textContent = t.nextPage;
+      previousPageButton.disabled = pageIndex <= 0;
+      nextPageButton.disabled = pageIndex >= pageCount - 1;
+      pagination.hidden = pageCount <= 1;
+      pageStatus.textContent = t.page + " " + (pageIndex + 1) + " / " + pageCount;
+    };
     const renderToolbarCount = () => {
       const t = controlText[galleryLang] || controlText.en;
-      resultsLabel.textContent = t.results + ": " + cards.length + " / " + items.length;
+      updatePagination(items.length, cards.length);
     };
     refreshGalleryControls = () => { renderToolbar(); renderGallery(); };
     refreshGalleryForLikes = () => { if (sortOrder === "liked") renderGallery(); };
-    searchInput.addEventListener("input", () => { searchTerm = searchInput.value.trim().toLocaleLowerCase(galleryLang); renderGallery(); });
+    searchInput.addEventListener("input", () => { searchTerm = searchInput.value.trim().toLocaleLowerCase(galleryLang); pageIndex = 0; renderGallery(); });
     searchInput.addEventListener("change", () => { if (searchInput.value.trim()) trackGalleryEvent("gallery_search", "gallery"); });
-    sortSelect.addEventListener("change", () => { sortOrder = sortSelect.value; trackGalleryEvent("gallery_sort", sortOrder); renderGallery(); });
-    resetButton.addEventListener("click", () => { selectedCategory = "all"; searchTerm = ""; sortOrder = "newest"; searchInput.value = ""; sortSelect.value = "newest"; trackGalleryEvent("gallery_filter_reset", "gallery"); renderToolbar(); renderGallery(); });
+    sortSelect.addEventListener("change", () => { sortOrder = sortSelect.value; pageIndex = 0; trackGalleryEvent("gallery_sort", sortOrder); renderGallery(); });
+    resetButton.addEventListener("click", () => { selectedCategory = "all"; searchTerm = ""; sortOrder = "newest"; pageIndex = 0; searchInput.value = ""; sortSelect.value = "newest"; trackGalleryEvent("gallery_filter_reset", "gallery"); renderToolbar(); renderGallery(); });
     renderToolbar();
     renderGallery();
   }).catch(error => {
