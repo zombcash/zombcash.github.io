@@ -127,4 +127,4 @@ assert "window.ZombieCashTrack = send;" in Path("script.js").read_text(encoding=
 assert "PAGE_SIZE = 200" in js and "pageItems = visible.slice" in js, "Gallery must page the archive in 200-image batches"
 assert "gallery-pagination" in js and "NEXT 200" in js, "Gallery must expose next/previous 200-image controls"
 
-print(f"PASS: {len(items)} static gallery cards (maximum 200 total, newest first; categories: {category_counts}), {len(reviewed)} visually reviewed, {len(pending)} pending review and Pinterest-blocked, {len(missing_dimensions)} CDN dimension fallback(s) protected by the square CSS ratio, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")
+print(f"PASS: {len(items)} static gallery cards (first page of 200, newest first; categories: {category_counts}), {len(reviewed)} visually reviewed, {len(pending)} pending review and Pinterest-blocked, {len(missing_dimensions)} CDN dimension fallback(s) protected by the square CSS ratio, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")
