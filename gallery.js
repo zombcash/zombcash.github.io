@@ -300,6 +300,7 @@
     let sortOrder = "newest";
     const PAGE_SIZE = 200;
     let pageIndex = 0;
+    let visibleItemCount = items.length;
 
     const renderToolbar = () => {
       const t = controlText[galleryLang] || controlText.en;
@@ -325,11 +326,11 @@
         button.addEventListener("click", () => { selectedCategory = id; pageIndex = 0; trackGalleryEvent("gallery_filter", id); renderToolbar(); renderGallery(); });
         filterRow.appendChild(button);
       });
-      updatePagination(items.length, grid.querySelectorAll(".gallery-card").length);
+      updatePagination(visibleItemCount, grid.querySelectorAll(".gallery-card").length);
     };
     const GALLERY_API = "https://zombcash-bot.fadehost.app";
     const loadGalleryLikeStats = async (force = false) => {
-      const ids = [...new Set(cards.map(card => card.dataset.galleryId).filter(Boolean))]
+      const ids = [...new Set(items.map(item => item.id).filter(Boolean))]
         .filter(id => force || !galleryLikeStats.has(id));
       if (!ids.length) return;
       const token = readGalleryToken();
@@ -430,6 +431,7 @@
         }
         return sortOrder === "oldest" ? delta : -delta;
       });
+      visibleItemCount = visible.length;
       const pageCount = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
       pageIndex = Math.min(pageIndex, pageCount - 1);
       const pageItems = visible.slice(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE);
@@ -515,7 +517,7 @@
     };
     const renderToolbarCount = () => {
       const t = controlText[galleryLang] || controlText.en;
-      updatePagination(items.length, cards.length);
+      updatePagination(visibleItemCount, cards.length);
     };
     refreshGalleryControls = () => { renderToolbar(); renderGallery(); };
     refreshGalleryForLikes = () => { if (sortOrder === "liked") renderGallery(); };
