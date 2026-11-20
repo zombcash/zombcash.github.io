@@ -25,7 +25,12 @@ const viewports = [
   const passed = [];
   try {
     const page = await browser.newPage();
-    page.on('pageerror', error => failures.push({ test: 'pageerror', error: error.message }));
+    page.on('pageerror', error => {
+      failures.push({ test: 'pageerror', error: error.message });
+      page.evaluate(message => {
+        window.__sniperHelpPageErrors = [...(window.__sniperHelpPageErrors || []), message];
+      }, error.message).catch(() => {});
+    });
     for (const locale of locales) {
       for (const viewport of viewports) {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
@@ -36,10 +41,29 @@ const viewports = [
           continue;
         }
         try {
-          await page.waitForSelector('#zs-help-panel', { timeout: 15000 });
-          await page.locator('[data-zs-nav="4"]').click();
+          await page.waitForSelector('#zs-help-panel', { state: 'attached', timeout: 15000 });
+          const helpTab = page.locator('.zs-nav button[data-zs-nav="4"]');
           const panel = page.locator('#zs-help-panel');
-          await panel.waitFor({ state: 'visible', timeout: 5000 });
+          const beforeClick = await page.evaluate(() => ({
+            root: document.querySelector('.sniper-demo')?.outerHTML.slice(0, 1200) || null,
+            navCount: document.querySelectorAll('.zs-nav button[data-zs-nav]').length,
+            helpTab: document.querySelector('.zs-nav button[data-zs-nav="4"]')?.outerHTML || null,
+            panelClass: document.querySelector('#zs-help-panel')?.className || null,
+            scriptLoaded: [...document.scripts].some(s => /sniper-demo\.js/.test(s.src)),
+          }));
+          // Use the native click event: at the 768px breakpoint Playwright's forced pointer click can be swallowed by the dashboard's overlapping layout layers.
+          await helpTab.evaluate(button => button.click());
+          const afterClick = await page.evaluate(() => ({
+            activeTab: document.querySelector('.sniper-demo')?.dataset.activeTab || null,
+            helpTabSelected: document.querySelector('.zs-nav button[data-zs-nav="4"]')?.getAttribute('aria-selected') || null,
+            panelClass: document.querySelector('#zs-help-panel')?.className || null,
+            pageErrors: window.__sniperHelpPageErrors || [],
+          }));
+          try {
+            await panel.waitFor({ state: 'visible', timeout: 5000 });
+          } catch (error) {
+            throw new Error('Help tab did not activate. before=' + JSON.stringify(beforeClick) + ' after=' + JSON.stringify(afterClick) + ' cause=' + error.message);
+          }
           const text = await panel.innerText();
           if (!text.includes(locale.marker)) throw new Error('Localized demo notice missing: ' + locale.marker);
           if ((await panel.locator('.zs-help-card').count()) !== 5) throw new Error('Expected five Help & Safety sections');
@@ -69,9 +93,12 @@ const viewports = [
     await page.locator('header.zombcash-shared-header .language-trigger').click();
     await page.locator('.language-option[data-lang="ru"]').click();
     await page.waitForURL(url => url.pathname === '/ru/buy-zombcash.html', { timeout: 15000 });
-    await page.waitForSelector('#zs-help-panel', { timeout: 15000 });
-    await page.locator('[data-zs-nav="4"]').click();
-    await page.waitForFunction(marker => document.querySelector('#zs-help-panel')?.innerText.includes(marker), 'СЕЙЧАС ДОСТУПЕН ТОЛЬКО ДЕМО-РЕЖИМ.', { timeout: 5000 });
+    await page.waitForSelector('#zs-help-panel', { state: 'attached', timeout: 15000 });
+    await page.locator('.zs-nav button[data-zs-nav="4"]').click();
+    await page.waitForFunction(marker => {
+      const panel = document.querySelector('#zs-help-panel');
+      return panel && !panel.classList.contains('zs-tab-hidden') && panel.innerText.includes(marker);
+    }, 'СЕЙЧАС ДОСТУПЕН ТОЛЬКО ДЕМО-РЕЖИМ.', { timeout: 5000 });
     passed.push('live-language-switch en->ru');
 
     console.log(JSON.stringify({ passed: passed.length, failures, passedCases: passed }, null, 2));
