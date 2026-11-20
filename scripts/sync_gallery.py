@@ -15,7 +15,7 @@ CHANNEL = "ZOMBCASH"
 BASE_URL = f"https://t.me/s/{CHANNEL}"
 OUTPUT = Path("gallery-data.json")
 MAX_PAGES = 300
-MAX_TOTAL_ITEMS = 200
+PAGE_SIZE = 200
 # Classify all attached image posts, not only the three legacy series headers.
 # The order is intentional: explicit series/meme labels win over broad keywords.
 CATEGORY_PATTERNS = {
@@ -161,7 +161,7 @@ def main():
                 continue
             all_items[item_id] = item
             category_counts[category] += 1
-        if len(all_items) >= MAX_TOTAL_ITEMS or not oldest_id or oldest_id <= 1:
+        if not oldest_id or oldest_id <= 1:
             break
         next_before = oldest_id
         if before == next_before:
@@ -169,12 +169,13 @@ def main():
         before = next_before
         time.sleep(0.35)
 
-    # Keep one rolling archive of the 200 newest image entries across all categories.
+    # Keep the full collected archive; the public gallery displays it in
+    # chronological pages of PAGE_SIZE (200) images at a time.
     items = sorted(
         all_items.values(),
         key=lambda item: (item.get("date") or "", item.get("post_id") or ""),
         reverse=True,
-    )[:MAX_TOTAL_ITEMS]
+    )
 
     # Preserve editorial review, ALT text, rights and Pinterest safeguards for
     # posts that remain in the rolling archive. New posts are never treated as
@@ -255,7 +256,7 @@ def main():
     }
     OUTPUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     final_counts = {category: sum(1 for item in items if category in (item.get("category_ids") or [])) for category in CATEGORY_PATTERNS}
-    print(f"Synced {len(items)} image entries from @{CHANNEL} into {OUTPUT} (maximum {MAX_TOTAL_ITEMS} total; counts: {final_counts})")
+    print(f"Synced {len(items)} image entries from @{CHANNEL} into {OUTPUT} (pages of {PAGE_SIZE}; counts: {final_counts})")
 
 
 if __name__ == "__main__":
