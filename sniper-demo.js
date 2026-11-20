@@ -512,7 +512,8 @@
     valid.sort((a,b)=>(Number(b.liquidity&&b.liquidity.usd)||0)-(Number(a.liquidity&&a.liquidity.usd)||0));
     return valid[0]||null;
   }
-  async function refreshFeed(){
+  async function refreshFeed(force=false){
+    if(!terminal.auto&&!force)return;
     if(state.busy)return;
     state.busy=true;renderCandidates();
     try{
@@ -871,7 +872,7 @@
   }
 
   async function showLaunchConfirm(){
-    await refreshFeed();
+    await refreshFeed(true);
     if(!state.feed.pumpdevConnected){window.alert(state.lang==='ru'?'Автодемо ожидает подключения торгового потока PumpDev. Ручные виртуальные покупки доступны.':'Auto demo is waiting for the PumpDev trade feed. Manual virtual buys remain available.');return;}
     const n=id=>Number($(id)&&$(id).value);
     const errors=[];
@@ -1283,7 +1284,7 @@
     const launchPanel=dashNode('section','zs-panel zs-launch-panel');const launchTitle=dashNode('h3','',dcopy().launches);launchTitle.id='zs-launch-title';launchPanel.append(launchTitle);const toolbar=dashNode('div','sniper-toolbar');
     const sourceSelect=dashNode('select','zs-source-select');sourceSelect.setAttribute('aria-label','Candidate source');
     [['all','ALL SOURCES'],['pumpportal','PUMP.FUN LAUNCHES'],['boosts','BOOST MONITOR'],['community','ZOMBIE LAB / COMMUNITY']].forEach(([v,label])=>{const option=document.createElement('option');option.value=v;option.textContent=state.lang==='ru'?({'all':'ВСЕ ИСТОЧНИКИ','pumpportal':'ЗАПУСКИ PUMP.FUN','boosts':'BOOST MONITOR','community':'ZOMBIE LAB / СООБЩЕСТВО'}[v]):label;sourceSelect.append(option);});
-    sourceSelect.value=state.source;sourceSelect.addEventListener('change',()=>{state.source=sourceSelect.value;refreshFeed();});
+    sourceSelect.value=state.source;sourceSelect.addEventListener('change',()=>{state.source=sourceSelect.value;if(terminal.auto)refreshFeed();});
     const socialsLabel=dashNode('label','zs-filter-label');const socialsCheck=dashNode('input','');socialsCheck.type='checkbox';socialsCheck.checked=state.requireSocials;socialsCheck.addEventListener('change',()=>{state.requireSocials=socialsCheck.checked;renderCandidates();if(terminal.auto&&authToken())setServerPaperEnabled(true);});socialsLabel.append(socialsCheck,dashNode('span','',state.lang==='ru'?'ТОЛЬКО С СОЦСЕТЯМИ':'SOCIALS ONLY'));
     const nameFilter=dashNode('input','zs-name-filter');nameFilter.type='search';nameFilter.placeholder=state.lang==='ru'?'Фильтр названия / тикера':'Filter name / ticker';nameFilter.value=state.nameQuery;nameFilter.addEventListener('input',()=>{state.nameQuery=nameFilter.value;renderCandidates();});
     const creatorSelect=dashNode('select','zs-creator-select');creatorSelect.setAttribute('aria-label','Creator history');
@@ -1362,12 +1363,12 @@
     });
     ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
     ['sniper-capital','sniper-size','sniper-target','sniper-stop','sniper-min-move','sniper-idle-timeout','sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-min-buys','sniper-max-daily-loss','sniper-max-open'].forEach(id=>$(id)?.addEventListener('change',()=>{if(terminal.auto&&authToken())setServerPaperEnabled(true);}));
-    refreshFeed();if(authToken())syncFromServer();else{updateSyncStatus('loginToSync');updatePositions();}
+    if(terminal.auto)refreshFeed();if(authToken())syncFromServer();else{updateSyncStatus('loginToSync');updatePositions();}
     if(terminal.auto&&!Number(terminal.startedAt)){terminal.startedAt=Date.now();saveTerminal();}const updateRuntimeIndicator=()=>{const node=$('zs-runtime-indicator');if(!node)return;const running=!!terminal.auto;const elapsed=running?Math.max(0,Math.floor((Date.now()-(Number(terminal.startedAt)||Date.now()))/1000)):0;const hh=String(Math.floor(elapsed/3600)).padStart(2,'0');const mm=String(Math.floor((elapsed%3600)/60)).padStart(2,'0');const ss=String(elapsed%60).padStart(2,'0');node.classList.toggle('is-running',running);node.classList.toggle('is-offline',!running);node.textContent=(state.lang==='ru'?(running?'АВТОТОРГОВЛЯ · РАБОТАЕТ':'АВТОТОРГОВЛЯ · ОСТАНОВЛЕНА'):(running?'AUTO TRADING · RUNNING':'AUTO TRADING · STOPPED'))+'  '+hh+':'+mm+':'+ss;};
     updateRuntimeIndicator();window.setInterval(updateRuntimeIndicator,1000);
-    state.timer=window.setInterval(()=>{checkAccountChange();if(!document.hidden)refreshFeed();},15000);
-    state.positionTimer=window.setInterval(()=>{if(!document.hidden)refreshResultsNow();},10000);
-    document.addEventListener('visibilitychange',()=>{if(!document.hidden){refreshFeed();refreshResultsNow();}});
+    state.timer=window.setInterval(()=>{checkAccountChange();if(terminal.auto&&!document.hidden)refreshFeed();},15000);
+    state.positionTimer=window.setInterval(()=>{if(terminal.auto&&!document.hidden)refreshResultsNow();},10000);
+    document.addEventListener('visibilitychange',()=>{if(terminal.auto&&!document.hidden){refreshFeed();refreshResultsNow();}});
 
     document.addEventListener('zombcash:languagechange',()=>{detectLang();translate();if($('zs-kpis'))renderDashboardState();if($('zs-kpis'))renderHelpPanel();});
     document.addEventListener('zombcash:survivorlogin',()=>{if(!checkAccountChange())syncFromServer();});
