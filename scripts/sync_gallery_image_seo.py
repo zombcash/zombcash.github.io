@@ -108,7 +108,7 @@ def main():
         raise SystemExit("gallery.html is missing generated-card markers; refusing to overwrite it")
     before, rest = gallery.split(START, 1)
     _, after = rest.split(END, 1)
-    gallery = before + START + "\n" + make_cards(items) + "\n      " + END + after
+    gallery = before + START + "\n" + make_cards(items[:200]) + "\n      " + END + after
     GALLERY_FILE.write_text(gallery, encoding="utf-8")
 
     sitemap, image_count = make_sitemap(items)
