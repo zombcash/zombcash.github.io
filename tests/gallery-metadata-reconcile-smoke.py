@@ -28,7 +28,7 @@ for item in items:
     ), f"Description duplicates title/caption: {item['id']}"
 # Keep the full Telegram archive so the frontend can paginate it in 200-image batches.
 sync_script = (Path(__file__).resolve().parents[1] / "scripts/sync_gallery.py").read_text(encoding="utf-8")
-assert re.search(r"^PAGE_SIZE\\s*=\\s*200$", sync_script, re.M), "Gallery pages must contain 200 images"
+assert re.search(r"^PAGE_SIZE\s*=\s*200$", sync_script, re.M), "Gallery pages must contain 200 images"
 dates = [str(item.get("date") or "") for item in items]
 assert dates == sorted(dates, reverse=True), "Gallery archive must be sorted newest first"
 patterns = {
