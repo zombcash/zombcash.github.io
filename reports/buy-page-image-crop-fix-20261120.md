@@ -18,7 +18,9 @@ The hero image `/images/buy-survivor-process.webp` was forced into a fixed respo
 - Confirmed the mobile fixed-height crop rule is absent.
 - Confirmed desktop and mobile rules preserve natural image proportions.
 - Confirmed the original hero asset reference remains present.
-- No live browser visual check has been performed on the PR branch; GitHub Pages production will not reflect this change until the PR is reviewed and merged.
+- PR #558 was squash-merged into `main` on 2026-11-20.
+- Verified the merged `main` file contains the natural-height desktop and mobile rules and no longer contains either fixed-height crop rule.
+- Live browser visual validation is still pending. An attempt to fetch the published GitHub Pages URL from this environment failed (cache miss / network DNS unavailable), so deployment and rendered appearance are not claimed as verified.
 
 ## Files
 - `buy-zombcash.html` — hero image sizing only.
@@ -29,4 +31,6 @@ No transaction was signed, no wallet connected, no swap executed, no production 
 
 ## Git
 - Branch: `fix/buy-page-full-image-20261120`
-- Latest source commit before report: `c784627640e3b360738310ffa6506ca05e03b9f8`
+- PR: [#558](https://github.com/zombcash/zombcash.github.io/pull/558) — merged
+- Merge commit on `main`: `01f937b707e8466acf41bee813e7bbdf103f6d7e`
+- Verified `main` file blob: `73a390a259ef3dd0ed453bb0e24e15582b162297`
