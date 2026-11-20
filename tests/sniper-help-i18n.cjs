@@ -92,9 +92,12 @@ const viewports = [
     await page.locator('header.zombcash-shared-header .language-trigger').click();
     await page.locator('.language-option[data-lang="ru"]').click();
     await page.waitForURL(url => url.pathname === '/ru/buy-zombcash.html', { timeout: 15000 });
-    await page.waitForSelector('#zs-help-panel', { timeout: 15000 });
-    await page.locator('[data-zs-nav="4"]').click();
-    await page.waitForFunction(marker => document.querySelector('#zs-help-panel')?.innerText.includes(marker), 'СЕЙЧАС ДОСТУПЕН ТОЛЬКО ДЕМО-РЕЖИМ.', { timeout: 5000 });
+    await page.waitForSelector('#zs-help-panel', { state: 'attached', timeout: 15000 });
+    await page.locator('.zs-nav button[data-zs-nav="4"]').click();
+    await page.waitForFunction(marker => {
+      const panel = document.querySelector('#zs-help-panel');
+      return panel && !panel.classList.contains('zs-tab-hidden') && panel.innerText.includes(marker);
+    }, 'СЕЙЧАС ДОСТУПЕН ТОЛЬКО ДЕМО-РЕЖИМ.', { timeout: 5000 });
     passed.push('live-language-switch en->ru');
 
     console.log(JSON.stringify({ passed: passed.length, failures, passedCases: passed }, null, 2));
