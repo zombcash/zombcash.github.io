@@ -7,6 +7,8 @@ on:
       - "scripts/sync_gallery_image_seo.py"
       - "scripts/generate_localized_gallery_pages.py"
       - ".github/workflows/sync-zombie-gallery.yml"
+      - "tests/gallery-feature-static-smoke.py"
+      - "tests/gallery-discovery-smoke.cjs"
   workflow_dispatch:
   schedule:
     - cron: "17 * * * *"
