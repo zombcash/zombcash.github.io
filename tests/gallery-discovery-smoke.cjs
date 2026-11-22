@@ -4,8 +4,8 @@ const fs = require("fs");
 const path = require("path");
 const galleryData = JSON.parse(fs.readFileSync("gallery-data.json", "utf8"));
 const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]));
-const expectedGalleryCount = Math.min(200, galleryData.items.length);
-const firstPageItems = galleryData.items.slice(0, expectedGalleryCount);
+const expectedGalleryCount = Math.min(150, galleryData.items.length);
+const firstPageItems = galleryData.items.slice(0, Math.min(200, galleryData.items.length));
 const installGalleryDataMock = page => page.addInitScript(data => {
   localStorage.setItem("zombcash-survivor-token", "smoke-survivor-session");
   const nativeFetch = window.fetch.bind(window);
@@ -116,9 +116,11 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       await page.waitForFunction(expected => document.querySelectorAll("#gallery-grid .gallery-card").length === expected, expectedGalleryCount, { timeout: 12000 });
     const initialLoadingHints = await page.locator("#gallery-grid img").evaluateAll(images => images.map(image => ({ loading: image.loading, priority: image.fetchPriority })));
     if (initialLoadingHints.length !== expectedGalleryCount ||
-        initialLoadingHints[0].loading !== "eager" || initialLoadingHints[0].priority !== "high" ||
-        initialLoadingHints.slice(1).some(item => item.loading !== "lazy" || item.priority !== "auto")) {
-      throw new Error("Only the first gallery image should be eager/high priority; remaining images must be lazy/auto: " + JSON.stringify(initialLoadingHints.slice(0, 4)));
+        initialLoadingHints.slice(0, 6).some(item => item.loading !== "eager") ||
+        initialLoadingHints.slice(6).some(item => item.loading !== "lazy") ||
+        initialLoadingHints.slice(0, 2).some(item => item.priority !== "high") ||
+        initialLoadingHints.slice(2).some(item => item.priority !== "auto")) {
+      throw new Error("The first six gallery images should be eager, the rest lazy; only the first two should have high priority: " + JSON.stringify(initialLoadingHints.slice(0, 8)));
     }
     } catch (error) {
       console.error("[gallery-diagnostics]", await page.evaluate(() => ({
@@ -310,12 +312,13 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     await page.getByRole("button", { name: "Nightmare & Horror" }).click();
     const filterTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_filter"));
     if (!filterTracked) throw new Error("Gallery filter analytics event was not recorded");
-    const expectedCategoryIds = categoryId => galleryData.items.filter(item => (item.category_ids || []).includes(categoryId)).map(item => item.id).sort();
-    const visibleCategoryIds = async () => page.locator("#gallery-grid .gallery-card").evaluateAll(cards => cards.map(card => card.dataset.galleryId).sort());
+    const expectedCategoryIds = categoryId => galleryData.items.filter(item => (item.category_ids || []).includes(categoryId)).map(item => item.id);
+    const visibleCategoryIds = async () => page.locator("#gallery-grid .gallery-card").evaluateAll(cards => cards.map(card => card.dataset.galleryId));
     const expectedHorrorIds = expectedCategoryIds("nightmare-horror");
     const horror = await page.locator("#gallery-grid .gallery-card").count();
-    if (horror !== expectedHorrorIds.length || JSON.stringify(await visibleCategoryIds()) !== JSON.stringify(expectedHorrorIds)) {
-      throw new Error("Nightmare filter does not match the current gallery metadata: expected " + expectedHorrorIds.length + ", got " + horror);
+    const expectedHorrorCount = Math.min(50, expectedHorrorIds.length);
+    if (horror !== expectedHorrorCount || JSON.stringify(await visibleCategoryIds()) !== JSON.stringify(expectedHorrorIds.slice(0, expectedHorrorCount))) {
+      throw new Error("Nightmare filter does not match the first category batch: expected " + expectedHorrorCount + ", got " + horror);
     }
     await page.locator(".gallery-search").fill(gallerySearchTerm);
     await page.locator(".gallery-search").press("Tab");
@@ -352,7 +355,7 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     if (categoryReset !== expectedGalleryCount) throw new Error("Reset after taxonomy filters should restore all gallery images");
     await page.locator(".gallery-search").fill(gallerySearchTerm);
     const matching = await page.locator("#gallery-grid .gallery-card").count();
-    if (matching !== expectedSearchCount) throw new Error("Search expected " + expectedSearchCount + " matching cards for " + gallerySearchTerm + ", got " + matching);
+    if (matching !== Math.min(150, expectedSearchCount)) throw new Error("Search expected " + Math.min(150, expectedSearchCount) + " matching cards for " + gallerySearchTerm + ", got " + matching);
     await page.locator(".gallery-reset").click();
     await page.locator(".gallery-sort").selectOption("oldest");
     const oldestFirst = await page.locator("#gallery-grid .gallery-card").first().getAttribute("data-gallery-id");
@@ -538,20 +541,18 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       await localized.close();
     }
 
-    if (galleryData.items.length > 200) {
-      // Pagination expectations below follow the archive’s default newest-first order.
+    if (galleryData.items.length > 150) {
+      // The interactive archive grows in 150-image batches while preserving newest-first order.
       await page.locator(".gallery-sort").selectOption("newest");
-      const nextPageButton = page.locator(".gallery-page-next");
-      if (!(await nextPageButton.isVisible())) throw new Error("Next 200-image page control is not visible");
-      await nextPageButton.click();
-      await page.waitForFunction(expectedId => {
-        const cards = document.querySelectorAll("#gallery-grid .gallery-card");
-        return cards.length > 0 && cards[0].dataset.galleryId === expectedId;
-      }, galleryData.items[200].id);
-      const secondPageCount = await page.locator("#gallery-grid .gallery-card").count();
-      if (secondPageCount !== Math.min(200, galleryData.items.length - 200)) throw new Error("Next page did not switch to the next 200 oldest images");
-      await page.locator(".gallery-page-prev").click();
-      await page.waitForFunction(expectedId => document.querySelector("#gallery-grid .gallery-card")?.dataset.galleryId === expectedId, galleryData.items[0].id);
+      const loadMoreButton = page.locator(".gallery-load-more-button");
+      if (!(await loadMoreButton.isVisible())) throw new Error("Gallery load-more control is not visible after the first 150 images");
+      await loadMoreButton.click();
+      const expandedCount = Math.min(300, galleryData.items.length);
+      await page.waitForFunction(expected => document.querySelectorAll("#gallery-grid .gallery-card").length === expected, expandedCount);
+      const firstId = await page.locator("#gallery-grid .gallery-card").first().getAttribute("data-gallery-id");
+      const batchBoundaryId = await page.locator("#gallery-grid .gallery-card").nth(150).getAttribute("data-gallery-id");
+      if (firstId !== galleryData.items[0].id) throw new Error("Loading more images must preserve the newest-first first card");
+      if (batchBoundaryId !== galleryData.items[150].id) throw new Error("The next 150-image batch must continue at the correct archive item");
     }
     console.log(JSON.stringify({ status: "passed", initial, horror, search, reset, matching, oldestFirst, japaneseFilter, mobile: overflow, imageLoadAudit, imageNetworkEvents, recoveryChecks, localeAudit }));
   } finally {
