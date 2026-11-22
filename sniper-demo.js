@@ -432,7 +432,7 @@
       return true;
     });
     if(!visible.length){
-      const msg=state.candidates.length?(uiText('noMatches')'):(state.busy?t('loading'):t('noCandidates'));
+      const msg=state.candidates.length?uiText('noMatches'):(state.busy?t('loading'):t('noCandidates'));
       host.append(make('p','sniper-muted',msg));
       return;
     }
