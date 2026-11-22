@@ -5,7 +5,7 @@ const path = require("path");
 const galleryData = JSON.parse(fs.readFileSync("gallery-data.json", "utf8"));
 const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]));
 const expectedGalleryCount = Math.min(150, galleryData.items.length);
-const firstPageItems = galleryData.items.slice(0, Math.min(200, galleryData.items.length));
+const firstPageItems = galleryData.items.slice(0, expectedGalleryCount);
 const installGalleryDataMock = page => page.addInitScript(data => {
   localStorage.setItem("zombcash-survivor-token", "smoke-survivor-session");
   const nativeFetch = window.fetch.bind(window);
