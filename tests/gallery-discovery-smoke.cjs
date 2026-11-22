@@ -329,25 +329,23 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     const reset = await page.locator("#gallery-grid .gallery-card").count();
     if (reset !== expectedGalleryCount) throw new Error("Clear filters should restore " + expectedGalleryCount + " cards, got " + reset);
     if (await page.locator("#gallery-grid .gallery-like-button").count() !== expectedGalleryCount) throw new Error("Clear filters should restore like controls");
-    const expectedZombieCharacters = expectedCategoryIds("zombie-characters").length;
-    const zombieCharactersButton = page.getByRole("button", { name: "Zombie Characters", exact: true });
-    if (expectedZombieCharacters > 0) {
-      if (await zombieCharactersButton.count() !== 1) throw new Error("Zombie Characters filter is missing despite matching gallery items");
-      await zombieCharactersButton.click();
-      const zombieCharacters = await page.locator("#gallery-grid .gallery-card").count();
-      if (zombieCharacters !== expectedZombieCharacters) throw new Error("Zombie Characters filter count does not match current gallery metadata: " + zombieCharacters);
-    } else if (await zombieCharactersButton.count() !== 0) {
-      throw new Error("Empty Zombie Characters category should not be rendered as a filter");
-    }
-    const expectedApocalypseSurvival = expectedCategoryIds("apocalypse-survival").length;
-    const apocalypseSurvivalButton = page.getByRole("button", { name: "Apocalypse & Survival", exact: true });
-    if (expectedApocalypseSurvival > 0) {
-      if (await apocalypseSurvivalButton.count() !== 1) throw new Error("Apocalypse & Survival filter is missing despite matching gallery items");
-      await apocalypseSurvivalButton.click();
-      const apocalypseSurvival = await page.locator("#gallery-grid .gallery-card").count();
-      if (apocalypseSurvival !== expectedApocalypseSurvival) throw new Error("Apocalypse & Survival filter count does not match current gallery metadata: " + apocalypseSurvival);
-    } else if (await apocalypseSurvivalButton.count() !== 0) {
-      throw new Error("Empty Apocalypse & Survival category should not be rendered as a filter");
+    const additionalCategoryFilters = [
+      { id: "zombie-characters", label: "Zombie Characters" },
+      { id: "apocalypse-survival", label: "Apocalypse & Survival" },
+      { id: "crypto-apocalypse", label: "Crypto Apocalypse" },
+      { id: "community-creations", label: "Community Creations" }
+    ];
+    for (const category of additionalCategoryFilters) {
+      const expected = expectedCategoryIds(category.id).length;
+      const button = page.getByRole("button", { name: category.label, exact: true });
+      if (expected > 0) {
+        if (await button.count() !== 1) throw new Error(category.label + " filter is missing despite matching gallery items");
+        await button.click();
+        const visible = await page.locator("#gallery-grid .gallery-card").count();
+        if (visible !== Math.min(50, expected)) throw new Error(category.label + " filter count does not match the first category batch: " + visible);
+      } else if (await button.count() !== 0) {
+        throw new Error("Empty " + category.label + " category should not be rendered as a filter");
+      }
     }
     await page.locator(".gallery-reset").click();
     const categoryReset = await page.locator("#gallery-grid .gallery-card").count();
@@ -365,6 +363,20 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     if (mostLikedFirst !== targetLikeImageId) throw new Error("Most-liked sort did not rank the highest-count image first: " + mostLikedFirst + " (expected " + targetLikeImageId + ")");
     const sortTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_sort"));
     if (!sortTracked) throw new Error("Gallery sort analytics event was not recorded");
+    const turkishExpected = galleryData.items.filter(item =>
+      [item.title,item.description,item.caption,item.series,...(item.category_ids||[]),...(item.tags||[])]
+        .join(" ").toLocaleLowerCase("tr").includes("ı")
+    ).length;
+    await page.locator(".gallery-search").fill("I");
+    await page.evaluate(() => {
+      document.documentElement.lang = "tr";
+      document.dispatchEvent(new CustomEvent("zombcash:languagechange", { detail: { language: "tr" } }));
+    });
+    const turkishSearchCount = await page.locator("#gallery-grid .gallery-card").count();
+    if (turkishSearchCount !== Math.min(150, turkishExpected)) {
+      throw new Error("Search query was not re-normalized after switching to Turkish: expected " + Math.min(150, turkishExpected) + ", got " + turkishSearchCount);
+    }
+    await page.locator(".gallery-reset").click();
     await page.evaluate(() => {
       document.documentElement.lang = "ja";
       document.dispatchEvent(new CustomEvent("zombcash:languagechange", { detail: { language: "ja" } }));
