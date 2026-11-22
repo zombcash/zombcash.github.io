@@ -149,31 +149,15 @@
     const title = card.dataset.galleryTitle || card.querySelector(".gallery-caption p")?.textContent || "";
     const originalCaption = card.querySelector(".gallery-caption p")?.dataset.originalCaption || "";
     const description = card.dataset.galleryDescription || "";
-    const normalizeLightboxText = value => String(value || "").toLocaleLowerCase().replace(/[\s\p{P}\p{S}]+/gu, " ").trim();
-    const normalizedTitle = normalizeLightboxText(cleanCaption(title));
-    const normalizedCaption = normalizeLightboxText(cleanCaption(originalCaption));
-    const normalizedDescription = normalizeLightboxText(cleanCaption(description));
-    const titleIsDuplicate = !normalizedTitle || !normalizedCaption ||
-      normalizedCaption.startsWith(normalizedTitle) || normalizedTitle.startsWith(normalizedCaption);
-    const descriptionIsDuplicate = !normalizedDescription ||
-      normalizedDescription === normalizedCaption ||
-      normalizedDescription === normalizedTitle ||
-      normalizedCaption.startsWith(normalizedDescription) ||
-      normalizedDescription.startsWith(normalizedCaption) ||
-      normalizedTitle.startsWith(normalizedDescription) ||
-      normalizedDescription.startsWith(normalizedTitle);
-    const captionToShow = titleIsDuplicate
-      ? cleanCaption(originalCaption)
-      : (!descriptionIsDuplicate ? cleanCaption(description) : "");
-    const categories = Array.from(card.querySelectorAll(".gallery-category-tag"))
-      .map(tag => tag.textContent.trim()).filter(Boolean).join(" · ");
+    const captionParts = splitGalleryCaption(originalCaption || title);
+    const captionToShow = captionParts.caption || cleanCardTitle(description || title);
+    const metaToShow = captionParts.meta;
     const sourceUrl = card.querySelector(".gallery-caption a")?.href || "https://t.me/ZOMBCASH";
     const shareLabels = galleryShareLabels[galleryLang] || galleryShareLabels.en;
     trackGalleryEvent("gallery_image_open", "image_" + String(card.dataset.galleryId || "").replace(/[^0-9]/g, "_"));
     fullCaption.innerHTML =
-      (!titleIsDuplicate ? '<strong class="gallery-lightbox-title">' + escapeHtml(title) + '</strong>' : '') +
       (captionToShow ? '<span class="gallery-lightbox-description gallery-lightbox-caption">' + escapeHtml(captionToShow) + '</span>' : '') +
-      (categories ? '<span class="gallery-lightbox-categories">' + escapeHtml(categories) + '</span>' : '') +
+      (metaToShow ? '<span class="gallery-lightbox-title">' + escapeHtml(metaToShow) + '</span>' : '') +
       '<span class="gallery-lightbox-actions">' +
       '<button class="gallery-lightbox-like" type="button" aria-pressed="false"></button>' +
       '<button class="gallery-lightbox-share" type="button" aria-label="' + escapeHtml(shareLabels.share) + '">' + escapeHtml(shareLabels.share) + '</button>' +
@@ -517,7 +501,9 @@
         const caption = cleanCaption(item.caption);
         const rawTitle = String(item.title || caption);
         const title = cleanCaption(rawTitle);
-        const cardTitle = cleanCardTitle(rawTitle);
+        const captionParts = splitGalleryCaption(item.caption || rawTitle);
+        const cardCaption = captionParts.caption || cleanCardTitle(rawTitle);
+        const cardMeta = captionParts.meta;
         const image = escapeHtml(item.image);
         const imageLoading = index < 6 ? "eager" : "lazy";
         const imagePriority = index < 2 ? "high" : "auto";
@@ -533,8 +519,8 @@
         const categoryMarkup = (item.category_ids || []).map(id => '<span class="gallery-category-tag">' + escapeHtml(labels[id] || id) + '</span>').join("");
         return '<article class="gallery-card" id="' + escapeHtml(item.anchor_id || "") + '" data-gallery-id="' + escapeHtml(item.id || "") + '" data-categories="' + escapeHtml((item.category_ids || []).join(" ")) + '" data-gallery-title="' + escapeHtml(rawTitle) + '" data-gallery-description="' + escapeHtml(item.description || "") + '" tabindex="0" role="group" aria-label="Open image: ' + escapeHtml(title) + '">' +
           '<img' + dimensionAttributes + ' src="' + image + '" alt="' + escapeHtml(alt) + '" loading="' + imageLoading + '" fetchpriority="' + imagePriority + '" decoding="async">' +
-          '<div class="gallery-caption"><p data-original-caption="' + escapeHtml(item.caption) + '" data-original-title="' + escapeHtml(rawTitle) + '">' + escapeHtml(cardTitle) + '</p>' +
-          '<div class="gallery-card-tags">' + categoryMarkup + '</div>' +
+          '<div class="gallery-caption"><p data-original-caption="' + escapeHtml(item.caption) + '" data-original-title="' + escapeHtml(rawTitle) + '">' + escapeHtml(cardCaption) + '</p>' +
+          (cardMeta ? '<div class="gallery-card-meta">' + escapeHtml(cardMeta) + '</div>' : '') +
           '<div class="gallery-card-actions"><button class="gallery-like-button" type="button" aria-pressed="false" title="' + escapeHtml(galleryLikeLabels.loginLike) + '"><span class="gallery-like-heart" aria-hidden="true">♡</span><span class="gallery-like-count">0</span></button></div>' +
           '<a href="' + post + '" target="_blank" rel="noreferrer">'+escapeHtml(gtx("source"))+'</a></div></article>';
       }).join("") : '<div class="gallery-state"><h3>' + escapeHtml((controlText[galleryLang]||controlText.en).empty) + '</h3></div>';
@@ -596,8 +582,8 @@
     refreshGalleryForLikes = () => { if (sortOrder === "liked") renderGallery(); };
     searchInput.addEventListener("input", () => { searchTerm = searchInput.value.trim().toLocaleLowerCase(galleryLang); visibleLimit = selectedCategory === "all" ? INITIAL_ALL : INITIAL_CATEGORY; renderGallery(); });
     searchInput.addEventListener("change", () => { if (searchInput.value.trim()) trackGalleryEvent("gallery_search", "gallery"); });
-    sortSelect.addEventListener("change", () => { sortOrder = sortSelect.value; pageIndex = 0; trackGalleryEvent("gallery_sort", sortOrder); renderGallery(); });
-    resetButton.addEventListener("click", () => { selectedCategory = "all"; searchTerm = ""; sortOrder = "newest"; pageIndex = 0; searchInput.value = ""; sortSelect.value = "newest"; trackGalleryEvent("gallery_filter_reset", "gallery"); renderToolbar(); renderGallery(); });
+    sortSelect.addEventListener("change", () => { sortOrder = sortSelect.value; trackGalleryEvent("gallery_sort", sortOrder); renderGallery(); });
+    resetButton.addEventListener("click", () => { selectedCategory = "all"; searchTerm = ""; sortOrder = "newest"; visibleLimit = INITIAL_ALL; searchInput.value = ""; sortSelect.value = "newest"; trackGalleryEvent("gallery_filter_reset", "gallery"); renderToolbar(); renderGallery(); });
     renderToolbar();
     renderGallery();
 
@@ -610,7 +596,7 @@
       if (targetIndex < 0) return;
       selectedCategory = "all";
       searchTerm = "";
-      pageIndex = 0;
+      visibleLimit = INITIAL_ALL;
       searchInput.value = "";
       sortSelect.value = "newest";
       renderToolbar();
