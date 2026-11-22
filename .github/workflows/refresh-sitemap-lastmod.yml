@@ -1,0 +1,76 @@
+name: Refresh sitemap lastmod from Git history
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "20 5 * * *"
+  push:
+    branches: [main]
+    paths:
+      - "*.html"
+      - "**/*.html"
+      - "scripts/update_sitemap_lastmod.py"
+      - ".github/workflows/refresh-sitemap-lastmod.yml"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: refresh-sitemap-lastmod
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out full Git history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Refresh sitemap modification dates
+        run: python3 scripts/update_sitemap_lastmod.py
+
+      - name: Validate generated XML and URL-to-file mapping
+        run: |
+          python3 - <<'PY'
+          import re
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+          root = ET.parse("sitemap.xml").getroot()
+          ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+          entries = root.findall("sm:url", ns)
+          if not entries:
+              raise SystemExit("ERROR: sitemap.xml contains no URL entries.")
+          missing = []
+          for entry in entries:
+              loc = entry.findtext("sm:loc", namespaces=ns)
+              lastmod = entry.findtext("sm:lastmod", namespaces=ns)
+              if not loc or not lastmod or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", lastmod):
+                  missing.append(loc or "(missing loc)")
+          if missing:
+              raise SystemExit("ERROR: invalid URL/lastmod entries: " + ", ".join(missing[:10]))
+          print(f"PASS: valid XML; {len(entries)} URL entries have YYYY-MM-DD lastmod.")
+          PY
+
+      - name: Open or update a pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: automation/refresh-sitemap-lastmod
+          delete-branch: true
+          commit-message: "Refresh sitemap lastmod from Git history"
+          title: "SEO: refresh sitemap lastmod dates"
+          body: |
+            ## Summary
+            - Derive primary sitemap `lastmod` dates from the latest Git commit affecting each HTML page.
+            - Validate sitemap XML and ensure every listed page has a valid modification date.
+            - Keep this as a pull request for review; this workflow does not publish changes directly to `main`.
+
+            ## Why
+            The previous sitemap contained dates older than actual page changes.
+          labels: |
+            seo
+            automation
