@@ -15,6 +15,7 @@ CHANNEL = "ZOMBCASH"
 BASE_URL = f"https://t.me/s/{CHANNEL}"
 OUTPUT = Path("gallery-data.json")
 TRANSLATIONS = Path("gallery-caption-translations.json")
+TRANSLATION_ADDITIONS = Path("gallery-caption-translations-additions.json")
 MAX_PAGES = 300
 PAGE_SIZE = 200
 # Classify all attached image posts, not only the three legacy series headers.
@@ -303,6 +304,15 @@ def main():
             translation_cache = {}
     except (OSError, ValueError, TypeError):
         translation_cache = {}
+    # Merge append-only translation batches after the canonical cache.
+    try:
+        additions = json.loads(TRANSLATION_ADDITIONS.read_text(encoding="utf-8"))
+        if isinstance(additions, dict):
+            for image_id, locale_map in additions.items():
+                if isinstance(locale_map, dict):
+                    translation_cache.setdefault(str(image_id), {}).update(locale_map)
+    except (OSError, ValueError, TypeError):
+        pass
     supported_locales = {"ru", "de", "fr", "it", "ja", "zh-CN", "tr", "hi"}
     for item in items:
         cached = translation_cache.get(str(item.get("id") or ""), {})
