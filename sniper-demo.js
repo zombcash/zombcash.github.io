@@ -129,10 +129,15 @@
       }
       return true;
     }catch(_){
-      window.alert(state.lang==='ru'?'Не удалось связаться с серверным демо-снайпером.':'Could not reach the server paper engine.');
+      window.alert(uiText('serverEngineError'));
       return false;
     }
   }
+
+  const SNIPER_UI_COPY = {"en":{"noMatches":"No coins match the active filters. Relax a filter or choose another source.","noClosed":"No closed trades yet","noOpen":"No open positions right now","statusOpen":"OPEN","statusClosed":"CLOSED","tradeSize":"TRADE SIZE","entryPrice":"ENTRY PRICE","exitPrice":"EXIT PRICE","currentPrice":"CURRENT PRICE","tradeResult":"TRADE RESULT","currentPnl":"CURRENT P/L","contract":"CONTRACT","addressNA":"Address unavailable","closedPrefix":"CLOSED: ","sources":"SOURCES: ","sourcesUnavailable":"SOURCES UNAVAILABLE: ","dailyLoss":"Daily loss limit reached. New trades are paused.","tradeSizeError":"Trade size must be positive and within your configured maximum.","lowLiquidity":"Token liquidity is below your configured minimum.","noBalance":"Insufficient virtual balance.","history":"TRADE HISTORY","waitingPumpDev":"Auto demo is waiting for PumpDev.","socialsOnly":"SOCIALS ONLY","filterTicker":"Filter name / ticker","allSources":"ALL SOURCES","pumpLaunches":"PUMP.FUN LAUNCHES","boostMonitor":"BOOST MONITOR","community":"ZOMBIE LAB / COMMUNITY","anyDev":"ANY DEV","firstSeen":"FIRST SEEN","repeatDev":"REPEAT DEV","recommended":"RECOMMENDED PROFILES","presetNote":"Ready-made paper-testing profiles. Demo settings only.","conservative":"Conservative","balanced":"Balanced","aggressive":"Aggressive","idleTimeout":"NO-MOVEMENT TIMEOUT (SEC)","minMove":"MINIMUM PRICE MOVE (%)","minBuys":"MINIMUM FIRST-MINUTE BUYS","maxDailyLoss":"MAX DAILY LOSS (SOL)","maxOpen":"MAX SIMULTANEOUS OPEN TRADES","statsHeading":"SIMULATION PERFORMANCE","equityCurve":"SESSION EQUITY CURVE","sinceStart":"SOL · SINCE SESSION START","closedTrades":"CLOSED TRADES","winsLosses":"WINS / LOSSES","start":"START ","now":"NOW ","totalExposure":"TOTAL OPEN EXPOSURE","openPositions":"OPEN POSITIONS: ","liveUnrealized":"LIVE UNREALIZED P/L","realized":"REALIZED P/L","average":"AVERAGE RESULT","best":"BEST TRADE","worst":"WORST TRADE","waitingPumpDevLong":"Auto demo is waiting for the PumpDev trade feed. Manual virtual buys remain available.","presetAppliedPrefix":"Applied profile: ","sessionTurnover":"SESSION TURNOVER","runtimeRunning":"AUTO TRADING · RUNNING","runtimeStopped":"AUTO TRADING · STOPPED","noNewTrades":"New trades are disabled (limit is 0).","maxOpenReached":"Maximum simultaneous open trades reached ({count}).","serverEngineError":"Could not reach the server paper engine."},"ru":{"noMatches":"Нет монет, соответствующих фильтрам. Ослабьте фильтры или выберите другой источник.","noClosed":"Закрытых сделок пока нет","noOpen":"Сейчас нет открытых сделок","statusOpen":"ОТКРЫТА","statusClosed":"ЗАКРЫТА","tradeSize":"РАЗМЕР СДЕЛКИ","entryPrice":"ЦЕНА ВХОДА","exitPrice":"ЦЕНА ВЫХОДА","currentPrice":"ТЕКУЩАЯ ЦЕНА","tradeResult":"ИТОГ СДЕЛКИ","currentPnl":"ТЕКУЩАЯ ПРИБЫЛЬ / УБЫТОК","contract":"КОНТРАКТ","addressNA":"Адрес недоступен","closedPrefix":"ЗАКРЫТА: ","sources":"ИСТОЧНИКИ: ","sourcesUnavailable":"ИСТОЧНИКИ НЕДОСТУПНЫ: ","dailyLoss":"Достигнут дневной лимит убытка. Новые сделки остановлены.","tradeSizeError":"Размер сделки должен быть больше нуля и не превышать установленный максимум.","lowLiquidity":"Ликвидность ниже установленного минимума.","noBalance":"Недостаточно виртуального баланса.","history":"ИСТОРИЯ СДЕЛОК","waitingPumpDev":"Автодемо ожидает подключения PumpDev.","socialsOnly":"ТОЛЬКО С СОЦСЕТЯМИ","filterTicker":"Фильтр названия / тикера","allSources":"ВСЕ ИСТОЧНИКИ","pumpLaunches":"ЗАПУСКИ PUMP.FUN","boostMonitor":"BOOST MONITOR","community":"ZOMBIE LAB / СООБЩЕСТВО","anyDev":"ЛЮБОЙ DEV","firstSeen":"ВПЕРВЫЕ В ЛЕНТЕ","repeatDev":"ПОВТОРНЫЙ DEV","recommended":"РЕКОМЕНДУЕМЫЕ ПРОФИЛИ","presetNote":"Готовые наборы для виртуальных испытаний. Меняют только демо-параметры.","conservative":"Консервативный","balanced":"Сбалансированный","aggressive":"Агрессивный","idleTimeout":"ТАЙМ-АУТ БЕЗ ДВИЖЕНИЯ (СЕК.)","minMove":"МИН. ДВИЖЕНИЕ ЦЕНЫ (%)","minBuys":"МИН. ПОКУПОК В ПЕРВОЙ МИНУТЕ","maxDailyLoss":"МАКС. ДНЕВНЫЙ УБЫТОК (SOL)","maxOpen":"МАКС. ОТКРЫТЫХ СДЕЛОК","statsHeading":"РЕЗУЛЬТАТЫ СИМУЛЯЦИИ","equityCurve":"ДИНАМИКА КАПИТАЛА ЗА СЕССИЮ","sinceStart":"SOL · С НАЧАЛА СЕССИИ","closedTrades":"ЗАКРЫТЫЕ СДЕЛКИ","winsLosses":"ПОБЕДЫ / ПОРАЖЕНИЯ","start":"СТАРТ ","now":"СЕЙЧАС ","totalExposure":"СУММА ОТКРЫТЫХ СДЕЛОК","openPositions":"ОТКРЫТЫХ ПОЗИЦИЙ: ","liveUnrealized":"ТЕКУЩАЯ ПРИБЫЛЬ / УБЫТОК","realized":"РЕАЛИЗОВАННЫЙ P/L","average":"СРЕДНИЙ РЕЗУЛЬТАТ","best":"ЛУЧШАЯ СДЕЛКА","worst":"ХУДШАЯ СДЕЛКА","waitingPumpDevLong":"Автодемо ожидает подключения торгового потока PumpDev. Ручные виртуальные покупки доступны.","presetAppliedPrefix":"Применён профиль: ","sessionTurnover":"ОБОРОТ ЗА СЕССИЮ","runtimeRunning":"АВТОТОРГОВЛЯ · РАБОТАЕТ","runtimeStopped":"АВТОТОРГОВЛЯ · ОСТАНОВЛЕНА","noNewTrades":"Открытие сделок отключено: лимит установлен на 0.","maxOpenReached":"Достигнут лимит одновременно открытых сделок ({count}).","serverEngineError":"Не удалось связаться с серверным демо-снайпером."},"de":{"noMatches":"Keine Coins entsprechen den aktiven Filtern. Lockere einen Filter oder wähle eine andere Quelle.","noClosed":"Noch keine geschlossenen Trades","noOpen":"Derzeit keine offenen Positionen","statusOpen":"OFFEN","statusClosed":"GESCHLOSSEN","tradeSize":"HANDELSGRÖSSE","entryPrice":"EINSTIEGSPREIS","exitPrice":"AUSSTIEGSPREIS","currentPrice":"AKTUELLER PREIS","tradeResult":"HANDELSERGEBNIS","currentPnl":"AKTUELLES P/L","contract":"KONTRAKT","addressNA":"Adresse nicht verfügbar","closedPrefix":"GESCHLOSSEN: ","sources":"QUELLEN: ","sourcesUnavailable":"QUELLEN NICHT VERFÜGBAR: ","dailyLoss":"Tägliches Verlustlimit erreicht. Neue Trades sind pausiert.","tradeSizeError":"Die Handelsgröße muss positiv sein und darf das festgelegte Maximum nicht überschreiten.","lowLiquidity":"Die Token-Liquidität liegt unter dem festgelegten Minimum.","noBalance":"Virtuelles Guthaben nicht ausreichend.","history":"TRADE-VERLAUF","waitingPumpDev":"Auto-Demo wartet auf den PumpDev-Feed.","socialsOnly":"NUR MIT SOCIALS","filterTicker":"Name / Ticker filtern","allSources":"ALLE QUELLEN","pumpLaunches":"PUMP.FUN-STARTS","boostMonitor":"BOOST MONITOR","community":"ZOMBIE LAB / COMMUNITY","anyDev":"BELIEBIGER DEV","firstSeen":"ZUM ERSTEN MAL GESEHEN","repeatDev":"WIEDERHOLTER DEV","recommended":"EMPFOHLENE PROFILE","presetNote":"Vorgefertigte Profile für virtuelle Tests. Nur Demo-Einstellungen.","conservative":"Konservativ","balanced":"Ausgewogen","aggressive":"Aggressiv","idleTimeout":"ZEITLIMIT OHNE BEWEGUNG (SEK.)","minMove":"MINDESTPREISBEWEGUNG (%)","minBuys":"MINDESTANZAHL KÄUFE IN DER ERSTEN MINUTE","maxDailyLoss":"MAX. TÄGLICHER VERLUST (SOL)","maxOpen":"MAX. GLEICHZEITIG OFFENE TRADES","statsHeading":"SIMULATIONSLEISTUNG","equityCurve":"KAPITALVERLAUF DER SITZUNG","sinceStart":"SOL · SEIT SITZUNGSBEGINN","closedTrades":"GESCHLOSSENE TRADES","winsLosses":"SIEGE / NIEDERLAGEN","start":"START ","now":"JETZT ","totalExposure":"GESAMTES OFFENES EXPOSURE","openPositions":"OFFENE POSITIONEN: ","liveUnrealized":"LAUFENDES NICHT REALISIERTES P/L","realized":"REALISIERTES P/L","average":"DURCHSCHNITTSERGEBNIS","best":"BESTER TRADE","worst":"SCHLECHTESTER TRADE","waitingPumpDevLong":"Auto-Demo wartet auf den PumpDev-Feed. Manuelle virtuelle Käufe bleiben verfügbar.","presetAppliedPrefix":"Profil angewendet: ","sessionTurnover":"SITZUNGSUMSATZ","runtimeRunning":"AUTO-TRADING · LÄUFT","runtimeStopped":"AUTO-TRADING · GESTOPPT","noNewTrades":"Neue Trades sind deaktiviert (Limit ist 0).","maxOpenReached":"Maximale Anzahl gleichzeitiger offener Trades erreicht ({count}).","serverEngineError":"Verbindung zur serverseitigen Paper-Engine nicht möglich."},"fr":{"noMatches":"Aucun jeton ne correspond aux filtres actifs. Assouplissez un filtre ou choisissez une autre source.","noClosed":"Aucune transaction clôturée pour le moment","noOpen":"Aucune position ouverte pour le moment","statusOpen":"OUVERTE","statusClosed":"FERMÉE","tradeSize":"TAILLE DE TRANSACTION","entryPrice":"PRIX D’ENTRÉE","exitPrice":"PRIX DE SORTIE","currentPrice":"PRIX ACTUEL","tradeResult":"RÉSULTAT DE LA TRANSACTION","currentPnl":"P/L ACTUEL","contract":"CONTRAT","addressNA":"Adresse indisponible","closedPrefix":"CLÔTURÉE : ","sources":"SOURCES : ","sourcesUnavailable":"SOURCES INDISPONIBLES : ","dailyLoss":"Limite de perte quotidienne atteinte. Les nouvelles transactions sont suspendues.","tradeSizeError":"La taille doit être positive et ne pas dépasser le maximum défini.","lowLiquidity":"La liquidité du jeton est inférieure au minimum défini.","noBalance":"Solde virtuel insuffisant.","history":"HISTORIQUE DES TRANSACTIONS","waitingPumpDev":"La démo automatique attend le flux PumpDev.","socialsOnly":"RÉSEAUX SOCIAUX UNIQUEMENT","filterTicker":"Filtrer le nom / ticker","allSources":"TOUTES LES SOURCES","pumpLaunches":"LANCEMENTS PUMP.FUN","boostMonitor":"BOOST MONITOR","community":"ZOMBIE LAB / COMMUNAUTÉ","anyDev":"TOUT DEV","firstSeen":"PREMIÈRE APPARITION","repeatDev":"DEV RÉCURRENT","recommended":"PROFILS RECOMMANDÉS","presetNote":"Profils prêts à l’emploi pour les tests virtuels. Paramètres de démo uniquement.","conservative":"Prudent","balanced":"Équilibré","aggressive":"Agressif","idleTimeout":"DÉLAI SANS MOUVEMENT (S)","minMove":"MOUVEMENT MINIMAL DU PRIX (%)","minBuys":"ACHATS MINIMAUX PENDANT LA PREMIÈRE MINUTE","maxDailyLoss":"PERTE QUOTIDIENNE MAX. (SOL)","maxOpen":"MAX. DE TRANSACTIONS OUVERTES SIMULTANÉES","statsHeading":"PERFORMANCES DE SIMULATION","equityCurve":"COURBE DE CAPITAL DE LA SESSION","sinceStart":"SOL · DEPUIS LE DÉBUT DE LA SESSION","closedTrades":"TRANSACTIONS CLÔTURÉES","winsLosses":"GAINS / PERTES","start":"DÉPART ","now":"MAINTENANT ","totalExposure":"EXPOSITION TOTALE OUVERTE","openPositions":"POSITIONS OUVERTES : ","liveUnrealized":"P/L LATENT EN DIRECT","realized":"P/L RÉALISÉ","average":"RÉSULTAT MOYEN","best":"MEILLEURE TRANSACTION","worst":"PIRE TRANSACTION","waitingPumpDevLong":"La démo automatique attend le flux PumpDev. Les achats virtuels manuels restent disponibles.","presetAppliedPrefix":"Profil appliqué : ","sessionTurnover":"VOLUME DE LA SESSION","runtimeRunning":"TRADING AUTO · EN COURS","runtimeStopped":"TRADING AUTO · ARRÊTÉ","noNewTrades":"Les nouvelles transactions sont désactivées (limite à 0).","maxOpenReached":"Nombre maximal de positions ouvertes simultanées atteint ({count}).","serverEngineError":"Impossible de joindre le moteur papier du serveur."},"it":{"noMatches":"Nessun token corrisponde ai filtri attivi. Allenta un filtro o scegli un'altra fonte.","noClosed":"Nessuna operazione chiusa","noOpen":"Nessuna posizione aperta al momento","statusOpen":"APERTA","statusClosed":"CHIUSA","tradeSize":"DIMENSIONE OPERAZIONE","entryPrice":"PREZZO DI INGRESSO","exitPrice":"PREZZO DI USCITA","currentPrice":"PREZZO ATTUALE","tradeResult":"RISULTATO OPERAZIONE","currentPnl":"P/L ATTUALE","contract":"CONTRATTO","addressNA":"Indirizzo non disponibile","closedPrefix":"CHIUSA: ","sources":"FONTI: ","sourcesUnavailable":"FONTI NON DISPONIBILI: ","dailyLoss":"Limite di perdita giornaliera raggiunto. Nuove operazioni sospese.","tradeSizeError":"La dimensione deve essere positiva e non superare il massimo configurato.","lowLiquidity":"La liquidità del token è inferiore al minimo configurato.","noBalance":"Saldo virtuale insufficiente.","history":"CRONOLOGIA OPERAZIONI","waitingPumpDev":"La demo automatica attende il flusso PumpDev.","socialsOnly":"SOLO SOCIAL","filterTicker":"Filtra nome / ticker","allSources":"TUTTE LE FONTI","pumpLaunches":"LANCI PUMP.FUN","boostMonitor":"BOOST MONITOR","community":"ZOMBIE LAB / COMMUNITY","anyDev":"QUALSIASI DEV","firstSeen":"PRIMA VOLTA","repeatDev":"DEV RICORRENTE","recommended":"PROFILI CONSIGLIATI","presetNote":"Profili pronti per i test virtuali. Solo impostazioni demo.","conservative":"Conservativo","balanced":"Bilanciato","aggressive":"Aggressivo","idleTimeout":"TIMEOUT SENZA MOVIMENTO (SEC.)","minMove":"MOVIMENTO MINIMO DEL PREZZO (%)","minBuys":"ACQUISTI MINIMI NEL PRIMO MINUTO","maxDailyLoss":"PERDITA GIORNALIERA MAX (SOL)","maxOpen":"MAX OPERAZIONI APERTE SIMULTANEE","statsHeading":"PRESTAZIONI SIMULAZIONE","equityCurve":"CURVA DEL CAPITALE DELLA SESSIONE","sinceStart":"SOL · DALL’INIZIO DELLA SESSIONE","closedTrades":"OPERAZIONI CHIUSE","winsLosses":"VITTORIE / SCONFITTE","start":"INIZIO ","now":"ORA ","totalExposure":"ESPOSIZIONE TOTALE APERTA","openPositions":"POSIZIONI APERTE: ","liveUnrealized":"P/L NON REALIZZATO IN TEMPO REALE","realized":"P/L REALIZZATO","average":"RISULTATO MEDIO","best":"MIGLIOR OPERAZIONE","worst":"PEGGIOR OPERAZIONE","waitingPumpDevLong":"La demo automatica attende il flusso PumpDev. Gli acquisti virtuali manuali restano disponibili.","presetAppliedPrefix":"Profilo applicato: ","sessionTurnover":"VOLUME SESSIONE","runtimeRunning":"TRADING AUTOMATICO · ATTIVO","runtimeStopped":"TRADING AUTOMATICO · FERMATO","noNewTrades":"Le nuove operazioni sono disabilitate (limite impostato a 0).","maxOpenReached":"Raggiunto il numero massimo di operazioni aperte simultanee ({count}).","serverEngineError":"Impossibile raggiungere il motore paper del server."},"ja":{"noMatches":"現在のフィルターに一致するトークンはありません。条件を緩めるか、別のソースを選択してください。","noClosed":"決済済み取引はありません","noOpen":"現在、保有中のポジションはありません","statusOpen":"保有中","statusClosed":"決済済み","tradeSize":"取引サイズ","entryPrice":"エントリー価格","exitPrice":"決済価格","currentPrice":"現在価格","tradeResult":"取引結果","currentPnl":"現在の損益","contract":"コントラクト","addressNA":"アドレスを取得できません","closedPrefix":"決済日時: ","sources":"ソース: ","sourcesUnavailable":"ソースを利用できません: ","dailyLoss":"1日の損失上限に達しました。新規取引を停止しました。","tradeSizeError":"取引サイズは0より大きく、設定した上限以下である必要があります。","lowLiquidity":"トークンの流動性が設定した最低値を下回っています。","noBalance":"仮想残高が不足しています。","history":"取引履歴","waitingPumpDev":"自動デモはPumpDevの取引フィード接続を待っています。","socialsOnly":"SNSリンクありのみ","filterTicker":"名前 / ティッカーで絞り込む","allSources":"すべてのソース","pumpLaunches":"PUMP.FUNローンチ","boostMonitor":"BOOST MONITOR","community":"ZOMBIE LAB / コミュニティ","anyDev":"すべてのDEV","firstSeen":"初回検出","repeatDev":"再登場DEV","recommended":"おすすめプロファイル","presetNote":"仮想テスト用のプリセットです。デモ設定のみ変更します。","conservative":"保守的","balanced":"バランス型","aggressive":"積極的","idleTimeout":"価格停滞タイムアウト（秒）","minMove":"最低価格変動率（%）","minBuys":"最初の1分間の最低購入数","maxDailyLoss":"1日の最大損失（SOL）","maxOpen":"同時に保有できる最大取引数","statsHeading":"シミュレーション実績","equityCurve":"セッション資産推移","sinceStart":"SOL · セッション開始から","closedTrades":"決済済み取引","winsLosses":"勝ち / 負け","start":"開始 ","now":"現在 ","totalExposure":"未決済ポジション合計","openPositions":"保有中のポジション: ","liveUnrealized":"リアルタイム未実現損益","realized":"確定損益","average":"平均リターン","best":"最高の取引","worst":"最低の取引","waitingPumpDevLong":"自動デモはPumpDevの取引フィード接続を待っています。手動の仮想購入は利用できます。","presetAppliedPrefix":"適用したプロファイル: ","sessionTurnover":"セッション取引量","runtimeRunning":"自動取引 · 稼働中","runtimeStopped":"自動取引 · 停止中","noNewTrades":"新規取引は無効です（上限が0に設定されています）。","maxOpenReached":"同時オープン取引数の上限に達しました（{count}）。","serverEngineError":"サーバーのペーパーモードエンジンに接続できません。"},"zh-CN":{"noMatches":"没有代币符合当前筛选条件。请放宽筛选条件或选择其他来源。","noClosed":"暂无已关闭的交易","noOpen":"当前没有未平仓头寸","statusOpen":"持有中","statusClosed":"已关闭","tradeSize":"交易金额","entryPrice":"买入价格","exitPrice":"卖出价格","currentPrice":"当前价格","tradeResult":"交易结果","currentPnl":"当前盈亏","contract":"合约","addressNA":"地址不可用","closedPrefix":"关闭时间：","sources":"来源：","sourcesUnavailable":"来源不可用：","dailyLoss":"已达到每日亏损上限，已暂停新交易。","tradeSizeError":"交易金额必须大于零且不能超过设置的上限。","lowLiquidity":"代币流动性低于设置的最低值。","noBalance":"虚拟余额不足。","history":"交易历史","waitingPumpDev":"自动模拟正在等待 PumpDev 交易流连接。","socialsOnly":"仅显示带社交链接","filterTicker":"按名称 / 代币代码筛选","allSources":"所有来源","pumpLaunches":"PUMP.FUN 新币","boostMonitor":"BOOST MONITOR","community":"ZOMBIE LAB / 社区","anyDev":"所有开发者","firstSeen":"首次出现","repeatDev":"重复开发者","recommended":"推荐配置","presetNote":"用于模拟测试的预设方案，仅更改模拟参数。","conservative":"保守型","balanced":"均衡型","aggressive":"激进型","idleTimeout":"价格无变动超时（秒）","minMove":"最低价格变动（%）","minBuys":"首分钟最低买入次数","maxDailyLoss":"每日最大亏损（SOL）","maxOpen":"同时开启的最大交易数","statsHeading":"模拟表现","equityCurve":"本次会话资产曲线","sinceStart":"SOL · 自会话开始","closedTrades":"已关闭交易","winsLosses":"盈利 / 亏损","start":"开始 ","now":"当前 ","totalExposure":"未平仓头寸总额","openPositions":"未平仓头寸：","liveUnrealized":"实时未实现盈亏","realized":"已实现盈亏","average":"平均结果","best":"最佳交易","worst":"最差交易","waitingPumpDevLong":"自动模拟正在等待 PumpDev 交易流连接。仍可手动进行虚拟买入。","presetAppliedPrefix":"已应用配置：","sessionTurnover":"本次会话交易额","runtimeRunning":"自动交易 · 运行中","runtimeStopped":"自动交易 · 已停止","noNewTrades":"新交易已禁用（上限设置为 0）。","maxOpenReached":"已达到同时开启交易数量上限（{count}）。","serverEngineError":"无法连接服务器模拟引擎。"},"tr":{"noMatches":"Etkin filtrelerle eşleşen token yok. Bir filtreyi gevşetin veya başka kaynak seçin.","noClosed":"Henüz kapatılmış işlem yok","noOpen":"Şu anda açık pozisyon yok","statusOpen":"AÇIK","statusClosed":"KAPALI","tradeSize":"İŞLEM BOYUTU","entryPrice":"GİRİŞ FİYATI","exitPrice":"ÇIKIŞ FİYATI","currentPrice":"GÜNCEL FİYAT","tradeResult":"İŞLEM SONUCU","currentPnl":"GÜNCEL K/Z","contract":"KONTRAT","addressNA":"Adres kullanılamıyor","closedPrefix":"KAPANIŞ: ","sources":"KAYNAKLAR: ","sourcesUnavailable":"KAYNAKLAR KULLANILAMIYOR: ","dailyLoss":"Günlük zarar limitine ulaşıldı. Yeni işlemler duraklatıldı.","tradeSizeError":"İşlem boyutu sıfırdan büyük olmalı ve ayarlanan maksimumu aşmamalı.","lowLiquidity":"Token likiditesi ayarlanan minimumun altında.","noBalance":"Sanal bakiye yetersiz.","history":"İŞLEM GEÇMİŞİ","waitingPumpDev":"Otomatik demo PumpDev işlem akışını bekliyor.","socialsOnly":"YALNIZCA SOSYAL BAĞLANTILAR","filterTicker":"Ad / ticker filtrele","allSources":"TÜM KAYNAKLAR","pumpLaunches":"PUMP.FUN LANSMANLARI","boostMonitor":"BOOST MONITOR","community":"ZOMBIE LAB / TOPLULUK","anyDev":"HERHANGİ BİR DEV","firstSeen":"İLK KEZ GÖRÜLDÜ","repeatDev":"TEKRAR EDEN DEV","recommended":"ÖNERİLEN PROFİLLER","presetNote":"Sanal testler için hazır profiller. Yalnızca demo ayarlarını değiştirir.","conservative":"Temkinli","balanced":"Dengeli","aggressive":"Agresif","idleTimeout":"HAREKETSİZLİK ZAMAN AŞIMI (SN)","minMove":"MİNİMUM FİYAT HAREKETİ (%)","minBuys":"İLK DAKİKADAKİ MİNİMUM ALIM","maxDailyLoss":"GÜNLÜK MAKS. ZARAR (SOL)","maxOpen":"AYNI ANDA AÇIK MAKS. İŞLEM","statsHeading":"SİMÜLASYON PERFORMANSI","equityCurve":"OTURUM SERMAYE GRAFİĞİ","sinceStart":"SOL · OTURUM BAŞLANGICINDAN BERİ","closedTrades":"KAPANAN İŞLEMLER","winsLosses":"KAZANÇ / KAYIP","start":"BAŞLANGIÇ ","now":"ŞİMDİ ","totalExposure":"TOPLAM AÇIK POZİSYON TUTARI","openPositions":"AÇIK POZİSYONLAR: ","liveUnrealized":"CANLI GERÇEKLEŞMEMİŞ K/Z","realized":"GERÇEKLEŞEN K/Z","average":"ORTALAMA SONUÇ","best":"EN İYİ İŞLEM","worst":"EN KÖTÜ İŞLEM","waitingPumpDevLong":"Otomatik demo PumpDev işlem akışını bekliyor. Manuel sanal alımlar kullanılabilir.","presetAppliedPrefix":"Uygulanan profil: ","sessionTurnover":"OTURUM HACMİ","runtimeRunning":"OTOMATİK İŞLEM · ÇALIŞIYOR","runtimeStopped":"OTOMATİK İŞLEM · DURDURULDU","noNewTrades":"Yeni işlemler devre dışı (limit 0).","maxOpenReached":"Aynı anda açık işlem sınırına ulaşıldı ({count}).","serverEngineError":"Sunucu paper motoruna bağlanılamadı."},"hi":{"noMatches":"सक्रिय फ़िल्टर से मेल खाने वाला कोई टोकन नहीं है। फ़िल्टर ढीला करें या दूसरा स्रोत चुनें।","noClosed":"अभी कोई बंद ट्रेड नहीं है","noOpen":"अभी कोई खुली पोज़िशन नहीं है","statusOpen":"खुली","statusClosed":"बंद","tradeSize":"ट्रेड का आकार","entryPrice":"एंट्री मूल्य","exitPrice":"एग्ज़िट मूल्य","currentPrice":"वर्तमान मूल्य","tradeResult":"ट्रेड परिणाम","currentPnl":"वर्तमान P/L","contract":"कॉन्ट्रैक्ट","addressNA":"पता उपलब्ध नहीं","closedPrefix":"बंद: ","sources":"स्रोत: ","sourcesUnavailable":"स्रोत उपलब्ध नहीं: ","dailyLoss":"दैनिक नुकसान सीमा पूरी हो गई है। नए ट्रेड रोक दिए गए हैं।","tradeSizeError":"ट्रेड का आकार शून्य से अधिक और निर्धारित अधिकतम सीमा के भीतर होना चाहिए।","lowLiquidity":"टोकन की लिक्विडिटी निर्धारित न्यूनतम से कम है।","noBalance":"वर्चुअल बैलेंस पर्याप्त नहीं है।","history":"ट्रेड इतिहास","waitingPumpDev":"ऑटो डेमो PumpDev ट्रेड फ़ीड कनेक्शन की प्रतीक्षा कर रहा है।","socialsOnly":"केवल सोशल लिंक वाले","filterTicker":"नाम / टिकर फ़िल्टर करें","allSources":"सभी स्रोत","pumpLaunches":"PUMP.FUN लॉन्च","boostMonitor":"BOOST MONITOR","community":"ZOMBIE LAB / समुदाय","anyDev":"कोई भी DEV","firstSeen":"पहली बार देखा गया","repeatDev":"बार-बार दिखने वाला DEV","recommended":"अनुशंसित प्रोफ़ाइल","presetNote":"वर्चुअल परीक्षण के लिए तैयार प्रोफ़ाइल। केवल डेमो सेटिंग बदलती हैं।","conservative":"सावधानीपूर्ण","balanced":"संतुलित","aggressive":"आक्रामक","idleTimeout":"बिना गतिविधि का टाइमआउट (सेकंड)","minMove":"न्यूनतम मूल्य बदलाव (%)","minBuys":"पहले मिनट में न्यूनतम खरीद","maxDailyLoss":"अधिकतम दैनिक नुकसान (SOL)","maxOpen":"एक साथ अधिकतम खुले ट्रेड","statsHeading":"सिमुलेशन प्रदर्शन","equityCurve":"सेशन इक्विटी कर्व","sinceStart":"SOL · सेशन शुरू होने के बाद से","closedTrades":"बंद ट्रेड","winsLosses":"जीत / हार","start":"शुरुआत ","now":"अभी ","totalExposure":"कुल खुला एक्सपोज़र","openPositions":"खुली पोज़िशन: ","liveUnrealized":"लाइव अवास्तविक P/L","realized":"वास्तविक P/L","average":"औसत परिणाम","best":"सबसे अच्छा ट्रेड","worst":"सबसे खराब ट्रेड","waitingPumpDevLong":"ऑटो डेमो PumpDev ट्रेड फ़ीड की प्रतीक्षा कर रहा है। मैन्युअल वर्चुअल खरीद उपलब्ध है।","presetAppliedPrefix":"लागू प्रोफ़ाइल: ","sessionTurnover":"सेशन टर्नओवर","runtimeRunning":"ऑटो ट्रेडिंग · चालू","runtimeStopped":"ऑटो ट्रेडिंग · रुका हुआ","noNewTrades":"नए ट्रेड बंद हैं (सीमा 0 है)।","maxOpenReached":"एक साथ खुले ट्रेड की अधिकतम सीमा पूरी हो गई ({count})।","serverEngineError":"सर्वर पेपर इंजन से संपर्क नहीं हो सका।"}};
+  const uiText = key => (SNIPER_UI_COPY[state.lang] || SNIPER_UI_COPY.en)[key] || SNIPER_UI_COPY.en[key] || key;
+  const WALLET_COPY = {"en":{"title":"YOUR SOLANA WALLET","login":"Sign in with Telegram to create your dedicated wallet.","create":"CREATE / CHECK WALLET","checking":"CHECKING…","retry":"RETRY","provisioning":"Wallet is provisioning or temporarily unavailable.","copy":"COPY","copied":"COPIED","failed":"FAILED","balance":"SOL BALANCE","loading":"LOADING…","refresh":"REFRESH","confirmed":"Confirmed on Solana","error":"ERROR: ","network":"network unavailable","deposit":"To fund this wallet, send native SOL on Solana only. Do not send assets from other networks.","baselineUnset":"RECONCILIATION: BASELINE NOT SET","setBaseline":"SET BASELINE","pending":"HISTORY NOT YET RECONCILED","scanning":"HISTORY SCAN IN PROGRESS","complete":"HISTORY RECONCILED","discrepancy":"BALANCE DISCREPANCY DETECTED","rpc":"RPC TEMPORARILY UNAVAILABLE","baselineSaved":"BASELINE SAVED","reconcileError":"RECONCILIATION LOAD ERROR: ","readBaseline":"READING BALANCE AND SLOT…","activity":"RECENT ACTIVITY","refreshHistory":"REFRESH HISTORY","noActivity":"No transactions yet.","failedStatus":"FAILED","confirmedStatus":"CONFIRMED","netChange":"(net change)","amountNA":"Amount unavailable","fee":"Network fee: ","feeNA":"Network fee unavailable","loadOlder":"LOAD OLDER","activityError":"ACTIVITY ERROR: ","privateKey":"Private key stays server-side. Paper mode never sends real trades.","walletError":"WALLET ERROR: ","nav":"WALLET"},"ru":{"title":"ВАШ SOLANA-КОШЕЛЁК","login":"Войдите через Telegram — для профиля будет создан отдельный кошелёк.","create":"СОЗДАТЬ / ПРОВЕРИТЬ КОШЕЛЁК","checking":"ПРОВЕРКА…","retry":"ПОВТОРИТЬ","provisioning":"Кошелёк создаётся или временно недоступен.","copy":"КОПИРОВАТЬ","copied":"СКОПИРОВАНО","failed":"ОШИБКА","balance":"БАЛАНС SOL","loading":"ЗАГРУЗКА…","refresh":"ОБНОВИТЬ","confirmed":"Подтверждено сетью Solana","error":"ОШИБКА: ","network":"сеть недоступна","deposit":"Для пополнения отправляйте только SOL в сети Solana на этот адрес. Не отправляйте токены других сетей.","baselineUnset":"СВЕРКА: ИСХОДНАЯ ТОЧКА НЕ ЗАДАНА","setBaseline":"ЗАДАТЬ ИСХОДНУЮ ТОЧКУ","pending":"ИСТОРИЯ ЕЩЁ НЕ СВЕРЕНА","scanning":"ПРОВЕРКА ИСТОРИИ","complete":"ИСТОРИЯ СВЕРЕНА","discrepancy":"ОБНАРУЖЕНО РАСХОЖДЕНИЕ","rpc":"RPC ВРЕМЕННО НЕДОСТУПЕН","baselineSaved":"ИСХОДНАЯ ТОЧКА СОХРАНЕНА","reconcileError":"ОШИБКА ЗАГРУЗКИ СВЕРКИ: ","readBaseline":"ПОЛУЧЕНИЕ БАЛАНСА И SLOT…","activity":"ПОСЛЕДНИЕ ОПЕРАЦИИ","refreshHistory":"ОБНОВИТЬ ИСТОРИЮ","noActivity":"Операций пока нет.","failedStatus":"ОШИБКА","confirmedStatus":"ПОДТВЕРЖДЕНО","netChange":"(чистое изменение)","amountNA":"Сумма недоступна","fee":"Комиссия сети: ","feeNA":"Комиссия недоступна","loadOlder":"ЗАГРУЗИТЬ ЕЩЁ","activityError":"ОШИБКА ЗАГРУЗКИ ИСТОРИИ: ","privateKey":"Приватный ключ хранится на сервере. Демо-режим не отправляет реальные сделки.","walletError":"ОШИБКА КОШЕЛЬКА: ","nav":"КОШЕЛЁК"},"de":{"title":"DEINE SOLANA-WALLET","login":"Melde dich über Telegram an, um eine eigene Wallet für dein Profil zu erstellen.","create":"WALLET ERSTELLEN / PRÜFEN","checking":"WIRD GEPRÜFT…","retry":"ERNEUT VERSUCHEN","provisioning":"Die Wallet wird eingerichtet oder ist vorübergehend nicht verfügbar.","copy":"KOPIEREN","copied":"KOPIERT","failed":"FEHLGESCHLAGEN","balance":"SOL-GUTHABEN","loading":"WIRD GELADEN…","refresh":"AKTUALISIEREN","confirmed":"Im Solana-Netzwerk bestätigt","error":"FEHLER: ","network":"Netzwerk nicht verfügbar","deposit":"Sende zum Aufladen ausschließlich natives SOL im Solana-Netzwerk an diese Adresse. Keine Assets aus anderen Netzwerken senden.","baselineUnset":"ABGLEICH: AUSGANGSWERT NICHT FESTGELEGT","setBaseline":"AUSGANGSWERT FESTLEGEN","pending":"VERLAUF NOCH NICHT ABGEGLICHEN","scanning":"VERLAUF WIRD GEPRÜFT","complete":"VERLAUF ABGEGLICHEN","discrepancy":"GUTHABENABWEICHUNG ERKANNT","rpc":"RPC VORÜBERGEHEND NICHT VERFÜGBAR","baselineSaved":"AUSGANGSWERT GESPEICHERT","reconcileError":"FEHLER BEIM LADEN DES ABGLEICHS: ","readBaseline":"GUTHABEN UND SLOT WERDEN ABGERUFEN…","activity":"LETZTE AKTIVITÄTEN","refreshHistory":"VERLAUF AKTUALISIEREN","noActivity":"Noch keine Transaktionen.","failedStatus":"FEHLGESCHLAGEN","confirmedStatus":"BESTÄTIGT","netChange":"(Nettoänderung)","amountNA":"Betrag nicht verfügbar","fee":"Netzwerkgebühr: ","feeNA":"Netzwerkgebühr nicht verfügbar","loadOlder":"ÄLTERE LADEN","activityError":"AKTIVITÄTSFEHLER: ","privateKey":"Der private Schlüssel bleibt auf dem Server. Der Demomodus sendet keine echten Trades.","walletError":"WALLET-FEHLER: ","nav":"WALLET"},"fr":{"title":"VOTRE PORTEFEUILLE SOLANA","login":"Connectez-vous avec Telegram pour créer un portefeuille dédié à votre profil.","create":"CRÉER / VÉRIFIER LE PORTEFEUILLE","checking":"VÉRIFICATION…","retry":"RÉESSAYER","provisioning":"Le portefeuille est en cours de création ou temporairement indisponible.","copy":"COPIER","copied":"COPIÉ","failed":"ÉCHEC","balance":"SOLDE SOL","loading":"CHARGEMENT…","refresh":"ACTUALISER","confirmed":"Confirmé sur Solana","error":"ERREUR : ","network":"réseau indisponible","deposit":"Pour approvisionner ce portefeuille, envoyez uniquement du SOL natif sur Solana à cette adresse. N’envoyez pas d’actifs d’autres réseaux.","baselineUnset":"RAPPROCHEMENT : POINT DE RÉFÉRENCE NON DÉFINI","setBaseline":"DÉFINIR LE POINT DE RÉFÉRENCE","pending":"HISTORIQUE PAS ENCORE RAPPROCHÉ","scanning":"VÉRIFICATION DE L’HISTORIQUE","complete":"HISTORIQUE RAPPROCHÉ","discrepancy":"ÉCART DE SOLDE DÉTECTÉ","rpc":"RPC TEMPORAIREMENT INDISPONIBLE","baselineSaved":"POINT DE RÉFÉRENCE ENREGISTRÉ","reconcileError":"ERREUR DE CHARGEMENT DU RAPPROCHEMENT : ","readBaseline":"LECTURE DU SOLDE ET DU SLOT…","activity":"ACTIVITÉ RÉCENTE","refreshHistory":"ACTUALISER L’HISTORIQUE","noActivity":"Aucune transaction pour le moment.","failedStatus":"ÉCHEC","confirmedStatus":"CONFIRMÉ","netChange":"(variation nette)","amountNA":"Montant indisponible","fee":"Frais réseau : ","feeNA":"Frais réseau indisponibles","loadOlder":"CHARGER LES ANCIENNES","activityError":"ERREUR D’ACTIVITÉ : ","privateKey":"La clé privée reste sur le serveur. Le mode démo n’envoie aucune transaction réelle.","walletError":"ERREUR DU PORTEFEUILLE : ","nav":"PORTEFEUILLE"},"it":{"title":"IL TUO WALLET SOLANA","login":"Accedi con Telegram per creare un wallet dedicato al tuo profilo.","create":"CREA / VERIFICA WALLET","checking":"VERIFICA IN CORSO…","retry":"RIPROVA","provisioning":"Il wallet è in creazione o temporaneamente non disponibile.","copy":"COPIA","copied":"COPIATO","failed":"ERRORE","balance":"SALDO SOL","loading":"CARICAMENTO…","refresh":"AGGIORNA","confirmed":"Confermato sulla rete Solana","error":"ERRORE: ","network":"rete non disponibile","deposit":"Per ricaricare questo wallet, invia solo SOL nativo sulla rete Solana a questo indirizzo. Non inviare asset di altre reti.","baselineUnset":"RICONCILIAZIONE: RIFERIMENTO NON IMPOSTATO","setBaseline":"IMPOSTA RIFERIMENTO","pending":"CRONOLOGIA NON ANCORA RICONCILIATA","scanning":"CONTROLLO CRONOLOGIA IN CORSO","complete":"CRONOLOGIA RICONCILIATA","discrepancy":"RILEVATA DIFFERENZA NEL SALDO","rpc":"RPC TEMPORANEAMENTE NON DISPONIBILE","baselineSaved":"RIFERIMENTO SALVATO","reconcileError":"ERRORE DI CARICAMENTO RICONCILIAZIONE: ","readBaseline":"LETTURA SALDO E SLOT…","activity":"ATTIVITÀ RECENTE","refreshHistory":"AGGIORNA CRONOLOGIA","noActivity":"Nessuna transazione al momento.","failedStatus":"ERRORE","confirmedStatus":"CONFERMATO","netChange":"(variazione netta)","amountNA":"Importo non disponibile","fee":"Commissione di rete: ","feeNA":"Commissione di rete non disponibile","loadOlder":"CARICA PRECEDENTI","activityError":"ERRORE ATTIVITÀ: ","privateKey":"La chiave privata resta sul server. La modalità demo non invia operazioni reali.","walletError":"ERRORE WALLET: ","nav":"WALLET"},"ja":{"title":"SOLANAウォレット","login":"Telegramでログインすると、プロフィール専用のウォレットが作成されます。","create":"ウォレットを作成 / 確認","checking":"確認中…","retry":"再試行","provisioning":"ウォレットを作成中、または一時的に利用できません。","copy":"コピー","copied":"コピーしました","failed":"失敗","balance":"SOL残高","loading":"読み込み中…","refresh":"更新","confirmed":"Solanaネットワークで確認済み","error":"エラー: ","network":"ネットワークを利用できません","deposit":"このウォレットへの入金には、Solanaネットワーク上のネイティブSOLのみを送信してください。他のネットワークの資産は送信しないでください。","baselineUnset":"照合: 基準値未設定","setBaseline":"基準値を設定","pending":"履歴は未照合です","scanning":"履歴を確認中","complete":"履歴の照合完了","discrepancy":"残高の不一致を検出","rpc":"RPCは一時的に利用できません","baselineSaved":"基準値を保存しました","reconcileError":"照合データの読み込みエラー: ","readBaseline":"残高とスロットを取得中…","activity":"最近のアクティビティ","refreshHistory":"履歴を更新","noActivity":"取引履歴はありません。","failedStatus":"失敗","confirmedStatus":"確認済み","netChange":"(純増減)","amountNA":"金額を取得できません","fee":"ネットワーク手数料: ","feeNA":"ネットワーク手数料を取得できません","loadOlder":"過去の履歴を読み込む","activityError":"アクティビティエラー: ","privateKey":"秘密鍵はサーバー上に保管されます。デモモードでは実際の取引は送信されません。","walletError":"ウォレットエラー: ","nav":"ウォレット"},"zh-CN":{"title":"您的 SOLANA 钱包","login":"通过 Telegram 登录，为您的个人资料创建专属钱包。","create":"创建 / 检查钱包","checking":"正在检查…","retry":"重试","provisioning":"钱包正在创建或暂时不可用。","copy":"复制","copied":"已复制","failed":"失败","balance":"SOL 余额","loading":"正在加载…","refresh":"刷新","confirmed":"已在 Solana 网络确认","error":"错误：","network":"网络不可用","deposit":"为此钱包充值时，请仅向该地址发送 Solana 网络上的原生 SOL。请勿发送其他网络的资产。","baselineUnset":"对账：尚未设置基准值","setBaseline":"设置基准值","pending":"历史记录尚未完成对账","scanning":"正在扫描历史记录","complete":"历史记录已完成对账","discrepancy":"检测到余额差异","rpc":"RPC 暂时不可用","baselineSaved":"基准值已保存","reconcileError":"加载对账信息失败：","readBaseline":"正在读取余额和 Slot…","activity":"最近活动","refreshHistory":"刷新历史记录","noActivity":"暂无交易记录。","failedStatus":"失败","confirmedStatus":"已确认","netChange":"(净变化)","amountNA":"金额不可用","fee":"网络手续费：","feeNA":"网络手续费不可用","loadOlder":"加载更早记录","activityError":"活动记录错误：","privateKey":"私钥保存在服务器端。模拟模式不会发送真实交易。","walletError":"钱包错误：","nav":"钱包"},"tr":{"title":"SOLANA CÜZDANINIZ","login":"Profilinize özel bir cüzdan oluşturmak için Telegram ile giriş yapın.","create":"CÜZDAN OLUŞTUR / KONTROL ET","checking":"KONTROL EDİLİYOR…","retry":"YENİDEN DENE","provisioning":"Cüzdan oluşturuluyor veya geçici olarak kullanılamıyor.","copy":"KOPYALA","copied":"KOPYALANDI","failed":"BAŞARISIZ","balance":"SOL BAKİYESİ","loading":"YÜKLENİYOR…","refresh":"YENİLE","confirmed":"Solana ağında onaylandı","error":"HATA: ","network":"ağ kullanılamıyor","deposit":"Bu cüzdana para yatırmak için bu adrese yalnızca Solana ağındaki yerel SOL'u gönderin. Diğer ağlardan varlık göndermeyin.","baselineUnset":"MUTABAKAT: REFERANS DEĞERİ AYARLANMADI","setBaseline":"REFERANS DEĞERİNİ AYARLA","pending":"İŞLEM GEÇMİŞİ HENÜZ MUTABAKATLANMADI","scanning":"İŞLEM GEÇMİŞİ TARANIYOR","complete":"İŞLEM GEÇMİŞİ MUTABAKATLANDI","discrepancy":"BAKİYE UYUŞMAZLIĞI ALGILANDI","rpc":"RPC GEÇİCİ OLARAK KULLANILAMIYOR","baselineSaved":"REFERANS DEĞERİ KAYDEDİLDİ","reconcileError":"MUTABAKAT YÜKLEME HATASI: ","readBaseline":"BAKİYE VE SLOT OKUNUYOR…","activity":"SON İŞLEMLER","refreshHistory":"GEÇMİŞİ YENİLE","noActivity":"Henüz işlem yok.","failedStatus":"BAŞARISIZ","confirmedStatus":"ONAYLANDI","netChange":"(net değişim)","amountNA":"Tutar kullanılamıyor","fee":"Ağ ücreti: ","feeNA":"Ağ ücreti kullanılamıyor","loadOlder":"ESKİ KAYITLARI YÜKLE","activityError":"İŞLEM GEÇMİŞİ HATASI: ","privateKey":"Özel anahtar sunucuda saklanır. Demo modu gerçek işlem göndermez.","walletError":"CÜZDAN HATASI: ","nav":"CÜZDAN"},"hi":{"title":"आपका SOLANA वॉलेट","login":"अपने प्रोफ़ाइल के लिए अलग वॉलेट बनाने हेतु Telegram से लॉग इन करें।","create":"वॉलेट बनाएँ / जाँचें","checking":"जाँच जारी…","retry":"फिर कोशिश करें","provisioning":"वॉलेट बनाया जा रहा है या अस्थायी रूप से उपलब्ध नहीं है।","copy":"कॉपी करें","copied":"कॉपी हो गया","failed":"विफल","balance":"SOL बैलेंस","loading":"लोड हो रहा है…","refresh":"रीफ़्रेश","confirmed":"Solana नेटवर्क पर पुष्टि हुई","error":"त्रुटि: ","network":"नेटवर्क उपलब्ध नहीं है","deposit":"इस वॉलेट में राशि भेजने के लिए केवल Solana नेटवर्क पर native SOL भेजें। अन्य नेटवर्क की संपत्ति न भेजें।","baselineUnset":"मिलान: आधार मान सेट नहीं है","setBaseline":"आधार मान सेट करें","pending":"लेन-देन इतिहास का मिलान अभी नहीं हुआ","scanning":"लेन-देन इतिहास स्कैन हो रहा है","complete":"लेन-देन इतिहास का मिलान पूरा","discrepancy":"बैलेंस में अंतर मिला","rpc":"RPC अस्थायी रूप से उपलब्ध नहीं है","baselineSaved":"आधार मान सहेजा गया","reconcileError":"मिलान जानकारी लोड करने में त्रुटि: ","readBaseline":"बैलेंस और स्लॉट पढ़े जा रहे हैं…","activity":"हाल की गतिविधि","refreshHistory":"इतिहास रीफ़्रेश करें","noActivity":"अभी कोई लेन-देन नहीं है।","failedStatus":"विफल","confirmedStatus":"पुष्ट","netChange":"(शुद्ध बदलाव)","amountNA":"राशि उपलब्ध नहीं","fee":"नेटवर्क शुल्क: ","feeNA":"नेटवर्क शुल्क उपलब्ध नहीं","loadOlder":"पुराने रिकॉर्ड लोड करें","activityError":"गतिविधि त्रुटि: ","privateKey":"निजी कुंजी सर्वर पर रहती है। डेमो मोड वास्तविक लेन-देन नहीं भेजता।","walletError":"वॉलेट त्रुटि: ","nav":"वॉलेट"}};
+  const walletText = key => (WALLET_COPY[state.lang] || WALLET_COPY.en)[key] || WALLET_COPY.en[key] || key;
 
   async function refreshWalletInfo(){
     const panel=$('zs-wallet-panel');if(!panel)return;
@@ -142,10 +147,10 @@
     panel.dataset.loading='true';
     panel.dataset.token=token;
     panel.replaceChildren();
-    const title=dashNode('strong','',state.lang==='ru'?'ВАШ SOLANA-КОШЕЛЁК':'YOUR SOLANA WALLET');
+    const title=dashNode('strong','',walletText('title'));
     panel.append(title);
-    if(!token){panel.append(dashNode('small','',state.lang==='ru'?'Войдите через Telegram — для профиля будет создан отдельный кошелёк.':'Sign in with Telegram to create your dedicated wallet.'));panel.dataset.loading='false';panel.dataset.loaded='true';return;}
-    const provision=dashNode('button','zs-wallet-provision',state.lang==='ru'?'СОЗДАТЬ / ПРОВЕРИТЬ КОШЕЛЁК':'CREATE / CHECK WALLET');provision.type='button';provision.addEventListener('click',async()=>{provision.disabled=true;provision.textContent=state.lang==='ru'?'ПРОВЕРКА…':'CHECKING…';try{const result=await fetch(AUTH_API+'/api/sniper/wallet/provision',{method:'POST',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},cache:'no-store'});const body=await result.json().catch(()=>({}));if(!result.ok)throw new Error(body.error||'Wallet provisioning failed');panel.dataset.loaded='false';await refreshWalletInfo();}catch(error){panel.append(dashNode('small','zs-wallet-error',error.message||'Wallet provisioning unavailable'));provision.disabled=false;provision.textContent=state.lang==='ru'?'ПОВТОРИТЬ':'RETRY';}});panel.append(provision);
+    if(!token){panel.append(dashNode('small','',walletText('login')));panel.dataset.loading='false';panel.dataset.loaded='true';return;}
+    const provision=dashNode('button','zs-wallet-provision',walletText('create'));provision.type='button';provision.addEventListener('click',async()=>{provision.disabled=true;provision.textContent=walletText('checking');try{const result=await fetch(AUTH_API+'/api/sniper/wallet/provision',{method:'POST',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},cache:'no-store'});const body=await result.json().catch(()=>({}));if(!result.ok)throw new Error(body.error||'Wallet provisioning failed');panel.dataset.loaded='false';await refreshWalletInfo();}catch(error){panel.append(dashNode('small','zs-wallet-error',error.message||'Wallet provisioning unavailable'));provision.disabled=false;provision.textContent=walletText('retry');}});panel.append(provision);
     try{
       const response=await fetch(AUTH_API+'/api/sniper/wallet',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
       if(!response.ok){const failure=await response.json().catch(()=>({}));throw new Error(failure.error||('Wallet API HTTP '+response.status));}
@@ -180,63 +185,63 @@
         if(terminal.auto!==serverEnabled){terminal.auto=serverEnabled;terminal.startedAt=serverEnabled?(terminal.startedAt||Date.now()):0;saveTerminal();renderDashboardState();}
       }
       if(!wallet||!wallet.publicKey){
-        panel.append(dashNode('small','',state.lang==='ru'?'Кошелёк создаётся или временно недоступен.':'Wallet is provisioning or temporarily unavailable.'));
+        panel.append(dashNode('small','',walletText('provisioning')));
         panel.dataset.loading='false';panel.dataset.loaded='true';
         return;
       }
       const address=String(wallet.publicKey);
       const line=dashNode('code','zs-wallet-address',address);
       line.title=address;
-      const copy=dashNode('button','zs-copy-address',state.lang==='ru'?'КОПИРОВАТЬ':'COPY');
+      const copy=dashNode('button','zs-copy-address',walletText('copy'));
       copy.type='button';
       copy.addEventListener('click',async()=>{
-        try{await navigator.clipboard.writeText(address);copy.textContent=state.lang==='ru'?'СКОПИРОВАНО':'COPIED';}
-        catch(_){copy.textContent=state.lang==='ru'?'ОШИБКА':'FAILED';}
+        try{await navigator.clipboard.writeText(address);copy.textContent=walletText('copied');}
+        catch(_){copy.textContent=walletText('failed');}
       });
       panel.append(line,copy);
       const balanceRow=dashNode('div','zs-wallet-balance');
-      const balanceLabel=dashNode('small','',state.lang==='ru'?'БАЛАНС SOL':'SOL BALANCE');
-      const balanceValue=dashNode('strong','zs-wallet-balance-value',state.lang==='ru'?'ЗАГРУЗКА…':'LOADING…');
-      const refreshBalance=dashNode('button','zs-wallet-refresh',state.lang==='ru'?'ОБНОВИТЬ':'REFRESH');
+      const balanceLabel=dashNode('small','',walletText('balance'));
+      const balanceValue=dashNode('strong','zs-wallet-balance-value',walletText('loading'));
+      const refreshBalance=dashNode('button','zs-wallet-refresh',walletText('refresh'));
       refreshBalance.type='button';
       const loadBalance=async()=>{
-        refreshBalance.disabled=true;balanceValue.textContent=state.lang==='ru'?'ЗАГРУЗКА…':'LOADING…';
+        refreshBalance.disabled=true;balanceValue.textContent=walletText('loading');
         try{
           const balanceResponse=await fetch(AUTH_API+'/api/sniper/wallet/balance',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
           const balanceData=await balanceResponse.json().catch(()=>({}));
           if(!balanceResponse.ok)throw new Error((balanceData.error||'Balance API error')+' (HTTP '+balanceResponse.status+')');
           balanceValue.textContent=Number(balanceData.sol).toLocaleString(undefined,{minimumFractionDigits:4,maximumFractionDigits:9})+' SOL';
-          balanceValue.title=state.lang==='ru'?'Подтверждено сетью Solana':'Confirmed on Solana';
-        }catch(error){balanceValue.textContent=(state.lang==='ru'?'ОШИБКА: ':'ERROR: ')+(error&&error.message?error.message:(state.lang==='ru'?'сеть недоступна':'network unavailable'));}
+          balanceValue.title=walletText('confirmed');
+        }catch(error){balanceValue.textContent=(walletText('error'))+(error&&error.message?error.message:(walletText('network')));}
         finally{refreshBalance.disabled=false;}
       };
       refreshBalance.addEventListener('click',loadBalance);
       balanceRow.append(balanceLabel,balanceValue,refreshBalance);
-      const depositNote=dashNode('small','zs-wallet-note',state.lang==='ru'?'Для пополнения отправляйте только SOL в сети Solana на этот адрес. Не отправляйте токены других сетей.':'To fund this wallet, send native SOL on Solana only. Do not send assets from other networks.');
+      const depositNote=dashNode('small','zs-wallet-note',walletText('deposit'));
       const reconciliationRow=dashNode('div','zs-wallet-reconciliation');
-      const reconciliationStatus=dashNode('small','zs-wallet-reconciliation-status',state.lang==='ru'?'СВЕРКА: ИСХОДНАЯ ТОЧКА НЕ ЗАДАНА':'RECONCILIATION: BASELINE NOT SET');
-      const setBaseline=dashNode('button','zs-wallet-set-baseline',state.lang==='ru'?'ЗАДАТЬ ИСХОДНУЮ ТОЧКУ':'SET BASELINE');
+      const reconciliationStatus=dashNode('small','zs-wallet-reconciliation-status',walletText('baselineUnset'));
+      const setBaseline=dashNode('button','zs-wallet-set-baseline',walletText('setBaseline'));
       setBaseline.type='button';
       const applyBaselineState=baseline=>{
         if(!baseline){
-          reconciliationStatus.textContent=state.lang==='ru'?'СВЕРКА: ИСХОДНАЯ ТОЧКА НЕ ЗАДАНА':'RECONCILIATION: BASELINE NOT SET';
-          setBaseline.textContent=state.lang==='ru'?'ЗАДАТЬ ИСХОДНУЮ ТОЧКУ':'SET BASELINE';
+          reconciliationStatus.textContent=walletText('baselineUnset');
+          setBaseline.textContent=walletText('setBaseline');
           setBaseline.disabled=false;
           return;
         }
         const statusLabels={
-          baseline_pending_history:state.lang==='ru'?'ИСТОРИЯ ЕЩЁ НЕ СВЕРЕНА':'HISTORY NOT YET RECONCILED',
-          scanning:state.lang==='ru'?'ПРОВЕРКА ИСТОРИИ':'HISTORY SCAN IN PROGRESS',
-          history_complete:state.lang==='ru'?'ИСТОРИЯ СВЕРЕНА':'HISTORY RECONCILED',
-          discrepancy:state.lang==='ru'?'ОБНАРУЖЕНО РАСХОЖДЕНИЕ':'BALANCE DISCREPANCY DETECTED',
-          rpc_unavailable:state.lang==='ru'?'RPC ВРЕМЕННО НЕДОСТУПЕН':'RPC TEMPORARILY UNAVAILABLE'
+          baseline_pending_history:walletText('pending'),
+          scanning:walletText('scanning'),
+          history_complete:walletText('complete'),
+          discrepancy:walletText('discrepancy'),
+          rpc_unavailable:walletText('rpc')
         };
         const sol=Number(baseline.baselineSol);
         const balance=Number.isFinite(sol)?sol.toLocaleString(undefined,{minimumFractionDigits:4,maximumFractionDigits:9})+' SOL':'';
         const slot=Number.isFinite(Number(baseline.baselineSlot))?' · SLOT '+Number(baseline.baselineSlot).toLocaleString():'';
         const status=statusLabels[baseline.status]||String(baseline.status||'BASELINE SAVED').toUpperCase();
-        reconciliationStatus.textContent=(state.lang==='ru'?'ИСХОДНАЯ ТОЧКА СОХРАНЕНА':'BASELINE SAVED')+(balance?' · '+balance:'')+slot+' · '+status;
-        setBaseline.textContent=state.lang==='ru'?'ИСХОДНАЯ ТОЧКА СОХРАНЕНА':'BASELINE SAVED';
+        reconciliationStatus.textContent=(walletText('baselineSaved'))+(balance?' · '+balance:'')+slot+' · '+status;
+        setBaseline.textContent=walletText('baselineSaved');
         setBaseline.disabled=true;
       };
       const loadReconciliationState=async()=>{
@@ -247,13 +252,13 @@
           if(!stateResponse.ok)throw new Error(stateData.error||'Reconciliation state API error');
           applyBaselineState(stateData.baseline||null);
         }catch(error){
-          reconciliationStatus.textContent=(state.lang==='ru'?'ОШИБКА ЗАГРУЗКИ СВЕРКИ: ':'RECONCILIATION LOAD ERROR: ')+(error&&error.message?error.message:'network unavailable');
+          reconciliationStatus.textContent=(walletText('reconcileError'))+(error&&error.message?error.message:'network unavailable');
           setBaseline.disabled=false;
         }
       };
       setBaseline.addEventListener('click',async()=>{
         setBaseline.disabled=true;
-        reconciliationStatus.textContent=state.lang==='ru'?'ПОЛУЧЕНИЕ БАЛАНСА И SLOT…':'READING BALANCE AND SLOT…';
+        reconciliationStatus.textContent=walletText('readBaseline');
         try{
           const baselineResponse=await fetch(AUTH_API+'/api/sniper/wallet/reconciliation/baseline',{
             method:'POST',headers:{'Authorization':'Bearer '+token},cache:'no-store'
@@ -262,14 +267,14 @@
           if(!baselineResponse.ok)throw new Error((baselineData.error||'Baseline API error')+' (HTTP '+baselineResponse.status+')');
           applyBaselineState(baselineData.baseline||null);
         }catch(error){
-          reconciliationStatus.textContent=(state.lang==='ru'?'ОШИБКА: ':'ERROR: ')+(error&&error.message?error.message:(state.lang==='ru'?'сеть недоступна':'network unavailable'));
+          reconciliationStatus.textContent=(walletText('error'))+(error&&error.message?error.message:(walletText('network')));
           setBaseline.disabled=false;
         }
       });
       reconciliationRow.append(reconciliationStatus,setBaseline);
-      const activityTitle=dashNode('strong','zs-wallet-activity-title',state.lang==='ru'?'ПОСЛЕДНИЕ ОПЕРАЦИИ':'RECENT ACTIVITY');
+      const activityTitle=dashNode('strong','zs-wallet-activity-title',walletText('activity'));
       const activityHeader=dashNode('div','zs-wallet-activity-header');
-      const activityRefresh=dashNode('button','zs-wallet-activity-refresh',state.lang==='ru'?'ОБНОВИТЬ ИСТОРИЮ':'REFRESH HISTORY');
+      const activityRefresh=dashNode('button','zs-wallet-activity-refresh',walletText('refreshHistory'));
       activityRefresh.type='button';
       activityHeader.append(activityTitle,activityRefresh);
       const activityList=dashNode('div','zs-wallet-activity');
@@ -280,7 +285,7 @@
         activityLoading=true;
         const loadMoreButton=activityList.querySelector('.zs-wallet-load-more');
         if(loadMoreButton)loadMoreButton.disabled=true;
-        if(!append){activityCursor=null;activityList.replaceChildren(dashNode('small','',state.lang==='ru'?'ЗАГРУЗКА…':'LOADING…'));}
+        if(!append){activityCursor=null;activityList.replaceChildren(dashNode('small','',walletText('loading')));}
         try{
           const query=activityCursor?'?before='+encodeURIComponent(activityCursor):'';
           const activityResponse=await fetch(AUTH_API+'/api/sniper/wallet/activity'+query,{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
@@ -288,18 +293,18 @@
           if(!activityResponse.ok)throw new Error((activityData.error||'Activity API error')+' (HTTP '+activityResponse.status+')');
           if(!append)activityList.replaceChildren();
           const items=Array.isArray(activityData.activity)?activityData.activity:[];
-          if(!items.length&&!append){activityList.append(dashNode('small','',state.lang==='ru'?'Операций пока нет.':'No transactions yet.'));}
+          if(!items.length&&!append){activityList.append(dashNode('small','',walletText('noActivity')));}
           items.forEach(item=>{
             const entry=dashNode('div','zs-wallet-activity-item');
-            const detail=dashNode('span','',item.failed?(state.lang==='ru'?'ОШИБКА':'FAILED'):(state.lang==='ru'?'ПОДТВЕРЖДЕНО':'CONFIRMED'));
+            const detail=dashNode('span','',item.failed?(walletText('failed')):(walletText('confirmedStatus')));
             const time=dashNode('small','',item.blockTime?new Date(item.blockTime*1000).toLocaleString():'—');
             const amountText=typeof item.netSol==='number'
-              ?(item.netSol>0?'+':'')+item.netSol.toFixed(9)+' SOL '+(state.lang==='ru'?'(чистое изменение)':'(net change)')
-              :(state.lang==='ru'?'Сумма недоступна':'Amount unavailable');
+              ?(item.netSol>0?'+':'')+item.netSol.toFixed(9)+' SOL '+(walletText('netChange'))
+              :(walletText('amountNA'));
             const amount=dashNode('small','',amountText);
             const feeText=typeof item.feeSol==='number'
-              ?(state.lang==='ru'?'Комиссия сети: ':'Network fee: ')+item.feeSol.toFixed(9)+' SOL'
-              :(state.lang==='ru'?'Комиссия недоступна':'Network fee unavailable');
+              ?(walletText('fee'))+item.feeSol.toFixed(9)+' SOL'
+              :(walletText('feeNA'));
             const fee=dashNode('small','',feeText);
             const link=dashNode('a','',String(item.signature).slice(0,10)+'…'+String(item.signature).slice(-8));
             link.href='https://solscan.io/tx/'+encodeURIComponent(item.signature);link.target='_blank';link.rel='noopener noreferrer';
@@ -309,14 +314,14 @@
           const oldButton=activityList.querySelector('.zs-wallet-load-more');
           if(oldButton)oldButton.remove();
           if(activityCursor){
-            const more=dashNode('button','zs-wallet-load-more',state.lang==='ru'?'ЗАГРУЗИТЬ ЕЩЁ':'LOAD OLDER');
+            const more=dashNode('button','zs-wallet-load-more',walletText('loadOlder'));
             more.type='button';
             more.addEventListener('click',()=>loadActivity(true));
             activityList.append(more);
           }
         }catch(failure){
           if(!append)activityList.replaceChildren();
-          const error=dashNode('small','zs-wallet-error',(state.lang==='ru'?'ОШИБКА ЗАГРУЗКИ ИСТОРИИ: ':'ACTIVITY ERROR: ')+(failure&&failure.message?failure.message:(state.lang==='ru'?'сеть недоступна':'network unavailable')));
+          const error=dashNode('small','zs-wallet-error',(walletText('activityError'))+(failure&&failure.message?failure.message:(walletText('network'))));
           activityList.append(error);
         }finally{
           activityLoading=false;
@@ -324,12 +329,12 @@
           activityRefresh.disabled=false;
         }
       };
-      panel.append(balanceRow,depositNote,reconciliationRow,activityHeader,activityList,dashNode('small','',state.lang==='ru'?'Приватный ключ хранится на сервере. Демо-режим не отправляет реальные сделки.':'Private key stays server-side. Paper mode never sends real trades.'));
+      panel.append(balanceRow,depositNote,reconciliationRow,activityHeader,activityList,dashNode('small','',walletText('privateKey')));
       activityRefresh.addEventListener('click',()=>loadActivity(false));
       panel.dataset.loading='false';panel.dataset.loaded='true';
       loadBalance();loadActivity();loadReconciliationState();
     }catch(error){
-      panel.append(dashNode('small','zs-wallet-error',(state.lang==='ru'?'ОШИБКА КОШЕЛЬКА: ':'WALLET ERROR: ')+(error&&error.message?error.message:(state.lang==='ru'?'сеть недоступна':'network unavailable'))));
+      panel.append(dashNode('small','zs-wallet-error',(walletText('walletError'))+(error&&error.message?error.message:(walletText('network')))));
       panel.dataset.loading='false';panel.dataset.loaded='true';
     }
   }
@@ -379,7 +384,9 @@
     detectLang();
     document.querySelectorAll('[data-sniper-i18n]').forEach(el=>{el.textContent=t(el.dataset.sniperI18n);});
     document.querySelectorAll('[data-sniper-placeholder]').forEach(el=>{el.placeholder=t(el.dataset.sniperPlaceholder);});
-    renderCandidates(); renderPositions();updateSyncStatus(state.syncStatusKey||'saved');
+    renderCandidates(); renderPositions();renderLog();updateSyncStatus(state.syncStatusKey||'saved');
+    if(typeof renderDashboardState==='function')renderDashboardState();
+    if($('zombie-sniper-demo')?.dataset.activeTab==='wallet'){const walletPanel=$('zs-wallet-panel');if(walletPanel)walletPanel.dataset.loaded='false';refreshWalletInfo();}
   }
   function fmt(value,digits=5){return Number(value).toLocaleString(undefined,{maximumFractionDigits:digits});}
   function ageLabel(ms){
@@ -425,7 +432,7 @@
       return true;
     });
     if(!visible.length){
-      const msg=state.candidates.length?(state.lang==='ru'?'Нет монет, соответствующих фильтрам. Ослабьте фильтры или выберите другой источник.':'No coins match the active filters. Relax a filter or choose another source.'):(state.busy?t('loading'):t('noCandidates'));
+      const msg=state.candidates.length?uiText('noMatches'):(state.busy?t('loading'):t('noCandidates'));
       host.append(make('p','sniper-muted',msg));
       return;
     }
@@ -470,36 +477,36 @@
     host.replaceChildren();
     const historyMode=mode==='history';
     const visiblePositions=state.positions.filter(p=>historyMode?p.status==='closed':p.status==='open');
-    if(!visiblePositions.length){host.append(make('p','sniper-muted',historyMode?(state.lang==='ru'?'Закрытых сделок пока нет':'No closed trades yet'):(state.lang==='ru'?'Сейчас нет открытых сделок':'No open positions right now')));renderStats();return;}
+    if(!visiblePositions.length){host.append(make('p','sniper-muted',historyMode?uiText('noClosed'):uiText('noOpen')));renderStats();return;}
     visiblePositions.slice().sort((a,b)=>Number((historyMode?b.closedAt:b.openedAt)||0)-Number((historyMode?a.closedAt:a.openedAt)||0)).forEach(p=>{
       const row=make('article','sniper-position zs-position-card');
       const head=make('div','zs-position-topline');
       const identity=make('div','zs-position-identity');
       identity.append(make('strong','zs-position-symbol',String(p.symbol||'TOKEN').toUpperCase()));
-      identity.append(make('span','zs-position-status '+(p.status==='open'?'is-open':'is-closed'),p.status==='open'?(state.lang==='ru'?'ОТКРЫТА':'OPEN'):(state.lang==='ru'?'ЗАКРЫТА':'CLOSED')));
+      identity.append(make('span','zs-position-status '+(p.status==='open'?'is-open':'is-closed'),p.status==='open'?(uiText('statusOpen')):(uiText('statusClosed'))));
       const pnl=make('strong','zs-position-pnl '+(Number(p.netPnl)>=0?'is-positive':'is-negative'),(p.netPnl>=0?'+':'')+fmt(p.netPnl||0,6)+' SOL');
       head.append(identity,pnl);
       const detail=make('div','zs-position-metrics');
       const metric=(label,value)=>{const cell=make('div','zs-position-metric');cell.append(make('small','',label),make('strong','',value));detail.append(cell);};
-      metric(state.lang==='ru'?'РАЗМЕР СДЕЛКИ':'TRADE SIZE',fmt(p.buySol||0,6)+' SOL');
-      metric(state.lang==='ru'?'ЦЕНА ВХОДА':'ENTRY PRICE',fmt(p.entryPrice,9)+' SOL');
-      metric(historyMode?(state.lang==='ru'?'ЦЕНА ВЫХОДА':'EXIT PRICE'):(state.lang==='ru'?'ТЕКУЩАЯ ЦЕНА':'CURRENT PRICE'),fmt(p.lastPrice||p.entryPrice,9)+' SOL');
-      metric(historyMode?(state.lang==='ru'?'ИТОГ СДЕЛКИ':'TRADE RESULT'):(state.lang==='ru'?'ТЕКУЩАЯ ПРИБЫЛЬ / УБЫТОК':'CURRENT P/L'),((Number(p.netPnl)||0)>=0?'+':'')+fmt(p.netPnl||0,6)+' SOL · '+((Number(p.netPct)||0)>=0?'+':'')+fmt(p.netPct||0,2)+'%');
+      metric(uiText('tradeSize'),fmt(p.buySol||0,6)+' SOL');
+      metric(uiText('entryPrice'),fmt(p.entryPrice,9)+' SOL');
+      metric(historyMode?(uiText('exitPrice')):(uiText('currentPrice')),fmt(p.lastPrice||p.entryPrice,9)+' SOL');
+      metric(historyMode?(uiText('tradeResult')):(uiText('currentPnl')),((Number(p.netPnl)||0)>=0?'+':'')+fmt(p.netPnl||0,6)+' SOL · '+((Number(p.netPct)||0)>=0?'+':'')+fmt(p.netPct||0,2)+'%');
       const contract=make('div','zs-position-contract');
-      const contractLabel=make('small','',state.lang==='ru'?'КОНТРАКТ':'CONTRACT');
+      const contractLabel=make('small','',uiText('contract'));
       const address=String(p.address||'');
-      const addressText=make('code','zs-position-address',address?address.slice(0,7)+'…'+address.slice(-7):(state.lang==='ru'?'Адрес недоступен':'Address unavailable'));
-      const copyBtn=make('button','zs-copy-address',state.lang==='ru'?'КОПИРОВАТЬ':'COPY');
+      const addressText=make('code','zs-position-address',address?address.slice(0,7)+'…'+address.slice(-7):(uiText('addressNA')));
+      const copyBtn=make('button','zs-copy-address',walletText('copy'));
       copyBtn.type='button';copyBtn.disabled=!address;copyBtn.addEventListener('click',async()=>{
         try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(address);else{const temp=document.createElement('textarea');temp.value=address;temp.style.position='fixed';temp.style.opacity='0';document.body.append(temp);temp.select();document.execCommand('copy');temp.remove();}
-          copyBtn.textContent=state.lang==='ru'?'СКОПИРОВАНО':'COPIED';window.setTimeout(()=>{copyBtn.textContent=state.lang==='ru'?'КОПИРОВАТЬ':'COPY';},1300);
-        }catch(_){copyBtn.textContent=state.lang==='ru'?'ОШИБКА':'FAILED';}
+          copyBtn.textContent=walletText('copied');window.setTimeout(()=>{copyBtn.textContent=walletText('copy');},1300);
+        }catch(_){copyBtn.textContent=walletText('failed');}
       });
       contract.append(contractLabel,addressText,copyBtn);
       const graph=make('div','zs-position-chart');graph.append(sparkline(p.priceHistory&&p.priceHistory.length?p.priceHistory:[p.entryPrice,p.lastPrice||p.entryPrice]));
       row.append(head,detail,contract,graph);
       if(p.status==='open'){const close=make('button','sniper-action sniper-close zs-position-close',dcopy().close||t('manualClose'));close.type='button';close.addEventListener('click',()=>closePaper(p.id,'manual'));row.append(close);}
-      else if(historyMode){const closedAt=Number(p.closedAt)||0;row.append(make('small','zs-position-reason',(state.lang==='ru'?'ЗАКРЫТА: ':'CLOSED: ')+(closedAt?new Date(closedAt).toLocaleString():'—')+(p.exitReason?' · '+String(p.exitReason).toUpperCase():'')));}
+      else if(historyMode){const closedAt=Number(p.closedAt)||0;row.append(make('small','zs-position-reason',uiText('closedPrefix')+(closedAt?new Date(closedAt).toLocaleString():'—')+(p.exitReason?' · '+String(p.exitReason).toUpperCase():'')));}
       host.append(row);
     });
     renderStats();
@@ -542,40 +549,40 @@
       }).filter(item=>item.address&&item.address!==OFFICIAL_MINT);
       const tradeReady=!!feed.pumpdevConnected;
       const visibleSources=[...new Set(state.candidates.flatMap(x=>x.sources||[x.source]))];
-      $('sniper-feed-status').textContent=(state.lang==='ru'?'ИСТОЧНИКИ: ':'SOURCES: ')+(visibleSources.join(' · ')||'—')+
+      $('sniper-feed-status').textContent=uiText('sources')+(visibleSources.join(' · ')||'—')+
         (tradeReady?' · PUMPDEV TRADE STREAM READY':' · PAPER FEED '+String(feed.pumpdevStatus||'waiting').toUpperCase().replace(/_/g,' '));
       renderDashboardState();
     }catch(error){
       state.candidates=[];
-      $('sniper-feed-status').textContent=(state.lang==='ru'?'ИСТОЧНИКИ НЕДОСТУПНЫ: ':'SOURCES UNAVAILABLE: ')+String(error&&error.message||'error').slice(0,70);
+      $('sniper-feed-status').textContent=uiText('sourcesUnavailable')+String(error&&error.message||'error').slice(0,70);
     }finally{state.busy=false;renderCandidates();}
   }
   function openPaper(item,automatic){
     const openCount=state.positions.filter(p=>p.status==='open').length;
     const maxOpen=Math.max(1,Math.min(20,Math.round(Number(terminal.maxOpenPositions??4))));
-    if(maxOpen===0||openCount>=maxOpen){if(!automatic)alert(state.lang==='ru'?(maxOpen===0?'Открытие сделок отключено: лимит установлен на 0.':'Достигнут лимит одновременно открытых сделок ('+maxOpen+').'): (maxOpen===0?'New trades are disabled (limit is 0).':'Maximum simultaneous open trades reached ('+maxOpen+').'));return;}
+    if(maxOpen===0||openCount>=maxOpen){if(!automatic)alert(maxOpen===0?uiText('noNewTrades'):uiText('maxOpenReached').replace('{count}',String(maxOpen)));return;}
     const buySol=Number($('sniper-size').value);
     const todayStart=new Date();todayStart.setHours(0,0,0,0);
     const todayLoss=state.positions.filter(p=>p.status==='closed'&&Number(p.closedAt||0)>=todayStart.getTime()&&Number(p.netPnl)<0)
       .reduce((sum,p)=>sum+Math.abs(Number(p.netPnl)||0),0);
     const dailyCap=Math.max(0,Number(terminal.maxDailyLossSol)||0);
-    if(dailyCap>0&&todayLoss>=dailyCap){if(!automatic)alert(state.lang==='ru'?'Достигнут дневной лимит убытка. Новые сделки остановлены.':'Daily loss limit reached. New trades are paused.');return;}
-    const maxTrade=Math.max(0.001,Math.min(1000,Number($('sniper-capital')&&$('sniper-capital').value)||10));if(!Number.isFinite(buySol)||buySol<=0||buySol>maxTrade){if(!automatic)alert(state.lang==='ru'?'Размер сделки должен быть больше нуля и не превышать установленный максимум.':'Trade size must be positive and within your configured maximum.');return;}
+    if(dailyCap>0&&todayLoss>=dailyCap){if(!automatic)alert(uiText('dailyLoss'));return;}
+    const maxTrade=Math.max(0.001,Math.min(1000,Number($('sniper-capital')&&$('sniper-capital').value)||10));if(!Number.isFinite(buySol)||buySol<=0||buySol>maxTrade){if(!automatic)alert(uiText('tradeSizeError'));return;}
     if(!item||!Number.isFinite(item.priceNative)||item.priceNative<=0){if(!automatic)alert(t('noPair'));return;}
-    if(item.source!=='pumpportal'&&Number(item.liquidityUsd||0)<Number(terminal.minLiquidity||0)){if(!automatic)alert(state.lang==='ru'?'Ликвидность ниже установленного минимума.':'Token liquidity is below your configured minimum.');return;}
+    if(item.source!=='pumpportal'&&Number(item.liquidityUsd||0)<Number(terminal.minLiquidity||0)){if(!automatic)alert(uiText('lowLiquidity'));return;}
     const c=getCosts();
     const closed=state.positions.filter(x=>x.status==='closed').reduce((a,x)=>a+(Number(x.netPnl)||0),0);
     const used=state.positions.filter(x=>x.status==='open').reduce((a,x)=>a+(Number(x.buySol)||0),0);
-    if(buySol+used>Number(terminal.capital||10)+closed){if(!automatic)alert(state.lang==='ru'?'Недостаточно виртуального баланса.':'Insufficient virtual balance.');return;}
+    if(buySol+used>Number(terminal.capital||10)+closed){if(!automatic)alert(uiText('noBalance'));return;}
     const quantity=buySol*(1-c.dex)*(1-c.slip)/item.priceNative;
     const now=Date.now();const p={id:makeUuid(),address:item.address,symbol:item.symbol,name:item.name,buySol,entryPrice:item.priceNative,lastPrice:item.priceNative,lastObservedPrice:item.priceNative,lastMovementAt:now,lastQuoteAt:now,quantity,openedAt:now,status:'open',netPnl:0,netPct:0,exitReason:null,priceHistory:[item.priceNative],source:item.source||'manual',_ownerTelegramId:telegramId()||'guest'};
-    state.positions.push(p);saveStore();renderPositions();renderStats();persistPosition(p);logEvent('BUY',item.symbol,(automatic?'Auto demo entry':'Manual demo entry')+' · '+fmt(buySol,4)+' SOL');if(!automatic)alert(t('buyOk'));
+    state.positions.push(p);saveStore();renderPositions();renderStats();persistPosition(p);logEvent('BUY',item.symbol,'',automatic?'autoEntry':'manualEntry',{amount:fmt(buySol,4)});if(!automatic)alert(t('buyOk'));
   }
   function closePaper(id,reason){
     const p=state.positions.find(x=>x.id===id&&x.status==='open');if(!p)return;
     const m=metrics(p,p.lastPrice||p.entryPrice);
     p.status='closed';p.closedAt=Date.now();p.netPnl=m.net;p.netPct=m.pct;p.sellSol=m.sellGross;p.exitReason=reason;
-    saveStore();renderPositions();renderStats();persistPosition(p);logEvent('SELL',p.symbol,'Manual demo close · '+fmt(m.pct,2)+'%');
+    saveStore();renderPositions();renderStats();persistPosition(p);logEvent('SELL',p.symbol,'','manualClose',{pct:fmt(m.pct,2)});
   }
   async function updatePositions(){
     const open=state.positions.filter(p=>p.status==='open');
@@ -606,11 +613,11 @@
         const target=Number($('sniper-target').value)||10;
         const stop=Number($('sniper-stop').value)||0;
         const idleSeconds=Math.max(15,Number($('sniper-idle-timeout')&&$('sniper-idle-timeout').value)||60);
-        if(m.pct>=target){p.status='closed';p.closedAt=now;p.sellSol=m.sellGross;p.exitReason='target';logEvent('SELL',p.symbol,'Net target reached · '+fmt(m.pct,2)+'%');rotated=true;}
-        else if(stop>0&&m.pct<=-stop){p.status='closed';p.closedAt=now;p.sellSol=m.sellGross;p.exitReason='stop';logEvent('SELL',p.symbol,'Net stop-loss reached · '+fmt(m.pct,2)+'%');rotated=true;}
+        if(m.pct>=target){p.status='closed';p.closedAt=now;p.sellSol=m.sellGross;p.exitReason='target';logEvent('SELL',p.symbol,'','netTarget',{pct:fmt(m.pct,2)});rotated=true;}
+        else if(stop>0&&m.pct<=-stop){p.status='closed';p.closedAt=now;p.sellSol=m.sellGross;p.exitReason='stop';logEvent('SELL',p.symbol,'','netStop',{pct:fmt(m.pct,2)});rotated=true;}
         else if(now-Number(p.lastMovementAt||p.openedAt)>=idleSeconds*1000){
           p.status='closed';p.closedAt=now;p.sellSol=m.sellGross;p.exitReason='stagnant';
-          logEvent('ROTATE',p.symbol,'No price movement ≥ '+threshold+'% for '+idleSeconds+'s; moving to next launch');rotated=true;
+          logEvent('ROTATE',p.symbol,'','rotate',{threshold,seconds:idleSeconds});rotated=true;
         }
       }catch(_){}
     }
@@ -632,6 +639,22 @@
   };
   const START_CONFIRM_COPY={"en":["STARTUP CHECK","Virtual capital","Paper trade size","Take Profit","Stop Loss","DEX fee / side","Slippage / side","Network / priority fees","Slippage exceeds 5% per side.","DEX fee exceeds 2% per side.","Trade size is above the 0.05 SOL starter suggestion.","Start Auto Sniper in PAPER DEMO mode? No real transactions will be sent.","Start demo","Cancel"],"ru":["ПРОВЕРКА ПЕРЕД ЗАПУСКОМ","Виртуальный капитал","Размер демо-сделки","Тейк-профит","Стоп-лосс","Комиссия DEX / сторона","Проскальзывание / сторона","Сеть / приоритетные комиссии","Проскальзывание выше 5% на сторону.","Комиссия DEX выше 2% на сторону.","Размер сделки выше стартовой рекомендации 0,05 SOL.","Запустить автоснайпер в ДЕМО-РЕЖИМЕ? Реальных транзакций не будет.","Запустить демо","Отмена"],"de":["STARTPRÜFUNG","Virtuelles Kapital","Demo-Handelsgröße","Take-Profit","Stop-Loss","DEX-Gebühr / Seite","Slippage / Seite","Netzwerk- / Prioritätsgebühr","Slippage über 5 % pro Seite.","DEX-Gebühr über 2 % pro Seite.","Handelsgröße über der Startempfehlung von 0,05 SOL.","Auto-Sniper im PAPER-DEMO-Modus starten? Es werden keine echten Transaktionen gesendet.","Demo starten","Abbrechen"],"fr":["VÉRIFICATION AVANT DÉMARRAGE","Capital virtuel","Taille de la transaction démo","Take-profit","Stop-loss","Frais DEX / côté","Glissement / côté","Frais réseau / priorité","Glissement supérieur à 5 % par côté.","Frais DEX supérieurs à 2 % par côté.","Taille supérieure à la recommandation initiale de 0,05 SOL.","Lancer Auto Sniper en mode démo papier ? Aucune transaction réelle ne sera envoyée.","Lancer la démo","Annuler"],"it":["CONTROLLO PRIMA DELL'AVVIO","Capitale virtuale","Dimensione operazione demo","Take profit","Stop loss","Commissione DEX / lato","Slippage / lato","Commissioni rete / priorità","Slippage superiore al 5% per lato.","Commissione DEX superiore al 2% per lato.","Dimensione superiore al suggerimento iniziale di 0,05 SOL.","Avviare Auto Sniper in modalità demo? Non verranno inviate transazioni reali.","Avvia demo","Annulla"],"ja":["起動前の確認","仮想資金","デモ取引額","利確","損切り","DEX手数料 / 片道","スリッページ / 片道","ネットワーク / 優先手数料","片道スリッページが5%を超えています。","片道DEX手数料が2%を超えています。","取引額が初期推奨額0.05 SOLを超えています。","ペーパーデモモードでAuto Sniperを起動しますか？実際の取引は送信されません。","デモを開始","キャンセル"],"zh-CN":["启动前检查","虚拟资金","模拟交易金额","止盈","止损","DEX费用 / 单边","滑点 / 单边","网络 / 优先费用","单边滑点超过5%。","单边DEX费用超过2%。","交易金额高于0.05 SOL的初始建议值。","以模拟模式启动自动狙击？不会发送真实交易。","启动模拟","取消"],"tr":["BAŞLATMA ÖNCESİ KONTROL","Sanal sermaye","Demo işlem miktarı","Kâr al","Zarar durdur","DEX ücreti / taraf","Kayma / taraf","Ağ / öncelik ücretleri","Taraf başına kayma %5'i aşıyor.","Taraf başına DEX ücreti %2'yi aşıyor.","İşlem boyutu 0,05 SOL başlangıç önerisini aşıyor.","Auto Sniper demo modunda başlatılsın mı? Gerçek işlem gönderilmeyecek.","Demoyu başlat","İptal"],"hi":["शुरू करने से पहले जाँच","वर्चुअल पूँजी","डेमो ट्रेड राशि","टेक प्रॉफ़िट","स्टॉप लॉस","DEX शुल्क / पक्ष","स्लिपेज / पक्ष","नेटवर्क / प्राथमिकता शुल्क","प्रति पक्ष स्लिपेज 5% से अधिक है।","प्रति पक्ष DEX शुल्क 2% से अधिक है।","ट्रेड राशि 0.05 SOL की शुरुआती अनुशंसा से अधिक है।","क्या Auto Sniper को डेमो मोड में शुरू करें? कोई वास्तविक लेनदेन नहीं भेजा जाएगा।","डेमो शुरू करें","रद्द करें"]};
   function showCenteredConfirm(rows){return new Promise(resolve=>{const labels=START_CONFIRM_COPY[state.lang]||START_CONFIRM_COPY.en;let d=document.getElementById('zs-start-confirm');if(d)d.remove();d=document.createElement('dialog');d.id='zs-start-confirm';d.style.cssText='width:min(560px,calc(100vw - 32px));max-width:560px;max-height:82vh;padding:0;border:1px solid #71836e;border-radius:16px;background:#101a17;color:#edf3e9;box-shadow:0 24px 80px #000b;overflow:hidden;margin:auto';const st=document.createElement('style');st.textContent='#zs-start-confirm::backdrop{background:rgba(0,0,0,.72);backdrop-filter:blur(3px)}#zs-start-confirm .zs-h{padding:18px 22px;border-bottom:1px solid #405148;font-weight:800;letter-spacing:.08em}#zs-start-confirm .zs-b{padding:18px 22px;overflow:auto;max-height:calc(82vh - 130px);font-size:14px;line-height:1.65}#zs-start-confirm .zs-r{padding:4px 0;border-bottom:1px solid #293831}#zs-start-confirm .zs-w{color:#f0c27b}#zs-start-confirm .zs-f{display:flex;justify-content:flex-end;gap:10px;padding:14px 20px;background:#0b1311;border-top:1px solid #405148}#zs-start-confirm button{border:1px solid #81977b;border-radius:9px;padding:10px 18px;font-weight:800;cursor:pointer}#zs-start-confirm .zs-ok{background:#b9c9ad;color:#111a14}#zs-start-confirm .zs-cancel{background:#1b2a24;color:#e7eee5}';const head=document.createElement('div');head.className='zs-h';head.textContent=labels[0];const body=document.createElement('div');body.className='zs-b';rows.forEach(row=>{const p=document.createElement('div');p.className='zs-r'+(row.warn?' zs-w':'');p.textContent=row.text;body.append(p)});const foot=document.createElement('div');foot.className='zs-f';const cancel=document.createElement('button');cancel.className='zs-cancel';cancel.textContent=labels[13];const ok=document.createElement('button');ok.className='zs-ok';ok.textContent=labels[12];foot.append(cancel,ok);d.append(st,head,body,foot);document.body.append(d);const done=v=>{if(d.open)d.close();d.remove();resolve(v)};cancel.addEventListener('click',()=>done(false));ok.addEventListener('click',()=>done(true));d.addEventListener('cancel',e=>{e.preventDefault();done(false)},{once:true});d.showModal()})}
+  const EVENT_COPY = {
+    en:{autoEntry:'Auto demo entry · {amount} SOL',manualEntry:'Manual demo entry · {amount} SOL',manualClose:'Manual demo close · {pct}%',netTarget:'Net target reached · {pct}%',netStop:'Net stop-loss reached · {pct}%',rotate:'No price movement ≥ {threshold}% for {seconds}s; moving to next launch',armed:'Paper mode confirmed · {amount} SOL',presetApplied:'{preset} profile applied',paused:'Paper engine paused; open paper positions remain managed.'},
+    ru:{autoEntry:'Автоматический вход в демо · {amount} SOL',manualEntry:'Ручной вход в демо · {amount} SOL',manualClose:'Ручное закрытие демо · {pct}%',netTarget:'Достигнута цель чистой прибыли · {pct}%',netStop:'Достигнут стоп-лосс по чистому P/L · {pct}%',rotate:'Цена не менялась на {threshold}% в течение {seconds} с; переход к следующему запуску',armed:'Демо-режим подтверждён · {amount} SOL',presetApplied:'Применён профиль «{preset}»',paused:'Демо-движок остановлен; открытые демо-позиции продолжают отслеживаться.'},
+    de:{autoEntry:'Automatischer Demo-Einstieg · {amount} SOL',manualEntry:'Manueller Demo-Einstieg · {amount} SOL',manualClose:'Demo-Position manuell geschlossen · {pct}%',netTarget:'Nettoziel erreicht · {pct}%',netStop:'Netto-Stop-Loss erreicht · {pct}%',rotate:'Keine Preisbewegung ≥ {threshold}% seit {seconds}s; nächster Tokenstart wird geprüft',armed:'Paper-Modus bestätigt · {amount} SOL',presetApplied:'Profil „{preset}“ angewendet',paused:'Paper-Engine pausiert; offene Paper-Positionen werden weiter überwacht.'},
+    fr:{autoEntry:'Entrée démo automatique · {amount} SOL',manualEntry:'Entrée démo manuelle · {amount} SOL',manualClose:'Clôture manuelle de la démo · {pct}%',netTarget:'Objectif net atteint · {pct}%',netStop:'Stop-loss net atteint · {pct}%',rotate:'Aucun mouvement de prix ≥ {threshold}% pendant {seconds}s ; passage au prochain lancement',armed:'Mode papier confirmé · {amount} SOL',presetApplied:'Profil « {preset} » appliqué',paused:'Moteur papier en pause ; les positions ouvertes restent suivies.'},
+    it:{autoEntry:'Ingresso demo automatico · {amount} SOL',manualEntry:'Ingresso demo manuale · {amount} SOL',manualClose:'Chiusura demo manuale · {pct}%',netTarget:'Obiettivo netto raggiunto · {pct}%',netStop:'Stop-loss netto raggiunto · {pct}%',rotate:'Nessun movimento del prezzo ≥ {threshold}% per {seconds}s; passaggio al prossimo lancio',armed:'Modalità paper confermata · {amount} SOL',presetApplied:'Profilo «{preset}» applicato',paused:'Motore paper in pausa; le posizioni aperte continuano a essere monitorate.'},
+    ja:{autoEntry:'自動デモ購入 · {amount} SOL',manualEntry:'手動デモ購入 · {amount} SOL',manualClose:'デモポジションを手動決済 · {pct}%',netTarget:'純利益目標に到達 · {pct}%',netStop:'純損失ストップに到達 · {pct}%',rotate:'{seconds}秒間、価格変動が{threshold}%未満のため次のローンチへ移行',armed:'ペーパーモードを確認 · {amount} SOL',presetApplied:'「{preset}」プロファイルを適用',paused:'ペーパーエンジンを一時停止しました。保有中のデモポジションは引き続き監視されます。'},
+    'zh-CN':{autoEntry:'自动模拟买入 · {amount} SOL',manualEntry:'手动模拟买入 · {amount} SOL',manualClose:'手动关闭模拟仓位 · {pct}%',netTarget:'已达到净利润目标 · {pct}%',netStop:'已触发净止损 · {pct}%',rotate:'{seconds}秒内价格变动未达到{threshold}%，转向下一个新币',armed:'已确认模拟模式 · {amount} SOL',presetApplied:'已应用“{preset}”配置',paused:'模拟引擎已暂停；仍会继续监控已开启的模拟仓位。'},
+    tr:{autoEntry:'Otomatik demo girişi · {amount} SOL',manualEntry:'Manuel demo girişi · {amount} SOL',manualClose:'Manuel demo kapatma · {pct}%',netTarget:'Net hedefe ulaşıldı · {pct}%',netStop:'Net zarar durdur tetiklendi · {pct}%',rotate:'{seconds}s boyunca fiyat hareketi ≥ {threshold}% olmadı; sonraki lansmana geçiliyor',armed:'Paper modu onaylandı · {amount} SOL',presetApplied:'{preset} profili uygulandı',paused:'Paper motoru duraklatıldı; açık paper pozisyonları izlenmeye devam ediyor.'},
+    hi:{autoEntry:'ऑटो डेमो एंट्री · {amount} SOL',manualEntry:'मैन्युअल डेमो एंट्री · {amount} SOL',manualClose:'मैन्युअल डेमो बंद · {pct}%',netTarget:'शुद्ध लक्ष्य पूरा · {pct}%',netStop:'शुद्ध स्टॉप-लॉस ट्रिगर · {pct}%',rotate:'{seconds}s तक कीमत में {threshold}% का बदलाव नहीं; अगले लॉन्च पर जा रहे हैं',armed:'पेपर मोड की पुष्टि · {amount} SOL',presetApplied:'{preset} प्रोफ़ाइल लागू',paused:'पेपर इंजन रोक दिया गया; खुली पेपर पोज़िशन की निगरानी जारी रहेगी।'}
+  };
+  function eventText(key, values={}) {
+    const lang = EVENT_COPY[state.lang] || EVENT_COPY.en;
+    return String(lang[key] || EVENT_COPY.en[key] || key).replace(/\{(\w+)\}/g, (_, name) => String(values[name] ?? ''));
+  }
+
   const terminal={auto:false,startedAt:0,capital:10,minLiquidity:5000,maxTradeSize:10,maxOpenPositions:4,maxDailyLossSol:1,minBuyCount:3,idleTimeout:60,minMovePct:0.2,logs:[],seen:[],lastAuto:0,sessionStartCapital:10,equityHistory:[]};
   const TERMINAL_KEY='zombcash_sniper_terminal_v1';
   const dcopy=()=>DASH_COPY[state.lang]||DASH_COPY.en;
@@ -718,7 +741,20 @@
 
   function saveTerminal(){try{terminal.settings={};['sniper-size','sniper-target','sniper-stop','sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-idle-timeout','sniper-min-move','sniper-max-open','sniper-min-buys','sniper-max-daily-loss'].forEach(id=>{const el=$(id);if(el)terminal.settings[id]=el.value;});localStorage.setItem(TERMINAL_KEY,JSON.stringify(terminal));}catch(_){}}
   function loadTerminal(){try{const v=JSON.parse(localStorage.getItem(TERMINAL_KEY)||'null');if(v&&typeof v==='object'){Object.assign(terminal,v);if(v.settings)Object.keys(v.settings).forEach(id=>{const el=$(id);if(el)el.value=v.settings[id];});}}catch(_){}}
-  function logEvent(kind,symbol,detail){terminal.logs.unshift({at:Date.now(),kind,symbol:symbol||'SYSTEM',detail:detail||''});terminal.logs=terminal.logs.slice(0,18);saveTerminal();renderLog();}
+  function localizeLegacyLog(detail) {
+    const value=String(detail||'');
+    let match;
+    if((match=value.match(/^Auto demo entry · (.+) SOL$/)))return eventText('autoEntry',{amount:match[1]});
+    if((match=value.match(/^Manual demo entry · (.+) SOL$/)))return eventText('manualEntry',{amount:match[1]});
+    if((match=value.match(/^Manual demo close · (.+)%$/)))return eventText('manualClose',{pct:match[1]});
+    if((match=value.match(/^Net target reached · (.+)%$/)))return eventText('netTarget',{pct:match[1]});
+    if((match=value.match(/^Net stop-loss reached · (.+)%$/)))return eventText('netStop',{pct:match[1]});
+    if((match=value.match(/^No price movement ≥ (.+)% for (.+)s; moving to next launch$/)))return eventText('rotate',{threshold:match[1],seconds:match[2]});
+    if(value==='Paper engine paused; open paper position remains managed.')return eventText('paused');
+    if((match=value.match(/^(.+) profile applied$/)))return eventText('presetApplied',{preset:match[1]});
+    return value;
+  }
+  function logEvent(kind,symbol,detail='',detailKey='',detailArgs={}){terminal.logs.unshift({at:Date.now(),kind,symbol:symbol||'SYSTEM',detail:detail||'',detailKey:detailKey||'',detailArgs:detailArgs||{}});terminal.logs=terminal.logs.slice(0,18);saveTerminal();renderLog();}
   function dashNode(tag,cls,txt){const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n;}
   function addRange(field,id,min,max,step){
     const input=$(id);if(!input||!field)return;
@@ -728,7 +764,7 @@
     field.append(range,input);
   }
   function addVirtualField(host,id,label,min,max,step,value,range=true){
-    const field=dashNode('div','zs-field');const fieldLabel=dashNode('label','',label);if(id==='sniper-capital')fieldLabel.id='zs-capital-label';if(id==='sniper-liquidity')fieldLabel.id='zs-liquidity-label';field.append(fieldLabel);
+    const field=dashNode('div','zs-field');const fieldLabel=dashNode('label','',label);if(id==='sniper-capital')fieldLabel.id='zs-capital-label';if(id==='sniper-liquidity')fieldLabel.id='zs-liquidity-label';const labelIds={'sniper-idle-timeout':'zs-idle-timeout-label','sniper-min-move':'zs-min-move-label','sniper-min-buys':'zs-min-buys-label','sniper-max-daily-loss':'zs-max-daily-loss-label','sniper-max-open':'zs-max-open-label'};if(labelIds[id])fieldLabel.id=labelIds[id];field.append(fieldLabel);
     const input=dashNode('input','zs-number');input.id=id;input.type='number';input.min=min;input.max=max;input.step=step;input.value=value;
     field.querySelector('label').htmlFor=id;
     if(range){const slider=dashNode('input','zs-range');slider.type='range';slider.min=min;slider.max=max;slider.step=step;slider.value=value;slider.addEventListener('input',()=>{input.value=slider.value;input.dispatchEvent(new Event('change',{bubbles:true}));});input.addEventListener('input',()=>slider.value=input.value);field.append(slider);}
@@ -811,36 +847,48 @@
     const turnover=sessionTrades.reduce((a,p)=>a+(Number(p.buySol)||0)+(Number(p.sellSol)||((p.status==='closed')?(Number(p.quantity)||0)*(Number(p.lastPrice)||Number(p.entryPrice)||0):0)),0);
     const decided=wins+losses;
     const winRate=decided?Math.round(wins/decided*100)+'%':'—';
-    const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,((session.realized+session.unrealized)>=0?'+':'')+(session.realized+session.unrealized).toFixed(5)+' SOL'],[state.lang==='ru'?'ЗАКРЫТЫЕ СДЕЛКИ':'CLOSED TRADES',String(closed.length)],[state.lang==='ru'?'ПОБЕДЫ / ПОРАЖЕНИЯ':'WINS / LOSSES',wins+' / '+losses],[dcopy().wins,winRate],[state.lang==='ru'?'ОБОРОТ ЗА СЕССИЮ':'SESSION TURNOVER',turnover.toFixed(5)+' SOL'],[dcopy().active,String(open.length)]];
+    const vals=[[dcopy().balance,available.toFixed(4)+' SOL'],[dcopy().profit,((session.realized+session.unrealized)>=0?'+':'')+(session.realized+session.unrealized).toFixed(5)+' SOL'],[uiText('closedTrades'),String(closed.length)],[uiText('winsLosses'),wins+' / '+losses],[dcopy().wins,winRate],[uiText('sessionTurnover'),turnover.toFixed(5)+' SOL'],[dcopy().active,String(open.length)]];
     host.replaceChildren();vals.forEach((v,i)=>{const card=dashNode('div','zs-kpi zs-kpi-'+i);card.append(dashNode('small','',v[0]),dashNode('strong','zs-counter',v[1]));host.append(card);});
     const mainChart=$('zs-main-chart');if(mainChart){mainChart.replaceChildren();const history=(terminal.equityHistory||[]).filter(x=>Number.isFinite(Number(x.at))&&Number.isFinite(Number(x.value)));if(!history.length)history.push({at:Date.now(),value:session.equity});mainChart.append(equityChart(history,state.lang));}
-    const equityCaption=$('zs-equity-caption');if(equityCaption){const change=session.equity-session.baseline,pct=change/session.baseline*100;equityCaption.textContent=(state.lang==='ru'?'СТАРТ ':'START ')+session.baseline.toFixed(4)+' SOL · '+(state.lang==='ru'?'СЕЙЧАС ':'NOW ')+session.equity.toFixed(4)+' SOL · '+(change>=0?'+':'')+change.toFixed(5)+' SOL ('+(pct>=0?'+':'')+pct.toFixed(2)+'%)';}
+    const equityCaption=$('zs-equity-caption');if(equityCaption){const change=session.equity-session.baseline,pct=change/session.baseline*100;equityCaption.textContent=(uiText('start'))+session.baseline.toFixed(4)+' SOL · '+(uiText('now'))+session.equity.toFixed(4)+' SOL · '+(change>=0?'+':'')+change.toFixed(5)+' SOL ('+(pct>=0?'+':'')+pct.toFixed(2)+'%)';}
     const centerSummary=$('zs-center-summary');if(centerSummary){
       centerSummary.replaceChildren();
       const left=dashNode('div','zs-center-token');
-      left.append(dashNode('small','',state.lang==='ru'?'СУММА ОТКРЫТЫХ СДЕЛОК':'TOTAL OPEN EXPOSURE'),dashNode('strong','',used.toFixed(5)+' SOL'),dashNode('span','',(state.lang==='ru'?'ОТКРЫТЫХ ПОЗИЦИЙ: ':'OPEN POSITIONS: ')+open.length));
+      left.append(dashNode('small','',uiText('totalExposure')),dashNode('strong','',used.toFixed(5)+' SOL'),dashNode('span','',(uiText('openPositions'))+open.length));
       const pct=used>0?session.unrealized/used*100:0;
       const right=dashNode('div','zs-center-pnl '+(session.unrealized>=0?'is-positive':'is-negative'));
-      right.append(dashNode('small','',state.lang==='ru'?'ТЕКУЩАЯ ПРИБЫЛЬ / УБЫТОК':'LIVE UNREALIZED P/L'),dashNode('strong','',(session.unrealized>=0?'+':'')+session.unrealized.toFixed(6)+' SOL'),dashNode('span','',(pct>=0?'+':'')+pct.toFixed(2)+'%'));
+      right.append(dashNode('small','',uiText('liveUnrealized')),dashNode('strong','',(session.unrealized>=0?'+':'')+session.unrealized.toFixed(6)+' SOL'),dashNode('span','',(pct>=0?'+':'')+pct.toFixed(2)+'%'));
       centerSummary.append(left,right);
     }
     const statGrid=$('zs-stat-grid');if(statGrid){
       const avg=closed.length?closed.reduce((a,p)=>a+(Number(p.netPct)||0),0)/closed.length:0;
       const best=closed.length?Math.max(...closed.map(p=>Number(p.netPct)||0)):0;
       const worst=closed.length?Math.min(...closed.map(p=>Number(p.netPct)||0)):0;
-      const items=[[state.lang==='ru'?'РЕАЛИЗОВАННЫЙ P/L':'REALIZED P/L',(session.realized>=0?'+':'')+session.realized.toFixed(5)+' SOL'],[state.lang==='ru'?'СРЕДНИЙ РЕЗУЛЬТАТ':'AVERAGE RESULT',(avg>=0?'+':'')+avg.toFixed(2)+'%'],[state.lang==='ru'?'ЛУЧШАЯ СДЕЛКА':'BEST TRADE',(best>=0?'+':'')+best.toFixed(2)+'%'],[state.lang==='ru'?'ХУДШАЯ СДЕЛКА':'WORST TRADE',worst.toFixed(2)+'%']];
+      const items=[[uiText('realized'),(session.realized>=0?'+':'')+session.realized.toFixed(5)+' SOL'],[uiText('average'),(avg>=0?'+':'')+avg.toFixed(2)+'%'],[uiText('best'),(best>=0?'+':'')+best.toFixed(2)+'%'],[uiText('worst'),worst.toFixed(2)+'%']];
       statGrid.replaceChildren();items.forEach((v,i)=>{const card=dashNode('div','zs-stat-card');card.append(dashNode('small','',v[0]),dashNode('strong',i===3&&worst<0?'zs-negative':'',v[1]));statGrid.append(card);});
     }
   }
   function renderLog(){
     const host=$('zs-log');if(!host)return;host.replaceChildren();
     if(!terminal.logs.length){host.append(dashNode('p','sniper-muted',dcopy().empty));return;}
-    terminal.logs.slice(0,12).forEach(e=>{const row=dashNode('div','zs-logrow');row.append(dashNode('time','',new Date(e.at).toLocaleTimeString()),dashNode('b','zs-logkind',e.kind),dashNode('strong','',e.symbol),dashNode('span','',e.detail));host.append(row);});
+    terminal.logs.slice(0,12).forEach(e=>{const row=dashNode('div','zs-logrow');row.append(dashNode('time','',new Date(e.at).toLocaleTimeString()),dashNode('b','zs-logkind',e.kind),dashNode('strong','',e.symbol),dashNode('span','',e.detailKey?eventText(e.detailKey,e.detailArgs):localizeLegacyLog(e.detail)));host.append(row);});
   }
   function renderDashboardState(){
-    const feedReady=!!(state.feed&&state.feed.pumpdevConnected);const btn=$('zs-auto-toggle');if(btn){btn.classList.toggle('is-on',!!terminal.auto&&feedReady);btn.textContent=terminal.auto&&feedReady?dcopy().armed:dcopy().paused;if(terminal.auto&&!feedReady)btn.title=state.lang==='ru'?'Автодемо ожидает подключения PumpDev.':'Auto demo is waiting for PumpDev.';else btn.removeAttribute('title');}
-    const nav=document.querySelectorAll('[data-zs-nav]');nav.forEach(b=>{const i=Number(b.dataset.zsNav);if(dcopy().nav[i])b.textContent=dcopy().nav[i];});
-    [['zs-settings-title',dcopy().settings],['zs-center-title',dcopy().autopilot],['zs-right-title',dcopy().active],['zs-launch-title',dcopy().launches],['zs-log-title',dcopy().journal],['zs-chart-title',state.lang==='ru'?'ДИНАМИКА КАПИТАЛА ЗА СЕССИЮ':'SESSION EQUITY CURVE']].forEach(([id,label])=>{const el=$(id);if(el)el.textContent=label;});
+    const feedReady=!!(state.feed&&state.feed.pumpdevConnected);const btn=$('zs-auto-toggle');if(btn){btn.classList.toggle('is-on',!!terminal.auto&&feedReady);btn.textContent=terminal.auto&&feedReady?dcopy().armed:dcopy().paused;if(terminal.auto&&!feedReady)btn.title=uiText('waitingPumpDev');else btn.removeAttribute('title');}
+    const nav=document.querySelectorAll('[data-zs-nav]');nav.forEach(b=>{const i=Number(b.dataset.zsNav);if(dcopy().nav[i])b.textContent=dcopy().nav[i];else if(i===5)b.textContent=walletText('nav');});
+    const root=$('zombie-sniper-demo');
+    const activeTab=root&&root.dataset.activeTab;
+    const rightTitle=$('zs-right-title');if(rightTitle)rightTitle.textContent=activeTab==='history'?uiText('history'):dcopy().active;
+    const sourceSelect=$('zs-source-select');if(sourceSelect){const labels={all:'allSources',pumpportal:'pumpLaunches',boosts:'boostMonitor',community:'community'};Array.from(sourceSelect.options).forEach(o=>{if(labels[o.value])o.textContent=uiText(labels[o.value]);});}
+    const creatorSelect=$('zs-creator-select');if(creatorSelect){const labels={any:'anyDev',first:'firstSeen',repeat:'repeatDev'};Array.from(creatorSelect.options).forEach(o=>{if(labels[o.value])o.textContent=uiText(labels[o.value]);});}
+    const socialsText=document.querySelector('.zs-filter-label span');if(socialsText)socialsText.textContent=uiText('socialsOnly');
+    const nameFilter=$('zs-name-filter');if(nameFilter)nameFilter.placeholder=uiText('filterTicker');
+    const presetTitle=$('zs-presets-title');if(presetTitle)presetTitle.textContent=uiText('recommended');
+    const presetNote=$('zs-preset-note');if(presetNote)presetNote.textContent=uiText('presetNote');
+    const presetLabels={conservative:'conservative',balanced:'balanced',aggressive:'aggressive'};
+    document.querySelectorAll('.zs-preset-btn[data-preset]').forEach(b=>{const key=presetLabels[b.dataset.preset];if(key)b.textContent=uiText(key);});
+    [['zs-idle-timeout-label','idleTimeout'],['zs-min-move-label','minMove'],['zs-min-buys-label','minBuys'],['zs-max-daily-loss-label','maxDailyLoss'],['zs-max-open-label','maxOpen'],['zs-stats-heading','statsHeading'],['zs-chart-title','equityCurve'],['zs-chart-range-label','sinceStart']].forEach(([id,key])=>{const el=$(id);if(el)el.textContent=uiText(key);});
+    [['zs-settings-title',dcopy().settings],['zs-center-title',dcopy().autopilot],['zs-right-title',activeTab==='history'?uiText('history'):dcopy().active],['zs-launch-title',dcopy().launches],['zs-log-title',dcopy().journal],['zs-chart-title',uiText('equityCurve')]].forEach(([id,label])=>{const el=$(id);if(el)el.textContent=label;});
     const capLabel=$('zs-capital-label'),liqLabel=$('zs-liquidity-label');if(capLabel)capLabel.textContent=dcopy().capital;if(liqLabel)liqLabel.textContent=dcopy().minliq;
     renderStats();renderLog();
   }
@@ -873,7 +921,7 @@
 
   async function showLaunchConfirm(){
     await refreshFeed(true);
-    if(!state.feed.pumpdevConnected){window.alert(state.lang==='ru'?'Автодемо ожидает подключения торгового потока PumpDev. Ручные виртуальные покупки доступны.':'Auto demo is waiting for the PumpDev trade feed. Manual virtual buys remain available.');return;}
+    if(!state.feed.pumpdevConnected){window.alert(uiText('waitingPumpDevLong'));return;}
     const n=id=>Number($(id)&&$(id).value);
     const errors=[];
     if(!(n('sniper-size')>0))errors.push('Размер сделки должен быть больше нуля.');
@@ -891,7 +939,7 @@
     if(!await showCenteredConfirm(rows))return;
     if(!await setServerPaperEnabled(true))return;
     terminal.auto=true;terminal.startedAt=Date.now();terminal.sessionStartCapital=Number($('sniper-capital').value)||10;terminal.equityHistory=[{at:terminal.startedAt,value:terminal.sessionStartCapital}];saveTerminal();renderDashboardState();
-    logEvent('ARMED','SYSTEM','Подтверждён paper mode · '+n('sniper-size')+' SOL');
+    logEvent('ARMED','SYSTEM','','armed',{amount:n('sniper-size')});
     refreshFeed();maybeAutoEnter();
   }
 
@@ -1208,7 +1256,7 @@
       right.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='history');
       launchPanel.classList.toggle('zs-tab-hidden',tab!=='sniper');
       posSection.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='history');
-      if(tab==='history'){rightTitle.textContent=state.lang==='ru'?'ИСТОРИЯ СДЕЛОК':'TRADE HISTORY';renderPositions('history');}
+      if(tab==='history'){rightTitle.textContent=uiText('history');renderPositions('history');}
       else{rightTitle.textContent=dcopy().active;}
       journal.classList.toggle('zs-tab-hidden',tab!=='history');
       kpis.classList.toggle('zs-tab-hidden',tab!=='sniper'&&tab!=='stats');
@@ -1218,19 +1266,19 @@
       if(tab==='stats'){renderStats();statsPanel.classList.remove('zs-tab-hidden');portrait.classList.add('zs-tab-hidden');core.classList.add('zs-tab-hidden');toggle.classList.add('zs-tab-hidden');uptime.classList.add('zs-tab-hidden');chartPanel.classList.add('zs-tab-hidden');}
       else{statsPanel.classList.add('zs-tab-hidden');portrait.classList.remove('zs-tab-hidden');core.classList.remove('zs-tab-hidden');toggle.classList.remove('zs-tab-hidden');uptime.classList.remove('zs-tab-hidden');chartPanel.classList.remove('zs-tab-hidden');}
     }
-    dcopy().nav.forEach((label,i)=>{if(i===5)label=state.lang==='ru'?'КОШЕЛЁК':'WALLET';const b=dashNode('button','',label);b.dataset.zsNav=String(i);b.type='button';b.setAttribute('role','tab');b.addEventListener('click',()=>selectTab(tabTargets[i]||'sniper'));nav.append(b);});
-    const walletTab=dashNode('button','',state.lang==='ru'?'КОШЕЛЁК':'WALLET');walletTab.dataset.zsNav='5';walletTab.type='button';walletTab.setAttribute('role','tab');walletTab.addEventListener('click',()=>selectTab('wallet'));nav.append(walletTab);
+    dcopy().nav.forEach((label,i)=>{if(i===5)label=walletText('nav');const b=dashNode('button','',label);b.dataset.zsNav=String(i);b.type='button';b.setAttribute('role','tab');b.addEventListener('click',()=>selectTab(tabTargets[i]||'sniper'));nav.append(b);});
+    const walletTab=dashNode('button','',walletText('nav'));walletTab.dataset.zsNav='5';walletTab.type='button';walletTab.setAttribute('role','tab');walletTab.addEventListener('click',()=>selectTab('wallet'));nav.append(walletTab);
     const kpis=dashNode('div','zs-kpis');kpis.id='zs-kpis';
     const layout=dashNode('div','zs-layout');const left=dashNode('section','zs-panel zs-left');left.id='zs-settings';const leftTitle=dashNode('h3','',dcopy().settings);leftTitle.id='zs-settings-title';left.append(leftTitle);
 
     const presetPanel=dashNode('section','zs-presets');presetPanel.id='zs-presets';
-    presetPanel.append(dashNode('h3','',state.lang==='ru'?'РЕКОМЕНДУЕМЫЕ ПРОФИЛИ':'RECOMMENDED PROFILES'));
-    presetPanel.append(dashNode('p','zs-preset-note',state.lang==='ru'?'Готовые наборы для виртуальных испытаний. Меняют только демо-параметры.':'Ready-made paper-testing profiles. Demo settings only.'));
+    const presetHeading=dashNode('h3','',uiText('recommended'));presetHeading.id='zs-presets-title';presetPanel.append(presetHeading);
+    const presetNote=dashNode('p','zs-preset-note',uiText('presetNote'));presetNote.id='zs-preset-note';presetPanel.append(presetNote);
     const presetButtons=dashNode('div','zs-preset-buttons');
     const presets=[
-      {id:'conservative',label:state.lang==='ru'?'Консервативный':'Conservative',v:{capital:10,size:0.02,target:8,stop:10,network:0.00001,priority:0.00005,dex:0.5,slip:0.5,max:0.05,liq:20000}},
-      {id:'balanced',label:state.lang==='ru'?'Сбалансированный':'Balanced',v:{capital:10,size:0.05,target:12,stop:15,network:0.00001,priority:0.0001,dex:0.5,slip:1,max:0.05,liq:10000}},
-      {id:'aggressive',label:state.lang==='ru'?'Агрессивный':'Aggressive',v:{capital:10,size:0.05,target:20,stop:25,network:0.00002,priority:0.0002,dex:0.5,slip:2,max:0.05,liq:5000}}
+      {id:'conservative',label:uiText('conservative'),v:{capital:10,size:0.02,target:8,stop:10,network:0.00001,priority:0.00005,dex:0.5,slip:0.5,max:0.05,liq:20000}},
+      {id:'balanced',label:uiText('balanced'),v:{capital:10,size:0.05,target:12,stop:15,network:0.00001,priority:0.0001,dex:0.5,slip:1,max:0.05,liq:10000}},
+      {id:'aggressive',label:uiText('aggressive'),v:{capital:10,size:0.05,target:20,stop:25,network:0.00002,priority:0.0002,dex:0.5,slip:2,max:0.05,liq:5000}}
     ];
     presets.forEach(p=>{
       const b=dashNode('button','zs-preset-btn',p.label);b.type='button';b.dataset.preset=p.id;
@@ -1239,7 +1287,7 @@
         Object.entries(map).forEach(([id,value])=>{const el=$(id);if(el){el.value=String(value);const r=el.parentElement&&el.parentElement.querySelector('.zs-range');if(r)r.value=String(value);}});
         terminal.capital=v.capital;terminal.maxTradeSize=v.max;terminal.minLiquidity=v.liq;terminal.selectedPreset=p.id;saveTerminal();renderStats();
         presetButtons.querySelectorAll('button').forEach(x=>x.classList.toggle('is-selected',x===b));
-        applied.textContent=(state.lang==='ru'?'Применён профиль: ':'Applied profile: ')+p.label;logEvent('PRESET','SYSTEM',p.label+' profile applied');
+        applied.textContent=(uiText('presetAppliedPrefix'))+p.label;logEvent('PRESET','SYSTEM','','presetApplied',{preset:p.label});
       });
       presetButtons.append(b);
     });
@@ -1250,11 +1298,11 @@
     addVirtualField(fieldHost,'sniper-capital',dcopy().capital,0.1,1000,0.1,terminal.capital||10);
     terminal.maxTradeSize=Math.max(0.001,Number(terminal.capital)||10);
     addVirtualField(fieldHost,'sniper-liquidity',dcopy().minliq,0,1000000,100,terminal.minLiquidity||5000);
-    addVirtualField(fieldHost,'sniper-idle-timeout',state.lang==='ru'?'ТАЙМ-АУТ БЕЗ ДВИЖЕНИЯ (СЕК.)':'NO-MOVEMENT TIMEOUT (SEC)',15,300,5,terminal.idleTimeout||60);
-    addVirtualField(fieldHost,'sniper-min-move',state.lang==='ru'?'МИН. ДВИЖЕНИЕ ЦЕНЫ (%)':'MINIMUM PRICE MOVE (%)',0.05,2,0.05,terminal.minMovePct||0.2);
-    addVirtualField(fieldHost,'sniper-min-buys',state.lang==='ru'?'МИН. ПОКУПОК В ПЕРВОЙ МИНУТЕ':'MINIMUM FIRST-MINUTE BUYS',1,30,1,terminal.minBuyCount||3);
-    addVirtualField(fieldHost,'sniper-max-daily-loss',state.lang==='ru'?'МАКС. ДНЕВНОЙ УБЫТОК (SOL)':'MAX DAILY LOSS (SOL)',0,1000,0.01,terminal.maxDailyLossSol??1,false);
-    const maxOpenField=addVirtualField(fieldHost,'sniper-max-open',state.lang==='ru'?'МАКС. ОТКРЫТЫХ СДЕЛОК':'MAX SIMULTANEOUS OPEN TRADES',1,20,1,Number.isFinite(Number(terminal.maxOpenPositions))?Number(terminal.maxOpenPositions):4);
+    addVirtualField(fieldHost,'sniper-idle-timeout',uiText('idleTimeout'),15,300,5,terminal.idleTimeout||60);
+    addVirtualField(fieldHost,'sniper-min-move',uiText('minMove'),0.05,2,0.05,terminal.minMovePct||0.2);
+    addVirtualField(fieldHost,'sniper-min-buys',uiText('minBuys'),1,30,1,terminal.minBuyCount||3);
+    addVirtualField(fieldHost,'sniper-max-daily-loss',uiText('maxDailyLoss'),0,1000,0.01,terminal.maxDailyLossSol??1,false);
+    const maxOpenField=addVirtualField(fieldHost,'sniper-max-open',uiText('maxOpen'),1,20,1,Number.isFinite(Number(terminal.maxOpenPositions))?Number(terminal.maxOpenPositions):4);
     const maxOpenInput=$('sniper-max-open');
     if(maxOpenInput){
       maxOpenInput.value=String(Math.max(1,Math.min(20,Math.round(Number(maxOpenInput.value)))));
@@ -1269,26 +1317,26 @@
     const walletPanel=dashNode('div','zs-foot');walletPanel.id='zs-wallet-panel';
     left.append(fieldHost,presetPanel,dashNode('p','zs-foot',dcopy().hint));
     const walletView=dashNode('section','zs-panel zs-wallet-view zs-tab-hidden');walletView.id='zs-wallet-view';
-    walletView.append(dashNode('h3','',state.lang==='ru'?'УПРАВЛЕНИЕ SOLANA-КОШЕЛЬКОМ':'SOLANA WALLET'),dashNode('p','zs-foot',state.lang==='ru'?'Кошелёк привязан к вашему профилю. Приватный ключ хранится только на сервере.':'Your wallet is linked to your Survivor profile. The private key stays server-side.'),walletPanel);
+    walletView.append(dashNode('h3','',walletText('title')),dashNode('p','zs-foot',walletText('privateKey')),walletPanel);
     const center=dashNode('section','zs-panel zs-center');center.id='zs-center';const centerTitle=dashNode('h3','',dcopy().autopilot);centerTitle.id='zs-center-title';center.append(centerTitle);
     const portrait=dashNode('div','zs-portrait');const pic=dashNode('img','');pic.src='/assets/zombcash-survivor-640.avif';pic.alt='ZombieCash anime survivor heroine';portrait.append(pic,dashNode('b','','$ZOMBCASH SURVIVOR'));
     const core=dashNode('div','zs-core');const coreText=dashNode('div','');coreText.append(dashNode('strong','', '◉'),dashNode('strong','', 'AUTO SNIPER'),dashNode('span','', 'PAPER ENGINE'));core.append(coreText);
-    const toggle=dashNode('button','zs-toggle',dcopy().paused);toggle.id='zs-auto-toggle';toggle.type='button';toggle.addEventListener('click',async()=>{if(terminal.auto){if(!await setServerPaperEnabled(false))return;terminal.auto=false;terminal.stoppedAt=Date.now();saveTerminal();renderDashboardState();logEvent('PAUSED','SYSTEM','Paper engine paused; open paper position remains managed.');}else showLaunchConfirm();});
+    const toggle=dashNode('button','zs-toggle',dcopy().paused);toggle.id='zs-auto-toggle';toggle.type='button';toggle.addEventListener('click',async()=>{if(terminal.auto){if(!await setServerPaperEnabled(false))return;terminal.auto=false;terminal.stoppedAt=Date.now();saveTerminal();renderDashboardState();logEvent('PAUSED','SYSTEM','','paused');}else showLaunchConfirm();});
     const uptime=dashNode('div','zs-runtime-indicator');uptime.id='zs-runtime-indicator';uptime.setAttribute('role','status');
     const statsPanel=dashNode('div','zs-stats-extra zs-tab-hidden');statsPanel.id='zs-stats-extra';
-    const statsHeading=dashNode('h3','',state.lang==='ru'?'РЕЗУЛЬТАТЫ СИМУЛЯЦИИ':'SIMULATION PERFORMANCE');
+    const statsHeading=dashNode('h3','',uiText('statsHeading'));statsHeading.id='zs-stats-heading';
     const statsGrid=dashNode('div','zs-stat-grid');statsGrid.id='zs-stat-grid';statsPanel.append(statsHeading,statsGrid);
-    const centerSummary=dashNode('div','zs-center-summary');centerSummary.id='zs-center-summary';const chartPanel=dashNode('div','zs-chart-panel');const chartHead=dashNode('div','zs-chart-head');const chartTitle=dashNode('h3','',state.lang==='ru'?'ДИНАМИКА КАПИТАЛА ЗА СЕССИЮ':'SESSION EQUITY CURVE');chartTitle.id='zs-chart-title';chartHead.append(chartTitle,dashNode('span','zs-chart-range',state.lang==='ru'?'SOL · С НАЧАЛА СЕССИИ':'SOL · SINCE SESSION START'));chartPanel.append(chartHead,dashNode('small','zs-equity-caption',''));const chart=dashNode('div','zs-chart');chart.id='zs-main-chart';chartPanel.append(chart);
+    const centerSummary=dashNode('div','zs-center-summary');centerSummary.id='zs-center-summary';const chartPanel=dashNode('div','zs-chart-panel');const chartHead=dashNode('div','zs-chart-head');const chartTitle=dashNode('h3','',uiText('equityCurve'));chartTitle.id='zs-chart-title';chartHead.append(chartTitle,dashNode('span','zs-chart-range',uiText('sinceStart')));chartPanel.append(chartHead,dashNode('small','zs-equity-caption',''));const chart=dashNode('div','zs-chart');chart.id='zs-main-chart';chartPanel.append(chart);
     center.append(portrait,core,toggle,uptime,centerSummary,chartPanel,statsPanel);
     const right=dashNode('section','zs-panel zs-right');const rightTitle=dashNode('h3','',dcopy().active);rightTitle.id='zs-right-title';right.append(rightTitle);const posSection=dashNode('div','zs-position-section');const posWrap=dashNode('div','zs-positions');posWrap.id='zs-positions-wrap';if(positions){positions.classList.add('zs-positions-inner');posWrap.append(positions);}posSection.append(posWrap);right.append(posSection);
     const launchPanel=dashNode('section','zs-panel zs-launch-panel');const launchTitle=dashNode('h3','',dcopy().launches);launchTitle.id='zs-launch-title';launchPanel.append(launchTitle);const toolbar=dashNode('div','sniper-toolbar');
     const sourceSelect=dashNode('select','zs-source-select');sourceSelect.setAttribute('aria-label','Candidate source');
-    [['all','ALL SOURCES'],['pumpportal','PUMP.FUN LAUNCHES'],['boosts','BOOST MONITOR'],['community','ZOMBIE LAB / COMMUNITY']].forEach(([v,label])=>{const option=document.createElement('option');option.value=v;option.textContent=state.lang==='ru'?({'all':'ВСЕ ИСТОЧНИКИ','pumpportal':'ЗАПУСКИ PUMP.FUN','boosts':'BOOST MONITOR','community':'ZOMBIE LAB / СООБЩЕСТВО'}[v]):label;sourceSelect.append(option);});
+    [['all','allSources'],['pumpportal','pumpLaunches'],['boosts','boostMonitor'],['community','community']].forEach(([v,key])=>{const option=document.createElement('option');option.value=v;option.textContent=uiText(key);sourceSelect.append(option);});
     sourceSelect.value=state.source;sourceSelect.addEventListener('change',()=>{state.source=sourceSelect.value;if(terminal.auto)refreshFeed();});
-    const socialsLabel=dashNode('label','zs-filter-label');const socialsCheck=dashNode('input','');socialsCheck.type='checkbox';socialsCheck.checked=state.requireSocials;socialsCheck.addEventListener('change',()=>{state.requireSocials=socialsCheck.checked;renderCandidates();if(terminal.auto&&authToken())setServerPaperEnabled(true);});socialsLabel.append(socialsCheck,dashNode('span','',state.lang==='ru'?'ТОЛЬКО С СОЦСЕТЯМИ':'SOCIALS ONLY'));
-    const nameFilter=dashNode('input','zs-name-filter');nameFilter.type='search';nameFilter.placeholder=state.lang==='ru'?'Фильтр названия / тикера':'Filter name / ticker';nameFilter.value=state.nameQuery;nameFilter.addEventListener('input',()=>{state.nameQuery=nameFilter.value;renderCandidates();});
+    const socialsLabel=dashNode('label','zs-filter-label');const socialsCheck=dashNode('input','');socialsCheck.type='checkbox';socialsCheck.checked=state.requireSocials;socialsCheck.addEventListener('change',()=>{state.requireSocials=socialsCheck.checked;renderCandidates();if(terminal.auto&&authToken())setServerPaperEnabled(true);});socialsLabel.append(socialsCheck,dashNode('span','',uiText('socialsOnly')));
+    const nameFilter=dashNode('input','zs-name-filter');nameFilter.type='search';nameFilter.placeholder=uiText('filterTicker');nameFilter.value=state.nameQuery;nameFilter.addEventListener('input',()=>{state.nameQuery=nameFilter.value;renderCandidates();});
     const creatorSelect=dashNode('select','zs-creator-select');creatorSelect.setAttribute('aria-label','Creator history');
-    [['any','ANY DEV'],['first','FIRST SEEN'],['repeat','REPEAT DEV']].forEach(([v,label])=>{const option=document.createElement('option');option.value=v;option.textContent=state.lang==='ru'?({'any':'ЛЮБОЙ DEV','first':'ВПЕРВЫЕ В ЛЕНТЕ','repeat':'ПОВТОРНЫЙ DEV'}[v]):label;creatorSelect.append(option);});
+    [['any','anyDev'],['first','firstSeen'],['repeat','repeatDev']].forEach(([v,key])=>{const option=document.createElement('option');option.value=v;option.textContent=uiText(key);creatorSelect.append(option);});
     creatorSelect.value=state.creatorFilter;creatorSelect.addEventListener('change',()=>{state.creatorFilter=creatorSelect.value;renderCandidates();if(terminal.auto&&authToken())setServerPaperEnabled(true);});
     toolbar.append(sourceSelect,socialsLabel,nameFilter,creatorSelect);if(refresh)toolbar.append(refresh);if(status)toolbar.append(status);launchPanel.append(toolbar);const launchWrap=dashNode('div','zs-launches');if(candidates)launchWrap.append(candidates);launchPanel.append(launchWrap);
     right.append(launchPanel);layout.append(left,center,right);
@@ -1364,7 +1412,7 @@
     ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
     ['sniper-capital','sniper-size','sniper-target','sniper-stop','sniper-min-move','sniper-idle-timeout','sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-min-buys','sniper-max-daily-loss','sniper-max-open'].forEach(id=>$(id)?.addEventListener('change',()=>{if(terminal.auto&&authToken())setServerPaperEnabled(true);}));
     if(terminal.auto)refreshFeed();if(authToken())syncFromServer();else{updateSyncStatus('loginToSync');updatePositions();}
-    if(terminal.auto&&!Number(terminal.startedAt)){terminal.startedAt=Date.now();saveTerminal();}const updateRuntimeIndicator=()=>{const node=$('zs-runtime-indicator');if(!node)return;const running=!!terminal.auto;const elapsed=running?Math.max(0,Math.floor((Date.now()-(Number(terminal.startedAt)||Date.now()))/1000)):0;const hh=String(Math.floor(elapsed/3600)).padStart(2,'0');const mm=String(Math.floor((elapsed%3600)/60)).padStart(2,'0');const ss=String(elapsed%60).padStart(2,'0');node.classList.toggle('is-running',running);node.classList.toggle('is-offline',!running);node.textContent=(state.lang==='ru'?(running?'АВТОТОРГОВЛЯ · РАБОТАЕТ':'АВТОТОРГОВЛЯ · ОСТАНОВЛЕНА'):(running?'AUTO TRADING · RUNNING':'AUTO TRADING · STOPPED'))+'  '+hh+':'+mm+':'+ss;};
+    if(terminal.auto&&!Number(terminal.startedAt)){terminal.startedAt=Date.now();saveTerminal();}const updateRuntimeIndicator=()=>{const node=$('zs-runtime-indicator');if(!node)return;const running=!!terminal.auto;const elapsed=running?Math.max(0,Math.floor((Date.now()-(Number(terminal.startedAt)||Date.now()))/1000)):0;const hh=String(Math.floor(elapsed/3600)).padStart(2,'0');const mm=String(Math.floor((elapsed%3600)/60)).padStart(2,'0');const ss=String(elapsed%60).padStart(2,'0');node.classList.toggle('is-running',running);node.classList.toggle('is-offline',!running);node.textContent=(running?uiText('runtimeRunning'):uiText('runtimeStopped'))+'  '+hh+':'+mm+':'+ss;};
     updateRuntimeIndicator();window.setInterval(updateRuntimeIndicator,1000);
     state.timer=window.setInterval(()=>{checkAccountChange();if(terminal.auto&&!document.hidden)refreshFeed();},15000);
     state.positionTimer=window.setInterval(()=>{if(terminal.auto&&!document.hidden)refreshResultsNow();},10000);
