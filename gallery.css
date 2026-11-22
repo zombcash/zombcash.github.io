@@ -230,3 +230,14 @@ body.gallery-lightbox-open{overflow:hidden}
 .gallery-lightbox-share[data-state="success"]{border-color:#9bff45!important;color:#cfffad!important}
 .gallery-lightbox-share[data-state="error"],.gallery-lightbox-share[data-state="cancelled"]{border-color:#b87942!important;color:#ffd09b!important}
 .gallery-lightbox-share:disabled{opacity:.65;cursor:wait}
+
+
+/* Platform chooser for sharing a specific gallery image. */
+.gallery-share-menu{display:grid;grid-template-columns:repeat(3,minmax(120px,1fr));gap:7px;width:min(100%,620px);margin:10px auto 2px}
+.gallery-share-menu[hidden]{display:none!important}
+.gallery-share-option{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:38px;padding:9px 11px;border:1px solid #35543a;background:#0b150e;color:#c5d6c5;text-decoration:none;font:700 9px Orbitron,sans-serif;letter-spacing:.35px;cursor:pointer}
+.gallery-share-option:hover,.gallery-share-option:focus-visible{border-color:#9bff45;background:#9bff4518;color:#d7ffc2;outline:2px solid #9bff45;outline-offset:1px}
+.gallery-share-option span{color:#9bff45}
+.gallery-share-copy{font-family:Orbitron,sans-serif}
+.gallery-lightbox-share[aria-expanded="true"]{border-color:#9bff45!important;color:#d7ffc2!important}
+@media(max-width:720px){.gallery-share-menu{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.gallery-share-option{min-height:36px;padding:8px;font-size:8px}}

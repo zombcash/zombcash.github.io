@@ -162,6 +162,7 @@
       '<button class="gallery-lightbox-like" type="button" aria-pressed="false"></button>' +
       '<button class="gallery-lightbox-share" type="button" aria-label="' + escapeHtml(shareLabels.share) + '">' + escapeHtml(shareLabels.share) + '</button>' +
       '<span class="gallery-share-status" role="status" aria-live="polite"></span>' +
+      '<div class="gallery-share-menu" hidden role="group" aria-label="Share this image"></div>' +
       '</span>' +
       '<a class="gallery-lightbox-source" href="' + escapeHtml(sourceUrl) + '" target="_blank" rel="noreferrer">' + escapeHtml(gtx("source")) + '</a>';
     syncLightboxLikeButton();
@@ -193,64 +194,62 @@
       event.stopPropagation();
       const card = cards[activeIndex];
       if (!card) return;
-      const labels = galleryShareLabels[galleryLang] || galleryShareLabels.en;
-      const status = lightbox.querySelector(".gallery-share-status");
+      const menu = lightbox.querySelector(".gallery-share-menu");
+      if (!menu) return;
       const shareUrl = new URL("/gallery.html", window.location.origin);
       shareUrl.hash = card.id || "";
-      const shareTitle = card.dataset.galleryTitle || "ZombieCash Gallery";
-      const shareText = card.dataset.galleryDescription || shareTitle;
-      const setShareResult = (message, state) => {
-        if (status) {
-          status.textContent = message;
-          status.dataset.state = state;
-        }
-        shareButton.textContent = message;
-        shareButton.dataset.state = state;
-        shareButton.setAttribute("aria-label", message);
-      };
-      shareButton.disabled = true;
-      shareButton.setAttribute("aria-busy", "true");
+      const url = shareUrl.href;
+      const title = card.dataset.galleryTitle || "ZombieCash Gallery";
+      const caption = card.querySelector(".gallery-caption p")?.dataset.originalCaption || title;
+      const message = (caption || title) + " — $ZOMBCASH";
+      const enc = encodeURIComponent;
+      const links = [
+        ["Telegram", "https://t.me/share/url?url=" + enc(url) + "&text=" + enc(message)],
+        ["X (Twitter)", "https://twitter.com/intent/tweet?url=" + enc(url) + "&text=" + enc(message)],
+        ["Bluesky", "https://bsky.app/intent/compose?text=" + enc(message + " " + url)],
+        ["Facebook", "https://www.facebook.com/sharer/sharer.php?u=" + enc(url)],
+        ["Reddit", "https://www.reddit.com/submit?url=" + enc(url) + "&title=" + enc(title)],
+        ["WhatsApp", "https://api.whatsapp.com/send?text=" + enc(message + " " + url)]
+      ];
+      menu.innerHTML = links.map(([name, href]) =>
+        '<a class="gallery-share-option" href="' + escapeHtml(href) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(name) + '<span>↗</span></a>'
+      ).join("") + '<button class="gallery-share-option gallery-share-copy" type="button" data-share-url="' + escapeHtml(url) + '">COPY LINK <span>⧉</span></button>';
+      menu.hidden = !menu.hidden;
+      shareButton.setAttribute("aria-expanded", menu.hidden ? "false" : "true");
+      const status = lightbox.querySelector(".gallery-share-status");
       if (status) { status.textContent = ""; status.dataset.state = ""; }
+      trackGalleryEvent("gallery_share_menu_open", "image_" + String(card.dataset.galleryId || "").replace(/[^0-9]/g, "_"));
+      return;
+    }
+    const copyButton = event.target.closest(".gallery-share-copy");
+    if (copyButton) {
+      event.preventDefault();
+      event.stopPropagation();
+      const url = copyButton.dataset.shareUrl || "";
+      const status = lightbox.querySelector(".gallery-share-status");
+      let copied = false;
       try {
-        if (typeof navigator.share === "function") {
-          await navigator.share({ title: shareTitle, text: shareText, url: shareUrl.href });
-          setShareResult(labels.shared || labels.copied, "success");
-        } else {
-          let copied = false;
-          if (navigator.clipboard?.writeText) {
-            try {
-              await navigator.clipboard.writeText(shareUrl.href);
-              copied = true;
-            } catch (_) {}
-          }
-          if (!copied) {
-            const fallback = document.createElement("textarea");
-            fallback.value = shareUrl.href;
-            fallback.setAttribute("readonly", "");
-            fallback.style.position = "fixed";
-            fallback.style.opacity = "0";
-            fallback.style.pointerEvents = "none";
-            document.body.appendChild(fallback);
-            fallback.select();
-            fallback.setSelectionRange(0, fallback.value.length);
-            try { copied = document.execCommand("copy"); } catch (_) { copied = false; }
-            fallback.remove();
-          }
-          if (!copied) throw new Error("Clipboard access was denied");
-          setShareResult(labels.copied, "success");
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(url);
+          copied = true;
         }
-        trackGalleryEvent("gallery_share", "image_" + String(card.dataset.galleryId || "").replace(/[^0-9]/g, "_"));
-      } catch (error) {
-        if (error?.name === "AbortError") {
-          setShareResult(labels.cancelled || labels.share, "cancelled");
-        } else {
-          setShareResult(labels.error, "error");
-          if (status) status.title = String(error?.message || error);
-        }
-      } finally {
-        shareButton.disabled = false;
-        shareButton.removeAttribute("aria-busy");
+      } catch (_) {}
+      if (!copied) {
+        const field = document.createElement("textarea");
+        field.value = url;
+        field.setAttribute("readonly", "");
+        field.style.position = "fixed";
+        field.style.opacity = "0";
+        document.body.appendChild(field);
+        field.select();
+        try { copied = document.execCommand("copy"); } catch (_) {}
+        field.remove();
       }
+      if (status) {
+        status.textContent = copied ? "LINK COPIED" : "COPY FAILED — SELECT THE LINK";
+        status.dataset.state = copied ? "success" : "error";
+      }
+      if (copied) copyButton.textContent = "LINK COPIED ✓";
       return;
     }
     if (event.target === lightbox) closeImage();
