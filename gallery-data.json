@@ -207,7 +207,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🩸 NIGHTMARE & HORROR Промышленная стиральная машина № 4 продолжает гонять бельё прямо из сектора 7. Рука за усиленным стеклом перестала дёргаться десять минут назад, а барабан всё ещё вращается. #ZombieCashHorror",
+        "de": "🩸 NIGHTMARE & HORROR Industriewaschmaschine Nummer vier läuft weiter mit Wäsche aus Sektor 7. Die Hand hinter dem verstärkten Glas zuckt seit zehn Minuten nicht mehr, doch die Trommel dreht sich weiter. #ZombieCashHorror",
+        "fr": "🩸 NIGHTMARE & HORROR La machine industrielle numéro quatre enchaîne les lessives venues du secteur 7. Cette main contre la vitre renforcée ne bouge plus depuis dix minutes, mais le tambour tourne toujours. #ZombieCashHorror",
+        "it": "🩸 NIGHTMARE & HORROR La lavatrice industriale numero quattro continua a lavare biancheria dal Settore 7. Quella mano contro il vetro rinforzato non si muove più da dieci minuti, ma il cestello gira ancora. #ZombieCashHorror",
+        "ja": "🩸 NIGHTMARE & HORROR 4番の業務用洗濯機はセクター7から届いたシーツを洗い続けている。強化ガラスに押しつけられた手は10分前から動かないのに、ドラムはまだ回っている。#ZombieCashHorror",
+        "zh-CN": "🩸 NIGHTMARE & HORROR 4号工业洗衣机仍在清洗直接从7区送来的床单。贴在强化玻璃上的那只手十分钟前就不再抽动了，可滚筒依旧转个不停。#ZombieCashHorror",
+        "tr": "🩸 NIGHTMARE & HORROR Dört numaralı endüstriyel çamaşır makinesi, 7. Bölge'den gelen çamaşırları döndürmeye devam ediyor. Güçlendirilmiş cama dayanan el on dakikadır kıpırdamıyor ama tambur hâlâ dönüyor. #ZombieCashHorror",
+        "hi": "🩸 NIGHTMARE & HORROR औद्योगिक वॉशर नंबर चार सेक्टर 7 से आई चादरों को लगातार धो रहा है। मज़बूत काँच पर टिका हाथ दस मिनट पहले हिलना बंद कर चुका, फिर भी ड्रम घूम रहा है। #ZombieCashHorror"
+      }
     },
     {
       "id": "ZOMBCASH/6665:0",
@@ -233,7 +243,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🌙 UNDEAD AFTER DARK Дождь портит ковёр, век портит настроение, но мои стандарты всё равно выше, чем у твоего последнего портфеля. #ZombieCashAfterDark",
+        "de": "🌙 UNDEAD AFTER DARK Der Regen ruiniert den Teppich, das Jahrhundert die Stimmung, und trotzdem habe ich höhere Ansprüche als dein letztes Portfolio. #ZombieCashAfterDark",
+        "fr": "🌙 UNDEAD AFTER DARK La pluie ruine le tapis, le siècle ruine l’ambiance, et pourtant mes exigences dépassent celles de ton dernier portefeuille. #ZombieCashAfterDark",
+        "it": "🌙 UNDEAD AFTER DARK La pioggia rovina il tappeto, il secolo l’atmosfera, eppure ho standard più alti del tuo ultimo portafoglio. #ZombieCashAfterDark",
+        "ja": "🌙 UNDEAD AFTER DARK 雨はカーペットを台無しにし、この時代は気分を台無しにする。それでも私の基準はあなたの前のポートフォリオより高い。#ZombieCashAfterDark",
+        "zh-CN": "🌙 UNDEAD AFTER DARK 雨毁了地毯，这个世纪毁了心情，可我的标准依然比你上一个投资组合高。#ZombieCashAfterDark",
+        "tr": "🌙 UNDEAD AFTER DARK Yağmur halıyı, yüzyıl da havayı mahvediyor; yine de standartlarım son portföyünden daha yüksek. #ZombieCashAfterDark",
+        "hi": "🌙 UNDEAD AFTER DARK बारिश कालीन बर्बाद करती है, यह सदी मूड बिगाड़ देती है, फिर भी मेरे मानक तुम्हारे पिछले पोर्टफोलियो से ऊँचे हैं। #ZombieCashAfterDark"
+      }
     },
     {
       "id": "ZOMBCASH/6663:0",
@@ -259,7 +279,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "😂 ZOMBIECASH MEMES Она загнала его в переулок ради скримера с поеданием плоти, а он лишь вздохнул и спросил, не хуже ли её портфель его собственного. #ZombieCashMeme",
+        "de": "😂 ZOMBIECASH MEMES Sie stellte ihn in der Gasse für einen klassischen Fleischfresser-Jumpscare, doch er seufzte nur und fragte, ob ihr Portfolio schlechter sei als seines. #ZombieCashMeme",
+        "fr": "😂 ZOMBIECASH MEMES Elle l’a coincé dans une ruelle pour une frayeur de mangeuse de chair, mais il a simplement soupiré et demandé si son portefeuille était pire que le sien. #ZombieCashMeme",
+        "it": "😂 ZOMBIECASH MEMES Lei lo ha messo alle strette nel vicolo per uno spavento da divoratrice di carne, ma lui ha sospirato chiedendole se il suo portafoglio fosse peggiore del proprio. #ZombieCashMeme",
+        "ja": "😂 ZOMBIECASH MEMES 彼女は肉食ジャンプスケアで驚かせようと路地で彼を追い詰めたが、彼はため息をつき、自分より彼女のポートフォリオの方がひどいのかと尋ねた。#ZombieCashMeme",
+        "zh-CN": "😂 ZOMBIECASH MEMES 她在巷子里堵住他，准备来一场经典的食肉惊吓，可他只是叹了口气，问她的投资组合是不是比自己的还惨。#ZombieCashMeme",
+        "tr": "😂 ZOMBIECASH MEMES Klasik bir et yiyen korkutmacası için onu ara sokakta köşeye sıkıştırdı; o ise iç çekip portföyünün kendisininkinden daha kötü olup olmadığını sordu. #ZombieCashMeme",
+        "hi": "😂 ZOMBIECASH MEMES उसने उसे गली में घेरकर मांस खाने वाला डरावना जंप-स्केयर देने की कोशिश की, लेकिन उसने बस आह भरी और पूछा कि क्या उसका पोर्टफोलियो उससे भी बदतर है। #ZombieCashMeme"
+      }
     },
     {
       "id": "ZOMBCASH/6662:0",
@@ -285,7 +315,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🌙 UNDEAD AFTER DARK Даже бессмертным аристократам надоедает веками читать мёртвую поэзию при свечах, но хотя бы библиотека не кусается, как остальной рынок. #ZombieCashAfterDark",
+        "de": "🌙 UNDEAD AFTER DARK Selbst unsterbliche Aristokraten haben irgendwann genug davon, jahrhundertelang bei Kerzenlicht tote Poesie zu lesen – immerhin beißt die Bibliothek nicht wie der Rest des Marktes zurück. #ZombieCashAfterDark",
+        "fr": "🌙 UNDEAD AFTER DARK Même les aristocrates immortels se lassent de lire des siècles de poésie morte à la chandelle, mais au moins la bibliothèque ne mord pas comme le reste du marché. #ZombieCashAfterDark",
+        "it": "🌙 UNDEAD AFTER DARK Anche gli aristocratici immortali si stancano di leggere secoli di poesia morta a lume di candela, ma almeno la biblioteca non morde come il resto del mercato. #ZombieCashAfterDark",
+        "ja": "🌙 UNDEAD AFTER DARK 不死の貴族だって、何世紀もろうそくの灯りで死んだ詩を読むのには飽きる。でも図書館は市場のほかの連中のように噛みついてこない。#ZombieCashAfterDark",
+        "zh-CN": "🌙 UNDEAD AFTER DARK 就连不朽的贵族，也会厌倦在烛光下读上几个世纪的亡者诗篇；至少图书馆不像市场其他地方那样会反咬一口。#ZombieCashAfterDark",
+        "tr": "🌙 UNDEAD AFTER DARK Ölümsüz aristokratlar bile mum ışığında yüzyıllarca ölü şiirler okumaktan sıkılır; ama en azından kütüphane piyasanın geri kalanı gibi ısırmaz. #ZombieCashAfterDark",
+        "hi": "🌙 UNDEAD AFTER DARK अमर कुलीन भी मोमबत्ती की रोशनी में सदियों पुरानी मृत कविता पढ़ते-पढ़ते ऊब जाते हैं, लेकिन पुस्तकालय बाज़ार के बाकी हिस्सों की तरह पलटकर काटता नहीं। #ZombieCashAfterDark"
+      }
     },
     {
       "id": "ZOMBCASH/6661:0",
@@ -311,7 +351,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🩸 NIGHTMARE & HORROR Аварийный свет мерцает под слоем маслянистой воды почти метровой глубины, пока бледные разбухшие пальцы цепляются за ржавые бамперы брошенных седанов. #ZombieCashHorror",
+        "de": "🩸 NIGHTMARE & HORROR Das Notlicht flackert unter fast einem Meter öligem Abwasser, während blasse, aufgequollene Finger die rostigen Stoßstangen verlassener Limousinen umklammern. #ZombieCashHorror",
+        "fr": "🩸 NIGHTMARE & HORROR L’éclairage de secours vacille sous près d’un mètre d’eaux grasses, tandis que des doigts pâles et gonflés s’agrippent aux pare-chocs rouillés de berlines abandonnées. #ZombieCashHorror",
+        "it": "🩸 NIGHTMARE & HORROR Le luci di emergenza tremolano sotto quasi un metro di liquame oleoso, mentre dita pallide e gonfie stringono i paraurti arrugginiti di berline abbandonate. #ZombieCashHorror",
+        "ja": "🩸 NIGHTMARE & HORROR 1メートル近い油まみれの排水の下で非常灯がちらつく。青白くふやけた指が、放置されたセダンの錆びたバンパーをつかんでいる。#ZombieCashHorror",
+        "zh-CN": "🩸 NIGHTMARE & HORROR 应急灯在近一米深的油污积水下闪烁，苍白浮肿的手指紧紧抓住废弃轿车锈蚀的保险杠。#ZombieCashHorror",
+        "tr": "🩸 NIGHTMARE & HORROR Acil durum ışıkları, yaklaşık bir metre derinliğindeki yağlı atık suyun altında titrerken solgun, su toplamış parmaklar terk edilmiş sedanların paslı tamponlarına tutunuyor. #ZombieCashHorror",
+        "hi": "🩸 NIGHTMARE & HORROR लगभग एक मीटर गहरे तैलीय गंदे पानी के नीचे आपातकालीन रोशनी टिमटिमा रही है, जबकि पीली, पानी से फूली उँगलियाँ छोड़ी गई सेडान कारों के जंग लगे बंपरों को पकड़े हैं। #ZombieCashHorror"
+      }
     },
     {
       "id": "ZOMBCASH/6659:0",
