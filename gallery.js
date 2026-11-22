@@ -204,7 +204,11 @@
       const menu = galleryShareMenu;
       if (!menu) return;
       const shareUrl = new URL("/gallery.html", window.location.origin);
-      shareUrl.hash = card.id || "";
+      const imageAnchor = card.id || "";
+      if (imageAnchor) {
+        shareUrl.searchParams.set("image", imageAnchor);
+        shareUrl.hash = imageAnchor;
+      }
       const url = shareUrl.href;
       const title = card.dataset.galleryTitle || "ZombieCash Gallery";
       const caption = card.querySelector(".gallery-caption p")?.dataset.originalCaption || title;
@@ -582,6 +586,28 @@
     resetButton.addEventListener("click", () => { selectedCategory = "all"; searchTerm = ""; sortOrder = "newest"; pageIndex = 0; searchInput.value = ""; sortSelect.value = "newest"; trackGalleryEvent("gallery_filter_reset", "gallery"); renderToolbar(); renderGallery(); });
     renderToolbar();
     renderGallery();
+
+    // Shared image links must reopen the exact artwork, not merely the gallery grid.
+    const openLinkedImage = () => {
+      const params = new URLSearchParams(window.location.search);
+      const target = params.get("image") || (window.location.hash ? decodeURIComponent(window.location.hash.slice(1)) : "");
+      if (!target) return;
+      const targetIndex = items.findIndex(item => item.anchor_id === target || item.id === target);
+      if (targetIndex < 0) return;
+      selectedCategory = "all";
+      searchTerm = "";
+      pageIndex = 0;
+      searchInput.value = "";
+      sortSelect.value = "newest";
+      renderToolbar();
+      renderGallery();
+      const cardIndex = cards.findIndex(card => card.id === target || card.dataset.galleryId === target);
+      if (cardIndex >= 0) {
+        cards[cardIndex].scrollIntoView({block:"center",behavior:"auto"});
+        showImage(cardIndex);
+      }
+    };
+    openLinkedImage();
   }).catch(error => {
     if (count) count.textContent = gtx("offline");
     if (updated) updated.textContent = "";
