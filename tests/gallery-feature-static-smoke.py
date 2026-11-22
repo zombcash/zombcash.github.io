@@ -147,7 +147,7 @@ for marker in ("gallery-toolbar", "gallery-lightbox-share", "/api/gallery/likes"
     assert marker in js, marker
 assert "window.ZombieCashTrack = send;" in Path("script.js").read_text(encoding="utf-8")
 assert 'document.addEventListener("zombcash:languagechange"' in js and "refreshGalleryControls();" in js, "Changing language must re-render localized gallery captions and controls"
-assert "PAGE_SIZE = 200" in js and "pageItems = visible.slice" in js, "Gallery must page the archive in 200-image batches"
-assert "gallery-pagination" in js and "NEXT 200" in js, "Gallery must expose next/previous 200-image controls"
+assert "const INITIAL_ALL = 150;" in js and "const LOAD_ALL = 150;" in js and "pageItems = visible.slice(0, visibleLimit)" in js, "Gallery must load the archive in 150-image batches"
+assert "gallery-pagination" in js and "LOAD {count} MORE" in js, "Gallery must expose its localized load-more control"
 
-print(f"PASS: {len(items)} static gallery cards (first page of 200, newest first; categories: {category_counts}), {len(reviewed)} visually reviewed, {len(pending)} pending ALT review with independent owner authorization, {len(missing_dimensions)} CDN dimension fallback(s) protected by the square CSS ratio, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")
+print(f"PASS: {len(items)} static gallery cards (first crawlable page of 200; interactive batches of 150, newest first; categories: {category_counts}), {len(reviewed)} visually reviewed, {len(pending)} pending ALT review with independent owner authorization, {len(missing_dimensions)} CDN dimension fallback(s) protected by the square CSS ratio, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")
