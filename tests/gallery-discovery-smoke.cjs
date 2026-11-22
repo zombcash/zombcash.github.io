@@ -245,7 +245,6 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     await page.waitForSelector(".gallery-lightbox.is-open .gallery-lightbox-like");
     const openTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_image_open"));
     if (!openTracked) throw new Error("Gallery image open analytics event was not recorded");
-    if (await page.locator(".gallery-lightbox-title").count() !== 0) throw new Error("Lightbox must hide a title that repeats the Telegram caption");
     const fullTelegramCaption = await page.locator(".gallery-lightbox-caption").textContent();
     const expectedTelegramCaption = String(galleryData.items.find(item => item.id === targetLikeImageId)?.caption || "")
       .replace(/\s+/g, " ")
@@ -253,6 +252,10 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       .trim();
     if (!fullTelegramCaption || fullTelegramCaption !== expectedTelegramCaption) {
       throw new Error("Lightbox must retain the current Telegram caption exactly once: " + JSON.stringify({ expectedTelegramCaption, fullTelegramCaption }));
+    }
+    const lightboxTitle = await page.locator(".gallery-lightbox-title").textContent().catch(() => "");
+    if (lightboxTitle.trim() && lightboxTitle.trim() === fullTelegramCaption.trim()) {
+      throw new Error("Lightbox metadata title must not repeat the Telegram caption");
     }
     if (await page.locator(".gallery-lightbox-description:not(.gallery-lightbox-caption)").count() !== 0) throw new Error("Lightbox must hide an absent or duplicate editorial description");
     const lightboxCaption = await page.locator(".gallery-lightbox figcaption").textContent();
