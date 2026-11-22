@@ -332,22 +332,28 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     const reset = await page.locator("#gallery-grid .gallery-card").count();
     if (reset !== expectedGalleryCount) throw new Error("Clear filters should restore " + expectedGalleryCount + " cards, got " + reset);
     if (await page.locator("#gallery-grid .gallery-like-button").count() !== expectedGalleryCount) throw new Error("Clear filters should restore like controls");
-    const additionalCategoryFilters = [
-      { id: "zombie-characters", label: "Zombie Characters" },
-      { id: "apocalypse-survival", label: "Apocalypse & Survival" },
-      { id: "crypto-apocalypse", label: "Crypto Apocalypse" },
-      { id: "community-creations", label: "Community Creations" }
-    ];
-    for (const category of additionalCategoryFilters) {
-      const expected = expectedCategoryIds(category.id).length;
-      const button = page.getByRole("button", { name: category.label, exact: true });
-      if (expected > 0) {
-        if (await button.count() !== 1) throw new Error(category.label + " filter is missing despite matching gallery items");
+    const assertCategoryFilter = async (label, expectedIds) => {
+      const button = page.getByRole("button", { name: label, exact: true });
+      if (expectedIds.length > 0) {
+        if (await button.count() !== 1) throw new Error(label + " filter is missing despite matching gallery items");
         await button.click();
+        const expectedVisible = Math.min(50, expectedIds.length);
         const visible = await page.locator("#gallery-grid .gallery-card").count();
-        if (visible !== Math.min(50, expected)) throw new Error(category.label + " filter count does not match the first category batch: " + visible);
+        if (visible !== expectedVisible || JSON.stringify(await visibleCategoryIds()) !== JSON.stringify(expectedIds.slice(0, expectedVisible))) {
+          throw new Error(label + " filter does not match its first category batch: expected " + expectedVisible + ", got " + visible);
+        }
       } else if (await button.count() !== 0) {
-        throw new Error("Empty " + category.label + " category should not be rendered as a filter");
+        throw new Error("Empty " + label + " category should not be rendered as a filter");
+      }
+    };
+    const expectedZombieMemeIds = galleryData.items
+      .filter(item => (item.category_ids || []).some(id => id !== "nightmare-horror" && id !== "undead-after-dark"))
+      .map(item => item.id);
+    await assertCategoryFilter("Zombie Memes", expectedZombieMemeIds);
+    await assertCategoryFilter("Undead After Dark", expectedCategoryIds("undead-after-dark"));
+    for (const label of ["Zombie Characters", "Apocalypse & Survival", "Crypto Apocalypse", "Community Creations"]) {
+      if (await page.getByRole("button", { name: label, exact: true }).count() !== 0) {
+        throw new Error(label + " should not appear as a separate filter in the three-category gallery taxonomy");
       }
     }
     await page.locator(".gallery-reset").click();
