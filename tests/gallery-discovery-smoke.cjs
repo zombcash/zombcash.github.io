@@ -250,12 +250,21 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       .replace(/\s+/g, " ")
       .split(/━━━━━━━━|🧟\s*\$ZOMBCASH|MARKET DIED\.|📋\s*CA:|🌐\s*Website:|𝕏\s*X Community|💬\s*Telegram/i)[0]
       .trim();
-    if (!fullTelegramCaption || fullTelegramCaption !== expectedTelegramCaption) {
-      throw new Error("Lightbox must retain the current Telegram caption exactly once: " + JSON.stringify({ expectedTelegramCaption, fullTelegramCaption }));
+    const headingPattern = /^(?:🌙\s*UNDEAD\s+AFTER\s+DARK|😂\s*ZOMBIECASH\s+MEMES?|🩸\s*NIGHTMARE\s*(?:&|AND)\s*HORROR|🛰️\s*ZOMBIECASH\s+SITE\s+TRANSMISSION|NIGHTMARE\s+DROP|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|ZOMBIECASH\s+MEMES?)/i;
+    const expectedHeading = expectedTelegramCaption.match(headingPattern)?.[0].trim() || "";
+    const expectedHashtags = [...expectedTelegramCaption.matchAll(/#[\p{L}\p{N}_]+/gu)].map(match => match[0]);
+    const expectedCaptionBody = expectedTelegramCaption
+      .replace(/#[\p{L}\p{N}_]+/gu, " ")
+      .replace(headingPattern, "")
+      .replace(/\s+/g, " ")
+      .trim();
+    const expectedLightboxMeta = [expectedHeading, [...new Set(expectedHashtags)].join(" ")].filter(Boolean).join("  ·  ");
+    if (!fullTelegramCaption || fullTelegramCaption !== expectedCaptionBody) {
+      throw new Error("Lightbox caption body must contain the Telegram text once, without its separate series/hashtag metadata: " + JSON.stringify({ expectedCaptionBody, fullTelegramCaption }));
     }
     const lightboxTitle = await page.locator(".gallery-lightbox-title").textContent().catch(() => "");
-    if (lightboxTitle.trim() && lightboxTitle.trim() === fullTelegramCaption.trim()) {
-      throw new Error("Lightbox metadata title must not repeat the Telegram caption");
+    if (lightboxTitle.trim() !== expectedLightboxMeta) {
+      throw new Error("Lightbox must preserve series and hashtag metadata separately: " + JSON.stringify({ expectedLightboxMeta, lightboxTitle }));
     }
     if (await page.locator(".gallery-lightbox-description:not(.gallery-lightbox-caption)").count() !== 0) throw new Error("Lightbox must hide an absent or duplicate editorial description");
     const lightboxCaption = await page.locator(".gallery-lightbox figcaption").textContent();
