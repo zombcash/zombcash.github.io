@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE_URL = "https://zombcash.github.io"
 ROOT_PAGE = ROOT / "gallery.html"
 SITEMAP_PATH = ROOT / "sitemap-gallery-pages.xml"
+TRANSLATIONS_PATH = ROOT / "gallery-caption-translations.json"
 ROBOTS_PATH = ROOT / "robots.txt"
 
 LOCALES = {
@@ -102,6 +103,53 @@ CATEGORY_LABELS = {
 }
 
 
+
+def load_caption_translations():
+    try:
+        data = json.loads(TRANSLATIONS_PATH.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def localized_gallery_title(caption):
+    text = re.sub(r"\s+", " ", str(caption or "")).strip()
+    if len(text) <= 100:
+        return text or "ZombieCash gallery artwork"
+    shortened = text[:99].rsplit(" ", 1)[0].rstrip()
+    return (shortened or text[:99]) + "…"
+
+
+def localize_gallery_captions(page, locale):
+    if locale == "en":
+        return page
+    translations = load_caption_translations()
+
+    def replace_card(match):
+        card = match.group(0)
+        id_match = re.search(r'data-gallery-id="([^"]*)"', card)
+        image_id = html.unescape(id_match.group(1)) if id_match else ""
+        localized = translations.get(image_id, {}).get(locale)
+        if not isinstance(localized, str) or not localized.strip():
+            return card
+
+        localized = localized.strip()
+        title = localized_gallery_title(localized)
+        escaped_caption = escape(localized, quote=True)
+        escaped_title = escape(title, quote=True)
+        card = re.sub(r'data-gallery-title="[^"]*"', 'data-gallery-title="' + escaped_title + '"', card, count=1, flags=re.I)
+        card = re.sub(r'aria-label="Open image: [^"]*"', 'aria-label="Open image: ' + escaped_title + '"', card, count=1, flags=re.I)
+        card = re.sub(r'(<img[^>]*title=")[^"]*(")', lambda m: m.group(1) + escaped_title + m.group(2), card, count=1, flags=re.I | re.S)
+        card = re.sub(
+            r'<p data-original-caption="[^"]*" data-original-title="[^"]*">.*?</p>',
+            '<p data-original-caption="' + escaped_caption + '" data-original-title="' + escaped_title + '">' + escaped_title + '</p>',
+            card, count=1, flags=re.I | re.S,
+        )
+        return card
+
+    return re.sub(r'<article class="gallery-card".*?</article>', replace_card, page, flags=re.I | re.S)
+
+
 def localize_category_tags(page, locale):
     labels = CATEGORY_LABELS.get(locale, CATEGORY_LABELS["en"])
 
@@ -143,6 +191,7 @@ def build_page(base, locale):
     meta = LOCALES[locale]
     url = page_url(locale)
     page = base
+    page = localize_gallery_captions(page, locale)
     page = localize_category_tags(page, locale)
     page = replace_tag(page, r'<html lang="[^"]+"', f'<html lang="{escape(locale)}"')
     page = set_meta(page, r'<meta name="description" content="[^"]*">',
