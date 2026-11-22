@@ -44,6 +44,15 @@
   const cleanCardTitle = value => cleanCaption(value)
     .replace(/^(?:🩸|🌙|😂|🛰️)\s*(?:NIGHTMARE\s*&\s*HORROR|NIGHTMARE\s+DROP|ZOMBIECASH\s+MEMES?|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|UNDEAD\s+AFTER\s+DARK|ZOMBIECASH\s+SITE\s+TRANSMISSION)\s*/i, "")
     .trim();
+  const splitGalleryCaption = value => {
+    let text = cleanCaption(value);
+    const hashtags = [...text.matchAll(/#[\p{L}\p{N}_]+/gu)].map(match => match[0]);
+    text = text.replace(/#[\p{L}\p{N}_]+/gu, " ").replace(/\s+/g, " ").trim();
+    const headingMatch = text.match(/^(?:🌙\s*UNDEAD\s+AFTER\s+DARK|😂\s*ZOMBIECASH\s+MEMES?|🩸\s*NIGHTMARE\s*(?:&|AND)\s*HORROR|🛰️\s*ZOMBIECASH\s+SITE\s+TRANSMISSION|NIGHTMARE\s+DROP|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|ZOMBIECASH\s+MEMES?)/i);
+    const heading = headingMatch ? headingMatch[0].trim() : "";
+    if (heading) text = text.slice(headingMatch[0].length).trim();
+    return {caption:text, meta:[heading, [...new Set(hashtags)].join(" ")].filter(Boolean).join("  ·  ")};
+  };
 
   const state = (title, message) => {
     grid.innerHTML = '<div class="gallery-state"><h3>' + escapeHtml(title) +
@@ -140,31 +149,15 @@
     const title = card.dataset.galleryTitle || card.querySelector(".gallery-caption p")?.textContent || "";
     const originalCaption = card.querySelector(".gallery-caption p")?.dataset.originalCaption || "";
     const description = card.dataset.galleryDescription || "";
-    const normalizeLightboxText = value => String(value || "").toLocaleLowerCase().replace(/[\s\p{P}\p{S}]+/gu, " ").trim();
-    const normalizedTitle = normalizeLightboxText(cleanCaption(title));
-    const normalizedCaption = normalizeLightboxText(cleanCaption(originalCaption));
-    const normalizedDescription = normalizeLightboxText(cleanCaption(description));
-    const titleIsDuplicate = !normalizedTitle || !normalizedCaption ||
-      normalizedCaption.startsWith(normalizedTitle) || normalizedTitle.startsWith(normalizedCaption);
-    const descriptionIsDuplicate = !normalizedDescription ||
-      normalizedDescription === normalizedCaption ||
-      normalizedDescription === normalizedTitle ||
-      normalizedCaption.startsWith(normalizedDescription) ||
-      normalizedDescription.startsWith(normalizedCaption) ||
-      normalizedTitle.startsWith(normalizedDescription) ||
-      normalizedDescription.startsWith(normalizedTitle);
-    const captionToShow = titleIsDuplicate
-      ? cleanCaption(originalCaption)
-      : (!descriptionIsDuplicate ? cleanCaption(description) : "");
-    const categories = Array.from(card.querySelectorAll(".gallery-category-tag"))
-      .map(tag => tag.textContent.trim()).filter(Boolean).join(" · ");
+    const captionParts = splitGalleryCaption(originalCaption || title);
+    const captionToShow = captionParts.caption || cleanCardTitle(description || title);
+    const metaToShow = captionParts.meta;
     const sourceUrl = card.querySelector(".gallery-caption a")?.href || "https://t.me/ZOMBCASH";
     const shareLabels = galleryShareLabels[galleryLang] || galleryShareLabels.en;
     trackGalleryEvent("gallery_image_open", "image_" + String(card.dataset.galleryId || "").replace(/[^0-9]/g, "_"));
     fullCaption.innerHTML =
-      (!titleIsDuplicate ? '<strong class="gallery-lightbox-title">' + escapeHtml(title) + '</strong>' : '') +
       (captionToShow ? '<span class="gallery-lightbox-description gallery-lightbox-caption">' + escapeHtml(captionToShow) + '</span>' : '') +
-      (categories ? '<span class="gallery-lightbox-categories">' + escapeHtml(categories) + '</span>' : '') +
+      (metaToShow ? '<span class="gallery-lightbox-title">' + escapeHtml(metaToShow) + '</span>' : '') +
       '<span class="gallery-lightbox-actions">' +
       '<button class="gallery-lightbox-like" type="button" aria-pressed="false"></button>' +
       '<button class="gallery-lightbox-share" type="button" aria-label="' + escapeHtml(shareLabels.share) + '">' + escapeHtml(shareLabels.share) + '</button>' +
@@ -305,6 +298,13 @@
     const items = Array.isArray(data.items)
       ? data.items.filter(item => item.image && item.caption && !/\bZOMBIECASH\s+SITE\s+SPOTLIGHT\b/i.test(String(item.caption)) && (Array.isArray(item.category_ids) ? item.category_ids.length : allowedGalleryCaption(item.caption)))
       : [];
+    // Keep only three clear gallery filters. Crypto-apocalypse belongs with memes;
+    // community creations remain in the main archive without a separate category.
+    items.forEach(item => {
+      const ids = Array.isArray(item.category_ids) ? item.category_ids : [];
+      item.category_ids = [...new Set(ids.map(id => id === "crypto-apocalypse" ? "zombie-memes" : id)
+        .filter(id => ["zombie-memes","nightmare-horror","undead-after-dark"].includes(id)))];
+    });
     localizeGalleryMeta(items, data.updated_at);
     if (!items.length) {
       state(gtx("none"), gtx("noneMsg"));
@@ -333,7 +333,7 @@
       tr:{"zombie-memes":"Zombi Memleri","nightmare-horror":"Kâbus ve Korku","undead-after-dark":"Gece Yarısı Ölüleri","zombie-characters":"Zombi Karakterleri","apocalypse-survival":"Kıyamet ve Hayatta Kalma","crypto-apocalypse":"Kripto Kıyameti","community-creations":"Topluluk Eserleri"},
       hi:{"zombie-memes":"ज़ॉम्बी मीम","nightmare-horror":"दुःस्वप्न और हॉरर","undead-after-dark":"रात ढलने के बाद के ज़ॉम्बी","zombie-characters":"ज़ॉम्बी किरदार","apocalypse-survival":"प्रलय और उत्तरजीविता","crypto-apocalypse":"क्रिप्टो प्रलय","community-creations":"समुदाय की कलाकृतियाँ"}
     };
-    const categories = ["zombie-memes","nightmare-horror","undead-after-dark","zombie-characters","apocalypse-survival","crypto-apocalypse","community-creations"];
+    const categories = ["zombie-memes","nightmare-horror","undead-after-dark"];
     const toolbar = document.createElement("div");
     toolbar.className = "gallery-toolbar";
     toolbar.innerHTML = '<div class="gallery-filter-row"><div class="gallery-category-filters" role="group" aria-label="Gallery categories"></div><label class="gallery-search-label"><span class="sr-only">Search gallery</span><input class="gallery-search" type="search" autocomplete="off"></label><label class="gallery-sort-label"><span class="sr-only">Sort gallery</span><select class="gallery-sort"><option value="newest"></option><option value="oldest"></option><option value="liked"></option></select></label><button class="gallery-reset" type="button"></button></div><p class="gallery-results" aria-live="polite"></p>';
@@ -343,23 +343,28 @@
     const sortSelect = toolbar.querySelector(".gallery-sort");
     const resultsLabel = toolbar.querySelector(".gallery-results");
     const resetButton = toolbar.querySelector(".gallery-reset");
-    const pagination = document.createElement("nav");
-    pagination.className = "gallery-pagination";
-    pagination.setAttribute("aria-label", "Gallery pages");
-    pagination.innerHTML = '<button class="gallery-page-prev" type="button"></button><span class="gallery-page-status" aria-live="polite"></span><button class="gallery-page-next" type="button"></button>';
+    const pagination = document.createElement("div");
+    pagination.className = "gallery-pagination gallery-load-more";
+    pagination.innerHTML = '<button class="gallery-load-more-button" type="button"></button>';
     grid.parentElement.appendChild(pagination);
-    const previousPageButton = pagination.querySelector(".gallery-page-prev");
-    const nextPageButton = pagination.querySelector(".gallery-page-next");
-    const pageStatus = pagination.querySelector(".gallery-page-status");
-    previousPageButton.addEventListener("click", () => { if (pageIndex > 0) { pageIndex--; renderGallery(); grid.parentElement.scrollTo({top:0,behavior:"smooth"}); } });
-    nextPageButton.addEventListener("click", () => { pageIndex++; renderGallery(); grid.parentElement.scrollTo({top:0,behavior:"smooth"}); });
-
+    const loadMoreButton = pagination.querySelector(".gallery-load-more-button");
     let selectedCategory = "all";
     let searchTerm = "";
     let sortOrder = "newest";
-    const PAGE_SIZE = 200;
-    let pageIndex = 0;
+    const INITIAL_ALL = 150;
+    const LOAD_ALL = 150;
+    const INITIAL_CATEGORY = 50;
+    const LOAD_CATEGORY = 50;
+    let visibleLimit = INITIAL_ALL;
     let visibleItemCount = items.length;
+    const batchSize = () => selectedCategory === "all" ? LOAD_ALL : LOAD_CATEGORY;
+    const loadMoreLabels = {
+      en:"LOAD {count} MORE",ru:"ЗАГРУЗИТЬ ЕЩЁ {count}",de:"WEITERE {count} LADEN",fr:"CHARGER {count} DE PLUS",it:"CARICA ALTRI {count}",ja:"さらに {count} 件読み込む","zh-CN":"再加载 {count} 张",tr:"{count} DAHA YÜKLE",hi:"{count} और लोड करें"
+    };
+    loadMoreButton.addEventListener("click", () => {
+      visibleLimit += batchSize();
+      renderGallery();
+    });
 
     const renderToolbar = () => {
       const t = controlText[galleryLang] || controlText.en;
@@ -382,7 +387,7 @@
         button.className = "gallery-category-chip" + (selectedCategory === id ? " is-active" : "");
         button.textContent = label;
         button.setAttribute("aria-pressed", selectedCategory === id ? "true" : "false");
-        button.addEventListener("click", () => { selectedCategory = id; pageIndex = 0; trackGalleryEvent("gallery_filter", id); renderToolbar(); renderGallery(); });
+        button.addEventListener("click", () => { selectedCategory = id; visibleLimit = selectedCategory === "all" ? INITIAL_ALL : INITIAL_CATEGORY; trackGalleryEvent("gallery_filter", id); renderToolbar(); renderGallery(); });
         filterRow.appendChild(button);
       });
       updatePagination(visibleItemCount, grid.querySelectorAll(".gallery-card").length);
@@ -491,17 +496,17 @@
         return sortOrder === "oldest" ? delta : -delta;
       });
       visibleItemCount = visible.length;
-      const pageCount = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
-      pageIndex = Math.min(pageIndex, pageCount - 1);
-      const pageItems = visible.slice(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE);
+      const pageItems = visible.slice(0, visibleLimit);
       grid.innerHTML = pageItems.length ? pageItems.map((item, index) => {
         const caption = cleanCaption(item.caption);
         const rawTitle = String(item.title || caption);
         const title = cleanCaption(rawTitle);
-        const cardTitle = cleanCardTitle(rawTitle);
+        const captionParts = splitGalleryCaption(item.caption || rawTitle);
+        const cardCaption = captionParts.caption || cleanCardTitle(rawTitle);
+        const cardMeta = captionParts.meta;
         const image = escapeHtml(item.image);
-        const imageLoading = index === 0 ? "eager" : "lazy";
-        const imagePriority = index === 0 ? "high" : "auto";
+        const imageLoading = index < 6 ? "eager" : "lazy";
+        const imagePriority = index < 2 ? "high" : "auto";
         const imageWidth = Number(item.image_width);
         const imageHeight = Number(item.image_height);
         const dimensionAttributes = Number.isInteger(imageWidth) && imageWidth > 0 && imageWidth <= 10000 &&
@@ -510,12 +515,10 @@
           : '';
         const post = item.post_url ? escapeHtml(item.post_url) : "https://t.me/ZOMBCASH";
         const alt = String(item.alt_text || ("ZombieCash gallery artwork accompanying the story: " + (item.description || caption)));
-        const labels = categoryText[galleryLang] || categoryText.en;
-        const categoryMarkup = (item.category_ids || []).map(id => '<span class="gallery-category-tag">' + escapeHtml(labels[id] || id) + '</span>').join("");
         return '<article class="gallery-card" id="' + escapeHtml(item.anchor_id || "") + '" data-gallery-id="' + escapeHtml(item.id || "") + '" data-categories="' + escapeHtml((item.category_ids || []).join(" ")) + '" data-gallery-title="' + escapeHtml(rawTitle) + '" data-gallery-description="' + escapeHtml(item.description || "") + '" tabindex="0" role="group" aria-label="Open image: ' + escapeHtml(title) + '">' +
           '<img' + dimensionAttributes + ' src="' + image + '" alt="' + escapeHtml(alt) + '" loading="' + imageLoading + '" fetchpriority="' + imagePriority + '" decoding="async">' +
-          '<div class="gallery-caption"><p data-original-caption="' + escapeHtml(item.caption) + '" data-original-title="' + escapeHtml(rawTitle) + '">' + escapeHtml(cardTitle) + '</p>' +
-          '<div class="gallery-card-tags">' + categoryMarkup + '</div>' +
+          '<div class="gallery-caption"><p data-original-caption="' + escapeHtml(item.caption) + '" data-original-title="' + escapeHtml(rawTitle) + '">' + escapeHtml(cardCaption) + '</p>' +
+          (cardMeta ? '<div class="gallery-card-meta">' + escapeHtml(cardMeta) + '</div>' : '') +
           '<div class="gallery-card-actions"><button class="gallery-like-button" type="button" aria-pressed="false" title="' + escapeHtml(galleryLikeLabels.loginLike) + '"><span class="gallery-like-heart" aria-hidden="true">♡</span><span class="gallery-like-count">0</span></button></div>' +
           '<a href="' + post + '" target="_blank" rel="noreferrer">'+escapeHtml(gtx("source"))+'</a></div></article>';
       }).join("") : '<div class="gallery-state"><h3>' + escapeHtml((controlText[galleryLang]||controlText.en).empty) + '</h3></div>';
@@ -563,16 +566,11 @@
     };
     const updatePagination = (total, shown) => {
       const t = controlText[galleryLang] || controlText.en;
-      const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
-      const start = total ? pageIndex * PAGE_SIZE + 1 : 0;
-      const end = Math.min(total, pageIndex * PAGE_SIZE + shown);
-      resultsLabel.textContent = t.results + ": " + start + "–" + end + " / " + total;
-      previousPageButton.textContent = t.previousPage;
-      nextPageButton.textContent = t.nextPage;
-      previousPageButton.disabled = pageIndex <= 0;
-      nextPageButton.disabled = pageIndex >= pageCount - 1;
-      pagination.hidden = pageCount <= 1;
-      pageStatus.textContent = t.page + " " + (pageIndex + 1) + " / " + pageCount;
+      resultsLabel.textContent = t.results + ": " + shown + " / " + total;
+      const labels = loadMoreLabels[galleryLang] || loadMoreLabels.en;
+      loadMoreButton.textContent = labels.replace("{count}", String(batchSize()));
+      pagination.hidden = shown >= total;
+      loadMoreButton.disabled = shown >= total;
     };
     const renderToolbarCount = () => {
       const t = controlText[galleryLang] || controlText.en;
@@ -580,10 +578,10 @@
     };
     refreshGalleryControls = () => { renderToolbar(); renderGallery(); };
     refreshGalleryForLikes = () => { if (sortOrder === "liked") renderGallery(); };
-    searchInput.addEventListener("input", () => { searchTerm = searchInput.value.trim().toLocaleLowerCase(galleryLang); pageIndex = 0; renderGallery(); });
+    searchInput.addEventListener("input", () => { searchTerm = searchInput.value.trim().toLocaleLowerCase(galleryLang); visibleLimit = selectedCategory === "all" ? INITIAL_ALL : INITIAL_CATEGORY; renderGallery(); });
     searchInput.addEventListener("change", () => { if (searchInput.value.trim()) trackGalleryEvent("gallery_search", "gallery"); });
-    sortSelect.addEventListener("change", () => { sortOrder = sortSelect.value; pageIndex = 0; trackGalleryEvent("gallery_sort", sortOrder); renderGallery(); });
-    resetButton.addEventListener("click", () => { selectedCategory = "all"; searchTerm = ""; sortOrder = "newest"; pageIndex = 0; searchInput.value = ""; sortSelect.value = "newest"; trackGalleryEvent("gallery_filter_reset", "gallery"); renderToolbar(); renderGallery(); });
+    sortSelect.addEventListener("change", () => { sortOrder = sortSelect.value; trackGalleryEvent("gallery_sort", sortOrder); renderGallery(); });
+    resetButton.addEventListener("click", () => { selectedCategory = "all"; searchTerm = ""; sortOrder = "newest"; visibleLimit = INITIAL_ALL; searchInput.value = ""; sortSelect.value = "newest"; trackGalleryEvent("gallery_filter_reset", "gallery"); renderToolbar(); renderGallery(); });
     renderToolbar();
     renderGallery();
 
@@ -596,7 +594,7 @@
       if (targetIndex < 0) return;
       selectedCategory = "all";
       searchTerm = "";
-      pageIndex = 0;
+      visibleLimit = Math.max(INITIAL_ALL, targetIndex + 1);
       searchInput.value = "";
       sortSelect.value = "newest";
       renderToolbar();
