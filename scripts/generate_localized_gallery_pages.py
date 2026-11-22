@@ -13,6 +13,7 @@ BASE_URL = "https://zombcash.github.io"
 ROOT_PAGE = ROOT / "gallery.html"
 SITEMAP_PATH = ROOT / "sitemap-gallery-pages.xml"
 TRANSLATIONS_PATH = ROOT / "gallery-caption-translations.json"
+TRANSLATION_ADDITIONS_PATH = ROOT / "gallery-caption-translations-additions.json"
 ROBOTS_PATH = ROOT / "robots.txt"
 
 LOCALES = {
@@ -108,8 +109,19 @@ def load_caption_translations():
     try:
         data = json.loads(TRANSLATIONS_PATH.read_text(encoding="utf-8"))
     except (OSError, ValueError, TypeError):
-        return {}
-    return data if isinstance(data, dict) else {}
+        data = {}
+    if not isinstance(data, dict):
+        data = {}
+    # Apply append-only batches so static pages match the interactive gallery.
+    try:
+        additions = json.loads(TRANSLATION_ADDITIONS_PATH.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        additions = {}
+    if isinstance(additions, dict):
+        for image_id, locale_map in additions.items():
+            if isinstance(locale_map, dict):
+                data.setdefault(str(image_id), {}).update(locale_map)
+    return data
 
 
 def localized_gallery_title(caption):
