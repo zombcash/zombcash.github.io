@@ -379,7 +379,7 @@
     detectLang();
     document.querySelectorAll('[data-sniper-i18n]').forEach(el=>{el.textContent=t(el.dataset.sniperI18n);});
     document.querySelectorAll('[data-sniper-placeholder]').forEach(el=>{el.placeholder=t(el.dataset.sniperPlaceholder);});
-    renderCandidates(); renderPositions();updateSyncStatus(state.syncStatusKey||'saved');
+    renderCandidates(); renderPositions();renderLog();updateSyncStatus(state.syncStatusKey||'saved');
   }
   function fmt(value,digits=5){return Number(value).toLocaleString(undefined,{maximumFractionDigits:digits});}
   function ageLabel(ms){
@@ -569,13 +569,13 @@
     if(buySol+used>Number(terminal.capital||10)+closed){if(!automatic)alert(state.lang==='ru'?'Недостаточно виртуального баланса.':'Insufficient virtual balance.');return;}
     const quantity=buySol*(1-c.dex)*(1-c.slip)/item.priceNative;
     const now=Date.now();const p={id:makeUuid(),address:item.address,symbol:item.symbol,name:item.name,buySol,entryPrice:item.priceNative,lastPrice:item.priceNative,lastObservedPrice:item.priceNative,lastMovementAt:now,lastQuoteAt:now,quantity,openedAt:now,status:'open',netPnl:0,netPct:0,exitReason:null,priceHistory:[item.priceNative],source:item.source||'manual',_ownerTelegramId:telegramId()||'guest'};
-    state.positions.push(p);saveStore();renderPositions();renderStats();persistPosition(p);logEvent('BUY',item.symbol,(automatic?'Auto demo entry':'Manual demo entry')+' · '+fmt(buySol,4)+' SOL');if(!automatic)alert(t('buyOk'));
+    state.positions.push(p);saveStore();renderPositions();renderStats();persistPosition(p);logEvent('BUY',item.symbol,'',automatic?'autoEntry':'manualEntry',{amount:fmt(buySol,4)});if(!automatic)alert(t('buyOk'));
   }
   function closePaper(id,reason){
     const p=state.positions.find(x=>x.id===id&&x.status==='open');if(!p)return;
     const m=metrics(p,p.lastPrice||p.entryPrice);
     p.status='closed';p.closedAt=Date.now();p.netPnl=m.net;p.netPct=m.pct;p.sellSol=m.sellGross;p.exitReason=reason;
-    saveStore();renderPositions();renderStats();persistPosition(p);logEvent('SELL',p.symbol,'Manual demo close · '+fmt(m.pct,2)+'%');
+    saveStore();renderPositions();renderStats();persistPosition(p);logEvent('SELL',p.symbol,'','manualClose',{pct:fmt(m.pct,2)});
   }
   async function updatePositions(){
     const open=state.positions.filter(p=>p.status==='open');
@@ -606,11 +606,11 @@
         const target=Number($('sniper-target').value)||10;
         const stop=Number($('sniper-stop').value)||0;
         const idleSeconds=Math.max(15,Number($('sniper-idle-timeout')&&$('sniper-idle-timeout').value)||60);
-        if(m.pct>=target){p.status='closed';p.closedAt=now;p.sellSol=m.sellGross;p.exitReason='target';logEvent('SELL',p.symbol,'Net target reached · '+fmt(m.pct,2)+'%');rotated=true;}
-        else if(stop>0&&m.pct<=-stop){p.status='closed';p.closedAt=now;p.sellSol=m.sellGross;p.exitReason='stop';logEvent('SELL',p.symbol,'Net stop-loss reached · '+fmt(m.pct,2)+'%');rotated=true;}
+        if(m.pct>=target){p.status='closed';p.closedAt=now;p.sellSol=m.sellGross;p.exitReason='target';logEvent('SELL',p.symbol,'','netTarget',{pct:fmt(m.pct,2)});rotated=true;}
+        else if(stop>0&&m.pct<=-stop){p.status='closed';p.closedAt=now;p.sellSol=m.sellGross;p.exitReason='stop';logEvent('SELL',p.symbol,'','netStop',{pct:fmt(m.pct,2)});rotated=true;}
         else if(now-Number(p.lastMovementAt||p.openedAt)>=idleSeconds*1000){
           p.status='closed';p.closedAt=now;p.sellSol=m.sellGross;p.exitReason='stagnant';
-          logEvent('ROTATE',p.symbol,'No price movement ≥ '+threshold+'% for '+idleSeconds+'s; moving to next launch');rotated=true;
+          logEvent('ROTATE',p.symbol,'','rotate',{threshold,seconds:idleSeconds});rotated=true;
         }
       }catch(_){}
     }
@@ -632,6 +632,22 @@
   };
   const START_CONFIRM_COPY={"en":["STARTUP CHECK","Virtual capital","Paper trade size","Take Profit","Stop Loss","DEX fee / side","Slippage / side","Network / priority fees","Slippage exceeds 5% per side.","DEX fee exceeds 2% per side.","Trade size is above the 0.05 SOL starter suggestion.","Start Auto Sniper in PAPER DEMO mode? No real transactions will be sent.","Start demo","Cancel"],"ru":["ПРОВЕРКА ПЕРЕД ЗАПУСКОМ","Виртуальный капитал","Размер демо-сделки","Тейк-профит","Стоп-лосс","Комиссия DEX / сторона","Проскальзывание / сторона","Сеть / приоритетные комиссии","Проскальзывание выше 5% на сторону.","Комиссия DEX выше 2% на сторону.","Размер сделки выше стартовой рекомендации 0,05 SOL.","Запустить автоснайпер в ДЕМО-РЕЖИМЕ? Реальных транзакций не будет.","Запустить демо","Отмена"],"de":["STARTPRÜFUNG","Virtuelles Kapital","Demo-Handelsgröße","Take-Profit","Stop-Loss","DEX-Gebühr / Seite","Slippage / Seite","Netzwerk- / Prioritätsgebühr","Slippage über 5 % pro Seite.","DEX-Gebühr über 2 % pro Seite.","Handelsgröße über der Startempfehlung von 0,05 SOL.","Auto-Sniper im PAPER-DEMO-Modus starten? Es werden keine echten Transaktionen gesendet.","Demo starten","Abbrechen"],"fr":["VÉRIFICATION AVANT DÉMARRAGE","Capital virtuel","Taille de la transaction démo","Take-profit","Stop-loss","Frais DEX / côté","Glissement / côté","Frais réseau / priorité","Glissement supérieur à 5 % par côté.","Frais DEX supérieurs à 2 % par côté.","Taille supérieure à la recommandation initiale de 0,05 SOL.","Lancer Auto Sniper en mode démo papier ? Aucune transaction réelle ne sera envoyée.","Lancer la démo","Annuler"],"it":["CONTROLLO PRIMA DELL'AVVIO","Capitale virtuale","Dimensione operazione demo","Take profit","Stop loss","Commissione DEX / lato","Slippage / lato","Commissioni rete / priorità","Slippage superiore al 5% per lato.","Commissione DEX superiore al 2% per lato.","Dimensione superiore al suggerimento iniziale di 0,05 SOL.","Avviare Auto Sniper in modalità demo? Non verranno inviate transazioni reali.","Avvia demo","Annulla"],"ja":["起動前の確認","仮想資金","デモ取引額","利確","損切り","DEX手数料 / 片道","スリッページ / 片道","ネットワーク / 優先手数料","片道スリッページが5%を超えています。","片道DEX手数料が2%を超えています。","取引額が初期推奨額0.05 SOLを超えています。","ペーパーデモモードでAuto Sniperを起動しますか？実際の取引は送信されません。","デモを開始","キャンセル"],"zh-CN":["启动前检查","虚拟资金","模拟交易金额","止盈","止损","DEX费用 / 单边","滑点 / 单边","网络 / 优先费用","单边滑点超过5%。","单边DEX费用超过2%。","交易金额高于0.05 SOL的初始建议值。","以模拟模式启动自动狙击？不会发送真实交易。","启动模拟","取消"],"tr":["BAŞLATMA ÖNCESİ KONTROL","Sanal sermaye","Demo işlem miktarı","Kâr al","Zarar durdur","DEX ücreti / taraf","Kayma / taraf","Ağ / öncelik ücretleri","Taraf başına kayma %5'i aşıyor.","Taraf başına DEX ücreti %2'yi aşıyor.","İşlem boyutu 0,05 SOL başlangıç önerisini aşıyor.","Auto Sniper demo modunda başlatılsın mı? Gerçek işlem gönderilmeyecek.","Demoyu başlat","İptal"],"hi":["शुरू करने से पहले जाँच","वर्चुअल पूँजी","डेमो ट्रेड राशि","टेक प्रॉफ़िट","स्टॉप लॉस","DEX शुल्क / पक्ष","स्लिपेज / पक्ष","नेटवर्क / प्राथमिकता शुल्क","प्रति पक्ष स्लिपेज 5% से अधिक है।","प्रति पक्ष DEX शुल्क 2% से अधिक है।","ट्रेड राशि 0.05 SOL की शुरुआती अनुशंसा से अधिक है।","क्या Auto Sniper को डेमो मोड में शुरू करें? कोई वास्तविक लेनदेन नहीं भेजा जाएगा।","डेमो शुरू करें","रद्द करें"]};
   function showCenteredConfirm(rows){return new Promise(resolve=>{const labels=START_CONFIRM_COPY[state.lang]||START_CONFIRM_COPY.en;let d=document.getElementById('zs-start-confirm');if(d)d.remove();d=document.createElement('dialog');d.id='zs-start-confirm';d.style.cssText='width:min(560px,calc(100vw - 32px));max-width:560px;max-height:82vh;padding:0;border:1px solid #71836e;border-radius:16px;background:#101a17;color:#edf3e9;box-shadow:0 24px 80px #000b;overflow:hidden;margin:auto';const st=document.createElement('style');st.textContent='#zs-start-confirm::backdrop{background:rgba(0,0,0,.72);backdrop-filter:blur(3px)}#zs-start-confirm .zs-h{padding:18px 22px;border-bottom:1px solid #405148;font-weight:800;letter-spacing:.08em}#zs-start-confirm .zs-b{padding:18px 22px;overflow:auto;max-height:calc(82vh - 130px);font-size:14px;line-height:1.65}#zs-start-confirm .zs-r{padding:4px 0;border-bottom:1px solid #293831}#zs-start-confirm .zs-w{color:#f0c27b}#zs-start-confirm .zs-f{display:flex;justify-content:flex-end;gap:10px;padding:14px 20px;background:#0b1311;border-top:1px solid #405148}#zs-start-confirm button{border:1px solid #81977b;border-radius:9px;padding:10px 18px;font-weight:800;cursor:pointer}#zs-start-confirm .zs-ok{background:#b9c9ad;color:#111a14}#zs-start-confirm .zs-cancel{background:#1b2a24;color:#e7eee5}';const head=document.createElement('div');head.className='zs-h';head.textContent=labels[0];const body=document.createElement('div');body.className='zs-b';rows.forEach(row=>{const p=document.createElement('div');p.className='zs-r'+(row.warn?' zs-w':'');p.textContent=row.text;body.append(p)});const foot=document.createElement('div');foot.className='zs-f';const cancel=document.createElement('button');cancel.className='zs-cancel';cancel.textContent=labels[13];const ok=document.createElement('button');ok.className='zs-ok';ok.textContent=labels[12];foot.append(cancel,ok);d.append(st,head,body,foot);document.body.append(d);const done=v=>{if(d.open)d.close();d.remove();resolve(v)};cancel.addEventListener('click',()=>done(false));ok.addEventListener('click',()=>done(true));d.addEventListener('cancel',e=>{e.preventDefault();done(false)},{once:true});d.showModal()})}
+  const EVENT_COPY = {
+    en:{autoEntry:'Auto demo entry · {amount} SOL',manualEntry:'Manual demo entry · {amount} SOL',manualClose:'Manual demo close · {pct}%',netTarget:'Net target reached · {pct}%',netStop:'Net stop-loss reached · {pct}%',rotate:'No price movement ≥ {threshold}% for {seconds}s; moving to next launch',armed:'Paper mode confirmed · {amount} SOL',presetApplied:'{preset} profile applied',paused:'Paper engine paused; open paper positions remain managed.'},
+    ru:{autoEntry:'Автоматический вход в демо · {amount} SOL',manualEntry:'Ручной вход в демо · {amount} SOL',manualClose:'Ручное закрытие демо · {pct}%',netTarget:'Достигнута цель чистой прибыли · {pct}%',netStop:'Достигнут стоп-лосс по чистому P/L · {pct}%',rotate:'Цена не менялась на {threshold}% в течение {seconds} с; переход к следующему запуску',armed:'Демо-режим подтверждён · {amount} SOL',presetApplied:'Применён профиль «{preset}»',paused:'Демо-движок остановлен; открытые демо-позиции продолжают отслеживаться.'},
+    de:{autoEntry:'Automatischer Demo-Einstieg · {amount} SOL',manualEntry:'Manueller Demo-Einstieg · {amount} SOL',manualClose:'Demo-Position manuell geschlossen · {pct}%',netTarget:'Nettoziel erreicht · {pct}%',netStop:'Netto-Stop-Loss erreicht · {pct}%',rotate:'Keine Preisbewegung ≥ {threshold}% seit {seconds}s; nächster Tokenstart wird geprüft',armed:'Paper-Modus bestätigt · {amount} SOL',presetApplied:'Profil „{preset}“ angewendet',paused:'Paper-Engine pausiert; offene Paper-Positionen werden weiter überwacht.'},
+    fr:{autoEntry:'Entrée démo automatique · {amount} SOL',manualEntry:'Entrée démo manuelle · {amount} SOL',manualClose:'Clôture manuelle de la démo · {pct}%',netTarget:'Objectif net atteint · {pct}%',netStop:'Stop-loss net atteint · {pct}%',rotate:'Aucun mouvement de prix ≥ {threshold}% pendant {seconds}s ; passage au prochain lancement',armed:'Mode papier confirmé · {amount} SOL',presetApplied:'Profil « {preset} » appliqué',paused:'Moteur papier en pause ; les positions ouvertes restent suivies.'},
+    it:{autoEntry:'Ingresso demo automatico · {amount} SOL',manualEntry:'Ingresso demo manuale · {amount} SOL',manualClose:'Chiusura demo manuale · {pct}%',netTarget:'Obiettivo netto raggiunto · {pct}%',netStop:'Stop-loss netto raggiunto · {pct}%',rotate:'Nessun movimento del prezzo ≥ {threshold}% per {seconds}s; passaggio al prossimo lancio',armed:'Modalità paper confermata · {amount} SOL',presetApplied:'Profilo «{preset}» applicato',paused:'Motore paper in pausa; le posizioni aperte continuano a essere monitorate.'},
+    ja:{autoEntry:'自動デモ購入 · {amount} SOL',manualEntry:'手動デモ購入 · {amount} SOL',manualClose:'デモポジションを手動決済 · {pct}%',netTarget:'純利益目標に到達 · {pct}%',netStop:'純損失ストップに到達 · {pct}%',rotate:'{seconds}秒間、価格変動が{threshold}%未満のため次のローンチへ移行',armed:'ペーパーモードを確認 · {amount} SOL',presetApplied:'「{preset}」プロファイルを適用',paused:'ペーパーエンジンを一時停止しました。保有中のデモポジションは引き続き監視されます。'},
+    'zh-CN':{autoEntry:'自动模拟买入 · {amount} SOL',manualEntry:'手动模拟买入 · {amount} SOL',manualClose:'手动关闭模拟仓位 · {pct}%',netTarget:'已达到净利润目标 · {pct}%',netStop:'已触发净止损 · {pct}%',rotate:'{seconds}秒内价格变动未达到{threshold}%，转向下一个新币',armed:'已确认模拟模式 · {amount} SOL',presetApplied:'已应用“{preset}”配置',paused:'模拟引擎已暂停；仍会继续监控已开启的模拟仓位。'},
+    tr:{autoEntry:'Otomatik demo girişi · {amount} SOL',manualEntry:'Manuel demo girişi · {amount} SOL',manualClose:'Manuel demo kapatma · {pct}%',netTarget:'Net hedefe ulaşıldı · {pct}%',netStop:'Net zarar durdur tetiklendi · {pct}%',rotate:'{seconds}s boyunca fiyat hareketi ≥ {threshold}% olmadı; sonraki lansmana geçiliyor',armed:'Paper modu onaylandı · {amount} SOL',presetApplied:'{preset} profili uygulandı',paused:'Paper motoru duraklatıldı; açık paper pozisyonları izlenmeye devam ediyor.'},
+    hi:{autoEntry:'ऑटो डेमो एंट्री · {amount} SOL',manualEntry:'मैन्युअल डेमो एंट्री · {amount} SOL',manualClose:'मैन्युअल डेमो बंद · {pct}%',netTarget:'शुद्ध लक्ष्य पूरा · {pct}%',netStop:'शुद्ध स्टॉप-लॉस ट्रिगर · {pct}%',rotate:'{seconds}s तक कीमत में {threshold}% का बदलाव नहीं; अगले लॉन्च पर जा रहे हैं',armed:'पेपर मोड की पुष्टि · {amount} SOL',presetApplied:'{preset} प्रोफ़ाइल लागू',paused:'पेपर इंजन रोक दिया गया; खुली पेपर पोज़िशन की निगरानी जारी रहेगी।'}
+  };
+  function eventText(key, values={}) {
+    const lang = EVENT_COPY[state.lang] || EVENT_COPY.en;
+    return String(lang[key] || EVENT_COPY.en[key] || key).replace(/\{(\w+)\}/g, (_, name) => String(values[name] ?? ''));
+  }
+
   const terminal={auto:false,startedAt:0,capital:10,minLiquidity:5000,maxTradeSize:10,maxOpenPositions:4,maxDailyLossSol:1,minBuyCount:3,idleTimeout:60,minMovePct:0.2,logs:[],seen:[],lastAuto:0,sessionStartCapital:10,equityHistory:[]};
   const TERMINAL_KEY='zombcash_sniper_terminal_v1';
   const dcopy=()=>DASH_COPY[state.lang]||DASH_COPY.en;
@@ -718,7 +734,20 @@
 
   function saveTerminal(){try{terminal.settings={};['sniper-size','sniper-target','sniper-stop','sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-idle-timeout','sniper-min-move','sniper-max-open','sniper-min-buys','sniper-max-daily-loss'].forEach(id=>{const el=$(id);if(el)terminal.settings[id]=el.value;});localStorage.setItem(TERMINAL_KEY,JSON.stringify(terminal));}catch(_){}}
   function loadTerminal(){try{const v=JSON.parse(localStorage.getItem(TERMINAL_KEY)||'null');if(v&&typeof v==='object'){Object.assign(terminal,v);if(v.settings)Object.keys(v.settings).forEach(id=>{const el=$(id);if(el)el.value=v.settings[id];});}}catch(_){}}
-  function logEvent(kind,symbol,detail){terminal.logs.unshift({at:Date.now(),kind,symbol:symbol||'SYSTEM',detail:detail||''});terminal.logs=terminal.logs.slice(0,18);saveTerminal();renderLog();}
+  function localizeLegacyLog(detail) {
+    const value=String(detail||'');
+    let match;
+    if((match=value.match(/^Auto demo entry · (.+) SOL$/)))return eventText('autoEntry',{amount:match[1]});
+    if((match=value.match(/^Manual demo entry · (.+) SOL$/)))return eventText('manualEntry',{amount:match[1]});
+    if((match=value.match(/^Manual demo close · (.+)%$/)))return eventText('manualClose',{pct:match[1]});
+    if((match=value.match(/^Net target reached · (.+)%$/)))return eventText('netTarget',{pct:match[1]});
+    if((match=value.match(/^Net stop-loss reached · (.+)%$/)))return eventText('netStop',{pct:match[1]});
+    if((match=value.match(/^No price movement ≥ (.+)% for (.+)s; moving to next launch$/)))return eventText('rotate',{threshold:match[1],seconds:match[2]});
+    if(value==='Paper engine paused; open paper position remains managed.')return eventText('paused');
+    if((match=value.match(/^(.+) profile applied$/)))return eventText('presetApplied',{preset:match[1]});
+    return value;
+  }
+  function logEvent(kind,symbol,detail='',detailKey='',detailArgs={}){terminal.logs.unshift({at:Date.now(),kind,symbol:symbol||'SYSTEM',detail:detail||'',detailKey:detailKey||'',detailArgs:detailArgs||{}});terminal.logs=terminal.logs.slice(0,18);saveTerminal();renderLog();}
   function dashNode(tag,cls,txt){const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n;}
   function addRange(field,id,min,max,step){
     const input=$(id);if(!input||!field)return;
@@ -835,7 +864,7 @@
   function renderLog(){
     const host=$('zs-log');if(!host)return;host.replaceChildren();
     if(!terminal.logs.length){host.append(dashNode('p','sniper-muted',dcopy().empty));return;}
-    terminal.logs.slice(0,12).forEach(e=>{const row=dashNode('div','zs-logrow');row.append(dashNode('time','',new Date(e.at).toLocaleTimeString()),dashNode('b','zs-logkind',e.kind),dashNode('strong','',e.symbol),dashNode('span','',e.detail));host.append(row);});
+    terminal.logs.slice(0,12).forEach(e=>{const row=dashNode('div','zs-logrow');row.append(dashNode('time','',new Date(e.at).toLocaleTimeString()),dashNode('b','zs-logkind',e.kind),dashNode('strong','',e.symbol),dashNode('span','',e.detailKey?eventText(e.detailKey,e.detailArgs):localizeLegacyLog(e.detail)));host.append(row);});
   }
   function renderDashboardState(){
     const feedReady=!!(state.feed&&state.feed.pumpdevConnected);const btn=$('zs-auto-toggle');if(btn){btn.classList.toggle('is-on',!!terminal.auto&&feedReady);btn.textContent=terminal.auto&&feedReady?dcopy().armed:dcopy().paused;if(terminal.auto&&!feedReady)btn.title=state.lang==='ru'?'Автодемо ожидает подключения PumpDev.':'Auto demo is waiting for PumpDev.';else btn.removeAttribute('title');}
@@ -891,7 +920,7 @@
     if(!await showCenteredConfirm(rows))return;
     if(!await setServerPaperEnabled(true))return;
     terminal.auto=true;terminal.startedAt=Date.now();terminal.sessionStartCapital=Number($('sniper-capital').value)||10;terminal.equityHistory=[{at:terminal.startedAt,value:terminal.sessionStartCapital}];saveTerminal();renderDashboardState();
-    logEvent('ARMED','SYSTEM','Подтверждён paper mode · '+n('sniper-size')+' SOL');
+    logEvent('ARMED','SYSTEM','','armed',{amount:n('sniper-size')});
     refreshFeed();maybeAutoEnter();
   }
 
@@ -1239,7 +1268,7 @@
         Object.entries(map).forEach(([id,value])=>{const el=$(id);if(el){el.value=String(value);const r=el.parentElement&&el.parentElement.querySelector('.zs-range');if(r)r.value=String(value);}});
         terminal.capital=v.capital;terminal.maxTradeSize=v.max;terminal.minLiquidity=v.liq;terminal.selectedPreset=p.id;saveTerminal();renderStats();
         presetButtons.querySelectorAll('button').forEach(x=>x.classList.toggle('is-selected',x===b));
-        applied.textContent=(state.lang==='ru'?'Применён профиль: ':'Applied profile: ')+p.label;logEvent('PRESET','SYSTEM',p.label+' profile applied');
+        applied.textContent=(state.lang==='ru'?'Применён профиль: ':'Applied profile: ')+p.label;logEvent('PRESET','SYSTEM','','presetApplied',{preset:p.label});
       });
       presetButtons.append(b);
     });
@@ -1273,7 +1302,7 @@
     const center=dashNode('section','zs-panel zs-center');center.id='zs-center';const centerTitle=dashNode('h3','',dcopy().autopilot);centerTitle.id='zs-center-title';center.append(centerTitle);
     const portrait=dashNode('div','zs-portrait');const pic=dashNode('img','');pic.src='/assets/zombcash-survivor-640.avif';pic.alt='ZombieCash anime survivor heroine';portrait.append(pic,dashNode('b','','$ZOMBCASH SURVIVOR'));
     const core=dashNode('div','zs-core');const coreText=dashNode('div','');coreText.append(dashNode('strong','', '◉'),dashNode('strong','', 'AUTO SNIPER'),dashNode('span','', 'PAPER ENGINE'));core.append(coreText);
-    const toggle=dashNode('button','zs-toggle',dcopy().paused);toggle.id='zs-auto-toggle';toggle.type='button';toggle.addEventListener('click',async()=>{if(terminal.auto){if(!await setServerPaperEnabled(false))return;terminal.auto=false;terminal.stoppedAt=Date.now();saveTerminal();renderDashboardState();logEvent('PAUSED','SYSTEM','Paper engine paused; open paper position remains managed.');}else showLaunchConfirm();});
+    const toggle=dashNode('button','zs-toggle',dcopy().paused);toggle.id='zs-auto-toggle';toggle.type='button';toggle.addEventListener('click',async()=>{if(terminal.auto){if(!await setServerPaperEnabled(false))return;terminal.auto=false;terminal.stoppedAt=Date.now();saveTerminal();renderDashboardState();logEvent('PAUSED','SYSTEM','','paused');}else showLaunchConfirm();});
     const uptime=dashNode('div','zs-runtime-indicator');uptime.id='zs-runtime-indicator';uptime.setAttribute('role','status');
     const statsPanel=dashNode('div','zs-stats-extra zs-tab-hidden');statsPanel.id='zs-stats-extra';
     const statsHeading=dashNode('h3','',state.lang==='ru'?'РЕЗУЛЬТАТЫ СИМУЛЯЦИИ':'SIMULATION PERFORMANCE');
