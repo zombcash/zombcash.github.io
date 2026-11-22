@@ -1810,7 +1810,7 @@
   if (!window.__zcWalletScriptRequested) {
     window.__zcWalletScriptRequested = true;
     const walletScript = document.createElement('script');
-    walletScript.src = '/site-wallet.js?v=donation-phantom-v2';
+    walletScript.src = '/site-wallet.js?v=donation-phantom-v3';
     walletScript.defer = true;
     document.head.appendChild(walletScript);
   }
