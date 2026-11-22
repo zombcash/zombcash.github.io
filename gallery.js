@@ -499,9 +499,9 @@
       grid.innerHTML = pageItems.length ? pageItems.map((item, index) => {
         const localizedCaption = (item.caption_translations && (item.caption_translations[galleryLang] || item.caption_translations[galleryLang.replace("-", "_")])) || item.caption;
         const caption = cleanCaption(localizedCaption);
-        const rawTitle = String(item.title || caption);
+        const rawTitle = String(caption || item.title || "");
         const title = cleanCaption(rawTitle);
-        const captionParts = splitGalleryCaption(item.caption || rawTitle);
+        const captionParts = splitGalleryCaption(localizedCaption || rawTitle);
         const cardCaption = captionParts.caption || cleanCardTitle(rawTitle);
         const cardMeta = captionParts.meta;
         const image = escapeHtml(item.image);
@@ -517,7 +517,7 @@
         const alt = String(item.alt_text || ("ZombieCash gallery artwork accompanying the story: " + (item.description || caption)));
         return '<article class="gallery-card" id="' + escapeHtml(item.anchor_id || "") + '" data-gallery-id="' + escapeHtml(item.id || "") + '" data-categories="' + escapeHtml((item.category_ids || []).join(" ")) + '" data-gallery-title="' + escapeHtml(rawTitle) + '" data-gallery-description="' + escapeHtml(item.description || "") + '" tabindex="0" role="group" aria-label="Open image: ' + escapeHtml(title) + '">' +
           '<img' + dimensionAttributes + ' src="' + image + '" alt="' + escapeHtml(alt) + '" loading="' + imageLoading + '" fetchpriority="' + imagePriority + '" decoding="async">' +
-          '<div class="gallery-caption"><p data-original-caption="' + escapeHtml(item.caption) + '" data-original-title="' + escapeHtml(rawTitle) + '">' + escapeHtml(cardCaption) + '</p>' +
+          '<div class="gallery-caption"><p data-original-caption="' + escapeHtml(localizedCaption) + '" data-original-title="' + escapeHtml(rawTitle) + '">' + escapeHtml(cardCaption) + '</p>' +
           (cardMeta ? '<div class="gallery-card-meta">' + escapeHtml(cardMeta) + '</div>' : '') +
           '<div class="gallery-card-actions"><button class="gallery-like-button" type="button" aria-pressed="false" title="' + escapeHtml(galleryLikeLabels.loginLike) + '"><span class="gallery-like-heart" aria-hidden="true">♡</span><span class="gallery-like-count">0</span></button>' +
           '<button class="gallery-card-share" type="button" aria-expanded="false">' + escapeHtml((galleryShareLabels[galleryLang]||galleryShareLabels.en).share) + '</button>' +
