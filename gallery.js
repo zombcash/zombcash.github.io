@@ -359,23 +359,28 @@
     const sortSelect = toolbar.querySelector(".gallery-sort");
     const resultsLabel = toolbar.querySelector(".gallery-results");
     const resetButton = toolbar.querySelector(".gallery-reset");
-    const pagination = document.createElement("nav");
-    pagination.className = "gallery-pagination";
-    pagination.setAttribute("aria-label", "Gallery pages");
-    pagination.innerHTML = '<button class="gallery-page-prev" type="button"></button><span class="gallery-page-status" aria-live="polite"></span><button class="gallery-page-next" type="button"></button>';
+    const pagination = document.createElement("div");
+    pagination.className = "gallery-pagination gallery-load-more";
+    pagination.innerHTML = '<button class="gallery-load-more-button" type="button"></button>';
     grid.parentElement.appendChild(pagination);
-    const previousPageButton = pagination.querySelector(".gallery-page-prev");
-    const nextPageButton = pagination.querySelector(".gallery-page-next");
-    const pageStatus = pagination.querySelector(".gallery-page-status");
-    previousPageButton.addEventListener("click", () => { if (pageIndex > 0) { pageIndex--; renderGallery(); grid.parentElement.scrollTo({top:0,behavior:"smooth"}); } });
-    nextPageButton.addEventListener("click", () => { pageIndex++; renderGallery(); grid.parentElement.scrollTo({top:0,behavior:"smooth"}); });
-
+    const loadMoreButton = pagination.querySelector(".gallery-load-more-button");
     let selectedCategory = "all";
     let searchTerm = "";
     let sortOrder = "newest";
-    const PAGE_SIZE = 200;
-    let pageIndex = 0;
+    const INITIAL_ALL = 150;
+    const LOAD_ALL = 150;
+    const INITIAL_CATEGORY = 50;
+    const LOAD_CATEGORY = 50;
+    let visibleLimit = INITIAL_ALL;
     let visibleItemCount = items.length;
+    const batchSize = () => selectedCategory === "all" ? LOAD_ALL : LOAD_CATEGORY;
+    const loadMoreLabels = {
+      en:"LOAD {count} MORE",ru:"ЗАГРУЗИТЬ ЕЩЁ {count}",de:"WEITERE {count} LADEN",fr:"CHARGER {count} DE PLUS",it:"CARICA ALTRI {count}",ja:"さらに {count} 件読み込む","zh-CN":"再加载 {count} 张",tr:"{count} DAHA YÜKLE",hi:"{count} और लोड करें"
+    };
+    loadMoreButton.addEventListener("click", () => {
+      visibleLimit += batchSize();
+      renderGallery();
+    });
 
     const renderToolbar = () => {
       const t = controlText[galleryLang] || controlText.en;
@@ -398,7 +403,7 @@
         button.className = "gallery-category-chip" + (selectedCategory === id ? " is-active" : "");
         button.textContent = label;
         button.setAttribute("aria-pressed", selectedCategory === id ? "true" : "false");
-        button.addEventListener("click", () => { selectedCategory = id; pageIndex = 0; trackGalleryEvent("gallery_filter", id); renderToolbar(); renderGallery(); });
+        button.addEventListener("click", () => { selectedCategory = id; visibleLimit = selectedCategory === "all" ? INITIAL_ALL : INITIAL_CATEGORY; trackGalleryEvent("gallery_filter", id); renderToolbar(); renderGallery(); });
         filterRow.appendChild(button);
       });
       updatePagination(visibleItemCount, grid.querySelectorAll(".gallery-card").length);
@@ -507,17 +512,15 @@
         return sortOrder === "oldest" ? delta : -delta;
       });
       visibleItemCount = visible.length;
-      const pageCount = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
-      pageIndex = Math.min(pageIndex, pageCount - 1);
-      const pageItems = visible.slice(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE);
+      const pageItems = visible.slice(0, visibleLimit);
       grid.innerHTML = pageItems.length ? pageItems.map((item, index) => {
         const caption = cleanCaption(item.caption);
         const rawTitle = String(item.title || caption);
         const title = cleanCaption(rawTitle);
         const cardTitle = cleanCardTitle(rawTitle);
         const image = escapeHtml(item.image);
-        const imageLoading = index === 0 ? "eager" : "lazy";
-        const imagePriority = index === 0 ? "high" : "auto";
+        const imageLoading = index < 6 ? "eager" : "lazy";
+        const imagePriority = index < 2 ? "high" : "auto";
         const imageWidth = Number(item.image_width);
         const imageHeight = Number(item.image_height);
         const dimensionAttributes = Number.isInteger(imageWidth) && imageWidth > 0 && imageWidth <= 10000 &&
@@ -579,16 +582,11 @@
     };
     const updatePagination = (total, shown) => {
       const t = controlText[galleryLang] || controlText.en;
-      const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
-      const start = total ? pageIndex * PAGE_SIZE + 1 : 0;
-      const end = Math.min(total, pageIndex * PAGE_SIZE + shown);
-      resultsLabel.textContent = t.results + ": " + start + "–" + end + " / " + total;
-      previousPageButton.textContent = t.previousPage;
-      nextPageButton.textContent = t.nextPage;
-      previousPageButton.disabled = pageIndex <= 0;
-      nextPageButton.disabled = pageIndex >= pageCount - 1;
-      pagination.hidden = pageCount <= 1;
-      pageStatus.textContent = t.page + " " + (pageIndex + 1) + " / " + pageCount;
+      resultsLabel.textContent = t.results + ": " + shown + " / " + total;
+      const labels = loadMoreLabels[galleryLang] || loadMoreLabels.en;
+      loadMoreButton.textContent = labels.replace("{count}", String(batchSize()));
+      pagination.hidden = shown >= total;
+      loadMoreButton.disabled = shown >= total;
     };
     const renderToolbarCount = () => {
       const t = controlText[galleryLang] || controlText.en;
@@ -596,7 +594,7 @@
     };
     refreshGalleryControls = () => { renderToolbar(); renderGallery(); };
     refreshGalleryForLikes = () => { if (sortOrder === "liked") renderGallery(); };
-    searchInput.addEventListener("input", () => { searchTerm = searchInput.value.trim().toLocaleLowerCase(galleryLang); pageIndex = 0; renderGallery(); });
+    searchInput.addEventListener("input", () => { searchTerm = searchInput.value.trim().toLocaleLowerCase(galleryLang); visibleLimit = selectedCategory === "all" ? INITIAL_ALL : INITIAL_CATEGORY; renderGallery(); });
     searchInput.addEventListener("change", () => { if (searchInput.value.trim()) trackGalleryEvent("gallery_search", "gallery"); });
     sortSelect.addEventListener("change", () => { sortOrder = sortSelect.value; pageIndex = 0; trackGalleryEvent("gallery_sort", sortOrder); renderGallery(); });
     resetButton.addEventListener("click", () => { selectedCategory = "all"; searchTerm = ""; sortOrder = "newest"; pageIndex = 0; searchInput.value = ""; sortSelect.value = "newest"; trackGalleryEvent("gallery_filter_reset", "gallery"); renderToolbar(); renderGallery(); });
