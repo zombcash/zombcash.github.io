@@ -134,6 +134,9 @@
     }
   }
 
+  const WALLET_COPY = {"en":{"title":"YOUR SOLANA WALLET","login":"Sign in with Telegram to create your dedicated wallet.","create":"CREATE / CHECK WALLET","checking":"CHECKING…","retry":"RETRY","provisioning":"Wallet is provisioning or temporarily unavailable.","copy":"COPY","copied":"COPIED","failed":"FAILED","balance":"SOL BALANCE","loading":"LOADING…","refresh":"REFRESH","confirmed":"Confirmed on Solana","error":"ERROR: ","network":"network unavailable","deposit":"To fund this wallet, send native SOL on Solana only. Do not send assets from other networks.","baselineUnset":"RECONCILIATION: BASELINE NOT SET","setBaseline":"SET BASELINE","pending":"HISTORY NOT YET RECONCILED","scanning":"HISTORY SCAN IN PROGRESS","complete":"HISTORY RECONCILED","discrepancy":"BALANCE DISCREPANCY DETECTED","rpc":"RPC TEMPORARILY UNAVAILABLE","baselineSaved":"BASELINE SAVED","reconcileError":"RECONCILIATION LOAD ERROR: ","readBaseline":"READING BALANCE AND SLOT…","activity":"RECENT ACTIVITY","refreshHistory":"REFRESH HISTORY","noActivity":"No transactions yet.","failedStatus":"FAILED","confirmedStatus":"CONFIRMED","netChange":"(net change)","amountNA":"Amount unavailable","fee":"Network fee: ","feeNA":"Network fee unavailable","loadOlder":"LOAD OLDER","activityError":"ACTIVITY ERROR: ","privateKey":"Private key stays server-side. Paper mode never sends real trades.","walletError":"WALLET ERROR: "},"ru":{"title":"ВАШ SOLANA-КОШЕЛЁК","login":"Войдите через Telegram — для профиля будет создан отдельный кошелёк.","create":"СОЗДАТЬ / ПРОВЕРИТЬ КОШЕЛЁК","checking":"ПРОВЕРКА…","retry":"ПОВТОРИТЬ","provisioning":"Кошелёк создаётся или временно недоступен.","copy":"КОПИРОВАТЬ","copied":"СКОПИРОВАНО","failed":"ОШИБКА","balance":"БАЛАНС SOL","loading":"ЗАГРУЗКА…","refresh":"ОБНОВИТЬ","confirmed":"Подтверждено сетью Solana","error":"ОШИБКА: ","network":"сеть недоступна","deposit":"Для пополнения отправляйте только SOL в сети Solana на этот адрес. Не отправляйте токены других сетей.","baselineUnset":"СВЕРКА: ИСХОДНАЯ ТОЧКА НЕ ЗАДАНА","setBaseline":"ЗАДАТЬ ИСХОДНУЮ ТОЧКУ","pending":"ИСТОРИЯ ЕЩЁ НЕ СВЕРЕНА","scanning":"ПРОВЕРКА ИСТОРИИ","complete":"ИСТОРИЯ СВЕРЕНА","discrepancy":"ОБНАРУЖЕНО РАСХОЖДЕНИЕ","rpc":"RPC ВРЕМЕННО НЕДОСТУПЕН","baselineSaved":"ИСХОДНАЯ ТОЧКА СОХРАНЕНА","reconcileError":"ОШИБКА ЗАГРУЗКИ СВЕРКИ: ","readBaseline":"ПОЛУЧЕНИЕ БАЛАНСА И SLOT…","activity":"ПОСЛЕДНИЕ ОПЕРАЦИИ","refreshHistory":"ОБНОВИТЬ ИСТОРИЮ","noActivity":"Операций пока нет.","failedStatus":"ОШИБКА","confirmedStatus":"ПОДТВЕРЖДЕНО","netChange":"(чистое изменение)","amountNA":"Сумма недоступна","fee":"Комиссия сети: ","feeNA":"Комиссия недоступна","loadOlder":"ЗАГРУЗИТЬ ЕЩЁ","activityError":"ОШИБКА ЗАГРУЗКИ ИСТОРИИ: ","privateKey":"Приватный ключ хранится на сервере. Демо-режим не отправляет реальные сделки.","walletError":"ОШИБКА КОШЕЛЬКА: "},"de":{"title":"DEINE SOLANA-WALLET","login":"Melde dich über Telegram an, um eine eigene Wallet für dein Profil zu erstellen.","create":"WALLET ERSTELLEN / PRÜFEN","checking":"WIRD GEPRÜFT…","retry":"ERNEUT VERSUCHEN","provisioning":"Die Wallet wird eingerichtet oder ist vorübergehend nicht verfügbar.","copy":"KOPIEREN","copied":"KOPIERT","failed":"FEHLGESCHLAGEN","balance":"SOL-GUTHABEN","loading":"WIRD GELADEN…","refresh":"AKTUALISIEREN","confirmed":"Im Solana-Netzwerk bestätigt","error":"FEHLER: ","network":"Netzwerk nicht verfügbar","deposit":"Sende zum Aufladen ausschließlich natives SOL im Solana-Netzwerk an diese Adresse. Keine Assets aus anderen Netzwerken senden.","baselineUnset":"ABGLEICH: AUSGANGSWERT NICHT FESTGELEGT","setBaseline":"AUSGANGSWERT FESTLEGEN","pending":"VERLAUF NOCH NICHT ABGEGLICHEN","scanning":"VERLAUF WIRD GEPRÜFT","complete":"VERLAUF ABGEGLICHEN","discrepancy":"GUTHABENABWEICHUNG ERKANNT","rpc":"RPC VORÜBERGEHEND NICHT VERFÜGBAR","baselineSaved":"AUSGANGSWERT GESPEICHERT","reconcileError":"FEHLER BEIM LADEN DES ABGLEICHS: ","readBaseline":"GUTHABEN UND SLOT WERDEN ABGERUFEN…","activity":"LETZTE AKTIVITÄTEN","refreshHistory":"VERLAUF AKTUALISIEREN","noActivity":"Noch keine Transaktionen.","failedStatus":"FEHLGESCHLAGEN","confirmedStatus":"BESTÄTIGT","netChange":"(Nettoänderung)","amountNA":"Betrag nicht verfügbar","fee":"Netzwerkgebühr: ","feeNA":"Netzwerkgebühr nicht verfügbar","loadOlder":"ÄLTERE LADEN","activityError":"AKTIVITÄTSFEHLER: ","privateKey":"Der private Schlüssel bleibt auf dem Server. Der Demomodus sendet keine echten Trades.","walletError":"WALLET-FEHLER: "},"fr":{"title":"VOTRE PORTEFEUILLE SOLANA","login":"Connectez-vous avec Telegram pour créer un portefeuille dédié à votre profil.","create":"CRÉER / VÉRIFIER LE PORTEFEUILLE","checking":"VÉRIFICATION…","retry":"RÉESSAYER","provisioning":"Le portefeuille est en cours de création ou temporairement indisponible.","copy":"COPIER","copied":"COPIÉ","failed":"ÉCHEC","balance":"SOLDE SOL","loading":"CHARGEMENT…","refresh":"ACTUALISER","confirmed":"Confirmé sur Solana","error":"ERREUR : ","network":"réseau indisponible","deposit":"Pour approvisionner ce portefeuille, envoyez uniquement du SOL natif sur Solana à cette adresse. N’envoyez pas d’actifs d’autres réseaux.","baselineUnset":"RAPPROCHEMENT : POINT DE RÉFÉRENCE NON DÉFINI","setBaseline":"DÉFINIR LE POINT DE RÉFÉRENCE","pending":"HISTORIQUE PAS ENCORE RAPPROCHÉ","scanning":"VÉRIFICATION DE L’HISTORIQUE","complete":"HISTORIQUE RAPPROCHÉ","discrepancy":"ÉCART DE SOLDE DÉTECTÉ","rpc":"RPC TEMPORAIREMENT INDISPONIBLE","baselineSaved":"POINT DE RÉFÉRENCE ENREGISTRÉ","reconcileError":"ERREUR DE CHARGEMENT DU RAPPROCHEMENT : ","readBaseline":"LECTURE DU SOLDE ET DU SLOT…","activity":"ACTIVITÉ RÉCENTE","refreshHistory":"ACTUALISER L’HISTORIQUE","noActivity":"Aucune transaction pour le moment.","failedStatus":"ÉCHEC","confirmedStatus":"CONFIRMÉ","netChange":"(variation nette)","amountNA":"Montant indisponible","fee":"Frais réseau : ","feeNA":"Frais réseau indisponibles","loadOlder":"CHARGER LES ANCIENNES","activityError":"ERREUR D’ACTIVITÉ : ","privateKey":"La clé privée reste sur le serveur. Le mode démo n’envoie aucune transaction réelle.","walletError":"ERREUR DU PORTEFEUILLE : "},"it":{"title":"IL TUO WALLET SOLANA","login":"Accedi con Telegram per creare un wallet dedicato al tuo profilo.","create":"CREA / VERIFICA WALLET","checking":"VERIFICA IN CORSO…","retry":"RIPROVA","provisioning":"Il wallet è in creazione o temporaneamente non disponibile.","copy":"COPIA","copied":"COPIATO","failed":"ERRORE","balance":"SALDO SOL","loading":"CARICAMENTO…","refresh":"AGGIORNA","confirmed":"Confermato sulla rete Solana","error":"ERRORE: ","network":"rete non disponibile","deposit":"Per ricaricare questo wallet, invia solo SOL nativo sulla rete Solana a questo indirizzo. Non inviare asset di altre reti.","baselineUnset":"RICONCILIAZIONE: RIFERIMENTO NON IMPOSTATO","setBaseline":"IMPOSTA RIFERIMENTO","pending":"CRONOLOGIA NON ANCORA RICONCILIATA","scanning":"CONTROLLO CRONOLOGIA IN CORSO","complete":"CRONOLOGIA RICONCILIATA","discrepancy":"RILEVATA DIFFERENZA NEL SALDO","rpc":"RPC TEMPORANEAMENTE NON DISPONIBILE","baselineSaved":"RIFERIMENTO SALVATO","reconcileError":"ERRORE DI CARICAMENTO RICONCILIAZIONE: ","readBaseline":"LETTURA SALDO E SLOT…","activity":"ATTIVITÀ RECENTE","refreshHistory":"AGGIORNA CRONOLOGIA","noActivity":"Nessuna transazione al momento.","failedStatus":"ERRORE","confirmedStatus":"CONFERMATO","netChange":"(variazione netta)","amountNA":"Importo non disponibile","fee":"Commissione di rete: ","feeNA":"Commissione di rete non disponibile","loadOlder":"CARICA PRECEDENTI","activityError":"ERRORE ATTIVITÀ: ","privateKey":"La chiave privata resta sul server. La modalità demo non invia operazioni reali.","walletError":"ERRORE WALLET: "},"ja":{"title":"SOLANAウォレット","login":"Telegramでログインすると、プロフィール専用のウォレットが作成されます。","create":"ウォレットを作成 / 確認","checking":"確認中…","retry":"再試行","provisioning":"ウォレットを作成中、または一時的に利用できません。","copy":"コピー","copied":"コピーしました","failed":"失敗","balance":"SOL残高","loading":"読み込み中…","refresh":"更新","confirmed":"Solanaネットワークで確認済み","error":"エラー: ","network":"ネットワークを利用できません","deposit":"このウォレットへの入金には、Solanaネットワーク上のネイティブSOLのみを送信してください。他のネットワークの資産は送信しないでください。","baselineUnset":"照合: 基準値未設定","setBaseline":"基準値を設定","pending":"履歴は未照合です","scanning":"履歴を確認中","complete":"履歴の照合完了","discrepancy":"残高の不一致を検出","rpc":"RPCは一時的に利用できません","baselineSaved":"基準値を保存しました","reconcileError":"照合データの読み込みエラー: ","readBaseline":"残高とスロットを取得中…","activity":"最近のアクティビティ","refreshHistory":"履歴を更新","noActivity":"取引履歴はありません。","failedStatus":"失敗","confirmedStatus":"確認済み","netChange":"(純増減)","amountNA":"金額を取得できません","fee":"ネットワーク手数料: ","feeNA":"ネットワーク手数料を取得できません","loadOlder":"過去の履歴を読み込む","activityError":"アクティビティエラー: ","privateKey":"秘密鍵はサーバー上に保管されます。デモモードでは実際の取引は送信されません。","walletError":"ウォレットエラー: "},"zh-CN":{"title":"您的 SOLANA 钱包","login":"通过 Telegram 登录，为您的个人资料创建专属钱包。","create":"创建 / 检查钱包","checking":"正在检查…","retry":"重试","provisioning":"钱包正在创建或暂时不可用。","copy":"复制","copied":"已复制","failed":"失败","balance":"SOL 余额","loading":"正在加载…","refresh":"刷新","confirmed":"已在 Solana 网络确认","error":"错误：","network":"网络不可用","deposit":"为此钱包充值时，请仅向该地址发送 Solana 网络上的原生 SOL。请勿发送其他网络的资产。","baselineUnset":"对账：尚未设置基准值","setBaseline":"设置基准值","pending":"历史记录尚未完成对账","scanning":"正在扫描历史记录","complete":"历史记录已完成对账","discrepancy":"检测到余额差异","rpc":"RPC 暂时不可用","baselineSaved":"基准值已保存","reconcileError":"加载对账信息失败：","readBaseline":"正在读取余额和 Slot…","activity":"最近活动","refreshHistory":"刷新历史记录","noActivity":"暂无交易记录。","failedStatus":"失败","confirmedStatus":"已确认","netChange":"(净变化)","amountNA":"金额不可用","fee":"网络手续费：","feeNA":"网络手续费不可用","loadOlder":"加载更早记录","activityError":"活动记录错误：","privateKey":"私钥保存在服务器端。模拟模式不会发送真实交易。","walletError":"钱包错误："},"tr":{"title":"SOLANA CÜZDANINIZ","login":"Profilinize özel bir cüzdan oluşturmak için Telegram ile giriş yapın.","create":"CÜZDAN OLUŞTUR / KONTROL ET","checking":"KONTROL EDİLİYOR…","retry":"YENİDEN DENE","provisioning":"Cüzdan oluşturuluyor veya geçici olarak kullanılamıyor.","copy":"KOPYALA","copied":"KOPYALANDI","failed":"BAŞARISIZ","balance":"SOL BAKİYESİ","loading":"YÜKLENİYOR…","refresh":"YENİLE","confirmed":"Solana ağında onaylandı","error":"HATA: ","network":"ağ kullanılamıyor","deposit":"Bu cüzdana para yatırmak için bu adrese yalnızca Solana ağındaki yerel SOL'u gönderin. Diğer ağlardan varlık göndermeyin.","baselineUnset":"MUTABAKAT: REFERANS DEĞERİ AYARLANMADI","setBaseline":"REFERANS DEĞERİNİ AYARLA","pending":"İŞLEM GEÇMİŞİ HENÜZ MUTABAKATLANMADI","scanning":"İŞLEM GEÇMİŞİ TARANIYOR","complete":"İŞLEM GEÇMİŞİ MUTABAKATLANDI","discrepancy":"BAKİYE UYUŞMAZLIĞI ALGILANDI","rpc":"RPC GEÇİCİ OLARAK KULLANILAMIYOR","baselineSaved":"REFERANS DEĞERİ KAYDEDİLDİ","reconcileError":"MUTABAKAT YÜKLEME HATASI: ","readBaseline":"BAKİYE VE SLOT OKUNUYOR…","activity":"SON İŞLEMLER","refreshHistory":"GEÇMİŞİ YENİLE","noActivity":"Henüz işlem yok.","failedStatus":"BAŞARISIZ","confirmedStatus":"ONAYLANDI","netChange":"(net değişim)","amountNA":"Tutar kullanılamıyor","fee":"Ağ ücreti: ","feeNA":"Ağ ücreti kullanılamıyor","loadOlder":"ESKİ KAYITLARI YÜKLE","activityError":"İŞLEM GEÇMİŞİ HATASI: ","privateKey":"Özel anahtar sunucuda saklanır. Demo modu gerçek işlem göndermez.","walletError":"CÜZDAN HATASI: "},"hi":{"title":"आपका SOLANA वॉलेट","login":"अपने प्रोफ़ाइल के लिए अलग वॉलेट बनाने हेतु Telegram से लॉग इन करें।","create":"वॉलेट बनाएँ / जाँचें","checking":"जाँच जारी…","retry":"फिर कोशिश करें","provisioning":"वॉलेट बनाया जा रहा है या अस्थायी रूप से उपलब्ध नहीं है।","copy":"कॉपी करें","copied":"कॉपी हो गया","failed":"विफल","balance":"SOL बैलेंस","loading":"लोड हो रहा है…","refresh":"रीफ़्रेश","confirmed":"Solana नेटवर्क पर पुष्टि हुई","error":"त्रुटि: ","network":"नेटवर्क उपलब्ध नहीं है","deposit":"इस वॉलेट में राशि भेजने के लिए केवल Solana नेटवर्क पर native SOL भेजें। अन्य नेटवर्क की संपत्ति न भेजें।","baselineUnset":"मिलान: आधार मान सेट नहीं है","setBaseline":"आधार मान सेट करें","pending":"लेन-देन इतिहास का मिलान अभी नहीं हुआ","scanning":"लेन-देन इतिहास स्कैन हो रहा है","complete":"लेन-देन इतिहास का मिलान पूरा","discrepancy":"बैलेंस में अंतर मिला","rpc":"RPC अस्थायी रूप से उपलब्ध नहीं है","baselineSaved":"आधार मान सहेजा गया","reconcileError":"मिलान जानकारी लोड करने में त्रुटि: ","readBaseline":"बैलेंस और स्लॉट पढ़े जा रहे हैं…","activity":"हाल की गतिविधि","refreshHistory":"इतिहास रीफ़्रेश करें","noActivity":"अभी कोई लेन-देन नहीं है।","failedStatus":"विफल","confirmedStatus":"पुष्ट","netChange":"(शुद्ध बदलाव)","amountNA":"राशि उपलब्ध नहीं","fee":"नेटवर्क शुल्क: ","feeNA":"नेटवर्क शुल्क उपलब्ध नहीं","loadOlder":"पुराने रिकॉर्ड लोड करें","activityError":"गतिविधि त्रुटि: ","privateKey":"निजी कुंजी सर्वर पर रहती है। डेमो मोड वास्तविक लेन-देन नहीं भेजता।","walletError":"वॉलेट त्रुटि: "}};
+  const walletText = key => (WALLET_COPY[state.lang] || WALLET_COPY.en)[key] || WALLET_COPY.en[key] || key;
+
   async function refreshWalletInfo(){
     const panel=$('zs-wallet-panel');if(!panel)return;
     const token=authToken();
@@ -142,10 +145,10 @@
     panel.dataset.loading='true';
     panel.dataset.token=token;
     panel.replaceChildren();
-    const title=dashNode('strong','',state.lang==='ru'?'ВАШ SOLANA-КОШЕЛЁК':'YOUR SOLANA WALLET');
+    const title=dashNode('strong','',walletText('title'));
     panel.append(title);
-    if(!token){panel.append(dashNode('small','',state.lang==='ru'?'Войдите через Telegram — для профиля будет создан отдельный кошелёк.':'Sign in with Telegram to create your dedicated wallet.'));panel.dataset.loading='false';panel.dataset.loaded='true';return;}
-    const provision=dashNode('button','zs-wallet-provision',state.lang==='ru'?'СОЗДАТЬ / ПРОВЕРИТЬ КОШЕЛЁК':'CREATE / CHECK WALLET');provision.type='button';provision.addEventListener('click',async()=>{provision.disabled=true;provision.textContent=state.lang==='ru'?'ПРОВЕРКА…':'CHECKING…';try{const result=await fetch(AUTH_API+'/api/sniper/wallet/provision',{method:'POST',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},cache:'no-store'});const body=await result.json().catch(()=>({}));if(!result.ok)throw new Error(body.error||'Wallet provisioning failed');panel.dataset.loaded='false';await refreshWalletInfo();}catch(error){panel.append(dashNode('small','zs-wallet-error',error.message||'Wallet provisioning unavailable'));provision.disabled=false;provision.textContent=state.lang==='ru'?'ПОВТОРИТЬ':'RETRY';}});panel.append(provision);
+    if(!token){panel.append(dashNode('small','',walletText('login')));panel.dataset.loading='false';panel.dataset.loaded='true';return;}
+    const provision=dashNode('button','zs-wallet-provision',walletText('create'));provision.type='button';provision.addEventListener('click',async()=>{provision.disabled=true;provision.textContent=walletText('checking');try{const result=await fetch(AUTH_API+'/api/sniper/wallet/provision',{method:'POST',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},cache:'no-store'});const body=await result.json().catch(()=>({}));if(!result.ok)throw new Error(body.error||'Wallet provisioning failed');panel.dataset.loaded='false';await refreshWalletInfo();}catch(error){panel.append(dashNode('small','zs-wallet-error',error.message||'Wallet provisioning unavailable'));provision.disabled=false;provision.textContent=walletText('retry');}});panel.append(provision);
     try{
       const response=await fetch(AUTH_API+'/api/sniper/wallet',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
       if(!response.ok){const failure=await response.json().catch(()=>({}));throw new Error(failure.error||('Wallet API HTTP '+response.status));}
@@ -180,63 +183,63 @@
         if(terminal.auto!==serverEnabled){terminal.auto=serverEnabled;terminal.startedAt=serverEnabled?(terminal.startedAt||Date.now()):0;saveTerminal();renderDashboardState();}
       }
       if(!wallet||!wallet.publicKey){
-        panel.append(dashNode('small','',state.lang==='ru'?'Кошелёк создаётся или временно недоступен.':'Wallet is provisioning or temporarily unavailable.'));
+        panel.append(dashNode('small','',walletText('provisioning')));
         panel.dataset.loading='false';panel.dataset.loaded='true';
         return;
       }
       const address=String(wallet.publicKey);
       const line=dashNode('code','zs-wallet-address',address);
       line.title=address;
-      const copy=dashNode('button','zs-copy-address',state.lang==='ru'?'КОПИРОВАТЬ':'COPY');
+      const copy=dashNode('button','zs-copy-address',walletText('copy'));
       copy.type='button';
       copy.addEventListener('click',async()=>{
-        try{await navigator.clipboard.writeText(address);copy.textContent=state.lang==='ru'?'СКОПИРОВАНО':'COPIED';}
-        catch(_){copy.textContent=state.lang==='ru'?'ОШИБКА':'FAILED';}
+        try{await navigator.clipboard.writeText(address);copy.textContent=walletText('copied');}
+        catch(_){copy.textContent=walletText('failed');}
       });
       panel.append(line,copy);
       const balanceRow=dashNode('div','zs-wallet-balance');
-      const balanceLabel=dashNode('small','',state.lang==='ru'?'БАЛАНС SOL':'SOL BALANCE');
-      const balanceValue=dashNode('strong','zs-wallet-balance-value',state.lang==='ru'?'ЗАГРУЗКА…':'LOADING…');
-      const refreshBalance=dashNode('button','zs-wallet-refresh',state.lang==='ru'?'ОБНОВИТЬ':'REFRESH');
+      const balanceLabel=dashNode('small','',walletText('balance'));
+      const balanceValue=dashNode('strong','zs-wallet-balance-value',walletText('loading'));
+      const refreshBalance=dashNode('button','zs-wallet-refresh',walletText('refresh'));
       refreshBalance.type='button';
       const loadBalance=async()=>{
-        refreshBalance.disabled=true;balanceValue.textContent=state.lang==='ru'?'ЗАГРУЗКА…':'LOADING…';
+        refreshBalance.disabled=true;balanceValue.textContent=walletText('loading');
         try{
           const balanceResponse=await fetch(AUTH_API+'/api/sniper/wallet/balance',{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
           const balanceData=await balanceResponse.json().catch(()=>({}));
           if(!balanceResponse.ok)throw new Error((balanceData.error||'Balance API error')+' (HTTP '+balanceResponse.status+')');
           balanceValue.textContent=Number(balanceData.sol).toLocaleString(undefined,{minimumFractionDigits:4,maximumFractionDigits:9})+' SOL';
-          balanceValue.title=state.lang==='ru'?'Подтверждено сетью Solana':'Confirmed on Solana';
-        }catch(error){balanceValue.textContent=(state.lang==='ru'?'ОШИБКА: ':'ERROR: ')+(error&&error.message?error.message:(state.lang==='ru'?'сеть недоступна':'network unavailable'));}
+          balanceValue.title=walletText('confirmed');
+        }catch(error){balanceValue.textContent=(walletText('error'))+(error&&error.message?error.message:(walletText('network')));}
         finally{refreshBalance.disabled=false;}
       };
       refreshBalance.addEventListener('click',loadBalance);
       balanceRow.append(balanceLabel,balanceValue,refreshBalance);
-      const depositNote=dashNode('small','zs-wallet-note',state.lang==='ru'?'Для пополнения отправляйте только SOL в сети Solana на этот адрес. Не отправляйте токены других сетей.':'To fund this wallet, send native SOL on Solana only. Do not send assets from other networks.');
+      const depositNote=dashNode('small','zs-wallet-note',walletText('deposit'));
       const reconciliationRow=dashNode('div','zs-wallet-reconciliation');
-      const reconciliationStatus=dashNode('small','zs-wallet-reconciliation-status',state.lang==='ru'?'СВЕРКА: ИСХОДНАЯ ТОЧКА НЕ ЗАДАНА':'RECONCILIATION: BASELINE NOT SET');
-      const setBaseline=dashNode('button','zs-wallet-set-baseline',state.lang==='ru'?'ЗАДАТЬ ИСХОДНУЮ ТОЧКУ':'SET BASELINE');
+      const reconciliationStatus=dashNode('small','zs-wallet-reconciliation-status',walletText('baselineUnset'));
+      const setBaseline=dashNode('button','zs-wallet-set-baseline',walletText('setBaseline'));
       setBaseline.type='button';
       const applyBaselineState=baseline=>{
         if(!baseline){
-          reconciliationStatus.textContent=state.lang==='ru'?'СВЕРКА: ИСХОДНАЯ ТОЧКА НЕ ЗАДАНА':'RECONCILIATION: BASELINE NOT SET';
-          setBaseline.textContent=state.lang==='ru'?'ЗАДАТЬ ИСХОДНУЮ ТОЧКУ':'SET BASELINE';
+          reconciliationStatus.textContent=walletText('baselineUnset');
+          setBaseline.textContent=walletText('setBaseline');
           setBaseline.disabled=false;
           return;
         }
         const statusLabels={
-          baseline_pending_history:state.lang==='ru'?'ИСТОРИЯ ЕЩЁ НЕ СВЕРЕНА':'HISTORY NOT YET RECONCILED',
-          scanning:state.lang==='ru'?'ПРОВЕРКА ИСТОРИИ':'HISTORY SCAN IN PROGRESS',
-          history_complete:state.lang==='ru'?'ИСТОРИЯ СВЕРЕНА':'HISTORY RECONCILED',
-          discrepancy:state.lang==='ru'?'ОБНАРУЖЕНО РАСХОЖДЕНИЕ':'BALANCE DISCREPANCY DETECTED',
-          rpc_unavailable:state.lang==='ru'?'RPC ВРЕМЕННО НЕДОСТУПЕН':'RPC TEMPORARILY UNAVAILABLE'
+          baseline_pending_history:walletText('pending'),
+          scanning:walletText('scanning'),
+          history_complete:walletText('complete'),
+          discrepancy:walletText('discrepancy'),
+          rpc_unavailable:walletText('rpc')
         };
         const sol=Number(baseline.baselineSol);
         const balance=Number.isFinite(sol)?sol.toLocaleString(undefined,{minimumFractionDigits:4,maximumFractionDigits:9})+' SOL':'';
         const slot=Number.isFinite(Number(baseline.baselineSlot))?' · SLOT '+Number(baseline.baselineSlot).toLocaleString():'';
         const status=statusLabels[baseline.status]||String(baseline.status||'BASELINE SAVED').toUpperCase();
-        reconciliationStatus.textContent=(state.lang==='ru'?'ИСХОДНАЯ ТОЧКА СОХРАНЕНА':'BASELINE SAVED')+(balance?' · '+balance:'')+slot+' · '+status;
-        setBaseline.textContent=state.lang==='ru'?'ИСХОДНАЯ ТОЧКА СОХРАНЕНА':'BASELINE SAVED';
+        reconciliationStatus.textContent=(walletText('baselineSaved'))+(balance?' · '+balance:'')+slot+' · '+status;
+        setBaseline.textContent=walletText('baselineSaved');
         setBaseline.disabled=true;
       };
       const loadReconciliationState=async()=>{
@@ -247,13 +250,13 @@
           if(!stateResponse.ok)throw new Error(stateData.error||'Reconciliation state API error');
           applyBaselineState(stateData.baseline||null);
         }catch(error){
-          reconciliationStatus.textContent=(state.lang==='ru'?'ОШИБКА ЗАГРУЗКИ СВЕРКИ: ':'RECONCILIATION LOAD ERROR: ')+(error&&error.message?error.message:'network unavailable');
+          reconciliationStatus.textContent=(walletText('reconcileError'))+(error&&error.message?error.message:'network unavailable');
           setBaseline.disabled=false;
         }
       };
       setBaseline.addEventListener('click',async()=>{
         setBaseline.disabled=true;
-        reconciliationStatus.textContent=state.lang==='ru'?'ПОЛУЧЕНИЕ БАЛАНСА И SLOT…':'READING BALANCE AND SLOT…';
+        reconciliationStatus.textContent=walletText('readBaseline');
         try{
           const baselineResponse=await fetch(AUTH_API+'/api/sniper/wallet/reconciliation/baseline',{
             method:'POST',headers:{'Authorization':'Bearer '+token},cache:'no-store'
@@ -262,14 +265,14 @@
           if(!baselineResponse.ok)throw new Error((baselineData.error||'Baseline API error')+' (HTTP '+baselineResponse.status+')');
           applyBaselineState(baselineData.baseline||null);
         }catch(error){
-          reconciliationStatus.textContent=(state.lang==='ru'?'ОШИБКА: ':'ERROR: ')+(error&&error.message?error.message:(state.lang==='ru'?'сеть недоступна':'network unavailable'));
+          reconciliationStatus.textContent=(walletText('error'))+(error&&error.message?error.message:(walletText('network')));
           setBaseline.disabled=false;
         }
       });
       reconciliationRow.append(reconciliationStatus,setBaseline);
-      const activityTitle=dashNode('strong','zs-wallet-activity-title',state.lang==='ru'?'ПОСЛЕДНИЕ ОПЕРАЦИИ':'RECENT ACTIVITY');
+      const activityTitle=dashNode('strong','zs-wallet-activity-title',walletText('activity'));
       const activityHeader=dashNode('div','zs-wallet-activity-header');
-      const activityRefresh=dashNode('button','zs-wallet-activity-refresh',state.lang==='ru'?'ОБНОВИТЬ ИСТОРИЮ':'REFRESH HISTORY');
+      const activityRefresh=dashNode('button','zs-wallet-activity-refresh',walletText('refreshHistory'));
       activityRefresh.type='button';
       activityHeader.append(activityTitle,activityRefresh);
       const activityList=dashNode('div','zs-wallet-activity');
@@ -280,7 +283,7 @@
         activityLoading=true;
         const loadMoreButton=activityList.querySelector('.zs-wallet-load-more');
         if(loadMoreButton)loadMoreButton.disabled=true;
-        if(!append){activityCursor=null;activityList.replaceChildren(dashNode('small','',state.lang==='ru'?'ЗАГРУЗКА…':'LOADING…'));}
+        if(!append){activityCursor=null;activityList.replaceChildren(dashNode('small','',walletText('loading')));}
         try{
           const query=activityCursor?'?before='+encodeURIComponent(activityCursor):'';
           const activityResponse=await fetch(AUTH_API+'/api/sniper/wallet/activity'+query,{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
@@ -288,18 +291,18 @@
           if(!activityResponse.ok)throw new Error((activityData.error||'Activity API error')+' (HTTP '+activityResponse.status+')');
           if(!append)activityList.replaceChildren();
           const items=Array.isArray(activityData.activity)?activityData.activity:[];
-          if(!items.length&&!append){activityList.append(dashNode('small','',state.lang==='ru'?'Операций пока нет.':'No transactions yet.'));}
+          if(!items.length&&!append){activityList.append(dashNode('small','',walletText('noActivity')));}
           items.forEach(item=>{
             const entry=dashNode('div','zs-wallet-activity-item');
-            const detail=dashNode('span','',item.failed?(state.lang==='ru'?'ОШИБКА':'FAILED'):(state.lang==='ru'?'ПОДТВЕРЖДЕНО':'CONFIRMED'));
+            const detail=dashNode('span','',item.failed?(walletText('failed')):(walletText('confirmedStatus')));
             const time=dashNode('small','',item.blockTime?new Date(item.blockTime*1000).toLocaleString():'—');
             const amountText=typeof item.netSol==='number'
-              ?(item.netSol>0?'+':'')+item.netSol.toFixed(9)+' SOL '+(state.lang==='ru'?'(чистое изменение)':'(net change)')
-              :(state.lang==='ru'?'Сумма недоступна':'Amount unavailable');
+              ?(item.netSol>0?'+':'')+item.netSol.toFixed(9)+' SOL '+(walletText('netChange'))
+              :(walletText('amountNA'));
             const amount=dashNode('small','',amountText);
             const feeText=typeof item.feeSol==='number'
-              ?(state.lang==='ru'?'Комиссия сети: ':'Network fee: ')+item.feeSol.toFixed(9)+' SOL'
-              :(state.lang==='ru'?'Комиссия недоступна':'Network fee unavailable');
+              ?(walletText('fee'))+item.feeSol.toFixed(9)+' SOL'
+              :(walletText('feeNA'));
             const fee=dashNode('small','',feeText);
             const link=dashNode('a','',String(item.signature).slice(0,10)+'…'+String(item.signature).slice(-8));
             link.href='https://solscan.io/tx/'+encodeURIComponent(item.signature);link.target='_blank';link.rel='noopener noreferrer';
@@ -309,14 +312,14 @@
           const oldButton=activityList.querySelector('.zs-wallet-load-more');
           if(oldButton)oldButton.remove();
           if(activityCursor){
-            const more=dashNode('button','zs-wallet-load-more',state.lang==='ru'?'ЗАГРУЗИТЬ ЕЩЁ':'LOAD OLDER');
+            const more=dashNode('button','zs-wallet-load-more',walletText('loadOlder'));
             more.type='button';
             more.addEventListener('click',()=>loadActivity(true));
             activityList.append(more);
           }
         }catch(failure){
           if(!append)activityList.replaceChildren();
-          const error=dashNode('small','zs-wallet-error',(state.lang==='ru'?'ОШИБКА ЗАГРУЗКИ ИСТОРИИ: ':'ACTIVITY ERROR: ')+(failure&&failure.message?failure.message:(state.lang==='ru'?'сеть недоступна':'network unavailable')));
+          const error=dashNode('small','zs-wallet-error',(walletText('activityError'))+(failure&&failure.message?failure.message:(walletText('network'))));
           activityList.append(error);
         }finally{
           activityLoading=false;
@@ -324,12 +327,12 @@
           activityRefresh.disabled=false;
         }
       };
-      panel.append(balanceRow,depositNote,reconciliationRow,activityHeader,activityList,dashNode('small','',state.lang==='ru'?'Приватный ключ хранится на сервере. Демо-режим не отправляет реальные сделки.':'Private key stays server-side. Paper mode never sends real trades.'));
+      panel.append(balanceRow,depositNote,reconciliationRow,activityHeader,activityList,dashNode('small','',walletText('privateKey')));
       activityRefresh.addEventListener('click',()=>loadActivity(false));
       panel.dataset.loading='false';panel.dataset.loaded='true';
       loadBalance();loadActivity();loadReconciliationState();
     }catch(error){
-      panel.append(dashNode('small','zs-wallet-error',(state.lang==='ru'?'ОШИБКА КОШЕЛЬКА: ':'WALLET ERROR: ')+(error&&error.message?error.message:(state.lang==='ru'?'сеть недоступна':'network unavailable'))));
+      panel.append(dashNode('small','zs-wallet-error',(walletText('walletError'))+(error&&error.message?error.message:(walletText('network')))));
       panel.dataset.loading='false';panel.dataset.loaded='true';
     }
   }
