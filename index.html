@@ -987,15 +987,54 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 </style>
 
 <style id="zc-ai-engine-card-layout-fix">
-  .hero-content > .zc-ai-engine-card {
-    display:flex;
-    width:min(100%, 420px);
-    box-sizing:border-box;
-    margin:18px 0 0 auto;
+  /* One full-width status rail balances the lower hero across both columns. */
+  body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail {
+    grid-column:1 / -1!important;
+    grid-row:2!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:clamp(22px,4vw,64px)!important;
+    width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:16px clamp(16px,2vw,28px)!important;
+    box-sizing:border-box!important;
+    border:1px solid #344b36!important;
+    border-left:3px solid #9bff45!important;
+    background:linear-gradient(100deg,#0a120dF2,#0b1010E8 62%,#101018E8)!important;
+    box-shadow:0 12px 34px #0006,inset 0 0 28px #9bff4508!important;
   }
-  .hero-content > .hero-stats { margin-top:22px; }
-  @media (max-width:950px) {
-    .hero-content > .zc-ai-engine-card { width:min(100%, 420px); margin:16px 0 0; }
+  .zc-home-status-rail > .zc-ai-engine-card {
+    display:flex!important;
+    flex:0 1 440px!important;
+    width:min(100%,440px)!important;
+    min-width:0!important;
+    margin:0!important;
+  }
+  .zc-home-status-rail > .hero-stats {
+    display:flex!important;
+    flex:1 1 auto!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:clamp(18px,3vw,48px)!important;
+    min-width:0!important;
+    margin:0!important;
+  }
+  @media(max-width:1359px) {
+    body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail {
+      grid-column:1!important;grid-row:3!important;
+      flex-direction:column!important;align-items:stretch!important;
+      gap:16px!important;
+    }
+    .zc-home-status-rail > .zc-ai-engine-card {flex:0 1 auto!important;width:100%!important;max-width:520px!important}
+    .zc-home-status-rail > .hero-stats {justify-content:flex-start!important}
+  }
+  @media(max-width:560px) {
+    body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail {padding:13px!important}
+    .zc-home-status-rail > .hero-stats {justify-content:space-between!important;gap:10px!important}
+    .zc-home-status-rail > .hero-stats strong {font-size:18px!important}
+    .zc-home-status-rail > .hero-stats span {font-size:8px!important;letter-spacing:.7px!important}
   }
 </style>
 </head>
@@ -1018,12 +1057,6 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
     <p class="brand-search-aliases" style="max-width:760px;margin:10px 0 0;color:#a6b5a5;font-size:13px;line-height:1.5">Looking for ZombieCash? The official Solana community project is also searched as <strong style="color:#d5e1d0">Zombie Cash</strong> or <strong style="color:#d5e1d0">ZombCash</strong>. Queries such as <strong style="color:#d5e1d0">Cash Zombie</strong> and <strong style="color:#d5e1d0">CashZombie</strong> should lead you to the same official project. Token ticker: <strong style="color:#9bff45">$ZOMBCASH</strong>.</p>
     <div class="hero-actions"><a class="btn btn-primary" href="#radar">⌁ OPEN THE RADAR</a><a class="btn btn-ghost" href="#lab">☣ ENTER ZOMBIE LAB</a></div><section class="field-manual-spotlight" aria-labelledby="field-manual-title"><div class="field-manual-copy"><span class="field-manual-kicker">SURVIVOR INTEL / PRACTICAL GUIDES</span><h2 id="field-manual-title">INTEL &amp; SURVIVAL GUIDES</h2><p>Research Solana tokens, read market signals, protect your wallet and spot common scams. Clear field guides, searchable by topic and date.</p><a class="field-manual-link" href="survivor-field-manual.html">OPEN THE FIELD MANUAL <span aria-hidden="true">↗</span></a></div><div class="field-manual-status"><span class="field-manual-dot"></span><span>FIELD ARCHIVE</span><strong>3 GUIDES AVAILABLE</strong><small>MORE DOSSIERS TO COME</small></div></section>
 
-    <a class="zc-ai-engine-card" href="#community" aria-label="ZombieCash AI engine status">
-      <span class="zc-ai-engine-pulse" aria-hidden="true"></span>
-      <span class="zc-ai-engine-copy"><small>COMMUNITY AI // CURRENT ENGINE</small><strong data-zc-ai-model>CHECKING MODEL…</strong><em data-zc-ai-provider>Connecting to assistant status</em></span>
-      <span class="zc-ai-engine-live" data-zc-ai-mode>SYNCING</span>
-    </a>
-    <div class="hero-stats"><div><strong>24/7</strong><span>LIVE OUTBREAK</span></div><i></i><div><strong>3</strong><span>SOLANA SECTOR</span></div><i></i><div><strong>0</strong><span>JUST THE CREW</span></div></div>
   </div>
 <aside class="zc-hero-sponsor-panel" aria-label="ZombieCash sponsor placement">
     <div class="zc-hero-sponsor">
@@ -1045,6 +1078,14 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
       </div>
     </div>
   </aside>
+  <div class="zc-home-status-rail" aria-label="Community engine and live project stats">
+    <a class="zc-ai-engine-card" href="#community" aria-label="ZombieCash AI engine status">
+      <span class="zc-ai-engine-pulse" aria-hidden="true"></span>
+      <span class="zc-ai-engine-copy"><small>COMMUNITY AI // CURRENT ENGINE</small><strong data-zc-ai-model>CHECKING MODEL…</strong><em data-zc-ai-provider>Connecting to assistant status</em></span>
+      <span class="zc-ai-engine-live" data-zc-ai-mode>SYNCING</span>
+    </a>
+    <div class="hero-stats"><div><strong>24/7</strong><span>LIVE OUTBREAK</span></div><i></i><div><strong>3</strong><span>SOLANA SECTOR</span></div><i></i><div><strong>0</strong><span>JUST THE CREW</span></div></div>
+  </div>
   </div>
   <div class="hero-bottom"><span>SCANNING FOR SIGNS OF LIFE...</span><span>SYS.STATUS: <b>UNDEAD</b></span><span>COORD: 6C-CB-F9</span></div>
 </section>
