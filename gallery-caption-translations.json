@@ -6699,27 +6699,7 @@
     "tr": "🩸 NIGHTMARE DROP Grafikteki mumlar saatler önce soğudu, ama monitörün içinden bir şey hâlâ tırmalıyor.",
     "hi": "🩸 NIGHTMARE DROP चार्ट की कैंडल्स घंटों पहले ठंडी पड़ गईं, लेकिन मॉनिटर के अंदर से अब भी कुछ खरोंच रहा है。"
   },
-  "ZOMBCASH/2226:0": {
-    "ru": "🩸 NIGHTMARE DROP Графики замерли несколько часов назад, но что-то всё ещё скребётся изнутри экрана терминала.",
-    "de": "🩸 NIGHTMARE DROP Die Charts sind vor Stunden auf Nulllinie gefallen, aber etwas kratzt immer noch von innen am Terminalbildschirm.",
-    "fr": "🩸 NIGHTMARE DROP Les graphiques sont à plat depuis des heures, mais quelque chose gratte encore depuis l’intérieur de l’écran du terminal.",
-    "it": "🩸 NIGHTMARE DROP I grafici sono piatti da ore, ma qualcosa continua a graffiare dall’interno dello schermo del terminale.",
-    "ja": "🩸 NIGHTMARE DROP チャートは何時間も前に平坦になった。それでも端末画面の内側から、何かがまだ引っかいている。",
-    "zh-CN": "🩸 NIGHTMARE DROP 图表几小时前就变成了一条直线，但终端屏幕内部仍有东西在抓挠。",
-    "tr": "🩸 NIGHTMARE DROP Grafikler saatler önce düz çizgiye geçti, ama terminal ekranının içinden bir şey hâlâ tırmalıyor.",
-    "hi": "🩸 NIGHTMARE DROP चार्ट घंटों पहले सपाट हो गए, लेकिन टर्मिनल स्क्रीन के अंदर से अब भी कुछ खरोंच रहा है।"
-  },
-  "ZOMBCASH/2213:0": {
-    "ru": "😂 ZOMBIE MEME OF THE HOUR Когда ты покупаешь самый пик прямо перед отключением сети, и твой портфель начинает жаждать мозгов.",
-    "de": "😂 ZOMBIE MEME OF THE HOUR Wenn du direkt vor dem Netzwerkausfall den absoluten Höchststand kaufst und dein Portfolio anfängt, nach Gehirnen zu verlangen.",
-    "fr": "😂 ZOMBIE MEME OF THE HOUR Quand tu achètes le sommet absolu juste avant la panne du réseau et que ton portefeuille commence à réclamer des cerveaux.",
-    "it": "😂 ZOMBIE MEME OF THE HOUR Quando compri il massimo assoluto proprio prima che la rete cada e il tuo portafoglio inizia a desiderare cervelli.",
-    "ja": "😂 ZOMBIE MEME OF THE HOUR ネットワークが落ちる直前に最高値をつかみ、ポートフォリオが脳みそを欲しがり始める。",
-    "zh-CN": "😂 ZOMBIE MEME OF THE HOUR 当你在网络中断前买入绝对顶部，而你的投资组合开始渴望大脑。",
-    "tr": "😂 ZOMBIE MEME OF THE HOUR Ağ kesilmeden hemen önce tam tepeden alım yaparsın ve portföyün beyin istemeye başlar.",
-    "hi": "😂 ZOMBIE MEME OF THE HOUR जब नेटवर्क बंद होने से ठीक पहले तुम सबसे ऊँचे भाव पर खरीदो और तुम्हारा पोर्टफोलियो दिमाग़ माँगने लगे。"
-  },
-  "ZOMBCASH/2205:0": {
+  "ZOMBCASH/2125:0": {
     "ru": "🩸 NIGHTMARE DROP Графики замерли несколько часов назад, но что-то всё ещё скребётся изнутри холодного хранилища.",
     "de": "🩸 NIGHTMARE DROP Die Charts sind vor Stunden auf Nulllinie gefallen, aber etwas kratzt immer noch von innen an der Cold Storage.",
     "fr": "🩸 NIGHTMARE DROP Les graphiques sont à plat depuis des heures, mais quelque chose gratte encore depuis l’intérieur du stockage à froid.",
@@ -6727,79 +6707,99 @@
     "ja": "🩸 NIGHTMARE DROP チャートは何時間も前に平坦になった。それでもコールドストレージの内側から、何かがまだ引っかいている。",
     "zh-CN": "🩸 NIGHTMARE DROP 图表几小时前就变成了一条直线，但冷存储内部仍有东西在抓挠。",
     "tr": "🩸 NIGHTMARE DROP Grafikler saatler önce düz çizgiye geçti, ama soğuk depolamanın içinden bir şey hâlâ tırmalıyor.",
-    "hi": "🩸 NIGHTMARE DROP चार्ट घंटों पहले सपाट हो गए, लेकिन कोल्ड स्टोरेज के अंदर से अब भी कुछ खरोंच रहा है。"
+    "hi": "🩸 NIGHTMARE DROP चार्ट घंटों पहले सपाट हो गए, लेकिन कोल्ड स्टोरेज के अंदर से अब भी कुछ खरोंच रहा है।"
   },
-  "ZOMBCASH/2192:0": {
-    "ru": "😂 ZOMBIE MEME OF THE HOUR Когда твой портфель так жёстко ликвидировали, что ты действительно начинаешь чувствовать голод по мозгам.",
-    "de": "😂 ZOMBIE MEME OF THE HOUR Wenn dein Portfolio so hart liquidiert wurde, dass du tatsächlich anfängst, Gehirne zu wollen.",
-    "fr": "😂 ZOMBIE MEME OF THE HOUR Quand ton portefeuille a été liquidé si violemment que tu commences vraiment à ressentir une faim de cerveaux.",
-    "it": "😂 ZOMBIE MEME OF THE HOUR Quando il tuo portafoglio è stato liquidato così pesantemente che inizi davvero a sentire fame di cervelli.",
-    "ja": "😂 ZOMBIE MEME OF THE HOUR ポートフォリオをあまりに激しく清算され、本当に脳みそが欲しくなってくる。",
-    "zh-CN": "😂 ZOMBIE MEME OF THE HOUR 当你的投资组合被清算得太惨，以至于你真的开始感到渴望大脑。",
-    "tr": "😂 ZOMBIE MEME OF THE HOUR Portföyün o kadar sert tasfiye edildi ki gerçekten beyin açlığı hissetmeye başlıyorsun.",
-    "hi": "😂 ZOMBIE MEME OF THE HOUR जब तुम्हारा पोर्टफोलियो इतनी बुरी तरह लिक्विडेट हुआ कि सचमुच दिमाग़ की भूख लगने लगी।"
+  "ZOMBCASH/2116:0": {
+    "ru": "😂 ZOMBIE MEME OF THE HOUR Когда твой портфель так сильно разнесло просадкой, что ты технически уже подходишь для кастинга в следующий сезон «Ходячих мертвецов».",
+    "de": "😂 ZOMBIE MEME OF THE HOUR Wenn dein Portfolio vom Dip so hart zerlegt wurde, dass du technisch gesehen schon für die nächste Staffel von The Walking Dead qualifiziert bist.",
+    "fr": "😂 ZOMBIE MEME OF THE HOUR Quand la chute a tellement détruit ton portefeuille que tu es techniquement qualifié pour le prochain casting de The Walking Dead.",
+    "it": "😂 ZOMBIE MEME OF THE HOUR Quando il ribasso ha distrutto così tanto il tuo portafoglio che sei tecnicamente qualificato per il prossimo casting di The Walking Dead.",
+    "ja": "😂 ZOMBIE MEME OF THE HOUR 下落でポートフォリオがあまりにボロボロになり、次の『ウォーキング・デッド』の出演資格まで得てしまった。",
+    "zh-CN": "😂 ZOMBIE MEME OF THE HOUR 当你的投资组合被暴跌打击得太惨，以至于你在技术上已经符合下一季《行尸走肉》的选角条件。",
+    "tr": "😂 ZOMBIE MEME OF THE HOUR Düşüş portföyünü o kadar mahvetti ki teknik olarak bir sonraki The Walking Dead seçmelerine katılmaya hak kazandın.",
+    "hi": "😂 ZOMBIE MEME OF THE HOUR जब गिरावट ने तुम्हारे पोर्टफोलियो को इतना तबाह कर दिया कि तकनीकी रूप से तुम The Walking Dead के अगले सीज़न के ऑडिशन के योग्य हो गए।"
   },
-  "ZOMBCASH/2182:0": {
-    "ru": "🩸 NIGHTMARE DROP Пульс портфеля замер несколько часов назад, но что-то тяжёлое всё ещё волочит ноги по коридору.",
-    "de": "🩸 NIGHTMARE DROP Der Puls des Portfolios ist vor Stunden stehen geblieben, aber etwas Schweres schleift immer noch seine Füße den Flur entlang.",
-    "fr": "🩸 NIGHTMARE DROP Le pouls du portefeuille s’est arrêté il y a des heures, mais quelque chose de lourd traîne encore les pieds dans le couloir.",
-    "it": "🩸 NIGHTMARE DROP Il battito del portafoglio si è fermato ore fa, ma qualcosa di pesante continua a trascinare i piedi lungo il corridoio.",
-    "ja": "🩸 NIGHTMARE DROP ポートフォリオの脈拍は何時間も前に止まった。それでも重い何かが廊下を足を引きずりながら進んでいる。",
-    "zh-CN": "🩸 NIGHTMARE DROP 投资组合的脉搏几小时前就停止了，但某个沉重的东西仍在走廊里拖着脚步。",
-    "tr": "🩸 NIGHTMARE DROP Portföyün nabzı saatler önce durdu, ama ağır bir şey hâlâ koridorda ayaklarını sürüklüyor.",
-    "hi": "🩸 NIGHTMARE DROP पोर्टफोलियो की नब्ज़ घंटों पहले रुक गई, लेकिन कोई भारी चीज़ अब भी गलियारे में पैर घसीट रही है।"
+  "ZOMBCASH/2107:0": {
+    "ru": "🩸 NIGHTMARE DROP График замер несколько часов назад, но в темноте что-то всё ещё дышит тебе в затылок.",
+    "de": "🩸 NIGHTMARE DROP Der Chart ist vor Stunden auf eine Nulllinie gefallen, aber in der Dunkelheit atmet dir immer noch etwas in den Nacken.",
+    "fr": "🩸 NIGHTMARE DROP Le graphique est à plat depuis des heures, mais quelque chose respire toujours dans ta nuque, dans l’obscurité.",
+    "it": "🩸 NIGHTMARE DROP Il grafico è piatto da ore, ma nell’oscurità qualcosa continua a respirarti sul collo.",
+    "ja": "🩸 NIGHTMARE DROP チャートは何時間も前に平坦になった。それでも暗闇の中で、何かがまだ首筋に息を吹きかけている。",
+    "zh-CN": "🩸 NIGHTMARE DROP 图表几小时前就变成了一条直线，但黑暗中仍有某种东西在你脖颈后呼吸。",
+    "tr": "🩸 NIGHTMARE DROP Grafik saatler önce düz çizgiye geçti, ama karanlıkta bir şey hâlâ ensene nefes veriyor.",
+    "hi": "🩸 NIGHTMARE DROP चार्ट घंटों पहले सपाट हो गया, लेकिन अँधेरे में अब भी कोई तुम्हारी गर्दन पर साँस ले रहा है।"
   },
-  "ZOMBCASH/2172:0": {
-    "ru": "😂 ZOMBIE MEME OF THE HOUR Когда твой портфель мёртв, но тебе всё равно нужен кофе, прежде чем идти обыскивать холодильник.",
-    "de": "😂 ZOMBIE MEME OF THE HOUR Wenn dein Portfolio tot ist, du aber trotzdem Kaffee brauchst, bevor du den Kühlschrank plünderst.",
-    "fr": "😂 ZOMBIE MEME OF THE HOUR Quand ton portefeuille est mort, mais qu’il te faut quand même du café avant de piller le réfrigérateur.",
-    "it": "😂 ZOMBIE MEME OF THE HOUR Quando il tuo portafoglio è morto, ma ti serve comunque un caffè prima di razziare il frigorifero.",
-    "ja": "😂 ZOMBIE MEME OF THE HOUR ポートフォリオは死んでいる。それでも冷蔵庫を漁る前にはコーヒーが必要だ。",
-    "zh-CN": "😂 ZOMBIE MEME OF THE HOUR 当你的投资组合已经死了，但在搜刮冰箱前你仍然需要咖啡。",
-    "tr": "😂 ZOMBIE MEME OF THE HOUR Portföyün ölü, ama buzdolabını yağmalamadan önce yine de kahveye ihtiyacın var.",
-    "hi": "😂 ZOMBIE MEME OF THE HOUR जब तुम्हारा पोर्टफोलियो मर चुका हो, लेकिन फ़्रिज लूटने से पहले भी तुम्हें कॉफ़ी चाहिए।"
+  "ZOMBCASH/2093:0": {
+    "ru": "😂 ZOMBIE MEME OF THE HOUR Когда твой портфель мёртв уже три недели и внезапно начинает кусать соседей.",
+    "de": "😂 ZOMBIE MEME OF THE HOUR Wenn dein Portfolio seit drei Wochen tot ist und plötzlich anfängt, deine Nachbarn zu beißen.",
+    "fr": "😂 ZOMBIE MEME OF THE HOUR Quand ton portefeuille est mort depuis trois semaines et se met soudain à mordre tes voisins.",
+    "it": "😂 ZOMBIE MEME OF THE HOUR Quando il tuo portafoglio è morto da tre settimane e all’improvviso inizia a mordere i vicini.",
+    "ja": "😂 ZOMBIE MEME OF THE HOUR ポートフォリオは3週間も死んでいたのに、突然近所の人を噛み始める。",
+    "zh-CN": "😂 ZOMBIE MEME OF THE HOUR 当你的投资组合已经死了三周，却突然开始咬邻居。",
+    "tr": "😂 ZOMBIE MEME OF THE HOUR Portföyün üç haftadır ölüdür ve birden komşularını ısırmaya başlar.",
+    "hi": "😂 ZOMBIE MEME OF THE HOUR जब तुम्हारा पोर्टफोलियो तीन हफ़्तों से मरा हुआ हो और अचानक पड़ोसियों को काटने लगे।"
   },
-  "ZOMBCASH/2162:0": {
-    "ru": "🩸 NIGHTMARE DROP Красные свечи продолжали мерцать ещё долго после того, как все остальные перестали кричать.",
-    "de": "🩸 NIGHTMARE DROP Die roten Kerzen flackerten noch lange weiter, nachdem alle anderen aufgehört hatten zu schreien.",
-    "fr": "🩸 NIGHTMARE DROP Les bougies rouges ont continué de vaciller longtemps après que tous les autres ont cessé de crier.",
-    "it": "🩸 NIGHTMARE DROP Le candele rosse hanno continuato a tremolare molto dopo che tutti gli altri avevano smesso di urlare.",
-    "ja": "🩸 NIGHTMARE DROP 他の全員が叫ぶのをやめた後も、赤いローソク足は長い間ちらつき続けていた。",
-    "zh-CN": "🩸 NIGHTMARE DROP 在其他人都停止尖叫很久之后，红色K线仍在闪烁。",
-    "tr": "🩸 NIGHTMARE DROP Herkes çığlık atmayı bıraktıktan çok sonra bile kırmızı mumlar titremeye devam etti.",
-    "hi": "🩸 NIGHTMARE DROP बाकी सभी के चीखना बंद करने के बहुत बाद तक लाल कैंडल्स टिमटिमाती रहीं।"
+  "ZOMBCASH/2079:0": {
+    "ru": "🩸 NIGHTMARE DROP Свечи перестали мигать несколько часов назад, но портфель всё ещё подёргивается в темноте.",
+    "de": "🩸 NIGHTMARE DROP Die Kerzen hörten vor Stunden auf zu blinken, doch das Portfolio zuckt weiterhin in der Dunkelheit.",
+    "fr": "🩸 NIGHTMARE DROP Les bougies ont cessé de clignoter il y a des heures, mais le portefeuille continue de tressaillir dans l’obscurité.",
+    "it": "🩸 NIGHTMARE DROP Le candele hanno smesso di lampeggiare ore fa, ma il portafoglio continua a contrarsi nell’oscurità.",
+    "ja": "🩸 NIGHTMARE DROP ローソク足は何時間も前に点滅を止めた。それでもポートフォリオは暗闇の中で痙攣し続けている。",
+    "zh-CN": "🩸 NIGHTMARE DROP K线几小时前就停止闪烁，但投资组合仍在黑暗中抽搐。",
+    "tr": "🩸 NIGHTMARE DROP Mumlar saatler önce yanıp sönmeyi bıraktı, ama portföy karanlıkta hâlâ seğiriyor.",
+    "hi": "🩸 NIGHTMARE DROP कैंडल्स ने घंटों पहले टिमटिमाना बंद कर दिया, लेकिन पोर्टफोलियो अब भी अँधेरे में फड़क रहा है।"
   },
-  "ZOMBCASH/2150:0": {
-    "ru": "😂 ZOMBIE MEME OF THE HOUR Когда портфель превращается в ровную линию, и зомби наконец чувствуют себя как дома.",
-    "de": "😂 ZOMBIE MEME OF THE HOUR Wenn das Portfolio auf Nulllinie fällt und sich die Zombies endlich wie zu Hause fühlen.",
-    "fr": "😂 ZOMBIE MEME OF THE HOUR Quand le portefeuille devient une ligne plate et que les zombies se sentent enfin chez eux.",
-    "it": "😂 ZOMBIE MEME OF THE HOUR Quando il portafoglio diventa una linea piatta e gli zombie finalmente si sentono a casa.",
-    "ja": "😂 ZOMBIE MEME OF THE HOUR ポートフォリオが平坦な線になり、ゾンビたちがようやく居心地よく感じる。",
-    "zh-CN": "😂 ZOMBIE MEME OF THE HOUR 当投资组合变成一条直线，僵尸们终于有了宾至如归的感觉。",
-    "tr": "😂 ZOMBIE MEME OF THE HOUR Portföy düz çizgiye dönüştüğünde zombiler sonunda kendilerini evlerinde hisseder.",
-    "hi": "😂 ZOMBIE MEME OF THE HOUR जब पोर्टफोलियो सपाट रेखा बन जाए और ज़ॉम्बी आख़िरकार घर जैसा महसूस करें।"
+  "ZOMBCASH/2066:0": {
+    "ru": "😂 ZOMBIE MEME OF THE HOUR Когда проверяешь портфель на медвежьем рынке и понимаешь, что он больше похож на «Ходячих мертвецов», чем на Уолл-стрит.",
+    "de": "😂 ZOMBIE MEME OF THE HOUR Wenn du im Bärenmarkt dein Portfolio prüfst und feststellst, dass es mehr mit The Walking Dead als mit der Wall Street gemeinsam hat.",
+    "fr": "😂 ZOMBIE MEME OF THE HOUR Quand tu vérifies ton portefeuille en marché baissier et réalises qu’il a plus en commun avec The Walking Dead qu’avec Wall Street.",
+    "it": "😂 ZOMBIE MEME OF THE HOUR Quando controlli il portafoglio durante un mercato ribassista e capisci che ha più in comune con The Walking Dead che con Wall Street.",
+    "ja": "😂 ZOMBIE MEME OF THE HOUR 弱気相場でポートフォリオを確認したら、ウォール街より『ウォーキング・デッド』に近いと気づく。",
+    "zh-CN": "😂 ZOMBIE MEME OF THE HOUR 当你在熊市查看投资组合，发现它与其说像华尔街，不如说更像《行尸走肉》。",
+    "tr": "😂 ZOMBIE MEME OF THE HOUR Ayı piyasasında portföyünü kontrol edip Wall Street'ten çok The Walking Dead'e benzediğini fark ettiğinde.",
+    "hi": "😂 ZOMBIE MEME OF THE HOUR जब बेयर मार्केट में पोर्टफोलियो देखते हो और समझते हो कि वह वॉल स्ट्रीट से ज़्यादा The Walking Dead जैसा है।"
   },
-  "ZOMBCASH/2141:0": {
-    "ru": "🩸 NIGHTMARE DROP Свечи перестали подёргиваться несколько часов назад, но терминал в углу продолжает обновляться.",
-    "de": "🩸 NIGHTMARE DROP Die Kerzen zuckten vor Stunden zum letzten Mal, aber das Terminal in der Ecke aktualisiert sich weiter.",
-    "fr": "🩸 NIGHTMARE DROP Les bougies ont cessé de tressaillir il y a des heures, mais le terminal dans le coin continue de s’actualiser.",
-    "it": "🩸 NIGHTMARE DROP Le candele hanno smesso di tremare ore fa, ma il terminale nell’angolo continua ad aggiornarsi.",
-    "ja": "🩸 NIGHTMARE DROP ローソク足は何時間も前に痙攣を止めた。それでも隅の端末は更新を続けている。",
-    "zh-CN": "🩸 NIGHTMARE DROP K线几小时前就停止了抽动，但角落里的终端仍在刷新。",
-    "tr": "🩸 NIGHTMARE DROP Mumlar saatler önce seğirmeyi bıraktı, ama köşedeki terminal yenilenmeye devam ediyor.",
-    "hi": "🩸 NIGHTMARE DROP कैंडल्स ने घंटों पहले फड़कना बंद कर दिया, लेकिन कोने में टर्मिनल अब भी रिफ़्रेश हो रहा है।"
+  "ZOMBCASH/2061:0": {
+    "ru": "🩸 NIGHTMARE DROP Не только портфель гниёт во тьме — шаги в коридоре становятся пугающе близкими.",
+    "de": "🩸 NIGHTMARE DROP Nicht nur das Portfolio verrottet im Dunkeln – die Schritte im Flur kommen beängstigend nahe.",
+    "fr": "🩸 NIGHTMARE DROP Le portefeuille n’est pas la seule chose qui pourrit dans l’obscurité, et les pas dans le couloir se rapprochent dangereusement.",
+    "it": "🩸 NIGHTMARE DROP Il portafoglio non è l’unica cosa che marcisce nell’oscurità, e alcuni passi nel corridoio si stanno avvicinando pericolosamente.",
+    "ja": "🩸 NIGHTMARE DROP 暗闇で腐っているのはポートフォリオだけではない。廊下の足音が、あまりにも近づいてきている。",
+    "zh-CN": "🩸 NIGHTMARE DROP 在黑暗中腐烂的不只是投资组合，走廊里的脚步声正变得过于接近。",
+    "tr": "🩸 NIGHTMARE DROP Karanlıkta çürüyen tek şey portföy değil; koridordaki ayak sesleri fazlasıyla yaklaşıyor.",
+    "hi": "🩸 NIGHTMARE DROP अँधेरे में सिर्फ़ पोर्टफोलियो ही नहीं सड़ रहा, गलियारे में कदमों की आवाज़ ख़तरनाक रूप से करीब आ रही है।"
   },
-  "ZOMBCASH/2136:0": {
-    "ru": "😂 ZOMBIE MEME OF THE HOUR Мой портфель — это группа поддержки цифровых призраков, но хотя бы мой криптозапас научился есть мозги.",
-    "de": "😂 ZOMBIE MEME OF THE HOUR Mein Portfolio ist eine Selbsthilfegruppe für digitale Geister, aber wenigstens hat mein Kryptovorrat gelernt, Gehirne zu essen.",
-    "fr": "😂 ZOMBIE MEME OF THE HOUR Mon portefeuille est un groupe de soutien pour fantômes numériques, mais au moins mon stock crypto a appris à manger des cerveaux.",
-    "it": "😂 ZOMBIE MEME OF THE HOUR Il mio portafoglio è un gruppo di supporto per fantasmi digitali, ma almeno la mia scorta crypto ha imparato a mangiare cervelli.",
-    "ja": "😂 ZOMBIE MEME OF THE HOUR 私のポートフォリオはデジタル幽霊の支援グループ。でも少なくとも、私の暗号資産の備蓄は脳みその食べ方を覚えた。",
-    "zh-CN": "😂 ZOMBIE MEME OF THE HOUR 我的投资组合就是数字幽灵互助小组，但至少我的加密资产储备学会了吃大脑。",
-    "tr": "😂 ZOMBIE MEME OF THE HOUR Portföyüm dijital hayaletler için bir destek grubu, ama en azından kripto stoğum beyin yemeyi öğrendi.",
-    "hi": "😂 ZOMBIE MEME OF THE HOUR मेरा पोर्टफोलियो डिजिटल भूतों का सहायता समूह है, लेकिन कम से कम मेरे क्रिप्टो भंडार ने दिमाग़ खाना सीख लिया है।"
+  "ZOMBCASH/2055:0": {
+    "ru": "😂 ZOMBIE MEME OF THE HOUR Когда твой портфель технически мёртв, но тебе всё ещё нужен кофе, чтобы проверить графики.",
+    "de": "😂 ZOMBIE MEME OF THE HOUR Wenn dein Portfolio technisch tot ist, du aber trotzdem Kaffee brauchst, um die Charts zu prüfen.",
+    "fr": "😂 ZOMBIE MEME OF THE HOUR Quand ton portefeuille est techniquement mort, mais qu’il te faut encore du café pour consulter les graphiques.",
+    "it": "😂 ZOMBIE MEME OF THE HOUR Quando il tuo portafoglio è tecnicamente morto, ma ti serve ancora il caffè per controllare i grafici.",
+    "ja": "😂 ZOMBIE MEME OF THE HOUR ポートフォリオは技術的には死んでいる。それでもチャートを確認するにはコーヒーが必要だ。",
+    "zh-CN": "😂 ZOMBIE MEME OF THE HOUR 当你的投资组合从技术上来说已经死了，但你仍需要咖啡来查看图表。",
+    "tr": "😂 ZOMBIE MEME OF THE HOUR Portföyün teknik olarak ölü, ama grafikleri kontrol etmek için hâlâ kahveye ihtiyacın var.",
+    "hi": "😂 ZOMBIE MEME OF THE HOUR जब तुम्हारा पोर्टफोलियो तकनीकी रूप से मर चुका हो, लेकिन चार्ट देखने के लिए अब भी कॉफ़ी चाहिए।"
   },
-  "ZOMBCASH/2135:0": {
+  "ZOMBCASH/2050:0": {
+    "ru": "🩸 NIGHTMARE DROP Графики замерли несколько часов назад, но что-то всё ещё скребётся в монитор изнутри.",
+    "de": "🩸 NIGHTMARE DROP Die Charts sind vor Stunden auf Nulllinie gefallen, aber etwas kratzt immer noch von innen am Monitor.",
+    "fr": "🩸 NIGHTMARE DROP Les graphiques sont à plat depuis des heures, mais quelque chose gratte encore le moniteur de l’intérieur.",
+    "it": "🩸 NIGHTMARE DROP I grafici sono piatti da ore, ma qualcosa continua a graffiare il monitor dall’interno.",
+    "ja": "🩸 NIGHTMARE DROP チャートは何時間も前に平坦になった。それでもモニターの内側から、何かがまだ引っかいている。",
+    "zh-CN": "🩸 NIGHTMARE DROP 图表几小时前就变成了一条直线，但显示器内部仍有东西在抓挠。",
+    "tr": "🩸 NIGHTMARE DROP Grafikler saatler önce düz çizgiye geçti, ama monitörün içinden bir şey hâlâ tırmalıyor.",
+    "hi": "🩸 NIGHTMARE DROP चार्ट घंटों पहले सपाट हो गए, लेकिन मॉनिटर के अंदर से अब भी कुछ खरोंच रहा है।"
+  },
+  "ZOMBCASH/2039:0": {
+    "ru": "😂 ZOMBIE MEME OF THE HOUR Когда портфель падает так сильно, что вместо зелёных свечей начинаешь жаждать мозгов.",
+    "de": "😂 ZOMBIE MEME OF THE HOUR Wenn das Portfolio so stark fällt, dass du statt grüner Kerzen anfängst, nach Gehirnen zu verlangen.",
+    "fr": "😂 ZOMBIE MEME OF THE HOUR Quand le portefeuille chute si fort que tu commences à réclamer des cerveaux plutôt que des bougies vertes.",
+    "it": "😂 ZOMBIE MEME OF THE HOUR Quando il portafoglio crolla così tanto che inizi a desiderare cervelli invece di candele verdi.",
+    "ja": "😂 ZOMBIE MEME OF THE HOUR ポートフォリオがあまりに下落して、緑のローソク足より脳みそを欲しがり始める。",
+    "zh-CN": "😂 ZOMBIE MEME OF THE HOUR 当投资组合跌得太惨，以至于你开始渴望大脑而不是绿色K线。",
+    "tr": "😂 ZOMBIE MEME OF THE HOUR Portföy o kadar sert düşer ki yeşil mumlar yerine beyin istemeye başlarsın.",
+    "hi": "😂 ZOMBIE MEME OF THE HOUR जब पोर्टफोलियो इतना गिर जाए कि हरी कैंडल्स की जगह दिमाग़ माँगने लगे।"
+  },
+  "ZOMBCASH/2033:0": {
     "ru": "🩸 NIGHTMARE DROP График замер несколько часов назад, но в темноте всё ещё что-то дышит.",
     "de": "🩸 NIGHTMARE DROP Der Chart ist vor Stunden auf eine Nulllinie gefallen, aber in der Dunkelheit atmet noch immer etwas.",
     "fr": "🩸 NIGHTMARE DROP Le graphique est à plat depuis des heures, mais quelque chose respire encore dans l’obscurité.",
@@ -6809,14 +6809,14 @@
     "tr": "🩸 NIGHTMARE DROP Grafik saatler önce düz çizgiye geçti, ama karanlıkta bir şey hâlâ nefes alıyor.",
     "hi": "🩸 NIGHTMARE DROP चार्ट घंटों पहले सपाट हो गया, लेकिन अँधेरे में अब भी कुछ साँस ले रहा है।"
   },
-  "ZOMBCASH/2130:0": {
-    "ru": "😂 ZOMBIE MEME OF THE HOUR Мой портфель на 90% состоит из пыли и на 10% — из чистой зомби-решимости, и, честно говоря, сегодня пыль выглядит лучшим трейдером.",
-    "de": "😂 ZOMBIE MEME OF THE HOUR Mein Portfolio besteht zu 90 % aus Staub und zu 10 % aus purer Zombie-Entschlossenheit, und ehrlich gesagt sieht der Staub heute wie der bessere Trader aus.",
-    "fr": "😂 ZOMBIE MEME OF THE HOUR Mon portefeuille est composé à 90 % de poussière et à 10 % de pure détermination zombie, et honnêtement, aujourd’hui la poussière semble être le meilleur trader.",
-    "it": "😂 ZOMBIE MEME OF THE HOUR Il mio portafoglio è composto per il 90% da polvere e per il 10% da pura determinazione zombie e, sinceramente, oggi la polvere sembra il trader migliore.",
-    "ja": "😂 ZOMBIE MEME OF THE HOUR 私のポートフォリオは90％がほこり、10％が純粋なゾンビ根性。正直、今日はほこりのほうが優秀なトレーダーに見える。",
-    "zh-CN": "😂 ZOMBIE MEME OF THE HOUR 我的投资组合由90%的灰尘和10%的纯粹僵尸意志组成，说实话，今天灰尘看起来才是更好的交易员。",
-    "tr": "😂 ZOMBIE MEME OF THE HOUR Portföyüm yüzde 90 toz ve yüzde 10 saf zombi kararlılığından oluşuyor; açıkçası bugün toz daha iyi bir trader gibi görünüyor.",
-    "hi": "😂 ZOMBIE MEME OF THE HOUR मेरा पोर्टफोलियो 90% धूल और 10% शुद्ध ज़ॉम्बी दृढ़ता से बना है, और सच कहूँ तो आज धूल बेहतर ट्रेडर लग रही है।"
+  "ZOMBCASH/2026:0": {
+    "ru": "😂 ZOMBIE MEME OF THE HOUR Когда портфель полностью мёртв, но тебе всё равно нужно найти свой кофе.",
+    "de": "😂 ZOMBIE MEME OF THE HOUR Wenn dein Portfolio völlig tot ist, du aber trotzdem deinen Kaffee finden musst.",
+    "fr": "😂 ZOMBIE MEME OF THE HOUR Quand ton portefeuille est complètement mort, mais que tu dois quand même retrouver ton café.",
+    "it": "😂 ZOMBIE MEME OF THE HOUR Quando il tuo portafoglio è completamente morto, ma devi comunque trovare il tuo caffè.",
+    "ja": "😂 ZOMBIE MEME OF THE HOUR ポートフォリオは完全に死んでいる。それでもコーヒーを探さなければならない。",
+    "zh-CN": "😂 ZOMBIE MEME OF THE HOUR 当你的投资组合已经彻底死亡，但你仍然得找到咖啡。",
+    "tr": "😂 ZOMBIE MEME OF THE HOUR Portföyün tamamen ölü, ama yine de kahveni bulman gerekiyor.",
+    "hi": "😂 ZOMBIE MEME OF THE HOUR जब तुम्हारा पोर्टफोलियो पूरी तरह मर चुका हो, लेकिन फिर भी तुम्हें अपनी कॉफ़ी ढूँढ़नी हो。"
   }
 }
