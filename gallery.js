@@ -17,15 +17,15 @@
     hi:{images:"इमेज",updated:"अपडेट",offline:"आर्काइव ऑफ़लाइन",none:"अभी कोई इमेज नहीं",noneMsg:"Telegram आर्काइव ने अभी तक कोई इमेज सिंक नहीं की है।",error:"इमेज लोड नहीं हो सकीं",errorMsg:"गैलरी डेटा अनुरोध विफल हुआ या समय समाप्त हो गया। पेज रीफ़्रेश करें या Telegram चैनल सीधे खोलें।",close:"बंद करें",closeAria:"फ़ुल-स्क्रीन छवि बंद करें",source:"स्रोत ↗",open:"@ZOMBCASH खोलें ↗"}
   };
   const galleryShareLabels = {
-    en:{share:"SHARE",copied:"LINK COPIED",unavailable:"SHARING UNAVAILABLE",error:"SHARE FAILED"},
-    ru:{share:"ПОДЕЛИТЬСЯ",copied:"ССЫЛКА СКОПИРОВАНА",unavailable:"ОТПРАВКА НЕДОСТУПНА",error:"НЕ УДАЛОСЬ ПОДЕЛИТЬСЯ"},
-    de:{share:"TEILEN",copied:"LINK KOPIERT",unavailable:"TEILEN NICHT VERFÜGBAR",error:"TEILEN FEHLGESCHLAGEN"},
-    fr:{share:"PARTAGER",copied:"LIEN COPIÉ",unavailable:"PARTAGE INDISPONIBLE",error:"ÉCHEC DU PARTAGE"},
-    it:{share:"CONDIVIDI",copied:"LINK COPIATO",unavailable:"CONDIVISIONE NON DISPONIBILE",error:"CONDIVISIONE NON RIUSCITA"},
-    ja:{share:"共有",copied:"リンクをコピーしました",unavailable:"共有できません",error:"共有に失敗しました"},
-    "zh-CN":{share:"分享",copied:"链接已复制",unavailable:"暂无法分享",error:"分享失败"},
-    tr:{share:"PAYLAŞ",copied:"BAĞLANTI KOPYALANDI",unavailable:"PAYLAŞIM KULLANILAMIYOR",error:"PAYLAŞIM BAŞARISIZ"},
-    hi:{share:"साझा करें",copied:"लिंक कॉपी हुआ",unavailable:"साझा करना उपलब्ध नहीं",error:"साझा नहीं हो सका"}
+    en:{share:"SHARE",copied:"LINK COPIED",shared:"SHARE COMPLETED",cancelled:"SHARE CANCELLED",unavailable:"SHARING UNAVAILABLE",error:"SHARE FAILED"},
+    ru:{share:"ПОДЕЛИТЬСЯ",copied:"ССЫЛКА СКОПИРОВАНА",shared:"ОТПРАВКА ЗАВЕРШЕНА",cancelled:"ОТПРАВКА ОТМЕНЕНА",unavailable:"ОТПРАВКА НЕДОСТУПНА",error:"НЕ УДАЛОСЬ ПОДЕЛИТЬСЯ"},
+    de:{share:"TEILEN",copied:"LINK KOPIERT",shared:"TEILEN ABGESCHLOSSEN",cancelled:"TEILEN ABGEBROCHEN",unavailable:"TEILEN NICHT VERFÜGBAR",error:"TEILEN FEHLGESCHLAGEN"},
+    fr:{share:"PARTAGER",copied:"LIEN COPIÉ",shared:"PARTAGE TERMINÉ",cancelled:"PARTAGE ANNULÉ",unavailable:"PARTAGE INDISPONIBLE",error:"ÉCHEC DU PARTAGE"},
+    it:{share:"CONDIVIDI",copied:"LINK COPIATO",shared:"CONDIVISIONE COMPLETATA",cancelled:"CONDIVISIONE ANNULLATA",unavailable:"CONDIVISIONE NON DISPONIBILE",error:"CONDIVISIONE NON RIUSCITA"},
+    ja:{share:"共有",copied:"リンクをコピーしました",shared:"共有を完了しました",cancelled:"共有をキャンセルしました",unavailable:"共有できません",error:"共有に失敗しました"},
+    "zh-CN":{share:"分享",copied:"链接已复制",shared:"分享已完成",cancelled:"已取消分享",unavailable:"暂无法分享",error:"分享失败"},
+    tr:{share:"PAYLAŞ",copied:"BAĞLANTI KOPYALANDI",shared:"PAYLAŞIM TAMAMLANDI",cancelled:"PAYLAŞIM İPTAL EDİLDİ",unavailable:"PAYLAŞIM KULLANILAMIYOR",error:"PAYLAŞIM BAŞARISIZ"},
+    hi:{share:"साझा करें",copied:"लिंक कॉपी हुआ",shared:"शेयर पूरा हुआ",cancelled:"शेयर रद्द हुआ",unavailable:"साझा करना उपलब्ध नहीं",error:"साझा नहीं हो सका"}
   };
   let galleryLang=document.documentElement.lang||"en";
   let refreshGalleryControls = () => {};
@@ -161,6 +161,7 @@
       '<span class="gallery-lightbox-actions">' +
       '<button class="gallery-lightbox-like" type="button" aria-pressed="false"></button>' +
       '<button class="gallery-lightbox-share" type="button" aria-label="' + escapeHtml(shareLabels.share) + '">' + escapeHtml(shareLabels.share) + '</button>' +
+      '<span class="gallery-share-status" role="status" aria-live="polite"></span>' +
       '</span>' +
       '<a class="gallery-lightbox-source" href="' + escapeHtml(sourceUrl) + '" target="_blank" rel="noreferrer">' + escapeHtml(gtx("source")) + '</a>';
     syncLightboxLikeButton();
@@ -193,23 +194,62 @@
       const card = cards[activeIndex];
       if (!card) return;
       const labels = galleryShareLabels[galleryLang] || galleryShareLabels.en;
+      const status = lightbox.querySelector(".gallery-share-status");
       const shareUrl = new URL("/gallery.html", window.location.origin);
       shareUrl.hash = card.id || "";
       const shareTitle = card.dataset.galleryTitle || "ZombieCash Gallery";
       const shareText = card.dataset.galleryDescription || shareTitle;
+      const setShareResult = (message, state) => {
+        if (status) {
+          status.textContent = message;
+          status.dataset.state = state;
+        }
+        shareButton.textContent = message;
+        shareButton.dataset.state = state;
+        shareButton.setAttribute("aria-label", message);
+      };
+      shareButton.disabled = true;
+      shareButton.setAttribute("aria-busy", "true");
+      if (status) { status.textContent = ""; status.dataset.state = ""; }
       try {
-        if (navigator.share) {
+        if (typeof navigator.share === "function") {
           await navigator.share({ title: shareTitle, text: shareText, url: shareUrl.href });
-        } else if (navigator.clipboard?.writeText) {
-          await navigator.clipboard.writeText(shareUrl.href);
-          shareButton.textContent = labels.copied;
+          setShareResult(labels.shared || labels.copied, "success");
         } else {
-          shareButton.title = labels.unavailable;
-          return;
+          let copied = false;
+          if (navigator.clipboard?.writeText) {
+            try {
+              await navigator.clipboard.writeText(shareUrl.href);
+              copied = true;
+            } catch (_) {}
+          }
+          if (!copied) {
+            const fallback = document.createElement("textarea");
+            fallback.value = shareUrl.href;
+            fallback.setAttribute("readonly", "");
+            fallback.style.position = "fixed";
+            fallback.style.opacity = "0";
+            fallback.style.pointerEvents = "none";
+            document.body.appendChild(fallback);
+            fallback.select();
+            fallback.setSelectionRange(0, fallback.value.length);
+            try { copied = document.execCommand("copy"); } catch (_) { copied = false; }
+            fallback.remove();
+          }
+          if (!copied) throw new Error("Clipboard access was denied");
+          setShareResult(labels.copied, "success");
         }
         trackGalleryEvent("gallery_share", "image_" + String(card.dataset.galleryId || "").replace(/[^0-9]/g, "_"));
       } catch (error) {
-        if (error?.name !== "AbortError") shareButton.title = labels.error;
+        if (error?.name === "AbortError") {
+          setShareResult(labels.cancelled || labels.share, "cancelled");
+        } else {
+          setShareResult(labels.error, "error");
+          if (status) status.title = String(error?.message || error);
+        }
+      } finally {
+        shareButton.disabled = false;
+        shareButton.removeAttribute("aria-busy");
       }
       return;
     }

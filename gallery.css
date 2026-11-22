@@ -222,3 +222,11 @@ body.gallery-lightbox-open{overflow:hidden}
 .gallery-pagination button:disabled{opacity:.35;cursor:not-allowed}
 .gallery-page-status{color:#91a894;font:600 9px Orbitron,sans-serif;letter-spacing:.8px}
 @media(max-width:720px){.gallery-pagination{gap:7px;padding:10px 6px}.gallery-pagination button{flex:1 1 42%;padding:9px 6px;font-size:8px}.gallery-page-status{flex:1 1 100%;order:-1;text-align:center}}
+
+
+/* Persistent, readable feedback for gallery sharing. */
+.gallery-share-status{display:block;flex-basis:100%;min-height:1.2em;margin-top:3px;color:#b8f992;font:700 10px Orbitron,sans-serif;letter-spacing:.35px;text-align:center}
+.gallery-share-status[data-state="error"],.gallery-share-status[data-state="cancelled"]{color:#e8b36b}
+.gallery-lightbox-share[data-state="success"]{border-color:#9bff45!important;color:#cfffad!important}
+.gallery-lightbox-share[data-state="error"],.gallery-lightbox-share[data-state="cancelled"]{border-color:#b87942!important;color:#ffd09b!important}
+.gallery-lightbox-share:disabled{opacity:.65;cursor:wait}
