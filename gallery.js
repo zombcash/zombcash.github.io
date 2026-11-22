@@ -161,9 +161,9 @@
       '<span class="gallery-lightbox-actions">' +
       '<button class="gallery-lightbox-like" type="button" aria-pressed="false"></button>' +
       '<button class="gallery-lightbox-share" type="button" aria-label="' + escapeHtml(shareLabels.share) + '">' + escapeHtml(shareLabels.share) + '</button>' +
+      '<a class="gallery-lightbox-source gallery-lightbox-action" href="' + escapeHtml(sourceUrl) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(gtx("source")) + '</a>' +
       '<span class="gallery-share-status" role="status" aria-live="polite"></span>' +
-      '</span>' +
-      '<a class="gallery-lightbox-source" href="' + escapeHtml(sourceUrl) + '" target="_blank" rel="noreferrer">' + escapeHtml(gtx("source")) + '</a>';
+      '</span>';
     syncLightboxLikeButton();
     lightbox.classList.add("is-open");
     document.body.classList.add("gallery-lightbox-open");
