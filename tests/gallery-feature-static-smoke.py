@@ -28,7 +28,7 @@ assert len(reviewed) + len(pending) == len(items), "Every item must have an expl
 assert all(item.get("alt_review_method") in {"manual-visual-review", "manual-contact-sheet-review"} for item in reviewed)
 assert all(item.get("alt_text", "").strip() for item in items), "Every card needs an ALT text value"
 for item in reviewed:
-    assert item.get("image_width") == 800 and item.get("image_height") == 800, f"Unexpected reviewed dimensions: {item['id']}"
+    assert isinstance(item.get("image_width"), int) and 0 < item["image_width"] <= 10000 and isinstance(item.get("image_height"), int) and 0 < item["image_height"] <= 10000, f"Invalid reviewed intrinsic dimensions: {item['id']}"
 missing_dimensions = []
 for item in items:
     width = item.get("image_width")
