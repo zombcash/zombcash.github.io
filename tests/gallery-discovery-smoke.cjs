@@ -388,6 +388,11 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     if (turkishSearchCount !== Math.min(150, turkishExpected)) {
       throw new Error("Search query was not re-normalized after switching to Turkish: expected " + Math.min(150, turkishExpected) + ", got " + turkishSearchCount);
     }
+    const turkishCountLabel = await page.locator("#gallery-count").textContent();
+    const turkishUpdatedLabel = await page.locator("#gallery-updated").textContent();
+    if (!turkishCountLabel.includes("GÖRSEL") || !turkishUpdatedLabel.startsWith("GÜNCELLENDİ")) {
+      throw new Error("Gallery count and update metadata must switch to Turkish with the controls");
+    }
     await page.locator(".gallery-reset").click();
     await page.evaluate(() => {
       document.documentElement.lang = "ja";
@@ -395,6 +400,11 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     });
     const japaneseFilter = await page.getByRole("button", { name: "悪夢とホラー" }).count();
     if (japaneseFilter !== 1) throw new Error("Japanese category label did not render");
+    const japaneseCountLabel = await page.locator("#gallery-count").textContent();
+    const japaneseUpdatedLabel = await page.locator("#gallery-updated").textContent();
+    if (!japaneseCountLabel.includes("枚") || !japaneseUpdatedLabel.startsWith("更新")) {
+      throw new Error("Gallery count and update metadata must switch to Japanese with the controls");
+    }
     const mobile = await browser.newPage({ viewport: { width: 375, height: 812 }, deviceScaleFactor: 1 });
     await mobile.route("https://**/*", route => route.abort());
     await mobile.route("https://cdn4.telesco.pe/file/**", route => route.continue());
