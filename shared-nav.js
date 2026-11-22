@@ -1806,6 +1806,15 @@
       });
     }, { passive: true });
   }
+  // Load the shared Phantom donation flow on every public page.
+  if (!window.__zcWalletScriptRequested) {
+    window.__zcWalletScriptRequested = true;
+    const walletScript = document.createElement('script');
+    walletScript.src = '/site-wallet.js?v=donation-phantom-v1';
+    walletScript.defer = true;
+    document.head.appendChild(walletScript);
+  }
+
 
 })();
 
