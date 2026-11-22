@@ -277,10 +277,10 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     const sourceLabel = (await page.locator(".gallery-lightbox-source").textContent()).trim();
     if (sourceLabel.endsWith("↗ ↗")) throw new Error("Lightbox source link must not repeat its arrow");
     await page.evaluate(() => {
-      window.__sharedPayload = null;
-      Object.defineProperty(navigator, "share", {
+      window.__copiedShareUrl = null;
+      Object.defineProperty(navigator, "clipboard", {
         configurable: true,
-        value: async payload => { window.__sharedPayload = payload; }
+        value: { writeText: async url => { window.__copiedShareUrl = url; } }
       });
     });
     const imageOnlyButton = page.locator(".gallery-lightbox-image-only");
@@ -318,10 +318,18 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     if (!await page.locator(".gallery-lightbox figcaption").isVisible()) throw new Error("Escape should return to the detail view, not close the gallery");
     await page.screenshot({ path: "gallery-lightbox-smoke.png" });
     await page.locator(".gallery-lightbox-share").click();
-    await page.waitForFunction(() => Boolean(window.__sharedPayload));
-    const sharedPayload = await page.evaluate(() => window.__sharedPayload);
-    if (!sharedPayload.url.includes("#gallery-image-")) throw new Error("Gallery share URL must use the stable image anchor");
-    await page.waitForFunction(() => window.__galleryEvents.some(item => item.event === "gallery_share"));
+    await page.waitForFunction(() => {
+      const menu = document.querySelector(".gallery-share-menu");
+      return Boolean(menu && !menu.hidden && menu.querySelector(".gallery-share-copy"));
+    });
+    const shareUrl = await page.locator(".gallery-share-copy").getAttribute("data-share-url");
+    if (!shareUrl || !shareUrl.includes("#gallery-image-")) throw new Error("Gallery share URL must use the stable image anchor");
+    if (await page.locator(".gallery-share-option").count() !== 6) throw new Error("Gallery share menu must expose all six supported destinations");
+    await page.locator(".gallery-share-copy").click();
+    await page.waitForFunction(expected => window.__copiedShareUrl === expected, shareUrl);
+    await page.waitForFunction(() => document.querySelector(".gallery-share-status")?.dataset.state === "success");
+    await page.waitForFunction(() => window.__galleryEvents.some(item => item.event === "gallery_share_menu_open"));
+    await page.locator(".gallery-share-close").click();
     await page.locator(".gallery-lightbox-close").click();
     await page.getByRole("button", { name: "Nightmare & Horror" }).click();
     const filterTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_filter"));
