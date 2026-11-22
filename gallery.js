@@ -17,15 +17,15 @@
     hi:{images:"इमेज",updated:"अपडेट",offline:"आर्काइव ऑफ़लाइन",none:"अभी कोई इमेज नहीं",noneMsg:"Telegram आर्काइव ने अभी तक कोई इमेज सिंक नहीं की है।",error:"इमेज लोड नहीं हो सकीं",errorMsg:"गैलरी डेटा अनुरोध विफल हुआ या समय समाप्त हो गया। पेज रीफ़्रेश करें या Telegram चैनल सीधे खोलें।",close:"बंद करें",closeAria:"फ़ुल-स्क्रीन छवि बंद करें",source:"स्रोत ↗",open:"@ZOMBCASH खोलें ↗"}
   };
   const galleryShareLabels = {
-    en:{share:"SHARE",copied:"LINK COPIED",shared:"SHARE COMPLETED",cancelled:"SHARE CANCELLED",unavailable:"SHARING UNAVAILABLE",error:"SHARE FAILED",title:"SHARE THIS IMAGE",hint:"Choose where to share this ZombieCash artwork.",copy:"COPY IMAGE LINK",close:"CLOSE"},
-    ru:{share:"ПОДЕЛИТЬСЯ",copied:"ССЫЛКА СКОПИРОВАНА",shared:"ОТПРАВКА ЗАВЕРШЕНА",cancelled:"ОТПРАВКА ОТМЕНЕНА",unavailable:"ОТПРАВКА НЕДОСТУПНА",error:"НЕ УДАЛОСЬ ПОДЕЛИТЬСЯ",title:"ПОДЕЛИТЬСЯ ИЗОБРАЖЕНИЕМ",hint:"Выберите площадку для публикации арта ZombieCash.",copy:"КОПИРОВАТЬ ССЫЛКУ",close:"ЗАКРЫТЬ"},
-    de:{share:"TEILEN",copied:"LINK KOPIERT",shared:"TEILEN ABGESCHLOSSEN",cancelled:"TEILEN ABGEBROCHEN",unavailable:"TEILEN NICHT VERFÜGBAR",error:"TEILEN FEHLGESCHLAGEN",title:"DIESES BILD TEILEN",hint:"Wähle eine Plattform für dieses ZombieCash-Motiv.",copy:"BILDLINK KOPIEREN",close:"SCHLIESSEN"},
-    fr:{share:"PARTAGER",copied:"LIEN COPIÉ",shared:"PARTAGE TERMINÉ",cancelled:"PARTAGE ANNULÉ",unavailable:"PARTAGE INDISPONIBLE",error:"ÉCHEC DU PARTAGE",title:"PARTAGER CETTE IMAGE",hint:"Choisissez où partager cette création ZombieCash.",copy:"COPIER LE LIEN",close:"FERMER"},
-    it:{share:"CONDIVIDI",copied:"LINK COPIATO",shared:"CONDIVISIONE COMPLETATA",cancelled:"CONDIVISIONE ANNULLATA",unavailable:"CONDIVISIONE NON DISPONIBILE",error:"CONDIVISIONE NON RIUSCITA",title:"CONDIVIDI QUESTA IMMAGINE",hint:"Scegli dove condividere questa creazione ZombieCash.",copy:"COPIA IL LINK",close:"CHIUDI"},
-    ja:{share:"共有",copied:"リンクをコピーしました",shared:"共有を完了しました",cancelled:"共有をキャンセルしました",unavailable:"共有できません",error:"共有に失敗しました",title:"この画像を共有",hint:"ZombieCashのアートを共有する場所を選択してください。",copy:"画像リンクをコピー",close:"閉じる"},
-    "zh-CN":{share:"分享",copied:"链接已复制",shared:"分享已完成",cancelled:"已取消分享",unavailable:"暂无法分享",error:"分享失败",title:"分享这张图片",hint:"选择分享这幅 ZombieCash 作品的平台。",copy:"复制图片链接",close:"关闭"},
-    tr:{share:"PAYLAŞ",copied:"BAĞLANTI KOPYALANDI",shared:"PAYLAŞIM TAMAMLANDI",cancelled:"PAYLAŞIM İPTAL EDİLDİ",unavailable:"PAYLAŞIM KULLANILAMIYOR",error:"PAYLAŞIM BAŞARISIZ",title:"BU GÖRSELİ PAYLAŞ",hint:"ZombieCash çalışmasını paylaşacağın platformu seç.",copy:"GÖRSEL LİNKİNİ KOPYALA",close:"KAPAT"},
-    hi:{share:"साझा करें",copied:"लिंक कॉपी हुआ",shared:"शेयर पूरा हुआ",cancelled:"शेयर रद्द हुआ",unavailable:"साझा करना उपलब्ध नहीं",error:"साझा नहीं हो सका",title:"यह इमेज शेयर करें",hint:"ZombieCash आर्टवर्क साझा करने के लिए प्लेटफ़ॉर्म चुनें।",copy:"इमेज लिंक कॉपी करें",close:"बंद करें"}
+    en:{share:"SHARE",copied:"LINK COPIED",shared:"SHARE COMPLETED",cancelled:"SHARE CANCELLED",unavailable:"SHARING UNAVAILABLE",error:"SHARE FAILED",postText:"Discover this ZombieCash artwork in the outbreak gallery! Join the survivors. $ZOMBCASH",postTitle:"ZombieCash Gallery — Featured Artwork",title:"SHARE THIS IMAGE",hint:"Choose where to share this ZombieCash artwork.",copy:"COPY IMAGE LINK",close:"CLOSE"},
+    ru:{share:"ПОДЕЛИТЬСЯ",copied:"ССЫЛКА СКОПИРОВАНА",shared:"ОТПРАВКА ЗАВЕРШЕНА",cancelled:"ОТПРАВКА ОТМЕНЕНА",unavailable:"ОТПРАВКА НЕДОСТУПНА",error:"НЕ УДАЛОСЬ ПОДЕЛИТЬСЯ",postText:"Посмотрите эту работу в галерее ZombieCash! Присоединяйтесь к выжившим. $ZOMBCASH",postTitle:"Галерея ZombieCash — избранная работа",title:"ПОДЕЛИТЬСЯ ИЗОБРАЖЕНИЕМ",hint:"Выберите площадку для публикации арта ZombieCash.",copy:"КОПИРОВАТЬ ССЫЛКУ",close:"ЗАКРЫТЬ"},
+    de:{share:"TEILEN",copied:"LINK KOPIERT",shared:"TEILEN ABGESCHLOSSEN",cancelled:"TEILEN ABGEBROCHEN",unavailable:"TEILEN NICHT VERFÜGBAR",error:"TEILEN FEHLGESCHLAGEN",postText:"Entdecke dieses ZombieCash-Kunstwerk in der Outbreak-Galerie! Schließe dich den Überlebenden an. $ZOMBCASH",postTitle:"ZombieCash-Galerie — ausgewähltes Artwork",title:"DIESES BILD TEILEN",hint:"Wähle eine Plattform für dieses ZombieCash-Motiv.",copy:"BILDLINK KOPIEREN",close:"SCHLIESSEN"},
+    fr:{share:"PARTAGER",copied:"LIEN COPIÉ",shared:"PARTAGE TERMINÉ",cancelled:"PARTAGE ANNULÉ",unavailable:"PARTAGE INDISPONIBLE",error:"ÉCHEC DU PARTAGE",postText:"Découvrez cette création ZombieCash dans la galerie de l’épidémie ! Rejoignez les survivants. $ZOMBCASH",postTitle:"Galerie ZombieCash — création à découvrir",title:"PARTAGER CETTE IMAGE",hint:"Choisissez où partager cette création ZombieCash.",copy:"COPIER LE LIEN",close:"FERMER"},
+    it:{share:"CONDIVIDI",copied:"LINK COPIATO",shared:"CONDIVISIONE COMPLETATA",cancelled:"CONDIVISIONE ANNULLATA",unavailable:"CONDIVISIONE NON DISPONIBILE",error:"CONDIVISIONE NON RIUSCITA",postText:"Scopri questa creazione ZombieCash nella galleria dell’epidemia! Unisciti ai sopravvissuti. $ZOMBCASH",postTitle:"Galleria ZombieCash — opera in evidenza",title:"CONDIVIDI QUESTA IMMAGINE",hint:"Scegli dove condividere questa creazione ZombieCash.",copy:"COPIA IL LINK",close:"CHIUDI"},
+    ja:{share:"共有",copied:"リンクをコピーしました",shared:"共有を完了しました",cancelled:"共有をキャンセルしました",unavailable:"共有できません",error:"共有に失敗しました",postText:"ZombieCashギャラリーでこの作品をチェック！生存者の仲間になろう。$ZOMBCASH",postTitle:"ZombieCashギャラリー — 注目の作品",title:"この画像を共有",hint:"ZombieCashのアートを共有する場所を選択してください。",copy:"画像リンクをコピー",close:"閉じる"},
+    "zh-CN":{share:"分享",copied:"链接已复制",shared:"分享已完成",cancelled:"已取消分享",unavailable:"暂无法分享",error:"分享失败",postText:"来看看 ZombieCash 末日画廊中的这幅作品！加入幸存者行列。$ZOMBCASH",postTitle:"ZombieCash 画廊 — 精选作品",title:"分享这张图片",hint:"选择分享这幅 ZombieCash 作品的平台。",copy:"复制图片链接",close:"关闭"},
+    tr:{share:"PAYLAŞ",copied:"BAĞLANTI KOPYALANDI",shared:"PAYLAŞIM TAMAMLANDI",cancelled:"PAYLAŞIM İPTAL EDİLDİ",unavailable:"PAYLAŞIM KULLANILAMIYOR",error:"PAYLAŞIM BAŞARISIZ",postText:"Bu ZombieCash eserini salgın galerisinde keşfet! Hayatta kalanlara katıl. $ZOMBCASH",postTitle:"ZombieCash Galerisi — Öne çıkan eser",title:"BU GÖRSELİ PAYLAŞ",hint:"ZombieCash çalışmasını paylaşacağın platformu seç.",copy:"GÖRSEL LİNKİNİ KOPYALA",close:"KAPAT"},
+    hi:{share:"साझा करें",copied:"लिंक कॉपी हुआ",shared:"शेयर पूरा हुआ",cancelled:"शेयर रद्द हुआ",unavailable:"साझा करना उपलब्ध नहीं",error:"साझा नहीं हो सका",postText:"ZombieCash आउटब्रेक गैलरी में इस कलाकृति को देखें! सर्वाइवर्स से जुड़ें। $ZOMBCASH",postTitle:"ZombieCash गैलरी — चुनिंदा कलाकृति",title:"यह इमेज शेयर करें",hint:"ZombieCash आर्टवर्क साझा करने के लिए प्लेटफ़ॉर्म चुनें।",copy:"इमेज लिंक कॉपी करें",close:"बंद करें"}
   };
   let galleryLang=document.documentElement.lang||"en";
   let refreshGalleryControls = () => {};
@@ -210,19 +210,19 @@
         shareUrl.hash = imageAnchor;
       }
       const url = shareUrl.href;
-      const title = card.dataset.galleryTitle || "ZombieCash Gallery";
-      const caption = card.querySelector(".gallery-caption p")?.dataset.originalCaption || title;
-      const message = (caption || title) + " — $ZOMBCASH";
+      const labels = galleryShareLabels[galleryLang] || galleryShareLabels.en;
+      // Share copy follows the active page language; source captions remain unchanged in the archive.
+      const message = labels.postText || galleryShareLabels.en.postText;
+      const shareTitle = labels.postTitle || galleryShareLabels.en.postTitle;
       const enc = encodeURIComponent;
       const links = [
         ["Telegram", "https://t.me/share/url?url=" + enc(url) + "&text=" + enc(message)],
         ["X (Twitter)", "https://twitter.com/intent/tweet?url=" + enc(url) + "&text=" + enc(message)],
         ["Bluesky", "https://bsky.app/intent/compose?text=" + enc(message + " " + url)],
         ["Facebook", "https://www.facebook.com/sharer/sharer.php?u=" + enc(url)],
-        ["Reddit", "https://www.reddit.com/submit?url=" + enc(url) + "&title=" + enc(title)],
+        ["Reddit", "https://www.reddit.com/submit?url=" + enc(url) + "&title=" + enc(shareTitle)],
         ["WhatsApp", "https://api.whatsapp.com/send?text=" + enc(message + " " + url)]
       ];
-      const labels = galleryShareLabels[galleryLang] || galleryShareLabels.en;
       menu.innerHTML = '<div class="gallery-share-panel"><div class="gallery-share-panel-head"><div><span class="gallery-share-eyebrow">$ZOMBCASH · SOCIAL TRANSMISSION</span><h2>' + escapeHtml(labels.title) + '</h2><p>' + escapeHtml(labels.hint) + '</p></div><button class="gallery-share-close" type="button" aria-label="' + escapeHtml(labels.close) + '">×</button></div><div class="gallery-share-grid">' +
         links.map(([name, href]) => '<a class="gallery-share-option" href="' + escapeHtml(href) + '" target="_blank" rel="noopener noreferrer"><span>' + escapeHtml(name) + '</span><b aria-hidden="true">↗</b></a>').join("") +
         '</div><button class="gallery-share-copy" type="button" data-share-url="' + escapeHtml(url) + '"><span>⧉</span>' + escapeHtml(labels.copy) + '</button></div>';
