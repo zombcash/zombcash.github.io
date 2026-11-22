@@ -54,6 +54,9 @@ def is_gallery_artwork(caption):
         r"\bINDEPENDENT\s+INVESTIGATION\b",
         r"\bTHE\s+HONEY[ -]TRAP\s+APOCALYPSE\b",
         r"\bCORPORATE\s+ESPIONAGE\b",
+        r"\bBEAUTY\s+IS\s+TEMPORARY\b",
+        r"\bSURVIVE\s+THE\s+OUTBREAK\b",
+        r"\bOFFICIAL\s+SOLANA\s+CONTRACT\b",
     )
     return not any(re.search(pattern, text, re.I) for pattern in excluded)
 
