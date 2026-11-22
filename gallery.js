@@ -605,7 +605,7 @@
       const t = controlText[galleryLang] || controlText.en;
       updatePagination(visibleItemCount, cards.length);
     };
-    refreshGalleryControls = () => { searchTerm = searchInput.value.trim().toLocaleLowerCase(galleryLang); renderToolbar(); renderGallery(); };
+    refreshGalleryControls = () => { searchTerm = searchInput.value.trim().toLocaleLowerCase(galleryLang); localizeGalleryMeta(items, data.updated_at); renderToolbar(); renderGallery(); };
     refreshGalleryForLikes = () => { if (sortOrder === "liked") renderGallery(); };
     searchInput.addEventListener("input", () => { searchTerm = searchInput.value.trim().toLocaleLowerCase(galleryLang); visibleLimit = selectedCategory === "all" ? INITIAL_ALL : INITIAL_CATEGORY; renderGallery(); });
     searchInput.addEventListener("change", () => { if (searchInput.value.trim()) trackGalleryEvent("gallery_search", "gallery"); });
