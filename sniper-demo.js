@@ -383,6 +383,8 @@
     document.querySelectorAll('[data-sniper-i18n]').forEach(el=>{el.textContent=t(el.dataset.sniperI18n);});
     document.querySelectorAll('[data-sniper-placeholder]').forEach(el=>{el.placeholder=t(el.dataset.sniperPlaceholder);});
     renderCandidates(); renderPositions();updateSyncStatus(state.syncStatusKey||'saved');
+    if(typeof renderDashboardState==='function')renderDashboardState();
+    if($('zombie-sniper-demo')?.dataset.activeTab==='wallet'){const walletPanel=$('zs-wallet-panel');if(walletPanel)walletPanel.dataset.loaded='false';refreshWalletInfo();}
   }
   function fmt(value,digits=5){return Number(value).toLocaleString(undefined,{maximumFractionDigits:digits});}
   function ageLabel(ms){
