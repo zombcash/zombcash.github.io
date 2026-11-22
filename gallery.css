@@ -264,3 +264,63 @@ body.gallery-lightbox-open{overflow:hidden}
   }
   .gallery-lightbox .gallery-share-option{min-height:40px;padding:8px;font-size:9px}
 }
+
+
+/* Centered ZombieCash share dialog — overrides legacy absolute button rules. */
+.gallery-lightbox .gallery-share-menu{
+  position:fixed!important;inset:0!important;z-index:2147483005!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  width:100%!important;height:100%!important;max-height:none!important;
+  padding:24px!important;box-sizing:border-box!important;overflow-y:auto!important;
+  transform:none!important;background:rgba(0,0,0,.64)!important;
+  backdrop-filter:blur(7px)!important;
+}
+.gallery-lightbox .gallery-share-menu[hidden]{display:none!important}
+.gallery-lightbox .gallery-share-panel{
+  position:relative;width:min(540px,100%);box-sizing:border-box;
+  padding:30px;border:1px solid #527b4d;border-radius:10px;
+  background:linear-gradient(145deg,#101c14 0%,#07100b 72%);
+  box-shadow:0 24px 90px #000e,0 0 0 1px #9bff4512,0 0 35px #9bff4518;
+  cursor:default;animation:gallery-share-enter .18s ease-out;
+}
+@keyframes gallery-share-enter{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+.gallery-share-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:24px}
+.gallery-share-eyebrow{display:block;margin-bottom:9px;color:#9bff45;font:700 9px Orbitron,sans-serif;letter-spacing:1.8px}
+.gallery-share-panel h2{margin:0;color:#eef6ee;font:700 clamp(17px,3vw,22px) Orbitron,sans-serif;letter-spacing:.7px;line-height:1.35}
+.gallery-share-panel p{margin:9px 0 0;color:#a9b8ad;font:500 14px Rajdhani,sans-serif;line-height:1.45}
+.gallery-lightbox .gallery-share-close{
+  position:static!important;flex:0 0 34px;width:34px!important;height:34px!important;
+  border:1px solid #38563e!important;border-radius:6px!important;background:#0b150f!important;
+  color:#b8c8ba!important;font:400 23px Arial,sans-serif!important;
+}
+.gallery-lightbox .gallery-share-close:hover{border-color:#9bff45!important;color:#9bff45!important}
+.gallery-share-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.gallery-lightbox .gallery-share-option{
+  position:static!important;display:flex!important;align-items:center!important;justify-content:space-between!important;
+  width:auto!important;height:auto!important;min-height:52px;padding:0 15px!important;
+  border:1px solid #304b36!important;border-radius:6px!important;background:#0b160f!important;
+  color:#d4e0d5!important;text-decoration:none!important;
+  font:700 11px Orbitron,sans-serif!important;letter-spacing:.35px!important;
+  transition:border-color .16s,background .16s,transform .16s;
+}
+.gallery-lightbox .gallery-share-option b{color:#9bff45;font-size:15px;font-weight:500}
+.gallery-lightbox .gallery-share-option:hover,.gallery-lightbox .gallery-share-option:focus-visible{
+  border-color:#9bff45!important;background:#9bff4512!important;color:#eaffdf!important;
+  transform:translateY(-1px);outline:none!important;box-shadow:0 0 0 2px #9bff4520;
+}
+.gallery-lightbox .gallery-share-copy{
+  position:static!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:10px;
+  width:100%!important;height:48px!important;margin-top:14px;padding:0 16px!important;
+  border:1px solid #9bff45!important;border-radius:6px!important;background:#9bff4516!important;
+  color:#caffaa!important;font:700 10px Orbitron,sans-serif!important;letter-spacing:1px!important;
+}
+.gallery-lightbox .gallery-share-copy span{font-size:16px}
+.gallery-lightbox .gallery-share-copy:hover{background:#9bff4528!important}
+@media(max-width:540px){
+  .gallery-lightbox .gallery-share-menu{padding:14px!important}
+  .gallery-lightbox .gallery-share-panel{padding:22px 18px;border-radius:8px}
+  .gallery-share-panel-head{margin-bottom:18px}
+  .gallery-share-grid{gap:8px}
+  .gallery-lightbox .gallery-share-option{min-height:48px;padding:0 10px!important;font-size:9px!important}
+}
+@media(prefers-reduced-motion:reduce){.gallery-share-panel{animation:none!important}}
