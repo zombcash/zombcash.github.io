@@ -269,9 +269,11 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     if (await page.locator(".gallery-lightbox-description:not(.gallery-lightbox-caption)").count() !== 0) throw new Error("Lightbox must hide an absent or duplicate editorial description");
     const lightboxCaption = await page.locator(".gallery-lightbox figcaption").textContent();
     if (!lightboxCaption.includes("SOURCE")) throw new Error("Lightbox must retain its Telegram source link");
-    const detailCategories = await page.locator(".gallery-lightbox-categories").textContent();
-    const openedCardCategoryCount = await page.locator("#gallery-grid .gallery-card").first().locator(".gallery-category-tag").count();
-    if (!detailCategories || (openedCardCategoryCount > 1 && !detailCategories.includes("·"))) throw new Error("Lightbox category labels should be separated");
+    const detailMetadata = await page.locator(".gallery-lightbox-title").textContent().catch(() => "");
+    const cardMetadata = await page.locator("#gallery-grid .gallery-card").first().locator(".gallery-card-meta").textContent().catch(() => "");
+    if (detailMetadata.trim() !== cardMetadata.trim()) {
+      throw new Error("Lightbox series/hashtag metadata should match the card metadata without duplication");
+    }
     const sourceLabel = (await page.locator(".gallery-lightbox-source").textContent()).trim();
     if (sourceLabel.endsWith("↗ ↗")) throw new Error("Lightbox source link must not repeat its arrow");
     await page.evaluate(() => {
