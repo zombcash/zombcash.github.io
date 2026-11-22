@@ -46,9 +46,9 @@
     .trim();
   const splitGalleryCaption = value => {
     let text = cleanCaption(value);
-    const hashtags = [...text.matchAll(/#[\\p{L}\\p{N}_]+/gu)].map(match => match[0]);
-    text = text.replace(/#[\\p{L}\\p{N}_]+/gu, " ").replace(/\\s+/g, " ").trim();
-    const headingMatch = text.match(/^(?:🌙\\s*UNDEAD\\s+AFTER\\s+DARK|😂\\s*ZOMBIECASH\\s+MEMES?|🩸\\s*NIGHTMARE\\s*(?:&|AND)\\s*HORROR|🛰️\\s*ZOMBIECASH\\s+SITE\\s+TRANSMISSION|NIGHTMARE\\s+DROP|ZOMBIE\\s+MEME(?:\\s+OF\\s+THE\\s+HOUR)?|ZOMBIECASH\\s+MEMES?)/i);
+    const hashtags = [...text.matchAll(/#[\p{L}\p{N}_]+/gu)].map(match => match[0]);
+    text = text.replace(/#[\p{L}\p{N}_]+/gu, " ").replace(/\s+/g, " ").trim();
+    const headingMatch = text.match(/^(?:🌙\s*UNDEAD\s+AFTER\s+DARK|😂\s*ZOMBIECASH\s+MEMES?|🩸\s*NIGHTMARE\s*(?:&|AND)\s*HORROR|🛰️\s*ZOMBIECASH\s+SITE\s+TRANSMISSION|NIGHTMARE\s+DROP|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|ZOMBIECASH\s+MEMES?)/i);
     const heading = headingMatch ? headingMatch[0].trim() : "";
     if (heading) text = text.slice(headingMatch[0].length).trim();
     return {caption:text, meta:[heading, [...new Set(hashtags)].join(" ")].filter(Boolean).join("  ·  ")};
@@ -515,8 +515,6 @@
           : '';
         const post = item.post_url ? escapeHtml(item.post_url) : "https://t.me/ZOMBCASH";
         const alt = String(item.alt_text || ("ZombieCash gallery artwork accompanying the story: " + (item.description || caption)));
-        const labels = categoryText[galleryLang] || categoryText.en;
-        const categoryMarkup = (item.category_ids || []).map(id => '<span class="gallery-category-tag">' + escapeHtml(labels[id] || id) + '</span>').join("");
         return '<article class="gallery-card" id="' + escapeHtml(item.anchor_id || "") + '" data-gallery-id="' + escapeHtml(item.id || "") + '" data-categories="' + escapeHtml((item.category_ids || []).join(" ")) + '" data-gallery-title="' + escapeHtml(rawTitle) + '" data-gallery-description="' + escapeHtml(item.description || "") + '" tabindex="0" role="group" aria-label="Open image: ' + escapeHtml(title) + '">' +
           '<img' + dimensionAttributes + ' src="' + image + '" alt="' + escapeHtml(alt) + '" loading="' + imageLoading + '" fetchpriority="' + imagePriority + '" decoding="async">' +
           '<div class="gallery-caption"><p data-original-caption="' + escapeHtml(item.caption) + '" data-original-title="' + escapeHtml(rawTitle) + '">' + escapeHtml(cardCaption) + '</p>' +
@@ -596,7 +594,7 @@
       if (targetIndex < 0) return;
       selectedCategory = "all";
       searchTerm = "";
-      visibleLimit = INITIAL_ALL;
+      visibleLimit = Math.max(INITIAL_ALL, targetIndex + 1);
       searchInput.value = "";
       sortSelect.value = "newest";
       renderToolbar();
