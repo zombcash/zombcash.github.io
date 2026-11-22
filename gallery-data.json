@@ -27,7 +27,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🌙 UNDEAD AFTER DARK Даже нежить ценит приглушённый свет, когда живым и укусить-то нечего. #ZombieCashAfterDark",
+        "de": "🌙 UNDEAD AFTER DARK Selbst die Untoten schätzen stimmungsvolles Licht, wenn die Lebenden nichts Interessantes zum Beißen bieten. #ZombieCashAfterDark",
+        "fr": "🌙 UNDEAD AFTER DARK Même les morts-vivants apprécient une lumière tamisée quand les vivants n’ont rien d’intéressant à mordre. #ZombieCashAfterDark",
+        "it": "🌙 UNDEAD AFTER DARK Anche i non morti apprezzano una luce d’atmosfera quando i vivi non offrono nulla di interessante da mordere. #ZombieCashAfterDark",
+        "ja": "🌙 UNDEAD AFTER DARK 生きている人間に噛みごたえのある相手がいないときは、アンデッドだってムード照明を楽しむ。#ZombieCashAfterDark",
+        "zh-CN": "🌙 UNDEAD AFTER DARK 当活人没什么值得一咬的目标时，就连亡灵也懂得欣赏氛围灯光。#ZombieCashAfterDark",
+        "tr": "🌙 UNDEAD AFTER DARK Yaşayanlarda ısırmaya değer bir şey kalmadığında, ölümsüzler bile loş ambiyans ışığını takdir eder. #ZombieCashAfterDark",
+        "hi": "🌙 UNDEAD AFTER DARK जब ज़िंदा लोगों में काटने लायक कुछ दिलचस्प न हो, तो मरे हुए भी माहौल बनाने वाली रोशनी पसंद करते हैं। #ZombieCashAfterDark"
+      }
     },
     {
       "id": "ZOMBCASH/6672:0",
@@ -53,7 +63,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🩸 NIGHTMARE & HORROR Журнал 42: Костюмы должны были быть пустыми, но костюм 04 сейчас тащится к периметральным воротам. #ZombieCashHorror",
+        "de": "🩸 NIGHTMARE & HORROR Protokoll 42: Die Anzüge sollten leer sein, doch Anzug 04 schleppt sich gerade zum Außentor. #ZombieCashHorror",
+        "fr": "🩸 NIGHTMARE & HORROR Rapport 42 : Les combinaisons étaient censées être vides, mais la combinaison 04 rampe vers la porte du périmètre. #ZombieCashHorror",
+        "it": "🩸 NIGHTMARE & HORROR Registro 42: Le tute dovevano essere vuote, ma la tuta 04 si sta trascinando verso il cancello perimetrale. #ZombieCashHorror",
+        "ja": "🩸 NIGHTMARE & HORROR 記録42：スーツは空のはずだったが、スーツ04が今、外周ゲートへ向かって這いずっている。#ZombieCashHorror",
+        "zh-CN": "🩸 NIGHTMARE & HORROR 日志42：这些防护服本应是空的，但04号防护服此刻正拖着身体朝外围大门爬去。#ZombieCashHorror",
+        "tr": "🩸 NIGHTMARE & HORROR Kayıt 42: Tulumların boş olması gerekiyordu ama 04 numaralı tulum şu anda çevre kapısına doğru sürünüyor. #ZombieCashHorror",
+        "hi": "🩸 NIGHTMARE & HORROR लॉग 42: सूट खाली होने चाहिए थे, लेकिन सूट 04 अभी परिधि वाले गेट की ओर घिसट रहा है। #ZombieCashHorror"
+      }
     },
     {
       "id": "ZOMBCASH/6671:0",
@@ -79,7 +99,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🌙 UNDEAD AFTER DARK Мои бархатные перчатки испорчены, тронный зал завален пеплом, а я всё равно лучше всех одета в этом апокалипсисе. #ZombieCashAfterDark",
+        "de": "🌙 UNDEAD AFTER DARK Meine Samthandschuhe sind ruiniert, der Thronsaal liegt voller Asche, und trotzdem bin ich die bestgekleidete Katastrophe dieser Apokalypse. #ZombieCashAfterDark",
+        "fr": "🌙 UNDEAD AFTER DARK Mes gants de velours sont fichus, la salle du trône est couverte de cendres, et pourtant je reste la catastrophe la mieux habillée de cette apocalypse. #ZombieCashAfterDark",
+        "it": "🌙 UNDEAD AFTER DARK I miei guanti di velluto sono rovinati, la sala del trono è piena di cenere, eppure resto il disastro meglio vestito di questa apocalisse. #ZombieCashAfterDark",
+        "ja": "🌙 UNDEAD AFTER DARK ベルベットの手袋は台無し、玉座の間は灰だらけ。それでもこの黙示録で一番おしゃれな厄介者は私。#ZombieCashAfterDark",
+        "zh-CN": "🌙 UNDEAD AFTER DARK 我的天鹅绒手套毁了，王座厅也满是灰烬，可我依然是这场末日里穿得最体面的灾难。#ZombieCashAfterDark",
+        "tr": "🌙 UNDEAD AFTER DARK Kadife eldivenlerim mahvoldu, taht salonu kül içinde; yine de bu kıyametin en şık felaketi hâlâ benim. #ZombieCashAfterDark",
+        "hi": "🌙 UNDEAD AFTER DARK मेरे मखमली दस्ताने खराब हो गए, सिंहासन कक्ष राख से भर गया, फिर भी इस सर्वनाश में सबसे शानदार पोशाक वाली आफ़त मैं ही हूँ। #ZombieCashAfterDark"
+      }
     },
     {
       "id": "ZOMBCASH/6670:0",
@@ -105,7 +135,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "😂 ZOMBIECASH MEMES Мой портфель ушёл в ноль сильнее, чем мои жизненные показатели, зато этот ноутбук хотя бы греет. #ZombieCashMeme",
+        "de": "😂 ZOMBIECASH MEMES Mein Portfolio ist noch endgültiger abgestürzt als meine Vitalwerte, aber wenigstens hält mich dieser Laptop warm. #ZombieCashMeme",
+        "fr": "😂 ZOMBIECASH MEMES Mon portefeuille est encore plus à plat que mes signes vitaux, mais au moins cet ordinateur portable me tient chaud. #ZombieCashMeme",
+        "it": "😂 ZOMBIECASH MEMES Il mio portafoglio è più piatto dei miei parametri vitali, ma almeno questo portatile mi tiene al caldo. #ZombieCashMeme",
+        "ja": "😂 ZOMBIECASH MEMES 資産残高は生命反応以上にゼロ寸前。でも、このノートPCだけは体を温めてくれる。#ZombieCashMeme",
+        "zh-CN": "😂 ZOMBIECASH MEMES 我的投资组合比生命体征还彻底地归零了，不过至少这台笔记本还能给我取暖。#ZombieCashMeme",
+        "tr": "😂 ZOMBIECASH MEMES Portföyüm yaşamsal belirtilerimden bile daha kötü durumda, ama en azından bu dizüstü bilgisayar beni ısıtıyor. #ZombieCashMeme",
+        "hi": "😂 ZOMBIECASH MEMES मेरा पोर्टफोलियो मेरी नब्ज़ से भी ज़्यादा सपाट हो चुका है, लेकिन कम से कम यह लैपटॉप मुझे गर्म रख रहा है। #ZombieCashMeme"
+      }
     },
     {
       "id": "ZOMBCASH/6668:0",
@@ -131,7 +171,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🌙 UNDEAD AFTER DARK Пережидать обвал рынка в бархатном гробу ужасно одиноко, поэтому я держу в гостиной пару живых закусок — пусть хоть кто-нибудь покричит о диверсификации портфеля. #ZombieCashAfterDark",
+        "de": "🌙 UNDEAD AFTER DARK Den Marktcrash in einem Samtsarg auszusitzen, ist schrecklich einsam. Deshalb halte ich mir im Salon ein paar atmende Snacks, damit wenigstens jemand über Portfoliodiversifizierung schreit. #ZombieCashAfterDark",
+        "fr": "🌙 UNDEAD AFTER DARK Attendre le krach du marché dans un cercueil de velours est terriblement solitaire. Alors je garde quelques amuse-bouches encore vivants au salon, juste pour entendre quelqu’un hurler à propos de la diversification du portefeuille. #ZombieCashAfterDark",
+        "it": "🌙 UNDEAD AFTER DARK Aspettare il crollo del mercato in una bara di velluto è terribilmente solitario, così tengo qualche spuntino ancora vivo in salotto, giusto per sentire qualcuno urlare sulla diversificazione del portafoglio. #ZombieCashAfterDark",
+        "ja": "🌙 UNDEAD AFTER DARK ベルベットの棺で市場暴落をやり過ごすのはひどく孤独。だから応接間に生きた軽食を何人か置いて、誰かがポートフォリオ分散について叫ぶ声を聞いている。#ZombieCashAfterDark",
+        "zh-CN": "🌙 UNDEAD AFTER DARK 躺在天鹅绒棺材里熬过市场崩盘，实在寂寞得可怕，所以我在客厅留了几个会喘气的小点心，只为听听有人尖叫着谈投资组合多元化。#ZombieCashAfterDark",
+        "tr": "🌙 UNDEAD AFTER DARK Piyasa çöküşünü kadife bir tabutta beklemek korkunç derecede yalnız; bu yüzden salonda birkaç canlı atıştırmalık tutuyorum ki biri portföy çeşitlendirmesi hakkında bağırsın. #ZombieCashAfterDark",
+        "hi": "🌙 UNDEAD AFTER DARK मखमली ताबूत में बाज़ार की गिरावट का इंतज़ार करना बेहद अकेला कर देता है, इसलिए बैठक में कुछ साँस लेते स्नैक्स रखती हूँ—ताकि कोई पोर्टफोलियो विविधीकरण पर चीख तो सके। #ZombieCashAfterDark"
+      }
     },
     {
       "id": "ZOMBCASH/6666:0",
@@ -157,7 +207,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🩸 NIGHTMARE & HORROR Промышленная стиральная машина № 4 продолжает гонять бельё прямо из сектора 7. Рука за усиленным стеклом перестала дёргаться десять минут назад, а барабан всё ещё вращается. #ZombieCashHorror",
+        "de": "🩸 NIGHTMARE & HORROR Industriewaschmaschine Nummer vier läuft weiter mit Wäsche aus Sektor 7. Die Hand hinter dem verstärkten Glas zuckt seit zehn Minuten nicht mehr, doch die Trommel dreht sich weiter. #ZombieCashHorror",
+        "fr": "🩸 NIGHTMARE & HORROR La machine industrielle numéro quatre enchaîne les lessives venues du secteur 7. Cette main contre la vitre renforcée ne bouge plus depuis dix minutes, mais le tambour tourne toujours. #ZombieCashHorror",
+        "it": "🩸 NIGHTMARE & HORROR La lavatrice industriale numero quattro continua a lavare biancheria dal Settore 7. Quella mano contro il vetro rinforzato non si muove più da dieci minuti, ma il cestello gira ancora. #ZombieCashHorror",
+        "ja": "🩸 NIGHTMARE & HORROR 4番の業務用洗濯機はセクター7から届いたシーツを洗い続けている。強化ガラスに押しつけられた手は10分前から動かないのに、ドラムはまだ回っている。#ZombieCashHorror",
+        "zh-CN": "🩸 NIGHTMARE & HORROR 4号工业洗衣机仍在清洗直接从7区送来的床单。贴在强化玻璃上的那只手十分钟前就不再抽动了，可滚筒依旧转个不停。#ZombieCashHorror",
+        "tr": "🩸 NIGHTMARE & HORROR Dört numaralı endüstriyel çamaşır makinesi, 7. Bölge'den gelen çamaşırları döndürmeye devam ediyor. Güçlendirilmiş cama dayanan el on dakikadır kıpırdamıyor ama tambur hâlâ dönüyor. #ZombieCashHorror",
+        "hi": "🩸 NIGHTMARE & HORROR औद्योगिक वॉशर नंबर चार सेक्टर 7 से आई चादरों को लगातार धो रहा है। मज़बूत काँच पर टिका हाथ दस मिनट पहले हिलना बंद कर चुका, फिर भी ड्रम घूम रहा है। #ZombieCashHorror"
+      }
     },
     {
       "id": "ZOMBCASH/6665:0",
@@ -183,7 +243,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🌙 UNDEAD AFTER DARK Дождь портит ковёр, век портит настроение, но мои стандарты всё равно выше, чем у твоего последнего портфеля. #ZombieCashAfterDark",
+        "de": "🌙 UNDEAD AFTER DARK Der Regen ruiniert den Teppich, das Jahrhundert die Stimmung, und trotzdem habe ich höhere Ansprüche als dein letztes Portfolio. #ZombieCashAfterDark",
+        "fr": "🌙 UNDEAD AFTER DARK La pluie ruine le tapis, le siècle ruine l’ambiance, et pourtant mes exigences dépassent celles de ton dernier portefeuille. #ZombieCashAfterDark",
+        "it": "🌙 UNDEAD AFTER DARK La pioggia rovina il tappeto, il secolo l’atmosfera, eppure ho standard più alti del tuo ultimo portafoglio. #ZombieCashAfterDark",
+        "ja": "🌙 UNDEAD AFTER DARK 雨はカーペットを台無しにし、この時代は気分を台無しにする。それでも私の基準はあなたの前のポートフォリオより高い。#ZombieCashAfterDark",
+        "zh-CN": "🌙 UNDEAD AFTER DARK 雨毁了地毯，这个世纪毁了心情，可我的标准依然比你上一个投资组合高。#ZombieCashAfterDark",
+        "tr": "🌙 UNDEAD AFTER DARK Yağmur halıyı, yüzyıl da havayı mahvediyor; yine de standartlarım son portföyünden daha yüksek. #ZombieCashAfterDark",
+        "hi": "🌙 UNDEAD AFTER DARK बारिश कालीन बर्बाद करती है, यह सदी मूड बिगाड़ देती है, फिर भी मेरे मानक तुम्हारे पिछले पोर्टफोलियो से ऊँचे हैं। #ZombieCashAfterDark"
+      }
     },
     {
       "id": "ZOMBCASH/6663:0",
@@ -209,7 +279,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "😂 ZOMBIECASH MEMES Она загнала его в переулок ради скримера с поеданием плоти, а он лишь вздохнул и спросил, не хуже ли её портфель его собственного. #ZombieCashMeme",
+        "de": "😂 ZOMBIECASH MEMES Sie stellte ihn in der Gasse für einen klassischen Fleischfresser-Jumpscare, doch er seufzte nur und fragte, ob ihr Portfolio schlechter sei als seines. #ZombieCashMeme",
+        "fr": "😂 ZOMBIECASH MEMES Elle l’a coincé dans une ruelle pour une frayeur de mangeuse de chair, mais il a simplement soupiré et demandé si son portefeuille était pire que le sien. #ZombieCashMeme",
+        "it": "😂 ZOMBIECASH MEMES Lei lo ha messo alle strette nel vicolo per uno spavento da divoratrice di carne, ma lui ha sospirato chiedendole se il suo portafoglio fosse peggiore del proprio. #ZombieCashMeme",
+        "ja": "😂 ZOMBIECASH MEMES 彼女は肉食ジャンプスケアで驚かせようと路地で彼を追い詰めたが、彼はため息をつき、自分より彼女のポートフォリオの方がひどいのかと尋ねた。#ZombieCashMeme",
+        "zh-CN": "😂 ZOMBIECASH MEMES 她在巷子里堵住他，准备来一场经典的食肉惊吓，可他只是叹了口气，问她的投资组合是不是比自己的还惨。#ZombieCashMeme",
+        "tr": "😂 ZOMBIECASH MEMES Klasik bir et yiyen korkutmacası için onu ara sokakta köşeye sıkıştırdı; o ise iç çekip portföyünün kendisininkinden daha kötü olup olmadığını sordu. #ZombieCashMeme",
+        "hi": "😂 ZOMBIECASH MEMES उसने उसे गली में घेरकर मांस खाने वाला डरावना जंप-स्केयर देने की कोशिश की, लेकिन उसने बस आह भरी और पूछा कि क्या उसका पोर्टफोलियो उससे भी बदतर है। #ZombieCashMeme"
+      }
     },
     {
       "id": "ZOMBCASH/6662:0",
@@ -235,7 +315,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🌙 UNDEAD AFTER DARK Даже бессмертным аристократам надоедает веками читать мёртвую поэзию при свечах, но хотя бы библиотека не кусается, как остальной рынок. #ZombieCashAfterDark",
+        "de": "🌙 UNDEAD AFTER DARK Selbst unsterbliche Aristokraten haben irgendwann genug davon, jahrhundertelang bei Kerzenlicht tote Poesie zu lesen – immerhin beißt die Bibliothek nicht wie der Rest des Marktes zurück. #ZombieCashAfterDark",
+        "fr": "🌙 UNDEAD AFTER DARK Même les aristocrates immortels se lassent de lire des siècles de poésie morte à la chandelle, mais au moins la bibliothèque ne mord pas comme le reste du marché. #ZombieCashAfterDark",
+        "it": "🌙 UNDEAD AFTER DARK Anche gli aristocratici immortali si stancano di leggere secoli di poesia morta a lume di candela, ma almeno la biblioteca non morde come il resto del mercato. #ZombieCashAfterDark",
+        "ja": "🌙 UNDEAD AFTER DARK 不死の貴族だって、何世紀もろうそくの灯りで死んだ詩を読むのには飽きる。でも図書館は市場のほかの連中のように噛みついてこない。#ZombieCashAfterDark",
+        "zh-CN": "🌙 UNDEAD AFTER DARK 就连不朽的贵族，也会厌倦在烛光下读上几个世纪的亡者诗篇；至少图书馆不像市场其他地方那样会反咬一口。#ZombieCashAfterDark",
+        "tr": "🌙 UNDEAD AFTER DARK Ölümsüz aristokratlar bile mum ışığında yüzyıllarca ölü şiirler okumaktan sıkılır; ama en azından kütüphane piyasanın geri kalanı gibi ısırmaz. #ZombieCashAfterDark",
+        "hi": "🌙 UNDEAD AFTER DARK अमर कुलीन भी मोमबत्ती की रोशनी में सदियों पुरानी मृत कविता पढ़ते-पढ़ते ऊब जाते हैं, लेकिन पुस्तकालय बाज़ार के बाकी हिस्सों की तरह पलटकर काटता नहीं। #ZombieCashAfterDark"
+      }
     },
     {
       "id": "ZOMBCASH/6661:0",
@@ -261,7 +351,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🩸 NIGHTMARE & HORROR Аварийный свет мерцает под слоем маслянистой воды почти метровой глубины, пока бледные разбухшие пальцы цепляются за ржавые бамперы брошенных седанов. #ZombieCashHorror",
+        "de": "🩸 NIGHTMARE & HORROR Das Notlicht flackert unter fast einem Meter öligem Abwasser, während blasse, aufgequollene Finger die rostigen Stoßstangen verlassener Limousinen umklammern. #ZombieCashHorror",
+        "fr": "🩸 NIGHTMARE & HORROR L’éclairage de secours vacille sous près d’un mètre d’eaux grasses, tandis que des doigts pâles et gonflés s’agrippent aux pare-chocs rouillés de berlines abandonnées. #ZombieCashHorror",
+        "it": "🩸 NIGHTMARE & HORROR Le luci di emergenza tremolano sotto quasi un metro di liquame oleoso, mentre dita pallide e gonfie stringono i paraurti arrugginiti di berline abbandonate. #ZombieCashHorror",
+        "ja": "🩸 NIGHTMARE & HORROR 1メートル近い油まみれの排水の下で非常灯がちらつく。青白くふやけた指が、放置されたセダンの錆びたバンパーをつかんでいる。#ZombieCashHorror",
+        "zh-CN": "🩸 NIGHTMARE & HORROR 应急灯在近一米深的油污积水下闪烁，苍白浮肿的手指紧紧抓住废弃轿车锈蚀的保险杠。#ZombieCashHorror",
+        "tr": "🩸 NIGHTMARE & HORROR Acil durum ışıkları, yaklaşık bir metre derinliğindeki yağlı atık suyun altında titrerken solgun, su toplamış parmaklar terk edilmiş sedanların paslı tamponlarına tutunuyor. #ZombieCashHorror",
+        "hi": "🩸 NIGHTMARE & HORROR लगभग एक मीटर गहरे तैलीय गंदे पानी के नीचे आपातकालीन रोशनी टिमटिमा रही है, जबकि पीली, पानी से फूली उँगलियाँ छोड़ी गई सेडान कारों के जंग लगे बंपरों को पकड़े हैं। #ZombieCashHorror"
+      }
     },
     {
       "id": "ZOMBCASH/6659:0",
@@ -287,7 +387,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🌙 UNDEAD AFTER DARK Бархат — это приятно, но портить репутацию бывшего с этой кушетки куда полезнее для фигуры. #ZombieCashAfterDark",
+        "de": "🌙 UNDEAD AFTER DARK Samt ist schön, aber den Ruf deines Ex von dieser Chaiselongue aus verrotten zu lassen, ist das bessere Workout. #ZombieCashAfterDark",
+        "fr": "🌙 UNDEAD AFTER DARK Le velours, c’est agréable, mais laisser pourrir la réputation de ton ex depuis cette méridienne est un bien meilleur exercice. #ZombieCashAfterDark",
+        "it": "🌙 UNDEAD AFTER DARK Il velluto è bello, ma far marcire la reputazione del tuo ex da questa chaise longue è un allenamento decisamente migliore. #ZombieCashAfterDark",
+        "ja": "🌙 UNDEAD AFTER DARK ベルベットも素敵だけど、この長椅子から元恋人の評判を腐らせる方がずっといい運動になる。#ZombieCashAfterDark",
+        "zh-CN": "🌙 UNDEAD AFTER DARK 天鹅绒固然不错，但躺在这张贵妃椅上败坏前任的名声，才是更好的锻炼。#ZombieCashAfterDark",
+        "tr": "🌙 UNDEAD AFTER DARK Kadife güzel ama bu şezlongdan eski sevgilinin itibarını çürütmek çok daha iyi bir egzersiz. #ZombieCashAfterDark",
+        "hi": "🌙 UNDEAD AFTER DARK मखमल अच्छा है, लेकिन इस दीवान पर लेटे-लेटे अपने एक्स की साख सड़ाना कहीं बेहतर कसरत है। #ZombieCashAfterDark"
+      }
     },
     {
       "id": "ZOMBCASH/6657:0",
@@ -313,7 +423,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "😂 ZOMBIECASH MEMES Старшая гот-сестра уверяет, что пирожное подходит к её савану, но сестра уже скрепила кровавой клятвой право первой откусить макарон. #ZombieCashMeme",
+        "de": "😂 ZOMBIECASH MEMES Goth-Schwester Nummer eins besteht darauf, dass das Gebäck zu ihrem Leichentuch passt, doch ihre Schwester hat sich den ersten Bissen des Macarons bereits per Blutschwur gesichert. #ZombieCashMeme",
+        "fr": "😂 ZOMBIECASH MEMES La sœur gothique numéro un insiste : la pâtisserie assortit son linceul, mais sa sœur a déjà juré par le sang qu’elle aurait la première bouchée du macaron. #ZombieCashMeme",
+        "it": "😂 ZOMBIECASH MEMES La sorella goth numero uno sostiene che il dolce si abbini al suo sudario, ma l’altra ha già rivendicato con un giuramento di sangue il primo morso del macaron. #ZombieCashMeme",
+        "ja": "😂 ZOMBIECASH MEMES ゴス姉妹の長女はお菓子が自分の経帷子に合うと言い張るが、妹はマカロンの最初のひと口を血の誓いで先に確保していた。#ZombieCashMeme",
+        "zh-CN": "😂 ZOMBIECASH MEMES 一号哥特姐妹坚持说甜点和她的裹尸布很搭，可她的姐妹早已立下血誓，宣称要先咬第一口马卡龙。#ZombieCashMeme",
+        "tr": "😂 ZOMBIECASH MEMES Bir numaralı gotik kız kardeş hamur işinin kefeniyle uyumlu olduğunu savunuyor, ama kardeşi makaronun ilk ısırığını almak için çoktan kan yemini etti. #ZombieCashMeme",
+        "hi": "😂 ZOMBIECASH MEMES पहली गॉथ बहन ज़िद करती है कि पेस्ट्री उसके कफ़न से मेल खाती है, लेकिन उसकी बहन मैकरॉन का पहला कौर पाने के लिए पहले ही खून की कसम खा चुकी है। #ZombieCashMeme"
+      }
     },
     {
       "id": "ZOMBCASH/6656:0",
@@ -339,7 +459,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🌙 UNDEAD AFTER DARK Молилась, чтобы в этом саду нашлась достойная душа для сбора урожая, а получила лишь влажный мох и всё твоё внимание. #ZombieCashAfterDark",
+        "de": "🌙 UNDEAD AFTER DARK Ich habe in diesem Garten um eine anständige Seele zur Ernte gebetet, bekam aber nur feuchtes Moos und deine ungeteilte Aufmerksamkeit. #ZombieCashAfterDark",
+        "fr": "🌙 UNDEAD AFTER DARK Je priais pour récolter une âme convenable dans ce jardin, mais je n’ai eu que de la mousse humide et toute ton attention. #ZombieCashAfterDark",
+        "it": "🌙 UNDEAD AFTER DARK Pregavo di raccogliere un’anima decente in questo giardino, ma ho ottenuto solo muschio umido e tutta la tua attenzione. #ZombieCashAfterDark",
+        "ja": "🌙 UNDEAD AFTER DARK この庭で収穫できるまともな魂を祈っていたのに、手に入ったのは湿った苔とあなたの注目だけ。#ZombieCashAfterDark",
+        "zh-CN": "🌙 UNDEAD AFTER DARK 我祈祷能在这座花园里收获一个像样的灵魂，结果只得到潮湿的苔藓和你全部的关注。#ZombieCashAfterDark",
+        "tr": "🌙 UNDEAD AFTER DARK Bu bahçede hasat edecek düzgün bir ruh için dua ettim, ama elime yalnızca nemli yosun ve senin tüm dikkatin geçti. #ZombieCashAfterDark",
+        "hi": "🌙 UNDEAD AFTER DARK इस बगीचे में काटने के लिए एक अच्छी आत्मा की प्रार्थना की थी, लेकिन मिला सिर्फ़ गीला काई और तुम्हारा पूरा ध्यान। #ZombieCashAfterDark"
+      }
     },
     {
       "id": "ZOMBCASH/6654:0",
@@ -365,7 +495,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🩸 NIGHTMARE & HORROR Жир на плоской жарочной поверхности не остывал с момента эвакуации, но то, что скользит по полу под стойкой, фартук не носит. #ZombieCashHorror",
+        "de": "🩸 NIGHTMARE & HORROR Das Fett auf der Grillplatte ist seit der Evakuierung nicht abgekühlt, aber was da unter der Theke über den Boden gleitet, trägt keine Schürze. #ZombieCashHorror",
+        "fr": "🩸 NIGHTMARE & HORROR La graisse de la plaque de cuisson n’a pas refroidi depuis l’évacuation, mais ce qui glisse sous le comptoir ne porte pas de tablier. #ZombieCashHorror",
+        "it": "🩸 NIGHTMARE & HORROR Il grasso sulla piastra non si è raffreddato dall’evacuazione, ma qualunque cosa stia strisciando sul pavimento sotto il bancone non indossa un grembiule. #ZombieCashHorror",
+        "ja": "🩸 NIGHTMARE & HORROR 避難以来、鉄板の油は冷めていない。それなのにカウンターの下を床づたいに滑ってくる何かは、エプロンを着けていない。#ZombieCashHorror",
+        "zh-CN": "🩸 NIGHTMARE & HORROR 自撤离以来，煎板上的油脂就没冷却过，但柜台下有什么东西正贴着地面滑行——它可没穿围裙。#ZombieCashHorror",
+        "tr": "🩸 NIGHTMARE & HORROR Düz ızgaradaki yağ tahliyeden beri soğumadı, ama tezgâhın altında yerde süzülen her neyse önlük giymiyor. #ZombieCashHorror",
+        "hi": "🩸 NIGHTMARE & HORROR निकासी के बाद से सपाट तवे की चिकनाई ठंडी नहीं हुई, लेकिन काउंटर के नीचे फर्श पर जो भी सरक रहा है, उसने एप्रन नहीं पहना। #ZombieCashHorror"
+      }
     },
     {
       "id": "ZOMBCASH/6653:0",
@@ -391,7 +531,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🌙 UNDEAD AFTER DARK Апокалипсис испортил обивку, но шёлковая рубашка уцелела — в отличие от трёх моих последних поклонников. #ZombieCashAfterDark",
+        "de": "🌙 UNDEAD AFTER DARK Die Apokalypse hat die Polster ruiniert, aber das Seidenhemd hat überlebt – anders als meine letzten drei Verehrer. #ZombieCashAfterDark",
+        "fr": "🌙 UNDEAD AFTER DARK L’apocalypse a ruiné le rembourrage, mais la chemise en soie a survécu — contrairement à mes trois derniers prétendants. #ZombieCashAfterDark",
+        "it": "🌙 UNDEAD AFTER DARK L’apocalisse ha rovinato il rivestimento, ma la camicia di seta è sopravvissuta, a differenza dei miei ultimi tre pretendenti. #ZombieCashAfterDark",
+        "ja": "🌙 UNDEAD AFTER DARK 黙示録で家具の張り地は台無しになったけれど、シルクのシャツは生き残った——最後の3人の求婚者とは違って。#ZombieCashAfterDark",
+        "zh-CN": "🌙 UNDEAD AFTER DARK 末日毁了家具的内衬，但丝绸衬衫幸存了下来——不像我最近的三位追求者。#ZombieCashAfterDark",
+        "tr": "🌙 UNDEAD AFTER DARK Kıyamet döşemeleri mahvetti ama ipek gömlek hayatta kaldı—son üç talibim gibi değil. #ZombieCashAfterDark",
+        "hi": "🌙 UNDEAD AFTER DARK सर्वनाश ने फर्नीचर की गद्दी बर्बाद कर दी, लेकिन रेशमी कमीज़ बच गई—मेरे पिछले तीन चाहने वालों की तरह नहीं। #ZombieCashAfterDark"
+      }
     },
     {
       "id": "ZOMBCASH/6652:0",
