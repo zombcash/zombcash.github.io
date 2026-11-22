@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "source": "https://t.me/ZOMBCASH",
-  "updated_at": "2026-11-22T23:03:14+00:00",
+  "updated_at": "2026-11-22T23:25:34+00:00",
   "items": [
     {
       "id": "ZOMBCASH/6682:0",
@@ -32099,7 +32099,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на крипторынке, и все ведут себя так, будто апокалипсис уже наступил. Очнитесь. Рынок умер, а $ZOMBCASH — нет. ZombieCash всё ещё бредёт вперёд.",
+        "de": "Ein weiterer roter Tag im Kryptomarkt, und alle tun so, als wäre die Apokalypse bereits da. Wacht auf. Der Markt ist tot, aber $ZOMBCASH nicht. ZombieCash schlurft hier immer noch weiter.",
+        "fr": "Encore une journée dans le rouge sur le marché crypto, et tout le monde agit comme si l’apocalypse avait vraiment eu lieu. Réveillez-vous. Le marché est mort, mais pas $ZOMBCASH. ZombieCash continue d’avancer péniblement.",
+        "it": "Un altro giorno in rosso nel mercato crypto e tutti si comportano come se fosse davvero arrivata l’apocalisse. Svegliatevi. Il mercato è morto, ma $ZOMBCASH no. ZombieCash continua a trascinarsi in giro.",
+        "ja": "暗号資産市場はまた赤い一日。まるで本当に終末が来たかのように騒いでいる。目を覚ませ。市場は死んだが、$ZOMBCASHは死んでいない。ZombieCashは今も歩き続けている。",
+        "zh-CN": "加密市场又是一个飘红的一天，所有人却表现得像末日真的降临了一样。醒醒吧。市场死了，但$ZOMBCASH没有。ZombieCash仍在这里蹒跚前行。",
+        "tr": "Kripto piyasasında yine kırmızı bir gün ve herkes kıyamet gerçekten kopmuş gibi davranıyor. Kendinize gelin. Piyasa öldü ama $ZOMBCASH ölmedi. ZombieCash hâlâ ağır ağır yoluna devam ediyor.",
+        "hi": "क्रिप्टो बाज़ार में फिर एक लाल दिन है और सब ऐसे बर्ताव कर रहे हैं जैसे सचमुच प्रलय आ गई हो। जागो। बाज़ार मर गया, लेकिन $ZOMBCASH नहीं। ZombieCash अब भी आगे बढ़ रहा है。"
+      }
     },
     {
       "id": "ZOMBCASH/1021:0",
@@ -32125,7 +32135,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на кладбище, а мы всё ещё здесь. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Собирай снаряжение и будь начеку. Что ты удерживаешь во время апокалипсиса?",
+        "de": "Überall rote Kerzen, Portfolios wie Friedhöfe, und trotzdem sind wir noch hier. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schnapp dir deine Ausrüstung und bleib wachsam. Was hältst du während der Apokalypse?",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des cimetières, et pourtant nous sommes toujours là. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Prépare ton équipement et reste vigilant. Que gardes-tu pendant l’apocalypse ?",
+        "it": "Candele rosse ovunque, portafogli che sembrano cimiteri, eppure siamo ancora qui. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Prepara l’equipaggiamento e resta all’erta. Cosa stai tenendo durante l’apocalisse?",
+        "ja": "赤いローソク足だらけで、ポートフォリオは墓場のよう。それでも私たちはここにいる。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 装備を整えて警戒を怠るな。終末の中で何を握り続けている？",
+        "zh-CN": "红色K线到处都是，投资组合像座座墓地，但我们依然在这里。市场已死，ZOMBIECASH没有。🧟‍♂️ 带好装备，保持警惕。末日之中，你还在持有什么？",
+        "tr": "Her yerde kırmızı mumlar, portföyler mezarlık gibi ama biz hâlâ buradayız. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ Ekipmanını hazırla ve tetikte kal. Kıyamet boyunca neyi elinde tutuyorsun?",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो कब्रिस्तान जैसे दिखते हैं, फिर भी हम यहीं हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ अपना सामान तैयार रखो और सतर्क रहो। प्रलय के दौरान तुम क्या थामे हुए हो?"
+      }
     },
     {
       "id": "ZOMBCASH/1017:0",
@@ -32151,7 +32171,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 266
+      "image_height": 266,
+      "caption_translations": {
+        "ru": "🧟‍♂️ ZombieCash Boost Monitor ЗАПУЩЕН! ⚡️ 🆕 Новые уведомления о бустах Solana 📈 Рост бустов 💰 Рыночная капитализация, объём и ликвидность 🌐 Соцсети и ссылки для торговли Проверка каждые 15 секунд! 📡 Следи за радаром: https://t.me/+5aXhFhx2RdFmNWYy $ZOMBCASH #Solana #Memecoins",
+        "de": "🧟‍♂️ ZombieCash Boost Monitor IST LIVE! ⚡️ 🆕 Neue Solana-Boost-Alarme 📈 Boost-Zuwächse 💰 Marktkapitalisierung, Volumen und Liquidität 🌐 Soziale Netzwerke und Handelslinks Prüfung alle 15 Sekunden! 📡 Folge dem Radar: https://t.me/+5aXhFhx2RdFmNWYy $ZOMBCASH #Solana #Memecoins",
+        "fr": "🧟‍♂️ ZombieCash Boost Monitor EST EN LIGNE ! ⚡️ 🆕 Alertes de nouveaux boosts Solana 📈 Hausse des boosts 💰 Capitalisation, volume et liquidité 🌐 Réseaux sociaux et liens de trading Vérification toutes les 15 secondes ! 📡 Suis le radar : https://t.me/+5aXhFhx2RdFmNWYy $ZOMBCASH #Solana #Memecoins",
+        "it": "🧟‍♂️ ZombieCash Boost Monitor È ATTIVO! ⚡️ 🆕 Avvisi sui nuovi boost Solana 📈 Aumenti dei boost 💰 Capitalizzazione, volume e liquidità 🌐 Social e link di trading Controllo ogni 15 secondi! 📡 Segui il radar: https://t.me/+5aXhFhx2RdFmNWYy $ZOMBCASH #Solana #Memecoins",
+        "ja": "🧟‍♂️ ZombieCash Boost Monitor が稼働中！⚡️ 🆕 Solanaの新しいブースト通知 📈 ブースト増加 💰 時価総額、取引量、流動性 🌐 SNSと取引リンク 15秒ごとにチェック！📡 レーダーをフォロー：https://t.me/+5aXhFhx2RdFmNWYy $ZOMBCASH #Solana #Memecoins",
+        "zh-CN": "🧟‍♂️ ZombieCash Boost Monitor 已上线！⚡️ 🆕 Solana 新增 Boost 提醒 📈 Boost 增长 💰 市值、交易量和流动性 🌐 社交媒体与交易链接 每 15 秒检查一次！📡 关注雷达：https://t.me/+5aXhFhx2RdFmNWYy $ZOMBCASH #Solana #Memecoins",
+        "tr": "🧟‍♂️ ZombieCash Boost Monitor YAYINDA! ⚡️ 🆕 Yeni Solana boost uyarıları 📈 Boost artışları 💰 Piyasa değeri, hacim ve likidite 🌐 Sosyal medya ve işlem bağlantıları Her 15 saniyede bir kontrol! 📡 Radarı takip et: https://t.me/+5aXhFhx2RdFmNWYy $ZOMBCASH #Solana #Memecoins",
+        "hi": "🧟‍♂️ ZombieCash Boost Monitor लाइव है! ⚡️ 🆕 नए Solana बूस्ट अलर्ट 📈 बूस्ट में बढ़ोतरी 💰 मार्केट कैप, वॉल्यूम और लिक्विडिटी 🌐 सोशल लिंक और ट्रेडिंग लिंक हर 15 सेकंड में जाँच! 📡 रडार देखें: https://t.me/+5aXhFhx2RdFmNWYy $ZOMBCASH #Solana #Memecoins"
+      }
     },
     {
       "id": "ZOMBCASH/1016:0",
@@ -32177,7 +32207,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель в минусе? Лента забита скамом? На графиках не осталось ни одного пульса? Хорошо, что $ZOMBCASH процветает в апокалипсисе. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Rotes Portfolio? Eine Timeline voller Rug-Pulls? Kein Lebenszeichen mehr in den Charts? Gut, dass $ZOMBCASH in der Apokalypse gedeiht. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Portefeuille dans le rouge ? Fil d’actualité rempli de rugs ? Plus aucun signe de vie sur les graphiques ? Heureusement, $ZOMBCASH prospère dans l’apocalypse. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Portafoglio in rosso? Timeline piena di rug pull? Nessun battito rilevato sui grafici? Per fortuna $ZOMBCASH prospera nell’apocalisse. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "ポートフォリオは赤字？タイムラインはラグプルだらけ？チャートに脈拍はゼロ？でも$ZOMBCASHは終末の中で繁栄している。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "投资组合一片红？动态里全是 Rug？图表上检测不到任何脉搏？好在$ZOMBCASH在末日中依然兴盛。市场已死，ZOMBIECASH没有。",
+        "tr": "Portföyün kırmızıda mı? Akışın rug olaylarıyla mı dolu? Grafiklerde hiç yaşam belirtisi yok mu? İyi ki $ZOMBCASH kıyamette gelişiyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "पोर्टफोलियो लाल है? टाइमलाइन पर हर तरफ़ रग पुल हैं? चार्ट में कोई धड़कन नहीं दिख रही? अच्छा है कि $ZOMBCASH प्रलय में भी फल-फूल रहा है। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/1012:0",
@@ -32203,7 +32243,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на города-призраки, но нежить продолжает идти. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ 💸 $ZOMBCASH",
+        "de": "Überall rote Kerzen, Portfolios gleichen Geisterstädten, doch die Untoten gehen weiter. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ 💸 $ZOMBCASH",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des villes fantômes, mais les morts-vivants continuent d’avancer. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ 💸 $ZOMBCASH",
+        "it": "Candele rosse ovunque, portafogli che sembrano città fantasma, ma i non morti continuano ad avanzare. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ 💸 $ZOMBCASH",
+        "ja": "赤いローソク足があちこちに。ポートフォリオはゴーストタウンのよう。それでもアンデッドは歩き続ける。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 💸 $ZOMBCASH",
+        "zh-CN": "红色K线到处都是，投资组合像一座座鬼城，但亡灵仍在继续前行。市场已死，ZOMBIECASH没有。🧟‍♂️ 💸 $ZOMBCASH",
+        "tr": "Her yerde kırmızı mumlar, portföyler hayalet kasabalar gibi ama yaşayan ölüler yürümeye devam ediyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ 💸 $ZOMBCASH",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो भुतहा कस्बों जैसे हैं, फिर भी मरे हुए चलते जा रहे हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ 💸 $ZOMBCASH"
+      }
     },
     {
       "id": "ZOMBCASH/1011:0",
@@ -32229,7 +32279,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Там портфели пожирают заживо, а остальной рынок превращается в зомби. Вот незадача для них — мы приняли жизнь нежити ещё с самого начала. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ 💸",
+        "de": "Die Portfolios werden dort draußen lebendig aufgefressen, während der Rest des Marktes zu Zombies wird. Dumm gelaufen für sie – wir haben das Untotenleben längst angenommen. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ 💸",
+        "fr": "Les portefeuilles se font dévorer tout crus pendant que le reste du marché se transforme en zombies. Tant pis pour eux : nous avons adopté la vie de morts-vivants depuis longtemps. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ 💸",
+        "it": "I portafogli vengono divorati vivi là fuori, mentre il resto del mercato si trasforma in zombie. Peccato per loro: noi abbiamo già abbracciato la vita da non morti. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ 💸",
+        "ja": "あちこちでポートフォリオが食い尽くされ、市場の残りはゾンビ化している。気の毒に。私たちはとっくにアンデッドの生き方を受け入れている。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 💸",
+        "zh-CN": "外面的投资组合正在被活活吞噬，市场其他部分也变成了僵尸。可惜他们了——我们早就拥抱了亡灵生活。市场已死，ZOMBIECASH没有。🧟‍♂️ 💸",
+        "tr": "Portföyler orada canlı canlı yenirken piyasanın geri kalanı zombiye dönüşüyor. Onlara kötü haber: biz yaşayan ölü hayatını çoktan benimsedik. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ 💸",
+        "hi": "वहाँ पोर्टफोलियो को ज़िंदा निगला जा रहा है और बाज़ार का बाकी हिस्सा ज़ॉम्बी बन रहा है। उनका मज़ाक बन गया—हमने तो पहले दिन से ही मरे हुओं की ज़िंदगी अपना ली थी। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ 💸"
+      }
     },
     {
       "id": "ZOMBCASH/1009:0",
@@ -32255,7 +32315,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель после сегодняшних красных свечей выглядит как кладбище? Хорошо, что $ZOMBCASH процветает в апокалипсисе. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ 💀",
+        "de": "Sieht dein Portfolio nach den heutigen roten Kerzen wie ein Friedhof aus? Gut, dass $ZOMBCASH in der Apokalypse gedeiht. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ 💀",
+        "fr": "Ton portefeuille ressemble à un cimetière après les bougies rouges d’aujourd’hui ? Heureusement, $ZOMBCASH prospère dans l’apocalypse. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ 💀",
+        "it": "Il tuo portafoglio sembra un cimitero dopo le candele rosse di oggi? Per fortuna $ZOMBCASH prospera nell’apocalisse. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ 💀",
+        "ja": "今日の赤いローソク足でポートフォリオは墓場のよう？ でも$ZOMBCASHは終末の世界で繁栄している。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 💀",
+        "zh-CN": "今天的红色K线过后，你的投资组合看起来像座墓地？好在$ZOMBCASH在末日中依然兴盛。市场已死，ZOMBIECASH没有。🧟‍♂️ 💀",
+        "tr": "Bugünkü kırmızı mumlardan sonra portföyün mezarlık gibi mi görünüyor? İyi ki $ZOMBCASH kıyamette gelişiyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ 💀",
+        "hi": "आज की लाल कैंडल्स के बाद आपका पोर्टफोलियो कब्रिस्तान जैसा दिख रहा है? अच्छा है कि $ZOMBCASH प्रलय में भी फल-फूल रहा है। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ 💀"
+      }
     },
     {
       "id": "ZOMBCASH/1004:0",
@@ -32281,7 +32351,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели выглядят так, будто пережили ядерную зиму, и всё же мы здесь. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Выпей кофе, проверь пульс и посмотрим, кто ещё дышит.",
+        "de": "Überall rote Kerzen, die Portfolios sehen aus, als hätten sie einen nuklearen Winter überstanden, und trotzdem sind wir noch hier. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schnapp dir einen Kaffee, prüf den Puls und sehen wir, wer noch atmet.",
+        "fr": "Des bougies rouges partout, des portefeuilles qui semblent avoir survécu à un hiver nucléaire, et pourtant nous sommes toujours là. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Prends un café, vérifie le pouls et voyons qui respire encore.",
+        "it": "Candele rosse ovunque, portafogli che sembrano sopravvissuti a un inverno nucleare, eppure siamo ancora qui. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Prendi un caffè, controlla il polso e vediamo chi respira ancora.",
+        "ja": "赤いローソク足だらけ。ポートフォリオは核の冬を生き延びたよう。それでも私たちはここにいる。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ コーヒーを飲み、脈を確認して、まだ息をしているのは誰か見てみよう。",
+        "zh-CN": "红色K线到处都是，投资组合看起来像是熬过了核冬天，但我们依然在这里。市场已死，ZOMBIECASH没有。🧟‍♂️ 喝杯咖啡，检查脉搏，看看还有谁在呼吸。",
+        "tr": "Her yerde kırmızı mumlar, portföyler nükleer kışı atlatmış gibi ama biz hâlâ buradayız. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ Bir kahve al, nabzı kontrol et ve bakalım hâlâ kim nefes alıyor.",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो ऐसे दिखते हैं जैसे परमाणु सर्दी झेलकर आए हों, फिर भी हम यहाँ हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ कॉफ़ी लो, नब्ज़ जाँचो और देखें कौन अब भी साँस ले रहा है।"
+      }
     },
     {
       "id": "ZOMBCASH/999:0",
@@ -32307,7 +32387,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на графиках, и портфель похож на кладбище. Но мы, между прочим, были нежитью с самого первого дня. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Ein weiterer roter Tag in den Charts und das Portfolio sieht aus wie ein Friedhof. Aber wir sind schließlich seit Tag eins untot. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Encore une journée dans le rouge sur les graphiques et le portefeuille ressemble à un cimetière. Mais nous, cela fait depuis le premier jour que nous sommes morts-vivants. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Un altro giorno in rosso sui grafici e il portafoglio sembra un cimitero. Ma noi, dopotutto, siamo non morti fin dal primo giorno. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "チャートはまた赤い一日で、ポートフォリオは墓場のよう。でも私たちは初日からずっとアンデッドだ。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "图表又是一个红色交易日，投资组合看起来像座墓地。不过，我们从第一天起就是亡灵了。市场已死，ZOMBIECASH没有。",
+        "tr": "Grafiklerde yine kırmızı bir gün ve portföy mezarlık gibi görünüyor. Ama biz zaten ilk günden beri yaşayan ölüyüz. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "चार्ट पर फिर एक लाल दिन है और पोर्टफोलियो कब्रिस्तान जैसा दिख रहा है। लेकिन हम तो पहले दिन से ही मरे हुए हैं। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/997:0",
@@ -32333,7 +32423,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель в минусе? Портфеля вообще нет? Неважно, если ты уже нежить. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Забирай свои $ZOMBCASH и продолжай свой зомби-марш.",
+        "de": "Portfolio im Minus? Gar kein Portfolio mehr? Egal, wenn du ohnehin schon untot bist. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schnapp dir deine $ZOMBCASH und schlurf weiter.",
+        "fr": "Portefeuille dans le rouge ? Plus de portefeuille du tout ? Peu importe quand on est déjà mort-vivant. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Récupère tes $ZOMBCASH et continue d’avancer en traînant les pieds.",
+        "it": "Portafoglio in rosso? Non hai più un portafoglio? Non importa se sei già un non morto. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Prendi i tuoi $ZOMBCASH e continua a trascinarti.",
+        "ja": "ポートフォリオは赤字？そもそもポートフォリオがない？もうアンデッドなら関係ない。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ $ZOMBCASHを手にして、ゾンビの行進を続けよう。",
+        "zh-CN": "投资组合亏损？甚至已经没有投资组合了？如果你早已是不死之身，那就无所谓。市场已死，ZOMBIECASH没有。🧟‍♂️ 拿好你的$ZOMBCASH，继续蹒跚前行。",
+        "tr": "Portföyün zararda mı? Artık portföyün bile mi yok? Zaten yaşayan ölüysen fark etmez. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ $ZOMBCASH'ini al ve ağır ağır yürümeye devam et.",
+        "hi": "पोर्टफोलियो घाटे में है? पोर्टफोलियो ही नहीं बचा? अगर तुम पहले से ही मरे हुए हो तो फ़र्क नहीं पड़ता। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ अपना $ZOMBCASH उठाओ और आगे बढ़ते रहो।"
+      }
     },
     {
       "id": "ZOMBCASH/994:0",
@@ -32359,7 +32459,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на кладбище, а вся лента рыдает. А мы тем временем просто едим мозги и отдыхаем. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ 💀 $ZOMBCASH",
+        "de": "Überall rote Kerzen, Portfolios wie Friedhöfe und die ganze Timeline heult. Währenddessen essen wir einfach Gehirne und hängen entspannt herum. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ 💀 $ZOMBCASH",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des cimetières et toute la timeline qui pleure. Pendant ce temps, nous mangeons tranquillement des cerveaux. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ 💀 $ZOMBCASH",
+        "it": "Candele rosse ovunque, portafogli che sembrano cimiteri e tutta la timeline in lacrime. Nel frattempo, noi mangiamo cervelli e ce la spassiamo. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ 💀 $ZOMBCASH",
+        "ja": "赤いローソク足だらけで、ポートフォリオは墓場のよう。タイムライン中が泣き叫ぶ一方、私たちは脳みそを食べてのんびりしている。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 💀 $ZOMBCASH",
+        "zh-CN": "红色K线到处都是，投资组合像座墓地，整条动态都在哭泣。而我们呢，只是在吃脑子、悠闲消磨时光。市场已死，ZOMBIECASH没有。🧟‍♂️ 💀 $ZOMBCASH",
+        "tr": "Her yerde kırmızı mumlar, portföyler mezarlık gibi ve tüm akış ağlıyor. Biz ise beyin yiyip takılıyoruz. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ 💀 $ZOMBCASH",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो कब्रिस्तान जैसे हैं और पूरी टाइमलाइन रो रही है। उधर हम बस दिमाग खा रहे हैं और मज़े कर रहे हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ 💀 $ZOMBCASH"
+      }
     },
     {
       "id": "ZOMBCASH/991:0",
@@ -32385,7 +32495,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель после вчерашних красных свечей похож на кладбище? Хорошо, что $ZOMBCASH процветает среди нежити. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Sieht dein Portfolio nach den roten Kerzen von gestern wie ein Friedhof aus? Gut, dass $ZOMBCASH unter den Untoten gedeiht. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Ton portefeuille ressemble à un cimetière après les bougies rouges d’hier ? Heureusement, $ZOMBCASH prospère parmi les morts-vivants. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Il tuo portafoglio sembra un cimitero dopo le candele rosse di ieri? Per fortuna $ZOMBCASH prospera tra i non morti. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "昨日の赤いローソク足でポートフォリオは墓場のよう？ でも$ZOMBCASHはアンデッドの世界で繁栄している。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "昨天的红色K线过后，你的投资组合看起来像座墓地？好在$ZOMBCASH在亡灵之中依然兴盛。市场已死，ZOMBIECASH没有。",
+        "tr": "Dünkü kırmızı mumlardan sonra portföyün mezarlık gibi mi görünüyor? İyi ki $ZOMBCASH yaşayan ölülerin arasında gelişiyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "कल की लाल कैंडल्स के बाद आपका पोर्टफोलियो कब्रिस्तान जैसा दिख रहा है? अच्छा है कि $ZOMBCASH मरे हुओं के बीच फल-फूल रहा है। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/984:0",
@@ -32411,7 +32531,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель после сегодняшних красных свечей выглядит как кладбище? Хорошо, что $ZOMBCASH процветает в апокалипсисе. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Sieht dein Portfolio nach den heutigen roten Kerzen wie ein Friedhof aus? Gut, dass $ZOMBCASH in der Apokalypse gedeiht. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Ton portefeuille ressemble à un cimetière après les bougies rouges d’aujourd’hui ? Heureusement, $ZOMBCASH prospère dans l’apocalypse. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Il tuo portafoglio sembra un cimitero dopo le candele rosse di oggi? Per fortuna $ZOMBCASH prospera nell’apocalisse. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "今日の赤いローソク足でポートフォリオは墓場のよう？ でも$ZOMBCASHは終末の世界で繁栄している。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "今天的红色K线过后，你的投资组合看起来像座墓地？好在$ZOMBCASH在末日中依然兴盛。市场已死，ZOMBIECASH没有。",
+        "tr": "Bugünkü kırmızı mumlardan sonra portföyün mezarlık gibi mi görünüyor? İyi ki $ZOMBCASH kıyamette gelişiyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "आज की लाल कैंडल्स के बाद आपका पोर्टफोलियो कब्रिस्तान जैसा दिख रहा है? अच्छा है कि $ZOMBCASH प्रलय में भी फल-फूल रहा है। बाज़ार मर गया। ZOMBIECASH नहीं。"
+      }
     },
     {
       "id": "ZOMBCASH/974:0",
@@ -32437,7 +32567,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на графиках, и портфель похож на кладбище. Хорошо, что $ZOMBCASH процветает в апокалипсисе. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Ein weiterer roter Tag in den Charts und das Portfolio sieht aus wie ein Friedhof. Gut, dass $ZOMBCASH in der Apokalypse gedeiht. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Encore une journée dans le rouge sur les graphiques et le portefeuille ressemble à un cimetière. Heureusement, $ZOMBCASH prospère dans l’apocalypse. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Un altro giorno in rosso sui grafici e il portafoglio sembra un cimitero. Per fortuna $ZOMBCASH prospera nell’apocalisse. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "チャートはまた赤い一日で、ポートフォリオは墓場のよう。でも$ZOMBCASHは終末の世界で繁栄している。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "图表又是一个红色交易日，投资组合看起来像座墓地。好在$ZOMBCASH在末日中依然兴盛。市场已死，ZOMBIECASH没有。",
+        "tr": "Grafiklerde yine kırmızı bir gün ve portföy mezarlık gibi görünüyor. İyi ki $ZOMBCASH kıyamette gelişiyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "चार्ट पर फिर एक लाल दिन है और पोर्टफोलियो कब्रिस्तान जैसा दिख रहा है। अच्छा है कि $ZOMBCASH प्रलय में भी फल-फूल रहा है। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/968:0",
@@ -32463,7 +32603,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на города-призраки, но мы всё ещё здесь. РЫНОК УМЕР. ZOMBIECASH — НЕТ. Выпей кофе и посмотри, что происходит на Solana: 👉 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 👉 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "de": "Überall rote Kerzen, Portfolios wie Geisterstädte, und trotzdem sind wir noch hier. DER MARKT IST TOT. ZOMBIECASH NICHT. Schnapp dir einen Kaffee und schau dir an, was auf Solana los ist: 👉 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 👉 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des villes fantômes, et pourtant nous sommes toujours là. LE MARCHÉ EST MORT. PAS ZOMBIECASH. Prends un café et regarde ce qui se passe sur Solana : 👉 CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 👉 Pump.fun : https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "it": "Candele rosse ovunque, portafogli che sembrano città fantasma, eppure siamo ancora qui. IL MERCATO È MORTO. ZOMBIECASH NO. Prendi un caffè e scopri cosa succede su Solana: 👉 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 👉 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "ja": "赤いローソク足だらけで、ポートフォリオはゴーストタウンのよう。それでも私たちはここにいる。市場は死んだ。ZOMBIECASHは死んでいない。コーヒーを飲んでSolanaの動きをチェックしよう：👉 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 👉 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "zh-CN": "红色K线到处都是，投资组合像一座座鬼城，但我们依然在这里。市场已死，ZOMBIECASH没有。喝杯咖啡，看看Solana上的动态：👉 CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 👉 Pump.fun：https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "tr": "Her yerde kırmızı mumlar, portföyler hayalet kasabalar gibi ama biz hâlâ buradayız. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. Bir kahve al ve Solana'daki gelişmelere göz at: 👉 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 👉 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो भुतहा कस्बों जैसे दिखते हैं, फिर भी हम यहाँ हैं। बाज़ार मर गया। ZOMBIECASH नहीं। कॉफ़ी लो और Solana पर चल रही गतिविधि देखो: 👉 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 👉 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump"
+      }
     },
     {
       "id": "ZOMBCASH/964:0",
@@ -32489,7 +32639,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфели истекают кровью? Повсюду красные свечи? Пока все остальные превращаются в криптозомби, $ZOMBCASH только начинает свой путь. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Bluten die Portfolios aus? Überall rote Kerzen? Während alle anderen zu Krypto-Zombies werden, fängt $ZOMBCASH gerade erst an. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Les portefeuilles se vident de leur sang ? Des bougies rouges partout ? Pendant que les autres deviennent des zombies de la crypto, $ZOMBCASH ne fait que commencer. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "I portafogli stanno sanguinando? Candele rosse ovunque? Mentre tutti gli altri diventano zombie crypto, $ZOMBCASH sta appena iniziando. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "ポートフォリオは血を流している？赤いローソク足だらけ？他のみんなが暗号資産ゾンビになる中、$ZOMBCASHは始まったばかり。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "投资组合正在失血？到处都是红色K线？当其他人都变成加密僵尸时，$ZOMBCASH才刚刚起步。市场已死，ZOMBIECASH没有。",
+        "tr": "Portföyler kan mı kaybediyor? Her yerde kırmızı mumlar mı var? Herkes kripto zombisine dönüşürken $ZOMBCASH daha yeni başlıyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "क्या पोर्टफोलियो से खून बह रहा है? हर तरफ़ लाल कैंडल्स हैं? जब बाकी सब क्रिप्टो ज़ॉम्बी बन रहे हैं, $ZOMBCASH की शुरुआत तो अब हो रही है। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/956:0",
@@ -32515,7 +32675,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель после сегодняшних свечей похож на кладбище? Хорошо, что $ZOMBCASH создан для апокалипсиса. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Sieht dein Portfolio nach den heutigen Kerzen wie ein Friedhof aus? Gut, dass $ZOMBCASH für die Apokalypse gemacht wurde. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Ton portefeuille ressemble à un cimetière après les bougies d’aujourd’hui ? Heureusement, $ZOMBCASH a été conçu pour l’apocalypse. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Il tuo portafoglio sembra un cimitero dopo le candele di oggi? Per fortuna $ZOMBCASH è stato creato per l’apocalisse. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "今日のローソク足でポートフォリオは墓場のよう？ でも$ZOMBCASHは終末に備えて作られた。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "今天的K线过后，你的投资组合看起来像座墓地？好在$ZOMBCASH就是为末日而生。市场已死，ZOMBIECASH没有。",
+        "tr": "Bugünkü mumlardan sonra portföyün mezarlık gibi mi görünüyor? İyi ki $ZOMBCASH kıyamet için tasarlandı. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "आज की कैंडल्स के बाद आपका पोर्टफोलियो कब्रिस्तान जैसा दिख रहा है? अच्छा है कि $ZOMBCASH प्रलय के लिए बनाया गया है। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/944:0",
@@ -32541,7 +32711,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на кладбище, а мы всё ещё здесь. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Собирай снаряжение и оставайся в чате — нежить выживает на Solana.",
+        "de": "Überall rote Kerzen, Portfolios wie Friedhöfe, und trotzdem sind wir noch hier. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schnapp dir deine Ausrüstung und bleib im Chat – die Untoten überleben auf Solana.",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des cimetières, et pourtant nous sommes toujours là. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Prépare ton équipement et reste dans le chat : les morts-vivants survivent sur Solana.",
+        "it": "Candele rosse ovunque, portafogli che sembrano cimiteri, eppure siamo ancora qui. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Prepara l’equipaggiamento e resta in chat: i non morti sopravvivono su Solana.",
+        "ja": "赤いローソク足だらけで、ポートフォリオは墓場のよう。それでも私たちはここにいる。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 装備を整えてチャットに残ろう。アンデッドはSolanaで生き延びる。",
+        "zh-CN": "红色K线到处都是，投资组合像座墓地，但我们依然在这里。市场已死，ZOMBIECASH没有。🧟‍♂️ 带好装备，留在聊天群里——亡灵在Solana上生存。",
+        "tr": "Her yerde kırmızı mumlar, portföyler mezarlık gibi ama biz hâlâ buradayız. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ Ekipmanını hazırla ve sohbette kal — yaşayan ölüler Solana'da hayatta kalır.",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो कब्रिस्तान जैसे हैं, फिर भी हम यहाँ हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ अपना सामान तैयार रखो और चैट में बने रहो—मरे हुए Solana पर ज़िंदा रहते हैं।"
+      }
     },
     {
       "id": "ZOMBCASH/939:0",
@@ -32567,7 +32747,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный портфель в групповом чате? Наверное, вторник. Пока остальной рынок изображает мёртвых, мы просто поддерживаем свой стиль. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Проверь ссылки, если бродишь по пустоши: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "de": "Schon wieder ein rotes Portfolio im Gruppenchat? Muss wohl Dienstag sein. Während der Rest des Marktes tot spielt, bleiben wir unserem Stil treu. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Check die Links, wenn du durchs Ödland streifst: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "fr": "Encore un portefeuille dans le rouge dans le chat de groupe ? Ça doit être mardi. Pendant que le reste du marché fait le mort, nous assumons simplement notre esthétique. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Consulte les liens si tu parcours les terres désolées : CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "it": "Un altro portafoglio in rosso nella chat di gruppo? Dev'essere martedì. Mentre il resto del mercato finge di essere morto, noi portiamo avanti il nostro stile. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Controlla i link se stai vagando nella zona desolata: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "ja": "グループチャットにまた赤字のポートフォリオ？火曜日かな。市場の他のみんなが死んだふりをしている間、私たちはこのスタイルを貫いている。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 荒野をさまようならリンクをチェック：CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "zh-CN": "群聊里又出现一个亏损的投资组合？看来是星期二。市场其他人都在装死，而我们只是在坚持自己的风格。市场已死，ZOMBIECASH没有。🧟‍♂️ 如果你正在荒地游荡，记得查看链接：CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "tr": "Grup sohbetinde yine kırmızı bir portföy mü? Bugün salı olmalı. Piyasanın geri kalanı ölü taklidi yaparken biz kendi tarzımızı sürdürüyoruz. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ Çorak arazide dolaşıyorsan bağlantılara göz at: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "hi": "ग्रुप चैट में फिर एक लाल पोर्टफोलियो? लगता है मंगलवार है। जब बाज़ार के बाकी लोग मरे होने का नाटक कर रहे हैं, हम बस अपने अंदाज़ में जी रहे हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ अगर बंजर ज़मीन में घूम रहे हो तो लिंक देखो: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`"
+      }
     },
     {
       "id": "ZOMBCASH/926:0",
@@ -32593,7 +32783,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфели кровоточат красным, а графики похожи на место преступления? Обычный вторник в крипте. Пока все остальные прикидываются мёртвыми, мы только начинаем. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ 💀",
+        "de": "Bluten die Portfolios rot und sehen die Charts wie ein Tatort aus? Ein ganz normaler Dienstag in Krypto. Während alle anderen tot spielen, fangen wir gerade erst an. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ 💀",
+        "fr": "Les portefeuilles saignent et les graphiques ressemblent à une scène de crime ? Un mardi ordinaire dans la crypto. Pendant que les autres font les morts, nous ne faisons que commencer. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ 💀",
+        "it": "I portafogli sanguinano in rosso e i grafici sembrano una scena del crimine? Un martedì qualunque nel mondo crypto. Mentre tutti gli altri fingono di essere morti, noi stiamo appena iniziando. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ 💀",
+        "ja": "ポートフォリオは赤く血を流し、チャートは犯罪現場のよう？暗号資産界ではいつもの火曜日。みんなが死んだふりをする中、私たちは始まったばかり。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 💀",
+        "zh-CN": "投资组合一片血红，图表看起来像犯罪现场？这就是加密市场普通的星期二。当其他人都在装死时，我们才刚刚开始。市场已死，ZOMBIECASH没有。🧟‍♂️ 💀",
+        "tr": "Portföyler kırmızıya mı boyandı, grafikler olay yeri gibi mi görünüyor? Kriptoda sıradan bir salı. Herkes ölü taklidi yaparken biz daha yeni başlıyoruz. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ 💀",
+        "hi": "पोर्टफोलियो से लाल खून बह रहा है और चार्ट अपराध-स्थल जैसे दिख रहे हैं? क्रिप्टो में आम मंगलवार। जब बाकी सब मरे होने का नाटक कर रहे हैं, हम तो अभी शुरू कर रहे हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ 💀"
+      }
     },
     {
       "id": "ZOMBCASH/916:0",
@@ -32619,7 +32819,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на города-призраки, но мы всё ещё здесь. Рынок умер. ZombieCash — нет. 🧟‍♂️ Собирай снаряжение и загляни на $ZOMBCASH в Solana: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "de": "Überall rote Kerzen, Portfolios wie Geisterstädte, und trotzdem sind wir noch hier. Der Markt ist tot. ZombieCash nicht. 🧟‍♂️ Schnapp dir deine Ausrüstung und schau dir $ZOMBCASH auf Solana an: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des villes fantômes, et pourtant nous sommes toujours là. Le marché est mort. Pas ZombieCash. 🧟‍♂️ Prépare ton équipement et découvre $ZOMBCASH sur Solana : https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "it": "Candele rosse ovunque, portafogli che sembrano città fantasma, eppure siamo ancora qui. Il mercato è morto. ZombieCash no. 🧟‍♂️ Prepara l’equipaggiamento e scopri $ZOMBCASH su Solana: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "ja": "赤いローソク足だらけで、ポートフォリオはゴーストタウンのよう。それでも私たちはここにいる。市場は死んだ。ZombieCashは死んでいない。🧟‍♂️ 装備を整えてSolanaの$ZOMBCASHをチェック：https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "zh-CN": "红色K线到处都是，投资组合像一座座鬼城，但我们依然在这里。市场死了，ZombieCash没有。🧟‍♂️ 带好装备，去Solana看看$ZOMBCASH：https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "tr": "Her yerde kırmızı mumlar, portföyler hayalet kasabalar gibi ama biz hâlâ buradayız. Piyasa öldü. ZombieCash ölmedi. 🧟‍♂️ Ekipmanını hazırla ve Solana'da $ZOMBCASH'e göz at: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो भुतहा कस्बों जैसे हैं, फिर भी हम यहाँ हैं। बाज़ार मर गया। ZombieCash नहीं। 🧟‍♂️ अपना सामान तैयार करो और Solana पर $ZOMBCASH देखो: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump"
+      }
     },
     {
       "id": "ZOMBCASH/905:0",
@@ -32645,7 +32855,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на города-призраки. А $ZOMBCASH тем временем просто выползает из земли. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Überall rote Kerzen, Portfolios wie Geisterstädte. Währenddessen kriecht $ZOMBCASH einfach aus der Erde. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des villes fantômes. Pendant ce temps, $ZOMBCASH sort tranquillement de terre. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Candele rosse ovunque, portafogli che sembrano città fantasma. Nel frattempo, $ZOMBCASH sta semplicemente strisciando fuori dalla terra. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "赤いローソク足だらけで、ポートフォリオはゴーストタウンのよう。その一方で、$ZOMBCASHは土の中から這い出してくる。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "红色K线到处都是，投资组合像一座座鬼城。而$ZOMBCASH正从泥土中爬出来。市场已死，ZOMBIECASH没有。",
+        "tr": "Her yerde kırmızı mumlar, portföyler hayalet kasabalar gibi. Bu sırada $ZOMBCASH toprağın altından sürünerek çıkıyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो भुतहा कस्बों जैसे हैं। उधर $ZOMBCASH मिट्टी से बाहर रेंग रहा है। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/900:0",
@@ -32671,7 +32891,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на кладбище, и вся лента рыдает. А $ZOMBCASH тем временем просто отдыхает в пустоши. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Überall rote Kerzen, Portfolios wie Friedhöfe und die ganze Timeline heult. Währenddessen chillt $ZOMBCASH einfach im Ödland. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des cimetières et toute la timeline qui pleure. Pendant ce temps, $ZOMBCASH se détend tranquillement dans les terres désolées. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Candele rosse ovunque, portafogli che sembrano cimiteri e tutta la timeline in lacrime. Nel frattempo, $ZOMBCASH se ne sta tranquillo nella zona desolata. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "赤いローソク足だらけで、ポートフォリオは墓場のよう。タイムライン中が泣いている一方、$ZOMBCASHは荒野でのんびりしている。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "红色K线到处都是，投资组合像座墓地，整条动态都在哭泣。而$ZOMBCASH正悠闲地待在荒地里。市场已死，ZOMBIECASH没有。",
+        "tr": "Her yerde kırmızı mumlar, portföyler mezarlık gibi ve tüm akış ağlıyor. Bu sırada $ZOMBCASH çorak arazide keyfine bakıyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो कब्रिस्तान जैसे हैं और पूरी टाइमलाइन रो रही है। उधर $ZOMBCASH बंजर ज़मीन में आराम कर रहा है। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/890:0",
@@ -32697,7 +32927,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель после сегодняшних свечей похож на кладбище? Хорошо, что зомби обожают кладбища. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ 💸",
+        "de": "Sieht dein Portfolio nach den heutigen Kerzen wie ein Friedhof aus? Gut, dass Zombies Friedhöfe lieben. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ 💸",
+        "fr": "Ton portefeuille ressemble à un cimetière après les bougies d’aujourd’hui ? Heureusement, les zombies adorent les cimetières. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ 💸",
+        "it": "Il tuo portafoglio sembra un cimitero dopo le candele di oggi? Per fortuna gli zombie adorano i cimiteri. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ 💸",
+        "ja": "今日のローソク足でポートフォリオは墓場のよう？ゾンビは墓場が大好きだから問題ない。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 💸",
+        "zh-CN": "今天的K线过后，你的投资组合看起来像座墓地？好在僵尸最爱墓地。市场已死，ZOMBIECASH没有。🧟‍♂️ 💸",
+        "tr": "Bugünkü mumlardan sonra portföyün mezarlık gibi mi görünüyor? İyi ki zombiler mezarlıkları sever. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ 💸",
+        "hi": "आज की कैंडल्स के बाद आपका पोर्टफोलियो कब्रिस्तान जैसा दिख रहा है? अच्छा है कि ज़ॉम्बी को कब्रिस्तान पसंद हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ 💸"
+      }
     },
     {
       "id": "ZOMBCASH/879:0",
@@ -32723,7 +32963,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель в минусе? Настроения на нуле? Обычный вторник на крипторынке. РЫНОК УМЕР. ZOMBIECASH — НЕТ. Собирай снаряжение. $ZOMBCASH всё ещё на ногах.",
+        "de": "Portfolio im Minus? Stimmung auf null? Ein ganz normaler Dienstag im Kryptomarkt. DER MARKT IST TOT. ZOMBIECASH NICHT. Schnapp dir deine Ausrüstung. $ZOMBCASH steht noch.",
+        "fr": "Portefeuille dans le rouge ? Sentiment à zéro ? Un mardi tout à fait ordinaire dans la crypto. LE MARCHÉ EST MORT. PAS ZOMBIECASH. Prépare ton équipement. $ZOMBCASH tient toujours debout.",
+        "it": "Portafoglio in rosso? Sentiment a zero? Un martedì qualunque nel mondo crypto. IL MERCATO È MORTO. ZOMBIECASH NO. Prepara l’equipaggiamento. $ZOMBCASH è ancora in piedi.",
+        "ja": "ポートフォリオは赤字？市場のムードはゼロ？暗号資産界ではごく普通の火曜日。市場は死んだ。ZOMBIECASHは死んでいない。装備を整えよう。$ZOMBCASHはまだ健在。",
+        "zh-CN": "投资组合亏损？市场情绪归零？加密市场又一个平平无奇的星期二。市场已死，ZOMBIECASH没有。带好装备。$ZOMBCASH依然屹立。",
+        "tr": "Portföy zararda mı? Duyarlılık sıfır mı? Kriptoda sıradan bir salı işte. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. Ekipmanını hazırla. $ZOMBCASH hâlâ ayakta.",
+        "hi": "पोर्टफोलियो घाटे में है? बाज़ार का मूड शून्य है? क्रिप्टो में एक और आम मंगलवार। बाज़ार मर गया। ZOMBIECASH नहीं। अपना सामान तैयार करो। $ZOMBCASH अब भी डटा है।"
+      }
     },
     {
       "id": "ZOMBCASH/871:0",
@@ -32749,7 +32999,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфели истекают кровью? Графики показывают ровную линию? Хорошо, что у нас изначально не было пульса. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ 💸",
+        "de": "Bluten die Portfolios aus? Sind die Charts nur noch eine flache Linie? Gut, dass wir von Anfang an keinen Puls hatten. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ 💸",
+        "fr": "Les portefeuilles se vident de leur sang ? Les graphiques sont à plat ? Heureusement que nous n’avons jamais eu de pouls. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ 💸",
+        "it": "I portafogli stanno sanguinando? I grafici sono piatti? Per fortuna non abbiamo mai avuto un battito. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ 💸",
+        "ja": "ポートフォリオは血を流している？チャートは心停止？最初から脈がなかった私たちには問題ない。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 💸",
+        "zh-CN": "投资组合正在失血？图表已经变成一条直线？好在我们从一开始就没有脉搏。市场已死，ZOMBIECASH没有。🧟‍♂️ 💸",
+        "tr": "Portföyler kan mı kaybediyor? Grafikler dümdüz mü oldu? İyi ki en başından beri nabzımız yoktu. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ 💸",
+        "hi": "क्या पोर्टफोलियो से खून बह रहा है? चार्ट सपाट हो गए हैं? अच्छा है कि हमारी धड़कन तो शुरू से ही नहीं थी। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ 💸"
+      }
     },
     {
       "id": "ZOMBCASH/868:0",
@@ -32775,7 +33035,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель после сегодняшних красных свечей похож на кладбище? Хорошо, что $ZOMBCASH процветает в апокалипсисе. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ 💀",
+        "de": "Sieht dein Portfolio nach den heutigen roten Kerzen wie ein Friedhof aus? Gut, dass $ZOMBCASH in der Apokalypse gedeiht. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ 💀",
+        "fr": "Ton portefeuille ressemble à un cimetière après les bougies rouges d’aujourd’hui ? Heureusement, $ZOMBCASH prospère dans l’apocalypse. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ 💀",
+        "it": "Il tuo portafoglio sembra un cimitero dopo le candele rosse di oggi? Per fortuna $ZOMBCASH prospera nell’apocalisse. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ 💀",
+        "ja": "今日の赤いローソク足でポートフォリオは墓場のよう？ でも$ZOMBCASHは終末の世界で繁栄している。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 💀",
+        "zh-CN": "今天的红色K线过后，你的投资组合看起来像座墓地？好在$ZOMBCASH在末日中依然兴盛。市场已死，ZOMBIECASH没有。🧟‍♂️ 💀",
+        "tr": "Bugünkü kırmızı mumlardan sonra portföyün mezarlık gibi mi görünüyor? İyi ki $ZOMBCASH kıyamette gelişiyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ 💀",
+        "hi": "आज की लाल कैंडल्स के बाद आपका पोर्टफोलियो कब्रिस्तान जैसा दिख रहा है? अच्छा है कि $ZOMBCASH प्रलय में भी फल-फूल रहा है। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ 💀"
+      }
     },
     {
       "id": "ZOMBCASH/809:0",
@@ -32801,7 +33071,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель после сегодняшних красных свечей похож на кладбище? Хорошо, что $ZOMBCASH процветает в апокалипсисе. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Sieht dein Portfolio nach den heutigen roten Kerzen wie ein Friedhof aus? Gut, dass $ZOMBCASH in der Apokalypse gedeiht. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Ton portefeuille ressemble à un cimetière après les bougies rouges d’aujourd’hui ? Heureusement, $ZOMBCASH prospère dans l’apocalypse. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Il tuo portafoglio sembra un cimitero dopo le candele rosse di oggi? Per fortuna $ZOMBCASH prospera nell’apocalisse. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "今日の赤いローソク足でポートフォリオは墓場のよう？ でも$ZOMBCASHは終末の世界で繁栄している。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "今天的红色K线过后，你的投资组合看起来像座墓地？好在$ZOMBCASH在末日中依然兴盛。市场已死，ZOMBIECASH没有。",
+        "tr": "Bugünkü kırmızı mumlardan sonra portföyün mezarlık gibi mi görünüyor? İyi ki $ZOMBCASH kıyamette gelişiyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "आज की लाल कैंडल्स के बाद आपका पोर्टफोलियो कब्रिस्तान जैसा दिख रहा है? अच्छा है कि $ZOMBCASH प्रलय में भी फल-फूल रहा है। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/808:0",
@@ -32827,7 +33107,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель кровоточит? Графики похожи на место преступления? Хорошо, что зомби не нужен пульс, чтобы продолжать идти. РЫНОК УМЕР. ZOMBIECASH — НЕТ. $ZOMBCASH",
+        "de": "Blutet das Portfolio? Sehen die Charts wie ein Tatort aus? Gut, dass Zombies keinen Puls brauchen, um weiterzumachen. DER MARKT IST TOT. ZOMBIECASH NICHT. $ZOMBCASH",
+        "fr": "Le portefeuille saigne ? Les graphiques ressemblent à une scène de crime ? Heureusement, les zombies n’ont pas besoin de pouls pour continuer. LE MARCHÉ EST MORT. PAS ZOMBIECASH. $ZOMBCASH",
+        "it": "Il portafoglio sanguina? I grafici sembrano una scena del crimine? Per fortuna gli zombie non hanno bisogno di battito per andare avanti. IL MERCATO È MORTO. ZOMBIECASH NO. $ZOMBCASH",
+        "ja": "ポートフォリオは出血中？チャートは犯罪現場のよう？ゾンビは歩き続けるのに脈拍なんていらない。市場は死んだ。ZOMBIECASHは死んでいない。$ZOMBCASH",
+        "zh-CN": "投资组合在流血？图表看起来像犯罪现场？好在僵尸不需要脉搏也能继续前行。市场已死，ZOMBIECASH没有。$ZOMBCASH",
+        "tr": "Portföy kan mı kaybediyor? Grafikler olay yeri gibi mi? İyi ki zombilerin devam etmek için nabza ihtiyacı yok. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. $ZOMBCASH",
+        "hi": "पोर्टफोलियो से खून बह रहा है? चार्ट अपराध-स्थल जैसे दिख रहे हैं? अच्छा है कि ज़ॉम्बी को चलते रहने के लिए धड़कन की ज़रूरत नहीं। बाज़ार मर गया। ZOMBIECASH नहीं। $ZOMBCASH"
+      }
     },
     {
       "id": "ZOMBCASH/794:0",
@@ -32853,7 +33143,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель похож на кладбище? Повсюду красные свечи? Не переживай: нежить не чувствует боли. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ 💸 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "de": "Sieht dein Portfolio wie ein Friedhof aus? Überall rote Kerzen? Keine Sorge: Die Untoten spüren keinen Schmerz. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ 💸 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "fr": "Ton portefeuille ressemble à un cimetière ? Des bougies rouges partout ? Pas d’inquiétude : les morts-vivants ne ressentent pas la douleur. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ 💸 CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "it": "Il tuo portafoglio sembra un cimitero? Candele rosse ovunque? Niente paura: i non morti non sentono dolore. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ 💸 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "ja": "ポートフォリオは墓場のよう？赤いローソク足だらけ？心配はいらない。アンデッドは痛みを感じない。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 💸 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "zh-CN": "投资组合看起来像墓地？到处都是红色K线？别担心：亡灵感受不到疼痛。市场已死，ZOMBIECASH没有。🧟‍♂️ 💸 CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "tr": "Portföyün mezarlık gibi mi görünüyor? Her yerde kırmızı mumlar mı var? Merak etme: yaşayan ölüler acı hissetmez. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ 💸 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "hi": "क्या आपका पोर्टफोलियो कब्रिस्तान जैसा दिख रहा है? हर तरफ़ लाल कैंडल्स हैं? चिंता न करें: मरे हुए दर्द महसूस नहीं करते। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ 💸 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`"
+      }
     },
     {
       "id": "ZOMBCASH/790:0",
@@ -32879,7 +33179,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфели истекают кровью? Графики показывают ровную линию? Хорошо, что у нас изначально не было пульса. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ 💸",
+        "de": "Bluten die Portfolios aus? Sind die Charts nur noch eine flache Linie? Gut, dass wir von Anfang an keinen Puls hatten. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ 💸",
+        "fr": "Les portefeuilles se vident de leur sang ? Les graphiques sont à plat ? Heureusement que nous n’avons jamais eu de pouls. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ 💸",
+        "it": "I portafogli stanno sanguinando? I grafici sono piatti? Per fortuna non abbiamo mai avuto un battito. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ 💸",
+        "ja": "ポートフォリオは血を流している？チャートは心停止？最初から脈がなかった私たちには問題ない。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 💸",
+        "zh-CN": "投资组合正在失血？图表已经变成一条直线？好在我们从一开始就没有脉搏。市场已死，ZOMBIECASH没有。🧟‍♂️ 💸",
+        "tr": "Portföyler kan mı kaybediyor? Grafikler dümdüz mü oldu? İyi ki en başından beri nabzımız yoktu. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ 💸",
+        "hi": "क्या पोर्टफोलियो से खून बह रहा है? चार्ट सपाट हो गए हैं? अच्छा है कि हमारी धड़कन तो शुरू से ही नहीं थी। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ 💸"
+      }
     },
     {
       "id": "ZOMBCASH/789:0",
@@ -32905,7 +33215,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель кровоточит? Красные свечи похожи на место преступления? Расслабься. Рынок умер, а $ZOMBCASH — нет. Захвати немного мозгов и присоединяйся к орде нежити на Solana: [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "de": "Blutet das Portfolio? Sehen die roten Kerzen wie ein Tatort aus? Ganz ruhig. Der Markt ist tot, aber $ZOMBCASH nicht. Schnapp dir ein paar Gehirne und schließ dich der Horde der Untoten auf Solana an: [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "fr": "Le portefeuille saigne ? Les bougies rouges ressemblent à une scène de crime ? Du calme. Le marché est mort, mais pas $ZOMBCASH. Prends quelques cerveaux et rejoins la horde des morts-vivants sur Solana : [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "it": "Il portafoglio sanguina? Le candele rosse sembrano una scena del crimine? Calma. Il mercato è morto, ma $ZOMBCASH no. Prendi qualche cervello e unisciti all’orda dei non morti su Solana: [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "ja": "ポートフォリオは出血中？赤いローソク足は犯罪現場のよう？落ち着いて。市場は死んだが、$ZOMBCASHは死んでいない。脳みそを持ってSolanaのアンデッドの群れに加わろう：[ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "zh-CN": "投资组合在流血？红色K线看起来像犯罪现场？放轻松。市场死了，但$ZOMBCASH没有。拿些脑子，加入Solana上的亡灵大军：[ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "tr": "Portföy kan mı kaybediyor? Kırmızı mumlar olay yeri gibi mi? Sakin ol. Piyasa öldü ama $ZOMBCASH ölmedi. Biraz beyin kap ve Solana'daki yaşayan ölüler sürüsüne katıl: [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "hi": "पोर्टफोलियो से खून बह रहा है? लाल कैंडल्स अपराध-स्थल जैसी लग रही हैं? शांत रहो। बाज़ार मर गया, लेकिन $ZOMBCASH नहीं। कुछ दिमाग उठाओ और Solana पर मरे हुओं की भीड़ में शामिल हो जाओ: [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )"
+      }
     },
     {
       "id": "ZOMBCASH/787:0",
@@ -32931,7 +33251,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель после сегодняшних красных свечей похож на кладбище? Хорошо, что $ZOMBCASH процветает в апокалипсисе. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Sieht dein Portfolio nach den heutigen roten Kerzen wie ein Friedhof aus? Gut, dass $ZOMBCASH in der Apokalypse gedeiht. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Ton portefeuille ressemble à un cimetière après les bougies rouges d’aujourd’hui ? Heureusement, $ZOMBCASH prospère dans l’apocalypse. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Il tuo portafoglio sembra un cimitero dopo le candele rosse di oggi? Per fortuna $ZOMBCASH prospera nell’apocalisse. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "今日の赤いローソク足でポートフォリオは墓場のよう？ でも$ZOMBCASHは終末の世界で繁栄している。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "今天的红色K线过后，你的投资组合看起来像座墓地？好在$ZOMBCASH在末日中依然兴盛。市场已死，ZOMBIECASH没有。",
+        "tr": "Bugünkü kırmızı mumlardan sonra portföyün mezarlık gibi mi görünüyor? İyi ki $ZOMBCASH kıyamette gelişiyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "आज की लाल कैंडल्स के बाद आपका पोर्टफोलियो कब्रिस्तान जैसा दिख रहा है? अच्छा है कि $ZOMBCASH प्रलय में भी फल-फूल रहा है। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/783:0",
@@ -32957,7 +33287,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на кладбище, но мы всё ещё здесь. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Собирай снаряжение и будь начеку. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "de": "Überall rote Kerzen, Portfolios wie Friedhöfe, und trotzdem sind wir noch hier. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schnapp dir deine Ausrüstung und bleib wachsam. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des cimetières, et pourtant nous sommes toujours là. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Prépare ton équipement et reste vigilant. CA : 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "it": "Candele rosse ovunque, portafogli che sembrano cimiteri, eppure siamo ancora qui. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Prepara l’equipaggiamento e resta all’erta. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "ja": "赤いローソク足だらけで、ポートフォリオは墓場のよう。それでも私たちはここにいる。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 装備を整えて警戒を怠るな。CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "zh-CN": "红色K线到处都是，投资组合像座墓地，但我们依然在这里。市场已死，ZOMBIECASH没有。🧟‍♂️ 带好装备，保持警惕。CA：6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "tr": "Her yerde kırmızı mumlar, portföyler mezarlık gibi ama biz hâlâ buradayız. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ Ekipmanını hazırla ve tetikte kal. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो कब्रिस्तान जैसे हैं, फिर भी हम यहाँ हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ अपना सामान तैयार रखो और सतर्क रहो। CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump"
+      }
     },
     {
       "id": "ZOMBCASH/781:0",
@@ -32983,7 +33323,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные портфели, но орда продолжает двигаться. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ $ZOMBCASH",
+        "de": "Überall rote Portfolios, aber die Horde ist weiter unterwegs. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ $ZOMBCASH",
+        "fr": "Des portefeuilles dans le rouge partout, mais la horde continue d’avancer. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ $ZOMBCASH",
+        "it": "Portafogli in rosso ovunque, ma l’orda continua ad avanzare. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ $ZOMBCASH",
+        "ja": "赤いポートフォリオだらけ。それでも群れは進み続ける。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ $ZOMBCASH",
+        "zh-CN": "到处都是亏损的投资组合，但亡灵大军仍在前进。市场已死，ZOMBIECASH没有。🧟‍♂️ $ZOMBCASH",
+        "tr": "Her yerde kırmızı portföyler var ama sürü ilerlemeye devam ediyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ $ZOMBCASH",
+        "hi": "हर तरफ़ लाल पोर्टफोलियो हैं, लेकिन झुंड आगे बढ़ रहा है। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ $ZOMBCASH"
+      }
     },
     {
       "id": "ZOMBCASH/780:0",
@@ -33009,7 +33359,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на кладбище, но мы всё ещё здесь. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Собирай снаряжение и будь начеку. Какова ваша стратегия выживания сегодня?",
+        "de": "Überall rote Kerzen, Portfolios wie Friedhöfe, und trotzdem sind wir noch hier. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schnapp dir deine Ausrüstung und bleib wachsam. Was ist heute eure Überlebensstrategie?",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des cimetières, et pourtant nous sommes toujours là. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Prépare ton équipement et reste vigilant. Quelle est votre stratégie de survie aujourd’hui ?",
+        "it": "Candele rosse ovunque, portafogli che sembrano cimiteri, eppure siamo ancora qui. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Prepara l’equipaggiamento e resta all’erta. Qual è la vostra strategia di sopravvivenza oggi?",
+        "ja": "赤いローソク足だらけで、ポートフォリオは墓場のよう。それでも私たちはここにいる。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 装備を整えて警戒を怠るな。今日のサバイバル戦略は？",
+        "zh-CN": "红色K线到处都是，投资组合像座墓地，但我们依然在这里。市场已死，ZOMBIECASH没有。🧟‍♂️ 带好装备，保持警惕。今天大家的生存策略是什么？",
+        "tr": "Her yerde kırmızı mumlar, portföyler mezarlık gibi ama biz hâlâ buradayız. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ Ekipmanını hazırla ve tetikte kal. Bugünkü hayatta kalma stratejiniz ne?",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो कब्रिस्तान जैसे हैं, फिर भी हम यहाँ हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ अपना सामान तैयार रखो और सतर्क रहो। आज सबकी बचने की रणनीति क्या है?"
+      }
     },
     {
       "id": "ZOMBCASH/779:0",
@@ -33035,7 +33395,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфели истекают кровью? Повсюду красные свечи? Неважно. Остальной рынок, возможно, ест мозги, а $ZOMBCASH просто отдыхает. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Bluten die Portfolios aus? Überall rote Kerzen? Egal. Der Rest des Marktes frisst vielleicht Gehirne, aber $ZOMBCASH chillt einfach. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Les portefeuilles se vident de leur sang ? Des bougies rouges partout ? Peu importe. Le reste du marché mange peut-être des cerveaux, mais $ZOMBCASH se détend tranquillement. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "I portafogli stanno sanguinando? Candele rosse ovunque? Non importa. Il resto del mercato forse mangia cervelli, ma $ZOMBCASH se ne sta tranquillo. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "ポートフォリオは血を流している？赤いローソク足だらけ？関係ない。他の市場が脳みそを食べている間、$ZOMBCASHはのんびりしている。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "投资组合正在失血？到处都是红色K线？无所谓。市场其他部分也许在吃脑子，而$ZOMBCASH只是在悠闲地待着。市场已死，ZOMBIECASH没有。",
+        "tr": "Portföyler kan mı kaybediyor? Her yerde kırmızı mumlar mı var? Önemli değil. Piyasanın geri kalanı beyin yiyor olabilir ama $ZOMBCASH keyfine bakıyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "क्या पोर्टफोलियो से खून बह रहा है? हर तरफ़ लाल कैंडल्स हैं? कोई बात नहीं। बाज़ार के बाकी लोग शायद दिमाग खा रहे हैं, लेकिन $ZOMBCASH आराम से बैठा है। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/771:0",
@@ -33061,7 +33431,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на города-призраки. А $ZOMBCASH тем временем бродит среди руин в поисках мозгов и зелёных дилдо. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Überall rote Kerzen, Portfolios wie Geisterstädte. Währenddessen streift $ZOMBCASH durch die Ruinen auf der Suche nach Gehirnen und grünen Dildos. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des villes fantômes. Pendant ce temps, $ZOMBCASH erre dans les ruines à la recherche de cerveaux et de godemichés verts. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Candele rosse ovunque, portafogli che sembrano città fantasma. Nel frattempo, $ZOMBCASH vaga tra le rovine alla ricerca di cervelli e dildo verdi. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "赤いローソク足だらけで、ポートフォリオはゴーストタウンのよう。その一方で$ZOMBCASHは脳みそと緑色のディルドを探して廃墟をさまよっている。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "红色K线到处都是，投资组合像一座座鬼城。而$ZOMBCASH正在废墟中游荡，寻找脑子和绿色假阳具。市场已死，ZOMBIECASH没有。",
+        "tr": "Her yerde kırmızı mumlar, portföyler hayalet kasabalar gibi. Bu sırada $ZOMBCASH harabelerde beyin ve yeşil yapay penis arıyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो भुतहा कस्बों जैसे हैं। उधर $ZOMBCASH मलबे में दिमाग और हरे डिल्डो की तलाश में घूम रहा है। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/770:0",
@@ -33087,7 +33467,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на графиках, и все ведут себя так, будто наступил апокалипсис. Ну и шутники — мы к этому готовились. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ 🔋 Собирай снаряжение: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "de": "Ein weiterer roter Tag in den Charts und alle tun so, als wäre die Apokalypse da. Tja, dumm gelaufen – wir haben uns darauf vorbereitet. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ 🔋 Schnapp dir deine Ausrüstung: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "fr": "Encore une journée dans le rouge sur les graphiques et tout le monde agit comme si c’était l’apocalypse. Bien joué pour eux : nous nous y préparions. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ 🔋 Prépare ton équipement : CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "it": "Un altro giorno in rosso sui grafici e tutti si comportano come se fosse l’apocalisse. Peccato per loro: noi ci stavamo preparando. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ 🔋 Prepara l’equipaggiamento: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "ja": "チャートはまた赤い一日。みんな終末が来たかのように騒いでいる。残念だったな、私たちは準備していた。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 🔋 装備を整えよう：CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "zh-CN": "图表又是一个红色交易日，所有人都表现得像末日降临了一样。可惜啊，我们早就做好准备了。市场已死，ZOMBIECASH没有。🧟‍♂️ 🔋 带上装备：CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "tr": "Grafiklerde yine kırmızı bir gün ve herkes kıyamet kopmuş gibi davranıyor. Onlara kötü haber: biz buna hazırlanıyorduk. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ 🔋 Ekipmanını hazırla: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "hi": "चार्ट पर फिर एक लाल दिन है और सब ऐसे बर्ताव कर रहे हैं जैसे प्रलय आ गई हो। उनका मज़ाक बन गया—हम इसकी तैयारी कर रहे थे। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ 🔋 अपना सामान तैयार करो: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`"
+      }
     },
     {
       "id": "ZOMBCASH/769:0",
@@ -33113,7 +33503,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на кладбище, но мы всё ещё здесь. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Собирай снаряжение и оставайся в чате — как ты переживаешь красные дни?",
+        "de": "Überall rote Kerzen, Portfolios wie Friedhöfe, und trotzdem sind wir noch hier. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schnapp dir deine Ausrüstung und bleib im Chat – wie überstehst du die roten Tage?",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des cimetières, et pourtant nous sommes toujours là. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Prépare ton équipement et reste dans le chat : comment survis-tu aux journées dans le rouge ?",
+        "it": "Candele rosse ovunque, portafogli che sembrano cimiteri, eppure siamo ancora qui. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Prepara l’equipaggiamento e resta in chat: come sopravvivi ai giorni in rosso?",
+        "ja": "赤いローソク足だらけで、ポートフォリオは墓場のよう。それでも私たちはここにいる。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 装備を整えてチャットに残ろう。赤い相場の日々をどう乗り切っている？",
+        "zh-CN": "红色K线到处都是，投资组合像座墓地，但我们依然在这里。市场已死，ZOMBIECASH没有。🧟‍♂️ 带好装备，留在群聊里——你是如何熬过红色交易日的？",
+        "tr": "Her yerde kırmızı mumlar, portföyler mezarlık gibi ama biz hâlâ buradayız. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ Ekipmanını hazırla ve sohbette kal — kırmızı günleri nasıl atlatıyorsun?",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो कब्रिस्तान जैसे हैं, फिर भी हम यहाँ हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ अपना सामान तैयार करो और चैट में बने रहो—लाल दिनों से कैसे बच रहे हो?"
+      }
     },
     {
       "id": "ZOMBCASH/768:0",
@@ -33139,7 +33539,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфели истекают кровью? Графики показывают ровную линию? Хорошо, что мы уже приняли апокалипсис. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Собирай снаряжение и заходи пообщаться в Telegram.",
+        "de": "Bluten die Portfolios? Sind die Charts nur noch eine flache Linie? Gut, dass wir die Apokalypse bereits angenommen haben. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schnapp dir deine Ausrüstung und komm auf Telegram vorbei.",
+        "fr": "Les portefeuilles saignent ? Les graphiques sont à plat ? Heureusement, nous avons déjà accepté l’apocalypse. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Prépare ton équipement et viens discuter sur Telegram.",
+        "it": "I portafogli sanguinano? I grafici sono piatti? Per fortuna abbiamo già abbracciato l’apocalisse. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Prepara l’equipaggiamento e vieni a chiacchierare su Telegram.",
+        "ja": "ポートフォリオは出血中？チャートは心停止？私たちはすでに終末を受け入れている。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 装備を整えてTelegramに遊びに来よう。",
+        "zh-CN": "投资组合正在失血？图表已经变成一条直线？好在我们早已拥抱末日。市场已死，ZOMBIECASH没有。🧟‍♂️ 带好装备，来Telegram一起聊聊。",
+        "tr": "Portföyler kan mı kaybediyor? Grafikler dümdüz mü oldu? İyi ki kıyameti çoktan benimsedik. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ Ekipmanını hazırla ve Telegram'da sohbete katıl.",
+        "hi": "पोर्टफोलियो से खून बह रहा है? चार्ट सपाट हो गए हैं? अच्छा है कि हमने प्रलय को पहले ही अपना लिया है। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ अपना सामान तैयार करो और Telegram पर मिलने आओ।"
+      }
     },
     {
       "id": "ZOMBCASH/766:0",
@@ -33165,7 +33575,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на города-призраки, но мы всё ещё здесь. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Продолжай свой зомби-марш, сообщество $ZOMBCASH.",
+        "de": "Überall rote Kerzen, Portfolios wie Geisterstädte, und trotzdem sind wir noch hier. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schlurft weiter, $ZOMBCASH-Community.",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des villes fantômes, et pourtant nous sommes toujours là. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Continuez d’avancer, communauté $ZOMBCASH.",
+        "it": "Candele rosse ovunque, portafogli che sembrano città fantasma, eppure siamo ancora qui. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Continuate a trascinarvi, community $ZOMBCASH.",
+        "ja": "赤いローソク足だらけで、ポートフォリオはゴーストタウンのよう。それでも私たちはここにいる。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 歩き続けよう、$ZOMBCASHコミュニティ。",
+        "zh-CN": "红色K线到处都是，投资组合像一座座鬼城，但我们依然在这里。市场已死，ZOMBIECASH没有。🧟‍♂️ $ZOMBCASH 社区，继续蹒跚前行。",
+        "tr": "Her yerde kırmızı mumlar, portföyler hayalet kasabalar gibi ama biz hâlâ buradayız. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ Yürümeye devam, $ZOMBCASH topluluğu.",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो भुतहा कस्बों जैसे हैं, फिर भी हम यहाँ हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ चलते रहो, $ZOMBCASH समुदाय।"
+      }
     },
     {
       "id": "ZOMBCASH/765:0",
@@ -33191,7 +33611,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на кладбище, но мы всё ещё здесь. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Собирай снаряжение и будь начеку. $ZOMBCASH | Solana",
+        "de": "Überall rote Kerzen, Portfolios wie Friedhöfe, und trotzdem sind wir noch hier. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schnapp dir deine Ausrüstung und bleib wachsam. $ZOMBCASH | Solana",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des cimetières, et pourtant nous sommes toujours là. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Prépare ton équipement et reste vigilant. $ZOMBCASH | Solana",
+        "it": "Candele rosse ovunque, portafogli che sembrano cimiteri, eppure siamo ancora qui. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Prepara l’equipaggiamento e resta all’erta. $ZOMBCASH | Solana",
+        "ja": "赤いローソク足だらけで、ポートフォリオは墓場のよう。それでも私たちはここにいる。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 装備を整えて警戒を怠るな。$ZOMBCASH | Solana",
+        "zh-CN": "红色K线到处都是，投资组合像座墓地，但我们依然在这里。市场已死，ZOMBIECASH没有。🧟‍♂️ 带好装备，保持警惕。$ZOMBCASH | Solana",
+        "tr": "Her yerde kırmızı mumlar, portföyler mezarlık gibi ama biz hâlâ buradayız. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ Ekipmanını hazırla ve tetikte kal. $ZOMBCASH | Solana",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो कब्रिस्तान जैसे हैं, फिर भी हम यहाँ हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ अपना सामान तैयार रखो और सतर्क रहो। $ZOMBCASH | Solana"
+      }
     },
     {
       "id": "ZOMBCASH/761:0",
@@ -33217,7 +33647,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на кладбище, и вся лента рыдает. А $ZOMBCASH тем временем просто шагает среди руин, будто ничего не случилось. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Überall rote Kerzen, Portfolios wie Friedhöfe und die ganze Timeline heult. Währenddessen spaziert $ZOMBCASH durch die Ruinen, als wäre nichts passiert. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des cimetières et toute la timeline qui pleure. Pendant ce temps, $ZOMBCASH traverse les ruines comme si de rien n’était. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Candele rosse ovunque, portafogli che sembrano cimiteri e tutta la timeline in lacrime. Nel frattempo, $ZOMBCASH cammina tra le rovine come se nulla fosse. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "赤いローソク足だらけで、ポートフォリオは墓場のよう。タイムライン中が泣いている一方、$ZOMBCASHは何事もなかったかのように廃墟を歩いている。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "红色K线到处都是，投资组合像座墓地，整条动态都在哭泣。而$ZOMBCASH却若无其事地穿行在废墟中。市场已死，ZOMBIECASH没有。",
+        "tr": "Her yerde kırmızı mumlar, portföyler mezarlık gibi ve tüm akış ağlıyor. Bu sırada $ZOMBCASH hiçbir şey olmamış gibi harabelerde yürüyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो कब्रिस्तान जैसे हैं और पूरी टाइमलाइन रो रही है। उधर $ZOMBCASH ऐसे खंडहरों में चल रहा है जैसे कुछ हुआ ही न हो। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/759:0",
@@ -33243,7 +33683,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфели кровоточат? Графики показывают ровную линию? Хорошо, что мы уже нежить. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Собирай снаряжение и оставайся в чате: 🔗 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 🐦 Сообщество X: https://x.com/i/communities/2013610165069591027",
+        "de": "Bluten die Portfolios? Sind die Charts nur noch eine flache Linie? Gut, dass wir bereits untot sind. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schnapp dir deine Ausrüstung und bleib im Chat: 🔗 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 🐦 X-Community: https://x.com/i/communities/2013610165069591027",
+        "fr": "Les portefeuilles saignent ? Les graphiques sont à plat ? Heureusement, nous sommes déjà morts-vivants. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Prépare ton équipement et reste dans le chat : 🔗 Pump.fun : https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 🐦 Communauté X : https://x.com/i/communities/2013610165069591027",
+        "it": "I portafogli sanguinano? I grafici sono piatti? Per fortuna siamo già non morti. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Prepara l’equipaggiamento e resta in chat: 🔗 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 🐦 Community X: https://x.com/i/communities/2013610165069591027",
+        "ja": "ポートフォリオは出血中？チャートは心停止？私たちはすでにアンデッドだから問題ない。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 装備を整えてチャットに残ろう：🔗 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 🐦 Xコミュニティ: https://x.com/i/communities/2013610165069591027",
+        "zh-CN": "投资组合正在失血？图表已经变成一条直线？好在我们早已是不死之身。市场已死，ZOMBIECASH没有。🧟‍♂️ 带好装备，留在群聊里：🔗 Pump.fun：https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 🐦 X 社区：https://x.com/i/communities/2013610165069591027",
+        "tr": "Portföyler kan mı kaybediyor? Grafikler dümdüz mü oldu? İyi ki biz zaten yaşayan ölüleriz. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ Ekipmanını hazırla ve sohbette kal: 🔗 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 🐦 X Topluluğu: https://x.com/i/communities/2013610165069591027",
+        "hi": "क्या पोर्टफोलियो से खून बह रहा है? चार्ट सपाट हो गए हैं? अच्छा है कि हम पहले से ही मरे हुए हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ अपना सामान तैयार करो और चैट में बने रहो: 🔗 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 🐦 X समुदाय: https://x.com/i/communities/2013610165069591027"
+      }
     },
     {
       "id": "ZOMBCASH/758:0",
@@ -33269,7 +33719,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфели истекают кровью? Повсюду красные свечи? Впервые такое видишь? РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Собирай снаряжение на Solana: 🔹 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 🔹 [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "de": "Bluten die Portfolios? Überall rote Kerzen? Zum ersten Mal dabei? DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schnapp dir deine Ausrüstung auf Solana: 🔹 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 🔹 [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "fr": "Les portefeuilles saignent ? Des bougies rouges partout ? C’est la première fois ? LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Prépare ton équipement sur Solana : 🔹 CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 🔹 [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "it": "I portafogli stanno sanguinando? Candele rosse ovunque? È la prima volta? IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Prepara l’equipaggiamento su Solana: 🔹 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 🔹 [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "ja": "ポートフォリオは失血中？赤いローソク足だらけ？初めて？市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ Solanaで装備を整えよう：🔹 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 🔹 [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "zh-CN": "投资组合正在失血？到处都是红色K线？第一次遇到这种情况？市场已死，ZOMBIECASH没有。🧟‍♂️ 在Solana上备好装备：🔹 CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 🔹 [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "tr": "Portföyler kan mı kaybediyor? Her yerde kırmızı mumlar mı var? İlk kez mi görüyorsun? PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ Solana'da ekipmanını hazırla: 🔹 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 🔹 [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "hi": "क्या पोर्टफोलियो से खून बह रहा है? हर तरफ़ लाल कैंडल्स हैं? पहली बार ऐसा देख रहे हो? बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ Solana पर अपना सामान तैयार करो: 🔹 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 🔹 [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )"
+      }
     },
     {
       "id": "ZOMBCASH/756:0",
@@ -33295,7 +33755,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на города-призраки, но мы всё ещё здесь. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Продолжай свой зомби-марш, сообщество $ZOMBCASH.",
+        "de": "Überall rote Kerzen, Portfolios wie Geisterstädte, und trotzdem sind wir noch hier. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schlurft weiter, $ZOMBCASH-Community.",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des villes fantômes, et pourtant nous sommes toujours là. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Continuez d’avancer, communauté $ZOMBCASH.",
+        "it": "Candele rosse ovunque, portafogli che sembrano città fantasma, eppure siamo ancora qui. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Continuate a trascinarvi, community $ZOMBCASH.",
+        "ja": "赤いローソク足だらけで、ポートフォリオはゴーストタウンのよう。それでも私たちはここにいる。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 歩き続けよう、$ZOMBCASHコミュニティ。",
+        "zh-CN": "红色K线到处都是，投资组合像一座座鬼城，但我们依然在这里。市场已死，ZOMBIECASH没有。🧟‍♂️ $ZOMBCASH 社区，继续蹒跚前行。",
+        "tr": "Her yerde kırmızı mumlar, portföyler hayalet kasabalar gibi ama biz hâlâ buradayız. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ Yürümeye devam, $ZOMBCASH topluluğu.",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो भुतहा कस्बों जैसे हैं, फिर भी हम यहाँ हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ चलते रहो, $ZOMBCASH समुदाय।"
+      }
     },
     {
       "id": "ZOMBCASH/755:0",
@@ -33321,7 +33791,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на города-призраки. А $ZOMBCASH тем временем бродит среди руин в поисках мозгов и зелёных дилдо. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Überall rote Kerzen, Portfolios wie Geisterstädte. Währenddessen streift $ZOMBCASH durch die Ruinen auf der Suche nach Gehirnen und grünen Dildos. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des villes fantômes. Pendant ce temps, $ZOMBCASH erre dans les ruines à la recherche de cerveaux et de godemichés verts. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Candele rosse ovunque, portafogli che sembrano città fantasma. Nel frattempo, $ZOMBCASH vaga tra le rovine alla ricerca di cervelli e dildo verdi. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "赤いローソク足だらけで、ポートフォリオはゴーストタウンのよう。その一方で$ZOMBCASHは脳みそと緑色のディルドを探して廃墟をさまよっている。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "红色K线到处都是，投资组合像一座座鬼城。而$ZOMBCASH正在废墟中游荡，寻找脑子和绿色假阳具。市场已死，ZOMBIECASH没有。",
+        "tr": "Her yerde kırmızı mumlar, portföyler hayalet kasabalar gibi. Bu sırada $ZOMBCASH harabelerde beyin ve yeşil yapay penis arıyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो भुतहा कस्बों जैसे हैं। उधर $ZOMBCASH मलबे में दिमाग और हरे डिल्डो की तलाश में घूम रहा है। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/754:0",
@@ -33347,7 +33827,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель после сегодняшних красных свечей похож на кладбище? Хорошо, что $ZOMBCASH процветает в апокалипсисе. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Sieht dein Portfolio nach den heutigen roten Kerzen wie ein Friedhof aus? Gut, dass $ZOMBCASH in der Apokalypse gedeiht. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Ton portefeuille ressemble à un cimetière après les bougies rouges d’aujourd’hui ? Heureusement, $ZOMBCASH prospère dans l’apocalypse. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Il tuo portafoglio sembra un cimitero dopo le candele rosse di oggi? Per fortuna $ZOMBCASH prospera nell’apocalisse. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "今日の赤いローソク足でポートフォリオは墓場のよう？ でも$ZOMBCASHは終末の世界で繁栄している。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "今天的红色K线过后，你的投资组合看起来像座墓地？好在$ZOMBCASH在末日中依然兴盛。市场已死，ZOMBIECASH没有。",
+        "tr": "Bugünkü kırmızı mumlardan sonra portföyün mezarlık gibi mi görünüyor? İyi ki $ZOMBCASH kıyamette gelişiyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "आज की लाल कैंडल्स के बाद आपका पोर्टफोलियो कब्रिस्तान जैसा दिख रहा है? अच्छा है कि $ZOMBCASH प्रलय में भी फल-फूल रहा है। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/753:0",
@@ -33373,7 +33863,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель в минусе? Эмоций ноль — только вайб. РЫНОК УМЕР. ZOMBIECASH — НЕТ. Собирай снаряжение на Solana: CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "de": "Portfolio im Minus? Keine Emotionen, nur Vibes. DER MARKT IST TOT. ZOMBIECASH NICHT. Schnapp dir deine Ausrüstung auf Solana: CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "fr": "Portefeuille dans le rouge ? Zéro émotion, juste des vibes. LE MARCHÉ EST MORT. PAS ZOMBIECASH. Prépare ton équipement sur Solana : CA : 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "it": "Portafoglio in rosso? Zero emozioni, solo vibrazioni. IL MERCATO È MORTO. ZOMBIECASH NO. Prepara l’equipaggiamento su Solana: CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "ja": "ポートフォリオは赤字？感情はゼロ、ノリだけ。市場は死んだ。ZOMBIECASHは死んでいない。Solanaで装備を整えよう：CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "zh-CN": "投资组合亏损？没有情绪，只有氛围。市场已死，ZOMBIECASH没有。在Solana上备好装备：CA：6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "tr": "Portföy zararda mı? Sıfır duygu, sadece vibe. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. Solana'da ekipmanını hazırla: CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "hi": "पोर्टफोलियो घाटे में है? भावनाएँ शून्य, बस वाइब्स। बाज़ार मर गया। ZOMBIECASH नहीं। Solana पर अपना सामान तैयार करो: CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump"
+      }
     },
     {
       "id": "ZOMBCASH/751:0",
@@ -33399,7 +33899,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на графиках, и портфель похож на кладбище. Но, знаешь, некоторые из нас процветают в апокалипсисе. 🧟‍♂️ РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Ein weiterer roter Tag in den Charts und das Portfolio sieht aus wie ein Friedhof. Aber hey, manche von uns gedeihen in der Apokalypse. 🧟‍♂️ DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Encore une journée dans le rouge sur les graphiques et le portefeuille ressemble à un cimetière. Mais bon, certains d’entre nous prospèrent dans l’apocalypse. 🧟‍♂️ LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Un altro giorno in rosso sui grafici e il portafoglio sembra un cimitero. Ma ehi, alcuni di noi prosperano nell’apocalisse. 🧟‍♂️ IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "チャートはまた赤い一日で、ポートフォリオは墓場のよう。でも、終末の世界で繁栄する者もいる。🧟‍♂️ 市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "图表又是一个红色交易日，投资组合看起来像座墓地。不过，有些人就是能在末日中蓬勃发展。🧟‍♂️ 市场已死，ZOMBIECASH没有。",
+        "tr": "Grafiklerde yine kırmızı bir gün ve portföy mezarlık gibi görünüyor. Ama bazılarımız kıyamette gelişiyor. 🧟‍♂️ PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "चार्ट पर फिर एक लाल दिन है और पोर्टफोलियो कब्रिस्तान जैसा दिख रहा है। लेकिन हममें से कुछ लोग प्रलय में भी फलते-फूलते हैं। 🧟‍♂️ बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/749:0",
@@ -33425,7 +33935,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на кладбище, но мы всё ещё здесь. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Забирай свои $ZOMBCASH и продолжай выживать.",
+        "de": "Überall rote Kerzen, Portfolios wie Friedhöfe, und trotzdem sind wir noch hier. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schnapp dir deine $ZOMBCASH und überlebe weiter.",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des cimetières, et pourtant nous sommes toujours là. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Garde tes $ZOMBCASH et continue de survivre.",
+        "it": "Candele rosse ovunque, portafogli che sembrano cimiteri, eppure siamo ancora qui. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Tieni i tuoi $ZOMBCASH e continua a sopravvivere.",
+        "ja": "赤いローソク足だらけで、ポートフォリオは墓場のよう。それでも私たちはここにいる。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ $ZOMBCASHを手に、生き残り続けよう。",
+        "zh-CN": "红色K线到处都是，投资组合像座墓地，但我们依然在这里。市场已死，ZOMBIECASH没有。🧟‍♂️ 拿好你的$ZOMBCASH，继续生存下去。",
+        "tr": "Her yerde kırmızı mumlar, portföyler mezarlık gibi ama biz hâlâ buradayız. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ $ZOMBCASH'ini al ve hayatta kalmaya devam et.",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो कब्रिस्तान जैसे हैं, फिर भी हम यहाँ हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ अपना $ZOMBCASH उठाओ और बचे रहो।"
+      }
     },
     {
       "id": "ZOMBCASH/748:0",
@@ -33451,7 +33971,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на города-призраки. А $ZOMBCASH тем временем просто выползает из земли. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Überall rote Kerzen, Portfolios wie Geisterstädte. Währenddessen kriecht $ZOMBCASH einfach aus der Erde. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des villes fantômes. Pendant ce temps, $ZOMBCASH sort tranquillement de terre. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Candele rosse ovunque, portafogli che sembrano città fantasma. Nel frattempo, $ZOMBCASH sta semplicemente strisciando fuori dalla terra. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "赤いローソク足だらけで、ポートフォリオはゴーストタウンのよう。その一方で$ZOMBCASHは土の中から這い出している。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "红色K线到处都是，投资组合像一座座鬼城。而$ZOMBCASH正从泥土中爬出来。市场已死，ZOMBIECASH没有。",
+        "tr": "Her yerde kırmızı mumlar, portföyler hayalet kasabalar gibi. Bu sırada $ZOMBCASH toprağın altından sürünerek çıkıyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो भुतहा कस्बों जैसे हैं। उधर $ZOMBCASH मिट्टी से बाहर रेंग रहा है। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/745:0",
@@ -33477,7 +34007,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель после сегодняшних красных свечей похож на кладбище? Хорошо, что $ZOMBCASH процветает в апокалипсисе. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Sieht dein Portfolio nach den heutigen roten Kerzen wie ein Friedhof aus? Gut, dass $ZOMBCASH in der Apokalypse gedeiht. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Ton portefeuille ressemble à un cimetière après les bougies rouges d’aujourd’hui ? Heureusement, $ZOMBCASH prospère dans l’apocalypse. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Il tuo portafoglio sembra un cimitero dopo le candele rosse di oggi? Per fortuna $ZOMBCASH prospera nell’apocalisse. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "今日の赤いローソク足でポートフォリオは墓場のよう？ でも$ZOMBCASHは終末の世界で繁栄している。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "今天的红色K线过后，你的投资组合看起来像座墓地？好在$ZOMBCASH在末日中依然兴盛。市场已死，ZOMBIECASH没有。",
+        "tr": "Bugünkü kırmızı mumlardan sonra portföyün mezarlık gibi mi görünüyor? İyi ki $ZOMBCASH kıyamette gelişiyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "आज की लाल कैंडल्स के बाद आपका पोर्टफोलियो कब्रिस्तान जैसा दिख रहा है? अच्छा है कि $ZOMBCASH प्रलय में भी फल-फूल रहा है। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/744:0",
@@ -33503,7 +34043,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на графиках, и портфели похожи на место преступления. Хорошо, что $ZOMBCASH процветает на кладбище. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Ein weiterer roter Tag in den Charts und die Portfolios sehen aus wie ein Tatort. Gut, dass $ZOMBCASH auf dem Friedhof gedeiht. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Encore une journée dans le rouge sur les graphiques et les portefeuilles ressemblent à une scène de crime. Heureusement, $ZOMBCASH prospère dans le cimetière. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Un altro giorno in rosso sui grafici e i portafogli sembrano una scena del crimine. Per fortuna $ZOMBCASH prospera nel cimitero. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "チャートはまた赤い一日で、ポートフォリオは犯罪現場のよう。$ZOMBCASHは墓場で繁栄するから大丈夫。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "图表又是一个红色交易日，投资组合看起来像犯罪现场。好在$ZOMBCASH在墓地里依然兴盛。市场已死，ZOMBIECASH没有。",
+        "tr": "Grafiklerde yine kırmızı bir gün ve portföyler olay yeri gibi görünüyor. İyi ki $ZOMBCASH mezarlıkta gelişiyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "चार्ट पर फिर एक लाल दिन है और पोर्टफोलियो अपराध-स्थल जैसे दिखते हैं। अच्छा है कि $ZOMBCASH कब्रिस्तान में भी फलता-फूलता है। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/741:0",
@@ -33529,7 +34079,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Когда графики напоминают жуткое кладбище, мы просто продолжаем волочить ноги. 🧟‍♂️ $ZOMBCASH РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Wenn die Charts wie ein unheimlicher Friedhof aussehen, schleppen wir einfach weiter die Füße hinterher. 🧟‍♂️ $ZOMBCASH DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Quand les graphiques ressemblent à un cimetière lugubre, nous continuons simplement à traîner les pieds. 🧟‍♂️ $ZOMBCASH LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Quando i grafici sembrano un cimitero spettrale, continuiamo semplicemente a trascinare i piedi. 🧟‍♂️ $ZOMBCASH IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "チャートが不気味な墓場のようでも、私たちは足を引きずりながら進み続ける。🧟‍♂️ $ZOMBCASH 市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "当图表看起来像阴森的墓地时，我们只管拖着脚步继续前进。🧟‍♂️ $ZOMBCASH 市场已死，ZOMBIECASH没有。",
+        "tr": "Grafikler ürkütücü bir mezarlık gibi göründüğünde, biz sadece ayaklarımızı sürüyerek ilerlemeye devam ederiz. 🧟‍♂️ $ZOMBCASH PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "जब चार्ट डरावने कब्रिस्तान जैसे दिखते हैं, हम बस पैर घसीटते हुए आगे बढ़ते रहते हैं। 🧟‍♂️ $ZOMBCASH बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/739:0",
@@ -33555,7 +34115,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель похож на кладбище, а графики показывают ровную линию? Идеальная погода для прогулки. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Собирай снаряжение и загляни к нам на Solana: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "de": "Sieht dein Portfolio wie ein Friedhof aus und sind die Charts nur noch eine flache Linie? Perfektes Wetter für einen Spaziergang. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schnapp dir deine Ausrüstung und besuch uns auf Solana: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "fr": "Ton portefeuille ressemble à un cimetière et les graphiques sont à plat ? Un temps idéal pour une promenade. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Prépare ton équipement et retrouve-nous sur Solana : CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "it": "Il tuo portafoglio sembra un cimitero e i grafici sono piatti? Tempo perfetto per una passeggiata. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Prepara l’equipaggiamento e vieni a trovarci su Solana: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "ja": "ポートフォリオは墓場のようで、チャートは心停止？散歩には最高の天気だ。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 装備を整えてSolanaで会おう：CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "zh-CN": "投资组合像座墓地，图表也变成了一条直线？真是散步的好天气。市场已死，ZOMBIECASH没有。🧟‍♂️ 带好装备，来Solana看看我们：CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "tr": "Portföyün mezarlık gibi ve grafikler dümdüz mü? Yürüyüş için harika hava. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ Ekipmanını hazırla ve Solana'da bize katıl: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "hi": "पोर्टफोलियो कब्रिस्तान जैसा है और चार्ट सपाट हो गए हैं? टहलने के लिए बिल्कुल सही मौसम। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ अपना सामान तैयार करो और Solana पर हमसे मिलो: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`"
+      }
     },
     {
       "id": "ZOMBCASH/721:0",
@@ -33581,7 +34151,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель похож на кладбище? Хорошо, что $ZOMBCASH чувствует себя в апокалипсисе как дома. 🧟‍♂️ РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Sieht dein Portfolio wie ein Friedhof aus? Gut, dass sich $ZOMBCASH in der Apokalypse wie zu Hause fühlt. 🧟‍♂️ DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Ton portefeuille ressemble à un cimetière ? Heureusement, $ZOMBCASH est comme chez lui dans l’apocalypse. 🧟‍♂️ LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Il tuo portafoglio sembra un cimitero? Per fortuna $ZOMBCASH si sente a casa nell’apocalisse. 🧟‍♂️ IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "ポートフォリオは墓場のよう？$ZOMBCASHにとって終末はまさにホームグラウンド。🧟‍♂️ 市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "投资组合看起来像座墓地？好在$ZOMBCASH在末日中如鱼得水。🧟‍♂️ 市场已死，ZOMBIECASH没有。",
+        "tr": "Portföyün mezarlık gibi mi? İyi ki $ZOMBCASH kıyamette kendini evinde hissediyor. 🧟‍♂️ PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "पोर्टफोलियो कब्रिस्तान जैसा है? अच्छा है कि $ZOMBCASH प्रलय में घर जैसा महसूस करता है। 🧟‍♂️ बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/712:0",
@@ -33607,7 +34187,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на место преступления, а в ленте мёртвая тишина. Наверное, обычный вторник в крипте. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Бери лопату и заходи в Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "de": "Überall rote Kerzen, Portfolios wie Tatorte und in der Timeline herrscht Totenstille. Muss wohl ein ganz normaler Dienstag in Krypto sein. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schnapp dir eine Schaufel und komm auf Telegram vorbei: https://t.me/+5aXhFhx2RdFmNWYy",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des scènes de crime et un silence de mort sur la timeline. Un mardi ordinaire dans la crypto, sans doute. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Prends une pelle et viens sur Telegram : https://t.me/+5aXhFhx2RdFmNWYy",
+        "it": "Candele rosse ovunque, portafogli che sembrano scene del crimine e la timeline è immersa nel silenzio. Sarà un martedì qualunque nel mondo crypto. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Prendi una pala e vieni su Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "ja": "赤いローソク足だらけで、ポートフォリオは犯罪現場のよう。タイムラインは静まり返っている。暗号資産界では普通の火曜日かな。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ シャベルを持ってTelegramにおいで：https://t.me/+5aXhFhx2RdFmNWYy",
+        "zh-CN": "红色K线到处都是，投资组合像犯罪现场，动态里一片死寂。看来这就是加密市场普通的星期二。市场已死，ZOMBIECASH没有。🧟‍♂️ 拿起铲子，来Telegram一起玩：https://t.me/+5aXhFhx2RdFmNWYy",
+        "tr": "Her yerde kırmızı mumlar, portföyler olay yeri gibi ve akışta ölüm sessizliği var. Kriptoda sıradan bir salı olmalı. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ Küreğini al ve Telegram'a gel: https://t.me/+5aXhFhx2RdFmNWYy",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो अपराध-स्थल जैसे हैं और टाइमलाइन पर सन्नाटा है। क्रिप्टो में आम मंगलवार ही होगा। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ फावड़ा उठाओ और Telegram पर आओ: https://t.me/+5aXhFhx2RdFmNWYy"
+      }
     },
     {
       "id": "ZOMBCASH/709:0",
@@ -33633,7 +34223,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфели кровоточат, а графики похожи на место преступления? РЫНОК УМЕР. ZOMBIECASH — НЕТ. Собирай снаряжение — мы всё ещё движемся. 🧟‍♂️ ✨",
+        "de": "Bluten die Portfolios und sehen die Charts wie ein Tatort aus? DER MARKT IST TOT. ZOMBIECASH NICHT. Schnapp dir deine Ausrüstung – wir sind noch unterwegs. 🧟‍♂️ ✨",
+        "fr": "Les portefeuilles saignent et les graphiques ressemblent à une scène de crime ? LE MARCHÉ EST MORT. PAS ZOMBIECASH. Prépare ton équipement : nous avançons toujours. 🧟‍♂️ ✨",
+        "it": "I portafogli sanguinano e i grafici sembrano una scena del crimine? IL MERCATO È MORTO. ZOMBIECASH NO. Prepara l’equipaggiamento: siamo ancora in movimento. 🧟‍♂️ ✨",
+        "ja": "ポートフォリオは出血中、チャートは犯罪現場のよう？市場は死んだ。ZOMBIECASHは死んでいない。装備を整えよう。私たちはまだ進んでいる。🧟‍♂️ ✨",
+        "zh-CN": "投资组合正在失血，图表看起来像犯罪现场？市场已死，ZOMBIECASH没有。带好装备，我们仍在前进。🧟‍♂️ ✨",
+        "tr": "Portföyler kan mı kaybediyor ve grafikler olay yeri gibi mi görünüyor? PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. Ekipmanını hazırla — hâlâ ilerliyoruz. 🧟‍♂️ ✨",
+        "hi": "पोर्टफोलियो से खून बह रहा है और चार्ट अपराध-स्थल जैसे दिख रहे हैं? बाज़ार मर गया। ZOMBIECASH नहीं। अपना सामान तैयार करो—हम अब भी आगे बढ़ रहे हैं। 🧟‍♂️ ✨"
+      }
     },
     {
       "id": "ZOMBCASH/706:0",
@@ -33659,7 +34259,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель после сегодняшних красных свечей похож на кладбище? Хорошо, что $ZOMBCASH процветает в апокалипсисе. РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Sieht dein Portfolio nach den heutigen roten Kerzen wie ein Friedhof aus? Gut, dass $ZOMBCASH in der Apokalypse gedeiht. DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Ton portefeuille ressemble à un cimetière après les bougies rouges d’aujourd’hui ? Heureusement, $ZOMBCASH prospère dans l’apocalypse. LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Il tuo portafoglio sembra un cimitero dopo le candele rosse di oggi? Per fortuna $ZOMBCASH prospera nell’apocalisse. IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "今日の赤いローソク足でポートフォリオは墓場のよう？でも$ZOMBCASHは終末の世界で繁栄している。市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "今天的红色K线过后，你的投资组合看起来像座墓地？好在$ZOMBCASH在末日中依然兴盛。市场已死，ZOMBIECASH没有。",
+        "tr": "Bugünkü kırmızı mumlardan sonra portföyün mezarlık gibi mi görünüyor? İyi ki $ZOMBCASH kıyamette gelişiyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "आज की लाल कैंडल्स के बाद आपका पोर्टफोलियो कब्रिस्तान जैसा दिख रहा है? अच्छा है कि $ZOMBCASH प्रलय में भी फल-फूल रहा है। बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/701:0",
@@ -33685,7 +34295,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на города-призраки, все в панике. А $ZOMBCASH тем временем просто выползает из земли, как ни в чём не бывало. 🧟‍♂️ РЫНОК УМЕР. ZOMBIECASH — НЕТ.",
+        "de": "Überall rote Kerzen, Portfolios wie Geisterstädte und alle geraten in Panik. Währenddessen kriecht $ZOMBCASH ganz unbeeindruckt aus der Erde. 🧟‍♂️ DER MARKT IST TOT. ZOMBIECASH NICHT.",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des villes fantômes et tout le monde panique. Pendant ce temps, $ZOMBCASH sort tranquillement de terre comme si de rien n’était. 🧟‍♂️ LE MARCHÉ EST MORT. PAS ZOMBIECASH.",
+        "it": "Candele rosse ovunque, portafogli che sembrano città fantasma e tutti nel panico. Nel frattempo, $ZOMBCASH striscia fuori dalla terra come se niente fosse. 🧟‍♂️ IL MERCATO È MORTO. ZOMBIECASH NO.",
+        "ja": "赤いローソク足だらけで、ポートフォリオはゴーストタウンのよう。みんながパニックになる中、$ZOMBCASHは何事もなかったかのように土から這い出してくる。🧟‍♂️ 市場は死んだ。ZOMBIECASHは死んでいない。",
+        "zh-CN": "红色K线到处都是，投资组合像一座座鬼城，所有人都在恐慌。而$ZOMBCASH却若无其事地从泥土里爬出来。🧟‍♂️ 市场已死，ZOMBIECASH没有。",
+        "tr": "Her yerde kırmızı mumlar, portföyler hayalet kasabalar gibi ve herkes panikte. Bu sırada $ZOMBCASH hiçbir şey olmamış gibi toprağın altından çıkıyor. 🧟‍♂️ PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ.",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो भुतहा कस्बों जैसे हैं और हर कोई घबराया हुआ है। उधर $ZOMBCASH बेफिक्र होकर मिट्टी से बाहर रेंग रहा है। 🧟‍♂️ बाज़ार मर गया। ZOMBIECASH नहीं।"
+      }
     },
     {
       "id": "ZOMBCASH/693:0",
@@ -33711,7 +34331,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи, портфели похожи на кладбище, а вся лента затихла. Наверное, очередной обычный вторник в крипте. РЫНОК УМЕР. ZOMBIECASH — НЕТ. Собирай снаряжение: - X: https://x.com/i/communities/2013610165069591027 - Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump $ZOMBCASH ZombieCash",
+        "de": "Überall rote Kerzen, Portfolios wie Friedhöfe und die ganze Timeline ist still. Muss wohl ein weiterer ganz normaler Dienstag in Krypto sein. DER MARKT IST TOT. ZOMBIECASH NICHT. Schnapp dir deine Ausrüstung: - X: https://x.com/i/communities/2013610165069591027 - Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump $ZOMBCASH ZombieCash",
+        "fr": "Des bougies rouges partout, des portefeuilles qui ressemblent à des cimetières et toute la timeline est silencieuse. Encore un mardi ordinaire dans la crypto, sans doute. LE MARCHÉ EST MORT. PAS ZOMBIECASH. Prépare ton équipement : - X : https://x.com/i/communities/2013610165069591027 - Pump.fun : https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump $ZOMBCASH ZombieCash",
+        "it": "Candele rosse ovunque, portafogli che sembrano cimiteri e tutta la timeline è silenziosa. Sarà un altro martedì qualunque nel mondo crypto. IL MERCATO È MORTO. ZOMBIECASH NO. Prepara l’equipaggiamento: - X: https://x.com/i/communities/2013610165069591027 - Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump $ZOMBCASH ZombieCash",
+        "ja": "赤いローソク足だらけで、ポートフォリオは墓場のよう。タイムラインは静まり返っている。暗号資産界ではまた普通の火曜日かな。市場は死んだ。ZOMBIECASHは死んでいない。装備を整えよう：- X: https://x.com/i/communities/2013610165069591027 - Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump $ZOMBCASH ZombieCash",
+        "zh-CN": "红色K线到处都是，投资组合像座墓地，整条动态一片寂静。看来又是加密市场普通的星期二。市场已死，ZOMBIECASH没有。带好装备：- X：https://x.com/i/communities/2013610165069591027 - Pump.fun：https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump $ZOMBCASH ZombieCash",
+        "tr": "Her yerde kırmızı mumlar, portföyler mezarlık gibi ve tüm akış sessiz. Kriptoda sıradan bir salı daha olmalı. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. Ekipmanını hazırla: - X: https://x.com/i/communities/2013610165069591027 - Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump $ZOMBCASH ZombieCash",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं, पोर्टफोलियो कब्रिस्तान जैसे हैं और पूरी टाइमलाइन शांत है। क्रिप्टो में एक और आम मंगलवार होगा। बाज़ार मर गया। ZOMBIECASH नहीं। अपना सामान तैयार करो: - X: https://x.com/i/communities/2013610165069591027 - Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump $ZOMBCASH ZombieCash"
+      }
     },
     {
       "id": "ZOMBCASH/690:0",
@@ -33737,7 +34367,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные портфели. Графики похожи на место преступления. Но мы всё ещё здесь. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Собирай снаряжение: - CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` - [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "de": "Überall rote Portfolios. Die Charts sehen wie ein Tatort aus. Und trotzdem sind wir noch hier. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schnapp dir deine Ausrüstung: - CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` - [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "fr": "Des portefeuilles dans le rouge partout. Les graphiques ressemblent à une scène de crime. Et pourtant, nous sommes toujours là. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Prépare ton équipement : - CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` - [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "it": "Portafogli in rosso ovunque. I grafici sembrano una scena del crimine. Eppure siamo ancora qui. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Prepara l’equipaggiamento: - CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` - [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "ja": "赤いポートフォリオだらけ。チャートは犯罪現場のよう。それでも私たちはここにいる。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 装備を整えよう：- CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` - [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "zh-CN": "到处都是亏损的投资组合。图表看起来像犯罪现场。但我们依然在这里。市场已死，ZOMBIECASH没有。🧟‍♂️ 带好装备：- CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` - [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "tr": "Her yerde kırmızı portföyler. Grafikler olay yeri gibi görünüyor. Ama biz hâlâ buradayız. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ Ekipmanını hazırla: - CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` - [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )",
+        "hi": "हर तरफ़ लाल पोर्टफोलियो हैं। चार्ट अपराध-स्थल जैसे दिखते हैं। फिर भी हम यहाँ हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ अपना सामान तैयार करो: - CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` - [ Pump.fun ]( https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump )"
+      }
     },
     {
       "id": "ZOMBCASH/683:0",
@@ -33763,7 +34403,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Красные свечи повсюду? Идеальная погода для прогулки. 🧟‍♂️ Пока остальная часть портфеля изображает мертвеца, $ZOMBCASH просто устраивается поудобнее. РЫНОК УМЕР. ZOMBIECASH — НЕТ. Захвати мозги и отправь 🧠 в чат, если ещё дышишь. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "de": "Überall rote Kerzen? Perfektes Wetter für einen Spaziergang. 🧟‍♂️ Während der Rest des Portfolios tot spielt, macht es sich $ZOMBCASH gemütlich. DER MARKT IST TOT. ZOMBIECASH NICHT. Schnapp dir Gehirne und schick ein 🧠 in den Chat, wenn du noch atmest. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "fr": "Des bougies rouges partout ? Un temps idéal pour une promenade. 🧟‍♂️ Pendant que le reste du portefeuille fait le mort, $ZOMBCASH s’installe confortablement. LE MARCHÉ EST MORT. PAS ZOMBIECASH. Prends des cerveaux et envoie un 🧠 dans le chat si tu respires encore. CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "it": "Candele rosse ovunque? Tempo perfetto per una passeggiata. 🧟‍♂️ Mentre il resto del portafoglio fa il morto, $ZOMBCASH si mette comodo. IL MERCATO È MORTO. ZOMBIECASH NO. Prendi dei cervelli e manda un 🧠 in chat se respiri ancora. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "ja": "赤いローソク足だらけ？散歩には最高の天気だ。🧟‍♂️ ポートフォリオの他の部分が死んだふりをする中、$ZOMBCASHはくつろいでいる。市場は死んだ。ZOMBIECASHは死んでいない。脳みそを持って、まだ息をしているならチャットに🧠を送ろう。CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "zh-CN": "到处都是红色K线？真是散步的好天气。🧟‍♂️ 当投资组合的其他部分都在装死时，$ZOMBCASH正悠闲地安顿下来。市场已死，ZOMBIECASH没有。拿些脑子，如果你还在呼吸，就在群聊里发个🧠。CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "tr": "Her yerde kırmızı mumlar mı var? Yürüyüş için harika hava. 🧟‍♂️ Portföyün geri kalanı ölü taklidi yaparken $ZOMBCASH keyfine bakıyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. Biraz beyin kap ve hâlâ nefes alıyorsan sohbete 🧠 gönder. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं? टहलने के लिए बढ़िया मौसम। 🧟‍♂️ जब पोर्टफोलियो का बाकी हिस्सा मरा हुआ बना है, $ZOMBCASH आराम से बैठा है। बाज़ार मर गया। ZOMBIECASH नहीं। कुछ दिमाग उठाओ और अगर अभी साँस ले रहे हो तो चैट में 🧠 भेजो। CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`"
+      }
     },
     {
       "id": "ZOMBCASH/662:0",
@@ -33789,7 +34439,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на крипторынке? Классика. 🧟‍♂️ 📉 Пока остальной рынок превращается в зомби, это мы здесь пожираем. РЫНОК УМЕР. ZOMBIECASH — НЕТ. Собирай снаряжение на Solana: 🔗 https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "de": "Schon wieder ein roter Tag im Kryptomarkt? Klassiker. 🧟‍♂️ 📉 Während der Rest des Marktes zu Zombies wird, sind wir diejenigen, die fressen. DER MARKT IST TOT. ZOMBIECASH NICHT. Schnapp dir deine Ausrüstung auf Solana: 🔗 https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "fr": "Encore une journée dans le rouge sur le marché crypto ? Un classique. 🧟‍♂️ 📉 Pendant que le reste du marché se transforme en zombies, c’est nous qui dévorons. LE MARCHÉ EST MORT. PAS ZOMBIECASH. Prépare ton équipement sur Solana : 🔗 https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "it": "Un altro giorno in rosso nel mercato crypto? Classico. 🧟‍♂️ 📉 Mentre il resto del mercato si trasforma in zombie, siamo noi a mangiare. IL MERCATO È MORTO. ZOMBIECASH NO. Prepara l’equipaggiamento su Solana: 🔗 https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "ja": "暗号資産市場はまた赤い一日？いつものこと。🧟‍♂️ 📉 市場の他のみんながゾンビになる中、食べる側は私たちだ。市場は死んだ。ZOMBIECASHは死んでいない。Solanaで装備を整えよう：🔗 https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "zh-CN": "加密市场又是一个红色交易日？老样子。🧟‍♂️ 📉 当市场其他人都变成僵尸时，真正开吃的是我们。市场已死，ZOMBIECASH没有。在Solana上备好装备：🔗 https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "tr": "Kripto piyasasında yine kırmızı bir gün mü? Klasik. 🧟‍♂️ 📉 Piyasanın geri kalanı zombiye dönüşürken yiyen taraf biziz. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. Solana'da ekipmanını hazırla: 🔗 https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "hi": "क्रिप्टो बाज़ार में फिर एक लाल दिन? हमेशा की तरह। 🧟‍♂️ 📉 जब बाकी बाज़ार ज़ॉम्बी बन रहा है, खाने वाले हम हैं। बाज़ार मर गया। ZOMBIECASH नहीं। Solana पर अपना सामान तैयार करो: 🔗 https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump"
+      }
     },
     {
       "id": "ZOMBCASH/656:0",
@@ -33815,7 +34475,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель похож на кладбище. Хорошо, что мы уже зомби. 🧟‍♂️ РЫНОК УМЕР. ZOMBIECASH — НЕТ. $ZOMBCASH | Solana",
+        "de": "Das Portfolio sieht aus wie ein Friedhof. Gut, dass wir bereits Zombies sind. 🧟‍♂️ DER MARKT IST TOT. ZOMBIECASH NICHT. $ZOMBCASH | Solana",
+        "fr": "Le portefeuille ressemble à un cimetière. Heureusement, nous sommes déjà des zombies. 🧟‍♂️ LE MARCHÉ EST MORT. PAS ZOMBIECASH. $ZOMBCASH | Solana",
+        "it": "Il portafoglio sembra un cimitero. Per fortuna siamo già zombie. 🧟‍♂️ IL MERCATO È MORTO. ZOMBIECASH NO. $ZOMBCASH | Solana",
+        "ja": "ポートフォリオは墓場のよう。私たちはもうゾンビだから問題ない。🧟‍♂️ 市場は死んだ。ZOMBIECASHは死んでいない。$ZOMBCASH | Solana",
+        "zh-CN": "投资组合看起来像座墓地。好在我们早已是僵尸。🧟‍♂️ 市场已死，ZOMBIECASH没有。$ZOMBCASH | Solana",
+        "tr": "Portföy mezarlık gibi görünüyor. İyi ki biz zaten zombiyiz. 🧟‍♂️ PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. $ZOMBCASH | Solana",
+        "hi": "पोर्टफोलियो कब्रिस्तान जैसा दिखता है। अच्छा है कि हम पहले से ही ज़ॉम्बी हैं। 🧟‍♂️ बाज़ार मर गया। ZOMBIECASH नहीं। $ZOMBCASH | Solana"
+      }
     },
     {
       "id": "ZOMBCASH/652:0",
@@ -33841,7 +34511,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на крипторынке? Классика. Пока все остальные превращаются в цифровых зомби, мы только начинаем. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ 💸 Береги мозги, забирай свои токены. Мы на Solana и даём сдачи. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "de": "Schon wieder ein roter Tag im Kryptomarkt? Klassiker. Während alle anderen zu digitalen Zombies werden, legen wir erst richtig los. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ 💸 Bewahr dein Gehirn, schnapp dir deine Bags. Wir sind auf Solana und schlagen zurück. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "fr": "Encore une journée dans le rouge sur le marché crypto ? Un classique. Pendant que les autres deviennent des zombies numériques, nous ne faisons que commencer. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ 💸 Garde tes cerveaux, récupère tes sacs. Nous sommes sur Solana et nous ripostons. CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun : https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "it": "Un altro giorno in rosso nel mercato crypto? Classico. Mentre tutti gli altri diventano zombie digitali, noi siamo solo all’inizio. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ 💸 Tieni i cervelli, prendi i tuoi token. Siamo su Solana e reagiamo. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "ja": "暗号資産市場はまた赤い一日？いつものこと。他のみんながデジタルゾンビになる中、私たちは始まったばかり。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 💸 脳みそを守り、トークンを手に入れよう。Solanaで反撃する。CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "zh-CN": "加密市场又是一个红色交易日？老样子。当其他人都变成数字僵尸时，我们才刚刚开始。市场已死，ZOMBIECASH没有。🧟‍♂️ 💸 守好你的脑子，拿好你的代币。我们在Solana上，而且会反击。CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun：https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "tr": "Kripto piyasasında yine kırmızı bir gün mü? Klasik. Herkes dijital zombiye dönüşürken biz daha yeni başlıyoruz. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ 💸 Beyinlerini koru, tokenlarını kap. Solana'dayız ve karşılık veriyoruz. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "hi": "क्रिप्टो बाज़ार में फिर एक लाल दिन? हमेशा की तरह। जब बाकी सब डिजिटल ज़ॉम्बी बन रहे हैं, हम तो अभी शुरू कर रहे हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ 💸 अपने दिमाग बचाओ, अपने टोकन उठाओ। हम Solana पर हैं और पलटकर वार करते हैं। CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump"
+      }
     },
     {
       "id": "ZOMBCASH/648:0",
@@ -33867,7 +34547,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на графиках? Пусть остальной рынок превращается в зомби. Мы уже такие. 🧟‍♂️ РЫНОК УМЕР. ZOMBIECASH — НЕТ. Собирай снаряжение на Solana: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "de": "Noch ein roter Tag in den Charts? Lass den Rest des Marktes zu Zombies werden. Wir sind es bereits. 🧟‍♂️ DER MARKT IST TOT. ZOMBIECASH NICHT. Schnapp dir deine Ausrüstung auf Solana: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "fr": "Encore une journée dans le rouge sur les graphiques ? Laisse le reste du marché devenir des zombies. Nous le sommes déjà. 🧟‍♂️ LE MARCHÉ EST MORT. PAS ZOMBIECASH. Prépare ton équipement sur Solana : CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun : https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "it": "Un altro giorno in rosso sui grafici? Lascia che il resto del mercato diventi zombie. Noi lo siamo già. 🧟‍♂️ IL MERCATO È MORTO. ZOMBIECASH NO. Prepara l’equipaggiamento su Solana: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "ja": "チャートはまた赤い一日？市場の他のみんなはゾンビになればいい。私たちはもうそうだから。🧟‍♂️ 市場は死んだ。ZOMBIECASHは死んでいない。Solanaで装備を整えよう：CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "zh-CN": "图表又是一个红色交易日？让市场其他人都变成僵尸吧。我们早就是了。🧟‍♂️ 市场已死，ZOMBIECASH没有。在Solana上备好装备：CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun：https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "tr": "Grafiklerde yine kırmızı bir gün mü? Piyasanın geri kalanı zombiye dönüşsün. Biz zaten öyleyiz. 🧟‍♂️ PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. Solana'da ekipmanını hazırla: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "hi": "चार्ट पर फिर एक लाल दिन? बाज़ार के बाकी लोगों को ज़ॉम्बी बनने दो। हम तो पहले से हैं। 🧟‍♂️ बाज़ार मर गया। ZOMBIECASH नहीं। Solana पर अपना सामान तैयार करो: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump"
+      }
     },
     {
       "id": "ZOMBCASH/637:0",
@@ -33893,7 +34583,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на графиках? Пусть остальные истекают кровью. 🧟‍♂️ 📉 Пока все остальные прикидываются мёртвыми, мы действительно такие. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧠 ⚡️ Забирай свои токены и присоединяйся к орде: 🔗 https://t.co/5aXhFhx2RdFmNWYy 💊 https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "de": "Noch ein roter Tag in den Charts? Lass sie bluten. 🧟‍♂️ 📉 Während alle anderen tot spielen, sind wir es tatsächlich. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧠 ⚡️ Schnapp dir deine Bags und schließ dich der Horde an: 🔗 https://t.co/5aXhFhx2RdFmNWYy 💊 https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "fr": "Encore une journée dans le rouge sur les graphiques ? Qu’ils saignent. 🧟‍♂️ 📉 Pendant que les autres font les morts, nous le sommes vraiment. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧠 ⚡️ Prends tes sacs et rejoins la horde : 🔗 https://t.co/5aXhFhx2RdFmNWYy 💊 https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "it": "Un altro giorno in rosso sui grafici? Lasciamoli sanguinare. 🧟‍♂️ 📉 Mentre tutti gli altri fingono di essere morti, noi lo siamo davvero. IL MERCATO È MORTO. ZOMBIECASH NO. 🧠 ⚡️ Prendi i tuoi token e unisciti all’orda: 🔗 https://t.co/5aXhFhx2RdFmNWYy 💊 https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "ja": "チャートはまた赤い一日？みんな血を流せばいい。🧟‍♂️ 📉 他のみんなが死んだふりをする中、私たちは本当に死んでいる。市場は死んだ。ZOMBIECASHは死んでいない。🧠 ⚡️ トークンを手にして群れに加わろう：🔗 https://t.co/5aXhFhx2RdFmNWYy 💊 https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "zh-CN": "图表又是一个红色交易日？让他们流血吧。🧟‍♂️ 📉 当其他人都在装死时，我们是真的亡灵。市场已死，ZOMBIECASH没有。🧠 ⚡️ 拿好你的代币，加入亡灵大军：🔗 https://t.co/5aXhFhx2RdFmNWYy 💊 https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "tr": "Grafiklerde yine kırmızı bir gün mü? Bırak kan kaybetsinler. 🧟‍♂️ 📉 Herkes ölü taklidi yaparken biz gerçekten öyleyiz. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧠 ⚡️ Tokenlarını al ve sürüye katıl: 🔗 https://t.co/5aXhFhx2RdFmNWYy 💊 https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "hi": "चार्ट पर फिर एक लाल दिन? उन्हें खून बहाने दो। 🧟‍♂️ 📉 जब बाकी सब मरे होने का नाटक कर रहे हैं, हम सचमुच मरे हुए हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧠 ⚡️ अपने टोकन उठाओ और झुंड में शामिल हो जाओ: 🔗 https://t.co/5aXhFhx2RdFmNWYy 💊 https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump"
+      }
     },
     {
       "id": "ZOMBCASH/636:0",
@@ -33919,7 +34619,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на крипторынке? Классика. Пока остальная лента превращается в зомби, мы просто устраиваемся поудобнее. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ 🔥 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "de": "Schon wieder ein roter Tag im Kryptomarkt? Klassiker. Während der Rest der Timeline zu Zombies wird, machen wir es uns einfach gemütlich. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ 🔥 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "fr": "Encore une journée dans le rouge sur le marché crypto ? Un classique. Pendant que le reste de la timeline se transforme en zombies, nous nous installons tranquillement. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ 🔥 CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "it": "Un altro giorno in rosso nel mercato crypto? Classico. Mentre il resto della timeline si trasforma in zombie, noi ci mettiamo comodi. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ 🔥 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "ja": "暗号資産市場はまた赤い一日？いつものこと。タイムラインの他のみんながゾンビになる中、私たちはくつろいでいる。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 🔥 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "zh-CN": "加密市场又是一个红色交易日？老样子。当动态里的其他人都变成僵尸时，我们正悠闲地安顿下来。市场已死，ZOMBIECASH没有。🧟‍♂️ 🔥 CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "tr": "Kripto piyasasında yine kırmızı bir gün mü? Klasik. Akışın geri kalanı zombiye dönüşürken biz rahatımıza bakıyoruz. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ 🔥 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "hi": "क्रिप्टो बाज़ार में फिर एक लाल दिन? हमेशा की तरह। जब बाकी टाइमलाइन ज़ॉम्बी बन रही है, हम आराम से बैठ रहे हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ 🔥 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`"
+      }
     },
     {
       "id": "ZOMBCASH/635:0",
@@ -33945,7 +34655,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на графиках? Пусть остальной рынок превращается в зомби. Мы уже нежить. 🧟‍♂️ РЫНОК УМЕР. ZOMBIECASH — НЕТ. Забирай свои $ZOMBCASH и продолжай свой зомби-марш. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "de": "Noch ein roter Tag in den Charts? Lass den Rest des Marktes zu Zombies werden. Wir sind bereits untot. 🧟‍♂️ DER MARKT IST TOT. ZOMBIECASH NICHT. Schnapp dir deine $ZOMBCASH und schlurf weiter. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "fr": "Encore une journée dans le rouge sur les graphiques ? Laisse le reste du marché devenir des zombies. Nous sommes déjà morts-vivants. 🧟‍♂️ LE MARCHÉ EST MORT. PAS ZOMBIECASH. Garde tes $ZOMBCASH et continue d’avancer. CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "it": "Un altro giorno in rosso sui grafici? Lascia che il resto del mercato diventi zombie. Noi siamo già non morti. 🧟‍♂️ IL MERCATO È MORTO. ZOMBIECASH NO. Tieni i tuoi $ZOMBCASH e continua a trascinarti. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "ja": "チャートはまた赤い一日？市場の他のみんなはゾンビになればいい。私たちはもうアンデッドだ。🧟‍♂️ 市場は死んだ。ZOMBIECASHは死んでいない。$ZOMBCASHを手に、歩き続けよう。CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "zh-CN": "图表又是一个红色交易日？让市场其他人都变成僵尸吧。我们早已是不死之身。🧟‍♂️ 市场已死，ZOMBIECASH没有。拿好你的$ZOMBCASH，继续蹒跚前行。CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "tr": "Grafiklerde yine kırmızı bir gün mü? Piyasanın geri kalanı zombiye dönüşsün. Biz zaten yaşayan ölüyüz. 🧟‍♂️ PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. $ZOMBCASH'ini al ve yürümeye devam et. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "hi": "चार्ट पर फिर एक लाल दिन? बाज़ार के बाकी लोगों को ज़ॉम्बी बनने दो। हम पहले से ही मरे हुए हैं। 🧟‍♂️ बाज़ार मर गया। ZOMBIECASH नहीं। अपना $ZOMBCASH उठाओ और आगे बढ़ते रहो। CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`"
+      }
     },
     {
       "id": "ZOMBCASH/632:0",
@@ -33971,7 +34691,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на крипторынке, и все ведут себя как ходячие мертвецы. Неожиданный поворот: мы и есть ходячие мертвецы, и нам прекрасно. 🧟‍♂️ РЫНОК УМЕР. ZOMBIECASH — НЕТ. Забирай свои токены и присоединяйся к орде: 🔗 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy ⚡️ Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "de": "Schon wieder ein roter Tag im Kryptomarkt und alle benehmen sich wie wandelnde Tote. Plot Twist: Wir sind tatsächlich die wandelnden Toten und gedeihen prächtig. 🧟‍♂️ DER MARKT IST TOT. ZOMBIECASH NICHT. Schnapp dir deine Bags und schließ dich der Horde an: 🔗 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy ⚡️ Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "fr": "Encore une journée dans le rouge sur le marché crypto et tout le monde se comporte comme des morts-vivants. Retournement de situation : nous sommes vraiment les morts-vivants, et nous prospérons. 🧟‍♂️ LE MARCHÉ EST MORT. PAS ZOMBIECASH. Prends tes sacs et rejoins la horde : 🔗 CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 💬 Telegram : https://t.me/+5aXhFhx2RdFmNWYy ⚡️ Pump.fun : https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "it": "Un altro giorno in rosso nel mercato crypto e tutti si comportano come morti viventi. Colpo di scena: siamo davvero noi i morti viventi, e prosperiamo. 🧟‍♂️ IL MERCATO È MORTO. ZOMBIECASH NO. Prendi i tuoi token e unisciti all’orda: 🔗 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy ⚡️ Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "ja": "暗号資産市場はまた赤い一日。みんながウォーキング・デッドのように振る舞っている。どんでん返し：本当にウォーキング・デッドなのは私たちで、しかも繁栄している。🧟‍♂️ 市場は死んだ。ZOMBIECASHは死んでいない。トークンを手に群れに加わろう：🔗 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy ⚡️ Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "zh-CN": "加密市场又是一个红色交易日，所有人都表现得像行尸走肉。剧情反转：我们才是真正的行尸走肉，而且活得很好。🧟‍♂️ 市场已死，ZOMBIECASH没有。拿好你的代币，加入亡灵大军：🔗 CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 💬 Telegram：https://t.me/+5aXhFhx2RdFmNWYy ⚡️ Pump.fun：https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "tr": "Kripto piyasasında yine kırmızı bir gün ve herkes yürüyen ölüler gibi davranıyor. Ters köşe: Yürüyen ölüler gerçekten biziz ve gayet iyi durumdayız. 🧟‍♂️ PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. Tokenlarını al ve sürüye katıl: 🔗 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy ⚡️ Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "hi": "क्रिप्टो बाज़ार में फिर एक लाल दिन और सब ऐसे बर्ताव कर रहे हैं जैसे चलते-फिरते मुर्दे हों। ट्विस्ट: असली चलते-फिरते मुर्दे तो हम हैं, और हम फल-फूल रहे हैं। 🧟‍♂️ बाज़ार मर गया। ZOMBIECASH नहीं। अपने टोकन उठाओ और झुंड में शामिल हो जाओ: 🔗 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy ⚡️ Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump"
+      }
     },
     {
       "id": "ZOMBCASH/631:0",
@@ -33997,7 +34727,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель в минусе? Графики мертвы? Идеальная погода для апокалипсиса. 🧟‍♂️ Пока остальной рынок превращается в цифровую пыль, $ZOMBCASH только начинает. РЫНОК УМЕР. ZOMBIECASH — НЕТ. Собирай снаряжение: 🧠 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💀 Сообщество X: https://x.com/i/communities/2013610165069591027",
+        "de": "Portfolio im Minus? Tote Charts? Perfektes Wetter für eine Apokalypse. 🧟‍♂️ Während der Rest des Marktes zu digitalem Staub zerfällt, fängt $ZOMBCASH gerade erst an. DER MARKT IST TOT. ZOMBIECASH NICHT. Schnapp dir deine Ausrüstung: 🧠 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💀 X-Community: https://x.com/i/communities/2013610165069591027",
+        "fr": "Portefeuille dans le rouge ? Graphiques morts ? Un temps parfait pour l’apocalypse. 🧟‍♂️ Pendant que le reste du marché se transforme en poussière numérique, $ZOMBCASH ne fait que commencer. LE MARCHÉ EST MORT. PAS ZOMBIECASH. Prépare ton équipement : 🧠 Pump.fun : https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💀 Communauté X : https://x.com/i/communities/2013610165069591027",
+        "it": "Portafoglio in rosso? Grafici morti? Tempo perfetto per un’apocalisse. 🧟‍♂️ Mentre il resto del mercato si trasforma in polvere digitale, $ZOMBCASH è appena agli inizi. IL MERCATO È MORTO. ZOMBIECASH NO. Prepara l’equipaggiamento: 🧠 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💀 Community X: https://x.com/i/communities/2013610165069591027",
+        "ja": "ポートフォリオは赤字？チャートは死亡？終末には最高の天気だ。🧟‍♂️ 市場の他のみんながデジタルの塵になる中、$ZOMBCASHは始まったばかり。市場は死んだ。ZOMBIECASHは死んでいない。装備を整えよう：🧠 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💀 Xコミュニティ: https://x.com/i/communities/2013610165069591027",
+        "zh-CN": "投资组合亏损？图表已经死寂？正是末日的好天气。🧟‍♂️ 当市场其他人都化为数字尘埃时，$ZOMBCASH才刚刚起步。市场已死，ZOMBIECASH没有。带好装备：🧠 Pump.fun：https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💀 X 社区：https://x.com/i/communities/2013610165069591027",
+        "tr": "Portföy zararda mı? Grafikler ölü mü? Kıyamet için mükemmel hava. 🧟‍♂️ Piyasanın geri kalanı dijital toza dönüşürken $ZOMBCASH daha yeni başlıyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. Ekipmanını hazırla: 🧠 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💀 X Topluluğu: https://x.com/i/communities/2013610165069591027",
+        "hi": "पोर्टफोलियो घाटे में है? चार्ट मर चुके हैं? प्रलय के लिए शानदार मौसम। 🧟‍♂️ जब बाज़ार के बाकी लोग डिजिटल धूल बन रहे हैं, $ZOMBCASH की शुरुआत हो रही है। बाज़ार मर गया। ZOMBIECASH नहीं। अपना सामान तैयार करो: 🧠 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💀 X समुदाय: https://x.com/i/communities/2013610165069591027"
+      }
     },
     {
       "id": "ZOMBCASH/630:0",
@@ -34023,7 +34763,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на крипторынке? Классика. Пока все остальные превращаются в цифровых зомби, мы только начинаем. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ 💸 Береги мозги, забирай свои токены. $ZOMBCASH на Solana.",
+        "de": "Schon wieder ein roter Tag im Kryptomarkt? Klassiker. Während alle anderen zu digitalen Zombies werden, legen wir erst richtig los. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ 💸 Bewahr dein Gehirn, schnapp dir deine Bags. $ZOMBCASH auf Solana.",
+        "fr": "Encore une journée dans le rouge sur le marché crypto ? Un classique. Pendant que les autres deviennent des zombies numériques, nous ne faisons que commencer. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ 💸 Garde tes cerveaux, récupère tes sacs. $ZOMBCASH sur Solana.",
+        "it": "Un altro giorno in rosso nel mercato crypto? Classico. Mentre tutti gli altri diventano zombie digitali, noi siamo solo all’inizio. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ 💸 Tieni i cervelli, prendi i tuoi token. $ZOMBCASH su Solana.",
+        "ja": "暗号資産市場はまた赤い一日？いつものこと。他のみんながデジタルゾンビになる中、私たちは始まったばかり。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 💸 脳みそを守り、トークンを手に入れよう。Solanaの$ZOMBCASH。",
+        "zh-CN": "加密市场又是一个红色交易日？老样子。当其他人都变成数字僵尸时，我们才刚刚开始。市场已死，ZOMBIECASH没有。🧟‍♂️ 💸 守好你的脑子，拿好你的代币。Solana 上的$ZOMBCASH。",
+        "tr": "Kripto piyasasında yine kırmızı bir gün mü? Klasik. Herkes dijital zombiye dönüşürken biz daha yeni başlıyoruz. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ 💸 Beyinlerini koru, tokenlarını kap. Solana'da $ZOMBCASH.",
+        "hi": "क्रिप्टो बाज़ार में फिर एक लाल दिन? हमेशा की तरह। जब बाकी सब डिजिटल ज़ॉम्बी बन रहे हैं, हम तो अभी शुरू कर रहे हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ 💸 अपने दिमाग बचाओ, टोकन उठाओ। Solana पर $ZOMBCASH।"
+      }
     },
     {
       "id": "ZOMBCASH/626:0",
@@ -34049,7 +34799,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на крипторынке? Классика. Пока все остальные превращаются в цифровых зомби, мы только начинаем. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ 💸 Береги мозги, забирай свои токены. Мы выходим на рассвете. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "de": "Schon wieder ein roter Tag im Kryptomarkt? Klassiker. Während alle anderen zu digitalen Zombies werden, legen wir erst richtig los. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ 💸 Bewahr dein Gehirn, schnapp dir deine Bags. Wir reiten bei Sonnenaufgang los. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "fr": "Encore une journée dans le rouge sur le marché crypto ? Un classique. Pendant que les autres deviennent des zombies numériques, nous ne faisons que commencer. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ 💸 Garde tes cerveaux, récupère tes sacs. Nous partons à l’aube. CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "it": "Un altro giorno in rosso nel mercato crypto? Classico. Mentre tutti gli altri diventano zombie digitali, noi siamo solo all’inizio. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ 💸 Tieni i cervelli, prendi i tuoi token. Si parte all’alba. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "ja": "暗号資産市場はまた赤い一日？いつものこと。他のみんながデジタルゾンビになる中、私たちは始まったばかり。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 💸 脳みそを守り、トークンを手に入れよう。出発は夜明けだ。CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "zh-CN": "加密市场又是一个红色交易日？老样子。当其他人都变成数字僵尸时，我们才刚刚开始。市场已死，ZOMBIECASH没有。🧟‍♂️ 💸 守好你的脑子，拿好你的代币。我们黎明出发。CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "tr": "Kripto piyasasında yine kırmızı bir gün mü? Klasik. Herkes dijital zombiye dönüşürken biz daha yeni başlıyoruz. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ 💸 Beyinlerini koru, tokenlarını kap. Şafakta yola çıkıyoruz. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "hi": "क्रिप्टो बाज़ार में फिर एक लाल दिन? हमेशा की तरह। जब बाकी सब डिजिटल ज़ॉम्बी बन रहे हैं, हम तो अभी शुरू कर रहे हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ 💸 अपने दिमाग बचाओ, टोकन उठाओ। हम भोर में निकलेंगे। CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`"
+      }
     },
     {
       "id": "ZOMBCASH/622:0",
@@ -34075,7 +34835,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на графиках? Пусть остальные истекают кровью. 🧟‍♂️ Пока все остальные изображают ходячих мертвецов, мы буквально созданы для этого. РЫНОК УМЕР. ZOMBIECASH — НЕТ. Забирай свои $ZOMBCASH и продолжай выживать. 🧠 💨 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "de": "Noch ein roter Tag in den Charts? Lass den Rest bluten. 🧟‍♂️ Während alle anderen wandelnde Tote spielen, sind wir genau dafür gemacht. DER MARKT IST TOT. ZOMBIECASH NICHT. Schnapp dir deine $ZOMBCASH und überlebe weiter. 🧠 💨 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "fr": "Encore une journée dans le rouge sur les graphiques ? Qu’ils saignent. 🧟‍♂️ Pendant que les autres font semblant d’être des morts-vivants, nous sommes littéralement faits pour ça. LE MARCHÉ EST MORT. PAS ZOMBIECASH. Garde tes $ZOMBCASH et continue de survivre. 🧠 💨 CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "it": "Un altro giorno in rosso sui grafici? Lasciamoli sanguinare. 🧟‍♂️ Mentre tutti gli altri fingono di essere morti viventi, noi siamo fatti proprio per questo. IL MERCATO È MORTO. ZOMBIECASH NO. Tieni i tuoi $ZOMBCASH e continua a sopravvivere. 🧠 💨 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "ja": "チャートはまた赤い一日？みんな血を流せばいい。🧟‍♂️ 他のみんながウォーキング・デッドのふりをする中、私たちはまさにそのために生まれた。市場は死んだ。ZOMBIECASHは死んでいない。$ZOMBCASHを手に、生き残り続けよう。🧠 💨 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "zh-CN": "图表又是一个红色交易日？让他们流血吧。🧟‍♂️ 当其他人都在装行尸走肉时，我们天生就是为此而来。市场已死，ZOMBIECASH没有。拿好你的$ZOMBCASH，继续生存。🧠 💨 CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "tr": "Grafiklerde yine kırmızı bir gün mü? Bırak kan kaybetsinler. 🧟‍♂️ Herkes yürüyen ölü taklidi yaparken biz tam da bunun için yaratıldık. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. $ZOMBCASH'ini al ve hayatta kalmaya devam et. 🧠 💨 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "hi": "चार्ट पर फिर एक लाल दिन? उन्हें खून बहाने दो। 🧟‍♂️ जब बाकी सब चलते-फिरते मुर्दे बनने का नाटक कर रहे हैं, हम सचमुच इसी के लिए बने हैं। बाज़ार मर गया। ZOMBIECASH नहीं। अपना $ZOMBCASH उठाओ और बचे रहो। 🧠 💨 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`"
+      }
     },
     {
       "id": "ZOMBCASH/620:0",
@@ -34101,7 +34871,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Проснулся, проверил графики — кругом настоящая кровавая баня. Отличная погода. 🧟‍♂️ РЫНОК УМЕР. ZOMBIECASH — НЕТ. Пока все остальные прикидываются мёртвыми, мы только начинаем. Собирай снаряжение и оставайся в бункере, дегенераты. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` TG: https://t.t.me/+5aXhFhx2RdFmNWYy",
+        "de": "Aufgewacht, Charts geprüft – hier sieht es nach einem totalen Blutbad aus. Perfektes Wetter. 🧟‍♂️ DER MARKT IST TOT. ZOMBIECASH NICHT. Während alle anderen tot spielen, legen wir erst richtig los. Schnapp dir deine Ausrüstung und bleib im Bunker, Degens. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` TG: https://t.t.me/+5aXhFhx2RdFmNWYy",
+        "fr": "Réveil, coup d’œil aux graphiques : c’est un véritable bain de sang ici. Temps idéal. 🧟‍♂️ LE MARCHÉ EST MORT. PAS ZOMBIECASH. Pendant que les autres font les morts, nous ne faisons que commencer. Prépare ton équipement et reste dans le bunker, les dégénérés. CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` TG : https://t.t.me/+5aXhFhx2RdFmNWYy",
+        "it": "Mi sono svegliato, ho controllato i grafici: qui sembra un vero bagno di sangue. Tempo perfetto. 🧟‍♂️ IL MERCATO È MORTO. ZOMBIECASH NO. Mentre tutti gli altri fingono di essere morti, noi siamo appena all’inizio. Prepara l’equipaggiamento e resta nel bunker, degen. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` TG: https://t.t.me/+5aXhFhx2RdFmNWYy",
+        "ja": "目を覚ましてチャートを確認したら、あたり一面が大虐殺状態。最高の天気だ。🧟‍♂️ 市場は死んだ。ZOMBIECASHは死んでいない。他のみんなが死んだふりをする中、私たちは始まったばかり。装備を整えてバンカーにいろよ、ディジェンども。CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` TG: https://t.t.me/+5aXhFhx2RdFmNWYy",
+        "zh-CN": "醒来查看图表，眼前简直是一片血海。天气真不错。🧟‍♂️ 市场已死，ZOMBIECASH没有。当其他人都在装死时，我们才刚刚开始。带好装备，待在地堡里，Degens们。CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` TG：https://t.t.me/+5aXhFhx2RdFmNWYy",
+        "tr": "Uyandım, grafiklere baktım; ortalık tam bir kan gölü. Harika hava. 🧟‍♂️ PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. Herkes ölü taklidi yaparken biz daha yeni başlıyoruz. Ekipmanını hazırla ve sığınakta kal, degenler. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` TG: https://t.t.me/+5aXhFhx2RdFmNWYy",
+        "hi": "जागकर चार्ट देखे—यहाँ तो खून की नदियाँ बह रही हैं। मौसम शानदार है। 🧟‍♂️ बाज़ार मर गया। ZOMBIECASH नहीं। जब बाकी सब मरे होने का नाटक कर रहे हैं, हम अभी शुरू कर रहे हैं। अपना सामान तैयार करो और बंकर में रहो, डीजेन्स। CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` TG: https://t.t.me/+5aXhFhx2RdFmNWYy"
+      }
     },
     {
       "id": "ZOMBCASH/619:0",
@@ -34127,7 +34907,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на крипторынке? Классика. Пока все остальные превращаются в цифровых зомби, мы уже мертвы — и веселимся куда лучше. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ 💸 Береги мозги, забирай свои токены. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "de": "Schon wieder ein roter Tag im Kryptomarkt? Klassiker. Während alle anderen zu digitalen Zombies werden, sind wir bereits tot – und haben viel mehr Spaß. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ 💸 Bewahr dein Gehirn, schnapp dir deine Bags. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "fr": "Encore une journée dans le rouge sur le marché crypto ? Un classique. Pendant que les autres deviennent des zombies numériques, nous sommes déjà morts — et nous nous amusons bien plus. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ 💸 Garde tes cerveaux, récupère tes sacs. CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "it": "Un altro giorno in rosso nel mercato crypto? Classico. Mentre tutti gli altri diventano zombie digitali, noi siamo già morti e ci divertiamo molto di più. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ 💸 Tieni i cervelli, prendi i tuoi token. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "ja": "暗号資産市場はまた赤い一日？いつものこと。他のみんながデジタルゾンビになる中、私たちはもう死んでいる。しかもずっと楽しんでいる。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 💸 脳みそを守り、トークンを手に入れよう。CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "zh-CN": "加密市场又是一个红色交易日？老样子。当其他人都变成数字僵尸时，我们早已死去，而且玩得更开心。市场已死，ZOMBIECASH没有。🧟‍♂️ 💸 守好你的脑子，拿好你的代币。CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "tr": "Kripto piyasasında yine kırmızı bir gün mü? Klasik. Herkes dijital zombiye dönüşürken biz çoktan öldük — ve çok daha fazla eğleniyoruz. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ 💸 Beyinlerini koru, tokenlarını kap. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "hi": "क्रिप्टो बाज़ार में फिर एक लाल दिन? हमेशा की तरह। जब बाकी सब डिजिटल ज़ॉम्बी बन रहे हैं, हम पहले से ही मर चुके हैं—और कहीं ज़्यादा मज़े कर रहे हैं। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ 💸 अपने दिमाग बचाओ, टोकन उठाओ। CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`"
+      }
     },
     {
       "id": "ZOMBCASH/614:0",
@@ -34153,7 +34943,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один портфель похож на место преступления? Классика. 🧟‍♂️ Пока все остальные прикидываются мёртвыми, $ZOMBCASH буквально создан для этого. РЫНОК УМЕР. ZOMBIECASH — НЕТ. Захвати мозги и присоединяйся к Орде: 🔗 TG: https://t.me/+5aXhFhx2RdFmNWYy ⚡️ CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "de": "Sieht noch ein Portfolio wie ein Tatort aus? Klassiker. 🧟‍♂️ Während alle anderen tot spielen, wurde $ZOMBCASH buchstäblich dafür geboren. DER MARKT IST TOT. ZOMBIECASH NICHT. Schnapp dir Gehirne und schließ dich der Horde an: 🔗 TG: https://t.me/+5aXhFhx2RdFmNWYy ⚡️ CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "fr": "Encore un portefeuille qui ressemble à une scène de crime ? Un classique. 🧟‍♂️ Pendant que les autres font les morts, $ZOMBCASH est littéralement né pour ça. LE MARCHÉ EST MORT. PAS ZOMBIECASH. Prends des cerveaux et rejoins la Horde : 🔗 TG : https://t.me/+5aXhFhx2RdFmNWYy ⚡️ CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "it": "Un altro portafoglio che sembra una scena del crimine? Classico. 🧟‍♂️ Mentre tutti gli altri fingono di essere morti, $ZOMBCASH è letteralmente nato per questo. IL MERCATO È MORTO. ZOMBIECASH NO. Prendi dei cervelli e unisciti all’Orda: 🔗 TG: https://t.me/+5aXhFhx2RdFmNWYy ⚡️ CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "ja": "またポートフォリオが犯罪現場のよう？いつものこと。🧟‍♂️ 他のみんなが死んだふりをする中、$ZOMBCASHはまさにそのために生まれた。市場は死んだ。ZOMBIECASHは死んでいない。脳みそを持って群れに加わろう：🔗 TG: https://t.me/+5aXhFhx2RdFmNWYy ⚡️ CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "zh-CN": "又一个投资组合看起来像犯罪现场？老样子。🧟‍♂️ 当其他人都在装死时，$ZOMBCASH简直就是为此而生。市场已死，ZOMBIECASH没有。拿些脑子，加入亡灵大军：🔗 TG：https://t.me/+5aXhFhx2RdFmNWYy ⚡️ CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "tr": "Yine bir portföy olay yeri gibi mi görünüyor? Klasik. 🧟‍♂️ Herkes ölü taklidi yaparken $ZOMBCASH tam da bunun için yaratıldı. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. Biraz beyin kap ve Sürüye katıl: 🔗 TG: https://t.me/+5aXhFhx2RdFmNWYy ⚡️ CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "hi": "एक और पोर्टफोलियो अपराध-स्थल जैसा दिख रहा है? हमेशा की तरह। 🧟‍♂️ जब बाकी सब मरे होने का नाटक कर रहे हैं, $ZOMBCASH सचमुच इसी के लिए बना है। बाज़ार मर गया। ZOMBIECASH नहीं। कुछ दिमाग उठाओ और झुंड में शामिल हो जाओ: 🔗 TG: https://t.me/+5aXhFhx2RdFmNWYy ⚡️ CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`"
+      }
     },
     {
       "id": "ZOMBCASH/611:0",
@@ -34179,7 +34979,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Графики похожи на кладбище. Идеальная погода для прогулки. 🧟‍♂️ РЫНОК УМЕР. ZOMBIECASH — НЕТ. Собирай снаряжение: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "de": "Die Charts sehen aus wie ein Friedhof. Perfektes Wetter für einen Spaziergang. 🧟‍♂️ DER MARKT IST TOT. ZOMBIECASH NICHT. Schnapp dir deine Ausrüstung: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "fr": "Les graphiques ressemblent à un cimetière. Un temps idéal pour une promenade. 🧟‍♂️ LE MARCHÉ EST MORT. PAS ZOMBIECASH. Prépare ton équipement : CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun : https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "it": "I grafici sembrano un cimitero. Tempo perfetto per una passeggiata. 🧟‍♂️ IL MERCATO È MORTO. ZOMBIECASH NO. Prepara l’equipaggiamento: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "ja": "チャートは墓場のよう。散歩には最高の天気だ。🧟‍♂️ 市場は死んだ。ZOMBIECASHは死んでいない。装備を整えよう：CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "zh-CN": "图表看起来像座墓地。真是散步的好天气。🧟‍♂️ 市场已死，ZOMBIECASH没有。带好装备：CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun：https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "tr": "Grafikler mezarlık gibi görünüyor. Yürüyüş için harika hava. 🧟‍♂️ PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. Ekipmanını hazırla: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "hi": "चार्ट कब्रिस्तान जैसे दिखते हैं। टहलने के लिए शानदार मौसम। 🧟‍♂️ बाज़ार मर गया। ZOMBIECASH नहीं। अपना सामान तैयार करो: CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump` Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump"
+      }
     },
     {
       "id": "ZOMBCASH/606:0",
@@ -34205,7 +35015,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на крипторынке? Какая разница. Мозги — вещь временная. $ZOMBCASH вечен. 🧟‍♂️ 💀 РЫНОК УМЕР. ZOMBIECASH — НЕТ. Собирай снаряжение на Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "de": "Noch ein roter Tag im Kryptomarkt? Wen kümmert's. Gehirne sind vergänglich. $ZOMBCASH ist ewig. 🧟‍♂️ 💀 DER MARKT IST TOT. ZOMBIECASH NICHT. Schnapp dir deine Ausrüstung auf Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "fr": "Encore une journée dans le rouge sur le marché crypto ? Peu importe. Les cerveaux sont éphémères. $ZOMBCASH est éternel. 🧟‍♂️ 💀 LE MARCHÉ EST MORT. PAS ZOMBIECASH. Prépare ton équipement sur Pump.fun : https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "it": "Un altro giorno in rosso nel mercato crypto? E chi se ne importa. I cervelli sono temporanei. $ZOMBCASH è eterno. 🧟‍♂️ 💀 IL MERCATO È MORTO. ZOMBIECASH NO. Prepara l’equipaggiamento su Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "ja": "暗号資産市場はまた赤い一日？だから何だ。脳みそは一時的なもの。$ZOMBCASHは永遠だ。🧟‍♂️ 💀 市場は死んだ。ZOMBIECASHは死んでいない。Pump.funで装備を整えよう：https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "zh-CN": "加密市场又是一个红色交易日？谁在乎。脑子只是暂时的。$ZOMBCASH才是永恒。🧟‍♂️ 💀 市场已死，ZOMBIECASH没有。在Pump.fun上备好装备：https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "tr": "Kripto piyasasında yine kırmızı bir gün mü? Kimin umurunda. Beyinler geçicidir. $ZOMBCASH sonsuzdur. 🧟‍♂️ 💀 PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. Pump.fun'da ekipmanını hazırla: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump",
+        "hi": "क्रिप्टो बाज़ार में फिर एक लाल दिन? किसे परवाह है। दिमाग अस्थायी हैं। $ZOMBCASH शाश्वत है। 🧟‍♂️ 💀 बाज़ार मर गया। ZOMBIECASH नहीं। Pump.fun पर अपना सामान तैयार करो: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump"
+      }
     },
     {
       "id": "ZOMBCASH/601:0",
@@ -34231,7 +35051,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Рынок сейчас буквально город-призрак. Портфель похож на место преступления. 💀 А $ZOMBCASH тем временем просто шагает среди обломков, будто ничего не произошло. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ Собирай снаряжение: 💬 TG: https://t.me/+5aXhFhx2RdFmNWYy 🐦 X: https://x.com/i/communities/2013610165069591027 💊 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "de": "Der Markt ist gerade buchstäblich eine Geisterstadt. Das Portfolio sieht aus wie ein Tatort. 💀 Währenddessen spaziert $ZOMBCASH durch die Trümmer, als wäre nichts passiert. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ Schnapp dir deine Ausrüstung: 💬 TG: https://t.me/+5aXhFhx2RdFmNWYy 🐦 X: https://x.com/i/communities/2013610165069591027 💊 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "fr": "Le marché est littéralement une ville fantôme en ce moment. Le portefeuille ressemble à une scène de crime. 💀 Pendant ce temps, $ZOMBCASH traverse les décombres comme si de rien n’était. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ Prépare ton équipement : 💬 TG : https://t.me/+5aXhFhx2RdFmNWYy 🐦 X : https://x.com/i/communities/2013610165069591027 💊 CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "it": "Il mercato al momento è letteralmente una città fantasma. Il portafoglio sembra una scena del crimine. 💀 Nel frattempo, $ZOMBCASH cammina tra le macerie come se nulla fosse. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ Prepara l’equipaggiamento: 💬 TG: https://t.me/+5aXhFhx2RdFmNWYy 🐦 X: https://x.com/i/communities/2013610165069591027 💊 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "ja": "今の市場は文字通りゴーストタウン。ポートフォリオは犯罪現場のよう。💀 その一方で$ZOMBCASHは何事もなかったかのように瓦礫の中を歩いている。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 装備を整えよう：💬 TG: https://t.me/+5aXhFhx2RdFmNWYy 🐦 X: https://x.com/i/communities/2013610165069591027 💊 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "zh-CN": "现在的市场简直就是一座鬼城。投资组合看起来像犯罪现场。💀 而$ZOMBCASH却若无其事地穿行在废墟中。市场已死，ZOMBIECASH没有。🧟‍♂️ 带好装备：💬 TG：https://t.me/+5aXhFhx2RdFmNWYy 🐦 X：https://x.com/i/communities/2013610165069591027 💊 CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "tr": "Piyasa şu anda kelimenin tam anlamıyla hayalet kasaba. Portföy olay yeri gibi görünüyor. 💀 Bu sırada $ZOMBCASH hiçbir şey olmamış gibi enkazın içinde yürüyor. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ Ekipmanını hazırla: 💬 TG: https://t.me/+5aXhFhx2RdFmNWYy 🐦 X: https://x.com/i/communities/2013610165069591027 💊 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "hi": "बाज़ार इस समय सचमुच भुतहा शहर है। पोर्टफोलियो अपराध-स्थल जैसा दिखता है। 💀 उधर $ZOMBCASH ऐसे मलबे में चल रहा है जैसे कुछ हुआ ही न हो। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ अपना सामान तैयार करो: 💬 TG: https://t.me/+5aXhFhx2RdFmNWYy 🐦 X: https://x.com/i/communities/2013610165069591027 💊 CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`"
+      }
     },
     {
       "id": "ZOMBCASH/599:0",
@@ -34257,7 +35087,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Повсюду красные свечи? Похоже, портфель присоединяется к нежити. 🧟‍♂️ 📉 Хорошо, что мы готовились к апокалипсису. РЫНОК УМЕР. ZOMBIECASH — НЕТ. Забирай свои $ZOMBCASH и оставайся в бункере. 🧠 ⚡️",
+        "de": "Überall rote Kerzen? Sieht so aus, als würde sich das Portfolio den Untoten anschließen. 🧟‍♂️ 📉 Gut, dass wir uns auf die Apokalypse vorbereitet haben. DER MARKT IST TOT. ZOMBIECASH NICHT. Schnapp dir deine $ZOMBCASH und bleib im Bunker. 🧠 ⚡️",
+        "fr": "Des bougies rouges partout ? On dirait que le portefeuille rejoint les morts-vivants. 🧟‍♂️ 📉 Heureusement que nous nous sommes préparés à l’apocalypse. LE MARCHÉ EST MORT. PAS ZOMBIECASH. Garde tes $ZOMBCASH et reste dans le bunker. 🧠 ⚡️",
+        "it": "Candele rosse ovunque? Sembra che il portafoglio si stia unendo ai non morti. 🧟‍♂️ 📉 Per fortuna ci siamo preparati all’apocalisse. IL MERCATO È MORTO. ZOMBIECASH NO. Tieni i tuoi $ZOMBCASH e resta nel bunker. 🧠 ⚡️",
+        "ja": "赤いローソク足だらけ？ポートフォリオもアンデッドの仲間入りのようだ。🧟‍♂️ 📉 終末に備えておいてよかった。市場は死んだ。ZOMBIECASHは死んでいない。$ZOMBCASHを手に、バンカーにとどまろう。🧠 ⚡️",
+        "zh-CN": "到处都是红色K线？看来投资组合也要加入亡灵了。🧟‍♂️ 📉 好在我们早已为末日做好准备。市场已死，ZOMBIECASH没有。拿好你的$ZOMBCASH，待在地堡里。🧠 ⚡️",
+        "tr": "Her yerde kırmızı mumlar mı var? Portföy yaşayan ölülerin arasına katılıyor gibi. 🧟‍♂️ 📉 İyi ki kıyamete hazırlandık. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. $ZOMBCASH'ini al ve sığınakta kal. 🧠 ⚡️",
+        "hi": "हर तरफ़ लाल कैंडल्स हैं? लगता है पोर्टफोलियो भी मरे हुओं में शामिल हो रहा है। 🧟‍♂️ 📉 अच्छा है कि हमने प्रलय की तैयारी की थी। बाज़ार मर गया। ZOMBIECASH नहीं। अपना $ZOMBCASH उठाओ और बंकर में रहो। 🧠 ⚡️"
+      }
     },
     {
       "id": "ZOMBCASH/597:0",
@@ -34283,7 +35123,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на графиках? Пусть остальной рынок превращается в зомби. Мы были мертвы всё это время. Поэтому мы до сих пор здесь. 🧟‍♂️ РЫНОК УМЕР. ZOMBIECASH — НЕТ. $ZOMBCASH | Solana",
+        "de": "Noch ein roter Tag in den Charts? Lass den Rest des Marktes zu Zombies werden. Wir waren die ganze Zeit tot. Deshalb sind wir immer noch hier. 🧟‍♂️ DER MARKT IST TOT. ZOMBIECASH NICHT. $ZOMBCASH | Solana",
+        "fr": "Encore une journée dans le rouge sur les graphiques ? Laisse le reste du marché devenir des zombies. Nous étions morts depuis le début. C’est pour cela que nous sommes encore là. 🧟‍♂️ LE MARCHÉ EST MORT. PAS ZOMBIECASH. $ZOMBCASH | Solana",
+        "it": "Un altro giorno in rosso sui grafici? Lascia che il resto del mercato diventi zombie. Noi siamo sempre stati morti. Ecco perché siamo ancora qui. 🧟‍♂️ IL MERCATO È MORTO. ZOMBIECASH NO. $ZOMBCASH | Solana",
+        "ja": "チャートはまた赤い一日？市場の他のみんなはゾンビになればいい。私たちはずっと死んでいた。だから今もここにいる。🧟‍♂️ 市場は死んだ。ZOMBIECASHは死んでいない。$ZOMBCASH | Solana",
+        "zh-CN": "图表又是一个红色交易日？让市场其他人都变成僵尸吧。我们一直都是亡灵，所以我们依然在这里。🧟‍♂️ 市场已死，ZOMBIECASH没有。$ZOMBCASH | Solana",
+        "tr": "Grafiklerde yine kırmızı bir gün mü? Piyasanın geri kalanı zombiye dönüşsün. Biz başından beri ölüydük. Bu yüzden hâlâ buradayız. 🧟‍♂️ PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. $ZOMBCASH | Solana",
+        "hi": "चार्ट पर फिर एक लाल दिन? बाज़ार के बाकी लोगों को ज़ॉम्बी बनने दो। हम तो पूरे समय से मरे हुए थे। इसीलिए अब भी यहाँ हैं। 🧟‍♂️ बाज़ार मर गया। ZOMBIECASH नहीं। $ZOMBCASH | Solana"
+      }
     },
     {
       "id": "ZOMBCASH/591:0",
@@ -34309,7 +35159,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на графиках? Пусть остальной рынок превращается в зомби. 🧟‍♂️ РЫНОК УМЕР. ZOMBIECASH — НЕТ. Забирай свои $ZOMBCASH и переживи хаос крипторынка. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "de": "Noch ein roter Tag in den Charts? Lass den Rest des Marktes zu Zombies werden. 🧟‍♂️ DER MARKT IST TOT. ZOMBIECASH NICHT. Schnapp dir deine $ZOMBCASH und übersteh das Krypto-Chaos. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "fr": "Encore une journée dans le rouge sur les graphiques ? Laisse le reste du marché devenir des zombies. 🧟‍♂️ LE MARCHÉ EST MORT. PAS ZOMBIECASH. Garde tes $ZOMBCASH et survis au chaos crypto. CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "it": "Un altro giorno in rosso sui grafici? Lascia che il resto del mercato diventi zombie. 🧟‍♂️ IL MERCATO È MORTO. ZOMBIECASH NO. Tieni i tuoi $ZOMBCASH e sopravvivi al caos crypto. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "ja": "チャートはまた赤い一日？市場の他のみんなはゾンビになればいい。🧟‍♂️ 市場は死んだ。ZOMBIECASHは死んでいない。$ZOMBCASHを手に、暗号資産の混乱を生き延びよう。CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "zh-CN": "图表又是一个红色交易日？让市场其他人都变成僵尸吧。🧟‍♂️ 市场已死，ZOMBIECASH没有。拿好你的$ZOMBCASH，在加密市场的混乱中活下去。CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "tr": "Grafiklerde yine kırmızı bir gün mü? Piyasanın geri kalanı zombiye dönüşsün. 🧟‍♂️ PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. $ZOMBCASH'ini al ve kripto karmaşasında hayatta kal. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "hi": "चार्ट पर फिर एक लाल दिन? बाज़ार के बाकी लोगों को ज़ॉम्बी बनने दो। 🧟‍♂️ बाज़ार मर गया। ZOMBIECASH नहीं। अपना $ZOMBCASH उठाओ और क्रिप्टो की अराजकता में बचे रहो। CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`"
+      }
     },
     {
       "id": "ZOMBCASH/587:0",
@@ -34335,7 +35195,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Ещё один красный день на графиках, и все ведут себя так, будто наступил конец света. Пусть паникуют. РЫНОК УМЕР. ZOMBIECASH — НЕТ. 🧟‍♂️ 💸 Забирай свои токены, продолжай ползти и оставайся нежитью на Solana. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "de": "Noch ein roter Tag in den Charts und alle tun so, als wäre das Ende der Welt gekommen. Sollen sie ruhig in Panik geraten. DER MARKT IST TOT. ZOMBIECASH NICHT. 🧟‍♂️ 💸 Schnapp dir deine Bags, kriech weiter und bleib auf Solana untot. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "fr": "Encore une journée dans le rouge sur les graphiques et tout le monde agit comme si c’était la fin du monde. Qu’ils paniquent. LE MARCHÉ EST MORT. PAS ZOMBIECASH. 🧟‍♂️ 💸 Prends tes sacs, continue de ramper et reste mort-vivant sur Solana. CA : `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "it": "Un altro giorno in rosso sui grafici e tutti si comportano come se fosse la fine del mondo. Lasciamoli andare nel panico. IL MERCATO È MORTO. ZOMBIECASH NO. 🧟‍♂️ 💸 Prendi i tuoi token, continua a strisciare e resta non morto su Solana. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "ja": "チャートはまた赤い一日。みんな世界の終わりのように騒いでいる。慌てさせておけばいい。市場は死んだ。ZOMBIECASHは死んでいない。🧟‍♂️ 💸 トークンを手に、這い進み、Solanaでアンデッドでいよう。CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "zh-CN": "图表又是一个红色交易日，所有人都表现得像世界末日来了。让他们恐慌去吧。市场已死，ZOMBIECASH没有。🧟‍♂️ 💸 拿好你的代币，继续爬行，在Solana上保持亡灵状态。CA：`6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "tr": "Grafiklerde yine kırmızı bir gün ve herkes dünyanın sonu gelmiş gibi davranıyor. Bırak paniklesinler. PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. 🧟‍♂️ 💸 Tokenlarını kap, sürünmeye devam et ve Solana'da yaşayan ölü kal. CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`",
+        "hi": "चार्ट पर फिर एक लाल दिन है और सब ऐसे बर्ताव कर रहे हैं जैसे दुनिया खत्म हो रही हो। उन्हें घबराने दो। बाज़ार मर गया। ZOMBIECASH नहीं। 🧟‍♂️ 💸 अपने टोकन उठाओ, रेंगते रहो और Solana पर मरे हुए बने रहो। CA: `6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump`"
+      }
     }
   ]
 }
