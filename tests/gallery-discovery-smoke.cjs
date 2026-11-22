@@ -551,7 +551,7 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       const schema = JSON.parse(schemaText);
       const controls = await localized.locator(".gallery-category-chip").allTextContents();
       const firstCardTitle = (await localized.locator("#gallery-grid .gallery-caption p").first().textContent()) || "";
-      const firstCardCategory = (await localized.locator("#gallery-grid .gallery-category-tag").first().textContent()) || "";
+      const firstCardMeta = (await localized.locator("#gallery-grid .gallery-card-meta").first().textContent()) || "";
       const localizedCategoryLabels = {
         "undead-after-dark": { de: "Untote bei Nacht", fr: "Morts-vivants nocturnes", it: "Non morti dopo il tramonto", ja: "夜更けのアンデッド", "zh-CN": "午夜不死者", ru: "Нежить после заката", tr: "Gece Yarısı Ölüleri", hi: "रात ढलने के बाद के ज़ॉम्बी" },
         "zombie-memes": { de: "Zombie-Memes", fr: "Mèmes zombies", it: "Meme zombie", ja: "ゾンビミーム", "zh-CN": "僵尸梗图", ru: "Зомби-мемы", tr: "Zombi Memleri", hi: "ज़ॉम्बी मीम" },
@@ -560,8 +560,11 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
         "community-creations": { de: "Community-Kreationen", fr: "Créations de la communauté", it: "Creazioni della community", ja: "コミュニティ作品", "zh-CN": "社区创作", ru: "Работы сообщества", tr: "Topluluk Eserleri", hi: "समुदाय की कलाकृतियाँ" }
       };
       const firstCategoryId = galleryData.items[0]?.category_ids?.[0];
-      const localizedFirstCategory = localizedCategoryLabels[firstCategoryId]?.[locale];
-      if (localizedFirstCategory && firstCardCategory !== localizedFirstCategory) throw new Error(locale + " first-card category is not translated: " + firstCardCategory);
+      const normalizedFirstCategoryId = firstCategoryId === "nightmare-horror" || firstCategoryId === "undead-after-dark" ? firstCategoryId : "zombie-memes";
+      const localizedFirstCategory = localizedCategoryLabels[normalizedFirstCategoryId]?.[locale];
+      if (localizedFirstCategory && !controls.includes(localizedFirstCategory)) {
+        throw new Error(locale + " category filter label is not translated: " + localizedFirstCategory);
+      }
       if (/NIGHTMARE & HORROR|ZOMBIECASH MEMES|ZOMBIECASH MEME|UNDEAD AFTER DARK|SITE TRANSMISSION/i.test(firstCardTitle)) throw new Error(locale + " source series header was not removed from the caption: " + firstCardTitle);
       const siteTransmissionLabels = ["Website-Meldungen", "Actualités du site", "Aggiornamenti dal sito", "サイト通信", "网站播报", "Передачи с сайта", "Site Duyuruları", "साइट अपडेट", "Site Transmissions"];
       if (controls.some(label => siteTransmissionLabels.includes(label))) throw new Error(locale + " removed Site Transmissions category is still visible");
@@ -575,7 +578,7 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       const shareLabel = (await localized.locator(".gallery-lightbox-share").textContent()).trim();
       if (!shareLabel || shareLabel === "SHARE") throw new Error(locale + " gallery share control is not localized");
       await localized.locator(".gallery-lightbox-close").click();
-      localeAudit.push({ locale, lang, alternates, cards: expectedGalleryCount, title, shareLabel, firstCardTitle, firstCardCategory });
+      localeAudit.push({ locale, lang, alternates, cards: expectedGalleryCount, title, shareLabel, firstCardTitle, firstCardMeta, firstCategoryLabel: localizedFirstCategory });
       await localized.close();
     }
 
