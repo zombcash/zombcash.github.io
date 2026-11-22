@@ -302,8 +302,7 @@
     // community creations remain in the main archive without a separate category.
     items.forEach(item => {
       const ids = Array.isArray(item.category_ids) ? item.category_ids : [];
-      item.category_ids = [...new Set(ids.map(id => id === "crypto-apocalypse" ? "zombie-memes" : id)
-        .filter(id => ["zombie-memes","nightmare-horror","undead-after-dark"].includes(id)))];
+      item.category_ids = [...new Set(ids.map(id => (id === "nightmare-horror" || id === "undead-after-dark") ? id : "zombie-memes"))];
     });
     localizeGalleryMeta(items, data.updated_at);
     if (!items.length) {
