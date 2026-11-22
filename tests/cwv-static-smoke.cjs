@@ -27,15 +27,26 @@ for (const [path, page] of homepages) {
   assert(page.includes("display=optional"), path + " must use optional display for brand fonts");
 }
 
-assert(index.includes('src="runtime-fixes.js?v=20261027-2" defer') &&
-       index.includes('src="script.js?v=market-status-fix-20261029-1" defer') &&
-       index.includes('src="living-world-recovery.js?v=news-commentary-sync-20261021-2" defer'),
+const hasDeferredScript = (page, filename, rootRelative = false) => {
+  const expectedSrc = rootRelative ? `/${filename}` : filename;
+  const scriptTags = page.match(/<script\b[^>]*>/gi) || [];
+  return scriptTags.some(tag => {
+    const srcMatch = tag.match(/\bsrc=["']([^"']+)["']/i);
+    if (!srcMatch) return false;
+    const srcWithoutQuery = srcMatch[1].split("?")[0];
+    return srcWithoutQuery === expectedSrc && /\bdefer(?=\s|=|>|$)/i.test(tag);
+  });
+};
+
+assert(hasDeferredScript(index, "runtime-fixes.js") &&
+       hasDeferredScript(index, "script.js") &&
+       hasDeferredScript(index, "living-world-recovery.js"),
   "English homepage utility scripts must be deferred");
 for (const path of localePaths) {
   const page = read(path);
-  assert(page.includes('src="/runtime-fixes.js?v=20261027-2" defer') &&
-         page.includes('src="/script.js?v=radar-icon-fallback-20261027-3" defer') &&
-         page.includes('src="/living-world-recovery.js?v=news-commentary-sync-20261021-2" defer'),
+  assert(hasDeferredScript(page, "runtime-fixes.js", true) &&
+         hasDeferredScript(page, "script.js", true) &&
+         hasDeferredScript(page, "living-world-recovery.js", true),
     path + " utility scripts must be deferred");
 }
 
