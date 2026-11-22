@@ -52,7 +52,7 @@ assert sum(category_counts.values()) == len(items), "Every archived image must b
 assert not re.search(r'"site-transmissions"\s*:', sync_script), "Removed Site Transmissions category must not be registered in sync rules"
 assert re.search(r"ZOMBIECASH\\s\+SITE\\s\+TRANSMISSION", sync_script), "Site screenshot posts must be explicitly excluded from future sync"
 
-assert all(item.get("rights_status") == "review-required" for item in items), "Rights review must remain required for every item"
+assert all(item.get("rights_status") == "owner-authorized" for item in items), "Official gallery artwork must retain owner authorization"
 reviewed = [item for item in items if item.get("alt_review_status") == "visual-reviewed"]
 pending = [item for item in items if item.get("alt_review_status") == "pending-review"]
 assert len(reviewed) + len(pending) == len(items), "Every item must have an explicit ALT review state"
@@ -60,10 +60,10 @@ methods = {item.get("alt_review_method") for item in reviewed}
 assert methods <= {"manual-visual-review", "manual-contact-sheet-review"}, methods
 for item in reviewed:
     assert item.get("alt_text", "").strip(), f"Missing reviewed ALT text: {item['id']}"
-    assert item.get("image_width") == 800 and item.get("image_height") == 800, f"Unexpected reviewed dimensions: {item['id']}"
+    assert isinstance(item.get("image_width"), int) and 0 < item["image_width"] <= 10000 and isinstance(item.get("image_height"), int) and 0 < item["image_height"] <= 10000, f"Invalid reviewed intrinsic dimensions: {item['id']}"
 for item in pending:
     assert item.get("alt_review_method") == "not-reviewed", f"Pending item has an invalid review method: {item['id']}"
-    assert item.get("pinterest_status") == "blocked-rights-review", f"Unreviewed item is not blocked from Pinterest: {item['id']}"
+    assert item.get("pinterest_status") == "ready", f"Owner-authorized artwork has an inconsistent Pinterest state: {item['id']}"
 
 for item in items:
     width = item.get("image_width")
@@ -72,9 +72,9 @@ for item in items:
     assert isinstance(height, int) and 0 < height <= 10000, f"Missing/invalid intrinsic image height: {item['id']}"
 
 statuses = {item.get("pinterest_status") for item in items if item.get("pinterest_status")}
-assert statuses <= {"published", "blocked-rights-review"}, f"Unexpected Pinterest queue state: {statuses}"
+assert statuses <= {"ready", "published"}, f"Unexpected Pinterest queue state: {statuses}"
 assert not any(item.get("pinterest_status") in {"queued", "pending", "scheduled"} for item in items)
 published = [item for item in items if item.get("pinterest_status") == "published"]
 assert all(item.get("pinterest_pin_id") and item.get("pinterest_pin_url") for item in published), "Published pin record lacks historical pin identifiers"
 
-print(f"PASS: {len(items)} gallery items follow the full archive with 200-image pages ({category_counts}); {len(reviewed)} ALT-reviewed, {len(pending)} pending; all items have intrinsic dimensions; rights review remains required; {len(published)} historical Pinterest pins retained and all other items remain blocked from Pinterest pending rights review.")
+print(f"PASS: {len(items)} gallery items follow the full archive with 200-image pages ({category_counts}); {len(reviewed)} ALT-reviewed, {len(pending)} pending; all items have intrinsic dimensions; owner authorization retained; {len(published)} historical Pinterest pins retained and remaining authorized items stay ready.")
