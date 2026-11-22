@@ -737,8 +737,13 @@ if (zomMarket) {
       const response = await fetch(apiBase + '/api/news', {cache:'no-store'});
       if (!response.ok) throw new Error('HTTP ' + response.status);
       const data = await response.json();
-      const articles = Array.isArray(data.articles) ? data.articles : [];
-      if (!articles.length) throw new Error('No articles in RSS response');
+      const articles = Array.isArray(data.articles) ? data.articles.filter(article => article && article.enriched !== true) : [];
+      if (!articles.length) {
+        newsList.replaceChildren(makeNode('p', 'world-empty', 'No external RSS transmissions are available right now. The feed will retry automatically.'));
+        if (newsStatus) newsStatus.textContent = 'RSS FEED QUIET';
+        if (newsUpdated) newsUpdated.textContent = 'WAITING FOR EXTERNAL NEWS';
+        return;
+      }
       newsList.replaceChildren();
       const seenArticleLinks = new Set();
       const seenArticleTitles = new Set();
@@ -791,7 +796,7 @@ if (zomMarket) {
         newsList.append(link);
         renderedArticles += 1;
       }
-      if (newsStatus) newsStatus.textContent = data.stale ? 'LAST KNOWN FEED' : (Number(data.enrichedCount || 0) > 0 ? 'ZOMBIECASH NEWS ONLINE' : 'RSS FEED ONLINE');
+      if (newsStatus) newsStatus.textContent = data.stale ? 'LAST KNOWN RSS' : 'RSS FEED ONLINE';
       if (newsUpdated) newsUpdated.textContent = 'UPDATED ' + new Date(Number(data.updatedAt || Date.now()/1000)*1000).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
     } catch (error) {
       console.warn('Living World RSS unavailable:', error);
