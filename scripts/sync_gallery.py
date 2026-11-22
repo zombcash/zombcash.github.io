@@ -48,6 +48,12 @@ def is_gallery_artwork(caption):
         r"\bNEWS\s+UPDATE\b",
         r"\bORIGINAL\s+SOURCE\s*:",
         r"\bTEST\s+IMAGE\b",
+        # Editorial/site promo cards are not gallery artwork.
+        r"\bVERIFICATION\s+IN\s+PROGRESS\b",
+        r"\bTHE\s+MEMECOIN\s+BATTLEFIELD\b",
+        r"\bINDEPENDENT\s+INVESTIGATION\b",
+        r"\bTHE\s+HONEY[ -]TRAP\s+APOCALYPSE\b",
+        r"\bCORPORATE\s+ESPIONAGE\b",
     )
     return not any(re.search(pattern, text, re.I) for pattern in excluded)
 
