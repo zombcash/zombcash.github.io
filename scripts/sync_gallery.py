@@ -215,6 +215,17 @@ def main():
     all_items = {item["id"]: item for item in live_items if item.get("id")}
     print(f"Validated Telegram media URLs: {len(live_items)} live, {rejected} unavailable.")
 
+    # Preserve the cumulative archive when older Telegram posts fall outside a scrape.
+    if OUTPUT.exists():
+        try:
+            old_data = json.loads(OUTPUT.read_text(encoding="utf-8"))
+            for old in old_data.get("items", []):
+                old_id = str(old.get("id") or "")
+                if old_id and old_id not in all_items and is_gallery_artwork(old.get("caption", "")):
+                    all_items[old_id] = old
+        except (OSError, ValueError, TypeError):
+            pass
+
     # Keep the full collected archive; the public gallery displays it in
     # chronological pages of PAGE_SIZE (200) images at a time.
     items = sorted(

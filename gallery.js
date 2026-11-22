@@ -302,8 +302,7 @@
     // community creations remain in the main archive without a separate category.
     items.forEach(item => {
       const ids = Array.isArray(item.category_ids) ? item.category_ids : [];
-      item.category_ids = [...new Set(ids.map(id => id === "crypto-apocalypse" ? "zombie-memes" : id)
-        .filter(id => ["zombie-memes","nightmare-horror","undead-after-dark"].includes(id)))];
+      item.category_ids = [...new Set(ids.map(id => (id === "nightmare-horror" || id === "undead-after-dark") ? id : "zombie-memes"))];
     });
     localizeGalleryMeta(items, data.updated_at);
     if (!items.length) {
@@ -498,7 +497,8 @@
       visibleItemCount = visible.length;
       const pageItems = visible.slice(0, visibleLimit);
       grid.innerHTML = pageItems.length ? pageItems.map((item, index) => {
-        const caption = cleanCaption(item.caption);
+        const localizedCaption = (item.caption_translations && (item.caption_translations[galleryLang] || item.caption_translations[galleryLang.replace("-", "_")])) || item.caption;
+        const caption = cleanCaption(localizedCaption);
         const rawTitle = String(item.title || caption);
         const title = cleanCaption(rawTitle);
         const captionParts = splitGalleryCaption(item.caption || rawTitle);
