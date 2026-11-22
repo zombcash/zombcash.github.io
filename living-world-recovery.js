@@ -78,8 +78,13 @@
     newsStatus.textContent = 'SYNCING RSS';
     try {
       const data = await request('/api/news');
-      const articles = Array.isArray(data.articles) ? data.articles : [];
-      if (!articles.length) throw new Error('API returned no articles');
+      const articles = Array.isArray(data.articles) ? data.articles.filter(article => article && article.enriched !== true) : [];
+      if (!articles.length) {
+        newsList.replaceChildren(node('p', 'world-empty', 'No external RSS transmissions are available right now. The feed will retry automatically.'));
+        newsStatus.textContent = 'RSS FEED QUIET';
+        if (newsUpdated) newsUpdated.textContent = 'WAITING FOR EXTERNAL NEWS';
+        return;
+      }
       newsList.replaceChildren();
       const seenArticleLinks = new Set();
       const seenArticleTitles = new Set();
@@ -135,7 +140,7 @@
         newsList.append(item);
         renderedArticles += 1;
       }
-      newsStatus.textContent = data.stale ? 'LAST KNOWN FEED' : (Number(data.enrichedCount || 0) > 0 ? 'ZOMBIECASH NEWS ONLINE' : 'RSS FEED ONLINE');
+      newsStatus.textContent = data.stale ? 'LAST KNOWN RSS' : 'RSS FEED ONLINE';
       if (newsUpdated) newsUpdated.textContent = 'UPDATED ' + new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
     } catch (error) {
       console.warn('Living World recovery: news feed failed', error);
