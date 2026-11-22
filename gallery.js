@@ -605,7 +605,8 @@
       const t = controlText[galleryLang] || controlText.en;
       updatePagination(visibleItemCount, cards.length);
     };
-    refreshGalleryControls = () => { renderToolbar(); renderGallery(); };
+    // Keep the retained query, archive summary, and gallery controls synchronized with the active locale.
+    refreshGalleryControls = () => { searchTerm = searchInput.value.trim().toLocaleLowerCase(galleryLang); localizeGalleryMeta(items, data.updated_at); renderToolbar(); renderGallery(); };
     refreshGalleryForLikes = () => { if (sortOrder === "liked") renderGallery(); };
     searchInput.addEventListener("input", () => { searchTerm = searchInput.value.trim().toLocaleLowerCase(galleryLang); visibleLimit = selectedCategory === "all" ? INITIAL_ALL : INITIAL_CATEGORY; renderGallery(); });
     searchInput.addEventListener("change", () => { if (searchInput.value.trim()) trackGalleryEvent("gallery_search", "gallery"); });

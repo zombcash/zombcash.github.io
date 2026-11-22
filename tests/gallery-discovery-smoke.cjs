@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const galleryData = JSON.parse(fs.readFileSync("gallery-data.json", "utf8"));
 const imageIdByUrl = new Map(galleryData.items.map(item => [item.image, item.id]));
-const expectedGalleryCount = Math.min(200, galleryData.items.length);
+const expectedGalleryCount = Math.min(150, galleryData.items.length);
 const firstPageItems = galleryData.items.slice(0, expectedGalleryCount);
 const installGalleryDataMock = page => page.addInitScript(data => {
   localStorage.setItem("zombcash-survivor-token", "smoke-survivor-session");
@@ -116,9 +116,11 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       await page.waitForFunction(expected => document.querySelectorAll("#gallery-grid .gallery-card").length === expected, expectedGalleryCount, { timeout: 12000 });
     const initialLoadingHints = await page.locator("#gallery-grid img").evaluateAll(images => images.map(image => ({ loading: image.loading, priority: image.fetchPriority })));
     if (initialLoadingHints.length !== expectedGalleryCount ||
-        initialLoadingHints[0].loading !== "eager" || initialLoadingHints[0].priority !== "high" ||
-        initialLoadingHints.slice(1).some(item => item.loading !== "lazy" || item.priority !== "auto")) {
-      throw new Error("Only the first gallery image should be eager/high priority; remaining images must be lazy/auto: " + JSON.stringify(initialLoadingHints.slice(0, 4)));
+        initialLoadingHints.slice(0, 6).some(item => item.loading !== "eager") ||
+        initialLoadingHints.slice(6).some(item => item.loading !== "lazy") ||
+        initialLoadingHints.slice(0, 2).some(item => item.priority !== "high") ||
+        initialLoadingHints.slice(2).some(item => item.priority !== "auto")) {
+      throw new Error("The first six gallery images should be eager, the rest lazy; only the first two should have high priority: " + JSON.stringify(initialLoadingHints.slice(0, 8)));
     }
     } catch (error) {
       console.error("[gallery-diagnostics]", await page.evaluate(() => ({
@@ -243,28 +245,42 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     await page.waitForSelector(".gallery-lightbox.is-open .gallery-lightbox-like");
     const openTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_image_open"));
     if (!openTracked) throw new Error("Gallery image open analytics event was not recorded");
-    if (await page.locator(".gallery-lightbox-title").count() !== 0) throw new Error("Lightbox must hide a title that repeats the Telegram caption");
     const fullTelegramCaption = await page.locator(".gallery-lightbox-caption").textContent();
     const expectedTelegramCaption = String(galleryData.items.find(item => item.id === targetLikeImageId)?.caption || "")
       .replace(/\s+/g, " ")
       .split(/━━━━━━━━|🧟\s*\$ZOMBCASH|MARKET DIED\.|📋\s*CA:|🌐\s*Website:|𝕏\s*X Community|💬\s*Telegram/i)[0]
       .trim();
-    if (!fullTelegramCaption || fullTelegramCaption !== expectedTelegramCaption) {
-      throw new Error("Lightbox must retain the current Telegram caption exactly once: " + JSON.stringify({ expectedTelegramCaption, fullTelegramCaption }));
+    const headingPattern = /^(?:🌙\s*UNDEAD\s+AFTER\s+DARK|😂\s*ZOMBIECASH\s+MEMES?|🩸\s*NIGHTMARE\s*(?:&|AND)\s*HORROR|🛰️\s*ZOMBIECASH\s+SITE\s+TRANSMISSION|NIGHTMARE\s+DROP|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|ZOMBIECASH\s+MEMES?)/i;
+    const expectedHeading = expectedTelegramCaption.match(headingPattern)?.[0].trim() || "";
+    const expectedHashtags = [...expectedTelegramCaption.matchAll(/#[\p{L}\p{N}_]+/gu)].map(match => match[0]);
+    const expectedCaptionBody = expectedTelegramCaption
+      .replace(/#[\p{L}\p{N}_]+/gu, " ")
+      .replace(headingPattern, "")
+      .replace(/\s+/g, " ")
+      .trim();
+    const expectedLightboxMeta = [expectedHeading, [...new Set(expectedHashtags)].join(" ")].filter(Boolean).join("  ·  ");
+    if (!fullTelegramCaption || fullTelegramCaption !== expectedCaptionBody) {
+      throw new Error("Lightbox caption body must contain the Telegram text once, without its separate series/hashtag metadata: " + JSON.stringify({ expectedCaptionBody, fullTelegramCaption }));
+    }
+    const lightboxTitle = await page.locator(".gallery-lightbox-title").textContent().catch(() => "");
+    if (lightboxTitle.trim() !== expectedLightboxMeta) {
+      throw new Error("Lightbox must preserve series and hashtag metadata separately: " + JSON.stringify({ expectedLightboxMeta, lightboxTitle }));
     }
     if (await page.locator(".gallery-lightbox-description:not(.gallery-lightbox-caption)").count() !== 0) throw new Error("Lightbox must hide an absent or duplicate editorial description");
     const lightboxCaption = await page.locator(".gallery-lightbox figcaption").textContent();
     if (!lightboxCaption.includes("SOURCE")) throw new Error("Lightbox must retain its Telegram source link");
-    const detailCategories = await page.locator(".gallery-lightbox-categories").textContent();
-    const openedCardCategoryCount = await page.locator("#gallery-grid .gallery-card").first().locator(".gallery-category-tag").count();
-    if (!detailCategories || (openedCardCategoryCount > 1 && !detailCategories.includes("·"))) throw new Error("Lightbox category labels should be separated");
+    const detailMetadata = await page.locator(".gallery-lightbox-title").textContent().catch(() => "");
+    const cardMetadata = await page.locator("#gallery-grid .gallery-card").first().locator(".gallery-card-meta").textContent().catch(() => "");
+    if (detailMetadata.trim() !== cardMetadata.trim()) {
+      throw new Error("Lightbox series/hashtag metadata should match the card metadata without duplication");
+    }
     const sourceLabel = (await page.locator(".gallery-lightbox-source").textContent()).trim();
     if (sourceLabel.endsWith("↗ ↗")) throw new Error("Lightbox source link must not repeat its arrow");
     await page.evaluate(() => {
-      window.__sharedPayload = null;
-      Object.defineProperty(navigator, "share", {
+      window.__copiedShareUrl = null;
+      Object.defineProperty(navigator, "clipboard", {
         configurable: true,
-        value: async payload => { window.__sharedPayload = payload; }
+        value: { writeText: async url => { window.__copiedShareUrl = url; } }
       });
     });
     const imageOnlyButton = page.locator(".gallery-lightbox-image-only");
@@ -302,20 +318,29 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     if (!await page.locator(".gallery-lightbox figcaption").isVisible()) throw new Error("Escape should return to the detail view, not close the gallery");
     await page.screenshot({ path: "gallery-lightbox-smoke.png" });
     await page.locator(".gallery-lightbox-share").click();
-    await page.waitForFunction(() => Boolean(window.__sharedPayload));
-    const sharedPayload = await page.evaluate(() => window.__sharedPayload);
-    if (!sharedPayload.url.includes("#gallery-image-")) throw new Error("Gallery share URL must use the stable image anchor");
-    await page.waitForFunction(() => window.__galleryEvents.some(item => item.event === "gallery_share"));
+    await page.waitForFunction(() => {
+      const menu = document.querySelector(".gallery-share-menu");
+      return Boolean(menu && !menu.hidden && menu.querySelector(".gallery-share-copy"));
+    });
+    const shareUrl = await page.locator(".gallery-share-copy").getAttribute("data-share-url");
+    if (!shareUrl || !shareUrl.includes("#gallery-image-")) throw new Error("Gallery share URL must use the stable image anchor");
+    if (await page.locator(".gallery-share-option").count() !== 6) throw new Error("Gallery share menu must expose all six supported destinations");
+    await page.locator(".gallery-share-copy").click();
+    await page.waitForFunction(expected => window.__copiedShareUrl === expected, shareUrl);
+    await page.waitForFunction(() => document.querySelector(".gallery-share-status")?.dataset.state === "success");
+    await page.waitForFunction(() => window.__galleryEvents.some(item => item.event === "gallery_share_menu_open"));
+    await page.locator(".gallery-share-close").click();
     await page.locator(".gallery-lightbox-close").click();
     await page.getByRole("button", { name: "Nightmare & Horror" }).click();
     const filterTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_filter"));
     if (!filterTracked) throw new Error("Gallery filter analytics event was not recorded");
-    const expectedCategoryIds = categoryId => galleryData.items.filter(item => (item.category_ids || []).includes(categoryId)).map(item => item.id).sort();
-    const visibleCategoryIds = async () => page.locator("#gallery-grid .gallery-card").evaluateAll(cards => cards.map(card => card.dataset.galleryId).sort());
+    const expectedCategoryIds = categoryId => galleryData.items.filter(item => (item.category_ids || []).includes(categoryId)).map(item => item.id);
+    const visibleCategoryIds = async () => page.locator("#gallery-grid .gallery-card").evaluateAll(cards => cards.map(card => card.dataset.galleryId));
     const expectedHorrorIds = expectedCategoryIds("nightmare-horror");
     const horror = await page.locator("#gallery-grid .gallery-card").count();
-    if (horror !== expectedHorrorIds.length || JSON.stringify(await visibleCategoryIds()) !== JSON.stringify(expectedHorrorIds)) {
-      throw new Error("Nightmare filter does not match the current gallery metadata: expected " + expectedHorrorIds.length + ", got " + horror);
+    const expectedHorrorCount = Math.min(50, expectedHorrorIds.length);
+    if (horror !== expectedHorrorCount || JSON.stringify(await visibleCategoryIds()) !== JSON.stringify(expectedHorrorIds.slice(0, expectedHorrorCount))) {
+      throw new Error("Nightmare filter does not match the first category batch: expected " + expectedHorrorCount + ", got " + horror);
     }
     await page.locator(".gallery-search").fill(gallerySearchTerm);
     await page.locator(".gallery-search").press("Tab");
@@ -329,32 +354,36 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     const reset = await page.locator("#gallery-grid .gallery-card").count();
     if (reset !== expectedGalleryCount) throw new Error("Clear filters should restore " + expectedGalleryCount + " cards, got " + reset);
     if (await page.locator("#gallery-grid .gallery-like-button").count() !== expectedGalleryCount) throw new Error("Clear filters should restore like controls");
-    const expectedZombieCharacters = expectedCategoryIds("zombie-characters").length;
-    const zombieCharactersButton = page.getByRole("button", { name: "Zombie Characters", exact: true });
-    if (expectedZombieCharacters > 0) {
-      if (await zombieCharactersButton.count() !== 1) throw new Error("Zombie Characters filter is missing despite matching gallery items");
-      await zombieCharactersButton.click();
-      const zombieCharacters = await page.locator("#gallery-grid .gallery-card").count();
-      if (zombieCharacters !== expectedZombieCharacters) throw new Error("Zombie Characters filter count does not match current gallery metadata: " + zombieCharacters);
-    } else if (await zombieCharactersButton.count() !== 0) {
-      throw new Error("Empty Zombie Characters category should not be rendered as a filter");
-    }
-    const expectedApocalypseSurvival = expectedCategoryIds("apocalypse-survival").length;
-    const apocalypseSurvivalButton = page.getByRole("button", { name: "Apocalypse & Survival", exact: true });
-    if (expectedApocalypseSurvival > 0) {
-      if (await apocalypseSurvivalButton.count() !== 1) throw new Error("Apocalypse & Survival filter is missing despite matching gallery items");
-      await apocalypseSurvivalButton.click();
-      const apocalypseSurvival = await page.locator("#gallery-grid .gallery-card").count();
-      if (apocalypseSurvival !== expectedApocalypseSurvival) throw new Error("Apocalypse & Survival filter count does not match current gallery metadata: " + apocalypseSurvival);
-    } else if (await apocalypseSurvivalButton.count() !== 0) {
-      throw new Error("Empty Apocalypse & Survival category should not be rendered as a filter");
+    const assertCategoryFilter = async (label, expectedIds) => {
+      const button = page.getByRole("button", { name: label, exact: true });
+      if (expectedIds.length > 0) {
+        if (await button.count() !== 1) throw new Error(label + " filter is missing despite matching gallery items");
+        await button.click();
+        const expectedVisible = Math.min(50, expectedIds.length);
+        const visible = await page.locator("#gallery-grid .gallery-card").count();
+        if (visible !== expectedVisible || JSON.stringify(await visibleCategoryIds()) !== JSON.stringify(expectedIds.slice(0, expectedVisible))) {
+          throw new Error(label + " filter does not match its first category batch: expected " + expectedVisible + ", got " + visible);
+        }
+      } else if (await button.count() !== 0) {
+        throw new Error("Empty " + label + " category should not be rendered as a filter");
+      }
+    };
+    const expectedZombieMemeIds = galleryData.items
+      .filter(item => (item.category_ids || []).some(id => id !== "nightmare-horror" && id !== "undead-after-dark"))
+      .map(item => item.id);
+    await assertCategoryFilter("Zombie Memes", expectedZombieMemeIds);
+    await assertCategoryFilter("Undead After Dark", expectedCategoryIds("undead-after-dark"));
+    for (const label of ["Zombie Characters", "Apocalypse & Survival", "Crypto Apocalypse", "Community Creations"]) {
+      if (await page.getByRole("button", { name: label, exact: true }).count() !== 0) {
+        throw new Error(label + " should not appear as a separate filter in the three-category gallery taxonomy");
+      }
     }
     await page.locator(".gallery-reset").click();
     const categoryReset = await page.locator("#gallery-grid .gallery-card").count();
     if (categoryReset !== expectedGalleryCount) throw new Error("Reset after taxonomy filters should restore all gallery images");
     await page.locator(".gallery-search").fill(gallerySearchTerm);
     const matching = await page.locator("#gallery-grid .gallery-card").count();
-    if (matching !== expectedSearchCount) throw new Error("Search expected " + expectedSearchCount + " matching cards for " + gallerySearchTerm + ", got " + matching);
+    if (matching !== Math.min(150, expectedSearchCount)) throw new Error("Search expected " + Math.min(150, expectedSearchCount) + " matching cards for " + gallerySearchTerm + ", got " + matching);
     await page.locator(".gallery-reset").click();
     await page.locator(".gallery-sort").selectOption("oldest");
     const oldestFirst = await page.locator("#gallery-grid .gallery-card").first().getAttribute("data-gallery-id");
@@ -365,12 +394,36 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     if (mostLikedFirst !== targetLikeImageId) throw new Error("Most-liked sort did not rank the highest-count image first: " + mostLikedFirst + " (expected " + targetLikeImageId + ")");
     const sortTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_sort"));
     if (!sortTracked) throw new Error("Gallery sort analytics event was not recorded");
+    const turkishExpected = galleryData.items.filter(item =>
+      [item.title,item.description,item.caption,item.series,...(item.category_ids||[]),...(item.tags||[])]
+        .join(" ").toLocaleLowerCase("tr").includes("ı")
+    ).length;
+    await page.locator(".gallery-search").fill("I");
+    await page.evaluate(() => {
+      document.documentElement.lang = "tr";
+      document.dispatchEvent(new CustomEvent("zombcash:languagechange", { detail: { language: "tr" } }));
+    });
+    const turkishSearchCount = await page.locator("#gallery-grid .gallery-card").count();
+    if (turkishSearchCount !== Math.min(150, turkishExpected)) {
+      throw new Error("Search query was not re-normalized after switching to Turkish: expected " + Math.min(150, turkishExpected) + ", got " + turkishSearchCount);
+    }
+    const turkishCountLabel = await page.locator("#gallery-count").textContent();
+    const turkishUpdatedLabel = await page.locator("#gallery-updated").textContent();
+    if (!turkishCountLabel.includes("GÖRSEL") || !turkishUpdatedLabel.startsWith("GÜNCELLENDİ")) {
+      throw new Error("Gallery count and update metadata must switch to Turkish with the controls");
+    }
+    await page.locator(".gallery-reset").click();
     await page.evaluate(() => {
       document.documentElement.lang = "ja";
       document.dispatchEvent(new CustomEvent("zombcash:languagechange", { detail: { language: "ja" } }));
     });
     const japaneseFilter = await page.getByRole("button", { name: "悪夢とホラー" }).count();
     if (japaneseFilter !== 1) throw new Error("Japanese category label did not render");
+    const japaneseCountLabel = await page.locator("#gallery-count").textContent();
+    const japaneseUpdatedLabel = await page.locator("#gallery-updated").textContent();
+    if (!japaneseCountLabel.includes("枚") || !japaneseUpdatedLabel.startsWith("更新")) {
+      throw new Error("Gallery count and update metadata must switch to Japanese with the controls");
+    }
     const mobile = await browser.newPage({ viewport: { width: 375, height: 812 }, deviceScaleFactor: 1 });
     await mobile.route("https://**/*", route => route.abort());
     await mobile.route("https://cdn4.telesco.pe/file/**", route => route.continue());
@@ -498,7 +551,7 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       const schema = JSON.parse(schemaText);
       const controls = await localized.locator(".gallery-category-chip").allTextContents();
       const firstCardTitle = (await localized.locator("#gallery-grid .gallery-caption p").first().textContent()) || "";
-      const firstCardCategory = (await localized.locator("#gallery-grid .gallery-category-tag").first().textContent()) || "";
+      const firstCardMeta = (await localized.locator("#gallery-grid .gallery-card-meta").first().textContent()) || "";
       const localizedCategoryLabels = {
         "undead-after-dark": { de: "Untote bei Nacht", fr: "Morts-vivants nocturnes", it: "Non morti dopo il tramonto", ja: "夜更けのアンデッド", "zh-CN": "午夜不死者", ru: "Нежить после заката", tr: "Gece Yarısı Ölüleri", hi: "रात ढलने के बाद के ज़ॉम्बी" },
         "zombie-memes": { de: "Zombie-Memes", fr: "Mèmes zombies", it: "Meme zombie", ja: "ゾンビミーム", "zh-CN": "僵尸梗图", ru: "Зомби-мемы", tr: "Zombi Memleri", hi: "ज़ॉम्बी मीम" },
@@ -507,8 +560,11 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
         "community-creations": { de: "Community-Kreationen", fr: "Créations de la communauté", it: "Creazioni della community", ja: "コミュニティ作品", "zh-CN": "社区创作", ru: "Работы сообщества", tr: "Topluluk Eserleri", hi: "समुदाय की कलाकृतियाँ" }
       };
       const firstCategoryId = galleryData.items[0]?.category_ids?.[0];
-      const localizedFirstCategory = localizedCategoryLabels[firstCategoryId]?.[locale];
-      if (localizedFirstCategory && firstCardCategory !== localizedFirstCategory) throw new Error(locale + " first-card category is not translated: " + firstCardCategory);
+      const normalizedFirstCategoryId = firstCategoryId === "nightmare-horror" || firstCategoryId === "undead-after-dark" ? firstCategoryId : "zombie-memes";
+      const localizedFirstCategory = localizedCategoryLabels[normalizedFirstCategoryId]?.[locale];
+      if (localizedFirstCategory && !controls.includes(localizedFirstCategory)) {
+        throw new Error(locale + " category filter label is not translated: " + localizedFirstCategory);
+      }
       if (/NIGHTMARE & HORROR|ZOMBIECASH MEMES|ZOMBIECASH MEME|UNDEAD AFTER DARK|SITE TRANSMISSION/i.test(firstCardTitle)) throw new Error(locale + " source series header was not removed from the caption: " + firstCardTitle);
       const siteTransmissionLabels = ["Website-Meldungen", "Actualités du site", "Aggiornamenti dal sito", "サイト通信", "网站播报", "Передачи с сайта", "Site Duyuruları", "साइट अपडेट", "Site Transmissions"];
       if (controls.some(label => siteTransmissionLabels.includes(label))) throw new Error(locale + " removed Site Transmissions category is still visible");
@@ -522,24 +578,22 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       const shareLabel = (await localized.locator(".gallery-lightbox-share").textContent()).trim();
       if (!shareLabel || shareLabel === "SHARE") throw new Error(locale + " gallery share control is not localized");
       await localized.locator(".gallery-lightbox-close").click();
-      localeAudit.push({ locale, lang, alternates, cards: expectedGalleryCount, title, shareLabel, firstCardTitle, firstCardCategory });
+      localeAudit.push({ locale, lang, alternates, cards: expectedGalleryCount, title, shareLabel, firstCardTitle, firstCardMeta, firstCategoryLabel: localizedFirstCategory });
       await localized.close();
     }
 
-    if (galleryData.items.length > 200) {
-      // Pagination expectations below follow the archive’s default newest-first order.
+    if (galleryData.items.length > 150) {
+      // The interactive archive grows in 150-image batches while preserving newest-first order.
       await page.locator(".gallery-sort").selectOption("newest");
-      const nextPageButton = page.locator(".gallery-page-next");
-      if (!(await nextPageButton.isVisible())) throw new Error("Next 200-image page control is not visible");
-      await nextPageButton.click();
-      await page.waitForFunction(expectedId => {
-        const cards = document.querySelectorAll("#gallery-grid .gallery-card");
-        return cards.length > 0 && cards[0].dataset.galleryId === expectedId;
-      }, galleryData.items[200].id);
-      const secondPageCount = await page.locator("#gallery-grid .gallery-card").count();
-      if (secondPageCount !== Math.min(200, galleryData.items.length - 200)) throw new Error("Next page did not switch to the next 200 oldest images");
-      await page.locator(".gallery-page-prev").click();
-      await page.waitForFunction(expectedId => document.querySelector("#gallery-grid .gallery-card")?.dataset.galleryId === expectedId, galleryData.items[0].id);
+      const loadMoreButton = page.locator(".gallery-load-more-button");
+      if (!(await loadMoreButton.isVisible())) throw new Error("Gallery load-more control is not visible after the first 150 images");
+      await loadMoreButton.click();
+      const expandedCount = Math.min(300, galleryData.items.length);
+      await page.waitForFunction(expected => document.querySelectorAll("#gallery-grid .gallery-card").length === expected, expandedCount);
+      const firstId = await page.locator("#gallery-grid .gallery-card").first().getAttribute("data-gallery-id");
+      const batchBoundaryId = await page.locator("#gallery-grid .gallery-card").nth(150).getAttribute("data-gallery-id");
+      if (firstId !== galleryData.items[0].id) throw new Error("Loading more images must preserve the newest-first first card");
+      if (batchBoundaryId !== galleryData.items[150].id) throw new Error("The next 150-image batch must continue at the correct archive item");
     }
     console.log(JSON.stringify({ status: "passed", initial, horror, search, reset, matching, oldestFirst, japaneseFilter, mobile: overflow, imageLoadAudit, imageNetworkEvents, recoveryChecks, localeAudit }));
   } finally {
