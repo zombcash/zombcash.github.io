@@ -645,7 +645,7 @@
   };
   function eventText(key, values={}) {
     const lang = EVENT_COPY[state.lang] || EVENT_COPY.en;
-    return String(lang[key] || EVENT_COPY.en[key] || key).replace(/\\{(\\w+)\\}/g, (_, name) => String(values[name] ?? ''));
+    return String(lang[key] || EVENT_COPY.en[key] || key).replace(/\{(\w+)\}/g, (_, name) => String(values[name] ?? ''));
   }
 
   const terminal={auto:false,startedAt:0,capital:10,minLiquidity:5000,maxTradeSize:10,maxOpenPositions:4,maxDailyLossSol:1,minBuyCount:3,idleTimeout:60,minMovePct:0.2,logs:[],seen:[],lastAuto:0,sessionStartCapital:10,equityHistory:[]};
@@ -734,6 +734,19 @@
 
   function saveTerminal(){try{terminal.settings={};['sniper-size','sniper-target','sniper-stop','sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-idle-timeout','sniper-min-move','sniper-max-open','sniper-min-buys','sniper-max-daily-loss'].forEach(id=>{const el=$(id);if(el)terminal.settings[id]=el.value;});localStorage.setItem(TERMINAL_KEY,JSON.stringify(terminal));}catch(_){}}
   function loadTerminal(){try{const v=JSON.parse(localStorage.getItem(TERMINAL_KEY)||'null');if(v&&typeof v==='object'){Object.assign(terminal,v);if(v.settings)Object.keys(v.settings).forEach(id=>{const el=$(id);if(el)el.value=v.settings[id];});}}catch(_){}}
+  function localizeLegacyLog(detail) {
+    const value=String(detail||'');
+    let match;
+    if((match=value.match(/^Auto demo entry · (.+) SOL$/)))return eventText('autoEntry',{amount:match[1]});
+    if((match=value.match(/^Manual demo entry · (.+) SOL$/)))return eventText('manualEntry',{amount:match[1]});
+    if((match=value.match(/^Manual demo close · (.+)%$/)))return eventText('manualClose',{pct:match[1]});
+    if((match=value.match(/^Net target reached · (.+)%$/)))return eventText('netTarget',{pct:match[1]});
+    if((match=value.match(/^Net stop-loss reached · (.+)%$/)))return eventText('netStop',{pct:match[1]});
+    if((match=value.match(/^No price movement ≥ (.+)% for (.+)s; moving to next launch$/)))return eventText('rotate',{threshold:match[1],seconds:match[2]});
+    if(value==='Paper engine paused; open paper position remains managed.')return eventText('paused');
+    if((match=value.match(/^(.+) profile applied$/)))return eventText('presetApplied',{preset:match[1]});
+    return value;
+  }
   function logEvent(kind,symbol,detail='',detailKey='',detailArgs={}){terminal.logs.unshift({at:Date.now(),kind,symbol:symbol||'SYSTEM',detail:detail||'',detailKey:detailKey||'',detailArgs:detailArgs||{}});terminal.logs=terminal.logs.slice(0,18);saveTerminal();renderLog();}
   function dashNode(tag,cls,txt){const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n;}
   function addRange(field,id,min,max,step){
@@ -851,7 +864,7 @@
   function renderLog(){
     const host=$('zs-log');if(!host)return;host.replaceChildren();
     if(!terminal.logs.length){host.append(dashNode('p','sniper-muted',dcopy().empty));return;}
-    terminal.logs.slice(0,12).forEach(e=>{const row=dashNode('div','zs-logrow');row.append(dashNode('time','',new Date(e.at).toLocaleTimeString()),dashNode('b','zs-logkind',e.kind),dashNode('strong','',e.symbol),dashNode('span','',e.detailKey?eventText(e.detailKey,e.detailArgs):e.detail));host.append(row);});
+    terminal.logs.slice(0,12).forEach(e=>{const row=dashNode('div','zs-logrow');row.append(dashNode('time','',new Date(e.at).toLocaleTimeString()),dashNode('b','zs-logkind',e.kind),dashNode('strong','',e.symbol),dashNode('span','',e.detailKey?eventText(e.detailKey,e.detailArgs):localizeLegacyLog(e.detail)));host.append(row);});
   }
   function renderDashboardState(){
     const feedReady=!!(state.feed&&state.feed.pumpdevConnected);const btn=$('zs-auto-toggle');if(btn){btn.classList.toggle('is-on',!!terminal.auto&&feedReady);btn.textContent=terminal.auto&&feedReady?dcopy().armed:dcopy().paused;if(terminal.auto&&!feedReady)btn.title=state.lang==='ru'?'Автодемо ожидает подключения PumpDev.':'Auto demo is waiting for PumpDev.';else btn.removeAttribute('title');}
