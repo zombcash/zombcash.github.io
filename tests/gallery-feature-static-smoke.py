@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+from html import escape as html_escape
 import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from pathlib import Path
@@ -133,6 +134,14 @@ assert set(translations).issubset(item_ids), "Every translation key must map to 
 for image_id, localized in translations.items():
     assert set(localized) == supported_locales, f"Incomplete locale coverage for {image_id}"
     assert all(isinstance(value, str) and value.strip() for value in localized.values()), f"Empty translation for {image_id}"
+for locale in supported_locales:
+    localized_page = Path(locale, "gallery.html").read_text(encoding="utf-8")
+    for item in page_items:
+        translated_caption = translations.get(item["id"], {}).get(locale)
+        if translated_caption:
+            escaped_caption = html_escape(translated_caption, quote=True)
+            assert 'data-original-caption="' + escaped_caption + '"' in localized_page, f"{locale} static card caption is not localized: {item['id']}"
+
 js = Path("gallery.js").read_text(encoding="utf-8")
 for marker in ("gallery-toolbar", "gallery-lightbox-share", "/api/gallery/likes", "/api/gallery/like"):
     assert marker in js, marker
@@ -141,4 +150,4 @@ assert 'document.addEventListener("zombcash:languagechange"' in js and "refreshG
 assert "PAGE_SIZE = 200" in js and "pageItems = visible.slice" in js, "Gallery must page the archive in 200-image batches"
 assert "gallery-pagination" in js and "NEXT 200" in js, "Gallery must expose next/previous 200-image controls"
 
-print(f"PASS: {len(items)} static gallery cards (first page of 200, newest first; categories: {category_counts}), {len(reviewed)} visually reviewed, {len(pending)} pending review and Pinterest-blocked, {len(missing_dimensions)} CDN dimension fallback(s) protected by the square CSS ratio, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")
+print(f"PASS: {len(items)} static gallery cards (first page of 200, newest first; categories: {category_counts}), {len(reviewed)} visually reviewed, {len(pending)} pending ALT review with independent owner authorization, {len(missing_dimensions)} CDN dimension fallback(s) protected by the square CSS ratio, rights safeguards, image sitemap, 8 localized pages, hreflang, language routing, discovery controls, share and likes.")
