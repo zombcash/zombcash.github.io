@@ -31,7 +31,7 @@
   let refreshGalleryControls = () => {};
   const gtx=k=>(galleryLocale[galleryLang]||galleryLocale.en)[k]||galleryLocale.en[k]||k;
   const localizeGalleryMeta=(items,updatedAt)=>{if(count&&items!==null)count.textContent=items.length+" "+gtx("images");if(updated)updated.textContent=updatedAt?gtx("updated")+" "+new Date(updatedAt).toLocaleString(galleryLang,{month:"short",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"";};
-  document.addEventListener("zombcash:languagechange",e=>{galleryLang=e.detail?.language||document.documentElement.lang||"en";galleryShareMenu.hidden=true;const shareButton=lightbox.querySelector(".gallery-lightbox-share");if(shareButton){const shareLabels=galleryShareLabels[galleryLang]||galleryShareLabels.en;shareButton.textContent=shareLabels.share;shareButton.setAttribute("aria-label",shareLabels.share);}grid.querySelectorAll(".gallery-caption p").forEach(p=>{p.textContent=cleanCardTitle(p.dataset.originalTitle||p.dataset.originalCaption||p.textContent);});grid.querySelectorAll(".gallery-caption a").forEach(a=>a.textContent=gtx("source"));if(count&&/IMAGES|ИЗОБРАЖЕНИЙ|BILDER|IMAGES|IMMAGINI|枚|张图片|GÖRSEL|इमेज/.test(count.textContent)){const n=parseInt(count.textContent,10);if(Number.isFinite(n))count.textContent=n+" "+gtx("images");}if(updated&&updated.textContent){const raw=updated.textContent.replace(/^(UPDATED|ОБНОВЛЕНО|AKTUALISIERT|MIS À JOUR|AGGIORNATO|更新|更新于|GÜNCELLENDİ|अपडेट)\s*/,"");updated.textContent=gtx("updated")+" "+raw;}refreshGalleryControls();});
+  document.addEventListener("zombcash:languagechange",e=>{galleryLang=e.detail?.language||document.documentElement.lang||"en";galleryShareMenu.hidden=true;grid.querySelectorAll(".gallery-card-share-menu").forEach(node=>node.hidden=true);grid.querySelectorAll(".gallery-card-share").forEach(node=>{node.textContent=(galleryShareLabels[galleryLang]||galleryShareLabels.en).share;node.setAttribute("aria-expanded","false");});const shareButton=lightbox.querySelector(".gallery-lightbox-share");if(shareButton){const shareLabels=galleryShareLabels[galleryLang]||galleryShareLabels.en;shareButton.textContent=shareLabels.share;shareButton.setAttribute("aria-label",shareLabels.share);}grid.querySelectorAll(".gallery-caption p").forEach(p=>{p.textContent=cleanCardTitle(p.dataset.originalTitle||p.dataset.originalCaption||p.textContent);});grid.querySelectorAll(".gallery-card-source").forEach(a=>a.textContent=gtx("source"));if(count&&/IMAGES|ИЗОБРАЖЕНИЙ|BILDER|IMAGES|IMMAGINI|枚|张图片|GÖRSEL|इमेज/.test(count.textContent)){const n=parseInt(count.textContent,10);if(Number.isFinite(n))count.textContent=n+" "+gtx("images");}if(updated&&updated.textContent){const raw=updated.textContent.replace(/^(UPDATED|ОБНОВЛЕНО|AKTUALISIERT|MIS À JOUR|AGGIORNATO|更新|更新于|GÜNCELLENDİ|अपडेट)\s*/,"");updated.textContent=gtx("updated")+" "+raw;}refreshGalleryControls();});
   const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, ch => {
     const entities = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
     return entities[ch];
@@ -519,8 +519,10 @@
           '<img' + dimensionAttributes + ' src="' + image + '" alt="' + escapeHtml(alt) + '" loading="' + imageLoading + '" fetchpriority="' + imagePriority + '" decoding="async">' +
           '<div class="gallery-caption"><p data-original-caption="' + escapeHtml(item.caption) + '" data-original-title="' + escapeHtml(rawTitle) + '">' + escapeHtml(cardCaption) + '</p>' +
           (cardMeta ? '<div class="gallery-card-meta">' + escapeHtml(cardMeta) + '</div>' : '') +
-          '<div class="gallery-card-actions"><button class="gallery-like-button" type="button" aria-pressed="false" title="' + escapeHtml(galleryLikeLabels.loginLike) + '"><span class="gallery-like-heart" aria-hidden="true">♡</span><span class="gallery-like-count">0</span></button></div>' +
-          '<a href="' + post + '" target="_blank" rel="noreferrer">'+escapeHtml(gtx("source"))+'</a></div></article>';
+          '<div class="gallery-card-actions"><button class="gallery-like-button" type="button" aria-pressed="false" title="' + escapeHtml(galleryLikeLabels.loginLike) + '"><span class="gallery-like-heart" aria-hidden="true">♡</span><span class="gallery-like-count">0</span></button>' +
+          '<button class="gallery-card-share" type="button" aria-expanded="false">' + escapeHtml((galleryShareLabels[galleryLang]||galleryShareLabels.en).share) + '</button>' +
+          '<a class="gallery-card-source" href="' + post + '" target="_blank" rel="noopener noreferrer">'+escapeHtml(gtx("source"))+'</a></div>' +
+          '<div class="gallery-card-share-menu" hidden></div></div></article>';
       }).join("") : '<div class="gallery-state"><h3>' + escapeHtml((controlText[galleryLang]||controlText.en).empty) + '</h3></div>';
       cards = Array.from(grid.querySelectorAll(".gallery-card"));
       cards.forEach((card, index) => {
@@ -550,8 +552,35 @@
         });
         const likeButton = card.querySelector(".gallery-like-button");
         likeButton?.addEventListener("click", event => { event.preventDefault(); event.stopPropagation(); handleGalleryLike?.(card); });
-        const sourceLink = card.querySelector(".gallery-caption a");
+        const sourceLink = card.querySelector(".gallery-card-source");
         sourceLink?.addEventListener("click", () => trackGalleryEvent("gallery_source_open", "image_" + String(card.dataset.galleryId || "").replace(/[^0-9]/g, "_")));
+        const cardShareButton = card.querySelector(".gallery-card-share");
+        cardShareButton?.addEventListener("click", event => {
+          event.preventDefault(); event.stopPropagation();
+          const menu = card.querySelector(".gallery-card-share-menu");
+          if (!menu) return;
+          const isOpen = !menu.hidden;
+          grid.querySelectorAll(".gallery-card-share-menu").forEach(node => { node.hidden = true; });
+          grid.querySelectorAll(".gallery-card-share").forEach(node => node.setAttribute("aria-expanded","false"));
+          if (isOpen) return;
+          const shareUrl = new URL("/gallery.html", window.location.origin);
+          const imageAnchor = card.id || card.dataset.galleryId || "";
+          if (imageAnchor) { shareUrl.searchParams.set("image", imageAnchor); shareUrl.hash = imageAnchor; }
+          const url = shareUrl.href, labels = galleryShareLabels[galleryLang] || galleryShareLabels.en;
+          const enc = encodeURIComponent, message = labels.postText || galleryShareLabels.en.postText;
+          const shareTitle = labels.postTitle || galleryShareLabels.en.postTitle;
+          const links = [
+            ["Telegram","https://t.me/share/url?url="+enc(url)+"&text="+enc(message)],
+            ["X (Twitter)","https://twitter.com/intent/tweet?url="+enc(url)+"&text="+enc(message)],
+            ["Bluesky","https://bsky.app/intent/compose?text="+enc(message+" "+url)],
+            ["Facebook","https://www.facebook.com/sharer/sharer.php?u="+enc(url)],
+            ["Reddit","https://www.reddit.com/submit?url="+enc(url)+"&title="+enc(shareTitle)],
+            ["WhatsApp","https://api.whatsapp.com/send?text="+enc(message+" "+url)]
+          ];
+          menu.innerHTML = '<div class="gallery-card-share-grid">'+links.map(([name,href])=>'<a href="'+escapeHtml(href)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(name)+' ↗</a>').join("")+'</div>';
+          menu.hidden = false; cardShareButton.setAttribute("aria-expanded","true");
+          trackGalleryEvent("gallery_share_menu_open","image_"+String(card.dataset.galleryId||"").replace(/[^0-9]/g,"_"));
+        });
         updateCardLikeButton(card);
         card.addEventListener("click", event => { if (!event.target.closest("a,button")) showImage(index); });
         card.addEventListener("keydown", event => {
