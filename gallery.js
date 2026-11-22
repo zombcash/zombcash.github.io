@@ -126,6 +126,7 @@
 
   const showImage = index => {
     if (!cards.length) return;
+    galleryShareMenu.hidden = true;
     const preserveImageOnly = lightbox.classList.contains("is-open") && lightbox.classList.contains("is-image-only");
     activeIndex = (index + cards.length) % cards.length;
     const image = cards[activeIndex].querySelector("img");
@@ -176,6 +177,7 @@
     closeButton.focus();
   };
   const closeImage = () => {
+    galleryShareMenu.hidden = true;
     lightbox.classList.remove("is-open");
     document.body.classList.remove("gallery-lightbox-open");
     fullImage.removeAttribute("src");
