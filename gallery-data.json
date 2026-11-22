@@ -567,7 +567,17 @@
       "alt_review_status": "visual-reviewed",
       "alt_review_method": "manual-contact-sheet-review",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "😂 ZOMBIECASH MEMES Шаг первый к мышлению богача: никогда не позволяй оторванной конечности испортить партнёрство с брендом. #ZombieCashMeme",
+        "de": "😂 ZOMBIECASH MEMES Schritt eins zur Wohlstandseinstellung: Lass niemals zu, dass ein abgetrenntes Glied deine Markenpartnerschaft ruiniert. #ZombieCashMeme",
+        "fr": "😂 ZOMBIECASH MEMES Première règle de l’état d’esprit riche : ne laisse jamais un membre détaché gâcher ton partenariat de marque. #ZombieCashMeme",
+        "it": "😂 ZOMBIECASH MEMES Primo passo per una mentalità da ricchi: non lasciare mai che un arto staccato rovini la tua partnership con un marchio. #ZombieCashMeme",
+        "ja": "😂 ZOMBIECASH MEMES 富豪マインドの第一歩：切り離された手足にブランド提携を台無しにさせないこと。#ZombieCashMeme",
+        "zh-CN": "😂 ZOMBIECASH MEMES 财富思维第一步：绝不要让一条断肢毁掉你的品牌合作。#ZombieCashMeme",
+        "tr": "😂 ZOMBIECASH MEMES Zengin zihniyetinin ilk adımı: kopmuş bir uzvun marka ortaklığını mahvetmesine asla izin verme. #ZombieCashMeme",
+        "hi": "😂 ZOMBIECASH MEMES अमीर सोच का पहला कदम: किसी कटे हुए अंग को अपनी ब्रांड साझेदारी कभी खराब न करने दें। #ZombieCashMeme"
+      }
     },
     {
       "id": "ZOMBCASH/6650:0",
@@ -593,7 +603,17 @@
       "alt_review_status": "visual-reviewed",
       "alt_review_method": "manual-contact-sheet-review",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🌙 UNDEAD AFTER DARK Умерла от разбитого сердца три века назад, но, честно говоря, ради тайного похода за раменом под неоновым дождём всё ещё стоит сменить наряд. #ZombieCashAfterDark",
+        "de": "🌙 UNDEAD AFTER DARK Vor drei Jahrhunderten an gebrochenem Herzen gestorben, aber ehrlich gesagt lohnt sich der heimliche Ausflug zu Ramen im Neonregen immer noch den Outfitwechsel. #ZombieCashAfterDark",
+        "fr": "🌙 UNDEAD AFTER DARK Morte d’un chagrin d’amour il y a trois siècles, mais franchement, sortir en douce manger des ramen sous la pluie néon vaut toujours le changement de tenue. #ZombieCashAfterDark",
+        "it": "🌙 UNDEAD AFTER DARK Morta di crepacuore tre secoli fa, ma sinceramente sgattaiolare fuori per un ramen sotto la pioggia al neon vale ancora il cambio d’abito. #ZombieCashAfterDark",
+        "ja": "🌙 UNDEAD AFTER DARK 300年前に失恋で死んだけれど、正直、ネオンの雨の中こっそりラーメンを食べに出るなら、着替える価値はまだある。#ZombieCashAfterDark",
+        "zh-CN": "🌙 UNDEAD AFTER DARK 三百年前因心碎而死，但说真的，为了在霓虹雨中偷偷溜出去吃碗拉面，换身衣服依然值得。#ZombieCashAfterDark",
+        "tr": "🌙 UNDEAD AFTER DARK Üç yüzyıl önce kırık bir kalpten öldüm ama dürüst olmak gerekirse neon yağmurunda gizlice ramen yemeye çıkmak için kıyafet değiştirmeye hâlâ değer. #ZombieCashAfterDark",
+        "hi": "🌙 UNDEAD AFTER DARK तीन सदियों पहले टूटे दिल से मर गई थी, लेकिन सच कहूँ तो नीयॉन बारिश में चुपके से रामेन खाने निकलने के लिए कपड़े बदलना आज भी सार्थक है। #ZombieCashAfterDark"
+      }
     },
     {
       "id": "ZOMBCASH/6649:0",
@@ -619,7 +639,17 @@
       "alt_review_status": "visual-reviewed",
       "alt_review_method": "manual-contact-sheet-review",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🩸 NIGHTMARE & HORROR Запись журнала: пилот с ID 409 найден среди обломков после 72 часов дождя; обнажёнными фалангами он всё ещё скребёт общую панель связи. #ZombieCashHorror",
+        "de": "🩸 NIGHTMARE & HORROR Logbucheintrag: Pilot ID 409 wurde nach 72 Stunden Regen aus den Trümmern geborgen und kratzt mit freiliegenden Fingerknochen noch immer am gemeinsamen Kommunikationspanel. #ZombieCashHorror",
+        "fr": "🩸 NIGHTMARE & HORROR Entrée du journal : le pilote ID 409 a été retrouvé dans les décombres après 72 heures de pluie ; ses phalanges à nu griffent encore le panneau de communication collectif. #ZombieCashHorror",
+        "it": "🩸 NIGHTMARE & HORROR Voce del registro: il pilota ID 409 è stato recuperato dalle macerie dopo 72 ore di pioggia e continua a graffiare il pannello comunicazioni con le falangi esposte. #ZombieCashHorror",
+        "ja": "🩸 NIGHTMARE & HORROR 記録：パイロットID409は72時間の雨の後、残骸から回収された。露出した指の骨で、今も共同通信パネルを引っかいている。#ZombieCashHorror",
+        "zh-CN": "🩸 NIGHTMARE & HORROR 日志记录：409号飞行员在连续降雨72小时后从残骸中被发现，裸露的指骨仍在抓挠公共通讯面板。#ZombieCashHorror",
+        "tr": "🩸 NIGHTMARE & HORROR Kayıt: Pilot ID 409, 72 saatlik yağmurun ardından enkazdan çıkarıldı; açıkta kalan parmak kemikleriyle ortak iletişim panelini hâlâ tırmalıyor. #ZombieCashHorror",
+        "hi": "🩸 NIGHTMARE & HORROR लॉग प्रविष्टि: पायलट ID 409 को 72 घंटे की बारिश के बाद मलबे से निकाला गया; उसकी उघड़ी उँगलियों की हड्डियाँ अब भी साझा संचार पैनल को खरोंच रही हैं। #ZombieCashHorror"
+      }
     },
     {
       "id": "ZOMBCASH/6648:0",
@@ -1077,7 +1107,17 @@
       "alt_review_status": "visual-reviewed",
       "alt_review_method": "manual-contact-sheet-review",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🌙 UNDEAD AFTER DARK Свечи мерцают, лестницы бесконечны, а бывший всё равно умудряется преследовать девушку, которая уже умерла ради покоя и тишины. #ZombieCashAfterDark",
+        "de": "🌙 UNDEAD AFTER DARK Die Kerzen flackern, die Treppen nehmen kein Ende, und irgendwie findet mein Ex immer noch einen Weg, ein Mädchen heimzusuchen, das für Ruhe und Frieden bereits gestorben ist. #ZombieCashAfterDark",
+        "fr": "🌙 UNDEAD AFTER DARK Les bougies vacillent, les escaliers n’en finissent pas, et mon ex trouve encore le moyen de hanter une fille qui est déjà morte pour avoir la paix. #ZombieCashAfterDark",
+        "it": "🌙 UNDEAD AFTER DARK Le cande tremolano, le scale non finiscono mai e il mio ex trova comunque il modo di perseguitare una ragazza che è già morta per avere un po’ di pace. #ZombieCashAfterDark",
+        "ja": "🌙 UNDEAD AFTER DARK ろうそくは揺らめき、階段は果てしない。それなのに元恋人は、静かな暮らしを求めてすでに死んだ女の子にまで取り憑く方法を見つけてくる。#ZombieCashAfterDark",
+        "zh-CN": "🌙 UNDEAD AFTER DARK 蜡烛摇曳，楼梯仿佛没有尽头，可我的前任不知怎的还是能找到办法，继续纠缠一个早已为清静而死去的女孩。#ZombieCashAfterDark",
+        "tr": "🌙 UNDEAD AFTER DARK Mumlar titriyor, merdivenler bitmek bilmiyor ve eski sevgilim, huzur bulmak için çoktan ölmüş bir kızı hâlâ rahatsız etmenin yolunu buluyor. #ZombieCashAfterDark",
+        "hi": "🌙 UNDEAD AFTER DARK मोमबत्तियाँ टिमटिमा रही हैं, सीढ़ियाँ अंतहीन हैं, और मेरा एक्स अब भी उस लड़की को सताने का रास्ता ढूँढ़ लेता है जो शांति के लिए पहले ही मर चुकी है। #ZombieCashAfterDark"
+      }
     },
     {
       "id": "ZOMBCASH/6623:0",
@@ -1103,7 +1143,17 @@
       "alt_review_status": "visual-reviewed",
       "alt_review_method": "manual-contact-sheet-review",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "😂 ZOMBIECASH MEMES Братан так яростно жмёт F5 на этом графике без пульса, что бедная клавиатура уже печатает сквозь слёзы. #ZombieCashMeme",
+        "de": "😂 ZOMBIECASH MEMES Der Typ hämmert so aggressiv auf F5 für diese flache Linie, dass die arme Tastatur schon unter Tränen tippt. #ZombieCashMeme",
+        "fr": "😂 ZOMBIECASH MEMES Il martèle tellement F5 devant cette courbe à plat que le pauvre clavier tape désormais à travers ses larmes. #ZombieCashMeme",
+        "it": "😂 ZOMBIECASH MEMES Sta premendo F5 così furiosamente davanti a quel grafico piatto che la povera tastiera ormai digita tra le lacrime. #ZombieCashMeme",
+        "ja": "😂 ZOMBIECASH MEMES 彼は横ばいチャートにF5を激しく連打しすぎて、かわいそうなキーボードは涙を流しながら文字を打っている。#ZombieCashMeme",
+        "zh-CN": "😂 ZOMBIECASH MEMES 这哥们对着那条毫无起色的曲线疯狂按F5，害得可怜的键盘都含泪打字了。#ZombieCashMeme",
+        "tr": "😂 ZOMBIECASH MEMES Düz çizgiye o kadar öfkeli biçimde F5 basıyor ki zavallı klavye gözyaşları içinde yazmaya başladı. #ZombieCashMeme",
+        "hi": "😂 ZOMBIECASH MEMES वह उस सपाट चार्ट पर इतनी ज़ोर से F5 दबा रहा है कि बेचारा कीबोर्ड आँसू बहाते हुए टाइप कर रहा है। #ZombieCashMeme"
+      }
     },
     {
       "id": "ZOMBCASH/6622:0",
