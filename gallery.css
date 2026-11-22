@@ -335,3 +335,35 @@ body.gallery-lightbox-open{overflow:hidden}
 .gallery-load-more .gallery-load-more-button:hover:not(:disabled),.gallery-load-more .gallery-load-more-button:focus-visible{border-color:#b5ff7a;background:linear-gradient(135deg,#1d3824,#101b12);transform:translateY(-1px);outline:2px solid #9bff4530;outline-offset:3px}
 .gallery-load-more .gallery-load-more-button:disabled{opacity:.4;cursor:default}
 @media(max-width:720px){.gallery-card-meta{font-size:8px;letter-spacing:.3px}.gallery-load-more{padding:12px 8px}.gallery-load-more .gallery-load-more-button{width:100%;min-width:0}}
+
+
+/* Keep long captions readable without pushing the Like/Share controls
+   outside the lightbox. The description scrolls independently; actions stay visible. */
+.gallery-lightbox figure{min-height:0;gap:12px;padding:0 8px 12px;box-sizing:border-box}
+.gallery-lightbox figure img{flex:0 1 auto;max-height:min(64vh,calc(100vh - 330px));min-height:0}
+.gallery-lightbox figcaption{
+  flex:0 0 auto;min-height:0;max-height:none;overflow:visible;
+  width:min(900px,calc(100vw - 140px));max-width:900px;
+  box-sizing:border-box;padding:12px 18px;gap:9px;
+}
+.gallery-lightbox-description{
+  display:block;max-height:7.2em;overflow-y:auto;overflow-x:hidden;
+  overscroll-behavior:contain;scrollbar-width:thin;overflow-wrap:anywhere;
+}
+.gallery-lightbox-actions{flex:0 0 auto;width:100%;padding-top:2px}
+.gallery-lightbox figcaption .gallery-lightbox-like,
+.gallery-lightbox figcaption .gallery-lightbox-share{flex:0 0 auto;white-space:normal;max-width:100%}
+.gallery-lightbox-source{display:block;flex:0 0 auto}
+@media(max-width:720px){
+  .gallery-lightbox{padding:52px 10px 14px}
+  .gallery-lightbox figure{gap:9px;padding:0 2px 8px}
+  .gallery-lightbox figure img{max-height:calc(100svh - 360px)}
+  .gallery-lightbox figcaption{width:calc(100vw - 32px);max-width:calc(100vw - 32px);padding:10px 12px;gap:8px}
+  .gallery-lightbox-description{max-height:6.5em;font-size:14px;line-height:1.4}
+  .gallery-lightbox-actions{gap:7px}
+}
+@media(max-height:700px) and (min-width:721px){
+  .gallery-lightbox figure img{max-height:calc(100vh - 300px)}
+  .gallery-lightbox figcaption{padding:9px 14px;gap:6px}
+  .gallery-lightbox-description{max-height:5.5em}
+}
