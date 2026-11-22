@@ -204,7 +204,7 @@
       const menu = galleryShareMenu;
       if (!menu) return;
       const shareUrl = new URL("/gallery.html", window.location.origin);
-      const imageAnchor = card.id || "";
+      const imageAnchor = card.id || card.dataset.galleryId || "";
       if (imageAnchor) {
         shareUrl.searchParams.set("image", imageAnchor);
         shareUrl.hash = imageAnchor;
