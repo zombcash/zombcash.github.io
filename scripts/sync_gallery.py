@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup
 CHANNEL = "ZOMBCASH"
 BASE_URL = f"https://t.me/s/{CHANNEL}"
 OUTPUT = Path("gallery-data.json")
+TRANSLATIONS = Path("gallery-caption-translations.json")
 MAX_PAGES = 300
 PAGE_SIZE = 200
 # Classify all attached image posts, not only the three legacy series headers.
@@ -215,6 +216,17 @@ def main():
     all_items = {item["id"]: item for item in live_items if item.get("id")}
     print(f"Validated Telegram media URLs: {len(live_items)} live, {rejected} unavailable.")
 
+    # Preserve the cumulative archive when older Telegram posts fall outside a scrape.
+    if OUTPUT.exists():
+        try:
+            old_data = json.loads(OUTPUT.read_text(encoding="utf-8"))
+            for old in old_data.get("items", []):
+                old_id = str(old.get("id") or "")
+                if old_id and old_id not in all_items and is_gallery_artwork(old.get("caption", "")):
+                    all_items[old_id] = old
+        except (OSError, ValueError, TypeError):
+            pass
+
     # Keep the full collected archive; the public gallery displays it in
     # chronological pages of PAGE_SIZE (200) images at a time.
     items = sorted(
@@ -282,6 +294,23 @@ def main():
             "alt_review_status": "pending-review",
             "alt_review_method": "not-reviewed",
         })
+
+    # Merge hand-authored offline translations by stable Telegram media ID.
+    # No translation API is called during gallery sync or page views.
+    try:
+        translation_cache = json.loads(TRANSLATIONS.read_text(encoding="utf-8")) if TRANSLATIONS.exists() else {}
+        if not isinstance(translation_cache, dict):
+            translation_cache = {}
+    except (OSError, ValueError, TypeError):
+        translation_cache = {}
+    supported_locales = {"ru", "de", "fr", "it", "ja", "zh-CN", "tr", "hi"}
+    for item in items:
+        cached = translation_cache.get(str(item.get("id") or ""), {})
+        if isinstance(cached, dict):
+            translations = {locale: value.strip() for locale, value in cached.items()
+                            if locale in supported_locales and isinstance(value, str) and value.strip()}
+            if translations:
+                item["caption_translations"] = translations
 
     # Probe image dimensions concurrently so a large archive does not
     # serialize dozens of CDN requests and hold the hourly sync open.

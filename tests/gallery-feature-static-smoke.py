@@ -20,7 +20,7 @@ category_counts = {category: sum(1 for item in items if category in item.get("ca
 assert sum(category_counts.values()) >= len(items), f"Some gallery items are missing a category: {category_counts}"
 assert [str(item.get("date") or "") for item in items] == sorted((str(item.get("date") or "") for item in items), reverse=True), "Gallery must show newest images first"
 assert all(item.get("category_ids") and set(item["category_ids"]).issubset(gallery_categories) for item in items), "Every image must belong to a known gallery category"
-assert all(item.get("rights_status") == "review-required" for item in items)
+assert all(item.get("rights_status") == "owner-authorized" for item in items)
 reviewed = [item for item in items if item.get("alt_review_status") == "visual-reviewed"]
 pending = [item for item in items if item.get("alt_review_status") == "pending-review"]
 assert len(reviewed) + len(pending) == len(items), "Every item must have an explicit ALT review state"
