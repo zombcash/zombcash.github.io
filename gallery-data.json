@@ -31455,7 +31455,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Всё ещё листаешь графики, пока твой портфель разлагается? Добро пожаловать в клуб нежити. 🧟 $ZOMBCASH | РЫНОК УМЕР. ZOMBIECASH — НЕТ. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Сообщество X: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "de": "Du scrollst noch durch Charts, während dein Portfolio verwest? Willkommen im Club der Untoten. 🧟 $ZOMBCASH | DER MARKT IST TOT. ZOMBIECASH NICHT. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X-Community: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "fr": "Tu fais encore défiler les graphiques pendant que ton portefeuille pourrit ? Bienvenue au club des morts-vivants. 🧟 $ZOMBCASH | LE MARCHÉ EST MORT. PAS ZOMBIECASH. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun : https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Communauté X : https://x.com/i/communities/2013610165069591027 💬 Telegram : https://t.me/+5aXhFhx2RdFmNWYy",
+        "it": "Continui a scorrere i grafici mentre il tuo portafoglio marcisce? Benvenuto nel club dei non morti. 🧟 $ZOMBCASH | IL MERCATO È MORTO. ZOMBIECASH NO. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Community X: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "ja": "ポートフォリオが腐っているのに、まだチャートをスクロールしてる？アンデッドクラブへようこそ。 🧟 $ZOMBCASH | 市場は死んだ。ZOMBIECASHは違う。CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Xコミュニティ: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "zh-CN": "你的投资组合都腐烂了，还在不停刷行情图？欢迎加入亡灵俱乐部。 🧟 $ZOMBCASH | 市场已死，ZOMBIECASH 仍在。CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun：https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X 社区：https://x.com/i/communities/2013610165069591027 💬 Telegram：https://t.me/+5aXhFhx2RdFmNWYy",
+        "tr": "Portföyün çürürken hâlâ grafikleri mi kaydırıyorsun? Ölümsüzler kulübüne hoş geldin. 🧟 $ZOMBCASH | PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X Topluluğu: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "hi": "आपका पोर्टफोलियो सड़ रहा है, फिर भी चार्ट स्क्रॉल कर रहे हैं? मरे हुओं के क्लब में स्वागत है। 🧟 $ZOMBCASH | बाज़ार मर गया। ZOMBIECASH नहीं। CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X कम्युनिटी: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy"
+      }
     },
     {
       "id": "ZOMBCASH/1169:0",
@@ -31481,7 +31491,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "После той красной свечи проверяю пульс портфеля — и, честно говоря, даже зомби теперь выглядят здоровее. 🧟 $ZOMBCASH | РЫНОК УМЕР. ZOMBIECASH — НЕТ. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Сообщество X: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "de": "Nach dieser roten Kerze prüfe ich den Puls meines Portfolios – und ehrlich gesagt sehen selbst die Zombies langsam gesünder aus. 🧟 $ZOMBCASH | DER MARKT IST TOT. ZOMBIECASH NICHT. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X-Community: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "fr": "Après cette bougie rouge, je vérifie le pouls de mon portefeuille et, franchement, même les zombies commencent à avoir meilleure mine. 🧟 $ZOMBCASH | LE MARCHÉ EST MORT. PAS ZOMBIECASH. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun : https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Communauté X : https://x.com/i/communities/2013610165069591027 💬 Telegram : https://t.me/+5aXhFhx2RdFmNWYy",
+        "it": "Dopo quella candela rossa controllo il battito del mio portafoglio e, a dire il vero, persino gli zombie iniziano a sembrare più in salute. 🧟 $ZOMBCASH | IL MERCATO È MORTO. ZOMBIECASH NO. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Community X: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "ja": "あの赤いローソク足の後でポートフォリオの脈を確認したら、正直ゾンビのほうが健康そうに見えてきた。 🧟 $ZOMBCASH | 市場は死んだ。ZOMBIECASHは違う。CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Xコミュニティ: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "zh-CN": "那根红色蜡烛线之后，我检查了一下投资组合的脉搏。说真的，现在连僵尸看起来都更健康了。 🧟 $ZOMBCASH | 市场已死，ZOMBIECASH 仍在。CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun：https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X 社区：https://x.com/i/communities/2013610165069591027 💬 Telegram：https://t.me/+5aXhFhx2RdFmNWYy",
+        "tr": "O kırmızı mumdan sonra portföyümün nabzını kontrol ediyorum; açıkçası zombiler bile daha sağlıklı görünmeye başladı. 🧟 $ZOMBCASH | PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X Topluluğu: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "hi": "उस लाल कैंडल के बाद पोर्टफोलियो की नब्ज़ देखी और सच कहूँ तो अब तो ज़ॉम्बी भी ज़्यादा स्वस्थ दिखने लगे हैं। 🧟 $ZOMBCASH | बाज़ार मर गया। ZOMBIECASH नहीं। CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X कम्युनिटी: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy"
+      }
     },
     {
       "id": "ZOMBCASH/1160:0",
@@ -31507,7 +31527,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Проверил пульс портфеля — на этом этапе там в основном играет драматичная фоновая музыка. 🧟 $ZOMBCASH | РЫНОК УМЕР. ZOMBIECASH — НЕТ. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Сообщество X: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "de": "Ich habe den Puls meines Portfolios geprüft – inzwischen läuft dort hauptsächlich dramatische Hintergrundmusik. 🧟 $ZOMBCASH | DER MARKT IST TOT. ZOMBIECASH NICHT. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X-Community: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "fr": "J’ai vérifié le pouls de mon portefeuille : à ce stade, il ne reste surtout qu’une musique de fond dramatique. 🧟 $ZOMBCASH | LE MARCHÉ EST MORT. PAS ZOMBIECASH. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun : https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Communauté X : https://x.com/i/communities/2013610165069591027 💬 Telegram : https://t.me/+5aXhFhx2RdFmNWYy",
+        "it": "Ho controllato il battito del mio portafoglio: a questo punto c’è soprattutto una colonna sonora drammatica. 🧟 $ZOMBCASH | IL MERCATO È MORTO. ZOMBIECASH NO. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Community X: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "ja": "ポートフォリオの脈を確認したけど、今となってはドラマチックなBGMが流れているだけ。 🧟 $ZOMBCASH | 市場は死んだ。ZOMBIECASHは違う。CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Xコミュニティ: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "zh-CN": "我检查了投资组合的脉搏——到了这个阶段，里面基本只剩下戏剧性的背景音乐了。 🧟 $ZOMBCASH | 市场已死，ZOMBIECASH 仍在。CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun：https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X 社区：https://x.com/i/communities/2013610165069591027 💬 Telegram：https://t.me/+5aXhFhx2RdFmNWYy",
+        "tr": "Portföyümün nabzını kontrol ettim; bu aşamada geriye çoğunlukla dramatik bir fon müziği kalmış. 🧟 $ZOMBCASH | PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X Topluluğu: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "hi": "मैंने अपने पोर्टफोलियो की नब्ज़ जाँची—इस मोड़ पर वहाँ बस नाटकीय बैकग्राउंड संगीत ही बचा है। 🧟 $ZOMBCASH | बाज़ार मर गया। ZOMBIECASH नहीं। CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X कम्युनिटी: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy"
+      }
     },
     {
       "id": "ZOMBCASH/1155:0",
@@ -31533,7 +31563,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Портфель просел на 99%? Не переживай: зомби не нужен пульс, чтобы HODLить. 🧟 $ZOMBCASH | РЫНОК УМЕР. ZOMBIECASH — НЕТ. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Сообщество X: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "de": "Portfolio 99 % im Minus? Keine Sorge, Zombies brauchen keinen Puls, um HODL zu betreiben. 🧟 $ZOMBCASH | DER MARKT IST TOT. ZOMBIECASH NICHT. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X-Community: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "fr": "Portefeuille en baisse de 99 % ? Pas d’inquiétude : les zombies n’ont pas besoin de pouls pour HODL. 🧟 $ZOMBCASH | LE MARCHÉ EST MORT. PAS ZOMBIECASH. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun : https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Communauté X : https://x.com/i/communities/2013610165069591027 💬 Telegram : https://t.me/+5aXhFhx2RdFmNWYy",
+        "it": "Portafoglio a -99%? Niente paura: agli zombie non serve un battito per fare HODL. 🧟 $ZOMBCASH | IL MERCATO È MORTO. ZOMBIECASH NO. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Community X: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "ja": "ポートフォリオが99％下落？心配無用。ゾンビはHODLするのに脈拍なんていらない。 🧟 $ZOMBCASH | 市場は死んだ。ZOMBIECASHは違う。CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Xコミュニティ: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "zh-CN": "投资组合跌了99%？别担心，僵尸持币（HODL）根本不需要脉搏。 🧟 $ZOMBCASH | 市场已死，ZOMBIECASH 仍在。CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun：https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X 社区：https://x.com/i/communities/2013610165069591027 💬 Telegram：https://t.me/+5aXhFhx2RdFmNWYy",
+        "tr": "Portföy %99 düştü mü? Endişelenme, zombilerin HODL yapmak için nabza ihtiyacı yok. 🧟 $ZOMBCASH | PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X Topluluğu: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "hi": "पोर्टफोलियो 99% गिर गया? चिंता न करें, HODL करने के लिए ज़ॉम्बी को नाड़ी की ज़रूरत नहीं होती। 🧟 $ZOMBCASH | बाज़ार मर गया। ZOMBIECASH नहीं। CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X कम्युनिटी: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy"
+      }
     },
     {
       "id": "ZOMBCASH/1154:0",
@@ -31559,7 +31599,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "Зелёные свечи вымерли, зато теперь мой портфель выглядит по-настоящему пугающе. 🧟 $ZOMBCASH | РЫНОК УМЕР. ZOMBIECASH — НЕТ. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Сообщество X: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "de": "Grüne Kerzen sind ausgestorben, aber wenigstens sieht mein Portfolio jetzt wirklich furchteinflößend aus. 🧟 $ZOMBCASH | DER MARKT IST TOT. ZOMBIECASH NICHT. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X-Community: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "fr": "Les bougies vertes ont disparu, mais au moins mon portefeuille a désormais vraiment de quoi faire peur. 🧟 $ZOMBCASH | LE MARCHÉ EST MORT. PAS ZOMBIECASH. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun : https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Communauté X : https://x.com/i/communities/2013610165069591027 💬 Telegram : https://t.me/+5aXhFhx2RdFmNWYy",
+        "it": "Le candele verdi si sono estinte, ma almeno ora il mio portafoglio fa davvero paura. 🧟 $ZOMBCASH | IL MERCATO È MORTO. ZOMBIECASH NO. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Community X: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "ja": "緑のローソク足は絶滅したけど、少なくとも今のポートフォリオは本当に恐ろしい見た目になった。 🧟 $ZOMBCASH | 市場は死んだ。ZOMBIECASHは違う。CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 Xコミュニティ: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "zh-CN": "绿色蜡烛线已经灭绝了，不过至少现在我的投资组合看起来确实够吓人。 🧟 $ZOMBCASH | 市场已死，ZOMBIECASH 仍在。CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun：https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X 社区：https://x.com/i/communities/2013610165069591027 💬 Telegram：https://t.me/+5aXhFhx2RdFmNWYy",
+        "tr": "Yeşil mumların nesli tükendi ama en azından portföyüm artık gerçekten korkutucu görünüyor. 🧟 $ZOMBCASH | PİYASA ÖLDÜ. ZOMBIECASH ÖLMEDİ. CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X Topluluğu: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy",
+        "hi": "हरी कैंडलें विलुप्त हो चुकी हैं, लेकिन कम से कम अब मेरा पोर्टफोलियो सचमुच डरावना दिखता है। 🧟 $ZOMBCASH | बाज़ार मर गया। ZOMBIECASH नहीं। CA: 6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 💊 Pump.fun: https://pump.fun/coin/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump 𝕏 X कम्युनिटी: https://x.com/i/communities/2013610165069591027 💬 Telegram: https://t.me/+5aXhFhx2RdFmNWYy"
+      }
     },
     {
       "id": "ZOMBCASH/1152:0",
