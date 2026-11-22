@@ -71,6 +71,3 @@ jobs:
 
             ## Why
             The previous sitemap contained dates older than actual page changes.
-          labels: |
-            seo
-            automation
