@@ -44,6 +44,15 @@
   const cleanCardTitle = value => cleanCaption(value)
     .replace(/^(?:🩸|🌙|😂|🛰️)\s*(?:NIGHTMARE\s*&\s*HORROR|NIGHTMARE\s+DROP|ZOMBIECASH\s+MEMES?|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|UNDEAD\s+AFTER\s+DARK|ZOMBIECASH\s+SITE\s+TRANSMISSION)\s*/i, "")
     .trim();
+  const splitGalleryCaption = value => {
+    let text = cleanCaption(value);
+    const hashtags = [...text.matchAll(/#[\\p{L}\\p{N}_]+/gu)].map(match => match[0]);
+    text = text.replace(/#[\\p{L}\\p{N}_]+/gu, " ").replace(/\\s+/g, " ").trim();
+    const headingMatch = text.match(/^(?:🌙\\s*UNDEAD\\s+AFTER\\s+DARK|😂\\s*ZOMBIECASH\\s+MEMES?|🩸\\s*NIGHTMARE\\s*(?:&|AND)\\s*HORROR|🛰️\\s*ZOMBIECASH\\s+SITE\\s+TRANSMISSION|NIGHTMARE\\s+DROP|ZOMBIE\\s+MEME(?:\\s+OF\\s+THE\\s+HOUR)?|ZOMBIECASH\\s+MEMES?)/i);
+    const heading = headingMatch ? headingMatch[0].trim() : "";
+    if (heading) text = text.slice(headingMatch[0].length).trim();
+    return {caption:text, meta:[heading, [...new Set(hashtags)].join(" ")].filter(Boolean).join("  ·  ")};
+  };
 
   const state = (title, message) => {
     grid.innerHTML = '<div class="gallery-state"><h3>' + escapeHtml(title) +
@@ -305,6 +314,13 @@
     const items = Array.isArray(data.items)
       ? data.items.filter(item => item.image && item.caption && !/\bZOMBIECASH\s+SITE\s+SPOTLIGHT\b/i.test(String(item.caption)) && (Array.isArray(item.category_ids) ? item.category_ids.length : allowedGalleryCaption(item.caption)))
       : [];
+    // Keep only three clear gallery filters. Crypto-apocalypse belongs with memes;
+    // community creations remain in the main archive without a separate category.
+    items.forEach(item => {
+      const ids = Array.isArray(item.category_ids) ? item.category_ids : [];
+      item.category_ids = [...new Set(ids.map(id => id === "crypto-apocalypse" ? "zombie-memes" : id)
+        .filter(id => categories.includes(id)))];
+    });
     localizeGalleryMeta(items, data.updated_at);
     if (!items.length) {
       state(gtx("none"), gtx("noneMsg"));
@@ -333,7 +349,7 @@
       tr:{"zombie-memes":"Zombi Memleri","nightmare-horror":"Kâbus ve Korku","undead-after-dark":"Gece Yarısı Ölüleri","zombie-characters":"Zombi Karakterleri","apocalypse-survival":"Kıyamet ve Hayatta Kalma","crypto-apocalypse":"Kripto Kıyameti","community-creations":"Topluluk Eserleri"},
       hi:{"zombie-memes":"ज़ॉम्बी मीम","nightmare-horror":"दुःस्वप्न और हॉरर","undead-after-dark":"रात ढलने के बाद के ज़ॉम्बी","zombie-characters":"ज़ॉम्बी किरदार","apocalypse-survival":"प्रलय और उत्तरजीविता","crypto-apocalypse":"क्रिप्टो प्रलय","community-creations":"समुदाय की कलाकृतियाँ"}
     };
-    const categories = ["zombie-memes","nightmare-horror","undead-after-dark","zombie-characters","apocalypse-survival","crypto-apocalypse","community-creations"];
+    const categories = ["zombie-memes","nightmare-horror","undead-after-dark"];
     const toolbar = document.createElement("div");
     toolbar.className = "gallery-toolbar";
     toolbar.innerHTML = '<div class="gallery-filter-row"><div class="gallery-category-filters" role="group" aria-label="Gallery categories"></div><label class="gallery-search-label"><span class="sr-only">Search gallery</span><input class="gallery-search" type="search" autocomplete="off"></label><label class="gallery-sort-label"><span class="sr-only">Sort gallery</span><select class="gallery-sort"><option value="newest"></option><option value="oldest"></option><option value="liked"></option></select></label><button class="gallery-reset" type="button"></button></div><p class="gallery-results" aria-live="polite"></p>';
