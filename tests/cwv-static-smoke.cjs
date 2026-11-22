@@ -34,7 +34,7 @@ const hasDeferredScript = (page, filename, rootRelative = false) => {
     const srcMatch = tag.match(/\bsrc=["']([^"']+)["']/i);
     if (!srcMatch) return false;
     const srcWithoutQuery = srcMatch[1].split("?")[0];
-    return srcWithoutQuery === expectedSrc && /\bdefer(?:\s|=|$)/i.test(tag);
+    return srcWithoutQuery === expectedSrc && /\bdefer(?=\s|=|>|$)/i.test(tag);
   });
 };
 
