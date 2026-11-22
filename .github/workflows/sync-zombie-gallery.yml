@@ -5,6 +5,7 @@ on:
     paths:
       - "scripts/sync_gallery.py"
       - "gallery-caption-translations.json"
+      - "gallery-caption-translations-additions.json"
       - "scripts/sync_gallery_image_seo.py"
       - "scripts/generate_localized_gallery_pages.py"
       - ".github/workflows/sync-zombie-gallery.yml"
