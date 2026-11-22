@@ -44,7 +44,11 @@ for item in items:
 assert len(missing_dimensions) <= max(1, len(items) // 20), f"Too many gallery images are missing source dimensions: {missing_dimensions}"
 for item in pending:
     assert item.get("alt_review_method") == "not-reviewed", f"Pending item has an invalid review method: {item['id']}"
-    assert item.get("pinterest_status") == "blocked-rights-review", f"Unreviewed item is not blocked from Pinterest: {item['id']}"
+    # Rights authorization and visual ALT review are separate gates. Official
+    # channel artwork is owner-authorized; pending ALT review must not be
+    # mislabeled as a rights problem or silently block the rights status.
+    assert item.get("rights_status") == "owner-authorized", f"Official channel artwork lost owner authorization: {item['id']}"
+    assert item.get("pinterest_status") == "ready", f"Authorized official artwork has an inconsistent Pinterest state: {item['id']}"
 assert all(item.get("anchor_id") for item in items)
 assert not any(item.get("pinterest_status") in {"queued", "pending", "scheduled"} for item in items)
 
