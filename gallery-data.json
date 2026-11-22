@@ -387,7 +387,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🌙 UNDEAD AFTER DARK Бархат — это приятно, но портить репутацию бывшего с этой кушетки куда полезнее для фигуры. #ZombieCashAfterDark",
+        "de": "🌙 UNDEAD AFTER DARK Samt ist schön, aber den Ruf deines Ex von dieser Chaiselongue aus verrotten zu lassen, ist das bessere Workout. #ZombieCashAfterDark",
+        "fr": "🌙 UNDEAD AFTER DARK Le velours, c’est agréable, mais laisser pourrir la réputation de ton ex depuis cette méridienne est un bien meilleur exercice. #ZombieCashAfterDark",
+        "it": "🌙 UNDEAD AFTER DARK Il velluto è bello, ma far marcire la reputazione del tuo ex da questa chaise longue è un allenamento decisamente migliore. #ZombieCashAfterDark",
+        "ja": "🌙 UNDEAD AFTER DARK ベルベットも素敵だけど、この長椅子から元恋人の評判を腐らせる方がずっといい運動になる。#ZombieCashAfterDark",
+        "zh-CN": "🌙 UNDEAD AFTER DARK 天鹅绒固然不错，但躺在这张贵妃椅上败坏前任的名声，才是更好的锻炼。#ZombieCashAfterDark",
+        "tr": "🌙 UNDEAD AFTER DARK Kadife güzel ama bu şezlongdan eski sevgilinin itibarını çürütmek çok daha iyi bir egzersiz. #ZombieCashAfterDark",
+        "hi": "🌙 UNDEAD AFTER DARK मखमल अच्छा है, लेकिन इस दीवान पर लेटे-लेटे अपने एक्स की साख सड़ाना कहीं बेहतर कसरत है। #ZombieCashAfterDark"
+      }
     },
     {
       "id": "ZOMBCASH/6657:0",
@@ -413,7 +423,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "😂 ZOMBIECASH MEMES Старшая гот-сестра уверяет, что пирожное подходит к её савану, но сестра уже скрепила кровавой клятвой право первой откусить макарон. #ZombieCashMeme",
+        "de": "😂 ZOMBIECASH MEMES Goth-Schwester Nummer eins besteht darauf, dass das Gebäck zu ihrem Leichentuch passt, doch ihre Schwester hat sich den ersten Bissen des Macarons bereits per Blutschwur gesichert. #ZombieCashMeme",
+        "fr": "😂 ZOMBIECASH MEMES La sœur gothique numéro un insiste : la pâtisserie assortit son linceul, mais sa sœur a déjà juré par le sang qu’elle aurait la première bouchée du macaron. #ZombieCashMeme",
+        "it": "😂 ZOMBIECASH MEMES La sorella goth numero uno sostiene che il dolce si abbini al suo sudario, ma l’altra ha già rivendicato con un giuramento di sangue il primo morso del macaron. #ZombieCashMeme",
+        "ja": "😂 ZOMBIECASH MEMES ゴス姉妹の長女はお菓子が自分の経帷子に合うと言い張るが、妹はマカロンの最初のひと口を血の誓いで先に確保していた。#ZombieCashMeme",
+        "zh-CN": "😂 ZOMBIECASH MEMES 一号哥特姐妹坚持说甜点和她的裹尸布很搭，可她的姐妹早已立下血誓，宣称要先咬第一口马卡龙。#ZombieCashMeme",
+        "tr": "😂 ZOMBIECASH MEMES Bir numaralı gotik kız kardeş hamur işinin kefeniyle uyumlu olduğunu savunuyor, ama kardeşi makaronun ilk ısırığını almak için çoktan kan yemini etti. #ZombieCashMeme",
+        "hi": "😂 ZOMBIECASH MEMES पहली गॉथ बहन ज़िद करती है कि पेस्ट्री उसके कफ़न से मेल खाती है, लेकिन उसकी बहन मैकरॉन का पहला कौर पाने के लिए पहले ही खून की कसम खा चुकी है। #ZombieCashMeme"
+      }
     },
     {
       "id": "ZOMBCASH/6656:0",
@@ -439,7 +459,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🌙 UNDEAD AFTER DARK Молилась, чтобы в этом саду нашлась достойная душа для сбора урожая, а получила лишь влажный мох и всё твоё внимание. #ZombieCashAfterDark",
+        "de": "🌙 UNDEAD AFTER DARK Ich habe in diesem Garten um eine anständige Seele zur Ernte gebetet, bekam aber nur feuchtes Moos und deine ungeteilte Aufmerksamkeit. #ZombieCashAfterDark",
+        "fr": "🌙 UNDEAD AFTER DARK Je priais pour récolter une âme convenable dans ce jardin, mais je n’ai eu que de la mousse humide et toute ton attention. #ZombieCashAfterDark",
+        "it": "🌙 UNDEAD AFTER DARK Pregavo di raccogliere un’anima decente in questo giardino, ma ho ottenuto solo muschio umido e tutta la tua attenzione. #ZombieCashAfterDark",
+        "ja": "🌙 UNDEAD AFTER DARK この庭で収穫できるまともな魂を祈っていたのに、手に入ったのは湿った苔とあなたの注目だけ。#ZombieCashAfterDark",
+        "zh-CN": "🌙 UNDEAD AFTER DARK 我祈祷能在这座花园里收获一个像样的灵魂，结果只得到潮湿的苔藓和你全部的关注。#ZombieCashAfterDark",
+        "tr": "🌙 UNDEAD AFTER DARK Bu bahçede hasat edecek düzgün bir ruh için dua ettim, ama elime yalnızca nemli yosun ve senin tüm dikkatin geçti. #ZombieCashAfterDark",
+        "hi": "🌙 UNDEAD AFTER DARK इस बगीचे में काटने के लिए एक अच्छी आत्मा की प्रार्थना की थी, लेकिन मिला सिर्फ़ गीला काई और तुम्हारा पूरा ध्यान। #ZombieCashAfterDark"
+      }
     },
     {
       "id": "ZOMBCASH/6654:0",
@@ -465,7 +495,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🩸 NIGHTMARE & HORROR Жир на плоской жарочной поверхности не остывал с момента эвакуации, но то, что скользит по полу под стойкой, фартук не носит. #ZombieCashHorror",
+        "de": "🩸 NIGHTMARE & HORROR Das Fett auf der Grillplatte ist seit der Evakuierung nicht abgekühlt, aber was da unter der Theke über den Boden gleitet, trägt keine Schürze. #ZombieCashHorror",
+        "fr": "🩸 NIGHTMARE & HORROR La graisse de la plaque de cuisson n’a pas refroidi depuis l’évacuation, mais ce qui glisse sous le comptoir ne porte pas de tablier. #ZombieCashHorror",
+        "it": "🩸 NIGHTMARE & HORROR Il grasso sulla piastra non si è raffreddato dall’evacuazione, ma qualunque cosa stia strisciando sul pavimento sotto il bancone non indossa un grembiule. #ZombieCashHorror",
+        "ja": "🩸 NIGHTMARE & HORROR 避難以来、鉄板の油は冷めていない。それなのにカウンターの下を床づたいに滑ってくる何かは、エプロンを着けていない。#ZombieCashHorror",
+        "zh-CN": "🩸 NIGHTMARE & HORROR 自撤离以来，煎板上的油脂就没冷却过，但柜台下有什么东西正贴着地面滑行——它可没穿围裙。#ZombieCashHorror",
+        "tr": "🩸 NIGHTMARE & HORROR Düz ızgaradaki yağ tahliyeden beri soğumadı, ama tezgâhın altında yerde süzülen her neyse önlük giymiyor. #ZombieCashHorror",
+        "hi": "🩸 NIGHTMARE & HORROR निकासी के बाद से सपाट तवे की चिकनाई ठंडी नहीं हुई, लेकिन काउंटर के नीचे फर्श पर जो भी सरक रहा है, उसने एप्रन नहीं पहना। #ZombieCashHorror"
+      }
     },
     {
       "id": "ZOMBCASH/6653:0",
@@ -491,7 +531,17 @@
       "alt_review_status": "pending-review",
       "alt_review_method": "not-reviewed",
       "image_width": 800,
-      "image_height": 800
+      "image_height": 800,
+      "caption_translations": {
+        "ru": "🌙 UNDEAD AFTER DARK Апокалипсис испортил обивку, но шёлковая рубашка уцелела — в отличие от трёх моих последних поклонников. #ZombieCashAfterDark",
+        "de": "🌙 UNDEAD AFTER DARK Die Apokalypse hat die Polster ruiniert, aber das Seidenhemd hat überlebt – anders als meine letzten drei Verehrer. #ZombieCashAfterDark",
+        "fr": "🌙 UNDEAD AFTER DARK L’apocalypse a ruiné le rembourrage, mais la chemise en soie a survécu — contrairement à mes trois derniers prétendants. #ZombieCashAfterDark",
+        "it": "🌙 UNDEAD AFTER DARK L’apocalisse ha rovinato il rivestimento, ma la camicia di seta è sopravvissuta, a differenza dei miei ultimi tre pretendenti. #ZombieCashAfterDark",
+        "ja": "🌙 UNDEAD AFTER DARK 黙示録で家具の張り地は台無しになったけれど、シルクのシャツは生き残った——最後の3人の求婚者とは違って。#ZombieCashAfterDark",
+        "zh-CN": "🌙 UNDEAD AFTER DARK 末日毁了家具的内衬，但丝绸衬衫幸存了下来——不像我最近的三位追求者。#ZombieCashAfterDark",
+        "tr": "🌙 UNDEAD AFTER DARK Kıyamet döşemeleri mahvetti ama ipek gömlek hayatta kaldı—son üç talibim gibi değil. #ZombieCashAfterDark",
+        "hi": "🌙 UNDEAD AFTER DARK सर्वनाश ने फर्नीचर की गद्दी बर्बाद कर दी, लेकिन रेशमी कमीज़ बच गई—मेरे पिछले तीन चाहने वालों की तरह नहीं। #ZombieCashAfterDark"
+      }
     },
     {
       "id": "ZOMBCASH/6652:0",
