@@ -62,6 +62,12 @@
     '<figure><img alt=""><figcaption></figcaption></figure>' +
     '<button class="gallery-lightbox-next" type="button" aria-label="Next image">›</button>';
   document.body.appendChild(lightbox);
+  const galleryShareMenu = document.createElement("div");
+  galleryShareMenu.className = "gallery-share-menu";
+  galleryShareMenu.hidden = true;
+  galleryShareMenu.setAttribute("role", "group");
+  galleryShareMenu.setAttribute("aria-label", "Share this image");
+  lightbox.appendChild(galleryShareMenu);
 
   const fullImage = lightbox.querySelector("img");
   const fullCaption = lightbox.querySelector("figcaption");
@@ -120,6 +126,7 @@
 
   const showImage = index => {
     if (!cards.length) return;
+    galleryShareMenu.hidden = true;
     const preserveImageOnly = lightbox.classList.contains("is-open") && lightbox.classList.contains("is-image-only");
     activeIndex = (index + cards.length) % cards.length;
     const image = cards[activeIndex].querySelector("img");
@@ -162,7 +169,6 @@
       '<button class="gallery-lightbox-like" type="button" aria-pressed="false"></button>' +
       '<button class="gallery-lightbox-share" type="button" aria-label="' + escapeHtml(shareLabels.share) + '">' + escapeHtml(shareLabels.share) + '</button>' +
       '<span class="gallery-share-status" role="status" aria-live="polite"></span>' +
-      '<div class="gallery-share-menu" hidden role="group" aria-label="Share this image"></div>' +
       '</span>' +
       '<a class="gallery-lightbox-source" href="' + escapeHtml(sourceUrl) + '" target="_blank" rel="noreferrer">' + escapeHtml(gtx("source")) + '</a>';
     syncLightboxLikeButton();
@@ -171,6 +177,7 @@
     closeButton.focus();
   };
   const closeImage = () => {
+    galleryShareMenu.hidden = true;
     lightbox.classList.remove("is-open");
     document.body.classList.remove("gallery-lightbox-open");
     fullImage.removeAttribute("src");
@@ -194,7 +201,7 @@
       event.stopPropagation();
       const card = cards[activeIndex];
       if (!card) return;
-      const menu = lightbox.querySelector(".gallery-share-menu");
+      const menu = galleryShareMenu;
       if (!menu) return;
       const shareUrl = new URL("/gallery.html", window.location.origin);
       shareUrl.hash = card.id || "";
