@@ -47,6 +47,7 @@ def is_gallery_artwork(caption):
         r"\bZOMBIECASH\s+SITE\s+TRANSMISSION\b",
         r"\bNEWS\s+UPDATE\b",
         r"\bORIGINAL\s+SOURCE\s*:",
+        r"\bTEST\s+IMAGE\b",
     )
     return not any(re.search(pattern, text, re.I) for pattern in excluded)
 
@@ -61,6 +62,23 @@ def gallery_title(caption, limit=100):
         shortened = text[:limit - 1]
     return shortened + "…"
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; ZombieCashGalleryBot/1.0)"}
+
+
+def image_url_is_live(url):
+    """Reject stale Telegram CDN links before publishing them in the static archive."""
+    for attempt in range(2):
+        try:
+            response = requests.get(url, headers=HEADERS, timeout=15, stream=True)
+            content_type = response.headers.get("Content-Type", "").lower()
+            valid = response.ok and content_type.startswith("image/")
+            response.close()
+            if valid:
+                return True
+        except requests.RequestException:
+            pass
+        if attempt == 0:
+            time.sleep(0.5)
+    return False
 
 
 def jpeg_dimensions(url):
@@ -168,6 +186,25 @@ def main():
             break
         before = next_before
         time.sleep(0.35)
+
+    # Telegram CDN media URLs may expire while the channel post remains live.
+    # Re-scrape and validate refreshed URLs on every sync; omit dead links.
+    candidates = list(all_items.values())
+    with ThreadPoolExecutor(max_workers=16) as executor:
+        checks = {executor.submit(image_url_is_live, str(item.get("image") or "")): item for item in candidates}
+        live_items = []
+        rejected = 0
+        for future in as_completed(checks):
+            item = checks[future]
+            try:
+                if future.result():
+                    live_items.append(item)
+                else:
+                    rejected += 1
+            except Exception:
+                rejected += 1
+    all_items = {item["id"]: item for item in live_items if item.get("id")}
+    print(f"Validated Telegram media URLs: {len(live_items)} live, {rejected} unavailable.")
 
     # Keep the full collected archive; the public gallery displays it in
     # chronological pages of PAGE_SIZE (200) images at a time.
