@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Generate dedicated localized gallery URLs, canonical/hreflang tags and sitemap."""
-from html import escape
+from html import escape, unescape
 from pathlib import Path
 import json
 import re
@@ -128,7 +128,7 @@ def localize_gallery_captions(page, locale):
     def replace_card(match):
         card = match.group(0)
         id_match = re.search(r'data-gallery-id="([^"]*)"', card)
-        image_id = html.unescape(id_match.group(1)) if id_match else ""
+        image_id = unescape(id_match.group(1)) if id_match else ""
         localized = translations.get(image_id, {}).get(locale)
         if not isinstance(localized, str) or not localized.strip():
             return card
