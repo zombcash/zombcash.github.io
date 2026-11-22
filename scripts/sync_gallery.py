@@ -304,7 +304,27 @@ def main():
             translation_cache = {}
     except (OSError, ValueError, TypeError):
         translation_cache = {}
-    # Merge append-only translation batches after the canonical cache.
+    supported_locales = {"ru", "de", "fr", "it", "ja", "zh-CN", "tr", "hi"}
+    # Preserve hand-authored translations already embedded in the previous
+    # gallery archive. Some legacy batches were never copied into the
+    # canonical translation cache, so replacing scraped items without this
+    # fallback would silently drop those localized captions.
+    if OUTPUT.exists():
+        try:
+            previous_data = json.loads(OUTPUT.read_text(encoding="utf-8"))
+            for previous_item in previous_data.get("items", []):
+                image_id = str(previous_item.get("id") or "")
+                previous_translations = previous_item.get("caption_translations", {})
+                if not image_id or not isinstance(previous_translations, dict):
+                    continue
+                cached = translation_cache.setdefault(image_id, {})
+                for locale, value in previous_translations.items():
+                    if locale in supported_locales and isinstance(value, str) and value.strip():
+                        cached.setdefault(locale, value.strip())
+        except (OSError, ValueError, TypeError):
+            pass
+    # Merge append-only translation batches after both canonical and legacy caches.
+    # The batch file is authoritative for IDs it explicitly contains.
     try:
         additions = json.loads(TRANSLATION_ADDITIONS.read_text(encoding="utf-8"))
         if isinstance(additions, dict):
@@ -313,7 +333,6 @@ def main():
                     translation_cache.setdefault(str(image_id), {}).update(locale_map)
     except (OSError, ValueError, TypeError):
         pass
-    supported_locales = {"ru", "de", "fr", "it", "ja", "zh-CN", "tr", "hi"}
     for item in items:
         cached = translation_cache.get(str(item.get("id") or ""), {})
         if isinstance(cached, dict):
