@@ -122,10 +122,18 @@ assert "https://zombcash.github.io/sitemap-gallery-pages.xml" in robots
 language = Path("language.js").read_text(encoding="utf-8")
 assert '"/gallery.html": ["de","fr","it","ja","zh-CN","ru","tr","hi"]' in language
 assert language.count('"gallery.html"') >= 9
+translations = json.loads(Path("gallery-caption-translations.json").read_text(encoding="utf-8"))
+supported_locales = {"ru", "de", "fr", "it", "ja", "zh-CN", "tr", "hi"}
+item_ids = set(ids)
+assert set(translations).issubset(item_ids), "Every translation key must map to a current gallery image ID"
+for image_id, localized in translations.items():
+    assert set(localized) == supported_locales, f"Incomplete locale coverage for {image_id}"
+    assert all(isinstance(value, str) and value.strip() for value in localized.values()), f"Empty translation for {image_id}"
 js = Path("gallery.js").read_text(encoding="utf-8")
 for marker in ("gallery-toolbar", "gallery-lightbox-share", "/api/gallery/likes", "/api/gallery/like"):
     assert marker in js, marker
 assert "window.ZombieCashTrack = send;" in Path("script.js").read_text(encoding="utf-8")
+assert 'document.addEventListener("zombcash:languagechange"' in js and "refreshGalleryControls();" in js, "Changing language must re-render localized gallery captions and controls"
 assert "PAGE_SIZE = 200" in js and "pageItems = visible.slice" in js, "Gallery must page the archive in 200-image batches"
 assert "gallery-pagination" in js and "NEXT 200" in js, "Gallery must expose next/previous 200-image controls"
 
