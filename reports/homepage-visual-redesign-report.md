@@ -1,85 +1,69 @@
 # Homepage Visual Redesign Report
 
-**Date:** 2026-11-23
-**Status:** COMPLETED
-**Issue:** #655 - Redesign homepage visual experience — cinematic ZombieCash landing page
-**Repository:** zombcash/zombcash.github.io
-**Branch:** feat/homepage-cinematic-redesign
-
----
+**Date:** 2026-11-23  
+**Status:** IMPLEMENTED — STATIC CHECKS PASS; FINAL VISUAL WORKFLOWS PENDING  
+**Issue:** #655 — Cinematic ZombieCash homepage redesign  
+**Repository:** zombcash/zombcash.github.io  
+**Branch:** feat/homepage-cinematic-redesign  
+**PR:** https://github.com/zombcash/zombcash.github.io/pull/656
 
 ## 1. Summary
 
-Visual enhancement pass on the ZombieCash homepage (index.html) to strengthen the cinematic dark survival / premium Web3 aesthetic. Changes focus on hero section, typography, color system, card styling, accessibility, and responsive behavior. All existing functionality, links, SEO metadata, and localization are preserved.
+The redesign adds a cinematic, dark survival visual layer while retaining the existing homepage content, multilingual navigation, SEO metadata, and interactive sections.
 
-## 2. Changes Made
+During final QA, a destructive regression was found in the eight localized homepage files: the PR version had removed the sections after the promo-video block. The localized pages were restored from the PR base commit and the redesign changes were reapplied without dropping existing content.
 
-1. **Color System**: Added CSS custom properties for cinematic palette (deep black, graphite, coal, cold whites, olive/military green, toxic green accent)
-2. **Hero Section**: Enhanced background, improved typography hierarchy, text shadows, CTA button gradients and hover effects, glass-morphism for hero stats and bottom bar
-3. **Card Styling**: Unified glass background, subtle borders, backdrop blur, consistent hover states
-4. **Accessibility**: Visible keyboard focus states, reduced-motion support, improved text contrast
-5. **Responsive Design**: Mobile improvements for 768px and 480px breakpoints
-6. **Section Transitions**: Added gradient divider lines between sections
-7. **External URL Replacement**: Replaced Wikimedia Commons background URLs with local project assets
-8. **Scoped CSS Selectors**: Removed overly broad selectors, all scoped to body:has(#home)
-9. **Survivor Artwork Panel**: Added zc-sponsor-art-slot with project-owned survivor artwork to all 9 locale homepages
-10. **Cache Version**: Updated homepage-visual.css cache version
+## 2. Changes
+
+1. Added the cinematic palette, typography, hero treatment, card styling, focus states, reduced-motion handling, and responsive refinements in `homepage-visual.css`.
+2. Added the project-owned survivor artwork slot to all nine homepages.
+3. Named the artwork wrapper `.zc-hero-art-panel` so it is not confused with the separate Adsterra sponsor/ad container used by the responsive smoke test.
+4. Replaced Wikimedia hero preload references with the local project asset `/assets/zombcash-survivor-640.avif`; removed Wikimedia preconnects from all nine homepage documents.
+5. Updated the homepage visual stylesheet cache version to `cinematic-redesign-20261123-1`.
+6. Restored all existing localized homepage sections and their scripts, including ZombieCash TV, Living World, Outbreak, Radar, Community Console, Snake Game, community, visitor and campaign sections.
+7. Updated the sitemap lastmod entry for `index.html`.
+8. Updated the Core Web Vitals static smoke test to expect the local hero preload asset instead of the retired Wikimedia URL.
 
 ## 3. Files Changed
 
-| File | Change | Description |
-|------|--------|-------------|
-| homepage-visual.css | Modified | Cinematic redesign + external URL replacement + scoped selectors |
-| index.html | Modified | Cache version + sponsor art slot HTML |
-| de/index.html through hi/index.html | Modified | Added sponsor art slot to all 8 localized homepages |
-| sitemap.xml | Modified | Updated lastmod for index.html |
-| reports/homepage-visual-redesign-report.md | Added | Mandatory report |
+- `homepage-visual.css` — cinematic visual layer, local assets, scoped selectors, art-panel layout.
+- `index.html` — artwork panel, stylesheet cache version, local hero preload.
+- `de/index.html` through `hi/index.html` — restored full localized pages with artwork panel and local hero preload.
+- `sitemap.xml` — homepage lastmod.
+- `tests/cwv-static-smoke.cjs` — assertion updated for the local hero asset.
+- `reports/homepage-visual-redesign-report.md` — this report.
 
-## 4. Tests Run
+## 4. Static and CI Checks
 
-| Test | Command | Result |
-|------|---------|--------|
-| SEO meta duplicate smoke | python tests/seo-meta-duplicate-smoke.py | PASS: 0 findings |
-| SEO orphan page audit | python tests/seo-orphan-page-audit.py | PASS: 0 orphans, 0 missing |
-| Sitemap lastmod smoke | python tests/sitemap-lastmod-smoke.py | PASS: 0 needing refresh |
-| Gallery sitemap lastmod | python tests/gallery-pages-sitemap-lastmod-smoke.py | PASS: 9 URLs verified |
-| Homepage smoke (survivor artwork) | manual check | PASS: all 9 locales |
+| Check | Run | Result |
+| --- | ---: | --- |
+| Homepage visual refresh smoke checks | #131 | PASS |
+| Core Web Vitals Static Guard | #113 | PASS |
+| SEO internal-link fix static smoke | #515 | PASS |
+| AI Worlds Smoke Tests | #154 | PASS |
+| Sitemap lastmod refresh | #21 | PASS |
+| Local branch visual QA | #243 | PENDING |
+| Mobile viewport smoke test | #1763 | PENDING |
 
-## 5. Browser Verification
+The passing homepage smoke confirms all nine locales have the expected language tags, canonical/hreflang metadata, stylesheet, ticker, and survivor artwork. The Core Web Vitals guard confirms deferred Jupiter loading, lazy TV artwork, promo video preload behavior, and the local hero preload asset.
 
-Performed on deployed site (zombcash.github.io) at default viewport (1345px):
+Additional source inspection:
+- All nine homepage documents contain zero `upload.wikimedia.org` references.
+- All nine pages retain the key homepage sections and the language-specific navigation.
+- `homepage-visual.css` has balanced braces (724 opening / 724 closing).
+- No standalone broad `.card` or `p` selector was found in the stylesheet.
 
-- Page loads successfully, readyState: complete
-- No horizontal overflow (scrollWidth = clientWidth = 1345)
-- Hero section exists and renders
-- No JavaScript console errors
-- Title: ZombieCash ($ZOMBCASH) on Solana — The Undead Internet
-- CSS version loaded: homepage-visual.css?v=zombie-lab-cinematic-20261116-2 (old, pre-merge)
+## 5. Browser Verification and Limitations
 
-Note: CSS version on deployed site is old. New version will be active after merge.
+The deployed-site check previously covered a 1345px viewport, with no horizontal overflow or JavaScript console errors. That deployed site still served the pre-redesign CSS at the time, so it is not evidence of the new CSS in production.
 
-## 6. Commit Information
+Playwright is installed by the GitHub Actions visual QA workflow. The first branch visual run exposed a test-classification issue: the new artwork wrapper reused the Adsterra sponsor-panel class, causing the ad-specific assertions to run against an artwork-only panel. The wrapper and related CSS selectors were renamed to `.zc-hero-art-panel`. The next visual QA and mobile viewport runs are pending.
 
-- Branch: feat/homepage-cinematic-redesign
-- Commit SHA: e40a4d90ab2efee97213ebc2c62d66e6bc7d6175
-- PR URL: https://github.com/zombcash/zombcash.github.io/pull/656
+Full acceptance requires those two pending workflows to complete successfully. No merge has been performed.
 
-## 7. Known Limitations
+## 6. Verified Code Snapshot
 
-1. Playwright not installed in environment - full visual QA at 1920/1440/1024/768/390/360px and 9 locales not performed via automated tests.
-2. Browser verification performed on deployed (old) CSS version.
-3. CSS changes are additive to minimize risk.
-
----
-
-| Проверка | Статус | Подтверждение / комментарий |
-| --- | --- | --- |
-| Desktop visual QA | PARTIAL | Verified on deployed site at 1345px, no overflow, no console errors |
-| Mobile visual QA | NOT RUN | Playwright not available |
-| 9 locales | NOT RUN | Playwright not available |
-| Navigation and CTA | NOT RUN | Requires browser verification |
-| Statistics and news | NOT RUN | Requires browser verification |
-| Console and network | PASS | 0 JS errors, 0 failed resources on deployed site |
-| SEO integrity | PASS | Python SEO tests: 0 findings |
-| Accessibility | PARTIAL | CSS focus states and reduced-motion added |
-| Build and tests | PASS | Python tests passed |
+- Branch: `feat/homepage-cinematic-redesign`
+- Code SHA before this report-only update: `a3bee5637ad37320e15de5398dd93e340497a037`
+- PR: https://github.com/zombcash/zombcash.github.io/pull/656
+- `zombcash-world` was not modified.
