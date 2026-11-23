@@ -559,7 +559,7 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
         "undead-after-dark": { de: "Untote bei Nacht", fr: "Morts-vivants nocturnes", it: "Non morti dopo il tramonto", ja: "夜更けのアンデッド", "zh-CN": "午夜不死者", ru: "Нежить после заката", tr: "Gece Yarısı Ölüleri", hi: "रात ढलने के बाद के ज़ॉम्बी" },
         "zombie-memes": { de: "Zombie-Memes", fr: "Mèmes zombies", it: "Meme zombie", ja: "ゾンビミーム", "zh-CN": "僵尸梗图", ru: "Зомби-мемы", tr: "Zombi Memleri", hi: "ज़ॉम्बी मीम" },
         "nightmare-horror": { de: "Albtraum & Horror", fr: "Cauchemar et horreur", it: "Incubo e horror", ja: "悪夢とホラー", "zh-CN": "噩梦与恐怖", ru: "Кошмары и хоррор", tr: "Kâbus ve Korku", hi: "दुःस्वप्न और हॉरर" },
-        "zombie-characters": { de: "Zombie-Charaktere", fr: "Personnages zombies", it: "Personaggi zombie", ja: "ゾンビキャラクター", "zh-CN": "僵尸角色", ru: "Персонажи-зомби", tr: "Zombi Karakterleri", hi: "ज़ॉम्बी पात्र" },
+        "zombie-characters": { de: "Zombie-Charaktere", fr: "Personnages zombies", it: "Personaggi zombie", ja: "ゾンビキャラクター", "zh-CN": "僵尸角色", ru: "Персонажи-зомби", tr: "Zombi Karakterleri", hi: "ज़ॉम्बी किरदार" },
         "crypto-apocalypse": { de: "Krypto-Apokalypse", fr: "Crypto-apocalypse", it: "Crypto-apocalisse", ja: "暗号資産アポカリプス", "zh-CN": "加密末日", ru: "Криптоапокалипсис", tr: "Kripto Kıyameti", hi: "क्रिप्टो प्रलय" },
         "community-creations": { de: "Community-Kreationen", fr: "Créations de la communauté", it: "Creazioni della community", ja: "コミュニティ作品", "zh-CN": "社区创作", ru: "Работы сообщества", tr: "Topluluk Eserleri", hi: "समुदाय की कलाकृतियाँ" }
       };
