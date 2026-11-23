@@ -1329,7 +1329,20 @@ if (zomMarket) {
 /* Zombie Radar Picks: consume the existing shared /api/radar feed.
    Time controls mirror bot-supported periods m5, h1 and h24. */
 (() => {
-  const japaneseUI = document.documentElement.lang === 'ja';
+  let localeCode = document.documentElement.lang || 'en';
+  let japaneseUI = localeCode === 'ja';
+  const signalCopy = {
+    ru:{buy:'ПОКУПКА',sell:'ПРОДАЖА',trades:'СДЕЛКИ',none:'СДЕЛОК НЕТ',unavailable:'СИГНАЛ ПОТОКА СДЕЛОК НЕДОСТУПЕН'},
+    de:{buy:'KÄUFE',sell:'VERKÄUFE',trades:'TRANSAKTIONEN',none:'KEINE TRANSAKTIONEN',unavailable:'HANDELSFLUSS-SIGNAL NICHT VERFÜGBAR'},
+    fr:{buy:'ACHATS',sell:'VENTES',trades:'TRANSACTIONS',none:'AUCUNE TRANSACTION',unavailable:'SIGNAL DE FLUX DES TRANSACTIONS INDISPONIBLE'},
+    it:{buy:'ACQUISTI',sell:'VENDITE',trades:'OPERAZIONI',none:'NESSUNA OPERAZIONE',unavailable:'SEGNALE DEL FLUSSO OPERAZIONI NON DISPONIBILE'},
+    ja:{buy:'買い',sell:'売り',trades:'取引',none:'取引なし',unavailable:'取引フローのシグナルを利用できません'},
+    'zh-CN':{buy:'买入',sell:'卖出',trades:'笔交易',none:'暂无交易',unavailable:'交易流信号不可用'},
+    tr:{buy:'ALIMLAR',sell:'SATIŞLAR',trades:'İŞLEMLER',none:'İŞLEM YOK',unavailable:'İŞLEM AKIŞI SİNYALİ KULLANILAMIYOR'},
+    hi:{buy:'खरीद',sell:'बिक्री',trades:'ट्रेड',none:'कोई ट्रेड नहीं',unavailable:'ट्रेड-फ्लो सिग्नल उपलब्ध नहीं'},
+    en:{buy:'BUY',sell:'SELL',trades:'TRADES',none:'NO TRADES',unavailable:'TRADE-FLOW SIGNAL UNAVAILABLE'}
+  };
+  const signalLabels = () => signalCopy[localeCode] || signalCopy.en;
   const apiBase = 'https://zombcash-bot.fadehost.app';
   const panel = document.querySelector('.zombie-radar-ai-panel');
   const list = document.getElementById('zombie-radar-ai-list');
@@ -1500,11 +1513,12 @@ if (zomMarket) {
       );
       const signal = document.createElement('div');
       signal.className = 'zrai-signal-line';
+      const labels = signalLabels();
       signal.textContent = metrics.hasTrades
-        ? (japaneseUI ? '買い ' : 'BUY ') + (metrics.buys === null ? '—' : metrics.buys.toLocaleString()) +
-          (japaneseUI ? ' · 売り ' : ' · SELL ') + (metrics.sells === null ? '—' : metrics.sells.toLocaleString()) +
-          ' · ' + (metrics.trades ? (japaneseUI ? '取引 ' : 'TRADES ') + metrics.trades.toLocaleString() : (japaneseUI ? '取引なし' : 'NO TRADES'))
-        : (japaneseUI ? '取引フローのシグナルを利用できません' : 'TRADE-FLOW SIGNAL UNAVAILABLE');
+        ? labels.buy + ' ' + (metrics.buys === null ? '—' : metrics.buys.toLocaleString()) +
+          ' · ' + labels.sell + ' ' + (metrics.sells === null ? '—' : metrics.sells.toLocaleString()) +
+          ' · ' + (metrics.trades ? labels.trades + ' ' + metrics.trades.toLocaleString() : labels.none)
+        : labels.unavailable;
       const addressLink = document.createElement('a');
       addressLink.className = 'zrai-address';
       addressLink.href = 'https://solscan.io/token/' + encodeURIComponent(address);
@@ -1596,6 +1610,11 @@ if (zomMarket) {
         if (lastPayload.stale) setState('STALE FEED', 'stale');
       } else load(true);
     });
+  });
+  document.addEventListener('zombcash:languagechange', event => {
+    localeCode = event.detail && event.detail.language || document.documentElement.lang || 'en';
+    japaneseUI = localeCode === 'ja';
+    if (lastPayload) render(lastPayload);
   });
   refreshButton.addEventListener('click', () => load(true));
   load(false);
