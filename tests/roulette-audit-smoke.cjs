@@ -392,8 +392,11 @@ async function checkRapidClick(browser) {
   await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded' });
   await page.locator('#wallet-connect').click();
   await page.waitForFunction(() => document.querySelector('#wallet-status')?.textContent.includes('QAWal'), null, { timeout: 15000 });
-  await page.locator('#spin-free').click();
-  await page.locator('#spin-free').click();
+  await page.evaluate(() => {
+    const button = document.querySelector('#spin-free');
+    button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+  });
   await page.waitForFunction(() => document.querySelector('#spin-result strong')?.textContent.includes('NO WIN'), null, { timeout: 15000 });
   const spinPosts = calls.filter(call => call.path === '/api/roulette/demo' && call.method === 'POST');
   if (spinPosts.length !== 1) throw new Error('Rapid double-click submitted ' + spinPosts.length + ' spin requests instead of one');
