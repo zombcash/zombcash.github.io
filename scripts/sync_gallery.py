@@ -269,7 +269,9 @@ def main():
 
         caption = re.sub(r"\s+", " ", str(item.get("caption") or "")).strip()
         slug = re.sub(r"[^a-z0-9]+", "-", str(item.get("id") or "gallery-item").lower()).strip("-")
-        if re.search(r"\bNIGHTMARE\s+DROP\b", caption, re.I):
+        if re.search(r"\bHEROINE\b", caption, re.I):
+            category = "zombie-characters"
+        elif re.search(r"\bNIGHTMARE\s+DROP\b", caption, re.I):
             category = "nightmare-horror"
         elif re.search(r"\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b", caption, re.I):
             category = "zombie-memes"
