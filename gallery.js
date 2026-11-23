@@ -295,8 +295,7 @@
       /\bNIGHTMARE\s+DROP\b/i.test(String(caption ?? "")) ||
       /\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b/i.test(String(caption ?? "")) ||
       /\bUNDEAD\s+AFTER\s+DARK\b/i.test(String(caption ?? "")) ||
-      /\bHEROINE[’']?S\s+SURVIVAL\s+DIARY\b/i.test(String(caption ?? "")) ||
-      /#ZombieCashDiary\b/i.test(String(caption ?? ""));
+      /\bHEROINE\b/i.test(String(caption ?? ""));
     const items = Array.isArray(data.items)
       ? data.items.filter(item => item.image && item.caption && !/\bZOMBIECASH\s+SITE\s+SPOTLIGHT\b/i.test(String(item.caption)) && (Array.isArray(item.category_ids) ? item.category_ids.length : allowedGalleryCaption(item.caption)))
       : [];
