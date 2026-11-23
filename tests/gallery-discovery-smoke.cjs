@@ -364,18 +364,21 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
         if (visible !== expectedVisible || JSON.stringify(await visibleCategoryIds()) !== JSON.stringify(expectedIds.slice(0, expectedVisible))) {
           throw new Error(label + " filter does not match its first category batch: expected " + expectedVisible + ", got " + visible);
         }
-      } else if (await button.count() !== 0) {
-        throw new Error("Empty " + label + " category should not be rendered as a filter");
+      } else {
+        if (await button.count() !== 1) throw new Error("The " + label + " filter must remain visible even before the first tagged post is synced");
+        await button.click();
+        if (await page.locator("#gallery-grid .gallery-card").count() !== 0) throw new Error("Empty " + label + " filter must not leak cards from another category");
       }
     };
     const expectedZombieMemeIds = galleryData.items
-      .filter(item => (item.category_ids || []).some(id => id !== "nightmare-horror" && id !== "undead-after-dark"))
+      .filter(item => (item.category_ids || []).some(id => id !== "nightmare-horror" && id !== "undead-after-dark" && id !== "zombie-characters"))
       .map(item => item.id);
     await assertCategoryFilter("Zombie Memes", expectedZombieMemeIds);
     await assertCategoryFilter("Undead After Dark", expectedCategoryIds("undead-after-dark"));
-    for (const label of ["Zombie Characters", "Apocalypse & Survival", "Crypto Apocalypse", "Community Creations"]) {
+    await assertCategoryFilter("Heroine’s Survival Diary", expectedCategoryIds("zombie-characters"));
+    for (const label of ["Apocalypse & Survival", "Crypto Apocalypse", "Community Creations"]) {
       if (await page.getByRole("button", { name: label, exact: true }).count() !== 0) {
-        throw new Error(label + " should not appear as a separate filter in the three-category gallery taxonomy");
+        throw new Error(label + " should remain outside the four editorial gallery filters");
       }
     }
     await page.locator(".gallery-reset").click();
@@ -556,15 +559,18 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
         "undead-after-dark": { de: "Untote bei Nacht", fr: "Morts-vivants nocturnes", it: "Non morti dopo il tramonto", ja: "夜更けのアンデッド", "zh-CN": "午夜不死者", ru: "Нежить после заката", tr: "Gece Yarısı Ölüleri", hi: "रात ढलने के बाद के ज़ॉम्बी" },
         "zombie-memes": { de: "Zombie-Memes", fr: "Mèmes zombies", it: "Meme zombie", ja: "ゾンビミーム", "zh-CN": "僵尸梗图", ru: "Зомби-мемы", tr: "Zombi Memleri", hi: "ज़ॉम्बी मीम" },
         "nightmare-horror": { de: "Albtraum & Horror", fr: "Cauchemar et horreur", it: "Incubo e horror", ja: "悪夢とホラー", "zh-CN": "噩梦与恐怖", ru: "Кошмары и хоррор", tr: "Kâbus ve Korku", hi: "दुःस्वप्न और हॉरर" },
+        "zombie-characters": { de: "Überlebenstagebuch der Heldin", fr: "Journal de survie de l’héroïne", it: "Diario di sopravvivenza dell’eroina", ja: "ヒロインのサバイバル日記", "zh-CN": "女主角的生存日记", ru: "Дневник выживания героини", tr: "Kahramanın Hayatta Kalma Günlüğü", hi: "नायिका की सर्वाइवल डायरी" },
         "crypto-apocalypse": { de: "Krypto-Apokalypse", fr: "Crypto-apocalypse", it: "Crypto-apocalisse", ja: "暗号資産アポカリプス", "zh-CN": "加密末日", ru: "Криптоапокалипсис", tr: "Kripto Kıyameti", hi: "क्रिप्टो प्रलय" },
         "community-creations": { de: "Community-Kreationen", fr: "Créations de la communauté", it: "Creazioni della community", ja: "コミュニティ作品", "zh-CN": "社区创作", ru: "Работы сообщества", tr: "Topluluk Eserleri", hi: "समुदाय की कलाकृतियाँ" }
       };
       const firstCategoryId = galleryData.items[0]?.category_ids?.[0];
-      const normalizedFirstCategoryId = firstCategoryId === "nightmare-horror" || firstCategoryId === "undead-after-dark" ? firstCategoryId : "zombie-memes";
+      const normalizedFirstCategoryId = ["nightmare-horror", "undead-after-dark", "zombie-characters"].includes(firstCategoryId) ? firstCategoryId : "zombie-memes";
       const localizedFirstCategory = localizedCategoryLabels[normalizedFirstCategoryId]?.[locale];
       if (localizedFirstCategory && !controls.includes(localizedFirstCategory)) {
         throw new Error(locale + " category filter label is not translated: " + localizedFirstCategory);
       }
+      const heroineLabel = localizedCategoryLabels["zombie-characters"]?.[locale];
+      if (!heroineLabel || !controls.includes(heroineLabel)) throw new Error(locale + " heroine category filter label is missing or untranslated");
       if (/NIGHTMARE & HORROR|ZOMBIECASH MEMES|ZOMBIECASH MEME|UNDEAD AFTER DARK|SITE TRANSMISSION/i.test(firstCardTitle)) throw new Error(locale + " source series header was not removed from the caption: " + firstCardTitle);
       const siteTransmissionLabels = ["Website-Meldungen", "Actualités du site", "Aggiornamenti dal sito", "サイト通信", "网站播报", "Передачи с сайта", "Site Duyuruları", "साइट अपडेट", "Site Transmissions"];
       if (controls.some(label => siteTransmissionLabels.includes(label))) throw new Error(locale + " removed Site Transmissions category is still visible");
