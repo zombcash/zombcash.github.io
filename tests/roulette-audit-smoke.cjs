@@ -2,6 +2,7 @@ const { chromium } = require('playwright');
 const fs = require('node:fs');
 const path = require('node:path');
 
+// This smoke suite uses QA-only API mocks; it never reaches production wallet or payment flows.
 const BASE_URL = process.env.SITE_URL || 'http://127.0.0.1:4173/';
 const PAGE_URL = new URL('roulette.html', BASE_URL).toString();
 const OUT_DIR = path.join(process.cwd(), 'roulette-audit-results');
