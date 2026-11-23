@@ -22,10 +22,10 @@ PAGE_SIZE = 200
 # The order is intentional: explicit series/meme labels win over broad keywords.
 CATEGORY_PATTERNS = {
     # Explicit editorial series always take priority over broad topic keywords.
+    "zombie-characters": re.compile(r"\b(?:ZOMBIE|UNDEAD)\s+(?:GIRL|BOY|CHARACTER|WARRIOR|QUEEN|KING|HUNTER|PRINCESS|HEROINE)\b|\bZOMBIE\s+CHARACTERS?\b|\bHEROINE\b", re.I),
     "nightmare-horror": re.compile(r"\bNIGHTMARE(?:\s+DROP|\s*&\s*HORROR)?\b|\bHORROR\b|\bHAUNTED\b|\bCREEPY\b|\bDREAD\b|🩸", re.I),
     "undead-after-dark": re.compile(r"\bUNDEAD\s+AFTER\s+DARK\b", re.I),
     "zombie-memes": re.compile(r"\bZOMBIECASH\s+MEMES?\b|\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b|#ZombieCashMeme\b|😂", re.I),
-    "zombie-characters": re.compile(r"\b(?:ZOMBIE|UNDEAD)\s+(?:GIRL|BOY|CHARACTER|WARRIOR|QUEEN|KING|HUNTER|PRINCESS)\b|\bZOMBIE\s+CHARACTERS?\b", re.I),
     # Crypto/market posts belong together even when they also use apocalypse language.
     "crypto-apocalypse": re.compile(r"\bCRYPTO\b|\bBITCOIN\b|\bSOLANA\b|\bMEMECOIN\b|\bTOKEN\b|\bWALLET\b|\bTRADING\b|\bPORTFOLIO\b|\bMARKET\b|\bCHARTS?\b|\bCANDLES?\b|\bHODL\b|\bBULL\b|\bBEAR\b|\bPUMP\b|\bDUMP\b", re.I),
     "apocalypse-survival": re.compile(r"\bAPOCALYPSE\s+SURVIVAL\b|\bSURVIVAL\b|\bWASTELAND\b|\bBUNKER\b|\bOUTBREAK\b|\bSCAVENGER\b|\bSHELTER\b|\bFALLOUT\b|\bEVACUATION\b|\bPOST[ -]APOCALYPTIC\b|\bSAFE\s+ZONE\b|\bSUPPLY\s+RUN\b", re.I),
@@ -269,7 +269,9 @@ def main():
 
         caption = re.sub(r"\s+", " ", str(item.get("caption") or "")).strip()
         slug = re.sub(r"[^a-z0-9]+", "-", str(item.get("id") or "gallery-item").lower()).strip("-")
-        if re.search(r"\bNIGHTMARE\s+DROP\b", caption, re.I):
+        if re.search(r"\bHEROINE\b", caption, re.I):
+            category = "zombie-characters"
+        elif re.search(r"\bNIGHTMARE\s+DROP\b", caption, re.I):
             category = "nightmare-horror"
         elif re.search(r"\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b", caption, re.I):
             category = "zombie-memes"

@@ -294,15 +294,15 @@
     const allowedGalleryCaption = caption =>
       /\bNIGHTMARE\s+DROP\b/i.test(String(caption ?? "")) ||
       /\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b/i.test(String(caption ?? "")) ||
-      /\bUNDEAD\s+AFTER\s+DARK\b/i.test(String(caption ?? ""));
+      /\bUNDEAD\s+AFTER\s+DARK\b/i.test(String(caption ?? "")) ||
+      /\bHEROINE\b/i.test(String(caption ?? ""));
     const items = Array.isArray(data.items)
       ? data.items.filter(item => item.image && item.caption && !/\bZOMBIECASH\s+SITE\s+SPOTLIGHT\b/i.test(String(item.caption)) && (Array.isArray(item.category_ids) ? item.category_ids.length : allowedGalleryCaption(item.caption)))
       : [];
-    // Keep only three clear gallery filters. Crypto-apocalypse belongs with memes;
-    // community creations remain in the main archive without a separate category.
+    // Keep four editorial filters. Crypto-apocalypse and unassigned community work stay in the main archive.
     items.forEach(item => {
       const ids = Array.isArray(item.category_ids) ? item.category_ids : [];
-      item.category_ids = [...new Set(ids.map(id => (id === "nightmare-horror" || id === "undead-after-dark") ? id : "zombie-memes"))];
+      item.category_ids = [...new Set(ids.map(id => (id === "nightmare-horror" || id === "undead-after-dark" || id === "zombie-characters") ? id : "zombie-memes"))];
     });
     localizeGalleryMeta(items, data.updated_at);
     if (!items.length) {
@@ -332,7 +332,7 @@
       tr:{"zombie-memes":"Zombi Memleri","nightmare-horror":"Kâbus ve Korku","undead-after-dark":"Gece Yarısı Ölüleri","zombie-characters":"Zombi Karakterleri","apocalypse-survival":"Kıyamet ve Hayatta Kalma","crypto-apocalypse":"Kripto Kıyameti","community-creations":"Topluluk Eserleri"},
       hi:{"zombie-memes":"ज़ॉम्बी मीम","nightmare-horror":"दुःस्वप्न और हॉरर","undead-after-dark":"रात ढलने के बाद के ज़ॉम्बी","zombie-characters":"ज़ॉम्बी किरदार","apocalypse-survival":"प्रलय और उत्तरजीविता","crypto-apocalypse":"क्रिप्टो प्रलय","community-creations":"समुदाय की कलाकृतियाँ"}
     };
-    const categories = ["zombie-memes","nightmare-horror","undead-after-dark"];
+    const categories = ["zombie-memes","nightmare-horror","undead-after-dark","zombie-characters"];
     const toolbar = document.createElement("div");
     toolbar.className = "gallery-toolbar";
     toolbar.innerHTML = '<div class="gallery-filter-row"><div class="gallery-category-filters" role="group" aria-label="Gallery categories"></div><label class="gallery-search-label"><span class="sr-only">Search gallery</span><input class="gallery-search" type="search" autocomplete="off"></label><label class="gallery-sort-label"><span class="sr-only">Sort gallery</span><select class="gallery-sort"><option value="newest"></option><option value="oldest"></option><option value="liked"></option></select></label><button class="gallery-reset" type="button"></button></div><p class="gallery-results" aria-live="polite"></p>';
@@ -379,7 +379,7 @@
       resetButton.textContent = t.clear;
       const present = new Set(items.flatMap(item => Array.isArray(item.category_ids) ? item.category_ids : []));
       filterRow.innerHTML = "";
-      const buttons = [{id:"all",label:t.all}, ...categories.filter(id => present.has(id)).map(id => ({id,label:c[id]||id}))];
+      const buttons = [{id:"all",label:t.all}, ...categories.map(id => ({id,label:c[id]||id}))];
       buttons.forEach(({id,label}) => {
         const button = document.createElement("button");
         button.type = "button";
