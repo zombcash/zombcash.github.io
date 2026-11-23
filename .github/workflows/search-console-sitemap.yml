@@ -4,20 +4,13 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+    # Resubmit only when sitemap or robots directives change. Ordinary HTML
+    # updates are discovered through the existing sitemap and internal links;
+    # resubmitting all feeds on every page edit can keep them perpetually pending.
     paths:
       - "sitemap.xml"
       - "sitemap-*.xml"
       - "robots.txt"
-      - "*.html"
-      - "ru/**"
-      - "de/**"
-      - "fr/**"
-      - "it/**"
-      - "ja/**"
-      - "zh-CN/**"
-      - "tr/**"
-      - "hi/**"
-      - ".github/workflows/search-console-sitemap.yml"
 
 permissions:
   contents: read
