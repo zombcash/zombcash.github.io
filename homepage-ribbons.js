@@ -6,8 +6,9 @@
  if(existing)existing.remove();
  if(!header && !main)return;
  var parts=location.pathname.split('/').filter(Boolean),known=['de','fr','it','ja','zh-CN','ru','tr','hi'];
- var pageLang=(document.documentElement.lang||'').toLowerCase();
- var lang=known.indexOf(pageLang)!==-1?pageLang:(parts.length&&known.indexOf(parts[0])!==-1?parts[0]:'en');
+ var normalizeLang=function(value){var code=String(value||'').toLowerCase();return code==='zh-cn'?'zh-CN':code;};
+ var pageLang=normalizeLang(document.documentElement.lang),pathLang=normalizeLang(parts[0]);
+ var lang=known.indexOf(pageLang)!==-1?pageLang:(parts.length&&known.indexOf(pathLang)!==-1?pathLang:'en');
  var copy={
  en:[['CRYPTO LIVE','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['FX RATES','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['MARKET PULSE','Live crypto prices','24-hour market changes','Currency exchange rates','Updated automatically']],
  de:[['AUSBRUCH-ALARM','Das ZombieCash-Ökosystem wächst','Neue Missionen und Spiele für Überlebende','Bleib wachsam. Bleib am Leben.'],['COMMUNITY-FEED','Memes','Spiele','Events','Missionen für Überlebende','Der Community beitreten'],['MARKTINTELLIGENZ','$ZOMBCASH auf Solana','Marktsignale und Token-Daten','Radar- und Token-Daten','Den Ausbruch verfolgen']],
@@ -20,18 +21,28 @@
  hi:[['प्रकोप चेतावनी','ZombieCash इकोसिस्टम बढ़ रहा है','सर्वाइवर्स के लिए नए मिशन और गेम','सतर्क रहें। जीवित रहें।'],['कम्युनिटी फ़ीड','मीम्स','गेम्स','इवेंट्स','सर्वाइवर मिशन','समुदाय से जुड़ें'],['मार्केट इंटेल','Solana पर $ZOMBCASH','बाज़ार संकेत और टोकन डेटा','रडार और टोकन डेटा','प्रकोप पर नज़र रखें']]
  };
  var themes=['alert','community','market'],icons=['☣','◉','▥'];
+ var liveValues={},marketSource='';
  var wrap=document.createElement('div');wrap.className='zc-outbreak-ribbons';wrap.setAttribute('role','region');wrap.setAttribute('aria-label','ZombieCash project highlights');
- (copy[lang]||copy.en).forEach(function(row,i){
-  var band=document.createElement('div');band.className='zc-ribbon zc-ribbon--'+themes[i];
-  var label=document.createElement('span');label.className='zc-ribbon-label';label.textContent=icons[i]+' '+row[0];
-  var track=document.createElement('div');track.className='zc-ribbon-track';
-  for(var repeat=0;repeat<2;repeat++){
-   var line=document.createElement('span');line.className='zc-ribbon-copy';if(repeat===1)line.setAttribute('aria-hidden','true');
-   row.slice(1).forEach(function(item){var text=document.createElement('span');text.textContent=item;line.appendChild(text);var sep=document.createElement('b');sep.textContent='•';line.appendChild(sep);});
-   track.appendChild(line);
-  }
-  band.appendChild(label);band.appendChild(track);wrap.appendChild(band);
- });
+ function storedRibbonValue(item){
+  var keys=Object.keys(liveValues);
+  for(var i=0;i<keys.length;i++)if(item.indexOf(keys[i])===0)return liveValues[keys[i]];
+  return item;
+ }
+ function renderRibbons(){
+  wrap.innerHTML='';
+  (copy[lang]||copy.en).forEach(function(row,i){
+   var band=document.createElement('div');band.className='zc-ribbon zc-ribbon--'+themes[i];
+   var label=document.createElement('span');label.className='zc-ribbon-label';label.textContent=icons[i]+' '+row[0];
+   var track=document.createElement('div');track.className='zc-ribbon-track';
+   for(var repeat=0;repeat<2;repeat++){
+    var line=document.createElement('span');line.className='zc-ribbon-copy';if(repeat===1)line.setAttribute('aria-hidden','true');
+    row.slice(1).forEach(function(item){var text=document.createElement('span');text.textContent=storedRibbonValue(item);line.appendChild(text);var sep=document.createElement('b');sep.textContent='•';line.appendChild(sep);});
+    track.appendChild(line);
+   }
+   band.appendChild(label);band.appendChild(track);wrap.appendChild(band);
+  });
+  setMarketSource(marketSource);
+ }
  wrap.style.setProperty('display','grid','important');
  wrap.style.setProperty('visibility','visible','important');
  wrap.style.setProperty('opacity','1','important');
@@ -40,7 +51,15 @@
  wrap.style.setProperty('width','100%','important');
  if(header)header.insertAdjacentElement('afterend',wrap);
  else main.insertAdjacentElement('beforebegin',wrap);
+ function setMarketSource(source){
+  marketSource=source||'';
+  var label=wrap.querySelector('.zc-ribbon--market .zc-ribbon-label');
+  var marketRows=(copy[lang]||copy.en)[0]||[];
+  var hasLiveTicker=marketRows.some(function(item){return item.indexOf('BTC:')===0;});
+  if(label)label.textContent=icons[2]+' '+(copy[lang]||copy.en)[2][0]+(marketSource&&hasLiveTicker?' · DATA: '+marketSource:'');
+ }
  function setItem(label,value){
+  liveValues[label]=value;
   var nodes=Array.prototype.slice.call(wrap.querySelectorAll('.zc-ribbon-copy span'));
   nodes.forEach(function(node){if(node.textContent.indexOf(label)===0)node.textContent=value;});
  }
@@ -54,15 +73,30 @@
  }
  function updateCrypto(){
   var symbols=['BTCUSDT','ETHUSDT','SOLUSDT'];
-  fetch('https://api.binance.com/api/v3/ticker/24hr?symbols='+encodeURIComponent(JSON.stringify(symbols)),{cache:'no-store'})
+  // Bound provider requests so a stalled Binance edge can reach the CoinGecko fallback.
+  fetch('https://api.binance.com/api/v3/ticker/24hr?symbols='+encodeURIComponent(JSON.stringify(symbols)),{cache:'no-store',signal:AbortSignal.timeout(10000)})
    .then(function(r){if(!r.ok)throw new Error('Binance HTTP '+r.status);return r.json();})
    .then(function(rows){
+    if(!Array.isArray(rows)||!symbols.every(function(symbol){return rows.some(function(row){return row&&row.symbol===symbol&&Number(row.lastPrice)>0;});}))throw new Error('Binance incomplete ticker response');
+    setMarketSource('');
     rows.forEach(function(row){
      var name=row.symbol.replace('USDT','');
      var change=Number(row.priceChangePercent);
      setItem(name+':',name+': '+fmtPrice(Number(row.lastPrice))+' ('+fmtChange(change)+')');
     });
-   }).catch(function(){['BTC','ETH','SOL'].forEach(function(s){setItem(s+':',s+': temporarily unavailable');});});
+   }).catch(function(){
+    var ids={BTC:'bitcoin',ETH:'ethereum',SOL:'solana'};
+    fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Csolana&vs_currencies=usd&include_24hr_change=true',{cache:'no-store',signal:AbortSignal.timeout(10000)})
+     .then(function(r){if(!r.ok)throw new Error('CoinGecko HTTP '+r.status);return r.json();})
+     .then(function(data){
+      if(Object.keys(ids).some(function(symbol){var quote=data[ids[symbol]]||{};return Number(quote.usd)>0;}))setMarketSource('COINGECKO');
+      Object.keys(ids).forEach(function(symbol){
+       var quote=data[ids[symbol]]||{},price=Number(quote.usd),rawChange=quote.usd_24h_change,change=rawChange===null||rawChange===undefined?NaN:Number(rawChange);
+       if(Number.isFinite(price)&&price>0)setItem(symbol+':',symbol+': '+fmtPrice(price)+(Number.isFinite(change)?' ('+fmtChange(change)+')':''));
+       else setItem(symbol+':',symbol+': temporarily unavailable');
+      });
+     }).catch(function(){['BTC','ETH','SOL'].forEach(function(symbol){setItem(symbol+':',symbol+': temporarily unavailable');});});
+   });
  }
  function updateFx(){
   fetch('https://open.er-api.com/v6/latest/USD',{cache:'no-store'})
@@ -85,5 +119,13 @@
    }).catch(function(){setItem('$ZOMBCASH:','$ZOMBCASH: temporarily unavailable');});
  }
  function refresh(){updateCrypto();updateFx();updateZombieCash();}
+ renderRibbons();
+ document.addEventListener('zombcash:languagechange',function(event){
+  var next=normalizeLang(event.detail&&event.detail.language||document.documentElement.lang);
+  if(known.indexOf(next)===-1)next='en';
+  if(next===lang)return;
+  lang=next;
+  renderRibbons();
+ });
  refresh();window.setInterval(refresh,60000);
 })();
