@@ -21,18 +21,28 @@
  hi:[['प्रकोप चेतावनी','ZombieCash इकोसिस्टम बढ़ रहा है','सर्वाइवर्स के लिए नए मिशन और गेम','सतर्क रहें। जीवित रहें।'],['कम्युनिटी फ़ीड','मीम्स','गेम्स','इवेंट्स','सर्वाइवर मिशन','समुदाय से जुड़ें'],['मार्केट इंटेल','Solana पर $ZOMBCASH','बाज़ार संकेत और टोकन डेटा','रडार और टोकन डेटा','प्रकोप पर नज़र रखें']]
  };
  var themes=['alert','community','market'],icons=['☣','◉','▥'];
+ var liveValues={},marketSource='';
  var wrap=document.createElement('div');wrap.className='zc-outbreak-ribbons';wrap.setAttribute('role','region');wrap.setAttribute('aria-label','ZombieCash project highlights');
- (copy[lang]||copy.en).forEach(function(row,i){
-  var band=document.createElement('div');band.className='zc-ribbon zc-ribbon--'+themes[i];
-  var label=document.createElement('span');label.className='zc-ribbon-label';label.textContent=icons[i]+' '+row[0];
-  var track=document.createElement('div');track.className='zc-ribbon-track';
-  for(var repeat=0;repeat<2;repeat++){
-   var line=document.createElement('span');line.className='zc-ribbon-copy';if(repeat===1)line.setAttribute('aria-hidden','true');
-   row.slice(1).forEach(function(item){var text=document.createElement('span');text.textContent=item;line.appendChild(text);var sep=document.createElement('b');sep.textContent='•';line.appendChild(sep);});
-   track.appendChild(line);
-  }
-  band.appendChild(label);band.appendChild(track);wrap.appendChild(band);
- });
+ function storedRibbonValue(item){
+  var keys=Object.keys(liveValues);
+  for(var i=0;i<keys.length;i++)if(item.indexOf(keys[i])===0)return liveValues[keys[i]];
+  return item;
+ }
+ function renderRibbons(){
+  wrap.innerHTML='';
+  (copy[lang]||copy.en).forEach(function(row,i){
+   var band=document.createElement('div');band.className='zc-ribbon zc-ribbon--'+themes[i];
+   var label=document.createElement('span');label.className='zc-ribbon-label';label.textContent=icons[i]+' '+row[0];
+   var track=document.createElement('div');track.className='zc-ribbon-track';
+   for(var repeat=0;repeat<2;repeat++){
+    var line=document.createElement('span');line.className='zc-ribbon-copy';if(repeat===1)line.setAttribute('aria-hidden','true');
+    row.slice(1).forEach(function(item){var text=document.createElement('span');text.textContent=storedRibbonValue(item);line.appendChild(text);var sep=document.createElement('b');sep.textContent='•';line.appendChild(sep);});
+    track.appendChild(line);
+   }
+   band.appendChild(label);band.appendChild(track);wrap.appendChild(band);
+  });
+  setMarketSource(marketSource);
+ }
  wrap.style.setProperty('display','grid','important');
  wrap.style.setProperty('visibility','visible','important');
  wrap.style.setProperty('opacity','1','important');
@@ -42,10 +52,14 @@
  if(header)header.insertAdjacentElement('afterend',wrap);
  else main.insertAdjacentElement('beforebegin',wrap);
  function setMarketSource(source){
+  marketSource=source||'';
   var label=wrap.querySelector('.zc-ribbon--market .zc-ribbon-label');
-  if(label)label.textContent=icons[2]+' '+(copy[lang]||copy.en)[2][0]+(source?' · DATA: '+source:'');
+  var marketRows=(copy[lang]||copy.en)[0]||[];
+  var hasLiveTicker=marketRows.some(function(item){return item.indexOf('BTC:')===0;});
+  if(label)label.textContent=icons[2]+' '+(copy[lang]||copy.en)[2][0]+(marketSource&&hasLiveTicker?' · DATA: '+marketSource:'');
  }
  function setItem(label,value){
+  liveValues[label]=value;
   var nodes=Array.prototype.slice.call(wrap.querySelectorAll('.zc-ribbon-copy span'));
   nodes.forEach(function(node){if(node.textContent.indexOf(label)===0)node.textContent=value;});
  }
@@ -105,5 +119,13 @@
    }).catch(function(){setItem('$ZOMBCASH:','$ZOMBCASH: temporarily unavailable');});
  }
  function refresh(){updateCrypto();updateFx();updateZombieCash();}
+ renderRibbons();
+ document.addEventListener('zombcash:languagechange',function(event){
+  var next=normalizeLang(event.detail&&event.detail.language||document.documentElement.lang);
+  if(known.indexOf(next)===-1)next='en';
+  if(next===lang)return;
+  lang=next;
+  renderRibbons();
+ });
  refresh();window.setInterval(refresh,60000);
 })();
