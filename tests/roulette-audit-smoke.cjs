@@ -64,12 +64,14 @@ async function installApiMocks(page, options = {}) {
       return json(route, options.statsResponse || { totalPrizeEquivalentUsd: 0, totalSpins: state.spinsToday, winners: [] });
     }
     if (url.pathname === '/api/profile') {
+      if (options.profileDelayMs) await new Promise(resolve => setTimeout(resolve, options.profileDelayMs));
       if (options.profileStatus) return json(route, { error: 'Profile unavailable' }, options.profileStatus);
       return options.auth
         ? json(route, { profile: { publicDisplayName: 'QA Survivor', firstName: 'QA' } })
         : json(route, { error: 'Unauthorized' }, 401);
     }
     if (url.pathname === '/api/roulette/demo' && request.method() === 'GET') {
+      if (options.stateDelayMs) await new Promise(resolve => setTimeout(resolve, options.stateDelayMs));
       return options.auth ? json(route, state) : json(route, { error: 'Unauthorized' }, 401);
     }
     if (url.pathname === '/api/roulette/wallet/challenge' && request.method() === 'POST') {
@@ -82,6 +84,7 @@ async function installApiMocks(page, options = {}) {
     }
     if (url.pathname === '/api/roulette/demo' && request.method() === 'POST') {
       if (!options.auth) return json(route, { error: 'Unauthorized' }, 401);
+      if (options.spinDelayMs) await new Promise(resolve => setTimeout(resolve, options.spinDelayMs));
       const body = request.postDataJSON();
       if (!body.walletAddress) return json(route, { error: 'Wallet required' }, 400);
       if (body.mode !== 'free') return json(route, { error: 'Unexpected QA spin mode' }, 400);
@@ -381,6 +384,23 @@ async function checkWalletFailureStates(browser) {
   }
 }
 
+
+async function checkRapidClick(browser) {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  const calls = await installApiMocks(page, { auth: true, profileDelayMs: 1800, stateDelayMs: 250, spinDelayMs: 500 });
+  await addQaAuthWallet(page, 'en');
+  await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded' });
+  await page.locator('#wallet-connect').click();
+  await page.waitForFunction(() => document.querySelector('#wallet-status')?.textContent.includes('QAWal'), null, { timeout: 15000 });
+  await page.locator('#spin-free').click();
+  await page.locator('#spin-free').click();
+  await page.waitForFunction(() => document.querySelector('#spin-result strong')?.textContent.includes('NO WIN'), null, { timeout: 15000 });
+  const spinPosts = calls.filter(call => call.path === '/api/roulette/demo' && call.method === 'POST');
+  if (spinPosts.length !== 1) throw new Error('Rapid double-click submitted ' + spinPosts.length + ' spin requests instead of one');
+  if (calls.some(call => /transaction|transfer|payment/i.test(call.path))) throw new Error('Rapid-click QA unexpectedly requested a transaction or payment endpoint');
+  await page.close();
+}
+
 async function checkSpinErrorLocalization(browser) {
   const dailyLimitCopy = {
     en: 'Daily spin limit reached. Come back after the UTC reset.',
@@ -431,7 +451,8 @@ async function checkSpinErrorLocalization(browser) {
     await checkAuthStates(browser);
     await checkWalletFailureStates(browser);
     await checkSpinErrorLocalization(browser);
-    console.log('Roulette audit passed: 9 locales, 7 viewports, auth/wallet failure states, localized API errors, reduced motion, and mocked server-authoritative spin.');
+    await checkRapidClick(browser);
+    console.log('Roulette audit passed: 9 locales, 7 viewports, auth/wallet failure states, localized API errors, rapid-click protection, reduced motion, and mocked server-authoritative spin.');
   } finally {
     await browser.close();
   }
