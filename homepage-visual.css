@@ -14,7 +14,7 @@ body:has(#home) .hero{background-image:linear-gradient(90deg,rgba(3,8,5,.96) 0%,
 body:has(#home) .hero:before{background:radial-gradient(ellipse at 78% 42%,#9bff4522 0,transparent 32%),linear-gradient(90deg,#03060522,transparent 60%)!important;pointer-events:none}
 body:has(#home) .hero-grid{opacity:.22!important}
 body:has(#home) .hero-content{position:relative;z-index:4}
-body:has(#home) .zc-hero-sponsor-panel{position:relative;z-index:4}
+body:has(#home) .zc-hero-art-panel{position:relative;z-index:4}
 body:has(#home) .field-manual-spotlight{backdrop-filter:blur(5px);background:linear-gradient(110deg,#0b1710ed,#10121ae8)!important;border-color:#527342!important;box-shadow:0 12px 38px #0008,0 0 24px #9bff4510}
 body:has(#home) .zc-promo-video{position:relative;isolation:isolate;background:linear-gradient(90deg,#070b09f2,#080d0be8),url("assets/zombcash-survivor-640.avif") center 55%/cover}
 body:has(#home) .zombie-maker-promo{background-image:linear-gradient(90deg,#07100df2,#09110be8),url("assets/zombcash-survivor-realistic-520.avif")!important;background-size:cover!important;background-position:center 60%!important}
@@ -83,7 +83,7 @@ body:has(#home) #home > section.hero > .hero-layout > .hero-content{
   width:100%!important;max-width:760px!important;min-width:0!important;
   margin:0!important;padding:0!important;transform:none!important;
 }
-body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel{
+body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
   grid-area:sponsor!important;grid-column:2!important;grid-row:1!important;
   position:relative!important;inset:auto!important;float:none!important;transform:none!important;
   box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
@@ -124,7 +124,7 @@ body:has(#home) #home > section.hero .hero-bottom{
     gap:24px!important;
   }
   body:has(#home) #home > section.hero > .hero-layout > .hero-content,
-  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel{
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
     grid-column:1!important;grid-row:auto!important;
     width:min(100%,900px)!important;max-width:900px!important;
     justify-self:center!important;
@@ -138,7 +138,7 @@ body:has(#home) #home > section.hero .hero-bottom{
     padding:28px 5% 24px!important;
   }
   body:has(#home) #home > section.hero > .hero-layout{gap:18px!important}
-  body:has(#home) #home > section.hero .zc-hero-sponsor-panel{padding:10px!important}
+  body:has(#home) #home > section.hero .zc-hero-art-panel{padding:10px!important}
   body:has(#home) #home > section.hero .zc-sponsor-art-slot{
     height:clamp(190px,62vw,260px)!important;min-height:190px!important;max-height:260px!important;
   }
@@ -1579,7 +1579,7 @@ body:has(#home) #home .zctv-player-column {
     grid-template-areas: "content" "sponsor" !important;
   }
   body:has(#home) #home > section.hero > .hero-layout > .hero-content,
-  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel {
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel {
     grid-column: 1 !important;
     grid-row: auto !important;
     width: min(100%, 900px) !important;
@@ -1901,7 +1901,7 @@ body:has(#home) #home > section:not(.hero){
     max-width:5600px!important;
     margin-inline:auto!important;
   }
-  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel {
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel {
     max-width:min(40vw,2400px)!important;
   }
 }
@@ -1924,7 +1924,7 @@ body:has(#home) #home > section:not(.hero){
     width:100%!important;
     max-width:none!important;
   }
-  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel {
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel {
     width:100%!important;
     max-width:min(40vw,2400px)!important;
     min-width:0!important;
@@ -1953,7 +1953,7 @@ body:has(#home) #home > section:not(.hero){
     max-width:none!important;
     min-width:0!important;
   }
-  html body:has(main#home) > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel {
+  html body:has(main#home) > main#home > section.hero > .hero-layout > .zc-hero-art-panel {
     width:100%!important;
     max-width:min(40vw,2400px)!important;
     min-width:0!important;
@@ -2432,7 +2432,7 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   body:has(main#home) #home > .hero .hero-stats span {
     font-size: clamp(10px, .38vw, 30px);
   }
-  body:has(main#home) #home > .hero .zc-hero-sponsor-panel {
+  body:has(main#home) #home > .hero .zc-hero-art-panel {
     min-width: 0;
     padding: clamp(14px, .65vw, 52px);
   }
@@ -2568,7 +2568,7 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   html body:has(main#home) main#home > section.hero > .hero-layout > .hero-content {
     width:100%!important; max-width:none!important;
   }
-  html body:has(main#home) main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel {
+  html body:has(main#home) main#home > section.hero > .hero-layout > .zc-hero-art-panel {
     width:100%!important; max-width:none!important; min-width:0!important;
   }
   html body:has(main#home) main#home > section.hero .hero-content h1,
@@ -2905,7 +2905,7 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     padding: clamp(16px,.55vw,88px) clamp(22px,.8vw,128px) !important;
     font-size: clamp(12px,.42vw,64px) !important; line-height: 1.25 !important;
   }
-  html body:has(main#home) > main#home > section.hero .zc-hero-sponsor-panel {
+  html body:has(main#home) > main#home > section.hero .zc-hero-art-panel {
     width: 100% !important; max-width: none !important; min-width: 0 !important; height: auto !important;
   }
   html body:has(main#home) > main#home > section.section { padding-block: clamp(100px,2.6vw,420px) !important; }
@@ -3189,7 +3189,7 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   }
 
   html body:has(main#home) > main#home > section.hero .hero-content,
-  html body:has(main#home) > main#home > section.hero .zc-hero-sponsor-panel,
+  html body:has(main#home) > main#home > section.hero .zc-hero-art-panel,
   html body:has(main#home) > main#home > section > :is(
     .world-grid,
     .tool-grid,
