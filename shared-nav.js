@@ -1298,7 +1298,7 @@
     if (brandSmall) brandSmall.textContent = language === 'en' ? 'THE UNDEAD INTERNET' : (brandLabels[language] || 'THE UNDEAD INTERNET');
     const brand = header.querySelector('.zsh-brand');
     if (brand) {
-      const visibleBrand = (brand.querySelector('.zsh-brand-copy')?.textContent || 'ZOMBIECASH').replace(/\\s+/g, ' ').trim();
+      const visibleBrand = (brand.querySelector('.zsh-brand-copy')?.textContent || 'ZOMBIECASH').replace(/\s+/g, ' ').trim();
       brand.setAttribute('aria-label', visibleBrand + ' HOME');
     }
     const menuToggle = header.querySelector('.zsh-menu-toggle');
@@ -1307,7 +1307,7 @@
     const languageTrigger = header.querySelector('.language-trigger');
     const languageAria = {de:'Sprache auswählen',fr:'Choisir la langue',it:'Scegli la lingua',ja:'言語を選択','zh-CN':'选择语言',ru:'Выбрать язык',tr:'Dil seçin',hi:'भाषा चुनें'};
     if (languageTrigger) {
-      const visibleLanguage = languageTrigger.textContent.trim().replace(/\\s+/g, ' ');
+      const visibleLanguage = languageTrigger.textContent.trim().replace(/\s+/g, ' ');
       languageTrigger.setAttribute('aria-label', visibleLanguage + ' — ' + (languageAria[language] || 'Choose language'));
     }
     const lineControl = document.querySelector('#zsh-about-footer .zsh-footer-line');
