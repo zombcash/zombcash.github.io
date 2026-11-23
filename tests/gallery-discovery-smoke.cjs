@@ -571,7 +571,7 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       }
       const heroineLabel = localizedCategoryLabels["zombie-characters"]?.[locale];
       if (!heroineLabel || !controls.includes(heroineLabel)) throw new Error(locale + " heroine category filter label is missing or untranslated");
-      if (/NIGHTMARE & HORROR|ZOMBIECASH MEMES|ZOMBIECASH MEME|UNDEAD AFTER DARK|SITE TRANSMISSION/i.test(firstCardTitle)) throw new Error(locale + " source series header was not removed from the caption: " + firstCardTitle);
+      if (/HEROINE[’']?S SURVIVAL DIARY|NIGHTMARE & HORROR|ZOMBIECASH MEMES|ZOMBIECASH MEME|UNDEAD AFTER DARK|SITE TRANSMISSION/i.test(firstCardTitle)) throw new Error(locale + " source series header was not removed from the caption: " + firstCardTitle);
       const siteTransmissionLabels = ["Website-Meldungen", "Actualités du site", "Aggiornamenti dal sito", "サイト通信", "网站播报", "Передачи с сайта", "Site Duyuruları", "साइट अपडेट", "Site Transmissions"];
       if (controls.some(label => siteTransmissionLabels.includes(label))) throw new Error(locale + " removed Site Transmissions category is still visible");
       if (lang !== locale) throw new Error(locale + " gallery lang mismatch: " + lang);
