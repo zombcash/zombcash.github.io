@@ -1,7 +1,7 @@
 # Homepage Visual Redesign Report
 
 **Date:** 2026-11-23  
-**Status:** COMPLETED — all seven required CI workflows passed on branch snapshot `74b0dfa96757dfb8afea34a32043fbc76800fd56`; dedicated Snake iframe runtime smoke test passed.  
+**Status:** COMPLETED — all seven required CI workflows passed on current PR head `cfb38b6265010a1d71cb5336ddf5ec540f1ca68b`; Snake iframe launch/control and full game-over/profile-save client handshake tests passed.  
 **Issue:** #655 — Cinematic ZombieCash homepage redesign  
 **Repository:** zombcash/zombcash.github.io  
 **Branch:** feat/homepage-cinematic-redesign  
@@ -25,6 +25,9 @@ Final QA found and corrected two regressions before acceptance:
 6. Restored all existing localized homepage sections and scripts, including ZombieCash TV, Living World, Outbreak, Radar, Community Console, Snake Game, community, visitor and campaign sections.
 7. Updated the sitemap lastmod entry for `index.html`.
 8. Updated Core Web Vitals and mobile responsive smoke tests to validate the local hero asset and distinguish artwork from ad slots.
+9. Added a dedicated Snake iframe runtime test for load, canvas visibility, start-message bridge and keyboard-message delivery.
+10. Added a full Snake game-over and Survivor profile-save handshake test using a mocked API, including receipt forwarding, authenticated completion, profile-stat refresh and leaderboard refresh.
+11. Updated the mobile QA workflow to run both Snake tests and upload their screenshots as CI artifacts.
 
 ## 3. Files Changed
 
@@ -34,23 +37,24 @@ Final QA found and corrected two regressions before acceptance:
 - `sitemap.xml` — homepage lastmod.
 - `tests/cwv-static-smoke.cjs` — assertion updated for the local hero preload asset.
 - `tests/mobile-viewport-smoke.cjs` — explicit survivor-art assertion, separate from Adsterra ad-slot checks.
-- `tests/arcade-snake-iframe-smoke.cjs` — new Playwright runtime smoke test for Snake iframe.
-- `.github/workflows/mobile-viewport-test.yml` — runs the new Snake test and checks its JavaScript syntax.
+- `tests/arcade-snake-iframe-smoke.cjs` — Playwright runtime smoke test for Snake iframe load and controls.
+- `tests/arcade-snake-session-save-smoke.cjs` — Playwright test for a complete Snake game-over and authenticated Survivor save handshake with a mocked API.
+- `.github/workflows/mobile-viewport-test.yml` — runs both Snake tests, checks their syntax, and uploads Snake screenshots.
 - `reports/homepage-visual-redesign-report.md` — final QA report.
 
 ## 4. CI Results
 
-All seven required workflows passed on the same tested branch head, `74b0dfa96757dfb8afea34a32043fbc76800fd56`.
+All seven required workflows passed on the same current PR head, `cfb38b6265010a1d71cb5336ddf5ec540f1ca68b`.
 
 | Check | Run | Result |
 | --- | ---: | --- |
-| Homepage visual refresh smoke checks | [#140](https://github.com/zombcash/zombcash.github.io/actions/runs/45206626484) | PASS |
-| Core Web Vitals Static Guard | [#122](https://github.com/zombcash/zombcash.github.io/actions/runs/45206626652) | PASS |
-| SEO internal-link fix static smoke | [#524](https://github.com/zombcash/zombcash.github.io/actions/runs/45206626419) | PASS |
-| Sitemap lastmod refresh | [#30](https://github.com/zombcash/zombcash.github.io/actions/runs/45206626515) | PASS |
-| AI Worlds Smoke Tests | [#163](https://github.com/zombcash/zombcash.github.io/actions/runs/45206626406) | PASS |
-| Local branch visual QA | [#252](https://github.com/zombcash/zombcash.github.io/actions/runs/45206626422) | PASS |
-| Mobile viewport smoke test | [#1772](https://github.com/zombcash/zombcash.github.io/actions/runs/45206626581) | PASS |
+| Homepage visual refresh smoke checks | [#147](https://github.com/zombcash/zombcash.github.io/actions/runs/45243283990) | PASS |
+| Core Web Vitals Static Guard | [#129](https://github.com/zombcash/zombcash.github.io/actions/runs/45243283972) | PASS |
+| SEO internal-link fix static smoke | [#531](https://github.com/zombcash/zombcash.github.io/actions/runs/45243283871) | PASS |
+| Sitemap lastmod refresh | [#38](https://github.com/zombcash/zombcash.github.io/actions/runs/45243283884) | PASS |
+| AI Worlds Smoke Tests | [#170](https://github.com/zombcash/zombcash.github.io/actions/runs/45243283935) | PASS |
+| Local branch visual QA | [#259](https://github.com/zombcash/zombcash.github.io/actions/runs/45243283853) | PASS |
+| Mobile viewport smoke test | [#1779](https://github.com/zombcash/zombcash.github.io/actions/runs/45243284022) | PASS |
 
 ## 5. Browser and Responsive QA
 
@@ -61,6 +65,8 @@ Playwright ran in GitHub Actions against a local preview of this PR branch.
 - Local branch visual QA passed ZombieCash TV desktop/tablet/mobile layout, localized article pages, Survivor Field Manual, multilingual comparison article, and language persistence/fallback routing.
 - The separate mobile suite passed homepage layouts across locales, reduced-zoom layouts, ZombieCash TV, Survivor Hub localization/navigation, and Arcade dynamic-record/progress checks.
 - The new Snake iframe test passed: the iframe document completed loading, the Snake modal opened, the canvas had non-zero visible dimensions, the Arcade Start button reached the iframe, and ArrowDown key-down/key-up messages reached the game. No uncaught page errors were reported.
+- The full Snake session/save test passed: it started a real game loop, reached normal GAME OVER, checked that the final score was sent with the test Survivor token and mocked session receipt, confirmed the parent Arcade UI showed a successful profile-save status, and verified personal progress and the Snake leaderboard were refreshed.
+- The save-flow test uses a mocked API and a QA-only token. It validates the browser/client handshake only; it does not write to or verify the production database or a real Survivor account.
 - Screenshot and diagnostic artifacts were uploaded by the successful GitHub Actions runs.
 
 The earlier deployed-site check at 1345px was performed against the old deployed CSS and is retained only as historical context; the new CSS was validated through the branch-local Playwright preview.
@@ -72,7 +78,7 @@ The earlier deployed-site check at 1345px was performed against the old deployed
 - All nine pages retain their locale tags, canonical/hreflang metadata, homepage ticker, deferred Jupiter loader, lazy TV artwork, and key homepage sections.
 - `homepage-visual.css` has balanced braces (724 opening / 724 closing).
 - No standalone broad `.card` or `p` selector was found in the stylesheet.
-- The Snake iframe smoke test uses the local branch preview, has no authenticated survivor token, and does not submit scores or perform transactions.
+- Both Snake tests use the local branch preview and mocked API responses. The save-flow test uses only a QA token; no real user token, production profile, score or transaction is involved.
 - `zombcash-world` was not modified.
 
 ## 7. Verified Code Snapshot
@@ -81,9 +87,11 @@ The earlier deployed-site check at 1345px was performed against the old deployed
 - Code snapshot before final CSS cleanup: `f2b34bfe184f935efe656c3501da42afcabc7726`.
 - Follow-up CSS cleanup commit: `16c547327322b2f044aa2173a5800234ac0ffca2`.
 - Previous visual-code snapshot and all seven CI workflows were verified on PR head `7858f3f647cc29f6c775232eb96628bfb7f319a5`.
-- Latest tested PR head, including the Snake iframe smoke test and workflow wiring: `74b0dfa96757dfb8afea34a32043fbc76800fd56`. All seven workflows passed on this head.
+- Snake iframe launch/control test added and passed on the branch before the save-flow test was introduced.
+- Snake game-over/profile-save client-handshake test added in commit `817367b2b4576c2cc6ba8064c1abd79ca553cd75`.
+- Final workflow wiring and screenshot-artifact upload commit: `cfb38b6265010a1d71cb5336ddf5ec540f1ca68b`. All seven workflows passed on this current PR head.
 - PR: https://github.com/zombcash/zombcash.github.io/pull/656
 
-**Snake iframe:** The dedicated runtime smoke test now independently launches the iframe and verifies document readiness, modal/canvas visibility, the parent Start-message bridge, and keyboard-message delivery. The historical iframe timeout was not reproduced. This is a launch/control smoke test; it does not claim to verify a complete gameplay session or score persistence.
+**Snake iframe:** The launch/control test verifies document readiness, modal/canvas visibility, the parent Start-message bridge and keyboard-message delivery. The additional session/save test exercises a complete game-over path and the authenticated client API handshake with a mocked backend. This does not constitute a production database integration test or confirm a real account's persisted score.
 
 **Merge status:** PR is open, mergeable, and has a clean merge state. It remains intentionally unmerged; no merge was performed. `zombcash-world` was not modified.
