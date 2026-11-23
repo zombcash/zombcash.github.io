@@ -1,4 +1,5 @@
 name: Refresh sitemap lastmod from page history
+# Deploy and Search Console submission workflows listen for this run's completion.
 
 on:
   workflow_dispatch:

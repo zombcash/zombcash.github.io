@@ -2,6 +2,9 @@ name: Search Console Sitemap Check
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Refresh sitemap lastmod from page history"]
+    types: [completed]
   push:
     branches: [main]
     # Resubmit only when sitemap or robots directives change. Ordinary HTML
@@ -17,6 +20,13 @@ permissions:
 
 jobs:
   sitemap:
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.head_branch == 'main' &&
+        github.event.workflow_run.name == 'Refresh sitemap lastmod from page history'
+      )
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
