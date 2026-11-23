@@ -58,6 +58,7 @@
   fetch('https://api.binance.com/api/v3/ticker/24hr?symbols='+encodeURIComponent(JSON.stringify(symbols)),{cache:'no-store',signal:AbortSignal.timeout(10000)})
    .then(function(r){if(!r.ok)throw new Error('Binance HTTP '+r.status);return r.json();})
    .then(function(rows){
+    if(!Array.isArray(rows)||!symbols.every(function(symbol){return rows.some(function(row){return row&&row.symbol===symbol&&Number(row.lastPrice)>0;});}))throw new Error('Binance incomplete ticker response');
     rows.forEach(function(row){
      var name=row.symbol.replace('USDT','');
      var change=Number(row.priceChangePercent);
