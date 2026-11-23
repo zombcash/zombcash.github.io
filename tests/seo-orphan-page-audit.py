@@ -230,7 +230,12 @@ def main():
     print(f"Reports written to {OUTPUT}/report.json and report.csv")
     if missing_files:
         raise SystemExit("FAIL: one or more sitemap pages have no corresponding repository HTML file.")
-    print("PASS: internal-link discovery audit completed.")
+    if orphans:
+        raise SystemExit(
+            f"FAIL: {len(orphans)} sitemap page(s) have no incoming internal anchor links. "
+            "Add locale-aware navigation or contextual links, or document an intentional exception."
+        )
+    print("PASS: every sitemap page has at least one incoming internal anchor link.")
 
 
 if __name__ == "__main__":
