@@ -41,6 +41,10 @@
  wrap.style.setProperty('width','100%','important');
  if(header)header.insertAdjacentElement('afterend',wrap);
  else main.insertAdjacentElement('beforebegin',wrap);
+ function setMarketSource(source){
+  var label=wrap.querySelector('.zc-ribbon--market .zc-ribbon-label');
+  if(label)label.textContent=icons[2]+' '+(copy[lang]||copy.en)[2][0]+(source?' · DATA: '+source:'');
+ }
  function setItem(label,value){
   var nodes=Array.prototype.slice.call(wrap.querySelectorAll('.zc-ribbon-copy span'));
   nodes.forEach(function(node){if(node.textContent.indexOf(label)===0)node.textContent=value;});
@@ -59,6 +63,7 @@
    .then(function(r){if(!r.ok)throw new Error('Binance HTTP '+r.status);return r.json();})
    .then(function(rows){
     if(!Array.isArray(rows)||!symbols.every(function(symbol){return rows.some(function(row){return row&&row.symbol===symbol&&Number(row.lastPrice)>0;});}))throw new Error('Binance incomplete ticker response');
+    setMarketSource('');
     rows.forEach(function(row){
      var name=row.symbol.replace('USDT','');
      var change=Number(row.priceChangePercent);
@@ -69,6 +74,7 @@
     fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Csolana&vs_currencies=usd&include_24hr_change=true',{cache:'no-store',signal:AbortSignal.timeout(10000)})
      .then(function(r){if(!r.ok)throw new Error('CoinGecko HTTP '+r.status);return r.json();})
      .then(function(data){
+      if(Object.keys(ids).some(function(symbol){var quote=data[ids[symbol]]||{};return Number(quote.usd)>0;}))setMarketSource('COINGECKO');
       Object.keys(ids).forEach(function(symbol){
        var quote=data[ids[symbol]]||{},price=Number(quote.usd),change=Number(quote.usd_24h_change);
        if(Number.isFinite(price)&&price>0)setItem(symbol+':',symbol+': '+fmtPrice(price)+(Number.isFinite(change)?' ('+fmtChange(change)+')':''));
