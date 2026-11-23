@@ -29,6 +29,7 @@ on:
       - "tests/survivor-field-manual-smoke.cjs"
       - "tests/memecoin-platforms-article-smoke.cjs"
       - "tests/language-persistence-smoke.cjs"
+      - "tests/coingecko-origin-cors-smoke.cjs"
       - "script.js"
       - "living-world-recovery.js"
       - "tests/living-world-single-loader-smoke.cjs"
@@ -75,6 +76,9 @@ jobs:
           npm init -y
           npm install --no-save playwright
           npx playwright install chromium
+
+      - name: Verify CoinGecko browser CORS from the live ZombieCash origin
+        run: node tests/coingecko-origin-cors-smoke.cjs
 
       - name: Start local static preview of this branch
         run: |
