@@ -6,16 +6,28 @@ const path = require('node:path');
 const BASE_URL = process.env.SITE_URL || 'http://127.0.0.1:4173/';
 const PAGE_URL = new URL('roulette.html', BASE_URL).toString();
 const OUT_DIR = path.join(process.cwd(), 'roulette-audit-results');
-const localeUrls = {
-  en: 'https://zombcash.github.io/roulette.html',
-  de: 'https://zombcash.github.io/roulette.html?lang=de',
-  fr: 'https://zombcash.github.io/roulette.html?lang=fr',
-  it: 'https://zombcash.github.io/roulette.html?lang=it',
-  ja: 'https://zombcash.github.io/roulette.html?lang=ja',
-  'zh-CN': 'https://zombcash.github.io/roulette.html?lang=zh-CN',
-  ru: 'https://zombcash.github.io/roulette.html?lang=ru',
-  tr: 'https://zombcash.github.io/roulette.html?lang=tr',
-  hi: 'https://zombcash.github.io/roulette.html?lang=hi',
+const localePaths = {
+  "en": "roulette.html",
+  "de": "de/roulette.html",
+  "fr": "fr/roulette.html",
+  "it": "it/roulette.html",
+  "ja": "ja/roulette.html",
+  "zh-CN": "zh-CN/roulette.html",
+  "ru": "ru/roulette.html",
+  "tr": "tr/roulette.html",
+  "hi": "hi/roulette.html"
+};
+const localeUrls = Object.fromEntries(Object.entries(localePaths).map(([locale, route]) => [locale, 'https://zombcash.github.io/' + route]));
+const seoTitles = {
+  "en": "Spin the Outbreak — ZombieCash",
+  "de": "Drehe das Ausbruchrad — ZombieCash",
+  "fr": "Faites tourner l’épidémie — ZombieCash",
+  "it": "Gira la ruota dell’epidemia — ZombieCash",
+  "ja": "アウトブレイクを回せ — ZombieCash",
+  "zh-CN": "旋转疫情转盘 — ZombieCash",
+  "ru": "Крути колесо вспышки — ZombieCash",
+  "tr": "Salgın Çarkını Çevir — ZombieCash",
+  "hi": "प्रकोप का पहिया घुमाएँ — ZombieCash"
 };
 const locales = {
   en: '🧠 AGAIN',
@@ -134,8 +146,12 @@ async function checkStaticPage(page, locale) {
   await page.addInitScript(language => {
     localStorage.setItem('zombcash-language', language);
   }, locale);
-  await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  const response = await page.goto(new URL(localePaths[locale], BASE_URL).toString(), { waitUntil: 'domcontentloaded', timeout: 60000 });
   await page.waitForSelector('#roulette-wheel .wheel-label', { timeout: 30000 });
+  const staticHtml = await response.text();
+  if (!staticHtml.includes('<html lang="'+locale+'">')) throw new Error(locale + ': server HTML lang is not localized');
+  if (!staticHtml.includes('<link rel="canonical" href="'+localeUrls[locale]+'">')) throw new Error(locale + ': server HTML canonical is not localized');
+  if (!staticHtml.includes('<title>'+seoTitles[locale]+'</title>')) throw new Error(locale + ': server HTML title is not localized');
   await page.waitForFunction(({ locale, expected }) => document.documentElement.lang === locale && [...document.querySelectorAll('.wheel-label[data-i18n="wheelAgain"]')].every(node => node.textContent.trim() === expected), { locale, expected: locales[locale] }, { timeout: 15000 });
   await page.waitForTimeout(250);
   const result = await page.evaluate(() => {
@@ -162,6 +178,7 @@ async function checkStaticPage(page, locale) {
       blankI18n: [...document.querySelectorAll('[data-i18n]')].filter(node => !node.textContent.trim()).length,
       canonical,
       ogUrl: document.querySelector('meta[property="og:url"]')?.content || '',
+      locationPathname: location.pathname,
       locationSearch: location.search,
       alternates,
       spinButtonVisible: !!document.querySelector('#spin-free') && document.querySelector('#spin-free').getBoundingClientRect().height > 0,
@@ -183,9 +200,8 @@ async function checkStaticPage(page, locale) {
     if (!result.alternates.some(item => item.lang === alternateLanguage && item.href === alternateUrl)) throw new Error(locale + ': missing or incorrect hreflang alternate for ' + alternateLanguage);
   }
   if (!result.alternates.some(item => item.lang === 'x-default' && item.href === localeUrls.en)) throw new Error(locale + ': x-default alternate is missing');
-  const selectedUrl = new URL(PAGE_URL);
-  if (locale !== 'en' && new URLSearchParams(result.locationSearch).get('lang') !== locale) throw new Error(locale + ': language query parameter was not synchronized');
-  if (locale === 'en' && new URLSearchParams(result.locationSearch).has('lang')) throw new Error('English locale should use the default URL without lang=en');
+  if (result.locationPathname !== '/' + localePaths[locale]) throw new Error(locale + ': browser URL did not use the localized path: ' + result.locationPathname);
+  if (new URLSearchParams(result.locationSearch).has('lang')) throw new Error(locale + ': legacy lang query parameter was not removed');
   if (!result.spinButtonVisible || !result.walletButtonVisible) throw new Error(locale + ': primary controls are not visible');
   if (!/signature|signatur|firma|подпис|署名|签名|imza|हस्ताक्षर/i.test(result.walletStatus)) throw new Error(locale + ': wallet signature requirement is not explained');
   if (locale === 'en' && /buy extra chances|purchases launch/i.test(result.intro)) throw new Error('English intro still promises unavailable demo purchases');
@@ -208,14 +224,14 @@ async function checkStaticPage(page, locale) {
     document.dispatchEvent(new CustomEvent('zombcash:languagechange', { detail: { language } }));
   }, alternateLocale);
   await page.waitForFunction(({ language, expected }) => document.documentElement.lang === language && [...document.querySelectorAll('.wheel-label[data-i18n="wheelAgain"]')].every(node => node.textContent.trim() === expected), { language: alternateLocale, expected: locales[alternateLocale] }, { timeout: 10000 });
-  await page.waitForFunction(expected => document.querySelector('link[rel="canonical"]')?.href === expected, localeUrls[alternateLocale], { timeout: 10000 });
+  await page.waitForFunction(({ expected, path }) => document.querySelector('link[rel="canonical"]')?.href === expected && location.pathname === path, { expected: localeUrls[alternateLocale], path: '/' + localePaths[alternateLocale] }, { timeout: 10000 });
   await page.evaluate(language => {
     localStorage.setItem('zombcash-language', language);
     window.dispatchEvent(new StorageEvent('storage', { key: 'zombcash-language', newValue: language }));
     window.dispatchEvent(new Event('focus'));
   }, locale);
   await page.waitForFunction(({ language, expected }) => document.documentElement.lang === language && [...document.querySelectorAll('.wheel-label[data-i18n="wheelAgain"]')].every(node => node.textContent.trim() === expected), { language: locale, expected: locales[locale] }, { timeout: 10000 });
-  await page.waitForFunction(expected => document.querySelector('link[rel="canonical"]')?.href === expected, localeUrls[locale], { timeout: 10000 });
+  await page.waitForFunction(({ expected, path }) => document.querySelector('link[rel="canonical"]')?.href === expected && location.pathname === path, { expected: localeUrls[locale], path: '/' + localePaths[locale] }, { timeout: 10000 });
   if (!calls.some(call => call.path === '/api/roulette/stats')) throw new Error(locale + ': public stats endpoint was not requested');
   await page.screenshot({ path: path.join(OUT_DIR, 'locale-' + locale.replace(/[^a-z0-9-]/gi, '-') + '.png'), fullPage: true });
   fs.writeFileSync(path.join(OUT_DIR, 'locale-' + locale.replace(/[^a-z0-9-]/gi, '-') + '.json'), JSON.stringify({ locale, result, errors, calls }, null, 2));
@@ -581,7 +597,7 @@ async function checkAccessibility(browser) {
     const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
     await installApiMocks(page);
     await page.addInitScript(language => localStorage.setItem('zombcash-language', language), locale);
-    await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded' });
+    await page.goto(new URL(localePaths[locale], BASE_URL).toString(), { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('#roulette-wheel .wheel-label');
     await page.addScriptTag({ path: require.resolve('axe-core') });
     const results = await page.evaluate(async () => axe.run(document, {
@@ -611,6 +627,7 @@ async function checkAccessibility(browser) {
 
 async function checkSitemapLocales() {
   const sitemap = fs.readFileSync(path.join(process.cwd(), 'sitemap.xml'), 'utf8');
+  if (sitemap.includes('roulette.html?lang=')) throw new Error('Sitemap still contains query-string roulette language URLs');
   for (const [locale, url] of Object.entries(localeUrls)) {
     const block = sitemap.split('<url>').find(item => item.includes('<loc>' + url + '</loc>'));
     if (!block || !block.includes('</url>')) throw new Error('Sitemap is missing roulette URL for ' + locale);

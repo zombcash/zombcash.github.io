@@ -6,7 +6,9 @@ on:
     branches: [main]
     paths:
       - 'roulette.html'
+      - '*/roulette.html'
       - 'roulette.js'
+      - 'language.js'
       - 'sitemap.xml'
       - 'tests/roulette-audit-smoke.cjs'
       - '.github/workflows/roulette-audit.yml'
@@ -14,7 +16,10 @@ on:
     branches: [main]
     paths:
       - 'roulette.html'
+      - '*/roulette.html'
       - 'roulette.js'
+      - 'language.js'
+      - 'sitemap.xml'
       - 'tests/roulette-audit-smoke.cjs'
       - '.github/workflows/roulette-audit.yml'
 

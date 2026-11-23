@@ -370,20 +370,39 @@ homeLink:"लाइव वर्ल्ड →"}
 };
 const langs={en,ru:{...en,...overrides.ru},de:{...en,...overrides.de},fr:{...en,...overrides.fr},it:{...en,...overrides.it},ja:{...en,...overrides.ja},'zh-CN':{...en,...overrides['zh-CN']},tr:{...en,...overrides.tr},hi:{...en,...overrides.hi}};
 const resultNames={try_tomorrow:{en:'NO WIN · TRY TOMORROW',ru:'СЕГОДНЯ БЕЗ ВЫИГРЫША'},cash1:{en:'$1 IN ZOMBCASH',ru:'$1 В ZOMBCASH',de:'$1 IN ZOMBCASH',fr:'1 $ EN ZOMBCASH',it:'$1 IN ZOMBCASH',ja:'ZOMBCASH $1相当','zh-CN':'价值$1的ZOMBCASH',tr:'ZOMBCASH $1',hi:'ZOMBCASH में $1'},again1:{en:'SPIN AGAIN',ru:'КРУТИТЬ ЕЩЁ'},again2:{en:'SPIN AGAIN',ru:'КРУТИТЬ ЕЩЁ'},cash2:{en:'$2 IN ZOMBCASH',ru:'$2 В ZOMBCASH'},cash5:{en:'$5 IN ZOMBCASH',ru:'$5 В ZOMBCASH'},cash10:{en:'$10 IN ZOMBCASH',ru:'$10 В ZOMBCASH'},super100:{en:'$100 SUPER PRIZE',ru:'СУПЕРПРИЗ $100'}};
-function lang(){let c='en';try{c=localStorage.getItem('zombcash-language')||document.documentElement.lang||'en'}catch(_){}if(c==='zh')c='zh-CN';return langs[c]?c:'en'}
+function lang(){let c='en';const parts=location.pathname.split('/').filter(Boolean);const pathLocale=parts.length>1?parts[0]:'';const queryLocale=new URLSearchParams(location.search).get('lang')||'';try{c=langs[pathLocale]?pathLocale:(langs[queryLocale]?queryLocale:(localStorage.getItem('zombcash-language')||document.documentElement.lang||'en'))}catch(_){c=langs[pathLocale]?pathLocale:(langs[queryLocale]?queryLocale:(document.documentElement.lang||'en'))}if(c==='zh')c='zh-CN';return langs[c]?c:'en'}
 function updateLocaleSeo(){
  const locale=lang();
+ const seo={
+  en:{title:'Spin the Outbreak — ZombieCash',description:'One daily free demo spin for registered survivors. No real payouts or paid spins in demo mode.'},
+  de:{title:'Drehe das Ausbruchrad — ZombieCash',description:'Ein kostenloser Demo-Dreh pro Tag für registrierte Überlebende. Keine echten Auszahlungen und keine kostenpflichtigen Drehungen im Demo-Modus.'},
+  fr:{title:'Faites tourner l’épidémie — ZombieCash',description:'Un tour de démonstration gratuit par jour pour les survivants inscrits. Aucun paiement réel ni tour payant en mode démo.'},
+  it:{title:'Gira la ruota dell’epidemia — ZombieCash',description:'Un giro demo gratuito al giorno per i sopravvissuti registrati. Nessun pagamento reale e nessun giro a pagamento in modalità demo.'},
+  ja:{title:'アウトブレイクを回せ — ZombieCash',description:'登録済みサバイバーは1日1回無料でデモ抽選に参加できます。デモモードでは実際の賞金や有料スピンはありません。'},
+  'zh-CN':{title:'旋转疫情转盘 — ZombieCash',description:'已注册的幸存者每天可免费进行一次演示抽奖。演示模式不发放真实奖励，也不提供付费抽奖。'},
+  ru:{title:'Крути колесо вспышки — ZombieCash',description:'Один бесплатный демо-спин в день для зарегистрированных выживших. В демо-режиме нет реальных выплат и платных вращений.'},
+  tr:{title:'Salgın Çarkını Çevir — ZombieCash',description:'Kayıtlı hayatta kalanlar için günde bir ücretsiz demo dönüşü. Demo modunda gerçek ödeme veya ücretli dönüş yoktur.'},
+  hi:{title:'प्रकोप का पहिया घुमाएँ — ZombieCash',description:'पंजीकृत सर्वाइवर्स के लिए प्रतिदिन एक मुफ़्त डेमो स्पिन। डेमो मोड में कोई वास्तविक भुगतान या सशुल्क स्पिन नहीं है.'}
+ };
+ const meta=seo[locale]||seo.en;
+ const path=locale==='en'?'/roulette.html':'/'+locale+'/roulette.html';
  const browserUrl=new URL(location.href);
- if(locale==='en')browserUrl.searchParams.delete('lang');
- else browserUrl.searchParams.set('lang',locale);
- const nextBrowserUrl=browserUrl.pathname+browserUrl.search+browserUrl.hash;
- if(nextBrowserUrl!==location.pathname+location.search+location.hash)history.replaceState(history.state,'',nextBrowserUrl);
- const canonicalUrl=new URL('https://zombcash.github.io/roulette.html');
- if(locale!=='en')canonicalUrl.searchParams.set('lang',locale);
+ browserUrl.searchParams.delete('lang');
+ const nextUrl=path+browserUrl.search+browserUrl.hash;
+ if(nextUrl!==location.pathname+location.search+location.hash)history.replaceState(history.state,'',nextUrl);
+ const canonicalUrl='https://zombcash.github.io'+path;
+ document.title=meta.title;
+ const setMeta=(selector,value)=>{const node=document.querySelector(selector);if(node)node.content=value};
+ setMeta('meta[name="description"]',meta.description);
+ setMeta('meta[property="og:title"]',meta.title);
+ setMeta('meta[property="og:description"]',meta.description);
+ setMeta('meta[property="og:url"]',canonicalUrl);
+ setMeta('meta[name="twitter:title"]',meta.title);
+ setMeta('meta[name="twitter:description"]',meta.description);
  const canonical=document.querySelector('link[rel="canonical"]');
- if(canonical)canonical.href=canonicalUrl.href;
- const ogUrl=document.querySelector('meta[property="og:url"]');
- if(ogUrl)ogUrl.content=canonicalUrl.href;
+ if(canonical)canonical.href=canonicalUrl;
+ const schemaNode=document.querySelector('script[type="application/ld+json"]');
+ if(schemaNode){try{const schema=JSON.parse(schemaNode.textContent);schema['@id']=canonicalUrl+'#webpage';schema.url=canonicalUrl;schema.name=meta.title;schema.description=meta.description;schema.inLanguage=locale;schemaNode.textContent=JSON.stringify(schema)}catch(_){}}
 }
 
 function tr(key,vars={}){return (langs[lang()][key]||en[key]||key).replace(/\{(\w+)\}/g,(_,k)=>vars[k]??'')}
