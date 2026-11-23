@@ -9,6 +9,7 @@ on:
       - 'tests/**'
       - '.github/workflows/deploy-pages.yml'
       - '.github/workflows/update-sitemap-lastmod.yml'
+      - '.github/workflows/search-console-sitemap.yml'
   # Gallery Preview and the sitemap lastmod updater write with GITHUB_TOKEN, so their bot pushes
   # do not start follow-up push workflows. Deploy after their successful main runs.
   workflow_run:
