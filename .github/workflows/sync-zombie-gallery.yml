@@ -62,16 +62,30 @@ jobs:
           echo "Push raced with another gallery/site commit; fetching current main."
           git fetch origin main
           if git rebase origin/main; then
-            if git push; then
-              exit 0
+            # A successful rebase can still leave generated pages stale when
+            # another commit added caption translations during Telegram sync.
+            # Rebuild all derived gallery assets on top of the newest main.
+            python scripts/sync_gallery_image_seo.py
+            python scripts/generate_localized_gallery_pages.py
+            python tests/gallery-feature-static-smoke.py
+            git add gallery-data.json gallery.html sitemap-gallery-images.xml sitemap-gallery-pages.xml robots.txt de/gallery.html fr/gallery.html it/gallery.html ja/gallery.html zh-CN/gallery.html ru/gallery.html tr/gallery.html hi/gallery.html
+            if git diff --cached --quiet; then
+              if git push; then
+                exit 0
+              fi
+            else
+              git commit -m "Refresh Zombie Gallery pages after concurrent main update"
+              if git push; then
+                exit 0
+              fi
             fi
           else
             echo "Rebase conflicted; regenerate all gallery outputs on current main."
             git rebase --abort
           fi
 
-          # If source data or editorial metadata changed concurrently, rerun
-          # the scraper and both generators against the newest committed main.
+          # If the rebase conflicted or the push raced again, rerun the scraper
+          # and both generators against the newest committed main.
           git fetch origin main
           git reset --hard origin/main
           python scripts/sync_gallery.py
