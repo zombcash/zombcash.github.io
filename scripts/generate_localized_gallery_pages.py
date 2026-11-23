@@ -19,8 +19,8 @@ ROBOTS_PATH = ROOT / "robots.txt"
 LOCALES = {
     "en": {
         "subtitle": "AI-generated artwork from our Telegram channel. Browse the archive and open any image full size.",
-        "title": "Zombie Gallery — ZombieCash",
-        "description": "Explore the ZombieCash gallery of zombie art, horror memes and undead transmissions from the community. Browse image stories and open original Telegram posts.",
+        "title": "Zombie Art & Horror Meme Gallery | ZombieCash",
+        "description": "Browse the ZombieCash zombie art gallery: horror memes, undead character art and community image stories, with links to original Telegram posts.",
         "og_locale": "en_US",
     },
     "de": {

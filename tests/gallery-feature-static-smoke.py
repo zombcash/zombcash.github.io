@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import re
 from html import escape as html_escape
 import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
@@ -72,6 +73,19 @@ class Cards(HTMLParser):
             self.current = None
 
 html = Path("gallery.html").read_text(encoding="utf-8")
+expected_gallery_title = "Zombie Art & Horror Meme Gallery | ZombieCash"
+expected_gallery_description = "Browse the ZombieCash zombie art gallery: horror memes, undead character art and community image stories, with links to original Telegram posts."
+assert '<title>Zombie Art &amp; Horror Meme Gallery | ZombieCash</title>' in html, "Gallery title must retain the improved search snippet after regeneration"
+assert '<meta name="description" content="' + expected_gallery_description + '">' in html, "Gallery description must retain the improved search snippet after regeneration"
+assert '<meta property="og:title" content="Zombie Art &amp; Horror Meme Gallery | ZombieCash">' in html
+assert '<meta property="og:description" content="' + expected_gallery_description + '">' in html
+assert '<meta name="twitter:title" content="Zombie Art &amp; Horror Meme Gallery | ZombieCash">' in html
+assert '<meta name="twitter:description" content="' + expected_gallery_description + '">' in html
+schema_match = re.search(r'<script id="gallery-collection-jsonld" type="application/ld\+json">(.*?)</script>', html, re.S)
+assert schema_match, "Gallery CollectionPage JSON-LD must exist"
+gallery_schema = json.loads(schema_match.group(1))
+assert gallery_schema.get("name") == expected_gallery_title
+assert gallery_schema.get("description") == expected_gallery_description
 parser = Cards()
 parser.feed(html)
 page_items = items[:200]
