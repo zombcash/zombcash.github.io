@@ -108,7 +108,7 @@ async function checkStaticPage(page, locale) {
   }, locale);
   await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
   await page.waitForSelector('#roulette-wheel .wheel-label', { timeout: 30000 });
-  await page.waitForFunction(() => document.documentElement.classList.contains('roulette-i18n-ready') || document.documentElement.lang !== '', null, { timeout: 15000 }).catch(() => {});
+  await page.waitForFunction(({ locale, expected }) => document.documentElement.lang === locale && [...document.querySelectorAll('.wheel-label[data-i18n="wheelAgain"]')].every(node => node.textContent.trim() === expected), { locale, expected: locales[locale] }, { timeout: 15000 });
   await page.waitForTimeout(250);
   const result = await page.evaluate(() => {
     const wheel = document.querySelector('#roulette-wheel');
@@ -141,10 +141,10 @@ async function checkStaticPage(page, locale) {
   if (result.documentWidth > result.viewportWidth + 1) throw new Error(locale + ': horizontal overflow at ' + result.viewportWidth + 'px');
   if (result.shellRect.x < -1 || result.shellRect.right > result.viewportWidth + 1) throw new Error(locale + ': wheel shell is clipped by viewport');
   if (result.blankI18n) throw new Error(locale + ': ' + result.blankI18n + ' empty translated elements');
-  if (result.canonical.length !== 1 || result.canonical[0] !== PAGE_URL) throw new Error(locale + ': canonical URL is missing or duplicated');
+  if (result.canonical.length !== 1 || result.canonical[0] !== 'https://zombcash.github.io/roulette.html') throw new Error(locale + ': canonical URL is missing or duplicated');
   if (result.alternates.length) throw new Error(locale + ': hreflang points to language variants that do not have separate URLs');
   if (!result.spinButtonVisible || !result.walletButtonVisible) throw new Error(locale + ': primary controls are not visible');
-  if (!/signature|signatur|signature|подпис|署名|签名|imza|हस्ताक्षर/i.test(result.walletNote)) throw new Error(locale + ': wallet signature requirement is not explained');
+  if (!/signature|signatur|firma|подпис|署名|签名|imza|हस्ताक्षर/i.test(result.walletStatus)) throw new Error(locale + ': wallet signature requirement is not explained');
   if (locale === 'en' && /buy extra chances|purchases launch/i.test(result.intro)) throw new Error('English intro still promises unavailable demo purchases');
   if (locale === 'ru' && /покупай дополнительные шансы|покупка дополнительных попыток/i.test(result.intro)) throw new Error('Russian intro still promises unavailable demo purchases');
   if (!/no .*transfer|no .*payout|disabled|не перевод|не выплач|禁用|支払いなし|no se transfieren|keine .*zahlung/i.test(result.demoText)) {
@@ -217,7 +217,7 @@ async function checkWalletAndSpin(browser) {
   if (!calls.some(call => call.path === '/api/roulette/wallet/verify')) throw new Error('Wallet ownership signature was not verified');
   if (calls.some(call => /transaction|transfer|payment/i.test(call.path))) throw new Error('QA flow unexpectedly requested a transaction or payment endpoint');
   await page.waitForFunction(() => document.querySelector('#spin-free')?.disabled === true, null, { timeout: 10000 });
-  if (!(await page.locator('#stats-total-spins').innerText()).trim() === '1') throw new Error('Public spin stats did not refresh after the mocked spin');
+  await page.waitForFunction(() => document.querySelector('#stats-total-spins')?.textContent.trim() === '1', null, { timeout: 10000 });
   if (errors.length) throw new Error('Wallet/spin browser errors: ' + errors.join(' | '));
   fs.writeFileSync(path.join(OUT_DIR, 'wallet-spin.json'), JSON.stringify({ calls, errors }, null, 2));
   await page.screenshot({ path: path.join(OUT_DIR, 'wallet-spin.png'), fullPage: true });
