@@ -371,8 +371,12 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     };
     const isHeroineDiary = item => /#ZombieCashDiary\b/i.test(String(item.caption || "") + " " + String(item.title || "")) ||
       /HEROINE[’']?S\s+SURVIVAL\s+DIARY/i.test(String(item.caption || "") + " " + String(item.title || ""));
+    const normalizedCategoryIds = item => {
+      if (isHeroineDiary(item)) return ["heroine-survival-diary"];
+      return [...new Set((item.category_ids || []).map(id => id === "nightmare-horror" || id === "undead-after-dark" ? id : "zombie-memes"))];
+    };
     const expectedZombieMemeIds = newestFirst(galleryData.items
-      .filter(item => !isHeroineDiary(item) && (item.category_ids || []).some(id => id !== "nightmare-horror" && id !== "undead-after-dark" && id !== "heroine-survival-diary")))
+      .filter(item => normalizedCategoryIds(item).includes("zombie-memes")))
       .map(item => item.id);
     await assertCategoryFilter("Zombie Memes", expectedZombieMemeIds);
     await assertCategoryFilter("Undead After Dark", expectedCategoryIds("undead-after-dark"));
