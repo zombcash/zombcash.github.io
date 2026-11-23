@@ -113,7 +113,7 @@ const calls = { start: [], complete: [], progress: [], leaderboard: [] };
 
     fs.mkdirSync(resultsDir, { recursive: true });
     await page.screenshot({ path: path.join(resultsDir, 'arcade-snake-session-save.png'), fullPage: true });
-    await frame.screenshot({ path: path.join(resultsDir, 'snake-game-over.png'), fullPage: true });
+    await iframe.screenshot({ path: path.join(resultsDir, 'snake-game-over.png') });
 
     console.log(JSON.stringify({
       result: 'PASS',
