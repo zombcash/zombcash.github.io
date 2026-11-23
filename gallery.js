@@ -42,13 +42,13 @@
     .split(/━━━━━━━━|🧟\s*\$ZOMBCASH|MARKET DIED\.|📋\s*CA:|🌐\s*Website:|𝕏\s*X Community|💬\s*Telegram/i)[0]
     .trim();
   const cleanCardTitle = value => cleanCaption(value)
-    .replace(/^(?:🩸|🌙|😂|🛰️)\s*(?:NIGHTMARE\s*&\s*HORROR|NIGHTMARE\s+DROP|ZOMBIECASH\s+MEMES?|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|UNDEAD\s+AFTER\s+DARK|ZOMBIECASH\s+SITE\s+TRANSMISSION)\s*/i, "")
+    .replace(/^(?:🩸|🌙|😂|🛰️|📓)\s*(?:HEROINE[’']?S\s+SURVIVAL\s+DIARY|NIGHTMARE\s*&\s*HORROR|NIGHTMARE\s+DROP|ZOMBIECASH\s+MEMES?|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|UNDEAD\s+AFTER\s+DARK|ZOMBIECASH\s+SITE\s+TRANSMISSION)\s*/i, "")
     .trim();
   const splitGalleryCaption = value => {
     let text = cleanCaption(value);
     const hashtags = [...text.matchAll(/#[\p{L}\p{N}_]+/gu)].map(match => match[0]);
     text = text.replace(/#[\p{L}\p{N}_]+/gu, " ").replace(/\s+/g, " ").trim();
-    const headingMatch = text.match(/^(?:🌙\s*UNDEAD\s+AFTER\s+DARK|😂\s*ZOMBIECASH\s+MEMES?|🩸\s*NIGHTMARE\s*(?:&|AND)\s*HORROR|🛰️\s*ZOMBIECASH\s+SITE\s+TRANSMISSION|NIGHTMARE\s+DROP|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|ZOMBIECASH\s+MEMES?)/i);
+    const headingMatch = text.match(/^(?:📓\s*HEROINE[’']?S\s+SURVIVAL\s+DIARY|HEROINE[’']?S\s+SURVIVAL\s+DIARY|🌙\s*UNDEAD\s+AFTER\s+DARK|😂\s*ZOMBIECASH\s+MEMES?|🩸\s*NIGHTMARE\s*(?:&|AND)\s*HORROR|🛰️\s*ZOMBIECASH\s+SITE\s+TRANSMISSION|NIGHTMARE\s+DROP|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|ZOMBIECASH\s+MEMES?)/i);
     const heading = headingMatch ? headingMatch[0].trim() : "";
     if (heading) text = text.slice(headingMatch[0].length).trim();
     return {caption:text, meta:[heading, [...new Set(hashtags)].join(" ")].filter(Boolean).join("  ·  ")};
@@ -291,17 +291,23 @@
     }),
     timeout
   ]).then(data => {
+    const isHeroineDiary = item => /#ZombieCashDiary\b/i.test(String(item?.caption ?? "") + " " + String(item?.title ?? "")) || /HEROINE[’']?S\s+SURVIVAL\s+DIARY/i.test(String(item?.caption ?? "") + " " + String(item?.title ?? ""));
     const allowedGalleryCaption = caption =>
+      isHeroineDiary({caption}) ||
       /\bNIGHTMARE\s+DROP\b/i.test(String(caption ?? "")) ||
       /\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b/i.test(String(caption ?? "")) ||
       /\bUNDEAD\s+AFTER\s+DARK\b/i.test(String(caption ?? ""));
     const items = Array.isArray(data.items)
       ? data.items.filter(item => item.image && item.caption && !/\bZOMBIECASH\s+SITE\s+SPOTLIGHT\b/i.test(String(item.caption)) && (Array.isArray(item.category_ids) ? item.category_ids.length : allowedGalleryCaption(item.caption)))
       : [];
-    // Keep only three clear gallery filters. Crypto-apocalypse belongs with memes;
-    // community creations remain in the main archive without a separate category.
+    // The heroine diary is a distinct fourth story series, identified by its heading or hashtag.
+    // Keep it separate even when diary captions contain generic horror vocabulary.
     items.forEach(item => {
       const ids = Array.isArray(item.category_ids) ? item.category_ids : [];
+      if (isHeroineDiary(item)) {
+        item.category_ids = ["heroine-survival-diary"];
+        return;
+      }
       item.category_ids = [...new Set(ids.map(id => (id === "nightmare-horror" || id === "undead-after-dark") ? id : "zombie-memes"))];
     });
     localizeGalleryMeta(items, data.updated_at);
@@ -322,17 +328,17 @@
       hi:{previousPage:"← पिछले 200",nextPage:"अगले 200 →",page:"पृष्ठ",mostLiked:"सबसे लोकप्रिय",like:"पसंद",unlike:"पसंद किया",loginLike:"पसंद करने के लिए Telegram से लॉग इन करें",likeError:"पसंद अपडेट नहीं हो सकी। फिर प्रयास करें।",categories:"गैलरी श्रेणियाँ",clear:"फ़िल्टर साफ़ करें",all:"सभी कलाकृतियाँ",search:"शीर्षक, विवरण या टैग खोजें…",sort:"क्रम",newest:"नवीनतम पहले",oldest:"सबसे पुरानी पहले",results:"परिणाम",empty:"इस फ़िल्टर से कोई इमेज नहीं मिली।"}
     };
     const categoryText = {
-      en:{"zombie-memes":"Zombie Memes","nightmare-horror":"Nightmare & Horror","undead-after-dark":"Undead After Dark","zombie-characters":"Zombie Characters","apocalypse-survival":"Apocalypse & Survival","crypto-apocalypse":"Crypto Apocalypse","community-creations":"Community Creations"},
-      ru:{"zombie-memes":"Зомби-мемы","nightmare-horror":"Кошмары и хоррор","undead-after-dark":"Нежить после заката","zombie-characters":"Персонажи-зомби","apocalypse-survival":"Апокалипсис и выживание","crypto-apocalypse":"Криптоапокалипсис","community-creations":"Работы сообщества"},
-      de:{"zombie-memes":"Zombie-Memes","nightmare-horror":"Albtraum & Horror","undead-after-dark":"Untote bei Nacht","zombie-characters":"Zombie-Charaktere","apocalypse-survival":"Apokalypse & Überleben","crypto-apocalypse":"Krypto-Apokalypse","community-creations":"Community-Kreationen"},
-      fr:{"zombie-memes":"Mèmes zombies","nightmare-horror":"Cauchemar et horreur","undead-after-dark":"Morts-vivants nocturnes","zombie-characters":"Personnages zombies","apocalypse-survival":"Apocalypse et survie","crypto-apocalypse":"Crypto-apocalypse","community-creations":"Créations de la communauté"},
-      it:{"zombie-memes":"Meme zombie","nightmare-horror":"Incubo e horror","undead-after-dark":"Non morti dopo il tramonto","zombie-characters":"Personaggi zombie","apocalypse-survival":"Apocalisse e sopravvivenza","crypto-apocalypse":"Crypto-apocalisse","community-creations":"Creazioni della community"},
-      ja:{"zombie-memes":"ゾンビミーム","nightmare-horror":"悪夢とホラー","undead-after-dark":"夜更けのアンデッド","zombie-characters":"ゾンビキャラクター","apocalypse-survival":"終末とサバイバル","crypto-apocalypse":"暗号資産アポカリプス","community-creations":"コミュニティ作品"},
-      "zh-CN":{"zombie-memes":"僵尸梗图","nightmare-horror":"噩梦与恐怖","undead-after-dark":"午夜不死者","zombie-characters":"僵尸角色","apocalypse-survival":"末日与生存","crypto-apocalypse":"加密末日","community-creations":"社区创作"},
-      tr:{"zombie-memes":"Zombi Memleri","nightmare-horror":"Kâbus ve Korku","undead-after-dark":"Gece Yarısı Ölüleri","zombie-characters":"Zombi Karakterleri","apocalypse-survival":"Kıyamet ve Hayatta Kalma","crypto-apocalypse":"Kripto Kıyameti","community-creations":"Topluluk Eserleri"},
-      hi:{"zombie-memes":"ज़ॉम्बी मीम","nightmare-horror":"दुःस्वप्न और हॉरर","undead-after-dark":"रात ढलने के बाद के ज़ॉम्बी","zombie-characters":"ज़ॉम्बी किरदार","apocalypse-survival":"प्रलय और उत्तरजीविता","crypto-apocalypse":"क्रिप्टो प्रलय","community-creations":"समुदाय की कलाकृतियाँ"}
+      en:{"zombie-memes":"Zombie Memes","nightmare-horror":"Nightmare & Horror","undead-after-dark":"Undead After Dark","zombie-characters":"Zombie Characters","apocalypse-survival":"Apocalypse & Survival","crypto-apocalypse":"Crypto Apocalypse","community-creations":"Community Creations","heroine-survival-diary":"Heroine’s Survival Diary"},
+      ru:{"zombie-memes":"Зомби-мемы","nightmare-horror":"Кошмары и хоррор","undead-after-dark":"Нежить после заката","zombie-characters":"Персонажи-зомби","apocalypse-survival":"Апокалипсис и выживание","crypto-apocalypse":"Криптоапокалипсис","community-creations":"Работы сообщества","heroine-survival-diary":"Дневник выживания героини"},
+      de:{"zombie-memes":"Zombie-Memes","nightmare-horror":"Albtraum & Horror","undead-after-dark":"Untote bei Nacht","zombie-characters":"Zombie-Charaktere","apocalypse-survival":"Apokalypse & Überleben","crypto-apocalypse":"Krypto-Apokalypse","community-creations":"Community-Kreationen","heroine-survival-diary":"Überlebenstagebuch der Heldin"},
+      fr:{"zombie-memes":"Mèmes zombies","nightmare-horror":"Cauchemar et horreur","undead-after-dark":"Morts-vivants nocturnes","zombie-characters":"Personnages zombies","apocalypse-survival":"Apocalypse et survie","crypto-apocalypse":"Crypto-apocalypse","community-creations":"Créations de la communauté","heroine-survival-diary":"Journal de survie de l’héroïne"},
+      it:{"zombie-memes":"Meme zombie","nightmare-horror":"Incubo e horror","undead-after-dark":"Non morti dopo il tramonto","zombie-characters":"Personaggi zombie","apocalypse-survival":"Apocalisse e sopravvivenza","crypto-apocalypse":"Crypto-apocalisse","community-creations":"Creazioni della community","heroine-survival-diary":"Diario di sopravvivenza dell’eroina"},
+      ja:{"zombie-memes":"ゾンビミーム","nightmare-horror":"悪夢とホラー","undead-after-dark":"夜更けのアンデッド","zombie-characters":"ゾンビキャラクター","apocalypse-survival":"終末とサバイバル","crypto-apocalypse":"暗号資産アポカリプス","community-creations":"コミュニティ作品","heroine-survival-diary":"ヒロインのサバイバル日記"},
+      "zh-CN":{"zombie-memes":"僵尸梗图","nightmare-horror":"噩梦与恐怖","undead-after-dark":"午夜不死者","zombie-characters":"僵尸角色","apocalypse-survival":"末日与生存","crypto-apocalypse":"加密末日","community-creations":"社区创作","heroine-survival-diary":"女主角的生存日记"},
+      tr:{"zombie-memes":"Zombi Memleri","nightmare-horror":"Kâbus ve Korku","undead-after-dark":"Gece Yarısı Ölüleri","zombie-characters":"Zombi Karakterleri","apocalypse-survival":"Kıyamet ve Hayatta Kalma","crypto-apocalypse":"Kripto Kıyameti","community-creations":"Topluluk Eserleri","heroine-survival-diary":"Kahramanın Hayatta Kalma Günlüğü"},
+      hi:{"zombie-memes":"ज़ॉम्बी मीम","nightmare-horror":"दुःस्वप्न और हॉरर","undead-after-dark":"रात ढलने के बाद के ज़ॉम्बी","zombie-characters":"ज़ॉम्बी किरदार","apocalypse-survival":"प्रलय और उत्तरजीविता","crypto-apocalypse":"क्रिप्टो प्रलय","community-creations":"समुदाय की कलाकृतियाँ","heroine-survival-diary":"नायिका की उत्तरजीविता डायरी"}
     };
-    const categories = ["zombie-memes","nightmare-horror","undead-after-dark"];
+    const categories = ["zombie-memes","nightmare-horror","undead-after-dark","heroine-survival-diary"];
     const toolbar = document.createElement("div");
     toolbar.className = "gallery-toolbar";
     toolbar.innerHTML = '<div class="gallery-filter-row"><div class="gallery-category-filters" role="group" aria-label="Gallery categories"></div><label class="gallery-search-label"><span class="sr-only">Search gallery</span><input class="gallery-search" type="search" autocomplete="off"></label><label class="gallery-sort-label"><span class="sr-only">Sort gallery</span><select class="gallery-sort"><option value="newest"></option><option value="oldest"></option><option value="liked"></option></select></label><button class="gallery-reset" type="button"></button></div><p class="gallery-results" aria-live="polite"></p>';
