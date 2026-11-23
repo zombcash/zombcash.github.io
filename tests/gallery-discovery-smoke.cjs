@@ -369,7 +369,7 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       }
     };
     const expectedZombieMemeIds = galleryData.items
-      .filter(item => (item.category_ids || []).some(id => id !== "nightmare-horror" && id !== "undead-after-dark"))
+      .filter(item => (item.category_ids || []).some(id => id !== "nightmare-horror" && id !== "undead-after-dark" && id !== "heroine-survival-diary"))
       .map(item => item.id);
     await assertCategoryFilter("Zombie Memes", expectedZombieMemeIds);
     await assertCategoryFilter("Undead After Dark", expectedCategoryIds("undead-after-dark"));
