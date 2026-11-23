@@ -1690,6 +1690,55 @@ const additionalCorePageTranslations={
     "hi": "ग्रुप शेयरिंग जनरेट की गई तस्वीर और आपका कैप्शन ZombieCash Telegram ग्रुप में भेजती है। X अलग पोस्ट ड्राफ्ट खोलता है; डाउनलोड की गई तस्वीर वहाँ खुद जोड़ें。"
   }
 };
+
+/* Dynamic homepage labels used by shared scripts (RSS, ZCTV, radar, arcade and activity). */
+const dynamicHomepageTranslations = {
+  "RSS FEED ONLINE": {ru:"RSS-КАНАЛ РАБОТАЕТ",de:"RSS-FEED ONLINE",fr:"FLUX RSS EN LIGNE",it:"FEED RSS ONLINE",ja:"RSSフィード稼働中","zh-CN":"RSS 订阅已上线",tr:"RSS AKIŞI ÇEVRİM İÇİ",hi:"RSS फ़ीड ऑनलाइन"},
+  "LAST KNOWN RSS": {ru:"ПОСЛЕДНИЕ ИЗВЕСТНЫЕ ДАННЫЕ RSS",de:"LETZTER BEKANNTER RSS-STAND",fr:"DERNIÈRES DONNÉES RSS CONNUES",it:"ULTIMI DATI RSS NOTI",ja:"RSSの最新既知データ","zh-CN":"最近一次已知 RSS 数据",tr:"BİLİNEN SON RSS VERİSİ",hi:"RSS का अंतिम ज्ञात डेटा"},
+  "SYNCING RSS": {ru:"СИНХРОНИЗАЦИЯ RSS",de:"RSS WIRD SYNCHRONISIERT",fr:"SYNCHRONISATION RSS",it:"SINCRONIZZAZIONE RSS",ja:"RSSを同期中","zh-CN":"正在同步 RSS",tr:"RSS EŞİTLENİYOR",hi:"RSS सिंक हो रहा है"},
+  "RSS FEED QUIET": {ru:"В RSS-КАНАЛЕ ПОКА ТИХО",de:"RSS-FEED IST DERZEIT RUHIG",fr:"FLUX RSS SANS NOUVEAUTÉ",it:"NESSUNA NOVITÀ NEL FEED RSS",ja:"RSSフィードに新着なし","zh-CN":"RSS 暂无更新",tr:"RSS AKIŞINDA YENİLİK YOK",hi:"RSS फ़ीड में अभी कोई नई खबर नहीं"},
+  "WAITING FOR EXTERNAL NEWS": {ru:"ОЖИДАНИЕ ВНЕШНИХ НОВОСТЕЙ",de:"WARTET AUF EXTERNE NACHRICHTEN",fr:"EN ATTENTE D’ACTUALITÉS EXTERNES",it:"IN ATTESA DI NOTIZIE ESTERNE",ja:"外部ニュースを待機中","zh-CN":"等待外部新闻",tr:"HARİCİ HABERLER BEKLENİYOR",hi:"बाहरी खबरों की प्रतीक्षा"},
+  "UPDATED": {ru:"ОБНОВЛЕНО",de:"AKTUALISIERT",fr:"MIS À JOUR",it:"AGGIORNATO",ja:"更新済み","zh-CN":"已更新",tr:"GÜNCELLENDİ",hi:"अपडेट किया गया"},
+  "AUTOMATIC RETRY ENABLED": {ru:"АВТОМАТИЧЕСКИЙ ПОВТОР ВКЛЮЧЁН",de:"AUTOMATISCHER NEUVERSUCH AKTIV",fr:"NOUVELLE TENTATIVE AUTOMATIQUE ACTIVÉE",it:"NUOVO TENTATIVO AUTOMATICO ATTIVO",ja:"自動再試行が有効","zh-CN":"已启用自动重试",tr:"OTOMATİK YENİDEN DENEME ETKİN",hi:"स्वचालित पुनः प्रयास चालू"},
+  "LATEST": {ru:"ПОСЛЕДНЕЕ",de:"NEUESTE",fr:"DERNIER",it:"ULTIMO",ja:"最新","zh-CN":"最新",tr:"EN YENİ",hi:"नवीनतम"},
+  "ZOMBIE COMMENTARY": {ru:"КОММЕНТАРИЙ ЗОМБИ",de:"ZOMBIE-KOMMENTAR",fr:"COMMENTAIRE ZOMBIE",it:"COMMENTO ZOMBIE",ja:"ゾンビ解説","zh-CN":"僵尸点评",tr:"ZOMBİ YORUMU",hi:"ज़ॉम्बी टिप्पणी"},
+  "ZOMBIECASH ORIGINAL": {ru:"ОРИГИНАЛ ZOMBIECASH",de:"ZOMBIECASH-ORIGINAL",fr:"ORIGINAL ZOMBIECASH",it:"ORIGINALE ZOMBIECASH",ja:"ZOMBIECASHオリジナル","zh-CN":"ZOMBIECASH 原创",tr:"ZOMBIECASH ÖZEL",hi:"ZOMBIECASH ओरिजिनल"},
+  "OUTBREAK WIRE": {ru:"ЛЕНТА ВСПЫШКИ",de:"AUSBRUCHS-MELDUNGEN",fr:"FIL DE L’ÉPIDÉMIE",it:"NOTIZIE DEL FOCOLAIO",ja:"アウトブレイク通信","zh-CN":"疫情快讯",tr:"SALGIN HABERLERİ",hi:"प्रकोप समाचार"},
+  "ALL EPISODES": {ru:"ВСЕ ВЫПУСКИ",de:"ALLE FOLGEN",fr:"TOUS LES ÉPISODES",it:"TUTTI GLI EPISODI",ja:"全エピソード","zh-CN":"全部剧集",tr:"TÜM BÖLÜMLER",hi:"सभी एपिसोड"},
+  "OUTBREAK NEWS": {ru:"НОВОСТИ ВСПЫШКИ",de:"AUSBRUCHS-NEWS",fr:"ACTUALITÉS DE L’ÉPIDÉMIE",it:"NOTIZIE DEL FOCOLAIO",ja:"アウトブレイクニュース","zh-CN":"疫情新闻",tr:"SALGIN HABERLERİ",hi:"प्रकोप समाचार"},
+  "MEME SHOW": {ru:"МЕМ-ШОУ",de:"MEME-SHOW",fr:"ÉMISSION DE MÈMES",it:"SHOW DEI MEME",ja:"ミームショー","zh-CN":"表情包秀",tr:"MEME ŞOVU",hi:"मीम शो"},
+  "ZOMBIE LAB": {ru:"ЗОМБИ-ЛАБОРАТОРИЯ",de:"ZOMBIE-LABOR",fr:"LABORATOIRE ZOMBIE",it:"LABORATORIO ZOMBIE",ja:"ゾンビラボ","zh-CN":"僵尸实验室",tr:"ZOMBİ LABORATUVARI",hi:"ज़ॉम्बी लैब"},
+  "FEATURED TRANSMISSION": {ru:"РЕКОМЕНДУЕМАЯ ТРАНСЛЯЦИЯ",de:"AUSGEWÄHLTE ÜBERTRAGUNG",fr:"TRANSMISSION À LA UNE",it:"TRASMISSIONE IN EVIDENZA",ja:"注目の通信","zh-CN":"精选播报",tr:"ÖNE ÇIKAN YAYIN",hi:"विशेष प्रसारण"},
+  "OPEN / DOWNLOAD ↗": {ru:"ОТКРЫТЬ / СКАЧАТЬ ↗",de:"ÖFFNEN / HERUNTERLADEN ↗",fr:"OUVRIR / TÉLÉCHARGER ↗",it:"APRI / SCARICA ↗",ja:"開く / ダウンロード ↗","zh-CN":"打开 / 下载 ↗",tr:"AÇ / İNDİR ↗",hi:"खोलें / डाउनलोड करें ↗"},
+  "PRESS PLAY": {ru:"НАЖМИТЕ PLAY",de:"ZUM ABSPIELEN DRÜCKEN",fr:"APPUYEZ SUR LECTURE",it:"PREMI PLAY",ja:"再生を押す","zh-CN":"按下播放",tr:"OYNAT'A BAS",hi:"चलाने के लिए दबाएँ"},
+  "OFFICIAL ZOMBIECASH PROMO": {ru:"ОФИЦИАЛЬНЫЙ ПРОМОРОЛИК ZOMBIECASH",de:"OFFIZIELLER ZOMBIECASH-PROMOCLIP",fr:"PROMO OFFICIELLE ZOMBIECASH",it:"PROMO UFFICIALE ZOMBIECASH",ja:"ZOMBIECASH公式プロモ","zh-CN":"ZOMBIECASH 官方宣传片",tr:"RESMÎ ZOMBIECASH TANITIMI",hi:"आधिकारिक ZOMBIECASH प्रोमो"},
+  "LIVE TRANSMISSION": {ru:"ПРЯМАЯ ТРАНСЛЯЦИЯ",de:"LIVE-ÜBERTRAGUNG",fr:"TRANSMISSION EN DIRECT",it:"TRASMISSIONE IN DIRETTA",ja:"ライブ配信","zh-CN":"直播传输",tr:"CANLI YAYIN",hi:"लाइव प्रसारण"},
+  "LIVE TRANSMISSION // MUTED": {ru:"ПРЯМАЯ ТРАНСЛЯЦИЯ // БЕЗ ЗВУКА",de:"LIVE-ÜBERTRAGUNG // STUMM",fr:"EN DIRECT // MUET",it:"DIRETTA // SENZA AUDIO",ja:"ライブ配信 // ミュート","zh-CN":"直播传输 // 静音",tr:"CANLI YAYIN // SESSİZ",hi:"लाइव प्रसारण // म्यूट"},
+  "VIDEO TRANSMISSION READY": {ru:"ВИДЕОТРАНСЛЯЦИЯ ГОТОВА",de:"VIDEÜBERTRAGUNG BEREIT",fr:"VIDÉO PRÊTE À ÊTRE DIFFUSÉE",it:"VIDEO PRONTO ALLA TRASMISSIONE",ja:"動画配信の準備完了","zh-CN":"视频传输已就绪",tr:"VİDEO YAYINI HAZIR",hi:"वीडियो प्रसारण तैयार"},
+  "HOVER OR TAP TO PLAY": {ru:"НАВЕДИТЕ ИЛИ НАЖМИТЕ ДЛЯ ВОСПРОИЗВЕДЕНИЯ",de:"ZUM ABSPIELEN HOVER ODER TIPPEN",fr:"SURVOLEZ OU TOUCHEZ POUR LIRE",it:"PASSA O TOCCA PER RIPRODURRE",ja:"ホバーまたはタップで再生","zh-CN":"悬停或点击播放",tr:"OYNATMAK İÇİN ÜZERİNE GELİN VEYA DOKUNUN",hi:"चलाने के लिए होवर या टैप करें"},
+  "TAP TO PAUSE": {ru:"НАЖМИТЕ, ЧТОБЫ ПРИОСТАНОВИТЬ",de:"ZUM PAUSIEREN TIPPEN",fr:"TOUCHEZ POUR METTRE EN PAUSE",it:"TOCCA PER METTERE IN PAUSA",ja:"タップして一時停止","zh-CN":"点击暂停",tr:"DURAKLATMAK İÇİN DOKUNUN",hi:"रोकने के लिए टैप करें"},
+  "VIDEO COULD NOT LOAD — RETRY": {ru:"НЕ УДАЛОСЬ ЗАГРУЗИТЬ ВИДЕО — ПОВТОРИТЕ ПОПЫТКУ",de:"VIDEO KANN NICHT GELADEN WERDEN — ERNEUT VERSUCHEN",fr:"IMPOSSIBLE DE CHARGER LA VIDÉO — RÉESSAYEZ",it:"IMPOSSIBILE CARICARE IL VIDEO — RIPROVA",ja:"動画を読み込めません — 再試行","zh-CN":"视频无法加载 — 请重试",tr:"VİDEO YÜKLENEMEDİ — YENİDEN DENEYİN",hi:"वीडियो लोड नहीं हुआ — फिर प्रयास करें"},
+  "PLAY AGAIN": {ru:"ИГРАТЬ ЕЩЁ",de:"NOCH EINMAL SPIELEN",fr:"REJOUER",it:"GIOCA ANCORA",ja:"もう一度プレイ","zh-CN":"再玩一次",tr:"TEKRAR OYNA",hi:"फिर खेलें"},
+  "SURVIVED": {ru:"ВЫЖИЛ",de:"ÜBERLEBT",fr:"SURVÉCU",it:"SOPRAVVISSUTO",ja:"生存","zh-CN":"幸存",tr:"HAYATTA KALDI",hi:"जीवित बचे"},
+  "GAME OVER": {ru:"ИГРА ОКОНЧЕНА",de:"SPIEL VORBEI",fr:"PARTIE TERMINÉE",it:"FINE PARTITA",ja:"ゲームオーバー","zh-CN":"游戏结束",tr:"OYUN BİTTİ",hi:"खेल समाप्त"},
+  "BUY": {ru:"ПОКУПКА",de:"KAUF",fr:"ACHAT",it:"ACQUISTO",ja:"買い","zh-CN":"买入",tr:"ALIM",hi:"खरीद"},
+  "SELL": {ru:"ПРОДАЖА",de:"VERKAUF",fr:"VENTE",it:"VENDITA",ja:"売り","zh-CN":"卖出",tr:"SATIŞ",hi:"बिक्री"},
+  "TRADE": {ru:"СДЕЛКА",de:"HANDEL",fr:"ÉCHANGE",it:"SCAMBIO",ja:"取引","zh-CN":"交易",tr:"İŞLEM",hi:"लेनदेन"},
+  "TRADES": {ru:"СДЕЛКИ",de:"TRADES",fr:"TRANSACTIONS",it:"OPERAZIONI",ja:"取引","zh-CN":"笔交易",tr:"İŞLEMLER",hi:"ट्रेड"},
+  "NO TRADES": {ru:"СДЕЛОК НЕТ",de:"KEINE TRADES",fr:"AUCUNE TRANSACTION",it:"NESSUNA OPERAZIONE",ja:"取引なし","zh-CN":"暂无交易",tr:"İŞLEM YOK",hi:"कोई ट्रेड नहीं"},
+  "BOOSTED": {ru:"ПРОКАЧАН",de:"GEPUSHT",fr:"BOOSTÉ",it:"POTENZIATO",ja:"ブースト済み","zh-CN":"已加速",tr:"ÖNE ÇIKARILDI",hi:"बूस्ट किया गया"},
+  "SCANNING SOLANA": {ru:"СКАНИРОВАНИЕ SOLANA",de:"SOLANA WIRD GESCANNT",fr:"ANALYSE DE SOLANA",it:"SCANSIONE SOLANA",ja:"Solanaをスキャン中","zh-CN":"正在扫描 Solana",tr:"SOLANA TARANIYOR",hi:"SOLANA स्कैन हो रहा है"},
+  "RADAR ONLINE": {ru:"РАДАР В СЕТИ",de:"RADAR ONLINE",fr:"RADAR EN LIGNE",it:"RADAR ONLINE",ja:"レーダー稼働中","zh-CN":"雷达在线",tr:"RADAR ÇEVRİM İÇİ",hi:"रडार ऑनलाइन"},
+  "RADAR SIGNAL UNAVAILABLE. Check your connection or refresh shortly.": {ru:"СИГНАЛ РАДАРА НЕДОСТУПЕН. Проверьте соединение или обновите страницу позже.",de:"RADARSIGNAL NICHT VERFÜGBAR. Prüfe die Verbindung oder aktualisiere die Seite später.",fr:"SIGNAL RADAR INDISPONIBLE. Vérifiez la connexion ou actualisez bientôt.",it:"SEGNALE RADAR NON DISPONIBILE. Controlla la connessione o aggiorna tra poco.",ja:"レーダー信号を利用できません。接続を確認するか、しばらくして更新してください。","zh-CN":"雷达信号不可用。请检查连接或稍后刷新。",tr:"RADAR SİNYALİ KULLANILAMIYOR. Bağlantıyı kontrol edin veya biraz sonra yenileyin.",hi:"रडार सिग्नल उपलब्ध नहीं है। कनेक्शन जाँचें या थोड़ी देर बाद रिफ्रेश करें।"},
+  "SCANNING": {ru:"СКАНИРОВАНИЕ",de:"SCAN LÄUFT",fr:"ANALYSE EN COURS",it:"SCANSIONE IN CORSO",ja:"スキャン中","zh-CN":"扫描中",tr:"TARANIYOR",hi:"स्कैन हो रहा है"},
+  "SHOWING LAST SIGNAL": {ru:"ПОКАЗАН ПОСЛЕДНИЙ СИГНАЛ",de:"LETZTES SIGNAL WIRD ANGEZEIGT",fr:"AFFICHAGE DU DERNIER SIGNAL",it:"MOSTRO L’ULTIMO SEGNALE",ja:"前回のシグナルを表示中","zh-CN":"正在显示上次信号",tr:"SON SİNYAL GÖSTERİLİYOR",hi:"पिछला सिग्नल दिखाया जा रहा है"},
+  "SIGNAL INTERRUPTED": {ru:"СИГНАЛ ПРЕРВАН",de:"SIGNAL UNTERBROCHEN",fr:"SIGNAL INTERROMPU",it:"SEGNALE INTERROTTO",ja:"シグナルが中断されました","zh-CN":"信号中断",tr:"SİNYAL KESİLDİ",hi:"सिग्नल बाधित"},
+  "BUY ": {ru:"ПОКУПКА ",de:"KAUF ",fr:"ACHAT ",it:"ACQUISTO ",ja:"買い ","zh-CN":"买入 ",tr:"ALIM ",hi:"खरीद "},
+  "SELL ": {ru:"ПРОДАЖА ",de:"VERKAUF ",fr:"VENTE ",it:"VENDITA ",ja:"売り ","zh-CN":"卖出 ",tr:"SATIŞ ",hi:"बिक्री "},
+  "TRADE-FLOW SIGNAL UNAVAILABLE": {ru:"СИГНАЛ ПОТОКА СДЕЛОК НЕДОСТУПЕН",de:"HANDELSFLUSS-SIGNAL NICHT VERFÜGBAR",fr:"SIGNAL DE FLUX DES TRANSACTIONS INDISPONIBLE",it:"SEGNALE DEL FLUSSO OPERAZIONI NON DISPONIBILE",ja:"取引フローのシグナルを利用できません","zh-CN":"交易流信号不可用",tr:"İŞLEM AKIŞI SİNYALİ KULLANILAMIYOR",hi:"ट्रेड-फ्लो सिग्नल उपलब्ध नहीं"}
+};
+Object.entries(dynamicHomepageTranslations).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
+
 Object.entries(additionalCorePageTranslations).forEach(([source,translations])=>Object.entries(translations).forEach(([lang,value])=>{if(langs[lang])langs[lang].map[source]=value;}));
 
 
