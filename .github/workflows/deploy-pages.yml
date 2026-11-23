@@ -3,11 +3,10 @@ name: Deploy ZombieCash static site to GitHub Pages
 on:
   push:
     branches: [main]
-    # Tests and workflow-only edits do not change the published site.
-    # Keep Pages deployments for actual site/content changes.
+    # Tests do not change the published site. Workflow changes are included so
+    # fixes to this deployment gate can deploy the current production tree.
     paths-ignore:
       - 'tests/**'
-      - '.github/workflows/**'
   # Gallery Preview writes generated HTML with GITHUB_TOKEN, so its bot push
   # does not start a follow-up push workflow. Deploy after its successful main run.
   workflow_run:
@@ -31,7 +30,13 @@ jobs:
       (
         github.event.workflow_run.conclusion == 'success' &&
         github.event.workflow_run.head_branch == 'main' &&
-        github.event.workflow_run.event == 'push'
+        (
+          github.event.workflow_run.event == 'push' ||
+          (
+            github.event.workflow_run.name == 'Sync Zombie Gallery' &&
+            github.event.workflow_run.event == 'schedule'
+          )
+        )
       )
     timeout-minutes: 40
     environment:
