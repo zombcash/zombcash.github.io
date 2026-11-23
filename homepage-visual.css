@@ -3320,3 +3320,279 @@ body:has(main#home) #home .zm-promo-coord{z-index:3!important;left:20px!importan
 @media(max-width:680px){body:has(main#home) #home .zombie-maker-promo{grid-template-columns:minmax(0,1fr)!important;width:calc(100% - 24px)!important;margin:28px 12px 38px!important;padding:22px 18px 16px!important;gap:18px!important}body:has(main#home) #home .zombie-maker-promo h2{font-size:clamp(31px,8.6vw,46px)!important;letter-spacing:-1.3px!important}body:has(main#home) #home .zombie-maker-promo p{font-size:17px!important}body:has(main#home) #home .zm-promo-actions{margin-top:22px!important}body:has(main#home) #home .zm-promo-btn{width:100%!important;box-sizing:border-box!important}body:has(main#home) #home .zm-promo-art{min-height:0!important;height:auto!important;aspect-ratio:4/5!important}body:has(main#home) #home .zm-promo-character{object-position:center 16%!important}body:has(main#home) #home .zm-promo-stamp{right:12px!important;bottom:12px!important}body:has(main#home) #home .zm-promo-coord{left:12px!important;top:12px!important}}
 @media(prefers-reduced-motion:reduce){body:has(main#home) #home .zm-promo-ring:after{animation:none!important}body:has(main#home) #home .zm-promo-btn{transition:none!important}}
 
+
+
+/* ============================================
+   CINEMATIC HOMEPAGE REDESIGN - Issue #655
+   Enhanced visual experience for ZombieCash landing page
+   ============================================ */
+
+/* === COLOR SYSTEM === */
+body:has(#home) {
+  --zc-bg-deep: #030605;
+  --zc-bg-graphite: #0a0f0d;
+  --zc-bg-coal: #111814;
+  --zc-text-cold: #d5e1d0;
+  --zc-text-dirty-white: #a6b5a5;
+  --zc-accent-olive: #527342;
+  --zc-accent-military: #3a4f2e;
+  --zc-accent-toxic: #9bff45;
+  --zc-danger: #ff4545;
+  --zc-border-subtle: #1a2618;
+  --zc-glass: rgba(8, 13, 10, 0.75);
+  --zc-metal: rgba(20, 30, 20, 0.6);
+}
+
+/* === HERO SECTION CINEMATIC REFINEMENT === */
+body:has(#home) #home > section.hero {
+  background-image:
+    linear-gradient(180deg, rgba(3, 6, 5, 0.97) 0%, rgba(3, 6, 5, 0.85) 40%, rgba(3, 6, 5, 0.6) 100%),
+    radial-gradient(ellipse at 70% 30%, rgba(155, 255, 69, 0.08) 0%, transparent 50%),
+    url("https://upload.wikimedia.org/wikipedia/commons/9/91/Overgrown_city%2C_post-apocalyptic.jpg") !important;
+  background-size: cover !important;
+  background-position: center 45% !important;
+  padding: clamp(32px, 4vw, 64px) clamp(24px, 5vw, 80px) 40px !important;
+}
+
+body:has(#home) #home > section.hero > .hero-layout > .hero-content {
+  max-width: 780px !important;
+}
+
+body:has(#home) #home > section.hero .hero-content .eyebrow {
+  font-size: clamp(11px, 0.9vw, 13px) !important;
+  letter-spacing: 0.15em !important;
+  color: var(--zc-accent-toxic) !important;
+  margin-bottom: 16px !important;
+  opacity: 0.9 !important;
+}
+
+body:has(#home) #home > section.hero .hero-content h1 {
+  font-size: clamp(48px, 5.5vw, 120px) !important;
+  line-height: 0.92 !important;
+  letter-spacing: -0.04em !important;
+  margin-bottom: 20px !important;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.8), 0 0 60px rgba(155, 255, 69, 0.1) !important;
+}
+
+body:has(#home) #home > section.hero .hero-content .hero-copy {
+  font-size: clamp(16px, 1.2vw, 20px) !important;
+  line-height: 1.6 !important;
+  color: var(--zc-text-cold) !important;
+  max-width: 600px !important;
+  margin-bottom: 24px !important;
+}
+
+body:has(#home) #home > section.hero .hero-content .hero-actions {
+  gap: 16px !important;
+  margin-top: 8px !important;
+}
+
+body:has(#home) #home > section.hero .hero-content .hero-actions .btn {
+  padding: 14px 28px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  border-radius: 6px !important;
+  transition: all 0.3s ease !important;
+}
+
+body:has(#home) #home > section.hero .hero-content .hero-actions .btn-primary {
+  background: linear-gradient(135deg, var(--zc-accent-toxic), #7acc35) !important;
+  color: #030605 !important;
+  box-shadow: 0 4px 20px rgba(155, 255, 69, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+body:has(#home) #home > section.hero .hero-content .hero-actions .btn-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 28px rgba(155, 255, 69, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+body:has(#home) #home > section.hero .hero-content .hero-actions .btn-ghost {
+  background: transparent !important;
+  border: 1px solid var(--zc-border-subtle) !important;
+  color: var(--zc-text-cold) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+body:has(#home) #home > section.hero .hero-content .hero-actions .btn-ghost:hover {
+  background: var(--zc-glass) !important;
+  border-color: var(--zc-accent-olive) !important;
+  color: var(--zc-accent-toxic) !important;
+}
+
+/* === IMPROVED HERO STATS === */
+body:has(#home) #home > section.hero .hero-stats {
+  display: flex !important;
+  align-items: center !important;
+  gap: 24px !important;
+  padding: 16px 24px !important;
+  background: var(--zc-glass) !important;
+  border: 1px solid var(--zc-border-subtle) !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+body:has(#home) #home > section.hero .hero-stats strong {
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  color: var(--zc-accent-toxic) !important;
+  text-shadow: 0 0 20px rgba(155, 255, 69, 0.3) !important;
+}
+
+body:has(#home) #home > section.hero .hero-stats span {
+  font-size: 11px !important;
+  letter-spacing: 0.1em !important;
+  color: var(--zc-text-dirty-white) !important;
+  text-transform: uppercase !important;
+}
+
+/* === IMPROVED HERO BOTTOM BAR === */
+body:has(#home) #home > section.hero .hero-bottom {
+  display: flex !important;
+  align-items: center !important;
+  gap: 24px !important;
+  padding: 12px 20px !important;
+  background: var(--zc-glass) !important;
+  border: 1px solid var(--zc-border-subtle) !important;
+  border-radius: 6px !important;
+  font-size: 11px !important;
+  letter-spacing: 0.08em !important;
+  color: var(--zc-text-dirty-white) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+body:has(#home) #home > section.hero .hero-bottom b {
+  color: var(--zc-accent-toxic) !important;
+  font-weight: 700 !important;
+}
+
+/* === SECTION TRANSITIONS === */
+body:has(#home) #home > section {
+  position: relative !important;
+}
+
+body:has(#home) #home > section::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 1px !important;
+  background: linear-gradient(90deg, transparent, var(--zc-border-subtle), transparent) !important;
+  pointer-events: none !important;
+}
+
+/* === IMPROVED CARD STYLING === */
+body:has(#home) #home .zc-card,
+body:has(#home) #home .card {
+  background: var(--zc-glass) !important;
+  border: 1px solid var(--zc-border-subtle) !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(8px) !important;
+  transition: all 0.3s ease !important;
+}
+
+body:has(#home) #home .zc-card:hover,
+body:has(#home) #home .card:hover {
+  border-color: var(--zc-accent-olive) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(155, 255, 69, 0.05) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* === ACCESSIBILITY: FOCUS STATES === */
+body:has(#home) #home a:focus-visible,
+body:has(#home) #home button:focus-visible,
+body:has(#home) #home input:focus-visible {
+  outline: 2px solid var(--zc-accent-toxic) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(155, 255, 69, 0.15) !important;
+}
+
+/* === REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  body:has(#home) #home * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* === MOBILE IMPROVEMENTS === */
+@media (max-width: 768px) {
+  body:has(#home) #home > section.hero {
+    padding: 20px 16px 16px !important;
+  }
+  
+  body:has(#home) #home > section.hero .hero-content h1 {
+    font-size: clamp(36px, 8vw, 64px) !important;
+  }
+  
+  body:has(#home) #home > section.hero .hero-content .hero-copy {
+    font-size: 15px !important;
+    line-height: 1.5 !important;
+  }
+  
+  body:has(#home) #home > section.hero .hero-stats {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+    padding: 12px 16px !important;
+  }
+  
+  body:has(#home) #home > section.hero .hero-bottom {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    padding: 10px 12px !important;
+    font-size: 10px !important;
+  }
+  
+  body:has(#home) #home > section.hero .hero-content .hero-actions {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  
+  body:has(#home) #home > section.hero .hero-content .hero-actions .btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body:has(#home) #home > section.hero .hero-content h1 {
+    font-size: clamp(32px, 10vw, 48px) !important;
+  }
+  
+  body:has(#home) #home > section.hero .hero-content .eyebrow {
+    font-size: 10px !important;
+  }
+}
+
+/* === IMPROVED SECTION SPACING === */
+body:has(#home) #home > section {
+  padding: clamp(40px, 5vw, 80px) clamp(20px, 4vw, 60px) !important;
+}
+
+/* === IMPROVED TYPOGRAPHY SCALE === */
+body:has(#home) #home h2 {
+  font-size: clamp(24px, 3vw, 40px) !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.02em !important;
+  margin-bottom: 16px !important;
+}
+
+body:has(#home) #home h3 {
+  font-size: clamp(18px, 2vw, 24px) !important;
+  line-height: 1.2 !important;
+  margin-bottom: 12px !important;
+}
+
+/* === IMPROVED TEXT CONTRAST === */
+body:has(#home) #home p {
+  color: var(--zc-text-cold) !important;
+  line-height: 1.6 !important;
+}
+
+body:has(#home) #home .text-muted,
+body:has(#home) #home small {
+  color: var(--zc-text-dirty-white) !important;
+}
+"""
