@@ -1253,7 +1253,8 @@
   const updateMenuToggleLabel = (open) => {
     const language = document.documentElement.lang || 'en';
     const labels = menuAriaLabels[language] || ['Open navigation', 'Close navigation'];
-    toggle.setAttribute('aria-label', labels[open ? 1 : 0]);
+    const visibleLabel = toggle.querySelector('.zsh-menu-label')?.textContent.trim() || 'MENU';
+    toggle.setAttribute('aria-label', visibleLabel + ' — ' + labels[open ? 1 : 0]);
   };
   toggle.addEventListener('click', () => {
     const open = nav.classList.toggle('zsh-open');
@@ -1295,15 +1296,26 @@
     const brandSmall = header.querySelector('.zsh-brand-copy small');
     const brandLabels = {de:'DAS INTERNET DER UNTOTEN',fr:'L’INTERNET DES MORTS-VIVANTS',it:'INTERNET DEI NON MORTI',ja:'アンデッド・インターネット','zh-CN':'不死者互联网',ru:'ИНТЕРНЕТ НЕЖИТИ',tr:'YAŞAYAN ÖLÜLERİN İNTERNETİ',hi:'मरे हुओं का इंटरनेट'};
     if (brandSmall) brandSmall.textContent = language === 'en' ? 'THE UNDEAD INTERNET' : (brandLabels[language] || 'THE UNDEAD INTERNET');
+    const brand = header.querySelector('.zsh-brand');
+    if (brand) {
+      const visibleBrand = (brand.querySelector('.zsh-brand-copy')?.textContent || 'ZOMBIECASH').replace(/\s+/g, ' ').trim();
+      brand.setAttribute('aria-label', visibleBrand + ' HOME');
+    }
     const menuToggle = header.querySelector('.zsh-menu-toggle');
     const menuAria = {de:['Navigation öffnen','Navigation schließen'],fr:['Ouvrir la navigation','Fermer la navigation'],it:['Apri la navigazione','Chiudi la navigazione'],ja:['ナビゲーションを開く','ナビゲーションを閉じる'],'zh-CN':['打开导航','关闭导航'],ru:['Открыть навигацию','Закрыть навигацию'],tr:['Gezinmeyi aç','Gezinmeyi kapat'],hi:['नेविगेशन खोलें','नेविगेशन बंद करें']};
-    if (menuToggle) menuToggle.setAttribute('aria-label', (menuAria[language] || ['Open navigation','Close navigation'])[nav.classList.contains('zsh-open') ? 1 : 0]);
+    if (menuToggle) updateMenuToggleLabel(nav.classList.contains('zsh-open'));
     const languageTrigger = header.querySelector('.language-trigger');
     const languageAria = {de:'Sprache auswählen',fr:'Choisir la langue',it:'Scegli la lingua',ja:'言語を選択','zh-CN':'选择语言',ru:'Выбрать язык',tr:'Dil seçin',hi:'भाषा चुनें'};
-    if (languageTrigger) languageTrigger.setAttribute('aria-label', languageAria[language] || 'Choose language');
+    if (languageTrigger) {
+      const visibleLanguage = languageTrigger.textContent.trim().replace(/\s+/g, ' ');
+      languageTrigger.setAttribute('aria-label', visibleLanguage + ' — ' + (languageAria[language] || 'Choose language'));
+    }
     const lineControl = document.querySelector('#zsh-about-footer .zsh-footer-line');
     const lineLabels = {de:'LINE HINZUFÜGEN',fr:'AJOUTER LINE',it:'AGGIUNGI LINE',ja:'LINEを追加','zh-CN':'添加 LINE',ru:'ДОБАВИТЬ LINE',tr:'LINE EKLE',hi:'LINE जोड़ें'};
-    if (lineControl) lineControl.textContent = language === 'en' ? 'ADD LINE' : (lineLabels[language] || 'ADD LINE');
+    if (lineControl) {
+      lineControl.textContent = language === 'en' ? 'ADD LINE' : (lineLabels[language] || 'ADD LINE');
+      lineControl.setAttribute('aria-label', lineControl.textContent.trim() + ' — ZombieCash on LINE');
+    }
     const loginControl = header.querySelector('.zsh-login-button');
     if (loginControl) {
       const loginLabels = {de:'MIT TELEGRAM ANMELDEN',fr:'SE CONNECTER AVEC TELEGRAM',it:'ACCEDI CON TELEGRAM',ja:'TELEGRAMでログイン','zh-CN':'使用 TELEGRAM 登录',ru:'ВОЙТИ ЧЕРЕЗ TELEGRAM',tr:'TELEGRAM İLE GİRİŞ',hi:'TELEGRAM से लॉग इन करें'};
