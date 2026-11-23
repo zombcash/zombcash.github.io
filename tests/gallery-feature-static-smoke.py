@@ -23,6 +23,11 @@ assert sum(category_counts.values()) >= len(items), f"Some gallery items are mis
 assert [str(item.get("date") or "") for item in items] == sorted((str(item.get("date") or "") for item in items), reverse=True), "Gallery must show newest images first"
 assert all(item.get("category_ids") and set(item["category_ids"]).issubset(gallery_categories) for item in items), "Every image must belong to a known gallery category"
 assert all(item.get("rights_status") == "owner-authorized" for item in items)
+sync_script = Path("scripts/sync_gallery.py").read_text(encoding="utf-8")
+assert '"zombie-characters": re.compile(r"\\\\bHEROINE' in sync_script or "#ZombieCashHeroine" in sync_script, "Gallery sync must recognize the heroine editorial series"
+gallery_js = Path("gallery.js").read_text(encoding="utf-8")
+assert 'const categories = ["zombie-memes","nightmare-horror","undead-after-dark","zombie-characters"]' in gallery_js
+assert '...categories.map(id => ({id,label:c[id]||id}))' in gallery_js, "All four editorial filters must remain visible before first category post is synced"
 reviewed = [item for item in items if item.get("alt_review_status") == "visual-reviewed"]
 pending = [item for item in items if item.get("alt_review_status") == "pending-review"]
 assert len(reviewed) + len(pending) == len(items), "Every item must have an explicit ALT review state"
