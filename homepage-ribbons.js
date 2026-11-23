@@ -76,7 +76,7 @@
      .then(function(data){
       if(Object.keys(ids).some(function(symbol){var quote=data[ids[symbol]]||{};return Number(quote.usd)>0;}))setMarketSource('COINGECKO');
       Object.keys(ids).forEach(function(symbol){
-       var quote=data[ids[symbol]]||{},price=Number(quote.usd),change=Number(quote.usd_24h_change);
+       var quote=data[ids[symbol]]||{},price=Number(quote.usd),rawChange=quote.usd_24h_change,change=rawChange===null||rawChange===undefined?NaN:Number(rawChange);
        if(Number.isFinite(price)&&price>0)setItem(symbol+':',symbol+': '+fmtPrice(price)+(Number.isFinite(change)?' ('+fmtChange(change)+')':''));
        else setItem(symbol+':',symbol+': temporarily unavailable');
       });
