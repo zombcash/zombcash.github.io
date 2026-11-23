@@ -221,12 +221,14 @@ async function checkStaticPage(page, locale) {
   const alternateLocale = locale === 'ru' ? 'en' : 'ru';
   await page.evaluate(language => {
     localStorage.setItem('zombcash-language', language);
+    document.documentElement.lang = language;
     document.dispatchEvent(new CustomEvent('zombcash:languagechange', { detail: { language } }));
   }, alternateLocale);
   await page.waitForFunction(({ language, expected }) => document.documentElement.lang === language && [...document.querySelectorAll('.wheel-label[data-i18n="wheelAgain"]')].every(node => node.textContent.trim() === expected), { language: alternateLocale, expected: locales[alternateLocale] }, { timeout: 10000 });
   await page.waitForFunction(({ expected, path }) => document.querySelector('link[rel="canonical"]')?.href === expected && location.pathname === path, { expected: localeUrls[alternateLocale], path: '/' + localePaths[alternateLocale] }, { timeout: 10000 });
   await page.evaluate(language => {
     localStorage.setItem('zombcash-language', language);
+    document.documentElement.lang = language;
     window.dispatchEvent(new StorageEvent('storage', { key: 'zombcash-language', newValue: language }));
     window.dispatchEvent(new Event('focus'));
   }, locale);
