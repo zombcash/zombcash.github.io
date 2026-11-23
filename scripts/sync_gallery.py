@@ -25,7 +25,7 @@ CATEGORY_PATTERNS = {
     "nightmare-horror": re.compile(r"\bNIGHTMARE(?:\s+DROP|\s*&\s*HORROR)?\b|\bHORROR\b|\bHAUNTED\b|\bCREEPY\b|\bDREAD\b|🩸", re.I),
     "undead-after-dark": re.compile(r"\bUNDEAD\s+AFTER\s+DARK\b", re.I),
     "zombie-memes": re.compile(r"\bZOMBIECASH\s+MEMES?\b|\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b|#ZombieCashMeme\b|😂", re.I),
-    "zombie-characters": re.compile(r"\b(?:ZOMBIE|UNDEAD)\s+(?:GIRL|BOY|CHARACTER|WARRIOR|QUEEN|KING|HUNTER|PRINCESS)\b|\bZOMBIE\s+CHARACTERS?\b", re.I),
+    "zombie-characters": re.compile(r"\bHEROINE[’']?S\s+SURVIVAL\s+DIARY\b|#ZombieCashHeroine\b|\b(?:ZOMBIE|UNDEAD)\s+(?:GIRL|BOY|CHARACTER|WARRIOR|QUEEN|KING|HUNTER|PRINCESS)\b|\bZOMBIE\s+CHARACTERS?\b", re.I),
     # Crypto/market posts belong together even when they also use apocalypse language.
     "crypto-apocalypse": re.compile(r"\bCRYPTO\b|\bBITCOIN\b|\bSOLANA\b|\bMEMECOIN\b|\bTOKEN\b|\bWALLET\b|\bTRADING\b|\bPORTFOLIO\b|\bMARKET\b|\bCHARTS?\b|\bCANDLES?\b|\bHODL\b|\bBULL\b|\bBEAR\b|\bPUMP\b|\bDUMP\b", re.I),
     "apocalypse-survival": re.compile(r"\bAPOCALYPSE\s+SURVIVAL\b|\bSURVIVAL\b|\bWASTELAND\b|\bBUNKER\b|\bOUTBREAK\b|\bSCAVENGER\b|\bSHELTER\b|\bFALLOUT\b|\bEVACUATION\b|\bPOST[ -]APOCALYPTIC\b|\bSAFE\s+ZONE\b|\bSUPPLY\s+RUN\b", re.I),
