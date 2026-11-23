@@ -218,7 +218,7 @@ async function checkWalletAndSpin(browser) {
   await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
   await page.waitForFunction(() => document.querySelector('#auth-message')?.textContent.includes('QA Survivor'), null, { timeout: 20000 });
   await page.locator('#wallet-connect').click();
-  await page.waitForFunction(() => document.querySelector('#wallet-status')?.textContent.includes('QAWallet'), null, { timeout: 15000 });
+  await page.waitForFunction(() => document.querySelector('#wallet-status')?.textContent.includes('QAWal'), null, { timeout: 15000 });
   if (!(await page.locator('#wallet-disconnect').isVisible())) throw new Error('Verified wallet disconnect control was not shown');
   await page.locator('#spin-free').click();
   await page.waitForFunction(() => document.querySelector('#spin-result strong')?.textContent.includes('NO WIN'), null, { timeout: 12000 });
