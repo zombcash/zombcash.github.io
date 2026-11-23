@@ -1321,7 +1321,7 @@
     walletView.append(dashNode('h3','',walletText('title')),dashNode('p','zs-foot',walletText('privateKey')),walletPanel);
     const center=dashNode('section','zs-panel zs-center');center.id='zs-center';const centerTitle=dashNode('h3','',dcopy().autopilot);centerTitle.id='zs-center-title';center.append(centerTitle);
     const portrait=dashNode('div','zs-portrait');const pic=dashNode('img','');pic.src='/assets/zombcash-survivor-640.avif';pic.alt='ZombieCash anime survivor heroine';portrait.append(pic,dashNode('b','','$ZOMBCASH SURVIVOR'));
-    const core=dashNode('div','zs-core');const coreText=dashNode('div','');coreText.append(dashNode('strong','', '◉'),dashNode('strong','', 'AUTO SNIPER'),dashNode('span','', 'PAPER ENGINE'));core.append(coreText);
+    const core=dashNode('div','zs-core');const coreText=dashNode('div','');coreText.append(dashNode('strong','', '◉'),dashNode('strong','',dcopy().autoCore),dashNode('span','', 'PAPER ENGINE'));core.append(coreText);
     const toggle=dashNode('button','zs-toggle',dcopy().paused);toggle.id='zs-auto-toggle';toggle.type='button';toggle.addEventListener('click',async()=>{if(terminal.auto){if(!await setServerPaperEnabled(false))return;terminal.auto=false;terminal.stoppedAt=Date.now();saveTerminal();renderDashboardState();logEvent('PAUSED','SYSTEM','','paused');}else showLaunchConfirm();});
     const uptime=dashNode('div','zs-runtime-indicator');uptime.id='zs-runtime-indicator';uptime.setAttribute('role','status');
     const statsPanel=dashNode('div','zs-stats-extra zs-tab-hidden');statsPanel.id='zs-stats-extra';
