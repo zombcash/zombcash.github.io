@@ -334,7 +334,8 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
     await page.getByRole("button", { name: "Nightmare & Horror" }).click();
     const filterTracked = await page.evaluate(() => window.__galleryEvents.some(item => item.event === "gallery_filter"));
     if (!filterTracked) throw new Error("Gallery filter analytics event was not recorded");
-    const expectedCategoryIds = categoryId => galleryData.items.filter(item => (item.category_ids || []).includes(categoryId)).map(item => item.id);
+    const newestFirst = items => [...items].sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+    const expectedCategoryIds = categoryId => newestFirst(galleryData.items.filter(item => (item.category_ids || []).includes(categoryId))).map(item => item.id);
     const visibleCategoryIds = async () => page.locator("#gallery-grid .gallery-card").evaluateAll(cards => cards.map(card => card.dataset.galleryId));
     const expectedHorrorIds = expectedCategoryIds("nightmare-horror");
     const horror = await page.locator("#gallery-grid .gallery-card").count();
@@ -368,8 +369,8 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
         throw new Error("Empty " + label + " category should not be rendered as a filter");
       }
     };
-    const expectedZombieMemeIds = galleryData.items
-      .filter(item => (item.category_ids || []).some(id => id !== "nightmare-horror" && id !== "undead-after-dark" && id !== "heroine-survival-diary"))
+    const expectedZombieMemeIds = newestFirst(galleryData.items
+      .filter(item => (item.category_ids || []).some(id => id !== "nightmare-horror" && id !== "undead-after-dark" && id !== "heroine-survival-diary")))
       .map(item => item.id);
     await assertCategoryFilter("Zombie Memes", expectedZombieMemeIds);
     await assertCategoryFilter("Undead After Dark", expectedCategoryIds("undead-after-dark"));
