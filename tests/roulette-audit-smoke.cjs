@@ -441,6 +441,40 @@ async function checkSpinErrorLocalization(browser) {
   }
 }
 
+
+async function checkAccessibility(browser) {
+  const resultsByLocale = {};
+  for (const locale of Object.keys(locales)) {
+    const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+    await installApiMocks(page);
+    await page.addInitScript(language => localStorage.setItem('zombcash-language', language), locale);
+    await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#roulette-wheel .wheel-label');
+    await page.addScriptTag({ path: require.resolve('axe-core') });
+    const results = await page.evaluate(async () => axe.run(document, {
+      runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] },
+    }));
+    const summary = {
+      locale,
+      violations: results.violations.map(item => ({
+        id: item.id,
+        impact: item.impact,
+        description: item.description,
+        nodes: item.nodes.map(node => ({ target: node.target, summary: node.failureSummary })),
+      })),
+      passes: results.passes.length,
+      incomplete: results.incomplete.length,
+    };
+    resultsByLocale[locale] = summary;
+    fs.writeFileSync(path.join(OUT_DIR, 'axe-' + locale + '.json'), JSON.stringify(summary, null, 2));
+    if (summary.violations.length) {
+      throw new Error('WCAG accessibility violations in ' + locale + ': ' + JSON.stringify(summary.violations.slice(0, 8)));
+    }
+    await page.close();
+  }
+  fs.writeFileSync(path.join(OUT_DIR, 'axe-summary.json'), JSON.stringify(resultsByLocale, null, 2));
+}
+
 (async () => {
   const browser = await chromium.launch({ headless: true });
   try {
@@ -455,7 +489,8 @@ async function checkSpinErrorLocalization(browser) {
     await checkWalletFailureStates(browser);
     await checkSpinErrorLocalization(browser);
     await checkRapidClick(browser);
-    console.log('Roulette audit passed: 9 locales, 7 viewports, auth/wallet failure states, localized API errors, rapid-click protection, reduced motion, and mocked server-authoritative spin.');
+    await checkAccessibility(browser);
+    console.log('Roulette audit passed: 9 locales, 7 viewports, auth/wallet failure states, localized API errors, rapid-click protection, WCAG 2.1 AA axe checks across all locales, reduced motion, and mocked server-authoritative spin.');
   } finally {
     await browser.close();
   }

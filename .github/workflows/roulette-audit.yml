@@ -44,7 +44,7 @@ jobs:
       - name: Install Playwright and Chromium
         run: |
           npm init -y
-          npm install --no-save playwright
+          npm install --no-save playwright axe-core
           npx playwright install chromium
       - name: Serve site for browser audit
         run: |
