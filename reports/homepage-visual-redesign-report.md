@@ -61,7 +61,7 @@ Note: CSS version on deployed site is old. New version will be active after merg
 ## 6. Commit Information
 
 - Branch: feat/homepage-cinematic-redesign
-- Commit SHA: 7f263c1b1d57971f0eadfd8f43e5423f82691e18
+- Commit SHA: e40a4d90ab2efee97213ebc2c62d66e6bc7d6175
 - PR URL: https://github.com/zombcash/zombcash.github.io/pull/656
 
 ## 7. Known Limitations
