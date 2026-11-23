@@ -21,7 +21,7 @@ for (const [path, page] of homepages) {
   assert(page.includes('loading="lazy" fetchpriority="low"'),
     path + " must lazy-load below-the-fold TV host art");
   assert(page.includes('rel="preload" as="image"') &&
-         page.includes("Overgrown_city%2C_post-apocalyptic.jpg") &&
+         page.includes("/assets/zombcash-survivor-640.avif") &&
          page.includes('fetchpriority="high"'),
     path + " must preload the CSS hero background at high priority");
   assert(page.includes("display=optional"), path + " must use optional display for brand fonts");
