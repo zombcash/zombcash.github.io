@@ -33,6 +33,7 @@ on:
       - 'zombie-world.js'
       - 'tests/arcade-ai-worlds-visual-smoke.cjs'
       - 'tests/arcade-dynamic-localization-smoke.cjs'
+      - 'tests/arcade-snake-iframe-smoke.cjs'
       - '.github/workflows/mobile-viewport-test.yml'
   push:
     branches: [main]
@@ -115,6 +116,7 @@ jobs:
           node --check tests/survivor-hub-localization-smoke.cjs
           node --check tests/survivor-hub-visual-smoke.cjs
           node --check tests/arcade-dynamic-localization-smoke.cjs
+          node --check tests/arcade-snake-iframe-smoke.cjs
           node --check tests/arcade-ai-worlds-visual-smoke.cjs
       - name: Install Playwright
         run: |
@@ -161,6 +163,12 @@ jobs:
       - name: Test Arcade dynamic records, save statuses and progress in all locales
         if: always()
         run: node tests/arcade-dynamic-localization-smoke.cjs
+
+      - name: Test Snake iframe loading, start bridge and keyboard bridge
+        if: always()
+        env:
+          SITE_URL: http://127.0.0.1:4173/
+        run: node tests/arcade-snake-iframe-smoke.cjs
 
       - name: Test AI Worlds on the actual Arcade page and capture screenshot
         if: always()
