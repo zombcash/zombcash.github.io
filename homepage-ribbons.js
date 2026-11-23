@@ -59,6 +59,7 @@
  }
  function updateCrypto(){
   var symbols=['BTCUSDT','ETHUSDT','SOLUSDT'];
+  // Bound provider requests so a stalled Binance edge can reach the CoinGecko fallback.
   fetch('https://api.binance.com/api/v3/ticker/24hr?symbols='+encodeURIComponent(JSON.stringify(symbols)),{cache:'no-store',signal:AbortSignal.timeout(10000)})
    .then(function(r){if(!r.ok)throw new Error('Binance HTTP '+r.status);return r.json();})
    .then(function(rows){
