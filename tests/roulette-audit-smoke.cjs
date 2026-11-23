@@ -314,7 +314,7 @@ async function checkAuthStates(browser) {
       localStorage.setItem('zombcash-survivor-token', 'qa-expired-token');
     });
     await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded' });
-    await page.waitForFunction(() => document.querySelector('#auth-message')?.textContent.trim().length > 0);
+    await page.waitForFunction(() => { const message = document.querySelector('#auth-message')?.textContent || ''; return message.trim().length > 0 && !/connecting|checking/i.test(message); }, null, { timeout: 15000 });
     const message = await page.locator('#auth-message').innerText();
     if (/connecting|checking/i.test(message) || !/telegram/i.test(message)) throw new Error('Expired token did not resolve to a useful re-login message');
     await page.close();
@@ -327,7 +327,7 @@ async function checkAuthStates(browser) {
       localStorage.setItem('zombcash-survivor-token', 'qa-only-fake-token');
     });
     await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded' });
-    await page.waitForFunction(() => document.querySelector('#auth-message')?.textContent.trim().length > 0 && document.querySelector('#public-winner-stats')?.textContent.trim().length > 0);
+    await page.waitForFunction(() => { const auth = document.querySelector('#auth-message')?.textContent || ''; const stats = document.querySelector('#public-winner-stats')?.textContent || ''; return auth.trim().length > 0 && !/connecting|checking/i.test(auth) && /unavailable|could not|error|failed/i.test(stats); }, null, { timeout: 15000 });
     const auth = await page.locator('#auth-message').innerText();
     const stats = await page.locator('#public-winner-stats').innerText();
     if (/connecting|checking/i.test(auth) || !/telegram/i.test(auth)) throw new Error('API outage left the auth panel in a loading state');
@@ -366,11 +366,12 @@ async function checkWalletFailureStates(browser) {
     }, { walletMode: scenario.walletMode });
     await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => document.querySelector('#auth-message')?.textContent.includes('QA Survivor'));
+    const initialStatus = await page.locator('#wallet-status').innerText();
     await page.locator('#wallet-connect').click();
-    await page.waitForFunction(() => {
+    await page.waitForFunction(initial => {
       const status = document.querySelector('#wallet-status')?.textContent || '';
-      return status.length > 0 && !/verifying|signing/i.test(status);
-    }, null, { timeout: 15000 });
+      return status.trim().length > 0 && status !== initial && !/verifying|signing/i.test(status);
+    }, initialStatus, { timeout: 15000 });
     const status = await page.locator('#wallet-status').innerText();
     if (!scenario.expected.test(status)) throw new Error(scenario.name + ': localized status missing: ' + status);
     if (scenario.raw && scenario.raw.test(status)) throw new Error(scenario.name + ': raw provider/API error leaked to UI: ' + status);
