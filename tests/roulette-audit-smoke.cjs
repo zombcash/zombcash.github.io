@@ -370,7 +370,7 @@ async function checkWalletFailureStates(browser) {
     await page.locator('#wallet-connect').click();
     await page.waitForFunction(initial => {
       const status = document.querySelector('#wallet-status')?.textContent || '';
-      return status.trim().length > 0 && status !== initial && !/verifying|signing/i.test(status);
+      return status.trim().length > 0 && status !== initial && !/one-time message|signing|verifying/i.test(status);
     }, initialStatus, { timeout: 15000 });
     const status = await page.locator('#wallet-status').innerText();
     if (!scenario.expected.test(status)) throw new Error(scenario.name + ': localized status missing: ' + status);
