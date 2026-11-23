@@ -177,7 +177,13 @@ jobs:
           SITE_URL: http://127.0.0.1:4173/
         run: node tests/arcade-snake-iframe-smoke.cjs
 
-      - name: Test Snake full game-over and Survivor profile save handshake\n        if: always()\n        env:\n          SITE_URL: http://127.0.0.1:4173/\n        run: node tests/arcade-snake-session-save-smoke.cjs\n\n      - name: Test AI Worlds on the actual Arcade page and capture screenshot
+      - name: Test Snake full game-over and Survivor profile save handshake
+        if: always()
+        env:
+          SITE_URL: http://127.0.0.1:4173/
+        run: node tests/arcade-snake-session-save-smoke.cjs
+
+      - name: Test AI Worlds on the actual Arcade page and capture screenshot
         if: always()
         run: node tests/arcade-ai-worlds-visual-smoke.cjs
 
