@@ -81,7 +81,7 @@ assert '<meta property="og:title" content="Zombie Art &amp; Horror Meme Gallery 
 assert '<meta property="og:description" content="' + expected_gallery_description + '">' in html
 assert '<meta name="twitter:title" content="Zombie Art &amp; Horror Meme Gallery | ZombieCash">' in html
 assert '<meta name="twitter:description" content="' + expected_gallery_description + '">' in html
-schema_match = re.search(r'<script id="gallery-collection-jsonld" type="application/ld\\+json">(.*?)</script>', html, re.S)
+schema_match = re.search(r'<script id="gallery-collection-jsonld" type="application/ld\+json">(.*?)</script>', html, re.S)
 assert schema_match, "Gallery CollectionPage JSON-LD must exist"
 gallery_schema = json.loads(schema_match.group(1))
 assert gallery_schema.get("name") == expected_gallery_title
