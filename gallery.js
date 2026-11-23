@@ -293,6 +293,7 @@
   ]).then(data => {
     const isHeroineDiary = item => /#ZombieCashDiary\b/i.test(String(item?.caption ?? "") + " " + String(item?.title ?? "")) || /HEROINE[’']?S\s+SURVIVAL\s+DIARY/i.test(String(item?.caption ?? "") + " " + String(item?.title ?? ""));
     const allowedGalleryCaption = caption =>
+      isHeroineDiary({caption}) ||
       /\bNIGHTMARE\s+DROP\b/i.test(String(caption ?? "")) ||
       /\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b/i.test(String(caption ?? "")) ||
       /\bUNDEAD\s+AFTER\s+DARK\b/i.test(String(caption ?? ""));
