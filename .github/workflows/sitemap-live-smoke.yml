@@ -23,7 +23,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: sitemap-live-validation
+  # Keep validations for different deployments independent; an older deployment must not block the latest sitemap check.
+  group: sitemap-live-validation-${{ github.event.workflow_run.head_sha || github.sha }}
   cancel-in-progress: false
 
 jobs:
@@ -42,7 +43,21 @@ jobs:
           python-version: "3.12"
       - name: Install HTTP client
         run: python -m pip install --disable-pip-version-check requests
+      - name: Skip stale validation when a newer main commit exists
+        id: freshness
+        env:
+          VALIDATED_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          latest_main="$(git ls-remote origin refs/heads/main | cut -f1)"
+          if [ "$latest_main" != "$VALIDATED_SHA" ]; then
+            echo "superseded=true" >> "$GITHUB_OUTPUT"
+            echo "Skipping stale sitemap validation for $VALIDATED_SHA; main is now $latest_main."
+          else
+            echo "superseded=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Allow GitHub Pages to finish publishing
+        if: steps.freshness.outputs.superseded != 'true'
         run: sleep 45
       - name: Validate all sitemap URLs against the live site
+        if: steps.freshness.outputs.superseded != 'true'
         run: python tests/sitemap-live-smoke.py
