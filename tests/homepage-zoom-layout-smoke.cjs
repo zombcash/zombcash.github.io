@@ -14,7 +14,7 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
       await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-      await page.waitForSelector('main#home .hero-layout .zc-hero-sponsor-panel', { timeout: 30000 });
+      await page.waitForSelector('main#home .hero-layout', { timeout: 30000 });
       await page.waitForSelector('#zctv-channel-hub > .zctv-inner', { timeout: 30000 });
       await page.waitForFunction(() => {
         const count = document.getElementById('zc-promo-count');
@@ -66,6 +66,7 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
           heroLayout: rect('#home > .hero .hero-layout'),
           heroContent: rect('#home > .hero .hero-content'),
           sponsor: rect('#home > .hero .zc-hero-sponsor-panel'),
+          statusRail: rect('#home > .hero .zc-home-status-rail'),
           tvPlayerWrap: rect('#zctv-channel-hub .zctv-player-mount .zc-promo-player-wrap'),
           promoVideo: rect('#zctv-channel-hub .zctv-player-mount #zc-promo-player'),
           tv: rect('#zctv-channel-hub > .zctv-inner'),
@@ -100,7 +101,8 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
       if (width >= 7600 && layout.ribbonHeight < 84) issues.push('outbreak ribbon bars remain too short at 20% browser zoom');
       if (!layout.heroLayout || layout.heroLayout.width < width * 0.85) issues.push('hero wrapper did not expand with the wide CSS viewport');
       if (!layout.heroContent || layout.heroContent.width < 760) issues.push('hero copy column remains capped at desktop width');
-      if (!layout.sponsor || layout.sponsor.width < 640) issues.push('sponsor column remains capped at desktop width');
+      if (layout.sponsor && layout.sponsor.width < 640) issues.push('localized sponsor column remains capped at desktop width');
+      if (!layout.sponsor && (!layout.statusRail || layout.statusRail.width < 640)) issues.push('current homepage status rail remains capped at desktop width');
       if (!layout.tvPlayerWrap || layout.tvPlayerWrap.width < 420) issues.push('visible ZombieCash TV promo player shell did not expand');
       if (!layout.promoVideo || layout.promoVideo.width < 400 || Math.abs(layout.promoVideo.width / layout.promoVideo.height - 16 / 9) > 0.08) issues.push('visible ZombieCash TV promo video is not a valid 16:9 frame');
       if (!layout.tv || layout.tv.width < width * 0.8) issues.push('ZombieCash TV container did not expand');

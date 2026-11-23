@@ -94,6 +94,8 @@ fs.mkdirSync(outDir, { recursive: true });
           languageMenuExists: !!languageMenu,
           languageMenuRect: rect(languageMenu),
           ads: document.querySelectorAll('.zc-hero-sponsor-panel .zc-hero-ad-unit iframe').length,
+          homeStatusRail: (() => { const el = document.querySelector('main#home .zc-home-status-rail'); return !!el && getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().width > 0; })(),
+          heroLayout: !!document.querySelector('main#home .hero-layout'),
           adSectionCount: document.querySelectorAll('.zc-hero-sponsor-panel').length,
           sponsorPromoVisible: (() => { const el = document.querySelector('.zc-hero-sponsor-promo'); return !!el && getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().height > 0; })(),
           adScriptTags: Array.from(document.scripts).filter(script => script.src.includes('bauval.org')).map(script => script.src),
@@ -136,46 +138,40 @@ fs.mkdirSync(outDir, { recursive: true });
       if (result.menuExpected && !result.navInitiallyClosed) issues.push('mobile navigation is not collapsed by default');
       if (!result.menuExpected && !result.navVisible) issues.push('desktop navigation is not visible');
       if (!result.languageButton.exists) issues.push('language selector button is missing');
-      if (result.adSectionCount !== 1) issues.push(`expected exactly one hero sponsor panel, found ${result.adSectionCount}`);
-      if (!result.sponsorPromoVisible) issues.push('Sponsor Zone fallback is not visible');
-      if (!result.adPlacementInHero) issues.push('sponsor panel is not inside the original hero layout');
-      // Current placements: 320×50 mobile banner below 768px; 180px native
-      // sponsor fallback reservation from 768px upward. Keep assertions aligned with
-      // the live CSS rather than the retired two-banner desktop grid.
-      const mobileAd = width < 768;
-      if (!result.adScriptTags.length) issues.push('Adsterra provider script is missing');
-      if (!result.adSlotGeometry) {
-        issues.push('reserved Adsterra stage is missing');
-      } else {
-        if (result.adSlotGeometry.width > width + 1) issues.push('reserved Adsterra slot exceeds the viewport width');
-        if (result.adSlotGeometry.x < -1 || result.adSlotGeometry.right > width + 1) issues.push('reserved Adsterra slot is clipped by viewport bounds');
-        if (mobileAd) {
-          const expectedStageHeight = 50 * Math.min(1, result.adSlotGeometry.width / 320);
-          if (!result.atOptions || Number(result.atOptions.width) !== 320 || Number(result.atOptions.height) !== 50) {
-            issues.push(`expected Adsterra 320×50 config at viewport ${width}px`);
-          }
-          if (result.adSlotGeometry.height < expectedStageHeight * 0.9) issues.push('reserved mobile Adsterra stage is shorter than the selected banner format');
-          if (Math.abs(result.adSlotGeometry.width / result.adSlotGeometry.height - 320 / 50) > 0.25) {
-            issues.push('reserved mobile Adsterra slot does not preserve the selected banner aspect ratio');
-          }
-          if (!result.mobileSlotVisible) issues.push('mobile Adsterra banner slot is not visible below 768px');
-          if (result.ads > 1) issues.push(`expected at most 1 mobile Adsterra iframe, found ${result.ads}`);
+      if (!result.heroLayout) issues.push('homepage hero layout is missing');
+      if (result.adSectionCount > 0) {
+        if (result.adSectionCount !== 1) issues.push(`expected exactly one hero sponsor panel, found ${result.adSectionCount}`);
+        if (!result.sponsorPromoVisible) issues.push('Sponsor Zone fallback is not visible');
+        if (!result.adPlacementInHero) issues.push('sponsor panel is not inside the original hero layout');
+        const mobileAd = width < 768;
+        if (!result.adScriptTags.length) issues.push('Adsterra provider script is missing for a page with Sponsor Zone');
+        if (!result.adSlotGeometry) {
+          issues.push('reserved Adsterra stage is missing');
         } else {
-          if (result.adSlotGeometry.height < 180) issues.push('native sponsor stage must reserve the configured 180px desktop fallback from 768px upward');
-          if (!result.nativeSlotVisible || !result.nativeSlotGeometry || result.nativeSlotGeometry.height < 180) {
-            issues.push('180px native sponsor slot is missing or not visibly reserved');
-          }
-          if (result.mobileSlotVisible || result.bannerGridVisible) {
-            issues.push('legacy mobile/banner-grid placements must be hidden when the native sponsor slot is active');
+          if (result.adSlotGeometry.width > width + 1) issues.push('reserved Adsterra slot exceeds the viewport width');
+          if (result.adSlotGeometry.x < -1 || result.adSlotGeometry.right > width + 1) issues.push('reserved Adsterra slot is clipped by viewport bounds');
+          if (mobileAd) {
+            const expectedStageHeight = 50 * Math.min(1, result.adSlotGeometry.width / 320);
+            if (!result.atOptions || Number(result.atOptions.width) !== 320 || Number(result.atOptions.height) !== 50) issues.push(`expected Adsterra 320×50 config at viewport ${width}px`);
+            if (result.adSlotGeometry.height < expectedStageHeight * 0.9) issues.push('reserved mobile Adsterra stage is shorter than the selected banner format');
+            if (Math.abs(result.adSlotGeometry.width / result.adSlotGeometry.height - 320 / 50) > 0.25) issues.push('reserved mobile Adsterra slot does not preserve the selected banner aspect ratio');
+            if (!result.mobileSlotVisible) issues.push('mobile Adsterra banner slot is not visible below 768px');
+            if (result.ads > 1) issues.push(`expected at most 1 mobile Adsterra iframe, found ${result.ads}`);
+          } else {
+            if (result.adSlotGeometry.height < 180) issues.push('native sponsor stage must reserve the configured 180px desktop fallback from 768px upward');
+            if (!result.nativeSlotVisible || !result.nativeSlotGeometry || result.nativeSlotGeometry.height < 180) issues.push('180px native sponsor slot is missing or not visibly reserved');
+            if (result.mobileSlotVisible || result.bannerGridVisible) issues.push('legacy mobile/banner-grid placements must be hidden when the native sponsor slot is active');
           }
         }
+        if (result.adGeometry && result.adSlotGeometry && (result.adGeometry.x < result.adSlotGeometry.x - 1 || result.adGeometry.right > result.adSlotGeometry.right + 1)) issues.push('Adsterra iframe escapes its reserved slot');
+        if (result.adGeometry && result.adGeometry.position === 'fixed') issues.push('Adsterra iframe must not be fixed while scrolling');
+        if (result.adGeometry && result.adGeometry.width > width + 1) issues.push('Adsterra iframe exceeds the viewport width');
+        if (result.adGeometry && result.adGeometry.x < -1) issues.push('Adsterra iframe starts outside the left viewport edge');
+        if (result.adGeometry && result.adGeometry.right > width + 1) issues.push('Adsterra iframe extends beyond the right viewport edge');
+      } else if (!result.homeStatusRail) {
+        issues.push('current homepage status rail is missing or not visible');
       }
-      if (result.adGeometry && result.adSlotGeometry && (result.adGeometry.x < result.adSlotGeometry.x - 1 || result.adGeometry.right > result.adSlotGeometry.right + 1)) issues.push('Adsterra iframe escapes its reserved slot');
       if (!result.pageVisitCounter) issues.push('homepage global visitor counter section is missing');
-      if (result.adGeometry && result.adGeometry.position === 'fixed') issues.push('Adsterra iframe must not be fixed while scrolling');
-      if (result.adGeometry && result.adGeometry.width > width + 1) issues.push('Adsterra iframe exceeds the viewport width');
-      if (result.adGeometry && result.adGeometry.x < -1) issues.push('Adsterra iframe starts outside the left viewport edge');
-      if (result.adGeometry && result.adGeometry.right > width + 1) issues.push('Adsterra iframe extends beyond the right viewport edge');
 
       if (result.menuButton.visible) {
         await page.locator('header.zombcash-shared-header .zsh-menu-toggle').click();
@@ -278,6 +274,18 @@ fs.mkdirSync(outDir, { recursive: true });
       });
       await blockedPage.route('https://bauval.org/**', route => route.abort());
       await blockedPage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+      const hasSponsorStage = await blockedPage.locator('.zc-hero-sponsor-panel .zc-hero-ad-stage').count();
+      if (!hasSponsorStage) {
+        const rail = await blockedPage.locator('main#home .zc-home-status-rail').count();
+        const visible = rail ? await blockedPage.locator('main#home .zc-home-status-rail').isVisible() : false;
+        const blockedIssues = [];
+        if (!visible) blockedIssues.push('current homepage status rail is missing when ad-provider requests are blocked');
+        if (await blockedPage.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) blockedIssues.push('blocked-provider page has horizontal overflow');
+        console.log(JSON.stringify({ mode: 'blocked-provider-current-hero', width, rail, visible, issues: blockedIssues }));
+        if (blockedIssues.length) failures.push({ mode: 'blocked-provider-current-hero', width, issues: blockedIssues });
+        await blockedPage.close();
+        continue;
+      }
       await blockedPage.waitForSelector('.zc-hero-sponsor-panel .zc-hero-ad-stage', { timeout: 20000 });
       await blockedPage.waitForTimeout(500);
       const blockedResult = await blockedPage.evaluate(() => {
