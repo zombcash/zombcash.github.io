@@ -1,7 +1,7 @@
 # Homepage Visual Redesign Report
 
 **Date:** 2026-11-23  
-**Status:** COMPLETED — ALL AUTOMATED CHECKS PASS  
+**Status:** Automated homepage, responsive, SEO and AI Worlds checks passed on the pre-cleanup snapshot; CSS cleanup is committed and awaiting its post-commit CI run.  
 **Issue:** #655 — Cinematic ZombieCash homepage redesign  
 **Repository:** zombcash/zombcash.github.io  
 **Branch:** feat/homepage-cinematic-redesign  
@@ -40,13 +40,13 @@ Final QA found and corrected two regressions before acceptance:
 
 | Check | Run | Result |
 | --- | ---: | --- |
-| Homepage visual refresh smoke checks | #131 | PASS |
-| Core Web Vitals Static Guard | #113 | PASS |
-| SEO internal-link fix static smoke | #515 | PASS |
-| AI Worlds Smoke Tests | #154 | PASS |
-| Sitemap lastmod refresh | #21 | PASS |
-| Local branch visual QA | #243 | PASS |
-| Mobile viewport smoke test | #1763 | PASS |
+| Homepage visual refresh smoke checks | #134 | PASS (pre-cleanup snapshot) |
+| Core Web Vitals Static Guard | #116 | PASS (pre-cleanup snapshot) |
+| SEO internal-link fix static smoke | #518 | PASS (pre-cleanup snapshot) |
+| AI Worlds Smoke Tests | #157 | PASS (pre-cleanup snapshot) |
+| Sitemap lastmod refresh | #24 | PASS (pre-cleanup snapshot) |
+| Local branch visual QA | #246 | PASS (pre-cleanup snapshot) |
+| Mobile viewport smoke test | #1766 | PASS (pre-cleanup snapshot) |
 
 ## 5. Browser and Responsive QA
 
@@ -72,7 +72,11 @@ The earlier deployed-site check at 1345px was performed against the old deployed
 ## 7. Verified Code Snapshot
 
 - Branch: `feat/homepage-cinematic-redesign`
-- Code SHA validated by the successful CI and browser runs: `ea1d4694526da09dbf56416c283707bd924f2d34`
+- Code snapshot before final CSS cleanup: `f2b34bfe184f935efe656c3501da42afcabc7726`.
+- Follow-up CSS cleanup commit: `16c547327322b2f044aa2173a5800234ac0ffca2`.
+- The cleanup commit removes a stray trailing `"""` from `homepage-visual.css`; its CI rerun is the remaining automated validation.
 - PR: https://github.com/zombcash/zombcash.github.io/pull/656
+
+**Snake iframe:** The current successful visual workflows do not invoke a dedicated Snake iframe test. The earlier timeout therefore remains unverified and must not be reported as fixed.
 
 **Merge status:** PR remains open and unmerged. No merge was performed.
