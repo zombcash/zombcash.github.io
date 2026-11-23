@@ -15,7 +15,7 @@ honey_trap = next((item for item in items if "HONEY-TRAP APOCALYPSE" in str(item
 if honey_trap:
     assert "community-creations" in honey_trap.get("category_ids", []), "Corporate honey-trap fiction should not be classified as Apocalypse & Survival"
     assert "apocalypse-survival" not in honey_trap.get("category_ids", []), "Generic use of 'apocalypse' must not override visual/topic relevance"
-gallery_categories = {"zombie-memes", "nightmare-horror", "undead-after-dark", "zombie-characters", "site-transmissions", "apocalypse-survival", "crypto-apocalypse", "community-creations"}
+gallery_categories = {"zombie-memes", "nightmare-horror", "undead-after-dark", "field-anchor-adventures", "zombie-characters", "site-transmissions", "apocalypse-survival", "crypto-apocalypse", "community-creations"}
 category_counts = {category: sum(1 for item in items if category in item.get("category_ids", [])) for category in gallery_categories}
 # PAGE_SIZE limits each rendered page, not the size of an archive category.
 # Categories may legitimately contain more than 200 items across multiple pages.

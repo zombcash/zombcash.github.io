@@ -42,13 +42,13 @@
     .split(/━━━━━━━━|🧟\s*\$ZOMBCASH|MARKET DIED\.|📋\s*CA:|🌐\s*Website:|𝕏\s*X Community|💬\s*Telegram/i)[0]
     .trim();
   const cleanCardTitle = value => cleanCaption(value)
-    .replace(/^(?:🩸|🌙|😂|🛰️)\s*(?:NIGHTMARE\s*&\s*HORROR|NIGHTMARE\s+DROP|ZOMBIECASH\s+MEMES?|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|UNDEAD\s+AFTER\s+DARK|ZOMBIECASH\s+SITE\s+TRANSMISSION)\s*/i, "")
+    .replace(/^(?:🩸|🌙|😂|🛰️|📡)\s*(?:FIELD\s+ANCHOR\s+ADVENTURES|NIGHTMARE\s*&\s*HORROR|NIGHTMARE\s+DROP|ZOMBIECASH\s+MEMES?|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|UNDEAD\s+AFTER\s+DARK|ZOMBIECASH\s+SITE\s+TRANSMISSION)\s*/i, "")
     .trim();
   const splitGalleryCaption = value => {
     let text = cleanCaption(value);
     const hashtags = [...text.matchAll(/#[\p{L}\p{N}_]+/gu)].map(match => match[0]);
     text = text.replace(/#[\p{L}\p{N}_]+/gu, " ").replace(/\s+/g, " ").trim();
-    const headingMatch = text.match(/^(?:🌙\s*UNDEAD\s+AFTER\s+DARK|😂\s*ZOMBIECASH\s+MEMES?|🩸\s*NIGHTMARE\s*(?:&|AND)\s*HORROR|🛰️\s*ZOMBIECASH\s+SITE\s+TRANSMISSION|NIGHTMARE\s+DROP|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|ZOMBIECASH\s+MEMES?)/i);
+    const headingMatch = text.match(/^(?:📡\s*FIELD\s+ANCHOR\s+ADVENTURES|🌙\s*UNDEAD\s+AFTER\s+DARK|😂\s*ZOMBIECASH\s+MEMES?|🩸\s*NIGHTMARE\s*(?:&|AND)\s*HORROR|🛰️\s*ZOMBIECASH\s+SITE\s+TRANSMISSION|FIELD\s+ANCHOR\s+ADVENTURES|NIGHTMARE\s+DROP|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|ZOMBIECASH\s+MEMES?)/i);
     const heading = headingMatch ? headingMatch[0].trim() : "";
     if (heading) text = text.slice(headingMatch[0].length).trim();
     return {caption:text, meta:[heading, [...new Set(hashtags)].join(" ")].filter(Boolean).join("  ·  ")};
@@ -294,15 +294,16 @@
     const allowedGalleryCaption = caption =>
       /\bNIGHTMARE\s+DROP\b/i.test(String(caption ?? "")) ||
       /\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b/i.test(String(caption ?? "")) ||
-      /\bUNDEAD\s+AFTER\s+DARK\b/i.test(String(caption ?? ""));
+      /\bUNDEAD\s+AFTER\s+DARK\b/i.test(String(caption ?? "")) ||
+      /\bFIELD\s+ANCHOR\s+ADVENTURES\b/i.test(String(caption ?? ""));
     const items = Array.isArray(data.items)
       ? data.items.filter(item => item.image && item.caption && !/\bZOMBIECASH\s+SITE\s+SPOTLIGHT\b/i.test(String(item.caption)) && (Array.isArray(item.category_ids) ? item.category_ids.length : allowedGalleryCaption(item.caption)))
       : [];
-    // Keep only three clear gallery filters. Crypto-apocalypse belongs with memes;
-    // community creations remain in the main archive without a separate category.
+    // Keep explicit editorial series separate; crypto-apocalypse belongs with memes,
+    // while community creations remain in the main archive without a separate category.
     items.forEach(item => {
       const ids = Array.isArray(item.category_ids) ? item.category_ids : [];
-      item.category_ids = [...new Set(ids.map(id => (id === "nightmare-horror" || id === "undead-after-dark") ? id : "zombie-memes"))];
+      item.category_ids = [...new Set(ids.map(id => (["nightmare-horror", "undead-after-dark", "field-anchor-adventures"].includes(id)) ? id : "zombie-memes"))];
     });
     localizeGalleryMeta(items, data.updated_at);
     if (!items.length) {
@@ -332,7 +333,16 @@
       tr:{"zombie-memes":"Zombi Memleri","nightmare-horror":"Kâbus ve Korku","undead-after-dark":"Gece Yarısı Ölüleri","zombie-characters":"Zombi Karakterleri","apocalypse-survival":"Kıyamet ve Hayatta Kalma","crypto-apocalypse":"Kripto Kıyameti","community-creations":"Topluluk Eserleri"},
       hi:{"zombie-memes":"ज़ॉम्बी मीम","nightmare-horror":"दुःस्वप्न और हॉरर","undead-after-dark":"रात ढलने के बाद के ज़ॉम्बी","zombie-characters":"ज़ॉम्बी किरदार","apocalypse-survival":"प्रलय और उत्तरजीविता","crypto-apocalypse":"क्रिप्टो प्रलय","community-creations":"समुदाय की कलाकृतियाँ"}
     };
-    const categories = ["zombie-memes","nightmare-horror","undead-after-dark"];
+    categoryText.en["field-anchor-adventures"]="Field Anchor Adventures";
+    categoryText.ru["field-anchor-adventures"]="Приключения полевого агента";
+    categoryText.de["field-anchor-adventures"]="Abenteuer der Feldagentin";
+    categoryText.fr["field-anchor-adventures"]="Aventures de l’éclaireuse";
+    categoryText.it["field-anchor-adventures"]="Avventure dell’esploratrice";
+    categoryText.ja["field-anchor-adventures"]="フィールドアンカーの冒険";
+    categoryText["zh-CN"]["field-anchor-adventures"]="前线主播的冒险";
+    categoryText.tr["field-anchor-adventures"]="Saha Muhabirinin Maceraları";
+    categoryText.hi["field-anchor-adventures"]="फील्ड एंकर के रोमांच";
+    const categories = ["zombie-memes","nightmare-horror","undead-after-dark","field-anchor-adventures"];
     const toolbar = document.createElement("div");
     toolbar.className = "gallery-toolbar";
     toolbar.innerHTML = '<div class="gallery-filter-row"><div class="gallery-category-filters" role="group" aria-label="Gallery categories"></div><label class="gallery-search-label"><span class="sr-only">Search gallery</span><input class="gallery-search" type="search" autocomplete="off"></label><label class="gallery-sort-label"><span class="sr-only">Sort gallery</span><select class="gallery-sort"><option value="newest"></option><option value="oldest"></option><option value="liked"></option></select></label><button class="gallery-reset" type="button"></button></div><p class="gallery-results" aria-live="polite"></p>';
