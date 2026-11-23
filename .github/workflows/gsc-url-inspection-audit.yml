@@ -2,6 +2,17 @@ name: Google Search Console URL Inspection Audit
 
 on:
   workflow_dispatch:
+    inputs:
+      start_index:
+        description: "Zero-based URL index to resume from"
+        required: false
+        default: "0"
+        type: string
+      limit:
+        description: "Maximum URLs to inspect in this batch; 0 means all remaining URLs"
+        required: false
+        default: "0"
+        type: string
   push:
     branches: [main]
     paths:
@@ -30,6 +41,8 @@ jobs:
       - name: Inspect every unique sitemap URL in Google
         env:
           GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+          START_INDEX: ${{ inputs.start_index || '0' }}
+          URL_LIMIT: ${{ inputs.limit || '0' }}
         run: |
           python - <<'PY'
           import datetime
@@ -115,12 +128,20 @@ jobs:
           if not urls:
               raise SystemExit("ERROR: No valid page URLs found in the published sitemaps.")
 
+          start_index = max(0, int(os.environ.get("START_INDEX", "0") or "0"))
+          url_limit = max(0, int(os.environ.get("URL_LIMIT", "0") or "0"))
+          selected_urls = urls[start_index:] if url_limit == 0 else urls[start_index:start_index + url_limit]
+          if not selected_urls:
+              raise SystemExit(f"ERROR: No URLs selected; start_index={start_index}, limit={url_limit}, total={len(urls)}.")
+
           report = {
               "site": site_url,
               "generated_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
               "source": "Google Search Console URL Inspection API",
               "sitemaps": sitemap_urls,
               "unique_sitemap_urls": len(urls),
+              "selected_start_index": start_index,
+              "selected_url_count": len(selected_urls),
               "inspected_count": 0,
               "error_count": 0,
               "stopped_early": False,
@@ -128,7 +149,8 @@ jobs:
           }
 
           print(f"Search Console property: {site_url}")
-          print(f"Unique sitemap URLs to inspect: {len(urls)}")
+          print(f"Unique sitemap URLs: {len(urls)}")
+          print(f"Selected URL batch: {len(selected_urls)} starting at index {start_index}; limit={url_limit or 'all remaining'}.")
           print("Inspection cadence: 0.2 seconds between requests (below the documented 600 requests/minute per-site quota).")
 
           # Each worker owns its Google API client; the shared start-time gate
@@ -201,7 +223,7 @@ jobs:
                   }
 
           with ThreadPoolExecutor(max_workers=4) as executor:
-              for index, record in enumerate(executor.map(inspect_url, urls), start=1):
+              for index, record in enumerate(executor.map(inspect_url, selected_urls), start=1):
                   if record.get("skipped_due_to_stop"):
                       report["skipped_count"] = report.get("skipped_count", 0) + 1
                       continue
@@ -213,7 +235,7 @@ jobs:
                           report["stop_reason"] = f"HTTP {record['error_http_status']} from URL Inspection API"
                   else:
                       report["inspected_count"] += 1
-                  if index % 25 == 0 or index == len(urls):
+                  if index % 25 == 0 or index == len(selected_urls):
                       print(
                           f"Progress: {index}/{len(urls)} scheduled; "
                           f"{report['inspected_count']} inspected; "
@@ -240,6 +262,7 @@ jobs:
               "# Google Search Console URL Inspection",
               "",
               f"- Unique sitemap URLs: **{len(urls)}**",
+              f"- Selected batch: **{len(selected_urls)}** (start index {start_index}, limit {url_limit or 'all remaining'})",
               f"- Inspected: **{report['inspected_count']}**",
               f"- Errors: **{report['error_count']}**",
               f"- Skipped after stop: **{report.get('skipped_count', 0)}**",
