@@ -44,7 +44,7 @@ async function json(route, data, status = 200) {
 
 async function installApiMocks(page, options = {}) {
   const calls = [];
-  let state = {
+  let state = options.state ? JSON.parse(JSON.stringify(options.state)) : {
     freeSpinAvailable: true,
     freeSpinUsed: false,
     bonusSpins: 0,
@@ -60,9 +60,11 @@ async function installApiMocks(page, options = {}) {
       return route.fulfill({ status: 204, headers: corsHeaders(), body: '' });
     }
     if (url.pathname === '/api/roulette/stats') {
-      return json(route, { totalPrizeEquivalentUsd: 0, totalSpins: state.spinsToday, winners: [] });
+      if (options.statsStatus) return json(route, { error: 'Stats unavailable' }, options.statsStatus);
+      return json(route, options.statsResponse || { totalPrizeEquivalentUsd: 0, totalSpins: state.spinsToday, winners: [] });
     }
     if (url.pathname === '/api/profile') {
+      if (options.profileStatus) return json(route, { error: 'Profile unavailable' }, options.profileStatus);
       return options.auth
         ? json(route, { profile: { publicDisplayName: 'QA Survivor', firstName: 'QA' } })
         : json(route, { error: 'Unauthorized' }, 401);
@@ -71,9 +73,11 @@ async function installApiMocks(page, options = {}) {
       return options.auth ? json(route, state) : json(route, { error: 'Unauthorized' }, 401);
     }
     if (url.pathname === '/api/roulette/wallet/challenge' && request.method() === 'POST') {
+      if (options.challengeStatus) return json(route, { error: 'QA challenge failure' }, options.challengeStatus);
       return options.auth ? json(route, { challengeId: 'qa-challenge-001', message: 'ZombieCash QA wallet ownership check' }) : json(route, { error: 'Unauthorized' }, 401);
     }
     if (url.pathname === '/api/roulette/wallet/verify' && request.method() === 'POST') {
+      if (options.verifyStatus) return json(route, { error: 'QA signature verification failure' }, options.verifyStatus);
       return options.auth ? json(route, { verified: true }) : json(route, { error: 'Unauthorized' }, 401);
     }
     if (url.pathname === '/api/roulette/demo' && request.method() === 'POST') {
@@ -81,6 +85,10 @@ async function installApiMocks(page, options = {}) {
       const body = request.postDataJSON();
       if (!body.walletAddress) return json(route, { error: 'Wallet required' }, 400);
       if (body.mode !== 'free') return json(route, { error: 'Unexpected QA spin mode' }, 400);
+      if (options.spinError) {
+        state = options.spinError.state || state;
+        return json(route, { error: options.spinError.error, state }, options.spinError.status || 409);
+      }
       state = {
         freeSpinAvailable: false,
         freeSpinUsed: true,
@@ -258,6 +266,157 @@ async function checkWalletAndSpin(browser) {
   await page.close();
 }
 
+
+async function addQaAuthWallet(page, locale = 'en', walletMode = 'ok') {
+  await page.addInitScript(({ locale, walletMode }) => {
+    localStorage.setItem('zombcash-language', locale);
+    localStorage.setItem('zombcash-survivor-token', 'qa-only-fake-token');
+    const publicKey = { toBase58: () => 'QAWallet111111111111111111111111111111111' };
+    const events = {};
+    const provider = {
+      isConnected: false,
+      connect: async () => {
+        if (walletMode === 'cancel') throw new Error('User rejected the request');
+        return { publicKey };
+      },
+      disconnect: async () => {},
+      on: (name, callback) => { events[name] = callback; },
+    };
+    if (walletMode !== 'unsupported') {
+      provider.signMessage = async () => {
+        if (walletMode === 'sign-cancel') throw new Error('User rejected the signature request');
+        return { signature: new Uint8Array([1, 2, 3, 4]) };
+      };
+    }
+    window.__qaWalletEvents = events;
+    window.phantom = { solana: provider };
+  }, { locale, walletMode });
+}
+
+async function checkAuthStates(browser) {
+  {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    const calls = await installApiMocks(page);
+    await page.addInitScript(() => localStorage.setItem('zombcash-language', 'en'));
+    await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => document.querySelector('#auth-message')?.textContent.trim().length > 0);
+    await page.locator('#spin-free').click();
+    await page.waitForFunction(() => document.querySelector('#spin-result strong')?.textContent.trim().length > 0);
+    if (calls.some(call => call.path === '/api/roulette/demo' && call.method === 'POST')) throw new Error('Guest was allowed to submit a roulette spin');
+    if (!(await page.locator('#auth-message').innerText()).toLowerCase().includes('telegram')) throw new Error('Guest login instructions do not explain Telegram registration');
+    await page.close();
+  }
+  {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    await installApiMocks(page, { auth: true, profileStatus: 401 });
+    await page.addInitScript(() => {
+      localStorage.setItem('zombcash-language', 'en');
+      localStorage.setItem('zombcash-survivor-token', 'qa-expired-token');
+    });
+    await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => document.querySelector('#auth-message')?.textContent.trim().length > 0);
+    const message = await page.locator('#auth-message').innerText();
+    if (/connecting|checking/i.test(message) || !/telegram/i.test(message)) throw new Error('Expired token did not resolve to a useful re-login message');
+    await page.close();
+  }
+  {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    await installApiMocks(page, { auth: true, profileStatus: 503, statsStatus: 503 });
+    await page.addInitScript(() => {
+      localStorage.setItem('zombcash-language', 'en');
+      localStorage.setItem('zombcash-survivor-token', 'qa-only-fake-token');
+    });
+    await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => document.querySelector('#auth-message')?.textContent.trim().length > 0 && document.querySelector('#public-winner-stats')?.textContent.trim().length > 0);
+    const auth = await page.locator('#auth-message').innerText();
+    const stats = await page.locator('#public-winner-stats').innerText();
+    if (/connecting|checking/i.test(auth) || !/telegram/i.test(auth)) throw new Error('API outage left the auth panel in a loading state');
+    if (!/unavailable|could not|error|failed/i.test(stats)) throw new Error('Stats API outage did not show a useful error state');
+    await page.close();
+  }
+}
+
+async function checkWalletFailureStates(browser) {
+  const scenarios = [
+    { name: 'provider missing', walletMode: 'missing', options: {}, expected: /wallet|phantom|solflare/i, raw: '' },
+    { name: 'connect cancelled', walletMode: 'cancel', options: {}, expected: /wallet|connect|complete/i, raw: /user rejected/i },
+    { name: 'message signing unsupported', walletMode: 'unsupported', options: {}, expected: /signature|подпис|署名|签名|imza|हस्ताक्षर/i, raw: /does not support message signing/i },
+    { name: 'challenge rejected', walletMode: 'ok', options: { challengeStatus: 503 }, expected: /signature|подпис|署名|签名|imza|हस्ताक्षर/i, raw: /QA challenge failure/i },
+    { name: 'signature verification rejected', walletMode: 'ok', options: { verifyStatus: 401 }, expected: /signature|подпис|署名|签名|imza|हस्ताक्षर/i, raw: /QA signature verification failure/i },
+  ];
+  for (const scenario of scenarios) {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    const calls = await installApiMocks(page, { auth: true, ...scenario.options });
+    await page.addInitScript(({ walletMode }) => {
+      localStorage.setItem('zombcash-language', 'en');
+      localStorage.setItem('zombcash-survivor-token', 'qa-only-fake-token');
+      if (walletMode === 'missing') return;
+      const publicKey = { toBase58: () => 'QAWallet111111111111111111111111111111111' };
+      const provider = {
+        isConnected: false,
+        connect: async () => {
+          if (walletMode === 'cancel') throw new Error('User rejected the request');
+          return { publicKey };
+        },
+        disconnect: async () => {},
+        on: () => {},
+      };
+      if (walletMode !== 'unsupported') provider.signMessage = async () => ({ signature: new Uint8Array([1, 2, 3, 4]) });
+      window.phantom = { solana: provider };
+    }, { walletMode: scenario.walletMode });
+    await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => document.querySelector('#auth-message')?.textContent.includes('QA Survivor'));
+    await page.locator('#wallet-connect').click();
+    await page.waitForFunction(() => {
+      const status = document.querySelector('#wallet-status')?.textContent || '';
+      return status.length > 0 && !/verifying|signing/i.test(status);
+    }, null, { timeout: 15000 });
+    const status = await page.locator('#wallet-status').innerText();
+    if (!scenario.expected.test(status)) throw new Error(scenario.name + ': localized status missing: ' + status);
+    if (scenario.raw && scenario.raw.test(status)) throw new Error(scenario.name + ': raw provider/API error leaked to UI: ' + status);
+    if (scenario.name === 'provider missing' && calls.some(call => call.path.includes('/wallet/challenge'))) throw new Error('Missing wallet unexpectedly requested a challenge');
+    if (scenario.name === 'challenge rejected' && calls.some(call => call.path.includes('/wallet/verify'))) throw new Error('Wallet verify was called after challenge failure');
+    await page.close();
+  }
+}
+
+async function checkSpinErrorLocalization(browser) {
+  const dailyLimitCopy = {
+    en: 'Daily spin limit reached. Come back after the UTC reset.',
+    ru: 'Дневной лимит исчерпан. Возвращайся после сброса суток UTC.',
+    de: 'Tageslimit erreicht. Komm nach dem UTC-Reset zurück.',
+    fr: 'Limite quotidienne atteinte. Revenez après la remise à zéro UTC.',
+    it: 'Limite giornaliero raggiunto. Torna dopo il reset UTC.',
+    ja: '本日の上限です。UTC日付変更後に戻ってください。',
+    'zh-CN': '已达到每日上限。请在UTC日期重置后再来。',
+    tr: 'Günlük sınır doldu. UTC sıfırlamasından sonra gel.',
+    hi: 'दैनिक सीमा पूरी हुई। UTC रीसेट के बाद लौटें।',
+  };
+  for (const locale of Object.keys(dailyLimitCopy)) {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    const calls = await installApiMocks(page, {
+      auth: true,
+      spinError: {
+        status: 409,
+        error: 'Daily demo spin limit reached.',
+        state: { freeSpinAvailable: false, freeSpinUsed: true, bonusSpins: 0, spinsToday: 3, dailySpinCap: 3, history: [] },
+      },
+    });
+    await addQaAuthWallet(page, locale);
+    await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => document.querySelector('#auth-message')?.textContent.includes('QA Survivor'));
+    await page.locator('#wallet-connect').click();
+    await page.waitForFunction(() => document.querySelector('#wallet-status')?.textContent.includes('QAWal'));
+    await page.locator('#spin-free').click();
+    await page.waitForFunction(expected => document.querySelector('#spin-result strong')?.textContent.trim() === expected, dailyLimitCopy[locale], { timeout: 12000 });
+    const title = await page.locator('#spin-result strong').innerText();
+    if (title === 'Daily demo spin limit reached.') throw new Error(locale + ': raw English API error leaked into the spin result');
+    if (!calls.some(call => call.path === '/api/roulette/demo' && call.method === 'POST')) throw new Error(locale + ': no server spin request was sent');
+    if (calls.some(call => /transaction|transfer|payment/i.test(call.path))) throw new Error(locale + ': a payment/transaction endpoint was requested');
+    await page.close();
+  }
+}
+
 (async () => {
   const browser = await chromium.launch({ headless: true });
   try {
@@ -268,7 +427,10 @@ async function checkWalletAndSpin(browser) {
     }
     await checkResponsive(browser);
     await checkWalletAndSpin(browser);
-    console.log('Roulette audit passed: 9 locales, 7 viewports, demo copy/SEO, wallet challenge, mocked server-authoritative spin, and screenshots.');
+    await checkAuthStates(browser);
+    await checkWalletFailureStates(browser);
+    await checkSpinErrorLocalization(browser);
+    console.log('Roulette audit passed: 9 locales, 7 viewports, auth/wallet failure states, localized API errors, reduced motion, and mocked server-authoritative spin.');
   } finally {
     await browser.close();
   }
