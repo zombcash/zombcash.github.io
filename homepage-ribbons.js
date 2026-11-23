@@ -62,7 +62,18 @@
      var change=Number(row.priceChangePercent);
      setItem(name+':',name+': '+fmtPrice(Number(row.lastPrice))+' ('+fmtChange(change)+')');
     });
-   }).catch(function(){['BTC','ETH','SOL'].forEach(function(s){setItem(s+':',s+': temporarily unavailable');});});
+   }).catch(function(){
+    var ids={BTC:'bitcoin',ETH:'ethereum',SOL:'solana'};
+    fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Csolana&vs_currencies=usd&include_24hr_change=true',{cache:'no-store'})
+     .then(function(r){if(!r.ok)throw new Error('CoinGecko HTTP '+r.status);return r.json();})
+     .then(function(data){
+      Object.keys(ids).forEach(function(symbol){
+       var quote=data[ids[symbol]]||{},price=Number(quote.usd),change=Number(quote.usd_24h_change);
+       if(Number.isFinite(price)&&price>0)setItem(symbol+':',symbol+': '+fmtPrice(price)+(Number.isFinite(change)?' ('+fmtChange(change)+')':''));
+       else setItem(symbol+':',symbol+': temporarily unavailable');
+      });
+     }).catch(function(){['BTC','ETH','SOL'].forEach(function(symbol){setItem(symbol+':',symbol+': temporarily unavailable');});});
+   });
  }
  function updateFx(){
   fetch('https://open.er-api.com/v6/latest/USD',{cache:'no-store'})
