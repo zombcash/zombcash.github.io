@@ -22,7 +22,7 @@ PAGE_SIZE = 200
 # The order is intentional: explicit series/meme labels win over broad keywords.
 CATEGORY_PATTERNS = {
     # Explicit editorial series always take priority over broad topic keywords.
-    "zombie-characters": re.compile(r"\bHEROINE[’']?S\s+SURVIVAL\s+DIARY\b|#ZombieCashHeroine\b", re.I),
+    "zombie-characters": re.compile(r"\bHEROINE[’']?S\s+SURVIVAL\s+DIARY\b|#ZombieCashDiary\b", re.I),
     "nightmare-horror": re.compile(r"\bNIGHTMARE(?:\s+DROP|\s*&\s*HORROR)?\b|\bHORROR\b|\bHAUNTED\b|\bCREEPY\b|\bDREAD\b|🩸", re.I),
     "undead-after-dark": re.compile(r"\bUNDEAD\s+AFTER\s+DARK\b", re.I),
     "zombie-memes": re.compile(r"\bZOMBIECASH\s+MEMES?\b|\bZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?\b|#ZombieCashMeme\b|😂", re.I),
