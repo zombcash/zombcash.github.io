@@ -54,7 +54,7 @@
  }
  function updateCrypto(){
   var symbols=['BTCUSDT','ETHUSDT','SOLUSDT'];
-  fetch('https://api.binance.com/api/v3/ticker/24hr?symbols='+encodeURIComponent(JSON.stringify(symbols)),{cache:'no-store'})
+  fetch('https://api.binance.com/api/v3/ticker/24hr?symbols='+encodeURIComponent(JSON.stringify(symbols)),{cache:'no-store',signal:AbortSignal.timeout(10000)})
    .then(function(r){if(!r.ok)throw new Error('Binance HTTP '+r.status);return r.json();})
    .then(function(rows){
     rows.forEach(function(row){
@@ -64,7 +64,7 @@
     });
    }).catch(function(){
     var ids={BTC:'bitcoin',ETH:'ethereum',SOL:'solana'};
-    fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Csolana&vs_currencies=usd&include_24hr_change=true',{cache:'no-store'})
+    fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Csolana&vs_currencies=usd&include_24hr_change=true',{cache:'no-store',signal:AbortSignal.timeout(10000)})
      .then(function(r){if(!r.ok)throw new Error('CoinGecko HTTP '+r.status);return r.json();})
      .then(function(data){
       Object.keys(ids).forEach(function(symbol){
