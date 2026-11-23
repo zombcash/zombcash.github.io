@@ -7,10 +7,12 @@ on:
     # fixes to this deployment gate can deploy the current production tree.
     paths-ignore:
       - 'tests/**'
+      - '.github/workflows/deploy-pages.yml'
+      - '.github/workflows/update-sitemap-lastmod.yml'
   # Gallery Preview writes generated HTML with GITHUB_TOKEN, so its bot push
   # does not start a follow-up push workflow. Deploy after its successful main run.
   workflow_run:
-    workflows: ["Sync Zombie Gallery", "Sync gallery image SEO assets", "Gallery discovery feature preview"]
+    workflows: ["Sync Zombie Gallery", "Sync gallery image SEO assets", "Gallery discovery feature preview", "Refresh sitemap lastmod from page history"]
     types: [completed]
   workflow_dispatch:
 
