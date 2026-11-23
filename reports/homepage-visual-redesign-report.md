@@ -103,11 +103,11 @@ Performed a visual enhancement pass on the ZombieCash homepage (index.html) to s
 ## 6. Commit Information
 
 - **Branch:** feat/homepage-cinematic-redesign
-- **Commit SHA:** (to be filled after commit)
+- **Commit SHA:** c1db2e6ad826e38b8411f6a4d84579c2bc0c2222
 
 ## 7. Pull Request
 
-- **PR URL:** (to be filled after PR creation)
+- **PR URL:** https://github.com/zombcash/zombcash.github.io/pull/656
 
 ---
 
