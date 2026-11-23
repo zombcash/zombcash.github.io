@@ -34,6 +34,12 @@ on:
       - 'tests/arcade-ai-worlds-visual-smoke.cjs'
       - 'tests/arcade-dynamic-localization-smoke.cjs'
       - 'tests/arcade-snake-iframe-smoke.cjs'
+      - 'tests/arcade-snake-session-save-smoke.cjs'
+      - 'script.js'
+      - 'tests/arcade-snake-iframe-smoke.cjs'
+      - 'tests/arcade-snake-session-save-smoke.cjs'
+      - 'script.js'
+      - 'index.html'
       - '.github/workflows/mobile-viewport-test.yml'
   push:
     branches: [main]
@@ -117,6 +123,7 @@ jobs:
           node --check tests/survivor-hub-visual-smoke.cjs
           node --check tests/arcade-dynamic-localization-smoke.cjs
           node --check tests/arcade-snake-iframe-smoke.cjs
+          node --check tests/arcade-snake-session-save-smoke.cjs
           node --check tests/arcade-ai-worlds-visual-smoke.cjs
       - name: Install Playwright
         run: |
@@ -170,7 +177,7 @@ jobs:
           SITE_URL: http://127.0.0.1:4173/
         run: node tests/arcade-snake-iframe-smoke.cjs
 
-      - name: Test AI Worlds on the actual Arcade page and capture screenshot
+      - name: Test Snake full game-over and Survivor profile save handshake\n        if: always()\n        env:\n          SITE_URL: http://127.0.0.1:4173/\n        run: node tests/arcade-snake-session-save-smoke.cjs\n\n      - name: Test AI Worlds on the actual Arcade page and capture screenshot
         if: always()
         run: node tests/arcade-ai-worlds-visual-smoke.cjs
 
