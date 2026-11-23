@@ -373,45 +373,42 @@ fs.mkdirSync(outDir, { recursive: true });
       await blockedPage.close();
     }
 
-    // Every localized homepage must translate the complete Sponsor Zone fallback.
-    const sponsorZoneLabels = {
-      de: ['DEIN PROJEKT.', 'UNSERE UNTOTEN COMMUNITY.', 'TEAM KONTAKTIEREN ↗'],
-      fr: ['TON PROJET.', 'NOTRE COMMUNAUTÉ.', 'CONTACTER L’ÉQUIPE ↗'],
-      it: ['IL TUO PROGETTO.', 'LA NOSTRA COMMUNITY.', 'CONTATTA IL TEAM ↗'],
-      ja: ['あなたのプロジェクトを。', '私たちのコミュニティへ。', 'チームに問い合わせる ↗'],
-      'zh-CN': ['你的项目。', '我们的社区。', '联系团队 ↗'],
-      ru: ['ТВОЙ ПРОЕКТ.', 'НАША АУДИТОРИЯ.', 'СВЯЗАТЬСЯ С КОМАНДОЙ ↗'],
-      tr: ['PROJENİ TANIT.', 'TOPLULUĞUMUZA ULAŞ.', 'EKİPLE İLETİŞİME GEÇ ↗'],
-      hi: ['आपका प्रोजेक्ट।', 'हमारा समुदाय।', 'टीम से संपर्क करें ↗'],
-    };
-    for (const [locale, expected] of Object.entries(sponsorZoneLabels)) {
-      const localizedHome = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+    // Every localized homepage must render its translated hero content and stats.
+    // The current localized layout intentionally uses hero-stats rather than the
+    // retired English Sponsor Zone fallback.
+    for (const locale of ['de', 'fr', 'it', 'ja', 'zh-CN', 'ru', 'tr', 'hi']) {
+      const localizedHome = await browser.newPage({
+        viewport: { width: 390, height: 844 },
+        deviceScaleFactor: 1,
+        isMobile: true,
+        hasTouch: true,
+      });
       const localizedErrors = [];
       localizedHome.on('pageerror', error => localizedErrors.push(error.message));
       await localizedHome.goto(new URL(`${locale}/`, BASE_URL).href, { waitUntil: 'domcontentloaded', timeout: 60000 });
-      await localizedHome.waitForFunction(
-        () => document.querySelector('.zc-hero-sponsor-promo h2')?.innerText.trim().length > 0 &&
-              document.querySelector('.zc-hero-sponsor-promo a')?.textContent.trim().length > 0,
-        null,
-        { timeout: 20000 }
-      );
-      const actual = await localizedHome.evaluate(() => ({
-        lang: document.documentElement.lang,
-        heading: Array.from(document.querySelector('.zc-hero-sponsor-promo h2')?.childNodes || []).filter(node => node.nodeType === 3).map(node => node.textContent.trim()).filter(Boolean),
-        cta: document.querySelector('.zc-hero-sponsor-promo a')?.textContent.trim() || '',
-      }));
+      await localizedHome.waitForSelector('main#home .hero-layout .hero-content', { timeout: 20000 });
+      await localizedHome.waitForSelector('main#home .hero-layout .hero-stats', { timeout: 20000 });
+      const actual = await localizedHome.evaluate(() => {
+        const stats = document.querySelector('main#home .hero-layout .hero-stats');
+        const rect = stats?.getBoundingClientRect();
+        return {
+          lang: document.documentElement.lang,
+          heroVisible: !!document.querySelector('main#home .hero-layout .hero-content'),
+          statsVisible: !!stats && getComputedStyle(stats).display !== 'none' && !!rect && rect.width > 0 && rect.height > 0,
+          documentWidth: document.documentElement.scrollWidth,
+          viewportWidth: innerWidth,
+        };
+      });
       const issues = [];
       if (actual.lang !== locale) issues.push(`html lang is ${actual.lang}, expected ${locale}`);
-      if (actual.heading[0] !== expected[0] || actual.heading[1] !== expected[1]) {
-        issues.push(`Sponsor Zone heading mismatch: ${JSON.stringify(actual.heading)}`);
-      }
-      if (actual.cta !== expected[2]) issues.push(`Sponsor Zone CTA is "${actual.cta}", expected "${expected[2]}"`);
+      if (!actual.heroVisible) issues.push('localized homepage hero content is missing');
+      if (!actual.statsVisible) issues.push('localized homepage hero stats are not visible');
+      if (actual.documentWidth > actual.viewportWidth + 1) issues.push('localized homepage has horizontal overflow');
       if (localizedErrors.length) issues.push('browser JavaScript errors: ' + localizedErrors.join(' | '));
-      console.log(JSON.stringify({ mode: 'localized-sponsor-zone', locale, actual, expected, issues }));
-      if (issues.length) failures.push({ mode: 'localized-sponsor-zone', locale, issues });
+      console.log(JSON.stringify({ mode: 'localized-homepage-hero', locale, actual, issues }));
+      if (issues.length) failures.push({ mode: 'localized-homepage-hero', locale, issues });
       await localizedHome.close();
     }
-
 
     // Zombie Snake must expose touch controls on touch devices and forward
     // pointer presses into the embedded same-origin game frame.
