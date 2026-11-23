@@ -380,7 +380,7 @@
       resetButton.textContent = t.clear;
       const present = new Set(items.flatMap(item => Array.isArray(item.category_ids) ? item.category_ids : []));
       filterRow.innerHTML = "";
-      const buttons = [{id:"all",label:t.all}, ...categories.filter(id => present.has(id)).map(id => ({id,label:c[id]||id}))];
+      const buttons = [{id:"all",label:t.all}, ...categories.map(id => ({id,label:c[id]||id}))];
       buttons.forEach(({id,label}) => {
         const button = document.createElement("button");
         button.type = "button";
