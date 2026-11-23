@@ -9,8 +9,8 @@ on:
       - 'tests/**'
       - '.github/workflows/deploy-pages.yml'
       - '.github/workflows/update-sitemap-lastmod.yml'
-  # Gallery Preview writes generated HTML with GITHUB_TOKEN, so its bot push
-  # does not start a follow-up push workflow. Deploy after its successful main run.
+  # Gallery Preview and the sitemap lastmod updater write with GITHUB_TOKEN, so their bot pushes
+  # do not start follow-up push workflows. Deploy after their successful main runs.
   workflow_run:
     workflows: ["Sync Zombie Gallery", "Sync gallery image SEO assets", "Gallery discovery feature preview", "Refresh sitemap lastmod from page history"]
     types: [completed]
@@ -34,6 +34,7 @@ jobs:
         github.event.workflow_run.head_branch == 'main' &&
         (
           github.event.workflow_run.event == 'push' ||
+          github.event.workflow_run.event == 'workflow_dispatch' ||
           (
             github.event.workflow_run.name == 'Sync Zombie Gallery' &&
             github.event.workflow_run.event == 'schedule'
