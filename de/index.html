@@ -72,8 +72,7 @@
 </script>
 <title>ZombieCash ($ZOMBCASH) auf Solana – Das untote Internet</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://upload.wikimedia.org">
-<link rel="preload" as="image" href="https://upload.wikimedia.org/wikipedia/commons/9/91/Overgrown_city%2C_post-apocalyptic.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="/assets/zombcash-survivor-640.avif" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=optional" rel="stylesheet">
 <link rel="stylesheet" href="/style.css?v=tools-card-bg-20261110-1">
@@ -762,7 +761,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 }
 </style>
 
-<link rel="stylesheet" href="/homepage-visual.css?v=zombie-lab-cinematic-20261116-2">
+<link rel="stylesheet" href="/homepage-visual.css?v=cinematic-redesign-20261123-1">
 <style id="zc-home-hero-compact-ad-placement">
 /* Keep the home hero content-led: browser zoom must not turn 100vh into a huge empty panel. */
 body > main#home > section.hero {
@@ -812,7 +811,7 @@ body > main#home > section.hero .hero-content {
   min-width: 0 !important;
   max-width: 680px !important;
 }
-body > main#home > section.hero .zc-hero-sponsor-panel {
+body > main#home > section.hero .zc-hero-art-panel {
   box-sizing: border-box !important;
   align-self: center !important;
   width: 100% !important;
@@ -847,7 +846,7 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
     grid-template-areas: "content" "radar" !important;
     align-items: stretch !important;
   }
-  body > main#home > section.hero .zc-hero-sponsor-panel {
+  body > main#home > section.hero .zc-hero-art-panel {
     width: min(100%, 760px) !important;
     justify-self: center !important;
     min-height: 0 !important;
@@ -860,7 +859,7 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
   body > main#home > section.hero > .hero-layout {
     gap: 20px !important;
   }
-  body > main#home > section.hero .zc-hero-sponsor-panel {
+  body > main#home > section.hero .zc-hero-art-panel {
     width: 100% !important;
     padding: 12px !important;
   }
@@ -1013,7 +1012,7 @@ body:has(#home) #home>.zombie-maker-promo{
 }
 /* Replace hard-edged boxes with soft glass, restrained borders and more generous radii. */
 /* Sponsor rail belongs to the same soft-glass visual language as the rest of the page. */
-body:has(#home) #home .zc-hero-sponsor-panel{
+body:has(#home) #home .zc-hero-art-panel{
   border:1px solid rgba(160,205,132,.16)!important;
   border-radius:20px!important;
   background:rgba(8,14,10,.58)!important;
@@ -1183,6 +1182,12 @@ body:has(#home) #home .tools#radar .tool-card .tool-art{
     <div class="hero-actions"><a class="btn btn-primary" href="#radar">⌁ RADAR ÖFFNEN</a><a class="btn btn-ghost" href="#lab">☣ ZOMBIE LAB BETRETEN</a></div><section class="field-manual-spotlight" aria-labelledby="field-manual-title"><div class="field-manual-copy"><span class="field-manual-kicker">ÜBERLEBENDEN-WISSEN / PRAKTISCHE GUIDES</span><h2 id="field-manual-title">WISSEN & ÜBERLEBENS-GUIDES</h2><p>Analysiere Solana-Token, erkenne Marktsignale, schütze deine Wallet und entdecke gängige Betrugsmaschen. Praktische Anleitungen, durchsuchbar nach Thema und Datum.</p><a class="field-manual-link" href="/de/survivor-field-manual.html">FELDHANDBUCH ÖFFNEN <span aria-hidden="true">↗</span></a></div><div class="field-manual-status"><span class="field-manual-dot"></span><span>FELDARCHIV</span><strong>3 LEITFÄDEN VERFÜGBAR</strong><small>WEITERE DOSSIERS FOLGEN</small></div></section>
 
     <div class="hero-stats"><div><strong>24/7</strong><span>AUSBRUCH LIVE</span></div><i></i><div><strong>3</strong><span>SOLANA-SEKTOR</span></div><i></i><div><strong>0</strong><span>NUR DIE CREW</span></div></div>
+  </div>
+
+  <div class="zc-hero-art-panel">
+    <div class="zc-sponsor-art-slot">
+      <img src="/assets/zombcash-survivor-realistic-520.avif" alt="ZombieCash zombie survivor heroine">
+    </div>
   </div>
 
   </div>
@@ -2248,7 +2253,7 @@ body:has(#home) #home > section.hero > .hero-layout > .hero-content{
   box-sizing:border-box!important;width:100%!important;max-width:680px!important;
   min-width:0!important;margin:0!important;padding:0!important;transform:none!important;
 }
-body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel{
+body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
   grid-area:sponsor!important;grid-column:2!important;grid-row:1!important;
   position:relative!important;inset:auto!important;float:none!important;
   align-self:start!important;justify-self:stretch!important;
@@ -2321,7 +2326,7 @@ body:has(#home) #home > section.hero .hero-bottom{
     gap:26px!important;
   }
   body:has(#home) #home > section.hero > .hero-layout > .hero-content,
-  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel{
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
     grid-column:1!important;grid-row:auto!important;
     width:min(100%,900px)!important;max-width:900px!important;
     justify-self:center!important;
@@ -2348,7 +2353,7 @@ body:has(#home) #home > section.hero .hero-bottom{
 @media(max-width:760px){
   body:has(#home) #home > section.hero{padding:26px 5% 24px!important}
   body:has(#home) #home > section.hero > .hero-layout{gap:20px!important}
-  body:has(#home) #home > section.hero .zc-hero-sponsor-panel{padding:9px!important}
+  body:has(#home) #home > section.hero .zc-hero-art-panel{padding:9px!important}
   body:has(#home) #home > section.hero .zc-hero-sponsor-promo{min-height:170px!important;padding:18px 14px!important}
   body:has(#home) #home > section.hero .hero-stats{flex-wrap:wrap!important;gap:12px!important}
 }

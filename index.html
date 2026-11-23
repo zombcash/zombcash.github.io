@@ -139,8 +139,7 @@
 </script>
 <title>ZombieCash ($ZOMBCASH) on Solana — The Undead Internet</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://upload.wikimedia.org">
-<link rel="preload" as="image" href="https://upload.wikimedia.org/wikipedia/commons/9/91/Overgrown_city%2C_post-apocalyptic.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="/assets/zombcash-survivor-640.avif" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=optional" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=tools-card-bg-20261110-1">
@@ -823,7 +822,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 </style>
 
 <meta name="38200f66893a4042799616bc41b0aa824be9a7b0" content="38200f66893a4042799616bc41b0aa824be9a7b0" />
-<link rel="stylesheet" href="/homepage-visual.css?v=zombie-lab-cinematic-20261116-2">
+<link rel="stylesheet" href="/homepage-visual.css?v=cinematic-redesign-20261123-1">
 <style id="zc-ai-engine-card-layout-fix">
   /* One full-width status rail balances the lower hero across both columns. */
   body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail {
@@ -895,6 +894,12 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
     <p class="brand-search-aliases" style="max-width:760px;margin:10px 0 0;color:#a6b5a5;font-size:13px;line-height:1.5">Looking for ZombieCash? The official Solana community project is also searched as <strong style="color:#d5e1d0">Zombie Cash</strong> or <strong style="color:#d5e1d0">ZombCash</strong>. Queries such as <strong style="color:#d5e1d0">Cash Zombie</strong> and <strong style="color:#d5e1d0">CashZombie</strong> should lead you to the same official project. Token ticker: <strong style="color:#9bff45">$ZOMBCASH</strong>.</p>
     <div class="hero-actions"><a class="btn btn-primary" href="#radar">⌁ OPEN THE RADAR</a><a class="btn btn-ghost" href="#lab">☣ ENTER ZOMBIE LAB</a></div><section class="field-manual-spotlight" aria-labelledby="field-manual-title"><div class="field-manual-copy"><span class="field-manual-kicker">SURVIVOR INTEL / PRACTICAL GUIDES</span><h2 id="field-manual-title">INTEL &amp; SURVIVAL GUIDES</h2><p>Research Solana tokens, read market signals, protect your wallet and spot common scams. Clear field guides, searchable by topic and date.</p><a class="field-manual-link" href="survivor-field-manual.html">OPEN THE FIELD MANUAL <span aria-hidden="true">↗</span></a></div><div class="field-manual-status"><span class="field-manual-dot"></span><span>FIELD ARCHIVE</span><strong>3 GUIDES AVAILABLE</strong><small>MORE DOSSIERS TO COME</small></div></section>
 
+  </div>
+
+  <div class="zc-hero-art-panel">
+    <div class="zc-sponsor-art-slot">
+      <img src="/assets/zombcash-survivor-realistic-520.avif" alt="ZombieCash zombie survivor heroine">
+    </div>
   </div>
 
   <div class="zc-home-status-rail" aria-label="Community engine and live project stats">
@@ -1937,7 +1942,7 @@ body > main#home > section.hero .hero-content {
   min-width: 0 !important;
   max-width: 680px !important;
 }
-body > main#home > section.hero .zc-hero-sponsor-panel {
+body > main#home > section.hero .zc-hero-art-panel {
   box-sizing: border-box !important;
   align-self: center !important;
   width: 100% !important;
@@ -1972,7 +1977,7 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
     grid-template-areas: "content" "radar" !important;
     align-items: stretch !important;
   }
-  body > main#home > section.hero .zc-hero-sponsor-panel {
+  body > main#home > section.hero .zc-hero-art-panel {
     width: min(100%, 760px) !important;
     justify-self: center !important;
     min-height: 0 !important;
@@ -1985,7 +1990,7 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
   body > main#home > section.hero > .hero-layout {
     gap: 20px !important;
   }
-  body > main#home > section.hero .zc-hero-sponsor-panel {
+  body > main#home > section.hero .zc-hero-art-panel {
     width: 100% !important;
     padding: 12px !important;
   }
@@ -2084,7 +2089,7 @@ body:has(#home) #home > section.hero > .hero-layout > .hero-content{
   box-sizing:border-box!important;width:100%!important;max-width:680px!important;
   min-width:0!important;margin:0!important;padding:0!important;transform:none!important;
 }
-body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel{
+body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
   grid-area:sponsor!important;grid-column:2!important;grid-row:1!important;
   position:relative!important;inset:auto!important;float:none!important;
   align-self:start!important;justify-self:stretch!important;
@@ -2157,7 +2162,7 @@ body:has(#home) #home > section.hero .hero-bottom{
     gap:26px!important;
   }
   body:has(#home) #home > section.hero > .hero-layout > .hero-content,
-  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel{
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
     grid-column:1!important;grid-row:auto!important;
     width:min(100%,900px)!important;max-width:900px!important;
     justify-self:center!important;
@@ -2184,7 +2189,7 @@ body:has(#home) #home > section.hero .hero-bottom{
 @media(max-width:760px){
   body:has(#home) #home > section.hero{padding:26px 5% 24px!important}
   body:has(#home) #home > section.hero > .hero-layout{gap:20px!important}
-  body:has(#home) #home > section.hero .zc-hero-sponsor-panel{padding:9px!important}
+  body:has(#home) #home > section.hero .zc-hero-art-panel{padding:9px!important}
   body:has(#home) #home > section.hero .zc-hero-sponsor-promo{min-height:170px!important;padding:18px 14px!important}
   body:has(#home) #home > section.hero .hero-stats{flex-wrap:wrap!important;gap:12px!important}
 }
@@ -2371,7 +2376,7 @@ body:has(#home) #home>.zombie-maker-promo{
 }
 /* Replace hard-edged boxes with soft glass, restrained borders and more generous radii. */
 /* Sponsor rail belongs to the same soft-glass visual language as the rest of the page. */
-body:has(#home) #home .zc-hero-sponsor-panel{
+body:has(#home) #home .zc-hero-art-panel{
   border:1px solid rgba(160,205,132,.16)!important;
   border-radius:20px!important;
   background:rgba(8,14,10,.58)!important;

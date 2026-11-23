@@ -10,15 +10,15 @@ body:has(#home) .zc-ribbon--alert{--ribbon-color:#a8ff55;--ribbon-tint:#17321a;-
 body:has(#home) .zc-ribbon--community{--ribbon-color:#d28cff;--ribbon-tint:#281636;--ribbon-speed:46s}
 body:has(#home) .zc-ribbon--market{--ribbon-color:#ffc46b;--ribbon-tint:#382713;--ribbon-speed:42s}
 @keyframes zcRibbonMove{to{transform:translateX(-50%)}}
-body:has(#home) .hero{background-image:linear-gradient(90deg,rgba(3,8,5,.96) 0%,rgba(3,8,5,.82) 43%,rgba(3,8,5,.42) 100%),linear-gradient(0deg,#050907 0%,transparent 38%),url("https://upload.wikimedia.org/wikipedia/commons/9/91/Overgrown_city%2C_post-apocalyptic.jpg")!important;background-size:cover!important;background-position:center 48%!important}
+body:has(#home) .hero{background-image:linear-gradient(90deg,rgba(3,8,5,.96) 0%,rgba(3,8,5,.82) 43%,rgba(3,8,5,.42) 100%),linear-gradient(0deg,#050907 0%,transparent 38%),url("assets/zombcash-survivor-640.avif")!important;background-size:cover!important;background-position:center 48%!important}
 body:has(#home) .hero:before{background:radial-gradient(ellipse at 78% 42%,#9bff4522 0,transparent 32%),linear-gradient(90deg,#03060522,transparent 60%)!important;pointer-events:none}
 body:has(#home) .hero-grid{opacity:.22!important}
 body:has(#home) .hero-content{position:relative;z-index:4}
-body:has(#home) .zc-hero-sponsor-panel{position:relative;z-index:4}
+body:has(#home) .zc-hero-art-panel{position:relative;z-index:4}
 body:has(#home) .field-manual-spotlight{backdrop-filter:blur(5px);background:linear-gradient(110deg,#0b1710ed,#10121ae8)!important;border-color:#527342!important;box-shadow:0 12px 38px #0008,0 0 24px #9bff4510}
-body:has(#home) .zc-promo-video{position:relative;isolation:isolate;background:linear-gradient(90deg,#070b09f2,#080d0be8),url("https://upload.wikimedia.org/wikipedia/commons/9/91/Overgrown_city%2C_post-apocalyptic.jpg") center 55%/cover}
-body:has(#home) .zombie-maker-promo{background-image:linear-gradient(90deg,#07100df2,#09110be8),url("https://upload.wikimedia.org/wikipedia/commons/b/b2/Post-apocalyptic_scenery.jpg")!important;background-size:cover!important;background-position:center 60%!important}
-body:has(#home) .living-world{position:relative;isolation:isolate;background:linear-gradient(180deg,#080d0cf2,#080d0cf5),url("https://upload.wikimedia.org/wikipedia/commons/b/b2/Post-apocalyptic_scenery.jpg") center/cover}
+body:has(#home) .zc-promo-video{position:relative;isolation:isolate;background:linear-gradient(90deg,#070b09f2,#080d0be8),url("assets/zombcash-survivor-640.avif") center 55%/cover}
+body:has(#home) .zombie-maker-promo{background-image:linear-gradient(90deg,#07100df2,#09110be8),url("assets/zombcash-survivor-realistic-520.avif")!important;background-size:cover!important;background-position:center 60%!important}
+body:has(#home) .living-world{position:relative;isolation:isolate;background:linear-gradient(180deg,#080d0cf2,#080d0cf5),url("assets/zombcash-survivor-realistic-520.avif") center/cover}
 body:has(#home) .world-panel{box-shadow:0 18px 50px #0008,0 0 22px #9bff4508}
 body:has(#home) .world-panel-head{background:linear-gradient(100deg,#16251bd9,#0a1014e8)}
 body:has(#home) .world-panel:nth-child(2) .world-panel-head{background:linear-gradient(100deg,#321722e8,#0a1014e8)}
@@ -28,7 +28,7 @@ body:has(#home) .world-panel-foot{background:#080e0deF}
  body:has(#home) .zc-ribbon{height:31px;border-radius:7px}
  body:has(#home) .zc-ribbon-label{padding:0 9px;font-size:8px;letter-spacing:.55px}
  body:has(#home) .zc-ribbon-copy{font-size:12px;gap:17px;padding-left:17px}
- body:has(#home) .hero{background-position:58% center!important;background-image:linear-gradient(90deg,rgba(3,8,5,.93),rgba(3,8,5,.72)),linear-gradient(0deg,#050907 0%,transparent 55%),url("https://upload.wikimedia.org/wikipedia/commons/9/91/Overgrown_city%2C_post-apocalyptic.jpg")!important}
+ body:has(#home) .hero{background-position:58% center!important;background-image:linear-gradient(90deg,rgba(3,8,5,.93),rgba(3,8,5,.72)),linear-gradient(0deg,#050907 0%,transparent 55%),url("assets/zombcash-survivor-640.avif")!important}
 }
 @media(prefers-reduced-motion:reduce){body:has(#home) .zc-ribbon-track{animation:none!important;transform:none!important}body:has(#home) .zc-ribbon-copy:nth-child(n+2){display:none}}
 
@@ -83,7 +83,7 @@ body:has(#home) #home > section.hero > .hero-layout > .hero-content{
   width:100%!important;max-width:760px!important;min-width:0!important;
   margin:0!important;padding:0!important;transform:none!important;
 }
-body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel{
+body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
   grid-area:sponsor!important;grid-column:2!important;grid-row:1!important;
   position:relative!important;inset:auto!important;float:none!important;transform:none!important;
   box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
@@ -124,7 +124,7 @@ body:has(#home) #home > section.hero .hero-bottom{
     gap:24px!important;
   }
   body:has(#home) #home > section.hero > .hero-layout > .hero-content,
-  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel{
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
     grid-column:1!important;grid-row:auto!important;
     width:min(100%,900px)!important;max-width:900px!important;
     justify-self:center!important;
@@ -138,7 +138,7 @@ body:has(#home) #home > section.hero .hero-bottom{
     padding:28px 5% 24px!important;
   }
   body:has(#home) #home > section.hero > .hero-layout{gap:18px!important}
-  body:has(#home) #home > section.hero .zc-hero-sponsor-panel{padding:10px!important}
+  body:has(#home) #home > section.hero .zc-hero-art-panel{padding:10px!important}
   body:has(#home) #home > section.hero .zc-sponsor-art-slot{
     height:clamp(190px,62vw,260px)!important;min-height:190px!important;max-height:260px!important;
   }
@@ -1579,7 +1579,7 @@ body:has(#home) #home .zctv-player-column {
     grid-template-areas: "content" "sponsor" !important;
   }
   body:has(#home) #home > section.hero > .hero-layout > .hero-content,
-  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel {
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel {
     grid-column: 1 !important;
     grid-row: auto !important;
     width: min(100%, 900px) !important;
@@ -1901,7 +1901,7 @@ body:has(#home) #home > section:not(.hero){
     max-width:5600px!important;
     margin-inline:auto!important;
   }
-  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel {
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel {
     max-width:min(40vw,2400px)!important;
   }
 }
@@ -1924,7 +1924,7 @@ body:has(#home) #home > section:not(.hero){
     width:100%!important;
     max-width:none!important;
   }
-  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-sponsor-panel {
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel {
     width:100%!important;
     max-width:min(40vw,2400px)!important;
     min-width:0!important;
@@ -1953,7 +1953,7 @@ body:has(#home) #home > section:not(.hero){
     max-width:none!important;
     min-width:0!important;
   }
-  html body:has(main#home) > main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel {
+  html body:has(main#home) > main#home > section.hero > .hero-layout > .zc-hero-art-panel {
     width:100%!important;
     max-width:min(40vw,2400px)!important;
     min-width:0!important;
@@ -2432,7 +2432,7 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   body:has(main#home) #home > .hero .hero-stats span {
     font-size: clamp(10px, .38vw, 30px);
   }
-  body:has(main#home) #home > .hero .zc-hero-sponsor-panel {
+  body:has(main#home) #home > .hero .zc-hero-art-panel {
     min-width: 0;
     padding: clamp(14px, .65vw, 52px);
   }
@@ -2568,7 +2568,7 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   html body:has(main#home) main#home > section.hero > .hero-layout > .hero-content {
     width:100%!important; max-width:none!important;
   }
-  html body:has(main#home) main#home > section.hero > .hero-layout > .zc-hero-sponsor-panel {
+  html body:has(main#home) main#home > section.hero > .hero-layout > .zc-hero-art-panel {
     width:100%!important; max-width:none!important; min-width:0!important;
   }
   html body:has(main#home) main#home > section.hero .hero-content h1,
@@ -2905,7 +2905,7 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     padding: clamp(16px,.55vw,88px) clamp(22px,.8vw,128px) !important;
     font-size: clamp(12px,.42vw,64px) !important; line-height: 1.25 !important;
   }
-  html body:has(main#home) > main#home > section.hero .zc-hero-sponsor-panel {
+  html body:has(main#home) > main#home > section.hero .zc-hero-art-panel {
     width: 100% !important; max-width: none !important; min-width: 0 !important; height: auto !important;
   }
   html body:has(main#home) > main#home > section.section { padding-block: clamp(100px,2.6vw,420px) !important; }
@@ -3189,7 +3189,7 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   }
 
   html body:has(main#home) > main#home > section.hero .hero-content,
-  html body:has(main#home) > main#home > section.hero .zc-hero-sponsor-panel,
+  html body:has(main#home) > main#home > section.hero .zc-hero-art-panel,
   html body:has(main#home) > main#home > section > :is(
     .world-grid,
     .tool-grid,
@@ -3319,4 +3319,244 @@ body:has(main#home) #home .zm-promo-coord{z-index:3!important;left:20px!importan
 @media(max-width:900px){body:has(main#home) #home .zombie-maker-promo{grid-template-columns:minmax(0,1fr) minmax(280px,.85fr)!important;min-height:0!important;gap:22px!important;padding:26px!important}body:has(main#home) #home .zm-promo-art{min-height:420px!important}}
 @media(max-width:680px){body:has(main#home) #home .zombie-maker-promo{grid-template-columns:minmax(0,1fr)!important;width:calc(100% - 24px)!important;margin:28px 12px 38px!important;padding:22px 18px 16px!important;gap:18px!important}body:has(main#home) #home .zombie-maker-promo h2{font-size:clamp(31px,8.6vw,46px)!important;letter-spacing:-1.3px!important}body:has(main#home) #home .zombie-maker-promo p{font-size:17px!important}body:has(main#home) #home .zm-promo-actions{margin-top:22px!important}body:has(main#home) #home .zm-promo-btn{width:100%!important;box-sizing:border-box!important}body:has(main#home) #home .zm-promo-art{min-height:0!important;height:auto!important;aspect-ratio:4/5!important}body:has(main#home) #home .zm-promo-character{object-position:center 16%!important}body:has(main#home) #home .zm-promo-stamp{right:12px!important;bottom:12px!important}body:has(main#home) #home .zm-promo-coord{left:12px!important;top:12px!important}}
 @media(prefers-reduced-motion:reduce){body:has(main#home) #home .zm-promo-ring:after{animation:none!important}body:has(main#home) #home .zm-promo-btn{transition:none!important}}
+
+
+
+/* ============================================
+   CINEMATIC HOMEPAGE REDESIGN - Issue #655
+   Enhanced visual experience for ZombieCash landing page
+   ============================================ */
+
+/* === COLOR SYSTEM === */
+body:has(#home) {
+  --zc-bg-deep: #030605;
+  --zc-bg-graphite: #0a0f0d;
+  --zc-bg-coal: #111814;
+  --zc-text-cold: #d5e1d0;
+  --zc-text-dirty-white: #a6b5a5;
+  --zc-accent-olive: #527342;
+  --zc-accent-military: #3a4f2e;
+  --zc-accent-toxic: #9bff45;
+  --zc-danger: #ff4545;
+  --zc-border-subtle: #1a2618;
+  --zc-glass: rgba(8, 13, 10, 0.75);
+  --zc-metal: rgba(20, 30, 20, 0.6);
+}
+
+/* === HERO SECTION CINEMATIC REFINEMENT === */
+body:has(#home) #home > section.hero {
+  background-image:
+    linear-gradient(180deg, rgba(3, 6, 5, 0.97) 0%, rgba(3, 6, 5, 0.85) 40%, rgba(3, 6, 5, 0.6) 100%),
+    radial-gradient(ellipse at 70% 30%, rgba(155, 255, 69, 0.08) 0%, transparent 50%) !important;
+  background-size: cover !important;
+  background-position: center 45% !important;
+  padding: clamp(32px, 4vw, 64px) clamp(24px, 5vw, 80px) 40px !important;
+}
+
+body:has(#home) #home > section.hero > .hero-layout > .hero-content {
+  max-width: 780px !important;
+}
+
+body:has(#home) #home > section.hero .hero-content .eyebrow {
+  font-size: clamp(11px, 0.9vw, 13px) !important;
+  letter-spacing: 0.15em !important;
+  color: var(--zc-accent-toxic) !important;
+  margin-bottom: 16px !important;
+  opacity: 0.9 !important;
+}
+
+body:has(#home) #home > section.hero .hero-content h1 {
+  font-size: clamp(48px, 5.5vw, 120px) !important;
+  line-height: 0.92 !important;
+  letter-spacing: -0.04em !important;
+  margin-bottom: 20px !important;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.8), 0 0 60px rgba(155, 255, 69, 0.1) !important;
+}
+
+body:has(#home) #home > section.hero .hero-content .hero-copy {
+  font-size: clamp(16px, 1.2vw, 20px) !important;
+  line-height: 1.6 !important;
+  color: var(--zc-text-cold) !important;
+  max-width: 600px !important;
+  margin-bottom: 24px !important;
+}
+
+body:has(#home) #home > section.hero .hero-content .hero-actions {
+  gap: 16px !important;
+  margin-top: 8px !important;
+}
+
+body:has(#home) #home > section.hero .hero-content .hero-actions .btn {
+  padding: 14px 28px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  border-radius: 6px !important;
+  transition: all 0.3s ease !important;
+}
+
+body:has(#home) #home > section.hero .hero-content .hero-actions .btn-primary {
+  background: linear-gradient(135deg, var(--zc-accent-toxic), #7acc35) !important;
+  color: #030605 !important;
+  box-shadow: 0 4px 20px rgba(155, 255, 69, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+body:has(#home) #home > section.hero .hero-content .hero-actions .btn-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 28px rgba(155, 255, 69, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+body:has(#home) #home > section.hero .hero-content .hero-actions .btn-ghost {
+  background: transparent !important;
+  border: 1px solid var(--zc-border-subtle) !important;
+  color: var(--zc-text-cold) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+body:has(#home) #home > section.hero .hero-content .hero-actions .btn-ghost:hover {
+  background: var(--zc-glass) !important;
+  border-color: var(--zc-accent-olive) !important;
+  color: var(--zc-accent-toxic) !important;
+}
+
+/* === IMPROVED HERO STATS === */
+body:has(#home) #home > section.hero .hero-stats {
+  display: flex !important;
+  align-items: center !important;
+  gap: 24px !important;
+  padding: 16px 24px !important;
+  background: var(--zc-glass) !important;
+  border: 1px solid var(--zc-border-subtle) !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+body:has(#home) #home > section.hero .hero-stats strong {
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  color: var(--zc-accent-toxic) !important;
+  text-shadow: 0 0 20px rgba(155, 255, 69, 0.3) !important;
+}
+
+body:has(#home) #home > section.hero .hero-stats span {
+  font-size: 11px !important;
+  letter-spacing: 0.1em !important;
+  color: var(--zc-text-dirty-white) !important;
+  text-transform: uppercase !important;
+}
+
+/* === IMPROVED HERO BOTTOM BAR === */
+body:has(#home) #home > section.hero .hero-bottom {
+  display: flex !important;
+  align-items: center !important;
+  gap: 24px !important;
+  padding: 12px 20px !important;
+  background: var(--zc-glass) !important;
+  border: 1px solid var(--zc-border-subtle) !important;
+  border-radius: 6px !important;
+  font-size: 11px !important;
+  letter-spacing: 0.08em !important;
+  color: var(--zc-text-dirty-white) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+body:has(#home) #home > section.hero .hero-bottom b {
+  color: var(--zc-accent-toxic) !important;
+  font-weight: 700 !important;
+}
+
+/* === SECTION TRANSITIONS === */
+body:has(#home) #home > section.hero::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 1px !important;
+  background: linear-gradient(90deg, transparent, var(--zc-border-subtle), transparent) !important;
+  pointer-events: none !important;
+}
+
+/* === ACCESSIBILITY: FOCUS STATES === */
+body:has(#home) #home a:focus-visible,
+body:has(#home) #home button:focus-visible,
+body:has(#home) #home input:focus-visible {
+  outline: 2px solid var(--zc-accent-toxic) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(155, 255, 69, 0.15) !important;
+}
+
+/* === REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  body:has(#home) #home * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* === MOBILE IMPROVEMENTS === */
+@media (max-width: 768px) {
+  body:has(#home) #home > section.hero {
+    padding: 20px 16px 16px !important;
+  }
+  
+  body:has(#home) #home > section.hero .hero-content h1 {
+    font-size: clamp(36px, 8vw, 64px) !important;
+  }
+  
+  body:has(#home) #home > section.hero .hero-content .hero-copy {
+    font-size: 15px !important;
+    line-height: 1.5 !important;
+  }
+  
+  body:has(#home) #home > section.hero .hero-stats {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+    padding: 12px 16px !important;
+  }
+  
+  body:has(#home) #home > section.hero .hero-bottom {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    padding: 10px 12px !important;
+    font-size: 10px !important;
+  }
+  
+  body:has(#home) #home > section.hero .hero-content .hero-actions {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  
+  body:has(#home) #home > section.hero .hero-content .hero-actions .btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body:has(#home) #home > section.hero .hero-content h1 {
+    font-size: clamp(32px, 10vw, 48px) !important;
+  }
+  
+  body:has(#home) #home > section.hero .hero-content .eyebrow {
+    font-size: 10px !important;
+  }
+}
+
+/* === IMPROVED TYPOGRAPHY SCALE === */
+body:has(#home) #home > section.hero .hero-content h1 {
+  font-size: clamp(48px, 5.5vw, 120px) !important;
+}
+
+body:has(#home) #home > section.hero .hero-content .hero-copy {
+  font-size: clamp(16px, 1.2vw, 20px) !important;
+  line-height: 1.6 !important;
+}
+
+/* === IMPROVED TEXT CONTRAST === */
+body:has(#home) #home > section.hero .hero-content p {
+  color: var(--zc-text-cold) !important;
+  line-height: 1.6 !important;
+}
 
