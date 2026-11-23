@@ -21,7 +21,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: roulette-audit-${{ github.ref }}
+  group: roulette-audit-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: false
 
 jobs:
