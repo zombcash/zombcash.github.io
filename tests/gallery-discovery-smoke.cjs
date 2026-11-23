@@ -369,8 +369,8 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
         throw new Error("Empty " + label + " category should not be rendered as a filter");
       }
     };
-    const isHeroineDiary = item => /#ZombieCashDiary\\b/i.test(String(item.caption || "") + " " + String(item.title || "")) ||
-      /HEROINE[’']?S\\s+SURVIVAL\\s+DIARY/i.test(String(item.caption || "") + " " + String(item.title || ""));
+    const isHeroineDiary = item => /#ZombieCashDiary\b/i.test(String(item.caption || "") + " " + String(item.title || "")) ||
+      /HEROINE[’']?S\s+SURVIVAL\s+DIARY/i.test(String(item.caption || "") + " " + String(item.title || ""));
     const expectedZombieMemeIds = newestFirst(galleryData.items
       .filter(item => !isHeroineDiary(item) && (item.category_ids || []).some(id => id !== "nightmare-horror" && id !== "undead-after-dark" && id !== "heroine-survival-diary")))
       .map(item => item.id);
