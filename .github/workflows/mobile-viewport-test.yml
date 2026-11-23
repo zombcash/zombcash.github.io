@@ -183,6 +183,17 @@ jobs:
           SITE_URL: http://127.0.0.1:4173/
         run: node tests/arcade-snake-session-save-smoke.cjs
 
+      - name: Upload Snake iframe and session-save evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snake-iframe-session-save-evidence
+          path: |
+            arcade-snake-iframe-results/
+            arcade-snake-session-results/
+          if-no-files-found: ignore
+          retention-days: 14
+
       - name: Test AI Worlds on the actual Arcade page and capture screenshot
         if: always()
         run: node tests/arcade-ai-worlds-visual-smoke.cjs
@@ -227,5 +238,7 @@ jobs:
             survivor-field-manual-results/
             memecoin-article-results/
             survivor-hub-visual-results/
+            arcade-snake-iframe-results/
+            arcade-snake-session-results/
           if-no-files-found: ignore
           retention-days: 14
