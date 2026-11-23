@@ -121,6 +121,9 @@ async function checkStaticPage(page, locale) {
     return {
       lang: document.documentElement.lang,
       wheelAgain: labels.find(node => node.dataset.i18n === 'wheelAgain')?.textContent?.trim() || '',
+      wheelRole: wheel.getAttribute('role'),
+      wheelAriaLabel: wheel.getAttribute('aria-label'),
+      resultLive: document.querySelector('#spin-result')?.getAttribute('aria-live') || '',
       intro: text('.hero .intro'),
       demoText: text('[data-i18n="demoText"]'),
       walletStatus: text('#wallet-status'),
@@ -139,6 +142,8 @@ async function checkStaticPage(page, locale) {
   if (result.lang !== locale) throw new Error(locale + ': document lang is ' + result.lang);
   if (result.wheelAgain !== locales[locale]) throw new Error(locale + ': wheel AGAIN label mismatch: ' + result.wheelAgain);
   if (result.wheelLabelCount !== 11) throw new Error(locale + ': expected 11 wheel labels, got ' + result.wheelLabelCount);
+  if (result.wheelRole !== 'img' || result.wheelAriaLabel !== 'Prize wheel') throw new Error(locale + ': prize wheel has no accessible image role/name');
+  if (result.resultLive !== 'polite') throw new Error(locale + ': spin result is missing its polite live region');
   if (result.documentWidth > result.viewportWidth + 1) throw new Error(locale + ': horizontal overflow at ' + result.viewportWidth + 'px');
   if (result.shellRect.x < -1 || result.shellRect.right > result.viewportWidth + 1) throw new Error(locale + ': wheel shell is clipped by viewport');
   if (result.blankI18n) throw new Error(locale + ': ' + result.blankI18n + ' empty translated elements');
@@ -152,6 +157,13 @@ async function checkStaticPage(page, locale) {
     // Keep this check deliberately broad: the exact wording differs by locale.
     if (locale === 'en' || locale === 'ru') throw new Error(locale + ': demo disclaimer does not clearly disable payouts/transfers');
   }
+  await page.keyboard.press('Tab');
+  const focused = await page.evaluate(() => {
+    const el = document.activeElement;
+    const style = el ? getComputedStyle(el) : null;
+    return { tag: el?.tagName || '', outlineStyle: style?.outlineStyle || 'none', outlineWidth: style?.outlineWidth || '0px' };
+  });
+  if (!focused.tag || focused.outlineStyle === 'none' || focused.outlineWidth === '0px') throw new Error(locale + ': keyboard focus is not visibly indicated');
   if (errors.length) throw new Error(locale + ': browser errors: ' + errors.join(' | '));
   const alternateLocale = locale === 'ru' ? 'en' : 'ru';
   await page.evaluate(language => {
@@ -172,6 +184,7 @@ async function checkStaticPage(page, locale) {
 
 async function checkResponsive(browser) {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   await installApiMocks(page);
@@ -180,6 +193,14 @@ async function checkResponsive(browser) {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await page.waitForSelector('#roulette-wheel .wheel-label', { timeout: 30000 });
+    if (viewport.width === 390) {
+      const motion = await page.evaluate(() => ({
+        wheelTransition: getComputedStyle(document.querySelector('.wheel')).transitionDuration,
+        hazardAnimation: getComputedStyle(document.querySelector('.wheel-shell'), '::before').animationName,
+        scrollBehavior: getComputedStyle(document.documentElement).scrollBehavior,
+      }));
+      if (motion.wheelTransition !== '0s' || motion.hazardAnimation !== 'none' || motion.scrollBehavior !== 'auto') throw new Error('Reduced-motion preferences were not respected');
+    }
     const metrics = await page.evaluate(() => ({
       width: window.innerWidth,
       documentWidth: document.documentElement.scrollWidth,
