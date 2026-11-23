@@ -39,6 +39,7 @@ fs.mkdirSync(output, { recursive: true });
           const content = layout?.querySelector('.hero-content');
           const sponsor = layout?.querySelector('.zc-hero-sponsor-panel');
           const statusRail = layout?.querySelector('.zc-home-status-rail');
+          const heroStats = layout?.querySelector('.hero-stats');
           const tvSection = document.querySelector('#zctv-channel-hub');
           const tvInner = tvSection?.querySelector('.zctv-inner');
           const tvLayout = tvInner?.querySelector('.zctv-layout');
@@ -59,7 +60,7 @@ fs.mkdirSync(output, { recursive: true });
             width: innerWidth,
             documentWidth: document.documentElement.scrollWidth,
             stylesheet,
-            hero: rect(hero), layout: rect(layout), content: rect(content), sponsor: rect(sponsor), statusRail: rect(statusRail), hasSponsor: !!sponsor, art: rect(art),
+            hero: rect(hero), layout: rect(layout), content: rect(content), sponsor: rect(sponsor), statusRail: rect(statusRail), heroStats: rect(heroStats), hasSponsor: !!sponsor, art: rect(art),
             tvSection: rect(tvSection), tvInner: rect(tvInner), tvLayout: rect(tvLayout), tvPlayer: rect(tvPlayer), tvVideo: rect(tvVideo), tvHostArt: rect(tvHostArt), tvArchive: rect(tvArchive), tvChannels: rect(tvChannels),
             tvHostImageLoaded: !!tvHostImage && tvHostImage.complete && tvHostImage.naturalWidth > 0,
             labCharacterImageLoaded: !!labCharacter && labCharacter.complete && labCharacter.naturalWidth > 0,
@@ -105,8 +106,8 @@ fs.mkdirSync(output, { recursive: true });
           }
           if (width >= 1360 && result.content.right > result.sponsor.left + 2) issues.push('desktop hero columns overlap');
           if (width < 1360 && result.content.bottom > result.sponsor.top + 2) issues.push('stacked hero sections overlap');
-        } else if (!result.statusRail || result.statusRail.width <= 0) {
-          issues.push('current homepage status rail is missing or has no visible width');
+        } else if ((!result.statusRail || result.statusRail.width <= 0) && (!result.heroStats || result.heroStats.width <= 0)) {
+          issues.push('localized homepage hero stats or current homepage status rail are missing');
         }
         if (!result.tvHostImageLoaded) issues.push('ZombieCash TV host artwork is missing or failed to load');
         if (errors.length) issues.push('JavaScript errors: ' + errors.join(' | '));
