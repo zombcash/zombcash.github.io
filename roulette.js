@@ -382,7 +382,19 @@ async function loadState(){const auth=token();if(!auth){survivorProfile=null;cur
 function showResult(item){const title=resultNames[item.id]?.[lang()]||item.label||item.id||'RESULT';let detail=tr('historyDemo');if(item.kind==='bonus_spin')detail=tr('againResult');else if(item.kind==='super_prize')detail=tr('superWin');else if(item.kind==='no_win')detail=tr('tomorrowResult');else if(item.amountUsd)detail=tr('cashWin',{amount:'$'+item.amountUsd});setResult(title,detail)}
 function indexOfPrize(id){const options={try_tomorrow:[0,4,7],cash1:[1,8],again1:[2],cash2:[3],cash5:[5],again2:[6],cash10:[9],super100:[10]};const slots=options[id]||[0];return slots[Math.floor(Math.random()*slots.length)]}
 function animate(id){return new Promise(resolve=>{const idx=indexOfPrize(id),step=360/11,mod=((currentAngle%360)+360)%360,target=((360-idx*step)%360+360)%360,delta=(target-mod+360)%360;currentAngle+=1800+delta;wheel.style.transform='rotate('+currentAngle+'deg)';let finished=false;const done=()=>{if(finished)return;finished=true;wheel.removeEventListener('transitionend',done);resolve()};wheel.addEventListener('transitionend',done,{once:true});setTimeout(done,4700)})}
-async function spin(mode){if(isSpinning)return;const auth=token();if(!auth){setResult(tr('needLogin'),tr('loginFirstDetail'));document.querySelector('header.zombcash-shared-header .zsh-login-button,header.zombcash-shared-header .zsh-actions a[href="#survivor-profile"],.survivor-entry-button')?.click();return}if(!walletPublicKey){setResult(tr('needWallet'),tr('walletFirstDetail'));walletStatus.textContent=tr('walletRequired');walletButton.focus();return}if(!survivorProfile||!currentState){await loadState();if(!survivorProfile||!currentState)return}isSpinning=true;updateButtons();setResult(tr('checking'));try{const r=await fetch(API+'/api/roulette/demo',{method:'POST',headers:{Authorization:'Bearer '+auth,'Content-Type':'application/json'},body:JSON.stringify({mode,walletAddress:walletPublicKey}),cache:'no-store'}),data=await r.json();if(!r.ok){if(data.state)currentState=data.state;throw new Error(data.error||'spin')}await animate(data.id);currentState=data.state||currentState;updateButtons();showResult(data);if(data.kind==='bonus_spin'&&data.bonusSpinGranted)setResult(resultNames[data.id]?.[lang()]||tr('spinAgain'),tr('bonusEarned'));renderHistory(currentState.history||[data])}catch(error){setResult(error?.message||tr('spinError'))}finally{isSpinning=false;updateButtons();await loadState();await loadPublicStats()}}
+function localizedWalletError(error){
+ const message=String(error?.message||'').toLowerCase();
+ if(/user rejected|user denied|cancelled|canceled/.test(message))return tr('walletFailed');
+ return tr('walletSignatureFailed');
+}
+function localizedSpinError(error){
+ const message=String(error?.message||'').toLowerCase();
+ if(/no earned bonus spins/.test(message))return tr('noBonus');
+ if(/daily demo spin limit|already been used|wallet has already used/.test(message))return tr('dailyLimit');
+ if(/connect a solana wallet|verify its signature/.test(message))return tr('walletRequired');
+ return tr('spinError');
+}
+async function spin(mode){if(isSpinning)return;const auth=token();if(!auth){setResult(tr('needLogin'),tr('loginFirstDetail'));document.querySelector('header.zombcash-shared-header .zsh-login-button,header.zombcash-shared-header .zsh-actions a[href="#survivor-profile"],.survivor-entry-button')?.click();return}if(!walletPublicKey){setResult(tr('needWallet'),tr('walletFirstDetail'));walletStatus.textContent=tr('walletRequired');walletButton.focus();return}if(!survivorProfile||!currentState){await loadState();if(!survivorProfile||!currentState)return}isSpinning=true;updateButtons();setResult(tr('checking'));try{const r=await fetch(API+'/api/roulette/demo',{method:'POST',headers:{Authorization:'Bearer '+auth,'Content-Type':'application/json'},body:JSON.stringify({mode,walletAddress:walletPublicKey}),cache:'no-store'}),data=await r.json();if(!r.ok){if(data.state)currentState=data.state;throw new Error(data.error||'spin')}await animate(data.id);currentState=data.state||currentState;updateButtons();showResult(data);if(data.kind==='bonus_spin'&&data.bonusSpinGranted)setResult(resultNames[data.id]?.[lang()]||tr('spinAgain'),tr('bonusEarned'));renderHistory(currentState.history||[data])}catch(error){setResult(localizedSpinError(error))}finally{isSpinning=false;updateButtons();await loadState();await loadPublicStats()}}
 function provider(){return window.ZombieCashWallet?.getProvider?.()||window.phantom?.solana||window.solana||window.solflare||null}
 function walletAuthHeaders(){const auth=token();return auth?{Authorization:'Bearer '+auth,'Content-Type':'application/json'}:null}
 function clearWalletState(message=tr('walletDisconnected')){walletPublicKey='';walletProvider=null;walletButton.textContent=tr('walletConnect');walletButton.hidden=false;const disconnect=document.getElementById('wallet-disconnect');if(disconnect)disconnect.hidden=true;walletStatus.textContent=message}
@@ -412,7 +424,7 @@ async function connectWallet(){
   const disconnect=document.getElementById('wallet-disconnect');if(disconnect)disconnect.hidden=false;
   walletProvider=p;
  }catch(error){
-  clearWalletState(error?.message||tr('walletSignatureFailed'));
+  clearWalletState(localizedWalletError(error));
  }
 }
 async function disconnectWallet(){
