@@ -6,6 +6,17 @@ const path = require('node:path');
 const BASE_URL = process.env.SITE_URL || 'http://127.0.0.1:4173/';
 const PAGE_URL = new URL('roulette.html', BASE_URL).toString();
 const OUT_DIR = path.join(process.cwd(), 'roulette-audit-results');
+const localeUrls = {
+  en: 'https://zombcash.github.io/roulette.html',
+  de: 'https://zombcash.github.io/roulette.html?lang=de',
+  fr: 'https://zombcash.github.io/roulette.html?lang=fr',
+  it: 'https://zombcash.github.io/roulette.html?lang=it',
+  ja: 'https://zombcash.github.io/roulette.html?lang=ja',
+  'zh-CN': 'https://zombcash.github.io/roulette.html?lang=zh-CN',
+  ru: 'https://zombcash.github.io/roulette.html?lang=ru',
+  tr: 'https://zombcash.github.io/roulette.html?lang=tr',
+  hi: 'https://zombcash.github.io/roulette.html?lang=hi',
+};
 const locales = {
   en: '🧠 AGAIN',
   ru: '🧠 ЕЩЁ',
@@ -150,6 +161,8 @@ async function checkStaticPage(page, locale) {
       viewportWidth: window.innerWidth,
       blankI18n: [...document.querySelectorAll('[data-i18n]')].filter(node => !node.textContent.trim()).length,
       canonical,
+      ogUrl: document.querySelector('meta[property="og:url"]')?.content || '',
+      locationSearch: location.search,
       alternates,
       spinButtonVisible: !!document.querySelector('#spin-free') && document.querySelector('#spin-free').getBoundingClientRect().height > 0,
       walletButtonVisible: !!document.querySelector('#wallet-connect') && document.querySelector('#wallet-connect').getBoundingClientRect().height > 0,
@@ -163,8 +176,16 @@ async function checkStaticPage(page, locale) {
   if (result.documentWidth > result.viewportWidth + 1) throw new Error(locale + ': horizontal overflow at ' + result.viewportWidth + 'px');
   if (result.shellRect.x < -1 || result.shellRect.right > result.viewportWidth + 1) throw new Error(locale + ': wheel shell is clipped by viewport');
   if (result.blankI18n) throw new Error(locale + ': ' + result.blankI18n + ' empty translated elements');
-  if (result.canonical.length !== 1 || result.canonical[0] !== 'https://zombcash.github.io/roulette.html') throw new Error(locale + ': canonical URL is missing or duplicated');
-  if (result.alternates.length) throw new Error(locale + ': hreflang points to language variants that do not have separate URLs');
+  if (result.canonical.length !== 1 || result.canonical[0] !== localeUrls[locale]) throw new Error(locale + ': canonical URL does not match the selected language URL: ' + JSON.stringify(result.canonical));
+  if (result.ogUrl !== localeUrls[locale]) throw new Error(locale + ': Open Graph URL does not match the canonical locale URL');
+  if (result.alternates.length !== 10) throw new Error(locale + ': expected 9 language alternates plus x-default, got ' + result.alternates.length);
+  for (const [alternateLanguage, alternateUrl] of Object.entries(localeUrls)) {
+    if (!result.alternates.some(item => item.lang === alternateLanguage && item.href === alternateUrl)) throw new Error(locale + ': missing or incorrect hreflang alternate for ' + alternateLanguage);
+  }
+  if (!result.alternates.some(item => item.lang === 'x-default' && item.href === localeUrls.en)) throw new Error(locale + ': x-default alternate is missing');
+  const selectedUrl = new URL(PAGE_URL);
+  if (locale !== 'en' && new URLSearchParams(result.locationSearch).get('lang') !== locale) throw new Error(locale + ': language query parameter was not synchronized');
+  if (locale === 'en' && new URLSearchParams(result.locationSearch).has('lang')) throw new Error('English locale should use the default URL without lang=en');
   if (!result.spinButtonVisible || !result.walletButtonVisible) throw new Error(locale + ': primary controls are not visible');
   if (!/signature|signatur|firma|подпис|署名|签名|imza|हस्ताक्षर/i.test(result.walletStatus)) throw new Error(locale + ': wallet signature requirement is not explained');
   if (locale === 'en' && /buy extra chances|purchases launch/i.test(result.intro)) throw new Error('English intro still promises unavailable demo purchases');
@@ -187,12 +208,14 @@ async function checkStaticPage(page, locale) {
     document.dispatchEvent(new CustomEvent('zombcash:languagechange', { detail: { language } }));
   }, alternateLocale);
   await page.waitForFunction(({ language, expected }) => document.documentElement.lang === language && [...document.querySelectorAll('.wheel-label[data-i18n="wheelAgain"]')].every(node => node.textContent.trim() === expected), { language: alternateLocale, expected: locales[alternateLocale] }, { timeout: 10000 });
+  await page.waitForFunction(expected => document.querySelector('link[rel="canonical"]')?.href === expected, localeUrls[alternateLocale], { timeout: 10000 });
   await page.evaluate(language => {
     localStorage.setItem('zombcash-language', language);
     window.dispatchEvent(new StorageEvent('storage', { key: 'zombcash-language', newValue: language }));
     window.dispatchEvent(new Event('focus'));
   }, locale);
   await page.waitForFunction(({ language, expected }) => document.documentElement.lang === language && [...document.querySelectorAll('.wheel-label[data-i18n="wheelAgain"]')].every(node => node.textContent.trim() === expected), { language: locale, expected: locales[locale] }, { timeout: 10000 });
+  await page.waitForFunction(expected => document.querySelector('link[rel="canonical"]')?.href === expected, localeUrls[locale], { timeout: 10000 });
   if (!calls.some(call => call.path === '/api/roulette/stats')) throw new Error(locale + ': public stats endpoint was not requested');
   await page.screenshot({ path: path.join(OUT_DIR, 'locale-' + locale.replace(/[^a-z0-9-]/gi, '-') + '.png'), fullPage: true });
   fs.writeFileSync(path.join(OUT_DIR, 'locale-' + locale.replace(/[^a-z0-9-]/gi, '-') + '.json'), JSON.stringify({ locale, result, errors, calls }, null, 2));
@@ -585,6 +608,19 @@ async function checkAccessibility(browser) {
   fs.writeFileSync(path.join(OUT_DIR, 'axe-summary.json'), JSON.stringify(resultsByLocale, null, 2));
 }
 
+
+async function checkSitemapLocales() {
+  const sitemap = fs.readFileSync(path.join(process.cwd(), 'sitemap.xml'), 'utf8');
+  for (const [locale, url] of Object.entries(localeUrls)) {
+    const block = sitemap.split('<url>').find(item => item.includes('<loc>' + url + '</loc>'));
+    if (!block || !block.includes('</url>')) throw new Error('Sitemap is missing roulette URL for ' + locale);
+    for (const [alternateLanguage, alternateUrl] of Object.entries(localeUrls)) {
+      if (!block.includes('hreflang="' + alternateLanguage + '" href="' + alternateUrl + '"')) throw new Error('Sitemap alternate set is incomplete for ' + locale + ': ' + alternateLanguage);
+    }
+    if (!block.includes('hreflang="x-default" href="' + localeUrls.en + '"')) throw new Error('Sitemap x-default is missing for ' + locale);
+  }
+}
+
 (async () => {
   const browser = await chromium.launch({ headless: true });
   try {
@@ -603,6 +639,7 @@ async function checkAccessibility(browser) {
     await checkBonusSpin(browser);
     await checkWalletLifecycle(browser);
     await checkAccessibility(browser);
+    await checkSitemapLocales();
     console.log('Roulette audit passed: 9 locales, 7 viewports, auth/wallet failure states, localized API errors, rapid-click protection, bonus-spin/state/history/stats and wallet-lifecycle checks, WCAG 2.1 AA axe checks across all locales, reduced motion, and mocked server-authoritative spin.');
   } finally {
     await browser.close();

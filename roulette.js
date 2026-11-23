@@ -371,8 +371,23 @@ homeLink:"लाइव वर्ल्ड →"}
 const langs={en,ru:{...en,...overrides.ru},de:{...en,...overrides.de},fr:{...en,...overrides.fr},it:{...en,...overrides.it},ja:{...en,...overrides.ja},'zh-CN':{...en,...overrides['zh-CN']},tr:{...en,...overrides.tr},hi:{...en,...overrides.hi}};
 const resultNames={try_tomorrow:{en:'NO WIN · TRY TOMORROW',ru:'СЕГОДНЯ БЕЗ ВЫИГРЫША'},cash1:{en:'$1 IN ZOMBCASH',ru:'$1 В ZOMBCASH',de:'$1 IN ZOMBCASH',fr:'1 $ EN ZOMBCASH',it:'$1 IN ZOMBCASH',ja:'ZOMBCASH $1相当','zh-CN':'价值$1的ZOMBCASH',tr:'ZOMBCASH $1',hi:'ZOMBCASH में $1'},again1:{en:'SPIN AGAIN',ru:'КРУТИТЬ ЕЩЁ'},again2:{en:'SPIN AGAIN',ru:'КРУТИТЬ ЕЩЁ'},cash2:{en:'$2 IN ZOMBCASH',ru:'$2 В ZOMBCASH'},cash5:{en:'$5 IN ZOMBCASH',ru:'$5 В ZOMBCASH'},cash10:{en:'$10 IN ZOMBCASH',ru:'$10 В ZOMBCASH'},super100:{en:'$100 SUPER PRIZE',ru:'СУПЕРПРИЗ $100'}};
 function lang(){let c='en';try{c=localStorage.getItem('zombcash-language')||document.documentElement.lang||'en'}catch(_){}if(c==='zh')c='zh-CN';return langs[c]?c:'en'}
+function updateLocaleSeo(){
+ const locale=lang();
+ const browserUrl=new URL(location.href);
+ if(locale==='en')browserUrl.searchParams.delete('lang');
+ else browserUrl.searchParams.set('lang',locale);
+ const nextBrowserUrl=browserUrl.pathname+browserUrl.search+browserUrl.hash;
+ if(nextBrowserUrl!==location.pathname+location.search+location.hash)history.replaceState(history.state,'',nextBrowserUrl);
+ const canonicalUrl=new URL('https://zombcash.github.io/roulette.html');
+ if(locale!=='en')canonicalUrl.searchParams.set('lang',locale);
+ const canonical=document.querySelector('link[rel="canonical"]');
+ if(canonical)canonical.href=canonicalUrl.href;
+ const ogUrl=document.querySelector('meta[property="og:url"]');
+ if(ogUrl)ogUrl.content=canonicalUrl.href;
+}
+
 function tr(key,vars={}){return (langs[lang()][key]||en[key]||key).replace(/\{(\w+)\}/g,(_,k)=>vars[k]??'')}
-function applyTranslations(){const l=lang();document.documentElement.lang=l;document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');el.textContent=tr(k)});document.querySelectorAll('[data-i18n-html]').forEach(el=>{const k=el.getAttribute('data-i18n-html');el.innerHTML=tr(k)});spinBonus.textContent=tr('spinBonus',{n:currentState?.bonusSpins||0});if(walletPublicKey)walletStatus.textContent=tr('walletVerified',{address:shortKey(walletPublicKey)})}
+function applyTranslations(){const l=lang();document.documentElement.lang=l;updateLocaleSeo();document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');el.textContent=tr(k)});document.querySelectorAll('[data-i18n-html]').forEach(el=>{const k=el.getAttribute('data-i18n-html');el.innerHTML=tr(k)});spinBonus.textContent=tr('spinBonus',{n:currentState?.bonusSpins||0});if(walletPublicKey)walletStatus.textContent=tr('walletVerified',{address:shortKey(walletPublicKey)})}
 function token(){try{return localStorage.getItem(TOKEN_KEY)||''}catch(_){return''}}
 function shortKey(s){return s.length>15?s.slice(0,5)+'…'+s.slice(-5):s}
 function setResult(title,detail=''){resultNode.innerHTML='';const a=document.createElement('strong');a.textContent=title;resultNode.appendChild(a);if(detail){const b=document.createElement('small');b.textContent=detail;resultNode.appendChild(b)}}
