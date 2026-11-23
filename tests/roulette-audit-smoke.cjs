@@ -78,6 +78,7 @@ async function installApiMocks(page, options = {}) {
       if (options.challengeStatus) return json(route, { error: 'QA challenge failure' }, options.challengeStatus);
       return options.auth ? json(route, { challengeId: 'qa-challenge-001', message: 'ZombieCash QA wallet ownership check' }) : json(route, { error: 'Unauthorized' }, 401);
     }
+    if (url.pathname === '/api/roulette/wallet/disconnect' && request.method() === 'POST') return json(route, { disconnected: true });
     if (url.pathname === '/api/roulette/wallet/verify' && request.method() === 'POST') {
       if (options.verifyStatus) return json(route, { error: 'QA signature verification failure' }, options.verifyStatus);
       return options.auth ? json(route, { verified: true }) : json(route, { error: 'Unauthorized' }, 401);
@@ -87,6 +88,10 @@ async function installApiMocks(page, options = {}) {
       if (options.spinDelayMs) await new Promise(resolve => setTimeout(resolve, options.spinDelayMs));
       const body = request.postDataJSON();
       if (!body.walletAddress) return json(route, { error: 'Wallet required' }, 400);
+      if (body.mode === 'bonus' && options.bonusSpinResponse) {
+        state = options.bonusSpinResponse.state || state;
+        return json(route, options.bonusSpinResponse);
+      }
       if (body.mode !== 'free') return json(route, { error: 'Unexpected QA spin mode' }, 400);
       if (options.spinError) {
         state = options.spinError.state || state;
@@ -442,6 +447,111 @@ async function checkSpinErrorLocalization(browser) {
 }
 
 
+
+async function checkStateAndStats(browser) {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  const state = {
+    freeSpinAvailable: false,
+    freeSpinUsed: true,
+    bonusSpins: 1,
+    spinsToday: 2,
+    dailySpinCap: 3,
+    history: [{ id: 'cash1', kind: 'prize' }, { id: 'try_tomorrow', kind: 'no_win' }],
+    lastResult: { id: 'try_tomorrow', kind: 'no_win' },
+  };
+  await installApiMocks(page, {
+    auth: true,
+    state,
+    statsResponse: {
+      totalPrizeEquivalentUsd: 1234.5,
+      totalSpins: 42,
+      winners: [{ survivor: 'SURVIVOR #QA42', wins: 3, amountUsd: 1234.5 }],
+    },
+  });
+  await page.addInitScript(() => {
+    localStorage.setItem('zombcash-language', 'en');
+    localStorage.setItem('zombcash-survivor-token', 'qa-only-fake-token');
+  });
+  await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => document.querySelector('#auth-message')?.textContent.includes('QA Survivor') && document.querySelector('#stats-total-spins')?.textContent.trim() === '42');
+  const controls = await page.evaluate(() => ({
+    freeDisabled: document.querySelector('#spin-free').disabled,
+    bonusDisabled: document.querySelector('#spin-bonus').disabled,
+    daily: document.querySelector('#daily-status').textContent.trim(),
+    bonus: document.querySelector('#bonus-count').textContent.trim(),
+    history: [...document.querySelectorAll('#spin-history .history-item')].map(row => row.innerText),
+    totalWon: document.querySelector('#stats-total-won').textContent.trim(),
+    totalSpins: document.querySelector('#stats-total-spins').textContent.trim(),
+    winners: document.querySelector('#public-winner-stats').innerText,
+  }));
+  if (!controls.freeDisabled || controls.bonusDisabled || controls.bonus !== '1' || !controls.daily) throw new Error('Free-used/bonus-available state rendered incorrectly: ' + JSON.stringify(controls));
+  if (controls.history.length !== 2 || !controls.history[0].includes('NO WIN') || !controls.history[1].includes('$1 IN ZOMBCASH')) throw new Error('Spin history order/content is incorrect: ' + JSON.stringify(controls.history));
+  if (controls.totalSpins !== '42' || !controls.totalWon.includes('1,234.5') || !controls.winners.includes('SURVIVOR #QA42')) throw new Error('Public winner stats did not render server data: ' + JSON.stringify(controls));
+  if (/QAWallet|qa-only-fake-token/i.test(controls.winners)) throw new Error('Private wallet/token data leaked into public winner stats');
+  await page.close();
+
+  const capped = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  await installApiMocks(capped, { auth: true, state: { freeSpinAvailable: false, freeSpinUsed: true, bonusSpins: 1, spinsToday: 3, dailySpinCap: 3, history: [] } });
+  await capped.addInitScript(() => {
+    localStorage.setItem('zombcash-language', 'en');
+    localStorage.setItem('zombcash-survivor-token', 'qa-only-fake-token');
+  });
+  await capped.goto(PAGE_URL, { waitUntil: 'domcontentloaded' });
+  await capped.waitForFunction(() => document.querySelector('#auth-message')?.textContent.includes('QA Survivor'));
+  const capDisabled = await capped.locator('#spin-bonus').isDisabled();
+  if (!capDisabled) throw new Error('Bonus spin remained enabled after the daily cap was reached');
+  await capped.close();
+}
+
+async function checkBonusSpin(browser) {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  const calls = await installApiMocks(page, {
+    auth: true,
+    state: { freeSpinAvailable: false, freeSpinUsed: true, bonusSpins: 1, spinsToday: 1, dailySpinCap: 3, history: [] },
+    bonusSpinResponse: {
+      id: 'again1',
+      kind: 'bonus_spin',
+      bonusSpinGranted: true,
+      state: { freeSpinAvailable: false, freeSpinUsed: true, bonusSpins: 0, spinsToday: 2, dailySpinCap: 3, history: [{ id: 'again1', kind: 'bonus_spin' }] },
+    },
+  });
+  await addQaAuthWallet(page, 'en');
+  await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => document.querySelector('#auth-message')?.textContent.includes('QA Survivor'));
+  await page.locator('#wallet-connect').click();
+  await page.waitForFunction(() => document.querySelector('#wallet-status')?.textContent.includes('QAWal'));
+  if (await page.locator('#spin-bonus').isDisabled()) throw new Error('Earned bonus spin was not enabled');
+  await page.locator('#spin-bonus').click();
+  await page.waitForFunction(() => document.querySelector('#spin-result strong')?.textContent.includes('SPIN AGAIN'), null, { timeout: 15000 });
+  const spin = calls.find(call => call.path === '/api/roulette/demo' && call.method === 'POST');
+  if (!spin || JSON.parse(spin.body).mode !== 'bonus') throw new Error('Bonus spin did not submit bonus mode to the server');
+  await page.waitForFunction(() => document.querySelector('#bonus-count')?.textContent.trim() === '0');
+  if (calls.some(call => /transaction|transfer|payment/i.test(call.path))) throw new Error('Bonus spin unexpectedly requested a payment/transaction endpoint');
+  await page.close();
+}
+
+async function checkWalletLifecycle(browser) {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  const calls = await installApiMocks(page, { auth: true });
+  await addQaAuthWallet(page, 'en');
+  await page.goto(PAGE_URL, { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => typeof window.__qaWalletEvents?.accountChanged === 'function');
+  await page.waitForFunction(() => document.querySelector('#auth-message')?.textContent.includes('QA Survivor'));
+  await page.locator('#wallet-connect').click();
+  await page.waitForFunction(() => document.querySelector('#wallet-status')?.textContent.includes('QAWal'));
+  await page.evaluate(() => window.__qaWalletEvents.accountChanged({ toBase58: () => 'AnotherWallet11111111111111111111111111111' }));
+  await page.waitForFunction(() => document.querySelector('#wallet-connect')?.getBoundingClientRect().height > 0 && document.querySelector('#wallet-disconnect')?.getBoundingClientRect().height === 0);
+  const changedStatus = await page.locator('#wallet-status').innerText();
+  if (/account changed|please reconnect/i.test(changedStatus)) throw new Error('Raw English account-change message leaked to wallet status');
+  await page.locator('#wallet-connect').click();
+  await page.waitForFunction(() => document.querySelector('#wallet-status')?.textContent.includes('QAWal'));
+  await page.locator('#wallet-disconnect').click();
+  await page.waitForFunction(() => document.querySelector('#wallet-connect')?.getBoundingClientRect().height > 0 && document.querySelector('#wallet-disconnect')?.getBoundingClientRect().height === 0);
+  if (!calls.some(call => call.path === '/api/roulette/wallet/disconnect' && call.method === 'POST')) throw new Error('Wallet disconnect was not sent to the server');
+  if (calls.some(call => /transaction|transfer|payment/i.test(call.path))) throw new Error('Wallet lifecycle unexpectedly requested a transaction/payment endpoint');
+  await page.close();
+}
+
 async function checkAccessibility(browser) {
   const resultsByLocale = {};
   for (const locale of Object.keys(locales)) {
@@ -489,8 +599,11 @@ async function checkAccessibility(browser) {
     await checkWalletFailureStates(browser);
     await checkSpinErrorLocalization(browser);
     await checkRapidClick(browser);
+    await checkStateAndStats(browser);
+    await checkBonusSpin(browser);
+    await checkWalletLifecycle(browser);
     await checkAccessibility(browser);
-    console.log('Roulette audit passed: 9 locales, 7 viewports, auth/wallet failure states, localized API errors, rapid-click protection, WCAG 2.1 AA axe checks across all locales, reduced motion, and mocked server-authoritative spin.');
+    console.log('Roulette audit passed: 9 locales, 7 viewports, auth/wallet failure states, localized API errors, rapid-click protection, bonus-spin/state/history/stats and wallet-lifecycle checks, WCAG 2.1 AA axe checks across all locales, reduced motion, and mocked server-authoritative spin.');
   } finally {
     await browser.close();
   }
