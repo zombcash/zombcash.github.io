@@ -122,7 +122,7 @@ async function checkStaticPage(page, locale) {
       wheelAgain: labels.find(node => node.dataset.i18n === 'wheelAgain')?.textContent?.trim() || '',
       intro: text('.hero .intro'),
       demoText: text('[data-i18n="demoText"]'),
-      walletNote: text('[data-i18n="walletNote"]'),
+      walletStatus: text('#wallet-status'),
       wheelLabelCount: labels.length,
       wheelRect: (() => { const r = wheel.getBoundingClientRect(); return { x: r.x, right: r.right, width: r.width, height: r.height }; })(),
       shellRect: (() => { const r = shell.getBoundingClientRect(); return { x: r.x, right: r.right, width: r.width, height: r.height }; })(),
@@ -152,6 +152,18 @@ async function checkStaticPage(page, locale) {
     if (locale === 'en' || locale === 'ru') throw new Error(locale + ': demo disclaimer does not clearly disable payouts/transfers');
   }
   if (errors.length) throw new Error(locale + ': browser errors: ' + errors.join(' | '));
+  const alternateLocale = locale === 'ru' ? 'en' : 'ru';
+  await page.evaluate(language => {
+    localStorage.setItem('zombcash-language', language);
+    document.dispatchEvent(new CustomEvent('zombcash:languagechange', { detail: { language } }));
+  }, alternateLocale);
+  await page.waitForFunction(({ language, expected }) => document.documentElement.lang === language && [...document.querySelectorAll('.wheel-label[data-i18n="wheelAgain"]')].every(node => node.textContent.trim() === expected), { language: alternateLocale, expected: locales[alternateLocale] }, { timeout: 10000 });
+  await page.evaluate(language => {
+    localStorage.setItem('zombcash-language', language);
+    window.dispatchEvent(new StorageEvent('storage', { key: 'zombcash-language', newValue: language }));
+    window.dispatchEvent(new Event('focus'));
+  }, locale);
+  await page.waitForFunction(({ language, expected }) => document.documentElement.lang === language && [...document.querySelectorAll('.wheel-label[data-i18n="wheelAgain"]')].every(node => node.textContent.trim() === expected), { language: locale, expected: locales[locale] }, { timeout: 10000 });
   if (!calls.some(call => call.path === '/api/roulette/stats')) throw new Error(locale + ': public stats endpoint was not requested');
   await page.screenshot({ path: path.join(OUT_DIR, 'locale-' + locale.replace(/[^a-z0-9-]/gi, '-') + '.png'), fullPage: true });
   fs.writeFileSync(path.join(OUT_DIR, 'locale-' + locale.replace(/[^a-z0-9-]/gi, '-') + '.json'), JSON.stringify({ locale, result, errors, calls }, null, 2));
