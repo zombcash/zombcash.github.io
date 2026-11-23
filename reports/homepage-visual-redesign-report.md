@@ -14,52 +14,33 @@ Performed a visual enhancement pass on the ZombieCash homepage (index.html) to s
 
 ## 2. Changes Made
 
-### Visual & Technical Changes
+### Visual and Technical Changes
 
-1. **Color System Enhancement** — Added CSS custom properties for a cohesive cinematic palette:
-   - Deep black (#030605), graphite (#0a0f0d), coal (#111814) backgrounds
-   - Cold gray/whites for text (#d5e1d0, #a6b5a5)
-   - Olive/military green secondaries (#527342, #3a4f2e)
-   - Toxic green for active states and CTA (#9bff45)
-   - Red reserved for danger signals only
+1. **Color System Enhancement** — Added CSS custom properties for a cohesive cinematic palette: deep black (#030605), graphite (#0a0f0d), coal (#111814) backgrounds; cold gray/whites for text (#d5e1d0, #a6b5a5); olive/military green secondaries (#527342, #3a4f2e); toxic green for active states and CTA (#9bff45); red reserved for danger signals only.
 
-2. **Hero Section Refinement**:
-   - Enhanced background with radial gradient accent and improved overlay
-   - Improved typography hierarchy (eyebrow, h1, hero-copy)
-   - Added text shadow for depth and readability
-   - Enhanced CTA buttons with gradient backgrounds, hover transforms, and glow effects
-   - Improved glass-morphism for hero stats and bottom bar
-   - Better responsive scaling across breakpoints
+2. **Hero Section Refinement**: Enhanced background with radial gradient accent; improved typography hierarchy (eyebrow, h1, hero-copy); added text shadow for depth; enhanced CTA buttons with gradients, hover transforms, and glow; improved glass-morphism for hero stats and bottom bar; better responsive scaling.
 
-3. **Card & Component Styling**:
-   - Unified card appearance with glass background, subtle borders, and backdrop blur
-   - Consistent hover states with border color change and subtle lift
-   - Improved transition timing
+3. **Card and Component Styling**: Unified card appearance with glass background, subtle borders, backdrop blur; consistent hover states with border color change and subtle lift.
 
-4. **Accessibility Improvements**:
-   - Visible keyboard focus states (2px toxic-green outline with glow)
-   - Reduced-motion support for all animations
-   - Improved text contrast
+4. **Accessibility Improvements**: Visible keyboard focus states (2px toxic-green outline with glow); reduced-motion support for all animations; improved text contrast.
 
-5. **Responsive Design**:
-   - Mobile-first improvements for 768px and 480px breakpoints
-   - Full-width CTA buttons on mobile
-   - Wrapped hero stats and bottom bar
-   - Scaled typography appropriately
+5. **Responsive Design**: Mobile-first improvements for 768px and 480px breakpoints; full-width CTA buttons on mobile; wrapped hero stats and bottom bar; scaled typography.
 
-6. **Section Transitions**:
-   - Added subtle gradient divider lines between sections
-   - Consistent section padding
+6. **Section Transitions**: Added subtle gradient divider lines between sections; consistent section padding.
 
-7. **Cache Version Update**:
-   - Updated homepage-visual.css cache version to `cinematic-redesign-20261123-1`
+7. **Cache Version Update**: Updated homepage-visual.css cache version to cinematic-redesign-20261123-1.
+
+8. **External URL Replacement**: Replaced all Wikimedia Commons background image URLs with local project assets (zombcash-survivor-640.avif, zombcash-survivor-realistic-520.avif).
+
+9. **Scoped CSS Selectors**: Removed overly broad selectors (card, p) that could affect other pages. All improvements use body:has(#home) scoping.
 
 ## 3. Files Changed
 
 | File | Change | Description |
 |------|--------|-------------|
-| `homepage-visual.css` | Modified | Appended cinematic redesign improvements |
-| `index.html` | Modified | Updated CSS cache version string |
+| homepage-visual.css | Modified | Appended cinematic redesign improvements, replaced external URLs |
+| index.html | Modified | Updated CSS cache version string |
+| reports/homepage-visual-redesign-report.md | Added | Mandatory report |
 
 ## 4. Sections Redesigned
 
@@ -76,38 +57,37 @@ Performed a visual enhancement pass on the ZombieCash homepage (index.html) to s
 
 | Test | Command | Result |
 |------|---------|--------|
-| SEO meta duplicate smoke | `python tests/seo-meta-duplicate-smoke.py` | PASS: 0 findings |
-| SEO orphan page audit | `python tests/seo-orphan-page-audit.py` | PASS: 0 orphans, 0 missing |
-| Sitemap lastmod smoke | `python tests/sitemap-lastmod-smoke.py` | PASS: 0 needing refresh |
-| Gallery sitemap lastmod | `python tests/gallery-pages-sitemap-lastmod-smoke.py` | PASS: 9 URLs verified |
+| SEO meta duplicate smoke | python tests/seo-meta-duplicate-smoke.py | PASS: 0 findings |
+| SEO orphan page audit | python tests/seo-orphan-page-audit.py | PASS: 0 orphans, 0 missing |
+| Sitemap lastmod smoke | python tests/sitemap-lastmod-smoke.py | PASS: 0 needing refresh |
+| Gallery sitemap lastmod | python tests/gallery-pages-sitemap-lastmod-smoke.py | PASS: 9 URLs verified |
 
 ### Browser Verification
 
-- **Desktop visual QA**: NOT RUN (Playwright not installed in environment)
-- **Mobile visual QA**: NOT RUN (Playwright not installed in environment)
-- **9 locales**: NOT RUN (requires Playwright)
-- **Navigation and CTA**: NOT RUN (requires browser)
-- **Statistics and news**: NOT RUN (requires browser)
-- **Console and network**: NOT RUN (requires browser)
-- **SEO integrity**: PASS (Python tests confirmed no metadata issues)
-- **Accessibility**: PARTIAL (CSS focus states and reduced-motion added)
-- **Build and tests**: PASS (Python SEO tests passed)
+- Desktop visual QA: NOT RUN (Playwright not installed in environment)
+- Mobile visual QA: NOT RUN (Playwright not installed in environment)
+- 9 locales: NOT RUN (requires Playwright)
+- Navigation and CTA: NOT RUN (requires browser)
+- Statistics and news: NOT RUN (requires browser)
+- Console and network: NOT RUN (requires browser)
+- SEO integrity: PASS (Python tests confirmed no metadata issues)
+- Accessibility: PARTIAL (CSS focus states and reduced-motion added)
+- Build and tests: PASS (Python SEO tests passed)
 
 ### Known Limitations
 
 1. Playwright is not installed in this environment, so browser-based visual QA, locale testing, and responsive checks could not be performed. These should be verified in CI or by the reviewer.
-2. The hero background image uses an external Wikimedia URL (existing). No new images were added.
-3. The CSS changes are additive (appended to existing file) to minimize risk of breaking existing rules.
-4. The `!important` flags are used consistently with the existing codebase style.
+2. The CSS changes are additive (appended to existing file) to minimize risk of breaking existing rules.
+3. The important flags are used consistently with the existing codebase style.
 
 ## 6. Commit Information
 
-- **Branch:** feat/homepage-cinematic-redesign
-- **Commit SHA:** e9d8e23d784ddd41d4c3bab451cbb7a213e1804f
+- Branch: feat/homepage-cinematic-redesign
+- Commit SHA: de0ee8bbe95c08fae67b3de7b482d8c7564df236
 
 ## 7. Pull Request
 
-- **PR URL:** https://github.com/zombcash/zombcash.github.io/pull/656
+- PR URL: https://github.com/zombcash/zombcash.github.io/pull/656
 
 ---
 

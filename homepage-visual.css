@@ -10,15 +10,15 @@ body:has(#home) .zc-ribbon--alert{--ribbon-color:#a8ff55;--ribbon-tint:#17321a;-
 body:has(#home) .zc-ribbon--community{--ribbon-color:#d28cff;--ribbon-tint:#281636;--ribbon-speed:46s}
 body:has(#home) .zc-ribbon--market{--ribbon-color:#ffc46b;--ribbon-tint:#382713;--ribbon-speed:42s}
 @keyframes zcRibbonMove{to{transform:translateX(-50%)}}
-body:has(#home) .hero{background-image:linear-gradient(90deg,rgba(3,8,5,.96) 0%,rgba(3,8,5,.82) 43%,rgba(3,8,5,.42) 100%),linear-gradient(0deg,#050907 0%,transparent 38%),url("https://upload.wikimedia.org/wikipedia/commons/9/91/Overgrown_city%2C_post-apocalyptic.jpg")!important;background-size:cover!important;background-position:center 48%!important}
+body:has(#home) .hero{background-image:linear-gradient(90deg,rgba(3,8,5,.96) 0%,rgba(3,8,5,.82) 43%,rgba(3,8,5,.42) 100%),linear-gradient(0deg,#050907 0%,transparent 38%),url("assets/zombcash-survivor-640.avif")!important;background-size:cover!important;background-position:center 48%!important}
 body:has(#home) .hero:before{background:radial-gradient(ellipse at 78% 42%,#9bff4522 0,transparent 32%),linear-gradient(90deg,#03060522,transparent 60%)!important;pointer-events:none}
 body:has(#home) .hero-grid{opacity:.22!important}
 body:has(#home) .hero-content{position:relative;z-index:4}
 body:has(#home) .zc-hero-sponsor-panel{position:relative;z-index:4}
 body:has(#home) .field-manual-spotlight{backdrop-filter:blur(5px);background:linear-gradient(110deg,#0b1710ed,#10121ae8)!important;border-color:#527342!important;box-shadow:0 12px 38px #0008,0 0 24px #9bff4510}
-body:has(#home) .zc-promo-video{position:relative;isolation:isolate;background:linear-gradient(90deg,#070b09f2,#080d0be8),url("https://upload.wikimedia.org/wikipedia/commons/9/91/Overgrown_city%2C_post-apocalyptic.jpg") center 55%/cover}
-body:has(#home) .zombie-maker-promo{background-image:linear-gradient(90deg,#07100df2,#09110be8),url("https://upload.wikimedia.org/wikipedia/commons/b/b2/Post-apocalyptic_scenery.jpg")!important;background-size:cover!important;background-position:center 60%!important}
-body:has(#home) .living-world{position:relative;isolation:isolate;background:linear-gradient(180deg,#080d0cf2,#080d0cf5),url("https://upload.wikimedia.org/wikipedia/commons/b/b2/Post-apocalyptic_scenery.jpg") center/cover}
+body:has(#home) .zc-promo-video{position:relative;isolation:isolate;background:linear-gradient(90deg,#070b09f2,#080d0be8),url("assets/zombcash-survivor-640.avif") center 55%/cover}
+body:has(#home) .zombie-maker-promo{background-image:linear-gradient(90deg,#07100df2,#09110be8),url("assets/zombcash-survivor-realistic-520.avif")!important;background-size:cover!important;background-position:center 60%!important}
+body:has(#home) .living-world{position:relative;isolation:isolate;background:linear-gradient(180deg,#080d0cf2,#080d0cf5),url("assets/zombcash-survivor-realistic-520.avif") center/cover}
 body:has(#home) .world-panel{box-shadow:0 18px 50px #0008,0 0 22px #9bff4508}
 body:has(#home) .world-panel-head{background:linear-gradient(100deg,#16251bd9,#0a1014e8)}
 body:has(#home) .world-panel:nth-child(2) .world-panel-head{background:linear-gradient(100deg,#321722e8,#0a1014e8)}
@@ -28,7 +28,7 @@ body:has(#home) .world-panel-foot{background:#080e0deF}
  body:has(#home) .zc-ribbon{height:31px;border-radius:7px}
  body:has(#home) .zc-ribbon-label{padding:0 9px;font-size:8px;letter-spacing:.55px}
  body:has(#home) .zc-ribbon-copy{font-size:12px;gap:17px;padding-left:17px}
- body:has(#home) .hero{background-position:58% center!important;background-image:linear-gradient(90deg,rgba(3,8,5,.93),rgba(3,8,5,.72)),linear-gradient(0deg,#050907 0%,transparent 55%),url("https://upload.wikimedia.org/wikipedia/commons/9/91/Overgrown_city%2C_post-apocalyptic.jpg")!important}
+ body:has(#home) .hero{background-position:58% center!important;background-image:linear-gradient(90deg,rgba(3,8,5,.93),rgba(3,8,5,.72)),linear-gradient(0deg,#050907 0%,transparent 55%),url("assets/zombcash-survivor-640.avif")!important}
 }
 @media(prefers-reduced-motion:reduce){body:has(#home) .zc-ribbon-track{animation:none!important;transform:none!important}body:has(#home) .zc-ribbon-copy:nth-child(n+2){display:none}}
 
@@ -3347,8 +3347,7 @@ body:has(#home) {
 body:has(#home) #home > section.hero {
   background-image:
     linear-gradient(180deg, rgba(3, 6, 5, 0.97) 0%, rgba(3, 6, 5, 0.85) 40%, rgba(3, 6, 5, 0.6) 100%),
-    radial-gradient(ellipse at 70% 30%, rgba(155, 255, 69, 0.08) 0%, transparent 50%),
-    url("https://upload.wikimedia.org/wikipedia/commons/9/91/Overgrown_city%2C_post-apocalyptic.jpg") !important;
+    radial-gradient(ellipse at 70% 30%, rgba(155, 255, 69, 0.08) 0%, transparent 50%) !important;
   background-size: cover !important;
   background-position: center 45% !important;
   padding: clamp(32px, 4vw, 64px) clamp(24px, 5vw, 80px) 40px !important;
@@ -3467,11 +3466,7 @@ body:has(#home) #home > section.hero .hero-bottom b {
 }
 
 /* === SECTION TRANSITIONS === */
-body:has(#home) #home > section {
-  position: relative !important;
-}
-
-body:has(#home) #home > section::before {
+body:has(#home) #home > section.hero::before {
   content: '' !important;
   position: absolute !important;
   top: 0 !important;
@@ -3480,23 +3475,6 @@ body:has(#home) #home > section::before {
   height: 1px !important;
   background: linear-gradient(90deg, transparent, var(--zc-border-subtle), transparent) !important;
   pointer-events: none !important;
-}
-
-/* === IMPROVED CARD STYLING === */
-body:has(#home) #home .zc-card,
-body:has(#home) #home .card {
-  background: var(--zc-glass) !important;
-  border: 1px solid var(--zc-border-subtle) !important;
-  border-radius: 8px !important;
-  backdrop-filter: blur(8px) !important;
-  transition: all 0.3s ease !important;
-}
-
-body:has(#home) #home .zc-card:hover,
-body:has(#home) #home .card:hover {
-  border-color: var(--zc-accent-olive) !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(155, 255, 69, 0.05) !important;
-  transform: translateY(-2px) !important;
 }
 
 /* === ACCESSIBILITY: FOCUS STATES === */
@@ -3566,33 +3544,19 @@ body:has(#home) #home input:focus-visible {
   }
 }
 
-/* === IMPROVED SECTION SPACING === */
-body:has(#home) #home > section {
-  padding: clamp(40px, 5vw, 80px) clamp(20px, 4vw, 60px) !important;
-}
-
 /* === IMPROVED TYPOGRAPHY SCALE === */
-body:has(#home) #home h2 {
-  font-size: clamp(24px, 3vw, 40px) !important;
-  line-height: 1.1 !important;
-  letter-spacing: -0.02em !important;
-  margin-bottom: 16px !important;
+body:has(#home) #home > section.hero .hero-content h1 {
+  font-size: clamp(48px, 5.5vw, 120px) !important;
 }
 
-body:has(#home) #home h3 {
-  font-size: clamp(18px, 2vw, 24px) !important;
-  line-height: 1.2 !important;
-  margin-bottom: 12px !important;
-}
-
-/* === IMPROVED TEXT CONTRAST === */
-body:has(#home) #home p {
-  color: var(--zc-text-cold) !important;
+body:has(#home) #home > section.hero .hero-content .hero-copy {
+  font-size: clamp(16px, 1.2vw, 20px) !important;
   line-height: 1.6 !important;
 }
 
-body:has(#home) #home .text-muted,
-body:has(#home) #home small {
-  color: var(--zc-text-dirty-white) !important;
+/* === IMPROVED TEXT CONTRAST === */
+body:has(#home) #home > section.hero .hero-content p {
+  color: var(--zc-text-cold) !important;
+  line-height: 1.6 !important;
 }
 """
