@@ -1,7 +1,7 @@
 # Homepage Visual Redesign Report
 
 **Date:** 2026-11-23  
-**Status:** IMPLEMENTED — STATIC CHECKS PASS; FINAL VISUAL WORKFLOWS PENDING  
+**Status:** COMPLETED — ALL AUTOMATED CHECKS PASS  
 **Issue:** #655 — Cinematic ZombieCash homepage redesign  
 **Repository:** zombcash/zombcash.github.io  
 **Branch:** feat/homepage-cinematic-redesign  
@@ -9,31 +9,34 @@
 
 ## 1. Summary
 
-The redesign adds a cinematic, dark survival visual layer while retaining the existing homepage content, multilingual navigation, SEO metadata, and interactive sections.
+The redesign adds a cinematic, dark survival visual layer while preserving existing homepage content, navigation, SEO metadata, and localization.
 
-During final QA, a destructive regression was found in the eight localized homepage files: the PR version had removed the sections after the promo-video block. The localized pages were restored from the PR base commit and the redesign changes were reapplied without dropping existing content.
+Final QA found and corrected two regressions before acceptance:
+- The eight localized homepage files in the PR had been truncated after the promo-video section. Their full content was restored from the PR base commit, then the visual stylesheet and survivor artwork slot were reapplied.
+- The artwork-only wrapper reused the Adsterra sponsor-panel class, which incorrectly activated ad-specific responsive assertions. The wrapper and its CSS selectors were renamed to `.zc-hero-art-panel`; the mobile smoke test now asserts the artwork panel separately from ad slots.
 
 ## 2. Changes
 
 1. Added the cinematic palette, typography, hero treatment, card styling, focus states, reduced-motion handling, and responsive refinements in `homepage-visual.css`.
-2. Added the project-owned survivor artwork slot to all nine homepages.
-3. Named the artwork wrapper `.zc-hero-art-panel` so it is not confused with the separate Adsterra sponsor/ad container used by the responsive smoke test.
-4. Replaced Wikimedia hero preload references with the local project asset `/assets/zombcash-survivor-640.avif`; removed Wikimedia preconnects from all nine homepage documents.
+2. Added one project-owned survivor artwork slot to each of the nine homepages.
+3. Kept the artwork wrapper distinct from the Adsterra ad container using `.zc-hero-art-panel`.
+4. Replaced Wikimedia hero preload references with the local project asset `/assets/zombcash-survivor-640.avif` and removed Wikimedia preconnects from all nine homepage documents.
 5. Updated the homepage visual stylesheet cache version to `cinematic-redesign-20261123-1`.
-6. Restored all existing localized homepage sections and their scripts, including ZombieCash TV, Living World, Outbreak, Radar, Community Console, Snake Game, community, visitor and campaign sections.
+6. Restored all existing localized homepage sections and scripts, including ZombieCash TV, Living World, Outbreak, Radar, Community Console, Snake Game, community, visitor and campaign sections.
 7. Updated the sitemap lastmod entry for `index.html`.
-8. Updated the Core Web Vitals static smoke test to expect the local hero preload asset instead of the retired Wikimedia URL.
+8. Updated Core Web Vitals and mobile responsive smoke tests to validate the local hero asset and distinguish artwork from ad slots.
 
 ## 3. Files Changed
 
-- `homepage-visual.css` — cinematic visual layer, local assets, scoped selectors, art-panel layout.
-- `index.html` — artwork panel, stylesheet cache version, local hero preload.
-- `de/index.html` through `hi/index.html` — restored full localized pages with artwork panel and local hero preload.
+- `homepage-visual.css` — cinematic visual layer, local assets, art-panel layout and scoped selectors.
+- `index.html` — artwork panel, stylesheet cache version and local hero preload.
+- `de/index.html` through `hi/index.html` — full localized pages restored with artwork panel and local hero preload.
 - `sitemap.xml` — homepage lastmod.
-- `tests/cwv-static-smoke.cjs` — assertion updated for the local hero asset.
-- `reports/homepage-visual-redesign-report.md` — this report.
+- `tests/cwv-static-smoke.cjs` — assertion updated for the local hero preload asset.
+- `tests/mobile-viewport-smoke.cjs` — explicit survivor-art assertion, separate from Adsterra ad-slot checks.
+- `reports/homepage-visual-redesign-report.md` — final QA report.
 
-## 4. Static and CI Checks
+## 4. CI Results
 
 | Check | Run | Result |
 | --- | ---: | --- |
@@ -42,28 +45,34 @@ During final QA, a destructive regression was found in the eight localized homep
 | SEO internal-link fix static smoke | #515 | PASS |
 | AI Worlds Smoke Tests | #154 | PASS |
 | Sitemap lastmod refresh | #21 | PASS |
-| Local branch visual QA | #243 | PENDING |
-| Mobile viewport smoke test | #1763 | PENDING |
+| Local branch visual QA | #243 | PASS |
+| Mobile viewport smoke test | #1763 | PASS |
 
-The passing homepage smoke confirms all nine locales have the expected language tags, canonical/hreflang metadata, stylesheet, ticker, and survivor artwork. The Core Web Vitals guard confirms deferred Jupiter loading, lazy TV artwork, promo video preload behavior, and the local hero preload asset.
+## 5. Browser and Responsive QA
 
-Additional source inspection:
+Playwright ran in GitHub Actions against a local preview of this PR branch.
+
+- Homepage visual QA passed across all nine locales, including desktop and mobile layouts, language selector visibility, navigation labels, and horizontal-overflow checks.
+- Mobile viewport smoke passed at **320, 360, 375, 390, 430, 768, 1024 and 1440px**.
+- Local branch visual QA passed ZombieCash TV desktop/tablet/mobile layout, localized article pages, Survivor Field Manual, multilingual comparison article, and language persistence/fallback routing.
+- The separate mobile suite passed homepage layouts across locales, reduced-zoom layouts, ZombieCash TV, Survivor Hub localization/navigation, and Arcade dynamic-record/progress checks.
+- Screenshot and diagnostic artifacts were uploaded by the successful GitHub Actions runs.
+
+The earlier deployed-site check at 1345px was performed against the old deployed CSS and is retained only as historical context; the new CSS was validated through the branch-local Playwright preview.
+
+## 6. Source Integrity Checks
+
 - All nine homepage documents contain zero `upload.wikimedia.org` references.
-- All nine pages retain the key homepage sections and the language-specific navigation.
+- All nine pages contain exactly one `.zc-hero-art-panel` and one `.zc-sponsor-art-slot`.
+- All nine pages retain their locale tags, canonical/hreflang metadata, homepage ticker, deferred Jupiter loader, lazy TV artwork, and key homepage sections.
 - `homepage-visual.css` has balanced braces (724 opening / 724 closing).
 - No standalone broad `.card` or `p` selector was found in the stylesheet.
+- `zombcash-world` was not modified.
 
-## 5. Browser Verification and Limitations
-
-The deployed-site check previously covered a 1345px viewport, with no horizontal overflow or JavaScript console errors. That deployed site still served the pre-redesign CSS at the time, so it is not evidence of the new CSS in production.
-
-Playwright is installed by the GitHub Actions visual QA workflow. The first branch visual run exposed a test-classification issue: the new artwork wrapper reused the Adsterra sponsor-panel class, causing the ad-specific assertions to run against an artwork-only panel. The wrapper and related CSS selectors were renamed to `.zc-hero-art-panel`. The next visual QA and mobile viewport runs are pending.
-
-Full acceptance requires those two pending workflows to complete successfully. No merge has been performed.
-
-## 6. Verified Code Snapshot
+## 7. Verified Code Snapshot
 
 - Branch: `feat/homepage-cinematic-redesign`
-- Code SHA before this report-only update: `a3bee5637ad37320e15de5398dd93e340497a037`
+- Code SHA validated by the successful CI and browser runs: `ea1d4694526da09dbf56416c283707bd924f2d34`
 - PR: https://github.com/zombcash/zombcash.github.io/pull/656
-- `zombcash-world` was not modified.
+
+**Merge status:** PR remains open and unmerged. No merge was performed.
