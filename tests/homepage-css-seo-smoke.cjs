@@ -17,6 +17,16 @@ for (const file of pages) {
   assert.equal(styles.length, 3, file + ': homepage CSS should be consolidated into three cascade-preserving blocks');
   assert.equal(bodyStyles.length, 0, file + ': inline CSS must be loaded before body content');
   assert.match(html, /<style id="homepage-pre-polish">/, file + ': consolidated pre-polish CSS bundle missing');
+  const bodyStart = html.indexOf('<body>');
+  const headerPlaceholder = html.indexOf('<header class="zombcash-shared-header" data-zsh-placeholder></header>');
+  const ribbonPlaceholder = html.indexOf('<div class="zc-outbreak-ribbons" data-zc-ribbons-placeholder></div>');
+  const homeMain = html.indexOf('<main id="home">');
+  assert.ok(bodyStart >= 0 && headerPlaceholder > bodyStart && ribbonPlaceholder > headerPlaceholder && homeMain > ribbonPlaceholder,
+    file + ': shared header and ribbons must reserve their final positions before main content');
+  assert.match(html, /data-zsh-placeholder\\]\\{[^}]*min-height:76px/, file + ': desktop header space is not reserved');
+  assert.match(html, /data-zc-ribbons-placeholder\\]\\{[^}]*min-height:127px/, file + ': desktop ribbon space is not reserved');
+  assert.match(html, /data-zc-ribbons-placeholder\\]\\{min-height:114px/, file + ': mobile ribbon space is not reserved');
+  assert.match(html, /data-zsh-placeholder\\]\\{min-height:68px/, file + ': mobile header space is not reserved');
   assert.match(html, /<style id="homepage-components-inline">/, file + ': consolidated component CSS bundle missing');
   assert.match(html, /<style id="homepage-late-overrides">/, file + ': consolidated late CSS bundle missing');
   assert.ok(html.indexOf('homepage-pre-polish') < html.indexOf('site-polish.css'), file + ': pre-polish CSS order changed');
