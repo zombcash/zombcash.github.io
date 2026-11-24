@@ -201,29 +201,43 @@ function pagePath(locale, slug) {
             const link = card.querySelector('h2 a, h3 a, a.article-link');
             return link ? new URL(link.href).pathname.split('/').pop() : '';
           });
+          const cardPaths = cards.map(card => {
+            const link = card.querySelector('h2 a, h3 a, a.article-link');
+            return link ? new URL(link.href).pathname.split('/').pop() : '';
+          });
+          const bookCard = cards.find(card => {
+            const link = card.querySelector('h2 a, h3 a, a.article-link');
+            return link && new URL(link.href).pathname.endsWith('/the-meridian-of-ash.html');
+          });
           const allImages = images.filter(Boolean);
           return {
             cardCount: cards.length,
             firstTenPaths: paths,
+            cardPaths,
+            bookPath: bookCard ? 'the-meridian-of-ash.html' : '',
+            bookLanguage: bookCard?.dataset.language || '',
+            bookTitleLang: bookCard?.querySelector('h2 a, h3 a')?.getAttribute('lang') || '',
+            fictionFilterAvailable: [...document.querySelectorAll('#manual-category option')].some(option => option.value === 'fiction'),
             uniquePosters: new Set(allImages.map(img => new URL(img.src).pathname)).size,
             missingAlt: allImages.filter(img => !img.alt.trim()).length,
             brokenImages: allImages.filter(img => !img.complete || img.naturalWidth === 0).map(img => img.src),
             schemaCount: schema?.mainEntity?.numberOfItems ?? null,
             schemaItems: itemList.length,
-            schemaOrder: itemList.slice(0, 10).map(item => item.url.split('/').pop()),
+            schemaOrder: itemList.map(item => item.url.split('/').pop()),
             width: innerWidth,
             documentWidth: document.documentElement.scrollWidth,
             englishMarkers: firstTen.filter(card => /original in english|read guide in english|article in english|en anglais|auf englisch|in inglese|на английском|İngilizce|अंग्रेज़ी|英文|英語/i.test(card.innerText)).length,
           };
         }, expectedGuideSlugs);
         const issues = [];
-        if (result.cardCount !== 13) issues.push('expected 13 Field Manual cards, found ' + result.cardCount);
+        if (result.cardCount !== 14) issues.push('expected 14 Field Manual cards, found ' + result.cardCount);
         if (result.firstTenPaths.join('|') !== expectedGuideSlugs.join('|')) issues.push('first ten card order or links do not match the canonical order');
         if (result.uniquePosters !== 10) issues.push('expected 10 distinct posters, found ' + result.uniquePosters);
         if (result.missingAlt) issues.push('missing ALT on ' + result.missingAlt + ' card posters');
         if (result.brokenImages.length) issues.push('broken poster images: ' + result.brokenImages.join(', '));
-        if (result.schemaCount !== 13 || result.schemaItems !== 13) issues.push('CollectionPage schema does not list all 13 cards');
-        if (result.schemaOrder.join('|') !== expectedGuideSlugs.join('|')) issues.push('structured-data order does not match visible card order');
+        if (result.schemaCount !== 14 || result.schemaItems !== 14) issues.push('CollectionPage schema does not list all 14 cards');
+        if (result.schemaOrder.join('|') !== result.cardPaths.join('|')) issues.push('structured-data order does not match visible card order');
+        if (result.bookPath !== 'the-meridian-of-ash.html' || result.bookLanguage !== 'en' || result.bookTitleLang !== 'en' || !result.fictionFilterAvailable) issues.push('The Meridian of Ash must be listed and clearly marked as an English-edition fiction card in every locale');
         if (result.documentWidth > viewport.width + 1) issues.push('Field Manual horizontal overflow: ' + result.documentWidth + 'px');
         if (locale !== 'en' && result.englishMarkers) issues.push('English-only labels remain on ' + result.englishMarkers + ' of the first ten cards');
         const report = { page: pagePath(locale, 'survivor-field-manual.html'), viewport: viewport.name, result, issues };
