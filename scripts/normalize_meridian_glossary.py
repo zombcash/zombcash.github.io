@@ -2,6 +2,7 @@
 """Targeted protected-term normalization for TranslateGemma book drafts."""
 from __future__ import annotations
 import argparse, json, os, re
+import requests
 from pathlib import Path
 from bs4 import BeautifulSoup, NavigableString, Comment, Tag
 from huggingface_hub import hf_hub_download
