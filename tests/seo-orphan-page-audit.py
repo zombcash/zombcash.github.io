@@ -26,23 +26,30 @@ class PageParser(HTMLParser):
         self.links = []
         self.scripts = []
         self.title = []
+        self.in_head = False
         self.in_title = False
 
     def handle_starttag(self, tag, attrs):
+        tag = tag.lower()
         attrs = dict(attrs)
-        if tag.lower() == "a" and attrs.get("href"):
+        if tag == "head":
+            self.in_head = True
+        elif tag == "a" and attrs.get("href"):
             self.links.append(attrs["href"].strip())
-        elif tag.lower() == "script" and attrs.get("src"):
+        elif tag == "script" and attrs.get("src"):
             self.scripts.append(attrs["src"])
-        elif tag.lower() == "title":
+        elif tag == "title" and self.in_head:
             self.in_title = True
 
     def handle_endtag(self, tag):
-        if tag.lower() == "title":
+        tag = tag.lower()
+        if tag == "title" and self.in_head:
             self.in_title = False
+        elif tag == "head":
+            self.in_head = False
 
     def handle_data(self, data):
-        if self.in_title:
+        if self.in_head and self.in_title:
             self.title.append(data)
 
 
