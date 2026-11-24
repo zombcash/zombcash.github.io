@@ -200,7 +200,7 @@ def translate_full_block_with_inline_terms(model, source_paragraph, target_code)
             exact = match.group(0) if match else term
             open_tag = str(source_tag).split(">", 1)[0] + ">"
             close_tag = f"</{source_tag.name}>"
-            pattern = re.compile(re.escape(exact), re.I)
+            pattern = term_pattern(exact)
             output, count = pattern.subn(open_tag + exact + close_tag, output, count=1)
             if count != 1:
                 return None, f"inline_term_reinsert_failure:{exact}"
@@ -221,7 +221,7 @@ def process_sample(model, lang, target_code, target_name):
            "This sample is not a published chapter.", ""]
     count = 0
     for p in soup.select(".wrap h1, .wrap h2, .wrap h3, .wrap p, .wrap blockquote"):
-        if not any(re.search(re.escape(t), p.get_text(" ", strip=True), re.I) for t in PROTECTED_TERMS):
+        if not any(term_pattern(t).search(p.get_text(" ", strip=True)) for t in PROTECTED_TERMS):
             continue
         translated, error = translate_protected(model, p, target_code)
         if error:
@@ -238,7 +238,7 @@ def process_sample(model, lang, target_code, target_name):
     formatted_items = formatted_page.select(".wrap p")
     formatted_index = next((i for i,p in enumerate(formatted_items)
                             if p.find(list(INLINE_TAGS)) and
-                            any(re.search(re.escape(t), p.get_text(" ", strip=True), re.I) for t in PROTECTED_TERMS)), None)
+                            any(term_pattern(t).search(p.get_text(" ", strip=True)) for t in PROTECTED_TERMS)), None)
     if formatted_index is not None:
         target_url = f"https://raw.githubusercontent.com/zombcash/zombcash.github.io/translation-tgemma-combined/{lang}/{lang}/the-meridian-of-ash-chapter-32.html"
         target_response = requests.get(target_url, timeout=40)
@@ -299,7 +299,7 @@ def process_all(model, lang, target_code):
             is_book_title = filename == "the-meridian-of-ash.html" and source_p.name == "h1" and source_text.strip().upper() == "THE MERIDIAN OF ASH"
             if not is_book_title:
                 target_text = target_p.get_text(" ", strip=True)
-                if all(re.search(re.escape(term), target_text) for term in hits):
+                if all(term_pattern(term).search(target_text) for term in hits):
                     already_ok += 1
                     continue
             if is_book_title:
