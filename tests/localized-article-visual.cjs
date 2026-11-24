@@ -217,12 +217,12 @@ function pagePath(locale, slug) {
           };
         }, expectedGuideSlugs);
         const issues = [];
-        if (result.cardCount !== 13) issues.push('expected 13 Field Manual cards, found ' + result.cardCount);
+        if (result.cardCount !== 14) issues.push('expected 14 Field Manual cards, found ' + result.cardCount);
         if (result.firstTenPaths.join('|') !== expectedGuideSlugs.join('|')) issues.push('first ten card order or links do not match the canonical order');
         if (result.uniquePosters !== 10) issues.push('expected 10 distinct posters, found ' + result.uniquePosters);
         if (result.missingAlt) issues.push('missing ALT on ' + result.missingAlt + ' card posters');
         if (result.brokenImages.length) issues.push('broken poster images: ' + result.brokenImages.join(', '));
-        if (result.schemaCount !== 13 || result.schemaItems !== 13) issues.push('CollectionPage schema does not list all 13 cards');
+        if (result.schemaCount !== 14 || result.schemaItems !== 14) issues.push('CollectionPage schema does not list all 14 cards');
         if (result.schemaOrder.join('|') !== expectedGuideSlugs.join('|')) issues.push('structured-data order does not match visible card order');
         if (result.documentWidth > viewport.width + 1) issues.push('Field Manual horizontal overflow: ' + result.documentWidth + 'px');
         if (locale !== 'en' && result.englishMarkers) issues.push('English-only labels remain on ' + result.englishMarkers + ' of the first ten cards');
