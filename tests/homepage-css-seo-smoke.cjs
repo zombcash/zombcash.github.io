@@ -65,7 +65,7 @@ const visualCss = fs.readFileSync(path.join(root, 'homepage-visual.css'), 'utf8'
 assert.match(visualCss, /\.zc-outbreak-ribbons\{[^}]*min-height:127px/, 'desktop ribbon height must be reserved before data loads');
 assert.match(visualCss, /\.zc-outbreak-ribbons\{[^}]*min-height:123px/, 'mobile ribbon height must be reserved before data loads');
 assert.match(visualCss, /min-height:\s*calc\(3 \* clamp\(84px, \.9vw, 144px\)/, 'large-viewport ribbon height must be reserved before data loads');
-assert.match(visualCss, /body:has\(#home\)>header\.topbar\{min-height:82px!important/, 'desktop shared-header height must be reserved before navigation hydration');
+assert.match(visualCss, /body:has\(#home\)>header\.topbar\{min-height:110px!important/, 'desktop shared-header height must be reserved before navigation hydration');
 assert.match(visualCss, /@media\(min-width:761px\) and \(max-width:1199px\)\{body:has\(#home\)>header\.topbar\{min-height:112px!important/, 'tablet shared-header height must be reserved before navigation hydration');
 assert.match(visualCss, /@media\(max-width:760px\)\{body:has\(#home\)>header\.topbar\{min-height:95px!important/, 'mobile shared-header height must be reserved before navigation hydration');
 console.log('PASS live market ribbons reserve layout space before dynamic content is rendered');
