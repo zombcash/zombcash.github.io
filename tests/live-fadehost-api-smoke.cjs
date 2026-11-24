@@ -52,8 +52,33 @@ function record(name, response, expectedStatus, failures, details = {}) {
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({ viewport: { width: 1365, height: 900 }, serviceWorkers: 'block' });
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, serviceWorkers: 'block' });
   const page = await context.newPage();
+  await page.addInitScript(() => {
+    window.__zombcashLayoutShifts = [];
+    try {
+      const observer = new PerformanceObserver(list => {
+        for (const entry of list.getEntries()) {
+          if (entry.hadRecentInput) continue;
+          window.__zombcashLayoutShifts.push({
+            value: entry.value,
+            startTime: Math.round(entry.startTime),
+            sources: (entry.sources || []).map(source => ({
+              tag: source.node?.tagName || '',
+              id: source.node?.id || '',
+              className: typeof source.node?.className === 'string' ? source.node.className.slice(0, 120) : '',
+              previousRect: source.previousRect ? { x: source.previousRect.x, y: source.previousRect.y, width: source.previousRect.width, height: source.previousRect.height } : null,
+              currentRect: source.currentRect ? { x: source.currentRect.x, y: source.currentRect.y, width: source.currentRect.width, height: source.currentRect.height } : null,
+            })),
+          });
+        }
+      });
+      observer.observe({ type: 'layout-shift', buffered: true });
+      window.__zombcashLayoutShiftObserver = observer;
+    } catch (error) {
+      window.__zombcashLayoutShiftObserverError = error.message;
+    }
+  });
   const failures = [];
   const degraded = [];
   const results = [];
@@ -214,6 +239,14 @@ function record(name, response, expectedStatus, failures, details = {}) {
       marketPrice: uiSnapshot.marketPrice,
     });
 
+    const layoutShiftDiagnostics = await page.evaluate(() => {
+      const entries = window.__zombcashLayoutShifts || [];
+      return {
+        totalValue: Number(entries.reduce((sum, entry) => sum + entry.value, 0).toFixed(4)),
+        entries: entries.slice().sort((a, b) => b.value - a.value).slice(0, 12),
+        observerError: window.__zombcashLayoutShiftObserverError || null,
+      };
+    });
     const report = {
       result: failures.length ? 'FAIL' : degraded.length ? 'DEGRADED' : 'PASS',
       origin: SITE_ORIGIN,
@@ -221,6 +254,7 @@ function record(name, response, expectedStatus, failures, details = {}) {
       checkedAt: new Date().toISOString(),
       results,
       homepage: uiSnapshot,
+      mobileLayoutShiftDiagnostics: layoutShiftDiagnostics,
       degraded,
       failures,
       note: 'Live public endpoints and unauthenticated security guards were checked from the real site origin. Telegram completion and authenticated profile writes were not attempted.',
