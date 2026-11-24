@@ -17,6 +17,7 @@ on:
       - "hi/index.html"
       - "shared-nav.js"
       - "tests/shared-nav-accessibility-smoke.cjs"
+      - "tests/survivor-auth-modal-accessibility-smoke.cjs"
       - "tests/homepage-css-seo-smoke.cjs"
       - "language.js"
       - "homepage-visual.css"
@@ -62,6 +63,7 @@ jobs:
         run: |
           node --check shared-nav.js
           node --check tests/shared-nav-accessibility-smoke.cjs
+          node --check tests/survivor-auth-modal-accessibility-smoke.cjs
           node --check tests/homepage-css-seo-smoke.cjs
           node tests/homepage-css-seo-smoke.cjs
           node --check language.js
@@ -118,6 +120,11 @@ jobs:
         env:
           SITE_URL: http://127.0.0.1:4173/
         run: node tests/shared-nav-accessibility-smoke.cjs
+
+      - name: Test Survivor registration modal, login retry, profile save and logout
+        env:
+          SITE_URL: http://127.0.0.1:4173/
+        run: node tests/survivor-auth-modal-accessibility-smoke.cjs
 
       - name: Test localized articles across desktop and mobile
         env:
