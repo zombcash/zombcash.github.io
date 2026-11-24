@@ -51,10 +51,12 @@ const routes = ['', 'de/', 'fr/', 'it/', 'ja/', 'zh-CN/', 'ru/', 'tr/', 'hi/'];
     await scrollPage.goto(base, { waitUntil: 'domcontentloaded' });
     const scrollControls = scrollPage.locator('.page-scroll-controls');
     await scrollControls.waitFor({ state: 'attached', timeout: 15000 });
+    await scrollPage.waitForFunction(() => window.__zshScrollControlsVisibilityBound === true);
     await scrollPage.evaluate(() => {
       window.dispatchEvent(new WheelEvent('wheel', { deltaY: 500, bubbles: true }));
-      window.scrollTo(0, 500);
+      window.scrollTo(0, Math.max(document.documentElement.scrollHeight, document.body.scrollHeight));
     });
+    await scrollPage.waitForFunction(() => window.scrollY > 220);
     await scrollPage.waitForFunction(() =>
       document.querySelector('.page-scroll-controls')?.classList.contains('is-visible')
     );
