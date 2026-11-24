@@ -102,9 +102,22 @@ def validate_source_and_draft(lang):
         translated_count = len(translated_soup.select(".wrap p"))
         if source_count != translated_count:
             raise RuntimeError(f"Paragraph count mismatch in {lang}/{filename}: {translated_count} vs {source_count}")
-        if "noindex,follow" not in str(translated_soup):
+        html_tag = translated_soup.find("html")
+        if not html_tag or html_tag.get("lang") != lang:
+            raise RuntimeError(f"Incorrect html lang in {lang}/{filename}")
+        canonical = translated_soup.find("link", rel=lambda value: value and "canonical" in value)
+        expected_canonical = f"https://zombcash.github.io/{lang}/{filename}"
+        if not canonical or canonical.get("href") != expected_canonical:
+            raise RuntimeError(f"Incorrect canonical URL in {lang}/{filename}")
+        alternates = translated_soup.find_all("link", rel=lambda value: value and "alternate" in value)
+        hreflangs = {link.get("hreflang") for link in alternates}
+        expected_hreflang = "zh-Hans" if lang == "zh-CN" else lang
+        if not {"en", expected_hreflang, "x-default"}.issubset(hreflangs):
+            raise RuntimeError(f"Missing hreflang alternates in {lang}/{filename}")
+        robots = translated_soup.find("meta", attrs={"name": "robots"})
+        if not robots or "noindex" not in robots.get("content", ""):
             raise RuntimeError(f"Missing noindex safeguard in {lang}/{filename}")
-        if "translation-draft-banner" not in str(translated_soup):
+        if not translated_soup.select_one(".translation-draft-banner"):
             raise RuntimeError(f"Missing machine-draft banner in {lang}/{filename}")
     print(f"QA PASS {lang}: all 48 pages, 6,744 paragraphs, noindex and draft banner verified", flush=True)
 
