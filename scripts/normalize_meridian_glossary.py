@@ -107,6 +107,33 @@ def translate_inline_preserving_terms(model, source_paragraph, target_code):
         node.replace_with(translated)
     return str(paragraph), None
 
+def normalize_inline_terms(model, source_paragraph, target_paragraph, target_code):
+    # Keep the existing translated sentence. Replace only the protected name inside matching inline tags.
+    source_tags = [tag for tag in source_paragraph.find_all(list(INLINE_TAGS))
+                   if not tag.find(list(INLINE_TAGS))]
+    target_tags = [tag for tag in target_paragraph.find_all(list(INLINE_TAGS))
+                   if not tag.find(list(INLINE_TAGS))]
+    if len(source_tags) != len(target_tags):
+        return None, "inline_tag_count_mismatch"
+    changed = False
+    for source_tag, target_tag in zip(source_tags, target_tags):
+        source_text = source_tag.get_text(" ", strip=True)
+        hits = [term for term in PROTECTED_TERMS if re.search(re.escape(term), source_text, re.I)]
+        if not hits:
+            continue
+        if any(re.fullmatch(re.escape(term), source_text, re.I) for term in hits):
+            normalized = source_text
+        else:
+            normalized, error = translate_segment(model, source_text, target_code)
+            if error:
+                return None, error
+        target_tag.clear()
+        target_tag.append(normalized)
+        changed = True
+    if not changed:
+        return None, "no_protected_inline_term"
+    return str(target_paragraph), None
+
 def set_paragraph_html(paragraph, fragment):
     parsed = BeautifulSoup(fragment, "html.parser")
     paragraph.clear()
@@ -132,19 +159,33 @@ def process_sample(model, lang, target_code, target_name):
                 f"## Example {count} — {target_name}", BeautifulSoup(translated, "html.parser").get_text(" ", strip=True), ""]
         if count >= 5:
             break
-    # Explicitly test the one source paragraph that contains inline emphasis and a protected name.
+    # Explicitly test the one source paragraph that contains inline formatting and a protected name.
+    import copy
     formatted_page = BeautifulSoup((ROOT / "the-meridian-of-ash-chapter-32.html").read_text(encoding="utf-8"), "html.parser")
-    formatted = next((p for p in formatted_page.select(".wrap p")
-                      if p.find(["strong", "em", "b", "i"]) and
-                      any(re.search(re.escape(t), p.get_text(" ", strip=True), re.I) for t in PROTECTED_TERMS)), None)
-    if formatted:
-        translated, error = translate_inline_preserving_terms(model, formatted, target_code)
-        if error:
-            out += [f"## FORMATTED INLINE TEST SKIPPED — {error}", formatted.get_text(" ", strip=True), ""]
+    formatted_items = formatted_page.select(".wrap p")
+    formatted_index = next((i for i,p in enumerate(formatted_items)
+                            if p.find(list(INLINE_TAGS)) and
+                            any(re.search(re.escape(t), p.get_text(" ", strip=True), re.I) for t in PROTECTED_TERMS)), None)
+    if formatted_index is not None:
+        target_url = f"https://raw.githubusercontent.com/zombcash/zombcash.github.io/translation-tgemma-combined/{lang}/{lang}/the-meridian-of-ash-chapter-32.html"
+        target_response = requests.get(target_url, timeout=40)
+        if not target_response.ok:
+            out += [f"## FORMATTED INLINE TEST SKIPPED — target page HTTP {target_response.status_code}", ""]
         else:
-            count += 1
-            out += ["## Formatted inline test — English", str(formatted), "",
-                    f"## Formatted inline test — {target_name}", translated, ""]
+            target_page = BeautifulSoup(target_response.text, "html.parser")
+            target_items = target_page.select(".wrap p")
+            if formatted_index >= len(target_items):
+                out += ["## FORMATTED INLINE TEST SKIPPED — paragraph index mismatch", ""]
+            else:
+                target_paragraph = BeautifulSoup(str(target_items[formatted_index]), "html.parser").find("p")
+                translated, error = normalize_inline_terms(model, formatted_items[formatted_index], target_paragraph, target_code)
+                if error:
+                    out += [f"## FORMATTED INLINE TEST SKIPPED — {error}", ""]
+                else:
+                    count += 1
+                    out += ["## Formatted inline test — English", str(formatted_items[formatted_index]), "",
+                            "## Existing translated paragraph before glossary normalization", str(target_items[formatted_index]), "",
+                            f"## {target_name} after glossary normalization", translated, ""]
     dest = ROOT / "translations" / "samples" / f"glossary-protection-{lang}.md"
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text("\n".join(out), encoding="utf-8")
@@ -179,7 +220,7 @@ def process_all(model, lang, target_code):
             for term in hits:
                 per_term[term] += 1
             if source_p.find(list(INLINE_TAGS)):
-                translated, error = translate_inline_preserving_terms(model, source_p, target_code)
+                translated, error = normalize_inline_terms(model, source_p, target_p, target_code)
             else:
                 translated, error = translate_protected(model, source_p, target_code)
             if error:
