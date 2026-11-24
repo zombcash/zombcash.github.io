@@ -71,6 +71,42 @@ def translate_protected(model, source_text, target_code):
         output = output.replace(token, original)
     return output, None
 
+def translate_segment(model, text, target_code):
+    if not text or not text.strip():
+        return text, None
+    # A standalone protected name is already the desired target output.
+    if any(re.fullmatch(re.escape(term), text.strip(), re.I) for term in PROTECTED_TERMS):
+        return text, None
+    marked, term_map = protect_terms(text)
+    prompt = f"en[sprt]{target_code}[sprt]{marked}"
+    response = model.create_chat_completion(
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.1, top_p=0.95, repeat_penalty=1.0, max_tokens=512, seed=42
+    )
+    output = response["choices"][0]["message"]["content"] or ""
+    output = re.sub(r"<think>[\\s\\S]*?</think>", "", output).strip()
+    for token, original in term_map.items():
+        if output.count(token) != 1:
+            return None, f"segment_marker_failure:{token}"
+        output = output.replace(token, original)
+    return output, None
+
+def translate_inline_preserving_terms(model, source_paragraph, target_code):
+    # Keep original inline tags/attributes; translate text nodes independently.
+    fragment = BeautifulSoup(str(source_paragraph), "html.parser")
+    paragraph = fragment.find(source_paragraph.name)
+    for node in list(paragraph.find_all(string=True)):
+        if isinstance(node, Comment) or not isinstance(node, NavigableString):
+            continue
+        raw = str(node)
+        if not raw.strip():
+            continue
+        translated, error = translate_segment(model, raw, target_code)
+        if error:
+            return None, error
+        node.replace_with(translated)
+    return str(paragraph), None
+
 def set_paragraph_html(paragraph, fragment):
     parsed = BeautifulSoup(fragment, "html.parser")
     paragraph.clear()
@@ -102,13 +138,13 @@ def process_sample(model, lang, target_code, target_name):
                       if p.find(["strong", "em", "b", "i"]) and
                       any(re.search(re.escape(t), p.get_text(" ", strip=True), re.I) for t in PROTECTED_TERMS)), None)
     if formatted:
-        translated, error = translate_protected(model, formatted, target_code)
+        translated, error = translate_inline_preserving_terms(model, formatted, target_code)
         if error:
             out += [f"## FORMATTED INLINE TEST SKIPPED — {error}", formatted.get_text(" ", strip=True), ""]
         else:
             count += 1
-            out += ["## Formatted inline test — English", formatted.get_text(" ", strip=True), "",
-                    f"## Formatted inline test — {target_name}", BeautifulSoup(translated, "html.parser").get_text(" ", strip=True), ""]
+            out += ["## Formatted inline test — English", str(formatted), "",
+                    f"## Formatted inline test — {target_name}", translated, ""]
     dest = ROOT / "translations" / "samples" / f"glossary-protection-{lang}.md"
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text("\n".join(out), encoding="utf-8")
@@ -142,7 +178,10 @@ def process_all(model, lang, target_code):
             candidates += 1
             for term in hits:
                 per_term[term] += 1
-            translated, error = translate_protected(model, source_p, target_code)
+            if source_p.find(list(INLINE_TAGS)):
+                translated, error = translate_inline_preserving_terms(model, source_p, target_code)
+            else:
+                translated, error = translate_protected(model, source_p, target_code)
             if error:
                 skipped += 1
                 print(f"SKIP {filename}: {error}", flush=True)
