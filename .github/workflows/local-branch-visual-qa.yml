@@ -19,6 +19,7 @@ on:
       - "tests/shared-nav-accessibility-smoke.cjs"
       - "tests/survivor-auth-modal-accessibility-smoke.cjs"
       - "tests/homepage-css-seo-smoke.cjs"
+      - "tests/homepage-ribbon-layout-shift-smoke.cjs"
       - "language.js"
       - "homepage-visual.css"
       - "assets/js/zctv-player.js"
@@ -117,6 +118,11 @@ jobs:
         env:
           SITE_URL: http://127.0.0.1:4173/
         run: node tests/mobile-viewport-smoke.cjs
+
+      - name: Verify live homepage ribbons do not shift main content
+        env:
+          SITE_URL: http://127.0.0.1:4173/
+        run: node tests/homepage-ribbon-layout-shift-smoke.cjs
 
       - name: Test shared navigation keyboard access and ARIA state in all locales
         env:
