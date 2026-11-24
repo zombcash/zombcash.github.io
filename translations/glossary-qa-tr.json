@@ -2,24 +2,11 @@
   "mode": "incremental_repair",
   "language": "tr",
   "pages": 48,
-  "candidate_blocks": 222,
-  "already_normalized_blocks": 214,
-  "repaired_blocks": 6,
-  "skipped_blocks": 2,
-  "skipped_items": [
-    {
-      "file": "the-meridian-of-ash-chapter-16.html",
-      "block_index": 0,
-      "source": "CHAPTER SIXTEEN — THE AUDITOR'S PROOF",
-      "error": "bracketed_glossary_missing:THE AUDITOR"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-38.html",
-      "block_index": 26,
-      "source": "She let the name settle. Morrow. A tomorrow built from broken yesterday.",
-      "error": "bracketed_glossary_missing:Morrow"
-    }
-  ],
+  "candidate_blocks": 213,
+  "already_normalized_blocks": 211,
+  "repaired_blocks": 2,
+  "skipped_blocks": 0,
+  "skipped_items": [],
   "source_term_hits": {
     "THE MERIDIAN OF ASH": 1,
     "The Meridian of Ash": 1,
@@ -28,11 +15,11 @@
     "ZOMBCASH": 5,
     "Zombie Lab": 13,
     "The Core": 36,
-    "Morrow": 103,
+    "Morrow": 95,
     "Saint Oran's": 19,
     "Bellwether": 9,
     "Grey Orchard": 3,
-    "The Auditor": 15,
+    "The Auditor": 14,
     "Survivor Field Manual": 0,
     "Outbreak Transmission": 7,
     "OUTBREAK RADAR": 6
