@@ -151,10 +151,10 @@ jobs:
           print(f"Search Console property: {site_url}")
           print(f"Unique sitemap URLs: {len(urls)}")
           print(f"Selected URL batch: {len(selected_urls)} starting at index {start_index}; limit={url_limit or 'all remaining'}.")
-          print("Inspection cadence: 0.2 seconds between requests (below the documented 600 requests/minute per-site quota).")
+          print("Inspection cadence: 1.0 seconds between requests (60 requests/minute, with headroom below API quotas).")
 
           # Each worker owns its Google API client; the shared start-time gate
-          # caps the entire pool at five requests per second (300/minute).
+          # caps the entire pool at one request per second (60/minute).
           thread_local = threading.local()
           rate_lock = threading.Lock()
           next_request_at = [0.0]
@@ -182,7 +182,7 @@ jobs:
                       time.sleep(delay)
                   if stop_event.is_set():
                       return {"url": url, "skipped_due_to_stop": True}
-                  next_request_at[0] = time.monotonic() + 0.2
+                  next_request_at[0] = time.monotonic() + 1.0
 
               try:
                   response = get_worker_service().urlInspection().index().inspect(
@@ -222,7 +222,7 @@ jobs:
                       "error": f"{type(exc).__name__}: {exc}",
                   }
 
-          with ThreadPoolExecutor(max_workers=4) as executor:
+          with ThreadPoolExecutor(max_workers=1) as executor:
               for index, record in enumerate(executor.map(inspect_url, selected_urls), start=1):
                   if record.get("skipped_due_to_stop"):
                       report["skipped_count"] = report.get("skipped_count", 0) + 1
@@ -243,8 +243,8 @@ jobs:
                       )
 
           report["stopped_early"] = stop_event.is_set()
-          report["concurrency"] = 4
-          report["request_start_interval_seconds"] = 0.2
+          report["concurrency"] = 1
+          report["request_start_interval_seconds"] = 1.0
 
           Path("gsc-url-inspection-report.json").write_text(
               json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
