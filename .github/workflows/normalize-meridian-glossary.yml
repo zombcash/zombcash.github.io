@@ -1,0 +1,82 @@
+name: Normalize Meridian glossary terms
+
+on:
+  workflow_dispatch:
+    inputs:
+      language:
+        description: Target language
+        required: true
+        type: choice
+        options: [ru, de, fr, it, ja, zh-CN, tr, hi]
+      mode:
+        description: sample tests five protected-term paragraphs; all updates only glossary-containing paragraphs
+        required: true
+        default: sample
+        type: choice
+        options: [sample, all]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: meridian-glossary-${{ inputs.language }}-${{ inputs.mode }}
+  cancel-in-progress: false
+
+jobs:
+  normalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout English source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Restore TranslateGemma model cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface/hub
+          key: translategemma-4b-q4km-v1
+      - name: Install Python dependencies
+        run: python -m pip install --disable-pip-version-check numpy==1.26.4 huggingface_hub==0.34.4 beautifulsoup4==4.13.4 diskcache jinja2 typing-extensions
+      - name: Install prebuilt llama.cpp CPU wheel
+        run: |
+          python -m pip install --disable-pip-version-check --no-deps https://github.com/abetlen/llama-cpp-python/releases/download/v0.3.38/llama_cpp_python-0.3.38-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
+          python -c "from llama_cpp import Llama; print('llama.cpp CPU runtime ready')"
+      - name: Prepare output branch
+        env:
+          TARGET_LANGUAGE: ${{ inputs.language }}
+          MODE: ${{ inputs.mode }}
+        run: |
+          set -euo pipefail
+          if [ "$MODE" = "sample" ]; then
+            BRANCH="translation-tgemma-glossary-test/$TARGET_LANGUAGE"
+            git checkout -b "$BRANCH" origin/main
+          else
+            SOURCE_BRANCH="translation-tgemma-combined/$TARGET_LANGUAGE"
+            BRANCH="translation-tgemma-glossary/$TARGET_LANGUAGE"
+            git fetch origin "+refs/heads/$SOURCE_BRANCH:refs/remotes/origin/$SOURCE_BRANCH"
+            git checkout -b "$BRANCH" "origin/$SOURCE_BRANCH"
+          fi
+          echo "OUTPUT_BRANCH=$BRANCH" >> "$GITHUB_ENV"
+      - name: Normalize protected terms
+        env:
+          HF_HOME: ~/.cache/huggingface
+          TOKENIZERS_PARALLELISM: "false"
+        run: python scripts/normalize_meridian_glossary.py --language "${{ inputs.language }}" --mode "${{ inputs.mode }}"
+      - name: Push glossary QA result
+        env:
+          TARGET_LANGUAGE: ${{ inputs.language }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          if git diff --cached --quiet; then
+            echo "No glossary changes were produced."
+            exit 0
+          fi
+          git commit -m "Normalize protected Meridian glossary terms ($TARGET_LANGUAGE)"
+          git push --set-upstream origin "$OUTPUT_BRANCH"
