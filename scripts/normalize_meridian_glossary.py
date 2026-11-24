@@ -379,7 +379,7 @@ def process_all(model, lang, target_code):
             is_book_title = filename == "the-meridian-of-ash.html" and source_p.name == "h1" and source_text.strip().upper() == "THE MERIDIAN OF ASH"
             if not is_book_title:
                 target_text = target_p.get_text(" ", strip=True)
-                if all(term_pattern(term).search(target_text) for term in hits):
+                if all(target_text.count(term) >= hits.count(term) for term in set(hits)):
                     already_ok += 1
                     continue
             if is_book_title:
