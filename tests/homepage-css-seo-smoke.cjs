@@ -52,7 +52,7 @@ const globalCssFiles = ['style.css', 'site-polish.css', 'cinematic-theme.css', '
 for (const cssFile of globalCssFiles) {
   const globalCss = fs.readFileSync(path.join(root, cssFile), 'utf8');
   for (const className of obsoleteHeroClasses) {
-    assert.doesNotMatch(globalCss, new RegExp('\\\\.' + className + '(?![\\\\w-])'), cssFile + ': retired hero selector remains: ' + className);
+    assert.doesNotMatch(globalCss, new RegExp('\\.' + className + '(?![\\w-])'), cssFile + ': retired hero selector remains: ' + className);
   }
 }
 
