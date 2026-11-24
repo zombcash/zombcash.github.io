@@ -1251,7 +1251,8 @@ if (zomMarket) {
     if (label) label.textContent = state;
     if (dot) {
       dot.className = state === 'ONLINE' ? 'is-online' : state === 'OFFLINE' ? 'is-offline' : 'is-unknown';
-      dot.setAttribute('aria-label', state);
+      dot.removeAttribute('aria-label');
+      dot.setAttribute('aria-hidden', 'true');
     }
   };
   const compact = value => {
