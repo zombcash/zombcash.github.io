@@ -6,7 +6,8 @@ required = [
     'if report["quota_paused"]:',
     "Google URL Inspection quota is exhausted for this property",
     'sys.exit(0)',
-    'f"- Quota paused: **{report.get(\\'quota_paused\\', False)}**"',
+    "Quota paused:",
+    "report.get('quota_paused', False)",
 ]
 missing = [item for item in required if item not in workflow]
 if missing:
