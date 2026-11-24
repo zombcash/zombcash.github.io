@@ -243,6 +243,7 @@ jobs:
                       )
 
           report["stopped_early"] = stop_event.is_set()
+          report["quota_paused"] = report.get("stop_reason") == "HTTP 429 from URL Inspection API"
           report["concurrency"] = 1
           report["request_start_interval_seconds"] = 1.0
 
@@ -267,6 +268,8 @@ jobs:
               f"- Errors: **{report['error_count']}**",
               f"- Skipped after stop: **{report.get('skipped_count', 0)}**",
               f"- Stopped early: **{report['stopped_early']}**",
+              f"- Quota paused: **{report.get('quota_paused', False)}**",
+              f"- Stop reason: **{report.get('stop_reason', 'none')}**",
               "",
               "## Index verdicts",
           ]
@@ -277,6 +280,9 @@ jobs:
               output.write("\n".join(summary) + "\n")
 
           print(f"Inspection complete: {report['inspected_count']} inspected; {report['error_count']} errors.")
+          if report["quota_paused"]:
+              print("::warning::Google URL Inspection quota is exhausted for this property. The partial report was saved; remaining URLs are deferred without retrying.")
+              sys.exit(0)
           if report["stopped_early"] or report["error_count"]:
               sys.exit(1)
           PY
