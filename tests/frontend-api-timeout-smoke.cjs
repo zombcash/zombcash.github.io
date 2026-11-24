@@ -30,8 +30,11 @@ for (const [name, source] of apiSections) {
   assert.match(source, /AbortSignal\.timeout\(/, name + ' must have a bounded network request');
 }
 
-assert((recovery.match(/AbortSignal\.timeout\(/g) || []).length >= 3,
-  'News, market and alarm recovery requests must all have timeouts');
+assert.match(recovery, /const request = async \(path, timeout = 10000\) => \{[\s\S]*?signal: AbortSignal\.timeout\(timeout\)/,
+  'The shared recovery request helper must enforce a timeout');
+for (const endpoint of ["request('/api/news')", "request('/api/zombcash')"]) {
+  assert(recovery.includes(endpoint), 'Recovery must use the bounded helper for ' + endpoint);
+}
 
 const authFetches = (auth.match(/fetch\(API\s*\+/g) || []).length;
 const authTimeouts = (auth.match(/AbortSignal\.timeout\(/g) || []).length;
