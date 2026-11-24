@@ -1,47 +1,54 @@
-# THE MERIDIAN OF ASH — Translation QA checkpoint
+# THE MERIDIAN OF ASH — Translation QA report
 
 **Date:** 2026-11-24  
 **Source:** approved English edition, Book I — The Outbreak  
-**Status:** machine translation drafts; not approved for public release
+**Status:** eight machine-translation editorial drafts; not approved for public release
 
 ## Structural completeness
 
-- English source: 48 HTML pages (contents, prologue, 46 chapters).
-- English paragraphs in all 48 reader pages: 6,744 (2 title-page paragraphs, 84 prologue paragraphs, and 6,658 chapter paragraphs).
+- English source: 48 reader pages — title/contents page, prologue, and 46 chapters.
+- English prose paragraphs across all 48 pages: 6,744.
 - Target languages: RU, DE, FR, IT, JA, ZH-CN, TR, HI.
-- Each combined language branch contains all 48 expected pages.
-- All 384 translated pages were fetched and checked against the source using the full .wrap p selector, including the title page and prologue.
-- Paragraph-count comparison: zero mismatches across all 384 pages; every language has 6,744 paragraphs.
-- Empty translated prose paragraphs: zero.
-- Sampled page checks: locale `html[lang]`, canonical URL, `noindex,follow`, and visible machine-draft banner all present.
-- No translated page has been merged into `main`; the English live edition and sitemap remain unchanged.
+- Each of the eight final review branches contains all 48 expected pages.
+- All 384 translated pages were fetched and compared against the English source.
+- Paragraph-count comparison: zero mismatches; each language has 6,744 paragraphs.
+- Exact protected-name audit: zero missing occurrences across all 384 pages.
+- Protected book title is exactly THE MERIDIAN OF ASH in every language.
+- The final QA gate checks html lang, canonical URL, hreflang alternates, noindex,follow, and the visible machine-translation draft banner on every page.
+- No translated page has been merged into main; the live English edition, navigation, and existing sitemaps remain unchanged.
 
-## Branches
+## Final review branches
 
-| Language | Review branch |
-|---|---|
-| Russian | `translation-tgemma-combined/ru` |
-| German | `translation-tgemma-combined/de` |
-| French | `translation-tgemma-combined/fr` |
-| Italian | `translation-tgemma-combined/it` |
-| Japanese | `translation-tgemma-combined/ja` |
-| Simplified Chinese | `translation-tgemma-combined/zh-CN` |
-| Turkish | `translation-tgemma-combined/tr` |
-| Hindi | `translation-tgemma-combined/hi` |
+| Language | Branch | Protected-term blocks | Already exact | Repaired | Unresolved |
+|---|---|---:|---:|---:|---:|
+| Russian | translation-tgemma-glossary/ru | 213 | 205 | 8 | 0 |
+| German | translation-tgemma-glossary/de | 213 | 208 | 5 | 0 |
+| French | translation-tgemma-glossary/fr | 213 | 209 | 4 | 0 |
+| Italian | translation-tgemma-glossary/it | 213 | 205 | 8 | 0 |
+| Japanese | translation-tgemma-glossary/ja | 213 | 199 | 14 | 0 |
+| Simplified Chinese | translation-tgemma-glossary/zh-CN | 213 | 198 | 15 | 0 |
+| Turkish | translation-tgemma-glossary/tr | 213 | 211 | 2 | 0 |
+| Hindi | translation-tgemma-glossary/hi | 213 | 208 | 5 | 0 |
 
-## Editorial issues still open
+**Totals:** 1,704 protected-term content blocks checked; 61 repaired; 1,643 already exact; zero unresolved. Every per-language JSON QA report is stored as translations/glossary-qa-language.json in its review branch.
 
-The structural audit does not establish literary quality. Targeted review of aligned source/translation paragraphs found that some glossary names and fictional service names are translated or transliterated inconsistently. Examples include The Core, The Auditor, Zombie Lab, Saint Oran's, and place names such as Bellwether. The current translation script did not enforce the protected-term list even though the glossary file exists.
+## Terminology and formatting
 
-A targeted protected-term normalization pass passed its Russian sample test. It preserves exact glossary spellings; the formatted Zombie Lab sentence is retranslated as a whole and its bold tag is restored. It must preserve the exact English glossary spellings and inline emphasis, and must not overwrite a paragraph if the model changes or drops a marker. The Russian sample passed. The same pass is now running across the 213 source content blocks containing protected terms in all eight language branches, including title-page headings, prologue text, chapter headings, and the one inline-formatted Zombie Lab paragraph. The Russian sample confirms exact term preservation and full-sentence translation while retaining bold formatting.
+- Protected names and fictional service titles retain exact English spelling and source capitalization.
+- Morrow is matched as a complete name, not as the substring inside the ordinary word tomorrow.
+- The formatted Zombie Lab sample retains its original bold emphasis.
+- The book title remains unchanged in English in all eight translations.
+- All eight branches passed the independent exact-name scan.
 
-## Release gate
+## Editorial status and release gate
 
-Do not merge or index the translations until:
-1. glossary normalization is complete and checked;
-2. literary review checks meaning, names, continuity, dialogue, and tone;
-3. final per-language QA and rendered-page checks pass;
-4. language alternates and the existing fiction sitemap are updated deliberately.
+These are machine-translation drafts, not publication-ready literary editions. The glossary pass verifies protected names, structural parity, and page metadata; it does not replace professional literary editing.
 
-Google Search Console inspection remains pending after the site-level API returned HTTP 429 quota errors. This is separate from the translation branch checks.
-\n\nWord-boundary QA correction: the protected name “Morrow” is matched as a complete name, not as the substring in the ordinary word “tomorrow”. The final QA denominator is 213 content blocks per language.\n
+Before public release:
+1. Perform full literary review in each language for meaning, continuity, dialogue, idiom, tone, and grammar.
+2. Review chapter headings and terminology in context.
+3. Run the strict Word export workflow; it independently refuses to package a language if any protected name is missing or any glossary block remains unresolved.
+4. Review the resulting DOCX files and perform rendered-page checks.
+5. Only after editorial approval, deliberately update localized publication pages and the existing fiction sitemap.
+
+The translated review branches are not published and must not be indexed.
