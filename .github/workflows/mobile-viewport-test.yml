@@ -41,6 +41,7 @@ on:
       - 'survivor-auth.js'
       - 'living-world-recovery.js'
       - 'tests/frontend-api-timeout-smoke.cjs'
+      - 'ai-model-status.js'
       - 'tests/arcade-snake-iframe-smoke.cjs'
       - 'tests/arcade-snake-session-save-smoke.cjs'
       - 'script.js'
