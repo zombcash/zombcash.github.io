@@ -2,42 +2,11 @@
   "mode": "incremental_repair",
   "language": "hi",
   "pages": 48,
-  "candidate_blocks": 222,
-  "already_normalized_blocks": 214,
-  "repaired_blocks": 3,
-  "skipped_blocks": 5,
-  "skipped_items": [
-    {
-      "file": "the-meridian-of-ash-chapter-28.html",
-      "block_index": 101,
-      "source": "Tomorrow, she would step closer to the thing the project had designed her to become.",
-      "error": "bracketed_glossary_missing:morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-33.html",
-      "block_index": 0,
-      "source": "CHAPTER THIRTY-THREE — ZOMBIE LAB",
-      "error": "bracketed_glossary_missing:ZOMBIE LAB"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-38.html",
-      "block_index": 26,
-      "source": "She let the name settle. Morrow. A tomorrow built from broken yesterday.",
-      "error": "bracketed_glossary_missing:Morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-43.html",
-      "block_index": 95,
-      "source": "Morrow scanned the chamber. “There are no active life-support systems in the pods. The body beneath the sheet is not moving.”",
-      "error": "bracketed_glossary_missing:Morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-45.html",
-      "block_index": 80,
-      "source": "Morrow answered before she could. “The transaction was signed with a key that resembles yours. It is not the same key.”",
-      "error": "bracketed_glossary_missing:Morrow"
-    }
-  ],
+  "candidate_blocks": 213,
+  "already_normalized_blocks": 208,
+  "repaired_blocks": 5,
+  "skipped_blocks": 0,
+  "skipped_items": [],
   "source_term_hits": {
     "THE MERIDIAN OF ASH": 1,
     "The Meridian of Ash": 1,
@@ -46,11 +15,11 @@
     "ZOMBCASH": 5,
     "Zombie Lab": 13,
     "The Core": 36,
-    "Morrow": 103,
+    "Morrow": 95,
     "Saint Oran's": 19,
     "Bellwether": 9,
     "Grey Orchard": 3,
-    "The Auditor": 15,
+    "The Auditor": 14,
     "Survivor Field Manual": 0,
     "Outbreak Transmission": 7,
     "OUTBREAK RADAR": 6
