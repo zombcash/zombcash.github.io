@@ -1251,7 +1251,8 @@ if (zomMarket) {
     if (label) label.textContent = state;
     if (dot) {
       dot.className = state === 'ONLINE' ? 'is-online' : state === 'OFFLINE' ? 'is-offline' : 'is-unknown';
-      dot.setAttribute('aria-label', state);
+      dot.setAttribute('aria-hidden', 'true');
+      dot.removeAttribute('aria-label');
     }
   };
   const compact = value => {
@@ -1499,7 +1500,8 @@ if (zomMarket) {
       const nameWrap = document.createElement('div');
       nameWrap.className = 'zrai-token-name';
       const tokenSymbol = document.createElement('strong');
-      tokenSymbol.textContent = '$' + symbol.replace(/^\$+/, '');
+      tokenSymbol.id = 'zrai-token-symbol-' + index;
+      tokenSymbol.textContent = String.fromCharCode(36) + symbol.replace(/^\u0024+/, '');
       const tokenName = document.createElement('span');
       tokenName.textContent = name;
       tokenName.title = name;
@@ -1539,8 +1541,11 @@ if (zomMarket) {
       view.href = dexUrl;
       view.target = '_blank';
       view.rel = 'noopener noreferrer';
-      view.textContent = 'VIEW';
-      view.setAttribute('aria-label', 'View ' + symbol + ' on DexScreener');
+      const viewLabel = document.createElement('span');
+      viewLabel.id = 'zrai-open-label-' + index;
+      viewLabel.textContent = 'VIEW';
+      view.append(viewLabel);
+      view.setAttribute('aria-labelledby', viewLabel.id + ' ' + tokenSymbol.id);
       card.append(rank, body, view);
       list.append(card);
     });
