@@ -1,0 +1,51 @@
+name: Full SEO metadata and live sitemap audit
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "tests/seo-orphan-page-audit.py"
+      - "tests/sitemap-live-smoke.py"
+      - ".github/workflows/seo-metadata-live-audit.yml"
+  push:
+    branches: [main]
+    paths:
+      - "*.html"
+      - "**/*.html"
+      - "robots.txt"
+      - "sitemap*.xml"
+      - "tests/seo-orphan-page-audit.py"
+      - "tests/sitemap-live-smoke.py"
+      - ".github/workflows/seo-metadata-live-audit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  seo-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install live audit dependency
+        run: python -m pip install --disable-pip-version-check requests
+      - name: Validate SEO audit syntax
+        run: python -m py_compile tests/seo-orphan-page-audit.py tests/sitemap-live-smoke.py
+      - name: Audit title, description and internal links on every sitemap page
+        run: python tests/seo-orphan-page-audit.py
+      - name: Validate live HTTP, metadata, canonical and hreflang for every sitemap page
+        run: python tests/sitemap-live-smoke.py
+      - name: Upload full SEO metadata audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-metadata-live-audit
+          path: |
+            seo-orphan-page-audit/
+            sitemap-live-smoke-report/
+          if-no-files-found: warn
+          retention-days: 30
