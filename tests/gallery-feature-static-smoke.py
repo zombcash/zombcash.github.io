@@ -139,7 +139,7 @@ assert "display=optional" in html, "Root gallery fonts must not swap late"
 robots = Path("robots.txt").read_text(encoding="utf-8")
 assert "https://zombcash.github.io/sitemap-gallery-pages.xml" in robots
 language = Path("language.js").read_text(encoding="utf-8")
-gallery_route_match = re.search(r'"/gallery\\.html":\\s*\\[([^\\]]+)\\]', language)
+gallery_route_match = re.search(r'"/gallery\.html":\s*\[([^\]]+)\]', language)
 assert gallery_route_match, "Gallery must be present in the localized editorial route map"
 assert set(re.findall(r'"([^"]+)"', gallery_route_match.group(1))) == {"de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"}
 assert language.count('"gallery.html"') >= 9
