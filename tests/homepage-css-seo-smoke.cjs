@@ -4,8 +4,8 @@ const assert = require('node:assert/strict');
 
 const root = path.resolve(__dirname, '..');
 const ribbonScript = fs.readFileSync(path.join(root, 'homepage-ribbons.js'), 'utf8');
-assert.doesNotMatch(ribbonScript, /if\\s*\\(existing\\)\\s*existing\\.remove\\(\\)/, 'live ribbons must reuse the reserved wrapper instead of removing/reinserting it');
-assert.match(ribbonScript, /wrap\\.removeAttribute\\('aria-busy'\\)/, 'live ribbon wrapper must clear its busy state after rendering');
+assert.doesNotMatch(ribbonScript, /if\s*\(existing\)\s*existing\.remove\(\)/, 'live ribbons must reuse the reserved wrapper instead of removing/reinserting it');
+assert.match(ribbonScript, /wrap\.removeAttribute\('aria-busy'\)/, 'live ribbon wrapper must clear its busy state after rendering');
 const pages = [
   'index.html', 'de/index.html', 'fr/index.html', 'it/index.html',
   'ja/index.html', 'zh-CN/index.html', 'ru/index.html', 'tr/index.html', 'hi/index.html'
