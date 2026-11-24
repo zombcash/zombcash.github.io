@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate Qwen3 offline translation drafts for THE MERIDIAN OF ASH."""
+"""Generate TranslateGemma offline translation drafts for THE MERIDIAN OF ASH."""
 from __future__ import annotations
 import argparse, html, json, os, re, time
 from pathlib import Path
@@ -9,37 +9,28 @@ from llama_cpp import Llama
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_URL = "https://zombcash.github.io"
-MODEL_REPO = "bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF"
-MODEL_FILE = "Qwen_Qwen3-4B-Instruct-2507-Q5_K_M.gguf"
+MODEL_REPO = "azmnc/translategemma-4b-it-Q4_K_M_GGUF"
+MODEL_FILE = "translategemma-4b-it-Q4_K_M_GGUF.gguf"
 LANGUAGES = {
-    "ru": "Russian",
-    "de": "German",
-    "fr": "French",
-    "it": "Italian",
-    "ja": "Japanese",
-    "zh-CN": "Simplified Chinese",
-    "tr": "Turkish",
-    "hi": "Hindi",
+    "ru": ("ru", "Russian"),
+    "de": ("de", "German"),
+    "fr": ("fr", "French"),
+    "it": ("it", "Italian"),
+    "ja": ("ja", "Japanese"),
+    "zh-CN": ("zh", "Simplified Chinese"),
+    "tr": ("tr", "Turkish"),
+    "hi": ("hi", "Hindi"),
 }
 GLOSSARY = json.loads((ROOT / "translations/glossary.json").read_text(encoding="utf-8"))["protected_terms"]
-SYSTEM_STYLE = (
-    "You are a senior literary translator working on a complete post-apocalyptic speculative-fiction novel. "
-    "Translate faithfully into the requested target language. Preserve meaning, subtext, imagery, atmosphere, "
-    "narrative tense, pacing, sentence rhythm, paragraph order, dialogue formatting, and distinct character voices. "
-    "Use natural, idiomatic, publishable literary prose; avoid literal calques and generic machine-translation phrasing. "
-    "Do not summarize, omit, simplify, censor, explain, or add anything. Keep all character names, place names, "
-    "and protected fictional terms exactly as provided. Any token beginning with ZXQ and ending with QZX is a "
-    "structural marker: copy it exactly, unchanged, once, and in its original position. Return only the translation."
-)
 
 def load_model():
     model_path = hf_hub_download(repo_id=MODEL_REPO, filename=MODEL_FILE)
-    print(f"Loaded model file: {MODEL_FILE}", flush=True)
+    print(f"Loaded TranslateGemma model: {MODEL_FILE}", flush=True)
     return Llama(
         model_path=model_path,
-        n_ctx=8192,
+        n_ctx=2048,
         n_threads=min(4, max(2, os.cpu_count() or 2)),
-        n_batch=512,
+        n_batch=256,
         use_mmap=True,
         verbose=False,
     )
@@ -59,35 +50,25 @@ def protect_terms(text):
 def restore_terms(text, protected):
     for token, original in protected.items():
         if text.count(token) != 1:
-            raise RuntimeError(f"Model changed or lost protected term marker {token}")
+            raise RuntimeError(f"TranslateGemma changed or lost protected term marker {token}")
         text = text.replace(token, original)
     return text
 
-def chat(model, messages, max_tokens=4096):
+def translate_text(model, text, target_code):
+    if not text or not text.strip():
+        return text
+    value, protected = protect_terms(text)
+    prompt = f"en[sprt]{target_code}[sprt]{value}"
     response = model.create_chat_completion(
-        messages=messages,
-        temperature=0.15,
-        top_p=0.9,
-        repeat_penalty=1.05,
-        max_tokens=max_tokens,
-        stop=["<|im_end|>", "<|endoftext|>"],
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.1,
+        top_p=0.95,
+        repeat_penalty=1.0,
+        max_tokens=1024,
         seed=42,
     )
     output = response["choices"][0]["message"]["content"] or ""
     output = re.sub(r"<think>[\s\S]*?</think>", "", output).strip()
-    tick = chr(96)
-    output = output.replace(tick * 3 + "text", "").replace(tick * 3, "").strip()
-    return output
-
-def translate_text(model, text, target_language):
-    if not text or not text.strip():
-        return text
-    value, protected = protect_terms(text)
-    prompt = f"Translate this English text into {target_language}. Return only the translation.\n\n{value}"
-    output = chat(model, [
-        {"role": "system", "content": SYSTEM_STYLE},
-        {"role": "user", "content": prompt},
-    ], max_tokens=2048)
     return restore_terms(output, protected)
 
 def serialize_inline(node, inline_map):
@@ -106,7 +87,7 @@ def serialize_inline(node, inline_map):
         return "".join(serialize_inline(c, inline_map) for c in node.contents)
     return ""
 
-def translate_paragraph_group(model, paragraphs, target_language):
+def translate_paragraph_group(model, paragraphs, target_code):
     inline_maps, term_maps, markers, lines = [], [], [], []
     for index, paragraph in enumerate(paragraphs):
         inline_map = {}
@@ -116,24 +97,24 @@ def translate_paragraph_group(model, paragraphs, target_language):
         markers.append(marker)
         inline_maps.append(inline_map)
         term_maps.append(term_map)
-        lines.append(marker + "\n" + protected)
+        lines.append(marker + " " + protected)
 
-    user_prompt = (
-        f"Translate the following English literary passage into {target_language}. "
-        "Keep every ZXQ marker exactly unchanged, once, and in the same order. "
-        "Preserve the paragraph boundaries. Return only the translated passage.\n\n"
-        + "\n\n".join(lines)
+    # TranslateGemma has a 2K-token input context; keep each marked group short.
+    prompt = f"en[sprt]{target_code}[sprt]" + "\n".join(lines)
+    response = model.create_chat_completion(
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.1,
+        top_p=0.95,
+        repeat_penalty=1.0,
+        max_tokens=1024,
+        seed=42,
     )
-    output = chat(model, [
-        {"role": "system", "content": SYSTEM_STYLE},
-        {"role": "user", "content": user_prompt},
-    ], max_tokens=4096)
-
+    output = response["choices"][0]["message"]["content"] or ""
+    output = re.sub(r"<think>[\s\S]*?</think>", "", output).strip()
     found = list(re.finditer(r"ZXQPARA(\d{4})QZX", output))
     ids = [int(m.group(1)) for m in found]
-    expected = list(range(len(paragraphs)))
-    if ids != expected:
-        raise RuntimeError(f"Paragraph markers changed: expected {expected}, got {ids}")
+    if ids != list(range(len(paragraphs))):
+        raise RuntimeError(f"Paragraph markers changed: {ids}")
 
     translated_items = []
     for i, match in enumerate(found):
@@ -147,7 +128,7 @@ def translate_paragraph_group(model, paragraphs, target_language):
         translated_items.append(value)
     return translated_items
 
-def chunk_paragraphs(paragraphs, max_words=700):
+def chunk_paragraphs(paragraphs, max_words=250):
     group, words = [], 0
     for paragraph in paragraphs:
         count = len(paragraph.get_text(" ", strip=True).split())
@@ -169,25 +150,25 @@ def replace_paragraph_html(paragraph, translated):
     for child in list(parsed.contents):
         paragraph.append(child)
 
-def translate_page(model, source_path, target_path, locale, target_language, available_files):
+def translate_page(model, source_path, target_path, locale, target_code, available_files):
     soup = BeautifulSoup(source_path.read_text(encoding="utf-8"), "html.parser")
     prose = soup.select(".chapter-copy p")
     translated_count = 0
     for group_index, group in enumerate(chunk_paragraphs(prose), 1):
         try:
-            translated = translate_paragraph_group(model, group, target_language)
+            translated = translate_paragraph_group(model, group, target_code)
         except Exception:
             if len(group) == 1:
                 raise
             translated = []
             for paragraph in group:
-                translated.extend(translate_paragraph_group(model, [paragraph], target_language))
+                translated.extend(translate_paragraph_group(model, [paragraph], target_code))
         if len(translated) != len(group):
             raise RuntimeError("Paragraph count mismatch after translation")
         for paragraph, value in zip(group, translated):
             replace_paragraph_html(paragraph, value)
             translated_count += 1
-        if group_index % 10 == 0:
+        if group_index % 20 == 0:
             print(f"{source_path.name}: translated {translated_count}/{len(prose)} prose paragraphs", flush=True)
 
     if soup.body:
@@ -203,15 +184,15 @@ def translate_page(model, source_path, target_path, locale, target_language, ava
                 continue
             leading = raw[:len(raw) - len(raw.lstrip())]
             trailing = raw[len(raw.rstrip()):]
-            node.replace_with(leading + translate_text(model, raw.strip(), target_language) + trailing)
+            node.replace_with(leading + translate_text(model, raw.strip(), target_code) + trailing)
 
     title = soup.find("title")
     if title and title.string:
-        title.string.replace_with(translate_text(model, str(title.string), target_language))
+        title.string.replace_with(translate_text(model, str(title.string), target_code))
     for meta in soup.find_all("meta"):
         key, prop = meta.get("name", "").lower(), meta.get("property", "").lower()
         if meta.get("content") and (key in {"description", "twitter:title"} or prop in {"og:title", "og:description"}):
-            meta["content"] = translate_text(model, meta["content"], target_language)
+            meta["content"] = translate_text(model, meta["content"], target_code)
 
     if soup.html:
         soup.html["lang"] = locale
@@ -252,28 +233,30 @@ def translate_page(model, source_path, target_path, locale, target_language, ava
             style.append("\n.translation-draft-banner{margin:14px auto 0;padding:10px 14px;max-width:1080px;border:1px solid #68757d;border-radius:8px;background:#202a31;color:#e0e6e9;font:600 12px/1.5 system-ui,sans-serif;letter-spacing:.08em;text-align:center}\n")
     if soup.body:
         banner = soup.new_tag("div", attrs={"class": "translation-draft-banner", "role": "note"})
-        banner.string = translate_text(model, "MACHINE TRANSLATION DRAFT — EDITORIAL REVIEW REQUIRED", target_language)
+        banner.string = "MACHINE TRANSLATION DRAFT — EDITORIAL REVIEW REQUIRED"
         soup.body.insert(0, banner)
 
     target_path.parent.mkdir(parents=True, exist_ok=True)
     target_path.write_text(str(soup), encoding="utf-8")
     return translated_count
 
-def translate_sample(model, locale, target_language):
+def translate_sample(model, locale, target_code, target_name):
     source = ROOT / "the-meridian-of-ash-chapter-01.html"
     soup = BeautifulSoup(source.read_text(encoding="utf-8"), "html.parser")
     paragraphs = soup.select(".chapter-copy p")[:3]
-    translated = translate_paragraph_group(model, paragraphs, target_language)
+    translated = []
+    for p in paragraphs:
+        translated.extend(translate_paragraph_group(model, [p], target_code))
     out = [
-        f"# Qwen3 literary translation sample — {target_language}",
+        f"# TranslateGemma quality sample — {target_name}",
         "",
-        "Model: Qwen3-4B-Instruct-2507, Q5_K_M, offline CPU inference.",
+        "Model: Google TranslateGemma 4B, Q4_K_M, offline CPU inference.",
         "This is a quality sample only; it is not a published chapter.",
         "",
     ]
     for i, (p, t) in enumerate(zip(paragraphs, translated), 1):
-        out += [f"## Paragraph {i} — English", p.get_text(" ", strip=True), "", f"## Paragraph {i} — {target_language}", t, ""]
-    path = ROOT / "translations" / "samples" / f"{locale}-chapter-01.md"
+        out += [f"## Paragraph {i} — English", p.get_text(" ", strip=True), "", f"## Paragraph {i} — {target_name}", t, ""]
+    path = ROOT / "translations" / "samples" / f"tgemma-{locale}-chapter-01.md"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("\n".join(out), encoding="utf-8")
     print(f"Created {path.relative_to(ROOT)}", flush=True)
@@ -292,15 +275,15 @@ def main():
     parser.add_argument("--language", required=True, choices=sorted(LANGUAGES))
     parser.add_argument("--chapter", default="sample")
     args = parser.parse_args()
-    locale, target_language = args.language, LANGUAGES[args.language]
+    locale, (target_code, target_name) = args.language, LANGUAGES[args.language]
     model = load_model()
     if args.chapter == "sample":
-        translate_sample(model, locale, target_language)
+        translate_sample(model, locale, target_code, target_name)
         return
     files = select_files(args.chapter)
     available_files = set(files)
     output_dir = ROOT / locale
-    sample_path = ROOT / "translations" / "samples" / f"{locale}-chapter-01.md"
+    sample_path = ROOT / "translations" / "samples" / f"tgemma-{locale}-chapter-01.md"
     if sample_path.exists():
         sample_path.unlink()
     started = time.time()
@@ -309,17 +292,11 @@ def main():
         source = ROOT / filename
         if not source.exists():
             raise FileNotFoundError(source)
-        count = translate_page(model, source, output_dir / filename, locale, target_language, available_files)
+        count = translate_page(model, source, output_dir / filename, locale, target_code, available_files)
         pages += 1
         paragraphs += count
         print(f"Created {locale}/{filename} ({count} prose paragraphs)", flush=True)
-    print(json.dumps({
-        "language": locale,
-        "files": pages,
-        "translated_prose_paragraphs": paragraphs,
-        "elapsed_seconds": round(time.time() - started, 1),
-        "status": "machine_draft_requires_literary_review"
-    }, ensure_ascii=False), flush=True)
+    print(json.dumps({"language":locale,"files":pages,"translated_prose_paragraphs":paragraphs,"elapsed_seconds":round(time.time()-started,1),"status":"machine_draft_requires_literary_review"},ensure_ascii=False),flush=True)
 
 if __name__ == "__main__":
     main()
