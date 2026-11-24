@@ -58,8 +58,13 @@ jobs:
           else
             SOURCE_BRANCH="translation-tgemma-combined/$TARGET_LANGUAGE"
             BRANCH="translation-tgemma-glossary/$TARGET_LANGUAGE"
-            git fetch origin "+refs/heads/$SOURCE_BRANCH:refs/remotes/origin/$SOURCE_BRANCH"
-            git checkout -B "$BRANCH" "origin/$SOURCE_BRANCH"
+            if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
+              git fetch origin "+refs/heads/$BRANCH:refs/remotes/origin/$BRANCH"
+              git checkout -B "$BRANCH" "origin/$BRANCH"
+            else
+              git fetch origin "+refs/heads/$SOURCE_BRANCH:refs/remotes/origin/$SOURCE_BRANCH"
+              git checkout -B "$BRANCH" "origin/$SOURCE_BRANCH"
+            fi
             git checkout origin/main -- scripts/normalize_meridian_glossary.py translations/glossary.json
           fi
           echo "OUTPUT_BRANCH=$BRANCH" >> "$GITHUB_ENV"
