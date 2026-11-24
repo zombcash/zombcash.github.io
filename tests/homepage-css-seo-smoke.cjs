@@ -48,6 +48,25 @@ for (const file of pages) {
   console.log('PASS', file, 'styleBlocks=' + styles.length, 'bodyStyleBlocks=0');
 }
 
+const ribbonsScript = fs.readFileSync(path.join(root, 'homepage-ribbons.js'), 'utf8');
+const ribbonsCss = fs.readFileSync(path.join(root, 'homepage-visual.css'), 'utf8');
+
+for (const file of pages) {
+  const html = fs.readFileSync(path.join(root, file), 'utf8');
+  const headerEnd = html.indexOf('</header>');
+  const ribbonMarkup = '<div class="zc-outbreak-ribbons" role="region" aria-label="ZombieCash project highlights"></div>';
+  const ribbonStart = html.indexOf(ribbonMarkup, headerEnd);
+  const mainStart = html.indexOf('<main id="home">', ribbonStart);
+  assert(headerEnd >= 0 && ribbonStart > headerEnd && mainStart > ribbonStart,
+    file + ': a server-rendered ribbon placeholder must sit between the header and homepage main');
+}
+assert(ribbonsScript.includes("var wrap=existing||document.createElement('div')"),
+  'Homepage ribbons must reuse the server-rendered placeholder instead of replacing it');
+assert(!ribbonsScript.includes('if(existing)existing.remove()'),
+  'Homepage ribbons must not remove the reserved placeholder');
+assert(ribbonsCss.includes('min-height:127px') && ribbonsCss.includes('min-height:114px'),
+  'Homepage ribbon space must be reserved at desktop and mobile heights');
+
 const english = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const keywords = english.match(/<meta\s+name=["']keywords["']\s+content=["']([^"']*)["']/i)?.[1] || '';
 assert.match(keywords, /ZombieCash/);
