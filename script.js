@@ -1502,6 +1502,8 @@ if (zomMarket) {
       const tokenSymbol = document.createElement('strong');
       tokenSymbol.id = 'zrai-token-symbol-' + index;
       tokenSymbol.textContent = String.fromCharCode(36) + symbol.replace(/^\u0024+/, '');
+      const tokenName = document.createElement('span');
+      tokenName.textContent = name;
       tokenName.title = name;
       nameWrap.append(tokenSymbol, tokenName);
       identity.append(logo, nameWrap);
