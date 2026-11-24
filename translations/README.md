@@ -41,3 +41,6 @@ After all eight glossary branches are ready, run **Build Word manuscripts — TH
 Model output is a translation draft, not a professionally proofread final edition. Draft pages are marked noindex and visibly labeled as machine drafts. The live site and sitemap remain unchanged.
 
 Before publication, each language must receive literary editing, name and terminology consistency checks, chapter continuity review, and final QA. Only then should the combined draft be merged and its URLs added to the existing fiction sitemap.
+
+
+Protected-name matching uses alphanumeric word boundaries, so the name Morrow is not falsely matched inside the ordinary word tomorrow. Word export checks the exact spelling and case of each protected-name occurrence and refuses to package a language with unresolved glossary blocks.
