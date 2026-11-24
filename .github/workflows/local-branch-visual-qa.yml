@@ -17,6 +17,7 @@ on:
       - "hi/index.html"
       - "shared-nav.js"
       - "tests/shared-nav-accessibility-smoke.cjs"
+      - "tests/homepage-css-seo-smoke.cjs"
       - "language.js"
       - "homepage-visual.css"
       - "assets/js/zctv-player.js"
@@ -60,6 +61,8 @@ jobs:
         run: |
           node --check shared-nav.js
           node --check tests/shared-nav-accessibility-smoke.cjs
+          node --check tests/homepage-css-seo-smoke.cjs
+          node tests/homepage-css-seo-smoke.cjs
           node --check language.js
           node --check tests/mobile-viewport-smoke.cjs
           node --check tests/zctv-layout-smoke.cjs
