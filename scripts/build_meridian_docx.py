@@ -139,6 +139,11 @@ def build(lang, output_dir):
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         p.paragraph_format.space_before = Inches(0.9)
         r = p.add_run(epigraph.get_text(" ", strip=True)); r.italic = True; r.font.size = Pt(11)
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p.paragraph_format.space_before = Inches(1.0)
+    r = p.add_run("MACHINE TRANSLATION DRAFT — EDITORIAL REVIEW REQUIRED")
+    r.bold = True; r.font.size = Pt(8)
     doc.add_page_break()
 
     toc_heading = title_soup.select_one(".wrap h2")
