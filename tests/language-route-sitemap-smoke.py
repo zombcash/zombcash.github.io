@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Ensure every localized sitemap page is reachable through both language route maps."""
+"""Ensure every localized sitemap page is registered in all language route maps."""
 from pathlib import Path
 from urllib.parse import urlsplit
 import re
@@ -56,6 +56,23 @@ def parse_locale_files_map(source):
     return result
 
 
+def parse_shared_nav_map(source):
+    start = source.index("const localizedPagesByLocale = {")
+    end = source.index("\n  };", start)
+    section = source[start:end]
+    result = {}
+    for locale in LOCALES:
+        pattern = re.compile(
+            r"(?:'" + re.escape(locale) + r"'|" + re.escape(locale) + r"):"
+            r"\s*new Set\(\[([^\]]*)\]\)"
+        )
+        match = pattern.search(section)
+        if not match:
+            raise SystemExit(f"FAIL: shared-nav.js localizedPagesByLocale entry missing: {locale}")
+        result[locale] = set(re.findall(r'"([^"]+\.html)"', match.group(1)))
+    return result
+
+
 def main():
     robots = Path("robots.txt").read_text(encoding="utf-8-sig")
     feeds = [
@@ -74,6 +91,8 @@ def main():
     source = Path("language.js").read_text(encoding="utf-8-sig")
     editorial = parse_localized_editorial_map(source)
     locale_files = parse_locale_files_map(source)
+    nav_source = Path("shared-nav.js").read_text(encoding="utf-8-sig")
+    nav_routes = parse_shared_nav_map(nav_source)
     checked = {locale: 0 for locale in LOCALES}
     errors = []
 
@@ -90,7 +109,9 @@ def main():
             continue
         checked[locale] += 1
         if file not in locale_files[locale]:
-            errors.append(f"{locale}/{file}: missing from localeFiles")
+            errors.append(f"{locale}/{file}: missing from language.js localeFiles")
+        if file not in nav_routes[locale]:
+            errors.append(f"{locale}/{file}: missing from shared-nav.js localizedPagesByLocale")
         if locale not in editorial.get("/" + file, set()):
             errors.append(f"{locale}/{file}: missing from localizedEditorialPages")
 
@@ -100,7 +121,7 @@ def main():
     print("Routing mismatches:", len(errors))
     if errors:
         raise SystemExit("FAIL: localized sitemap routing is incomplete.\n" + "\n".join(errors))
-    print("PASS: every localized sitemap page is registered in both language route maps.")
+    print("PASS: every localized sitemap page is registered in all three language route maps.")
 
 
 if __name__ == "__main__":
