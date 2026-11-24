@@ -39,10 +39,12 @@ def sitemap_urls():
 
 def main():
     sitemap_pages = sitemap_urls()
-    sitemap_paths = {
-        (url.removeprefix(SITE).split("?", 1)[0] or "index.html")
-        for url in sitemap_pages
-    }
+    sitemap_paths = set()
+    for url in sitemap_pages:
+        path = url.removeprefix(SITE).split("?", 1)[0].lstrip("/")
+        if not path or path.endswith("/"):
+            path = path + "index.html"
+        sitemap_paths.add(path)
     html_files = sorted(
         p for p in Path(".").rglob("*.html")
         if not any(part in EXCLUDED_DIRS for part in p.parts)
