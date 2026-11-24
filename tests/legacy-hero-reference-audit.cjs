@@ -23,11 +23,11 @@ function walk(directory) {
       if (!skipped.has(entry.name)) walk(path.join(directory, entry.name));
       continue;
     }
-    if (!/\\.(?:html|js)$/i.test(entry.name)) continue;
+    if (!/\.(?:html|js)$/i.test(entry.name)) continue;
     const file = path.join(directory, entry.name);
     const relative = path.relative(root, file).replaceAll(path.sep, '/');
     let content = fs.readFileSync(file, 'utf8');
-    if (entry.name.endsWith('.html')) content = content.replace(/<style\\b[^>]*>[\\s\\S]*?<\\/style>/gi, '');
+    if (entry.name.endsWith('.html')) content = content.replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
     sources.push({ file: relative, content });
   }
 }
@@ -40,7 +40,7 @@ for (const source of sources) {
     const match = expression.exec(source.content);
     if (match) {
       const before = source.content.slice(0, match.index);
-      const line = before.split('\\n').length;
+      const line = before.split('\n').length;
       matches.push({ file: source.file, line, className });
     }
   }
