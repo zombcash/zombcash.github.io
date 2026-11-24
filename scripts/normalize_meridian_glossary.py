@@ -135,6 +135,39 @@ def normalize_inline_terms(model, source_paragraph, target_paragraph, target_cod
         return None, "no_protected_inline_term"
     return str(target_paragraph), None
 
+def translate_full_block_with_inline_terms(model, source_paragraph, target_code):
+    # Translate the full sentence for natural syntax while protecting proper nouns.
+    source_text = source_paragraph.get_text(" ", strip=True)
+    marked, term_map = protect_terms(source_text)
+    if not term_map:
+        return None, "no_terms"
+    prompt = f"en[sprt]{target_code}[sprt]{marked}"
+    response = model.create_chat_completion(
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.1, top_p=0.95, repeat_penalty=1.0, max_tokens=1400, seed=42
+    )
+    output = response["choices"][0]["message"]["content"] or ""
+    output = re.sub(r"<think>[\\s\\S]*?</think>", "", output).strip()
+    for token, original in term_map.items():
+        if output.count(token) != 1:
+            return None, f"inline_block_marker_failure:{token}"
+        output = output.replace(token, original)
+    # Reapply the original inline tag to the corresponding protected term.
+    for source_tag in source_paragraph.find_all(list(INLINE_TAGS)):
+        tag_text = source_tag.get_text(" ", strip=True)
+        hits = [term for term in PROTECTED_TERMS if re.search(re.escape(term), tag_text, re.I)]
+        for term in hits:
+            match = re.search(re.escape(term), tag_text, re.I)
+            exact = match.group(0) if match else term
+            open_tag = str(source_tag).split(">", 1)[0] + ">"
+            close_tag = f"</{source_tag.name}>"
+            pattern = re.compile(re.escape(exact), re.I)
+            output, count = pattern.subn(open_tag + exact + close_tag, output, count=1)
+            if count != 1:
+                return None, f"inline_term_reinsert_failure:{exact}"
+            break
+    return output, None
+
 def set_paragraph_html(paragraph, fragment):
     parsed = BeautifulSoup(fragment, "html.parser")
     paragraph.clear()
@@ -179,14 +212,14 @@ def process_sample(model, lang, target_code, target_name):
                 out += ["## FORMATTED INLINE TEST SKIPPED — paragraph index mismatch", ""]
             else:
                 target_paragraph = BeautifulSoup(str(target_items[formatted_index]), "html.parser").find("p")
-                translated, error = normalize_inline_terms(model, formatted_items[formatted_index], target_paragraph, target_code)
+                translated, error = translate_full_block_with_inline_terms(model, formatted_items[formatted_index], target_code)
                 if error:
                     out += [f"## FORMATTED INLINE TEST SKIPPED — {error}", ""]
                 else:
                     count += 1
                     out += ["## Formatted inline test — English", str(formatted_items[formatted_index]), "",
                             "## Existing translated paragraph before glossary normalization", str(target_items[formatted_index]), "",
-                            f"## {target_name} after glossary normalization", translated, ""]
+                            f"## {target_name} full-context correction", translated, ""]
     dest = ROOT / "translations" / "samples" / f"glossary-protection-{lang}.md"
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text("\n".join(out), encoding="utf-8")
@@ -221,7 +254,7 @@ def process_all(model, lang, target_code):
             for term in hits:
                 per_term[term] += 1
             if source_p.find(list(INLINE_TAGS)):
-                translated, error = normalize_inline_terms(model, source_p, target_p, target_code)
+                translated, error = translate_full_block_with_inline_terms(model, source_p, target_code)
             else:
                 translated, error = translate_protected(model, source_p, target_code)
             if error:
