@@ -53,7 +53,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$MODE" = "sample" ]; then
-            BRANCH="translation-tgemma-glossary-test/$TARGET_LANGUAGE"
+            BRANCH="translation-tgemma-glossary-test-v2/$TARGET_LANGUAGE"
             git checkout -b "$BRANCH" origin/main
           else
             SOURCE_BRANCH="translation-tgemma-combined/$TARGET_LANGUAGE"
@@ -80,4 +80,4 @@ jobs:
             exit 0
           fi
           git commit -m "Normalize protected Meridian glossary terms ($TARGET_LANGUAGE)"
-          git push --force-with-lease --set-upstream origin "$OUTPUT_BRANCH"
+          git push --set-upstream origin "$OUTPUT_BRANCH"
