@@ -57,8 +57,20 @@ for (const file of pages) {
   assert.ok(html.indexOf('homepage-components-inline') < html.indexOf('homepage-visual.css'), file + ': component CSS order changed');
   assert.ok(html.indexOf('homepage-visual.css') < html.indexOf('homepage-late-overrides'), file + ': final CSS must follow homepage-visual.css');
   assert.doesNotMatch(html, /brand-search-aliases/i, file + ': artificial brand-alias paragraph remains');
+  const inlineCss = [...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)].map(match => match[1]).join('\n');
   const heroCss = html.match(/<style id="homepage-pre-polish">([\s\S]*?)<\/style>/i)?.[1] || '';
   assert.ok(heroCss.length > 0, file + ': consolidated hero CSS block missing');
+  assert.ok(inlineCss.includes('.zc-hero-art-panel'), file + ': current hero artwork panel styles must remain');
+  assert.ok(inlineCss.includes('.zc-sponsor-art-slot'), file + ': current hero artwork slot styles must remain');
+  for (const stale of [
+    '.zc-adsterra-section', '.zc-adsterra-inner', '#container-4420dadadbd2f0727c322cd6c632be3e',
+    '.zc-radar-art', '.zc-radar-scene', '.zc-art-scanlines', '.zc-art-corner',
+    '.zc-art-caption', '.zc-art-live-dot', '.zc-hero-ad-stage',
+    '.zc-adsterra-native-slot', '.zc-adsterra-mobile-slot', '.zc-hero-sponsor-panel'
+  ]) {
+    assert.equal(inlineCss.includes(stale), false, file + ': unused homepage selector remains: ' + stale);
+  }
+  assert.doesNotMatch(inlineCss, /\.hero(?:-layout)?\s*>\s*\.outbreak-panel|\.hero\s+\.outbreak-panel/, file + ': obsolete outbreak panel hero override remains');
   assert.doesNotMatch(heroCss, /\/\*\s*V(?:8|9|14|17|18|19|20|21)\b/i, file + ': superseded hero version history remains');
   assert.doesNotMatch(heroCss.slice(0, 6000), /\.outbreak-panel|panelOrbit|signalPulse/, file + ': stale hero panel selectors or animations remain');
   assert.match(heroCss, /\.hero:after\{[^}]*writing-mode:horizontal-tb!important/, file + ': hero pseudo-element was not reset to a horizontal rule');
