@@ -2,6 +2,8 @@ name: Sitemap metadata audit
 
 on:
   workflow_dispatch:
+  push:
+    branches: [audit/sitemap-meta-20261124]
 
 permissions:
   contents: read
