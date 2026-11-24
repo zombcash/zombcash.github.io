@@ -9,7 +9,7 @@ on:
         type: choice
         options: [ru, de, fr, it, ja, zh-CN, tr, hi]
       chapter:
-        description: sample, all, prologue, or chapter number 01–46
+        description: sample, all, prologue, chapter number 01–46, or range 01-23 / 24-46
         required: true
         default: sample
         type: string
@@ -18,7 +18,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: meridian-tgemma-translation-${{ inputs.language }}
+  group: meridian-tgemma-translation-${{ inputs.language }}-${{ inputs.chapter }}
   cancel-in-progress: false
 
 jobs:
@@ -48,8 +48,13 @@ jobs:
       - name: Prepare language draft branch
         env:
           TARGET_LANGUAGE: ${{ inputs.language }}
+          TARGET_CHAPTER: ${{ inputs.chapter }}
         run: |
-          BRANCH="translation-tgemma-draft/$TARGET_LANGUAGE"
+          if [[ "$TARGET_CHAPTER" =~ ^[0-9]{2}-[0-9]{2}$ ]]; then
+            BRANCH="translation-tgemma-part-$TARGET_CHAPTER/$TARGET_LANGUAGE"
+          else
+            BRANCH="translation-tgemma-draft/$TARGET_LANGUAGE"
+          fi
           if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
             git fetch origin "$BRANCH"
             git checkout -B "$BRANCH" "origin/$BRANCH"

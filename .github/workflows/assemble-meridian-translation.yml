@@ -1,0 +1,59 @@
+name: Assemble complete Meridian translation draft
+
+on:
+  workflow_dispatch:
+    inputs:
+      language:
+        description: Language to assemble from the two completed chapter batches
+        required: true
+        type: choice
+        options: [ru, de, fr, it, ja, zh-CN, tr, hi]
+
+permissions:
+  contents: write
+
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Assemble both translated ranges
+        env:
+          TARGET_LANGUAGE: ${{ inputs.language }}
+        run: |
+          set -euo pipefail
+          LANG="$TARGET_LANGUAGE"
+          PART1="translation-tgemma-part-01-23/$LANG"
+          PART2="translation-tgemma-part-24-46/$LANG"
+          COMBINED="translation-tgemma-combined/$LANG"
+          git fetch origin "$PART1" "$PART2"
+          git checkout -b "$COMBINED" origin/main
+
+          git checkout "origin/$PART1" -- "$LANG/the-meridian-of-ash.html" "$LANG/the-meridian-of-ash-prologue.html"
+          for i in $(seq -w 1 23); do
+            git checkout "origin/$PART1" -- "$LANG/the-meridian-of-ash-chapter-$i.html"
+          done
+          for i in $(seq -w 24 46); do
+            git checkout "origin/$PART2" -- "$LANG/the-meridian-of-ash-chapter-$i.html"
+          done
+
+          for f in "$LANG/the-meridian-of-ash.html" "$LANG/the-meridian-of-ash-prologue.html"; do
+            test -s "$f" || { echo "Missing translated page: $f"; exit 1; }
+            grep -q 'noindex,follow' "$f" || { echo "Draft noindex marker missing: $f"; exit 1; }
+            grep -q 'translation-draft-banner' "$f" || { echo "Draft banner missing: $f"; exit 1; }
+          done
+          for i in $(seq -w 1 46); do
+            f="$LANG/the-meridian-of-ash-chapter-$i.html"
+            test -s "$f" || { echo "Missing translated page: $f"; exit 1; }
+            grep -q 'noindex,follow' "$f" || { echo "Draft noindex marker missing: $f"; exit 1; }
+            grep -q 'translation-draft-banner' "$f" || { echo "Draft banner missing: $f"; exit 1; }
+          done
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$LANG"
+          git commit -m "Assemble complete TranslateGemma draft translation ($LANG)"
+          git push --set-upstream origin "$COMBINED"

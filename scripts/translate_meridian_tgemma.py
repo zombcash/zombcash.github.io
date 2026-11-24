@@ -184,9 +184,18 @@ def select_files(chapter):
         return ["the-meridian-of-ash.html", "the-meridian-of-ash-prologue.html"] + [f"the-meridian-of-ash-chapter-{i:02d}.html" for i in range(1,47)]
     if chapter == "prologue":
         return ["the-meridian-of-ash-prologue.html"]
+    if re.fullmatch(r"\d{2}-\d{2}", chapter):
+        start, end = [int(x) for x in chapter.split("-")]
+        if not (1 <= start <= end <= 46):
+            raise ValueError("chapter range must be within 01-46")
+        files = []
+        if start == 1:
+            files.extend(["the-meridian-of-ash.html", "the-meridian-of-ash-prologue.html"])
+        files.extend([f"the-meridian-of-ash-chapter-{i:02d}.html" for i in range(start, end + 1)])
+        return files
     if re.fullmatch(r"\d{1,2}", chapter) and 1 <= int(chapter) <= 46:
         return [f"the-meridian-of-ash-chapter-{int(chapter):02d}.html"]
-    raise ValueError("chapter must be sample, all, prologue, or a number from 01 to 46")
+    raise ValueError("chapter must be sample, all, prologue, a number 01-46, or a range such as 01-23")
 
 def main():
     parser = argparse.ArgumentParser()
