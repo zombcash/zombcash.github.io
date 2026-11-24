@@ -30,6 +30,7 @@ on:
       - '**/survivor-hub.html'
       - 'tests/survivor-hub-localization-smoke.cjs'
       - 'tests/survivor-hub-visual-smoke.cjs'
+      - 'tests/survivor-auth-modal-accessibility-smoke.cjs'
       - 'arcade.html'
       - 'ai-arena.js'
       - 'zombie-world.js'
@@ -80,6 +81,7 @@ on:
       - '**/survivor-hub.html'
       - 'tests/survivor-hub-localization-smoke.cjs'
       - 'tests/survivor-hub-visual-smoke.cjs'
+      - 'tests/survivor-auth-modal-accessibility-smoke.cjs'
       - 'tests/arcade-dynamic-localization-smoke.cjs'
       - 'tests/memecoin-platforms-article-smoke.cjs'
       - 'memecoin-promotion-platforms-comparison.html'
@@ -134,6 +136,7 @@ jobs:
           node tests/homepage-css-seo-smoke.cjs
           node --check tests/survivor-hub-localization-smoke.cjs
           node --check tests/survivor-hub-visual-smoke.cjs
+          node --check tests/survivor-auth-modal-accessibility-smoke.cjs
           node --check tests/arcade-dynamic-localization-smoke.cjs
           node --check tests/frontend-api-timeout-smoke.cjs
           node tests/frontend-api-timeout-smoke.cjs
@@ -160,6 +163,8 @@ jobs:
         run: node tests/language-transition-smoke.cjs
       - name: Test shared navigation keyboard access and ARIA state in all locales
         run: node tests/shared-nav-accessibility-smoke.cjs
+      - name: Test Telegram login modal focus, retry and profile-save behavior
+        run: node tests/survivor-auth-modal-accessibility-smoke.cjs
       - name: Test homepage layout across all locales and viewports
         if: always()
         run: node tests/homepage-locales-layout-smoke.cjs
