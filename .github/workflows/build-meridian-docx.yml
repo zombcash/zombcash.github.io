@@ -67,6 +67,7 @@ jobs:
           python - <<'PY'
           from docx import Document
           from pathlib import Path
+          import json
           out=Path("dist")
           glossary=Document()
           glossary.add_heading("THE MERIDIAN OF ASH — Literary Glossary",0)
