@@ -1388,65 +1388,68 @@
     const controls = document.querySelector('.page-scroll-controls');
     if (!controls) return;
     const mobile = window.matchMedia('(max-width: 760px)').matches;
-    controls.classList.toggle('is-visible', mobile && window.scrollY > 220);
+    const showControls = mobile && window.scrollY > 220;
     const assistant = document.getElementById('zombcash-floating-assistant');
     const assistantLauncher = assistant && assistant.querySelector('.zfa-launch');
     const adSelectors = '.zc-adsterra-section, .outbreak-ad-unit, .arcade-ad-unit, .gallery-ad-unit, .field-manual-ad, .maker-ad-unit, .aads-ad-section, .zsh-shared-ad, aside[aria-label="Advertisement"], #frame, [data-aa], [id^="frame-"]';
-    const intersectsAd = (element) => {
-      if (!element || element.getClientRects().length === 0) return false;
+    const visibleRect = (element) => {
+      if (!element || element.getClientRects().length === 0) return null;
       const rect = element.getBoundingClientRect();
-      if (rect.width <= 0 || rect.height <= 0) return false;
-      for (const ad of document.querySelectorAll(adSelectors)) {
-        if (ad.contains(element) || ad.getClientRects().length === 0) continue;
-        const adRect = ad.getBoundingClientRect();
-        if (adRect.width > 0 && adRect.height > 0 &&
-            rect.left < adRect.right && rect.right > adRect.left &&
-            rect.top < adRect.bottom && rect.bottom > adRect.top) return true;
-      }
-      return false;
+      return rect.width > 0 && rect.height > 0 ? rect : null;
     };
-    const intersectsTargets = (element, selector) => {
-      if (!element || element.getClientRects().length === 0) return false;
-      const rect = element.getBoundingClientRect();
-      if (rect.width <= 0 || rect.height <= 0) return false;
-      for (const target of document.querySelectorAll(selector)) {
-        if (target.contains(element) || target.getClientRects().length === 0) continue;
-        const targetRect = target.getBoundingClientRect();
-        if (targetRect.width > 0 && targetRect.height > 0 && rect.left < targetRect.right && rect.right > targetRect.left && rect.top < targetRect.bottom && rect.bottom > targetRect.top) return true;
-      }
-      return false;
-    };
-    const controlsOverlapAd = intersectsAd(controls) && (!mobile || window.scrollY > 220);
-    controls.classList.toggle('is-ad-overlap', controlsOverlapAd);
-    const controlsOverlapGame = intersectsTargets(controls, 'iframe, canvas, .leaderboard, .player-progress, .leaderboard-card, .player-progress-grid');
-    controls.classList.toggle('is-content-overlap', controlsOverlapGame);
-    const assistantOverlapAd = intersectsAd(assistantLauncher);
+    const overlaps = (a, b) => Boolean(a && b &&
+      a.left < b.right && a.right > b.left &&
+      a.top < b.bottom && a.bottom > b.top);
+    const adRects = Array.from(document.querySelectorAll(adSelectors))
+      .map(node => ({ node, rect: visibleRect(node) }))
+      .filter(item => item.rect);
+    const controlsRect = visibleRect(controls);
+    const controlsOverlapAd = (!mobile || window.scrollY > 220) &&
+      adRects.some(item => !item.node.contains(controls) && overlaps(controlsRect, item.rect));
+    const gameRects = Array.from(document.querySelectorAll(
+      'iframe, canvas, .leaderboard, .player-progress, .leaderboard-card, .player-progress-grid'
+    )).map(node => ({ node, rect: visibleRect(node) })).filter(item => item.rect);
+    const controlsOverlapGame = gameRects.some(item =>
+      !item.node.contains(controls) && overlaps(controlsRect, item.rect)
+    );
+    const assistantRect = visibleRect(assistantLauncher);
+    const assistantOverlapAd = adRects.some(item =>
+      !item.node.contains(assistantLauncher) && overlaps(assistantRect, item.rect)
+    );
     let assistantOverlapsContent = false;
-    if (assistantLauncher && assistantLauncher.getClientRects().length) {
-      const launcherRect = assistantLauncher.getBoundingClientRect();
-      const contentSelectors = 'iframe, img, picture, video, canvas, button, [role="button"], input, select, textarea, .leaderboard, .player-progress, .leaderboard-card, .player-progress-grid';
-      for (const target of document.querySelectorAll(contentSelectors)) {
-        if (assistant.contains(target) || target.closest('header, nav, footer, .page-scroll-controls, #zombcash-floating-assistant, .zc-adsterra-section, .zsh-shared-ad, .outbreak-ad-unit, [data-aa], [id^="frame-"]') || target.getClientRects().length === 0) continue;
-        const targetRect = target.getBoundingClientRect();
-        if (targetRect.width > 0 && targetRect.height > 0 &&
-            launcherRect.left < targetRect.right && launcherRect.right > targetRect.left &&
-            launcherRect.top < targetRect.bottom && launcherRect.bottom > targetRect.top) {
-          assistantOverlapsContent = true;
-          break;
-        }
-      }
+    if (assistant && assistantRect) {
+      const exclusionSelector = 'header, nav, footer, .page-scroll-controls, #zombcash-floating-assistant, .zc-adsterra-section, .zsh-shared-ad, .outbreak-ad-unit, [data-aa], [id^="frame-"]';
+      const contentRects = Array.from(document.querySelectorAll(
+        'iframe, img, picture, video, canvas, button, [role="button"], input, select, textarea, .leaderboard, .player-progress, .leaderboard-card, .player-progress-grid'
+      )).filter(target => !assistant.contains(target) && !target.closest(exclusionSelector))
+        .map(node => visibleRect(node)).filter(Boolean);
+      assistantOverlapsContent = contentRects.some(rect => overlaps(assistantRect, rect));
     }
+
+    // Complete every geometry read before changing classes. This avoids
+    // invalidating layout between getBoundingClientRect() calls.
+    controls.classList.toggle('is-visible', showControls);
+    controls.classList.toggle('is-ad-overlap', controlsOverlapAd);
+    controls.classList.toggle('is-content-overlap', controlsOverlapGame);
     if (assistant) {
       assistant.classList.toggle('zfa-ad-overlap', assistantOverlapAd);
       assistant.classList.toggle('zfa-content-overlap', assistantOverlapsContent);
     }
   };
+  let scrollControlsUpdateFrame = 0;
+  const scheduleScrollControlsVisibilityUpdate = () => {
+    if (scrollControlsUpdateFrame) return;
+    scrollControlsUpdateFrame = window.requestAnimationFrame(() => {
+      scrollControlsUpdateFrame = 0;
+      scheduleScrollControlsVisibilityUpdate();
+    });
+  };
   if (!window.__zshScrollControlsVisibilityBound) {
     window.__zshScrollControlsVisibilityBound = true;
-    window.addEventListener('scroll', updateScrollControlsVisibility, {passive:true});
-    window.addEventListener('resize', updateScrollControlsVisibility, {passive:true});
-    window.addEventListener('load', updateScrollControlsVisibility, {once:true});
-    const adObserver = new MutationObserver(() => updateScrollControlsVisibility());
+    window.addEventListener('scroll', scheduleScrollControlsVisibilityUpdate, {passive:true});
+    window.addEventListener('resize', scheduleScrollControlsVisibilityUpdate, {passive:true});
+    window.addEventListener('load', scheduleScrollControlsVisibilityUpdate, {once:true});
+    const adObserver = new MutationObserver(scheduleScrollControlsVisibilityUpdate);
     adObserver.observe(document.body, {childList:true,subtree:true,attributes:true,attributeFilter:['style','class']});
     updateScrollControlsVisibility();
   }
