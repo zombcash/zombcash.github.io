@@ -1035,7 +1035,8 @@ if (zomMarket) {
     try {
       const response = await fetch(apiBase + '/api/vote', {
         method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({option, voter:voterId})
+        body:JSON.stringify({option, voter:voterId}),
+        signal:AbortSignal.timeout(12000)
       });
       const data = await response.json();
       if (!response.ok && response.status !== 409) throw new Error(data.error || 'Vote failed');
