@@ -113,6 +113,24 @@ function record(name, response, expectedStatus, failures, details = {}) {
     results.push(record('health', health, 200, failures));
     if (health.data?.ok !== true) failures.push('health: response did not contain ok=true');
 
+    const assistantStatus = await requestFromSite(page, '/api/assistant/status');
+    if (assistantStatus.resolved && assistantStatus.type === 'cors' && assistantStatus.status === 200 && assistantStatus.data) {
+      const updatedAt = Number(assistantStatus.data.updated_at);
+      const hasSuccess = Number.isFinite(updatedAt) && updatedAt > 0;
+      const ageSeconds = hasSuccess ? Math.max(0, Math.floor(Date.now() / 1000 - updatedAt)) : null;
+      const state = !hasSuccess ? 'UNVERIFIED' : ageSeconds > 300 ? 'STALE' : 'PASS';
+      results.push({
+        name: 'assistant-status',
+        result: state,
+        status: 200,
+        model: assistantStatus.data.model || assistantStatus.data.configured_primary || assistantStatus.data.configured_fallback || 'Not reported',
+        lastSuccessAgeSeconds: ageSeconds
+      });
+      if (state !== 'PASS') degraded.push('assistant provider status: ' + state.toLowerCase() + (ageSeconds === null ? ' — no successful response recorded' : ' — last success was ' + ageSeconds + ' seconds ago'));
+    } else {
+      record('assistant-status', assistantStatus, 200, failures);
+    }
+
     const radar = await requestFromSite(page, '/api/radar');
     if (radar.resolved && radar.type === 'cors' && radar.status === 200 && Array.isArray(radar.data?.pairs) && radar.data.pairs.length > 0) {
       results.push({ name: 'radar', result: 'PASS', status: 200, pairs: radar.data.pairs.length, stale: Boolean(radar.data.stale) });
