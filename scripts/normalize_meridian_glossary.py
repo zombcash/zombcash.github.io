@@ -67,9 +67,41 @@ def translate_protected(model, source_text, target_code):
     output = re.sub(r"<think>[\s\S]*?</think>", "", output).strip()
     for token in all_markers:
         if output.count(token) != 1:
-            return None, f"marker_failure:{token}"
+            if inline_map:
+                return None, f"marker_failure:{token}"
+            return translate_with_explicit_glossary(model, source_text.get_text(" ", strip=True), target_code, term_map.values())
     for token, original in all_markers.items():
         output = output.replace(token, original)
+    return output, None
+
+def translate_with_explicit_glossary(model, text, target_code, protected_names):
+    names = list(dict.fromkeys(protected_names))
+    marked_text = text
+    for name in sorted(names, key=len, reverse=True):
+        pattern = re.compile(re.escape(name), re.I)
+        marked_text = pattern.sub(lambda match: "⟦" + match.group(0) + "⟧", marked_text)
+    prompt = (
+        f"Translate the following English text into {target_code}. "
+        "Copy every phrase enclosed in the special brackets ⟦ and ⟧ exactly as written. "
+        "Do not translate, transliterate, respell, or change capitalization inside those brackets. "
+        "Keep the brackets in the output. Output only the translated text.\n\nTEXT:\n" + marked_text
+    )
+    response = model.create_chat_completion(
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.1, top_p=0.95, repeat_penalty=1.0, max_tokens=1400, seed=42
+    )
+    output = response["choices"][0]["message"]["content"] or ""
+    output = re.sub(r"<think>[\s\S]*?</think>", "", output).strip()
+    for name in names:
+        bracketed = re.compile("⟦" + re.escape(name) + "⟧", re.I)
+        if bracketed.search(output):
+            output = bracketed.sub(lambda match: name, output)
+            continue
+        plain = re.compile(re.escape(name), re.I)
+        if plain.search(output):
+            output = plain.sub(lambda match: name, output)
+            continue
+        return None, f"bracketed_glossary_missing:{name}"
     return output, None
 
 def translate_segment(model, text, target_code):
@@ -148,10 +180,14 @@ def translate_full_block_with_inline_terms(model, source_paragraph, target_code)
     )
     output = response["choices"][0]["message"]["content"] or ""
     output = re.sub(r"<think>[\s\S]*?</think>", "", output).strip()
-    for token, original in term_map.items():
-        if output.count(token) != 1:
-            return None, f"inline_block_marker_failure:{token}"
-        output = output.replace(token, original)
+    marker_failed = any(output.count(token) != 1 for token in term_map)
+    if marker_failed:
+        output, error = translate_with_explicit_glossary(model, source_text, target_code, term_map.values())
+        if error:
+            return None, f"inline_block_{error}"
+    else:
+        for token, original in term_map.items():
+            output = output.replace(token, original)
     # Reapply the original inline tag to the corresponding protected term.
     for source_tag in source_paragraph.find_all(list(INLINE_TAGS)):
         tag_text = source_tag.get_text(" ", strip=True)
@@ -247,17 +283,20 @@ def process_all(model, lang, target_code):
         page_changed = False
         for block_index, (source_p, target_p) in enumerate(zip(source_ps, target_ps)):
             source_text = source_p.get_text(" ", strip=True)
-            hits = [term for term in PROTECTED_TERMS if re.search(re.escape(term), source_text, re.I)]
+            hits = []
+            for term in PROTECTED_TERMS:
+                matches = [match.group(0) for match in re.finditer(re.escape(term), source_text, re.I)]
+                if matches:
+                    per_term[term] += 1
+                    hits.extend(matches)
             if not hits:
                 continue
             candidates += 1
-            for term in hits:
-                per_term[term] += 1
             # The title is a protected publication name, not a translatable phrase.
             is_book_title = filename == "the-meridian-of-ash.html" and source_p.name == "h1" and source_text.strip().upper() == "THE MERIDIAN OF ASH"
             if not is_book_title:
                 target_text = target_p.get_text(" ", strip=True)
-                if all(re.search(re.escape(term), target_text, re.I) for term in hits):
+                if all(re.search(re.escape(term), target_text) for term in hits):
                     already_ok += 1
                     continue
             if is_book_title:
