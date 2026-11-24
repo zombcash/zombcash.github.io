@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Generate TranslateGemma offline translation drafts for THE MERIDIAN OF ASH."""
 from __future__ import annotations
-import argparse, html, json, os, re, time
+import argparse, json, os, re, time
 from pathlib import Path
-from bs4 import BeautifulSoup, NavigableString, Comment, Tag
+from bs4 import BeautifulSoup, NavigableString, Comment
 from huggingface_hub import hf_hub_download
 from llama_cpp import Llama
 
@@ -21,7 +21,6 @@ LANGUAGES = {
     "tr": ("tr", "Turkish"),
     "hi": ("hi", "Hindi"),
 }
-GLOSSARY = json.loads((ROOT / "translations/glossary.json").read_text(encoding="utf-8"))["protected_terms"]
 
 def load_model():
     model_path = hf_hub_download(repo_id=MODEL_REPO, filename=MODEL_FILE)
@@ -35,30 +34,11 @@ def load_model():
         verbose=False,
     )
 
-def protect_terms(text):
-    protected = {}
-    value = text
-    for term_index, term in enumerate(sorted(GLOSSARY, key=len, reverse=True)):
-        pattern = re.compile(re.escape(term), re.IGNORECASE)
-        def repl(match, i=term_index):
-            token = f"ZXQTERM{i:02d}X{len(protected):03d}QZX"
-            protected[token] = match.group(0)
-            return token
-        value = pattern.sub(repl, value)
-    return value, protected
-
-def restore_terms(text, protected):
-    for token, original in protected.items():
-        if text.count(token) != 1:
-            raise RuntimeError(f"TranslateGemma changed or lost protected term marker {token}")
-        text = text.replace(token, original)
-    return text
-
 def translate_text(model, text, target_code):
     if not text or not text.strip():
         return text
-    value, protected = protect_terms(text)
-    prompt = f"en[sprt]{target_code}[sprt]{value}"
+    # TranslateGemma's documented input format is source-code[sprt]target-code[sprt]text.
+    prompt = f"en[sprt]{target_code}[sprt]{text}"
     response = model.create_chat_completion(
         messages=[{"role": "user", "content": prompt}],
         temperature=0.1,
@@ -69,64 +49,25 @@ def translate_text(model, text, target_code):
     )
     output = response["choices"][0]["message"]["content"] or ""
     output = re.sub(r"<think>[\s\S]*?</think>", "", output).strip()
-    return restore_terms(output, protected)
+    return output
 
-def serialize_inline(node, inline_map):
-    if isinstance(node, Comment):
-        return ""
-    if isinstance(node, NavigableString):
-        return str(node)
-    if isinstance(node, Tag):
-        if node.name in {"strong", "em", "b", "i"}:
-            i = len(inline_map)
-            open_token = f"ZXQINLINEOPEN{i:03d}QZX"
-            close_token = f"ZXQINLINECLOSE{i:03d}QZX"
-            inline_map[open_token] = f"<{node.name}>"
-            inline_map[close_token] = f"</{node.name}>"
-            return open_token + "".join(serialize_inline(c, inline_map) for c in node.contents) + close_token
-        return "".join(serialize_inline(c, inline_map) for c in node.contents)
-    return ""
-
-def translate_paragraph_group(model, paragraphs, target_code):
-    inline_maps, term_maps, markers, lines = [], [], [], []
-    for index, paragraph in enumerate(paragraphs):
-        inline_map = {}
-        raw = "".join(serialize_inline(child, inline_map) for child in paragraph.contents)
-        protected, term_map = protect_terms(raw)
-        marker = f"ZXQPARA{index:04d}QZX"
-        markers.append(marker)
-        inline_maps.append(inline_map)
-        term_maps.append(term_map)
-        lines.append(marker + " " + protected)
-
-    # TranslateGemma has a 2K-token input context; keep each marked group short.
-    prompt = f"en[sprt]{target_code}[sprt]" + "\n".join(lines)
-    response = model.create_chat_completion(
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.1,
-        top_p=0.95,
-        repeat_penalty=1.0,
-        max_tokens=1024,
-        seed=42,
-    )
-    output = response["choices"][0]["message"]["content"] or ""
-    output = re.sub(r"<think>[\s\S]*?</think>", "", output).strip()
-    found = list(re.finditer(r"ZXQPARA(\d{4})QZX", output))
-    ids = [int(m.group(1)) for m in found]
-    if ids != list(range(len(paragraphs))):
-        raise RuntimeError(f"Paragraph markers changed: {ids}")
-
-    translated_items = []
-    for i, match in enumerate(found):
-        end = found[i + 1].start() if i + 1 < len(found) else len(output)
-        value = re.sub(r"\s+", " ", output[match.end():end].strip())
-        value = restore_terms(value, term_maps[i])
-        for token, original in inline_maps[i].items():
-            if value.count(token) != 1:
-                raise RuntimeError(f"Inline marker lost or duplicated: {token}")
-            value = value.replace(token, original)
-        translated_items.append(value)
-    return translated_items
+def translate_paragraph(model, paragraph, target_code):
+    # Translate a plain paragraph as one unit to retain its sentence context.
+    # If inline emphasis exists, translate each text segment and keep the HTML tags untouched.
+    if paragraph.find(["strong", "em", "b", "i"]):
+        for node in list(paragraph.find_all(string=True)):
+            if isinstance(node, Comment) or not isinstance(node, NavigableString):
+                continue
+            raw = str(node)
+            if raw.strip():
+                leading = raw[:len(raw) - len(raw.lstrip())]
+                trailing = raw[len(raw.rstrip()):]
+                node.replace_with(leading + translate_text(model, raw.strip(), target_code) + trailing)
+    else:
+        source_text = paragraph.get_text(" ", strip=True)
+        paragraph.clear()
+        paragraph.append(translate_text(model, source_text, target_code))
+    return paragraph
 
 def chunk_paragraphs(paragraphs, max_words=250):
     group, words = [], 0
@@ -140,35 +81,14 @@ def chunk_paragraphs(paragraphs, max_words=250):
     if group:
         yield group
 
-def replace_paragraph_html(paragraph, translated):
-    fragment = html.escape(translated, quote=False)
-    for tag in ("strong", "em", "b", "i"):
-        fragment = fragment.replace(f"&lt;{tag}&gt;", f"<{tag}>")
-        fragment = fragment.replace(f"&lt;/{tag}&gt;", f"</{tag}>")
-    parsed = BeautifulSoup(fragment, "html.parser")
-    paragraph.clear()
-    for child in list(parsed.contents):
-        paragraph.append(child)
-
 def translate_page(model, source_path, target_path, locale, target_code, available_files):
     soup = BeautifulSoup(source_path.read_text(encoding="utf-8"), "html.parser")
     prose = soup.select(".chapter-copy p")
     translated_count = 0
-    for group_index, group in enumerate(chunk_paragraphs(prose), 1):
-        try:
-            translated = translate_paragraph_group(model, group, target_code)
-        except Exception:
-            if len(group) == 1:
-                raise
-            translated = []
-            for paragraph in group:
-                translated.extend(translate_paragraph_group(model, [paragraph], target_code))
-        if len(translated) != len(group):
-            raise RuntimeError("Paragraph count mismatch after translation")
-        for paragraph, value in zip(group, translated):
-            replace_paragraph_html(paragraph, value)
-            translated_count += 1
-        if group_index % 20 == 0:
+    for paragraph in prose:
+        translate_paragraph(model, paragraph, target_code)
+        translated_count += 1
+        if translated_count % 50 == 0:
             print(f"{source_path.name}: translated {translated_count}/{len(prose)} prose paragraphs", flush=True)
 
     if soup.body:
@@ -244,9 +164,7 @@ def translate_sample(model, locale, target_code, target_name):
     source = ROOT / "the-meridian-of-ash-chapter-01.html"
     soup = BeautifulSoup(source.read_text(encoding="utf-8"), "html.parser")
     paragraphs = soup.select(".chapter-copy p")[:3]
-    translated = []
-    for p in paragraphs:
-        translated.extend(translate_paragraph_group(model, [p], target_code))
+    translated = [translate_text(model, p.get_text(" ", strip=True), target_code) for p in paragraphs]
     out = [
         f"# TranslateGemma quality sample — {target_name}",
         "",
