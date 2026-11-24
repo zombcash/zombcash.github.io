@@ -7,9 +7,9 @@ const ribbonScript = fs.readFileSync(path.join(root, 'homepage-ribbons.js'), 'ut
 const homepageVisualCss = fs.readFileSync(path.join(root, 'homepage-visual.css'), 'utf8');
 const aiStatusScript = fs.readFileSync(path.join(root, 'ai-model-status.js'), 'utf8');
 const sharedScript = fs.readFileSync(path.join(root, 'script.js'), 'utf8');
-assert.doesNotMatch(sharedScript, /dot\\.setAttribute\\('aria-label'/,
+assert.doesNotMatch(sharedScript, /dot\.setAttribute\('aria-label'/,
   'decorative system-status dots must not receive prohibited aria-label attributes');
-assert.match(sharedScript, /view\\.setAttribute\\('aria-labelledby', viewLabel\\.id \\+ ' ' \\+ tokenSymbol\\.id\\)/,
+assert.match(sharedScript, /view\.setAttribute\('aria-labelledby', viewLabel\.id \+ ' ' \+ tokenSymbol\.id\)/,
   'dynamic radar links must derive their accessible names from localized visible labels and token symbols');
 
 assert.ok(homepageVisualCss.includes('.zc-ai-engine-card{'),
@@ -89,11 +89,11 @@ for (const file of pages) {
   for (const id of ['zc-promo-prev', 'zc-promo-next', 'zombie-radar-ai-refresh']) {
     const control = html.match(new RegExp('<button\\b[^>]*\\bid="' + id + '"[^>]*>'))?.[0] || '';
     assert.ok(control, file + ': missing visible control ' + id);
-    assert.doesNotMatch(control, /\\baria-label=/i, file + ': accessible name must follow the localized visible label for ' + id);
+    assert.doesNotMatch(control, /\baria-label=/i, file + ': accessible name must follow the localized visible label for ' + id);
   }
   for (const id of ['service-market-dot', 'service-api-dot', 'service-community-dot']) {
     const dot = html.match(new RegExp('<i\\b(?=[^>]*\\bid="' + id + '")[^>]*>'))?.[0] || '';
-    assert.match(dot, /\\baria-hidden="true"/i, file + ': decorative service indicator must be hidden from assistive technology: ' + id);
+    assert.match(dot, /\baria-hidden="true"/i, file + ': decorative service indicator must be hidden from assistive technology: ' + id);
   }
   assert.match(html, /aria-label="ZOMBIECASH — back to top"/, file + ': footer brand accessible name must include the visible brand text');
   assert.doesNotMatch(html, /\bCash\s+Zombie\b|\bCashZombie\b/i, file + ': artificial search phrase remains');
