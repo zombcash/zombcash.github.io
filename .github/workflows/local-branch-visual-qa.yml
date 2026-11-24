@@ -19,6 +19,7 @@ on:
       - "tests/shared-nav-accessibility-smoke.cjs"
       - "tests/survivor-auth-modal-accessibility-smoke.cjs"
       - "tests/homepage-css-seo-smoke.cjs"
+      - "tests/legacy-hero-reference-audit.cjs"
       - "language.js"
       - "homepage-visual.css"
       - "assets/js/zctv-player.js"
@@ -67,6 +68,8 @@ jobs:
           node --check tests/survivor-auth-modal-accessibility-smoke.cjs
           node --check tests/homepage-css-seo-smoke.cjs
           node tests/homepage-css-seo-smoke.cjs
+          node --check tests/legacy-hero-reference-audit.cjs
+          node tests/legacy-hero-reference-audit.cjs
           node --check language.js
           node --check survivor-auth.js
           node --check tests/mobile-viewport-smoke.cjs
