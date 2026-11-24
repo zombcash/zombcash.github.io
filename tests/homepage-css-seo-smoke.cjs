@@ -15,6 +15,12 @@ assert.ok(aiStatusScript.includes('signal: AbortSignal.timeout(10000)'),
 assert.ok(aiStatusScript.includes('if (refreshing) return;'),
   'AI status polling must not overlap requests');
 
+const retiredHomepageSelectors = ["zc-hero-ad-stage","zc-adsterra-grid","zc-adsterra-slot","zc-hero-sponsor","zc-hero-sponsor-promo","zc-hero-ad-unit","zc-adsterra-native-slot","zc-adsterra-mobile-slot","zc-hero-sponsor-label","zc-hero-sponsor-kicker","field-manual-spotlight-inner","world-section","zc-promo-video-inner","hero-title"];
+for (const selector of retiredHomepageSelectors) {
+  assert.equal(homepageVisualCss.includes('.' + selector), false,
+    'homepage stylesheet must not retain selectors for absent legacy markup: ' + selector);
+}
+
 assert.doesNotMatch(ribbonScript, /if\s*\(existing\)\s*existing\.remove\(\)/, 'live ribbons must reuse the reserved wrapper instead of removing/reinserting it');
 assert.match(ribbonScript, /wrap\.removeAttribute\('aria-busy'\)/, 'live ribbon wrapper must clear its busy state after rendering');
 const pages = [
