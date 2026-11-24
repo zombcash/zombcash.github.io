@@ -145,29 +145,29 @@ const BASE = process.env.SITE_URL || 'https://zombcash.github.io/';
     ];
     for (const slug of meridianSlugs) {
       for (const locale of locales) {
-        await page.goto(new URL(\`\${slug}?lang=en\`, BASE).href, { waitUntil: 'domcontentloaded' });
+        await page.goto(new URL(`${slug}?lang=en`, BASE).href, { waitUntil: 'domcontentloaded' });
         await waitForLanguage('en');
         await chooseLanguage(locale);
         await page.waitForURL(
-          url => url.pathname === \`/\${locale}/\${slug}\` && !url.searchParams.has('lang'),
+          url => url.pathname === `/${locale}/${slug}` && !url.searchParams.has('lang'),
           { timeout: 25000, waitUntil: 'domcontentloaded' },
         );
         await waitForLanguage(locale);
 
         const localizedCanonical = await page.locator('link[rel="canonical"]').getAttribute('href');
-        if (localizedCanonical !== \`https://zombcash.github.io/\${locale}/\${slug}\`) {
-          throw new Error(\`Meridian \${slug} canonical mismatch for \${locale}: \${localizedCanonical}\`);
+        if (localizedCanonical !== `https://zombcash.github.io/${locale}/${slug}`) {
+          throw new Error(`Meridian ${slug} canonical mismatch for ${locale}: ${localizedCanonical}`);
         }
 
         await chooseLanguage('en');
         await page.waitForURL(
-          url => url.pathname === \`/\${slug}\` && !url.searchParams.has('lang'),
+          url => url.pathname === `/${slug}` && !url.searchParams.has('lang'),
           { timeout: 25000, waitUntil: 'domcontentloaded' },
         );
         await waitForLanguage('en');
         const englishCanonical = await page.locator('link[rel="canonical"]').getAttribute('href');
-        if (englishCanonical !== \`https://zombcash.github.io/\${slug}\`) {
-          throw new Error(\`Meridian \${slug} did not return to its English canonical: \${englishCanonical}\`);
+        if (englishCanonical !== `https://zombcash.github.io/${slug}`) {
+          throw new Error(`Meridian ${slug} did not return to its English canonical: ${englishCanonical}`);
         }
       }
     }
