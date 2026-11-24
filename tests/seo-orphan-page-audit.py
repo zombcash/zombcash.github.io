@@ -256,7 +256,8 @@ def main():
     print(f"Local HTML pages read: {len(page_titles)}")
     print(f"Pages with locale-aware shared navigation: {shared_nav_pages}")
     print(f"Missing local files: {len(missing_files)}")
-    print(f"Pages with one non-empty document-head title and meta description: {len(page_titles) - len(metadata_issues)}/{len(page_titles)}")
+    metadata_pass_pages = len(page_titles) - len({issue["url"] for issue in metadata_issues})
+    print(f"Pages with one non-empty document-head title and meta description: {metadata_pass_pages}/{len(page_titles)}")
     print(f"Long titles (>70 characters; review only): {sum(row['title_length'] > 70 for row in rows)}")
     print(f"Long descriptions (>170 characters; review only): {sum(row['description_length'] > 170 for row in rows)}")
     for issue in metadata_issues:
