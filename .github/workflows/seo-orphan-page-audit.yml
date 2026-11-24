@@ -35,8 +35,16 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install internal-link audit dependency
+        run: python -m pip install --disable-pip-version-check beautifulsoup4
       - name: Audit sitemap pages and incoming internal links
         run: python tests/seo-orphan-page-audit.py
+      - name: Audit every same-origin HTML link
+        run: python tests/internal-link-integrity-smoke.py
+      - name: Audit duplicate Open Graph and Twitter metadata
+        run: python tests/seo-meta-duplicate-smoke.py
+      - name: Audit title, description, canonical and indexability for every sitemap page
+        run: python tests/seo-page-metadata-audit.py
       - name: Upload full audit report
         if: always()
         uses: actions/upload-artifact@v4
