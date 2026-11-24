@@ -251,8 +251,8 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 .world-community-pair{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:stretch;padding:16px;border:1px solid #31452e;background:linear-gradient(135deg,#0a100c,#080c0a)}
 .world-community-pair>.world-panel{min-width:0;height:100%;margin:0}
 .world-community-pair .world-panel-head{min-height:70px}
-.world-community-pair .world-event{
-.world-community-pair .world-panel-foot{
+.world-community-pair .world-event{margin:10px 12px}
+.world-community-pair .world-panel-foot{margin-top:auto}
 @media(max-width:760px){.world-community-pair{grid-template-columns:minmax(0,1fr);padding:10px;gap:12px}}
 
 /* Community operations: two equal columns, with daily poll closing the same outer frame. */
@@ -506,7 +506,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 @media (max-width: 1100px) and (pointer: coarse) {
   .hero { height:auto!important; min-height:0!important; max-height:none!important; overflow:visible!important; padding:32px 5% 30px!important; align-items:stretch!important; }
   .hero-layout { width:100%!important; min-width:0!important; grid-template-columns:minmax(0,1fr)!important; grid-template-areas:"content" "radar"!important; gap:26px!important; align-items:start!important; }
-  body > main#home > section.hero > .hero-layout {  grid-template-areas:"content" "radar"!important; display:grid!important; }
+  body > main#home > section.hero > .hero-layout { grid-template-columns:minmax(0,1fr)!important; grid-template-areas:"content" "radar"!important; display:grid!important; }
   body > main#home > section.hero > .hero-layout { grid-template-columns: minmax(0,1fr) !important; }
   body > main#home > section.hero > .hero-layout > .hero-content { grid-area:content!important; }
   body > main#home > section.hero > .hero-layout > .zc-hero-art-panel,
@@ -546,7 +546,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 .zc-promo-video-copy h2 span{color:#9bff45}
 .zc-promo-video-copy>p{max-width:440px;color:#a6b5a1;font:500 17px/1.55 Rajdhani,sans-serif}
 .zc-promo-video-controls{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:24px}
-.zc-promo-video-controls button{padding:10px 12px;border:1px solid #405c38;background:#0a120c;color:#c7e5ba;font:700 8px Orbitron,sans-serif;letter-spacing:.45px;cursor:pointer}
+.zc-promo-video-controls button{min-height:39px;padding:10px 12px;border:1px solid #405c38;background:#0a120c;color:#c7e5ba;font:700 8px Orbitron,sans-serif;letter-spacing:.45px;cursor:pointer}
 .zc-promo-video-controls button:hover:not(:disabled){border-color:#9bff45;color:#9bff45}
 .zc-promo-video-controls button:disabled{opacity:.38;cursor:not-allowed}
 #zc-promo-count{color:#9bff45;font:700 8px Orbitron,sans-serif;letter-spacing:.5px}
@@ -741,8 +741,8 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 @media(max-width:560px){.site-footer-main{grid-template-columns:minmax(0,1fr)!important;gap:26px!important}.site-footer-main>.site-footer-brand,.site-footer-main>nav.site-footer-column{grid-column:1!important}.footer-support-grid{grid-template-columns:minmax(0,1fr)!important}.footer-support-grid>.site-feedback{grid-column:auto!important}.footer-support-grid>.site-feedback,.footer-support-grid>.footer-growth,.footer-support-grid>.footer-donate{min-height:0;padding:18px}}
 
 /* Consolidated from campaign-dashboard-styles; original order preserved. */
-.campaign-dashboard{border-top:1px solid #9bff4520;background:linear-gradient(180deg,#090d0b,#080b11)}
-.campaign-dashboard-inner{margin:auto}
+.campaign-dashboard{padding:64px 6.5%;border-top:1px solid #9bff4520;background:linear-gradient(180deg,#090d0b,#080b11)}
+.campaign-dashboard-inner{max-width:1240px;margin:auto}
 .campaign-heading{margin-bottom:26px}.campaign-heading h2{font:700 clamp(28px,4vw,42px) Orbitron,sans-serif;letter-spacing:-1px;margin:12px 0}.campaign-heading p{color:#a8b2a5;font-size:15px}
 .campaign-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 .campaign-card,.campaign-panel{border:1px solid #33452f;background:linear-gradient(145deg,#101710,#0b0e12);padding:22px;min-width:0}
@@ -825,7 +825,7 @@ section.section.community-console .crew-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   grid-template-areas: "market jupiter" "chart feed" !important;
   grid-auto-flow: row !important;
-  
+  align-items: stretch !important;
 }
 section.section.community-console .crew-grid > article:first-of-type { grid-area: market !important; align-self:stretch !important; height:100% !important; }
 section.section.community-console .crew-grid > .jupiter-swap-card { grid-area: jupiter !important; align-self:stretch !important; height:100% !important; }
@@ -975,7 +975,7 @@ footer {
 }
 
 /* Consolidated from zombcash-market-panels-final-alignment; original order preserved. */
-section.section.community-console .crew-grid {  }
+section.section.community-console .crew-grid { align-items: stretch !important; }
 section.section.community-console .crew-grid > .activity-chart-panel,
 section.section.community-console .crew-grid > .recent-trades-panel {
   display: flex !important;
@@ -1003,7 +1003,7 @@ section.section.community-console .crew-grid > .recent-trades-panel .recent-trad
   padding: 12px 0 !important;
 }
 @media (max-width: 800px) {
-  section.section.community-console .crew-grid {  }
+  section.section.community-console .crew-grid { align-items: start !important; }
   section.section.community-console .crew-grid > .activity-chart-panel,
   section.section.community-console .crew-grid > .recent-trades-panel {
     min-height: 0 !important;
@@ -1021,11 +1021,11 @@ section.section.community-console .jupiter-swap-card #jupiter-zombcash-terminal 
   display: flex !important;
   justify-content: center !important;
   align-items: stretch !important;
-  
+  width: 100% !important;
   min-width: 0 !important;
   min-height: 390px !important;
   height: 390px !important;
-  
+  box-sizing: border-box !important;
 }
 @media (max-width: 850px) {
   section.section.community-console .jupiter-swap-card #jupiter-zombcash-terminal {
@@ -1188,21 +1188,21 @@ header.topbar {
 /* Consolidated from zc-home-hero-compact-ad-placement; original order preserved. */
 /* Keep the home hero content-led: browser zoom must not turn 100vh into a huge empty panel. */
 body > main#home > section.hero {
-  
-  
-  
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
   padding-top: clamp(28px, 3.2vw, 48px) !important;
   padding-bottom: 30px !important;
   overflow: hidden !important;
 }
 body > main#home > section.hero > .hero-layout {
   min-height: 0 !important;
-  
+  align-items: center !important;
 }
 body > main#home > section.hero .zc-hero-art-panel {
-  
-  
-  
+  min-height: 0 !important;
+  height: auto !important;
+  aspect-ratio: 900 / 650;
 }
 body > main#home > section.zc-adsterra-section {
   margin: 0 !important;
@@ -1296,24 +1296,24 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
 /* Touch devices using a desktop-width viewport must still stack the hero. */
 @media (max-width: 1100px) and (pointer: coarse) {
   body > main#home > section.hero > .hero-layout {
-    
-    
-    
-    
-    
-    
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto !important;
+    grid-template-areas: "content" "radar" !important;
+    grid-auto-flow: row !important;
+    align-items: stretch !important;
   }
   body > main#home > section.hero > .hero-layout > .hero-content {
-    
+    grid-area: content !important;
     grid-column: 1 !important;
-    
+    grid-row: 1 !important;
     position: relative !important;
     transform: none !important;
   }
   body > main#home > section.hero > .hero-layout > .outbreak-panel {
-    
+    grid-area: radar !important;
     grid-column: 1 !important;
-    
+    grid-row: 2 !important;
     position: relative !important;
     transform: none !important;
   }
@@ -1362,12 +1362,12 @@ body:has(#home) #home > section.hero{
   overflow:visible!important;
 }
 body:has(#home) #home > section.hero > .hero-layout{
-  box-sizing:border-box!important;
-  
-  
+  box-sizing:border-box!important;display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(560px,640px)!important;
+  grid-template-areas:"content sponsor"!important;
   grid-template-rows:auto!important;grid-auto-flow:row!important;
-  align-content:start!important;
-  
+  align-items:start!important;align-content:start!important;
+  gap:clamp(24px,2.5vw,40px)!important;
   width:min(100%,1440px)!important;max-width:1440px!important;
   min-width:0!important;height:auto!important;min-height:0!important;
   margin:0 auto!important;transform:none!important;
@@ -1422,18 +1422,18 @@ body:has(#home) #home > section.hero .zc-hero-sponsor-label{
   body:has(#home) #home > section.hero .zc-adsterra-mobile-slot{display:none!important}
 }
 body:has(#home) #home > section.hero .zc-sponsor-art-slot{
-  
-  flex:0 0 auto!important;min-width:0!important;
-  
-  margin:0!important;
-  
+  box-sizing:border-box!important;position:relative!important;display:block!important;
+  flex:0 0 auto!important;width:100%!important;min-width:0!important;
+  height:clamp(260px,22vw,340px)!important;min-height:260px!important;max-height:340px!important;
+  margin:0!important;padding:0!important;overflow:hidden!important;
+  border:1px solid #9bff4560!important;border-radius:5px!important;background:#080d0a!important;
 }
 body:has(#home) #home > section.hero .zc-sponsor-art-slot:before{content:none!important;display:none!important}
 body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
-  
-  
-  
-  
+  position:absolute!important;inset:0!important;display:block!important;
+  width:100%!important;height:100%!important;max-width:none!important;
+  object-fit:cover!important;object-position:center 32%!important;
+  filter:saturate(.96) contrast(1.04)!important;z-index:1!important;
 }
 body:has(#home) #home > section.hero .zc-hero-sponsor-promo{
   box-sizing:border-box!important;display:flex!important;flex:0 0 auto!important;
