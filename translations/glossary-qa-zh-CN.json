@@ -2,102 +2,11 @@
   "mode": "incremental_repair",
   "language": "zh-CN",
   "pages": 48,
-  "candidate_blocks": 222,
-  "already_normalized_blocks": 202,
-  "repaired_blocks": 5,
-  "skipped_blocks": 15,
-  "skipped_items": [
-    {
-      "file": "the-meridian-of-ash-chapter-01.html",
-      "block_index": 134,
-      "source": "The Core's diagnostic began.",
-      "error": "bracketed_glossary_missing:The Core"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-01.html",
-      "block_index": 295,
-      "source": "The Core's status changed.",
-      "error": "bracketed_glossary_missing:The Core"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-02.html",
-      "block_index": 20,
-      "source": "He pulled a portable diagnostic unit from beneath the desk and connected it through the isolated maintenance port. The screen filled with a stream of status messages, most of them routine. The Core had not shut down. Its processes were acti",
-      "error": "bracketed_glossary_missing:The Core"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-15.html",
-      "block_index": 36,
-      "source": "The woman looked at the panel. “Because the machine doesn't know whether the cells are damaged, whether the cable will fail tomorrow, or whether you stole it from someone who needs it more.”",
-      "error": "bracketed_glossary_missing:morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-16.html",
-      "block_index": 0,
-      "source": "CHAPTER SIXTEEN — THE AUDITOR'S PROOF",
-      "error": "bracketed_glossary_missing:THE AUDITOR"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-18.html",
-      "block_index": 0,
-      "source": "CHAPTER EIGHTEEN — THE SAINT ORAN'S LEDGER",
-      "error": "bracketed_glossary_missing:SAINT ORAN'S"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-33.html",
-      "block_index": 0,
-      "source": "CHAPTER THIRTY-THREE — ZOMBIE LAB",
-      "error": "bracketed_glossary_missing:ZOMBIE LAB"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-36.html",
-      "block_index": 0,
-      "source": "CHAPTER THIRTY-SIX — THE FIRST ZOMBIECASH",
-      "error": "bracketed_glossary_missing:ZOMBIECASH"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-38.html",
-      "block_index": 26,
-      "source": "She let the name settle. Morrow. A tomorrow built from broken yesterday.",
-      "error": "bracketed_glossary_missing:Morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-38.html",
-      "block_index": 86,
-      "source": "Morrow's voice came through her earpiece. “The sensor is not transmitting now.”",
-      "error": "bracketed_glossary_missing:Morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-41.html",
-      "block_index": 8,
-      "source": "Morrow spoke through the small speaker on the bench. “A key can be copied before its destruction. The ledger confirms that the signature is mathematically valid. It does not prove the person was alive when it was made.”",
-      "error": "bracketed_glossary_missing:Morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-43.html",
-      "block_index": 63,
-      "source": "Morrow monitored her pulse. “The change is not following the previous cycle. There is no administered dose.”",
-      "error": "bracketed_glossary_missing:Morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-43.html",
-      "block_index": 95,
-      "source": "Morrow scanned the chamber. “There are no active life-support systems in the pods. The body beneath the sheet is not moving.”",
-      "error": "bracketed_glossary_missing:Morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-43.html",
-      "block_index": 110,
-      "source": "“Morrow,” she said, “record everything. No network access. No automatic analysis that changes the samples.”",
-      "error": "bracketed_glossary_missing:Morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-46.html",
-      "block_index": 96,
-      "source": "Morrow spoke.",
-      "error": "bracketed_glossary_missing:Morrow"
-    }
-  ],
+  "candidate_blocks": 213,
+  "already_normalized_blocks": 198,
+  "repaired_blocks": 15,
+  "skipped_blocks": 0,
+  "skipped_items": [],
   "source_term_hits": {
     "THE MERIDIAN OF ASH": 1,
     "The Meridian of Ash": 1,
@@ -106,11 +15,11 @@
     "ZOMBCASH": 5,
     "Zombie Lab": 13,
     "The Core": 36,
-    "Morrow": 103,
+    "Morrow": 95,
     "Saint Oran's": 19,
     "Bellwether": 9,
     "Grey Orchard": 3,
-    "The Auditor": 15,
+    "The Auditor": 14,
     "Survivor Field Manual": 0,
     "Outbreak Transmission": 7,
     "OUTBREAK RADAR": 6
