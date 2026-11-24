@@ -2,6 +2,15 @@ name: SEO orphan-page and internal-link audit
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - "*.html"
+      - "**/*.html"
+      - "robots.txt"
+      - "sitemap*.xml"
+      - "tests/seo-page-metadata-audit.py"
+      - ".github/workflows/seo-orphan-page-audit.yml"
   push:
     branches: [main]
     paths:
