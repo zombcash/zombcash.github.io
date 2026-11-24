@@ -1,8 +1,8 @@
-/* 2026-11-24 cascade cleanup: removed only earlier declarations shadowed by a later identical selector in the same media/support context. Responsive rules and cascade order are preserved. */
+/* 2026-11-24 cascade cleanup: remove earlier declarations only when a later identical selector in the same media/support context shadows the same property with equal-or-higher importance. Responsive rules and cascade order are preserved. */
 /* ZombieCash homepage visual refresh — additive, homepage-scoped styles only. */
 body:has(#home) .zc-outbreak-ribbons{position:relative;z-index:19;display:grid;gap:5px;padding:7px clamp(10px,2vw,28px);background:#050907;border-bottom:1px solid #25382a}
 body:has(#home) .zc-ribbon{height:34px;display:flex;align-items:center;overflow:hidden;position:relative;border:1px solid var(--ribbon-color);border-radius:9px;background:linear-gradient(90deg,var(--ribbon-tint),#080d0b 52%,#080d0b);box-shadow:0 0 18px color-mix(in srgb,var(--ribbon-color) 16%,transparent),inset 0 0 18px color-mix(in srgb,var(--ribbon-color) 8%,transparent)}
-body:has(#home) .zc-ribbon-label{;display:flex;align-items:center;gap:8px;padding:0 14px;height:100%;color:var(--ribbon-color);font:800 10px/1 Orbitron,Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;border-right:1px solid color-mix(in srgb,var(--ribbon-color) 40%,transparent);white-space:nowrap}
+body:has(#home) .zc-ribbon-label{display:flex;align-items:center;gap:8px;padding:0 14px;height:100%;color:var(--ribbon-color);font:800 10px/1 Orbitron,Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;border-right:1px solid color-mix(in srgb,var(--ribbon-color) 40%,transparent);white-space:nowrap}
 body:has(#home) .zc-ribbon-track{display:flex;align-items:center;min-width:max-content;animation:zcRibbonMove var(--ribbon-speed,34s) linear infinite}
 body:has(#home) .zc-ribbon-copy{display:inline-flex;align-items:center;gap:26px;padding-left:26px;color:#d7e3d8;font:600 14px/1.1 Rajdhani,Arial,sans-serif;white-space:nowrap}
 body:has(#home) .zc-ribbon-copy b{color:var(--ribbon-color);font:700 12px Orbitron,Arial,sans-serif}
@@ -60,7 +60,7 @@ body:has(#home) .zc-ribbon-track{position:relative!important;z-index:1!important
 body:has(#home) #home > section.hero{
   box-sizing:border-box!important;
   height:auto!important;min-height:0!important;max-height:none!important;
-  ;
+  
   overflow:visible!important;
 }
 body:has(#home) #home > section.hero > .hero-layout{
@@ -78,7 +78,7 @@ body:has(#home) #home > section.hero > .hero-layout{
 body:has(#home) #home > section.hero > .hero-layout > .hero-content{
   grid-area:content!important;grid-column:1!important;grid-row:1!important;
   align-self:center!important;justify-self:stretch!important;
-  width:100%!important;;min-width:0!important;
+  width:100%!important;min-width:0!important;
   margin:0!important;padding:0!important;transform:none!important;
 }
 body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
@@ -141,28 +141,25 @@ body:has(#home) #home > section.hero .hero-bottom{
 /* Responsive tool cards: preserve readable columns instead of squeezing three cards
    into tablet and phone widths. Shared by all nine localized homepages. */
 .tools,.tools .tool-grid,.tools .tool-card{min-width:0;max-width:100%}
-.tools .tool-grid{;;;}
-.tools .tool-card{;;;}
-.tools .tool-card h3{;;overflow-wrap:anywhere}
-.tools .tool-card p{;;overflow-wrap:anywhere}
-.tools .tool-card ul{}
+.tools .tool-card h3{overflow-wrap:anywhere}
+.tools .tool-card p{overflow-wrap:anywhere}
 .tools .tool-card .card-link{min-width:0;margin-top:auto;overflow-wrap:anywhere}
-.tools .tool-video-shell{;min-width:0;;;}
+.tools .tool-video-shell{min-width:0;}
 @media(max-width:1024px){.tools .tool-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
-@media(max-width:640px){.tools .tool-grid{;}.tools .tool-card{padding-inline:clamp(12px,4vw,20px)}.tools .tool-card h3{}}
+@media(max-width:640px){.tools .tool-card{padding-inline:clamp(12px,4vw,20px)}}
 
 
 /* ZOMBCASH tool cards: clean cinematic reveal, compact hierarchy, no visible play affordance. */
 .tools .tool-card{
-  ;
-  ;
+  
+  
   flex-direction:column!important;
-  ;
+  
   gap:0!important;
 }
 .tools .tool-card .card-top{
   min-height:15px!important;
-  ;
+  
   gap:6px!important;
   font-size:8px!important;
   line-height:1.1!important;
@@ -210,37 +207,24 @@ body:has(#home) #home > section.hero .hero-bottom{
 .tools .tool-video-shell:hover .tool-video-trigger,
 .tools .tool-video-shell:focus-within .tool-video-trigger,
 .tools .tool-video-shell.is-playing .tool-video-trigger{opacity:0!important}
-.tools .tool-card h3{
-  ;
-  ;
-  ;
-  ;
-}
 .tools .tool-card p{
   flex:0 0 auto!important;
-  ;
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
+  
 }
 .tools .tool-card ul{
   flex:0 0 auto!important;
-  ;
+  
   padding:0!important;
 }
-.tools .tool-card li{
-  ;
-  ;
-  ;
-  ;
-}
-.tools .tool-card li:before{}
 .tools .tool-card .card-link{
   flex:0 0 auto!important;
-  ;
-  ;
-  ;
+  
+  
+  
   font-size:9px!important;
   line-height:1.1!important;
 }
@@ -425,259 +409,165 @@ body:has(#home) #home > section.hero .hero-bottom{
 
 /* FINAL TOOL PANEL LAYOUT: hard one-column stack, aligned content grid, real graffiti artwork. */
 html body section.section.tools#radar > .tool-grid{
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
+  
+  
+  
+  
   margin-inline:auto!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card{
   --panel-accent:#9bff45;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
-html body section.section.tools#radar > .tool-grid > article.radar-card{}
-html body section.section.tools#radar > .tool-grid > article.lab-card{}
-html body section.section.tools#radar > .tool-grid > article.network-card{}
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
+  
+  
+  
   background-image:
     linear-gradient(90deg,#080d0c 0%,#080d0c88 23%,#080d0c24 62%,#080d0c10 100%),
     url("/assets/images/tool-radar-outbreak.webp?v=20261109-real-art2")!important;
-  ;
-  ;
-  ;
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.lab-card:before{
-  ;
-  ;
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.network-card:before{
-  ;
-  ;
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.tool-card:after{
-  ;
-  ;
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-top{
-  ;
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
+  
   min-width:0!important;
-  ;
-  ;
-  ;
+  
+  
+  
   position:relative!important;
   z-index:2!important;
-}
-html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell video{
-  ;;;;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > h3{
-  ;
-  ;
+  
+  
   position:relative!important;
   z-index:2!important;
   min-width:0!important;
-  ;
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > p{
-  ;
-  ;
+  
+  
   position:relative!important;
   z-index:2!important;
   min-width:0!important;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > ul{
-  ;
-  ;
+  
+  
   position:relative!important;
   z-index:2!important;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li{
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{
-  ;
-  ;
-  ;
+  
+  
+  
   position:relative!important;
   z-index:3!important;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:hover{
   transform:none!important;
-  ;
-  ;
+  
+  
 }
 @media(max-width:760px){
   html body section.section.tools#radar > .tool-grid{gap:14px!important;grid-auto-rows:auto!important}
   html body section.section.tools#radar > .tool-grid > article.tool-card{
-    ;
-    ;
-    ;
-    ;
+    
+    
+    
+    
     min-height:0!important;
     height:auto!important;
     padding:12px!important;
   }
   html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
-    width:100%!important;height:auto!important;;
+    width:100%!important;height:auto!important;
   }
   html body section.section.tools#radar > .tool-grid > article.tool-card > h3{font-size:22px!important}
   html body section.section.tools#radar > .tool-grid > article.tool-card > p{font-size:13px!important;line-height:1.45!important}
   html body section.section.tools#radar > .tool-grid > article.tool-card > ul{grid-template-columns:1fr!important;gap:0!important}
   html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li{font-size:9px!important;padding:7px 4px!important}
-  html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{}
-  html body section.section.tools#radar > .tool-grid > article.tool-card:before{;}
 }
 
 
 /* DISTINCT CINEMATIC ARTWORK: one original scene per ZombieCash tool panel. */
 html body section.section.tools#radar > .tool-grid > article.tool-card{
-  ;
-  ;
-  ;
+  
+  
+  
 }
-html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.lab-card:before{
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.network-card:before{
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.tool-card > *{
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.radar-card{}
-html body section.section.tools#radar > .tool-grid > article.lab-card{}
-html body section.section.tools#radar > .tool-grid > article.network-card{}
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-top{
   letter-spacing:1.2px!important;
-}
-html body section.section.tools#radar > .tool-grid > article.tool-card > h3{
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.tool-card > p{
-  ;
-  ;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li{
   background:linear-gradient(90deg,color-mix(in srgb,var(--panel-accent) 8%,transparent),transparent)!important;
@@ -692,9 +582,9 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li
 
 /* Keep the bespoke artwork atmospheric and behind readable copy. */
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  ;
-  ;
-  ;
+  
+  
+  
 }
 
 
@@ -717,102 +607,70 @@ html body section.section.tools#radar > .tool-grid{
   margin:24px auto 30px!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card{
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
+  
+  
+  
+  
   box-sizing:border-box!important;
   width:100%!important;
   min-width:0!important;
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
   position:relative!important;
   isolation:isolate!important;
-  ;
-  ;
-  ;
+  
+  
+  
   box-shadow:0 10px 28px #0007,inset 0 0 0 1px #ffffff08!important;
 }
 html body section.section.tools#radar > .tool-grid > article.radar-card{--panel-accent:#a3ff45}
 html body section.section.tools#radar > .tool-grid > article.lab-card{--panel-accent:#d46cff}
 html body section.section.tools#radar > .tool-grid > article.network-card{--panel-accent:#ff5969}
-html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.lab-card:before{
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.network-card:before{
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.tool-card:after{
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.tool-card > *{
-  ;
-  ;
-  ;
-}
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-top{
-  ;
+  
   display:flex!important;
   align-items:center!important;
   justify-content:space-between!important;
-  ;
+  
   min-height:0!important;
   margin:0!important;
   padding:0 0 5px!important;
   border-bottom:1px solid color-mix(in srgb,var(--panel-accent) 34%,transparent)!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
-  ;
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
+  
   min-width:0!important;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
+  
+  
+  
   background:#050807!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell video{
-  ;
-  ;
-  ;
+  
+  
+  
   min-height:100%!important;
-  ;
-  ;
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > h3{
-  ;
-  ;
-  ;
+  
+  
+  
   padding:0!important;
   font-size:clamp(20px,1.65vw,26px)!important;
   line-height:1.02!important;
@@ -820,12 +678,12 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > h3{
   text-shadow:0 2px 14px #000!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > p{
-  ;
+  
   align-self:start!important;
-  ;
+  
   max-width:760px!important;
-  ;
-  ;
+  
+  
   padding:0!important;
   color:#e0e6e1!important;
   font-size:clamp(12px,.88vw,14px)!important;
@@ -833,15 +691,15 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > p{
   text-shadow:0 1px 8px #000!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > ul{
-  ;
+  
   align-self:stretch!important;
   display:grid!important;
   grid-template-columns:repeat(3,minmax(0,1fr))!important;
   align-items:stretch!important;
   gap:0 12px!important;
-  ;
+  
   min-width:0!important;
-  ;
+  
   padding:0!important;
   border-top:1px solid color-mix(in srgb,var(--panel-accent) 42%,transparent)!important;
 }
@@ -859,17 +717,17 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li
   overflow-wrap:anywhere!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{
-  ;
+  
   align-self:end!important;
-  ;
+  
   display:flex!important;
   align-items:center!important;
   justify-content:space-between!important;
-  ;
+  
   min-height:36px!important;
   height:36px!important;
   box-sizing:border-box!important;
-  ;
+  
   padding:8px 13px!important;
   border:1px solid color-mix(in srgb,var(--panel-accent) 65%,transparent)!important;
   color:var(--panel-accent)!important;
@@ -893,12 +751,12 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:hover{
  html body section.section.tools#radar > .tool-grid{gap:14px!important;margin:18px auto 24px!important}
  html body section.section.tools#radar > .tool-grid > article.tool-card{
   grid-template-columns:minmax(0,1fr)!important;
-  ;
+  
   grid-template-areas:"top" "video" "title" "copy" "features" "action"!important;
   gap:9px!important;
-  ;
+  
   height:auto!important;
-  ;
+  
  }
  html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
   width:100%!important;
@@ -908,59 +766,29 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:hover{
  html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell video{height:100%!important}
  html body section.section.tools#radar > .tool-grid > article.tool-card > h3{font-size:22px!important}
  html body section.section.tools#radar > .tool-grid > article.tool-card > p{font-size:13px!important;line-height:1.45!important}
- html body section.section.tools#radar > .tool-grid > article.tool-card > ul{;gap:0!important}
+ html body section.section.tools#radar > .tool-grid > article.tool-card > ul{gap:0!important}
  html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li{font-size:9px!important;padding:7px 4px!important}
  html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{width:100%!important}
- html body section.section.tools#radar > .tool-grid > article.tool-card:before{;;}
 }
 
 /* Cinematic art visibility tune: distinct color signatures, controlled contrast behind text. */
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
- ;
- ;
-}
-html body section.section.tools#radar > .tool-grid > article.lab-card:before{
- ;
- ;
-}
-html body section.section.tools#radar > .tool-grid > article.network-card:before{
- ;
- ;
+ 
+ 
 }
 @media(max-width:640px){
- html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  ;
- }
 }
 
 
 /* TOOL CARD ARTWORK — palette-matched backgrounds, balanced crop and readable copy */
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.lab-card:before{
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.network-card:before{
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
+  
+  
+  
 }
 
 
@@ -970,9 +798,9 @@ html body section.section.tools#radar > .tool-grid > article.tool-card{
 }
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
   inset:0 0 0 34%!important;
-  ;
+  
   background-size:cover!important;
-  ;
+  
   background-repeat:no-repeat!important;
   opacity:.78!important;
   filter:saturate(1.08) contrast(1.06)!important;
@@ -980,9 +808,9 @@ html body section.section.tools#radar > .tool-grid > article.radar-card:before{
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:before{
   inset:0 0 0 34%!important;
-  ;
+  
   background-size:cover!important;
-  ;
+  
   background-repeat:no-repeat!important;
   opacity:.76!important;
   filter:saturate(1.12) contrast(1.06)!important;
@@ -990,28 +818,13 @@ html body section.section.tools#radar > .tool-grid > article.lab-card:before{
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:before{
   inset:0 0 0 34%!important;
-  ;
+  
   background-size:cover!important;
-  ;
+  
   background-repeat:no-repeat!important;
   opacity:.78!important;
   filter:saturate(1.08) contrast(1.06)!important;
   mix-blend-mode:normal!important;
-}
-html body section.section.tools#radar > .tool-grid > article.tool-card:after{
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.lab-card:after{
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.network-card:after{
-  ;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > h3,
 html body section.section.tools#radar > .tool-grid > article.tool-card > p,
@@ -1025,14 +838,6 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > ul{
   background:linear-gradient(90deg,rgba(0,0,0,.20),rgba(0,0,0,.10))!important;
 }
 @media(max-width:640px){
- html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-   ;
-   ;
- }
- html body section.section.tools#radar > .tool-grid > article.tool-card:after{
-   ;
-   ;
- }
 }
 
 
@@ -1046,43 +851,10 @@ html body section.section.tools#radar > .tool-grid > article.network-card:before
   background-repeat:no-repeat!important;
   opacity:.88!important;
 }
-html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.lab-card:before{
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.network-card:before{
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.tool-card:after{
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.lab-card:after{
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.network-card:after{
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.tool-card > *{
-  ;
-}
 @media(max-width:640px){
- html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-   ;
-   ;
-   ;
-   ;
- }
  html body section.section.tools#radar > .tool-grid > article.tool-card:after{
    inset:0!important;
-   ;
+   
  }
 }
 
@@ -1090,10 +862,10 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > *{
 /* CRITICAL FIX: remove inherited decorative rotations from the artwork pseudo-elements.
    The old graffiti transforms were still rotating the new full-size background layers. */
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
   right:0!important;
   top:0!important;
   bottom:0!important;
@@ -1104,10 +876,10 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:before{
   max-height:none!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:after{
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
   right:0!important;
   top:0!important;
   bottom:0!important;
@@ -1121,10 +893,10 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:after{
 /* FINAL FLAT ARTWORK ALIGNMENT — square, level image planes inside straight panels. */
 html body section.section.tools#radar > .tool-grid > article.tool-card{
   clip-path:none!important;
-  ;
+  
   transform:none!important;
-  ;
-  ;
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
   clip-path:none!important;
@@ -1132,26 +904,14 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:before{
   rotate:0deg!important;
   scale:1!important;
   translate:0 0!important;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.lab-card:before{
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.network-card:before{
-  ;
-  ;
+  
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:after{
   clip-path:none!important;
@@ -1161,11 +921,6 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:after{
   translate:0 0!important;
 }
 @media(max-width:640px){
- html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-   ;
-   ;
-   ;
- }
 }
 
 
@@ -1173,29 +928,20 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:after{
    This stylesheet loads after style.css. Replace the previous SVG artwork here,
    in the last cascade layer, while preserving the left video panel and card content. */
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
   background-attachment:scroll!important;
-  ;
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.lab-card:before{
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.network-card:before{
-  ;
+  
+  
+  
 }
 @media(max-width:640px){
   html body section.section.tools#radar > .tool-grid > article.tool-card:before{
     inset:0!important;
     background-size:100% 100%,auto 48%!important;
-    ;
+    
   }
 }
 
@@ -1206,58 +952,30 @@ html body section.section.tools#radar > .tool-grid > article.network-card:before
    Three selected 1600x640 artworks now fill each card edge-to-edge.
    Hide the old inset video window so no framed panel competes with the banner. */
 html body section.section.tools#radar > .tool-grid > article.tool-card{
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
+  
+  
+  
+  
   overflow:hidden!important;
   border:1px solid color-mix(in srgb,var(--panel-accent) 34%,transparent)!important;
   border-radius:4px!important;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.tool-card:after{
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.lab-card:after{
-  ;
-}
-html body section.section.tools#radar > .tool-grid > article.network-card:after{
-  ;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-  ;
+  
   background-position:center center!important;
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:before{
-  ;
+  
   background-position:center center!important;
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:before{
-  ;
+  
   background-position:center center!important;
-}
-html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
-  ;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > *{
   position:relative!important;
@@ -1265,23 +983,23 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > *{
   min-width:0!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-top{
-  ;
+  
   width:100%!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > h3{
-  ;
+  
   width:min(62%,680px)!important;
   margin:0 0 7px auto!important;
-  ;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > p{
-  ;
+  
   width:min(62%,680px)!important;
   margin:0 0 10px auto!important;
   min-height:0!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > ul{
-  ;
+  
   width:min(62%,680px)!important;
   margin:0 0 10px auto!important;
 }
@@ -1292,7 +1010,7 @@ html body section.section.tools#radar > .tool-grid > article.lab-card > ul{
   margin-right:auto!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{
-  ;
+  
   width:min(62%,420px)!important;
   margin:0 0 0 auto!important;
 }
@@ -1445,10 +1163,6 @@ body:has(#home) #home,
 body:has(#home) #home > section {
   box-sizing: border-box;
   min-width: 0;
-}
-body:has(#home) #home > section:not(.hero) {
-  ;
-  ;
 }
 body:has(#home) #home .hero-layout,
 body:has(#home) #home .zc-promo-video-shell,
@@ -1606,38 +1320,29 @@ body:has(#home) #zctv-channel-hub > .zctv-inner {
   box-sizing:border-box!important;
 }
 body:has(#home) #zctv-channel-hub .zctv-layout {
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
+  
+  
   grid-auto-flow:row!important;
-  ;
-  ;
+  
+  
   margin:20px 0 26px!important;
-}
-body:has(#home) #zctv-channel-hub .zctv-intro {
-  ;
-  ;
-  ;
 }
 body:has(#home) #zctv-channel-hub .zctv-host-art {
   display:flex!important;
-  ;
-  ;;
-  ;
-  ;;
-}
-body:has(#home) #zctv-channel-hub .zctv-host-art img {
-  ;;
-  ;;
+  
+  
+  
+  
 }
 body:has(#home) #zctv-channel-hub .zctv-player-column {
   display:flex!important;
-  ;
-  ;;;
-  ;;
+  
+  
+  
   flex-direction:column!important;gap:12px!important;
 }
 body:has(#home) #zctv-channel-hub .zctv-live-label,
@@ -1656,8 +1361,8 @@ body:has(#home) #zctv-channel-hub .zc-promo-player-wrap {
   margin:0!important;overflow:hidden!important;
 }
 body:has(#home) #zctv-channel-hub #zc-promo-player {
-  ;max-height:none!important;;
-  ;;
+  max-height:none!important;
+  
 }
 body:has(#home) #zctv-channel-hub .zctv-archive {
   flex:0 0 auto!important;align-self:stretch!important;
@@ -1697,15 +1402,10 @@ body:has(#home) #zctv-channel-hub .zctv-channel-card {
   }
 }
 @media(max-width:760px) {
-  body:has(#home) #zctv-channel-hub .zctv-layout {
-    ;
-    ;
-    ;
-  }
   body:has(#home) #zctv-channel-hub .zctv-intro {grid-area:intro!important}
   body:has(#home) #zctv-channel-hub .zctv-host-art {
     grid-area:host!important;width:100%!important;max-width:100%!important;
-    ;
+    
   }
   body:has(#home) #zctv-channel-hub .zctv-player-column {
     grid-area:player!important;width:100%!important;max-width:100%!important;
@@ -1818,9 +1518,6 @@ body:has(#home) #home > section:not(.hero){
     width:90vw!important;
     max-width:5600px!important;
     margin-inline:auto!important;
-  }
-  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel {
-    ;
   }
 }
 @media (max-width:600px) {
@@ -2007,32 +1704,32 @@ body:has(#home) #zctv-channel-hub #zc-promo-player{
    assigned intro/host/player areas in a different order, so changing only the
    grid-template-areas left the panels split across rows. */
 html body:has(main#home) #zctv-channel-hub .zctv-layout{
-  ;
-  ;
-  ;
-  ;
-  ;
+  
+  
+  
+  
+  
 }
 html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-player-column{
-  ;
+  
   grid-column:auto!important;grid-row:auto!important;
-  ;;;
-  ;;;
+  
+  
 }
 html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-intro{
-  ;
+  
   grid-column:auto!important;grid-row:auto!important;
-  ;;;
-  ;;;
-  ;;;
+  
+  
+  
   box-sizing:border-box!important;
 }
 html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art{
-  ;
+  
   grid-column:auto!important;grid-row:auto!important;
-  ;;;
-  ;;;
-  ;box-sizing:border-box!important;
+  
+  
+  box-sizing:border-box!important;
 }
 html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art img{
   width:100%!important;height:100%!important;object-fit:cover!important;
@@ -2050,14 +1747,6 @@ html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art img{
   html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art{grid-area:host!important;height:100%!important;min-height:260px!important}
 }
 @media(max-width:760px){
-  html body:has(main#home) #zctv-channel-hub .zctv-layout{
-    ;
-    ;
-    ;
-  }
-  html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-player-column{;}
-  html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-intro{;}
-  html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art{;}
 }
 
 
@@ -2803,8 +2492,8 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   }
   html body:has(main#home) > footer#site-footer .site-footer-main,
   html body:has(main#home) > footer#site-footer .site-footer-bottom {
-    box-sizing: border-box !important; ;
-    ; margin-inline: auto !important;
+    box-sizing: border-box !important; 
+     margin-inline: auto !important;
   }
   html body:has(main#home) > footer#site-footer .site-footer-main {
     grid-template-columns: minmax(0,1.2fr) minmax(0,.8fr) minmax(0,.8fr) !important;
@@ -3195,7 +2884,7 @@ body:has(#home) #home > section.hero .hero-content .eyebrow {
 }
 
 body:has(#home) #home > section.hero .hero-content h1 {
-  ;
+  
   line-height: 0.92 !important;
   letter-spacing: -0.04em !important;
   margin-bottom: 20px !important;
@@ -3203,8 +2892,8 @@ body:has(#home) #home > section.hero .hero-content h1 {
 }
 
 body:has(#home) #home > section.hero .hero-content .hero-copy {
-  ;
-  ;
+  
+  
   color: var(--zc-text-cold) !important;
   max-width: 600px !important;
   margin-bottom: 24px !important;
