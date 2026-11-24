@@ -20,7 +20,7 @@
   };
   const load = async () => {
     try {
-      const response = await fetch(endpoint, {cache:'no-store'});
+      const response = await fetch(endpoint, {cache:'no-store',signal:AbortSignal.timeout(12000)});
       if (!response.ok) throw new Error('Analytics endpoint returned ' + response.status);
       const data = await response.json();
       const events = data.events || {};
@@ -172,7 +172,7 @@ async function beginSnakeSurvivalSession(){
   snakeSurvivalReceiptUsed=false;
   const token=snakeSurvivorToken();
   if(!token){snakeSurvivalReceiptPromise=null;return}
-  snakeSurvivalReceiptPromise=fetch('https://zombcash-bot.fadehost.app/api/survival/game-start',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({game:'snake'}),cache:'no-store'})
+  snakeSurvivalReceiptPromise=fetch('https://zombcash-bot.fadehost.app/api/survival/game-start',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({game:'snake'}),cache:'no-store',signal:AbortSignal.timeout(12000)})
     .then(async response=>{const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'Session unavailable');return data.receipt||null})
     .catch(()=>null);
 }
@@ -185,7 +185,7 @@ async function completeSnakeSurvivalSession(points){
   const receipt=await pending;
   if(!receipt){if(window.parent!==window)window.parent.postMessage({type:'zombcash-arcade-snake-result',points:score,accountSaved:false,error:'Could not verify this game session.'},location.origin);return}
   try{
-    const response=await fetch('https://zombcash-bot.fadehost.app/api/survival/game-complete',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({receipt,points:score}),cache:'no-store'});
+    const response=await fetch('https://zombcash-bot.fadehost.app/api/survival/game-complete',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({receipt,points:score}),cache:'no-store',signal:AbortSignal.timeout(12000)});
     const data=await response.json().catch(()=>({}));
     if(window.parent!==window)window.parent.postMessage({type:'zombcash-arcade-snake-result',points:score,accountSaved:response.ok,arcadeScore:data.arcadeScore||null,error:response.ok?'':(data.error||'Could not save to profile.')},location.origin);
   }catch(_){if(window.parent!==window)window.parent.postMessage({type:'zombcash-arcade-snake-result',points:score,accountSaved:false,error:'Network error while saving score.'},location.origin)}
@@ -582,7 +582,7 @@ async function loadRadar(force = false) {
   if (radarStatus) radarStatus.textContent = radarJapaneseUI ? 'Solanaをスキャン中' : 'SCANNING SOLANA';
   if (radarRefresh) { radarRefresh.disabled = true; radarRefresh.textContent = radarJapaneseUI ? '↻ スキャン中' : '↻ SCANNING'; }
   try {
-    const response = await fetch('https://zombcash-bot.fadehost.app/api/radar', {cache:'no-store'});
+    const response = await fetch('https://zombcash-bot.fadehost.app/api/radar', {cache:'no-store',signal:AbortSignal.timeout(12000)});
     if (!response.ok) throw new Error('Radar API returned HTTP ' + response.status);
     const payload = await response.json();
     if (!Array.isArray(payload.pairs)) throw new Error(payload.error || 'Radar API returned an invalid response');
@@ -657,7 +657,7 @@ if (zomMarket) {
     if (zomStatus) zomStatus.textContent = 'SCANNING TOKEN…';
     if (zomRefresh) zomRefresh.disabled = true;
     try {
-      const response = await fetch('https://zombcash-bot.fadehost.app/api/zombcash', {cache:'no-store'});
+      const response = await fetch('https://zombcash-bot.fadehost.app/api/zombcash', {cache:'no-store',signal:AbortSignal.timeout(12000)});
       if (!response.ok) throw new Error('HTTP ' + response.status);
       const data = await response.json();
       zomPrice.textContent = zomPriceText(data.priceUsd);
@@ -734,7 +734,7 @@ if (zomMarket) {
     window.__zombcashWorldNewsStarted = true;
     if (newsStatus) newsStatus.textContent = 'SYNCING RSS';
     try {
-      const response = await fetch(apiBase + '/api/news', {cache:'no-store'});
+      const response = await fetch(apiBase + '/api/news', {cache:'no-store',signal:AbortSignal.timeout(12000)});
       if (!response.ok) throw new Error('HTTP ' + response.status);
       const data = await response.json();
       const articles = Array.isArray(data.articles) ? data.articles.filter(article => article && article.enriched !== true) : [];
@@ -837,7 +837,7 @@ if (zomMarket) {
 
   async function loadMarketAlarms() {
     try {
-      const response = await fetch(apiBase + '/api/zombcash', {cache:'no-store'});
+      const response = await fetch(apiBase + '/api/zombcash', {cache:'no-store',signal:AbortSignal.timeout(12000)});
       if (!response.ok) throw new Error('HTTP ' + response.status);
       renderAlarms(await response.json(), false);
     } catch (error) {
@@ -961,7 +961,7 @@ if (zomMarket) {
   }
   async function loadActivity() {
     try {
-      const response = await fetch(apiBase + '/api/activity', {cache:'no-store'});
+      const response = await fetch(apiBase + '/api/activity', {cache:'no-store',signal:AbortSignal.timeout(12000)});
       if (!response.ok) throw new Error('HTTP ' + response.status);
       activityData = await response.json();
       renderActivity();
@@ -1016,7 +1016,7 @@ if (zomMarket) {
   }
   async function loadVote() {
     try {
-      const response = await fetch(apiBase + '/api/vote', {cache:'no-store'});
+      const response = await fetch(apiBase + '/api/vote', {cache:'no-store',signal:AbortSignal.timeout(12000)});
       if (!response.ok) throw new Error('HTTP ' + response.status);
       const data = await response.json();
       let alreadyVoted = false;
@@ -1063,8 +1063,8 @@ if (zomMarket) {
     else scores.slice(0,10).forEach((item,index)=>{const row=document.createElement('div');row.className='survivor-row';const rank=document.createElement('span');rank.className='survivor-rank';rank.textContent='#'+(index+1);const name=document.createElement('span');name.className='survivor-name';name.textContent=item.name||'Survivor';const date=document.createElement('small');date.className='survivor-date';date.textContent=item.date?'RECORD · '+item.date:'COMMUNITY RECORD';name.append(date);const points=document.createElement('strong');points.className='survivor-time';points.textContent=Number(item.points||0).toLocaleString('en-US')+' PTS';row.append(rank,name,points);leaderboardEl.append(row);});
     if(leaderboardStatus)leaderboardStatus.textContent='TOP 10';
   }
-  async function loadLeaderboard(){try{const response=await fetch(apiBase+'/api/survival-scores',{cache:'no-store'});if(!response.ok)throw new Error('HTTP '+response.status);renderLeaderboard(await response.json());}catch(_){if(leaderboardStatus)leaderboardStatus.textContent='OFFLINE';if(leaderboardEl)leaderboardEl.innerHTML='<p class="crew-note">Leaderboard is temporarily unavailable.</p>';}}
-  submitScoreButton?.addEventListener('click',async()=>{const points=Number(window.lastSurvivalPoints);if(!Number.isFinite(points)||points<10||points>100000){if(submitScoreStatus)submitScoreStatus.textContent='Score at least 10 points before saving.';return;}submitScoreButton.disabled=true;if(submitScoreStatus)submitScoreStatus.textContent='Submitting your record…';try{const response=await fetch(apiBase+'/api/survival-scores',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:getEl('survivor-name')?.value||'Survivor',points,voter:voterId})});const data=await response.json();if(!response.ok)throw new Error(data.error||'Could not save record');if(submitScoreStatus)submitScoreStatus.textContent='Record saved! Survival leaderboard updated.';renderLeaderboard(data);}catch(error){if(submitScoreStatus)submitScoreStatus.textContent=error.message;submitScoreButton.disabled=false;}});
+  async function loadLeaderboard(){try{const response=await fetch(apiBase+'/api/survival-scores',{cache:'no-store',signal:AbortSignal.timeout(12000)});if(!response.ok)throw new Error('HTTP '+response.status);renderLeaderboard(await response.json());}catch(_){if(leaderboardStatus)leaderboardStatus.textContent='OFFLINE';if(leaderboardEl)leaderboardEl.innerHTML='<p class="crew-note">Leaderboard is temporarily unavailable.</p>';}}
+  submitScoreButton?.addEventListener('click',async()=>{const points=Number(window.lastSurvivalPoints);if(!Number.isFinite(points)||points<10||points>100000){if(submitScoreStatus)submitScoreStatus.textContent='Score at least 10 points before saving.';return;}submitScoreButton.disabled=true;if(submitScoreStatus)submitScoreStatus.textContent='Submitting your record…';try{const response=await fetch(apiBase+'/api/survival-scores',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:getEl('survivor-name')?.value||'Survivor',points,voter:voterId}),signal:AbortSignal.timeout(12000)});const data=await response.json();if(!response.ok)throw new Error(data.error||'Could not save record');if(submitScoreStatus)submitScoreStatus.textContent='Record saved! Survival leaderboard updated.';renderLeaderboard(data);}catch(error){if(submitScoreStatus)submitScoreStatus.textContent=error.message;submitScoreButton.disabled=false;}});
 
 
 
@@ -1172,7 +1172,7 @@ if (zomMarket) {
   caption.textContent=labels[game]+' · Top 10 records';list.textContent='Loading records…';
   try{
    const url=game==='snake'?api+'/api/survival-scores':api+'/api/arcade-scores?game='+encodeURIComponent(game);
-   const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw new Error('HTTP '+response.status);
+   const response=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(12000)});if(!response.ok)throw new Error('HTTP '+response.status);
    const data=await response.json();const scores=Array.isArray(data.scores)?data.scores:[];list.replaceChildren();
    if(!scores.length){list.textContent='No records yet. Play '+labels[game]+' and claim the first spot.';return;}
    scores.slice(0,10).forEach((item,i)=>{const row=document.createElement('div');row.className='survivor-row';const rank=document.createElement('span');rank.className='survivor-rank';rank.textContent='#'+(i+1);const name=document.createElement('span');name.className='survivor-name';name.textContent=item.name||'Survivor';const date=document.createElement('small');date.className='survivor-date';date.textContent=item.date?'RECORD · '+item.date:'COMMUNITY RECORD';name.append(date);const points=document.createElement('strong');points.className='survivor-points';points.textContent=Number(item.points||0).toLocaleString('en-US')+' PTS';row.append(rank,name,points);list.append(row);});
@@ -1202,7 +1202,7 @@ if (zomMarket) {
   };
   const refreshVisits = async () => {
     try {
-      const response = await fetch(apiBase + '/api/visits', {cache:'no-store'});
+      const response = await fetch(apiBase + '/api/visits', {cache:'no-store',signal:AbortSignal.timeout(12000)});
       if (!response.ok) throw new Error('Visit counter unavailable');
       render(await response.json());
     } catch (_) {
@@ -1261,19 +1261,19 @@ if (zomMarket) {
   };
   async function refreshStatus() {
     const checks = await Promise.allSettled([
-      fetch(apiBase + '/health', {cache:'no-store'}).then(r => {
+      fetch(apiBase + '/health', {cache:'no-store',signal:AbortSignal.timeout(12000)}).then(r => {
         if (!r.ok) throw new Error('Health HTTP ' + r.status);
         return r.json();
       }),
-      fetch(apiBase + '/api/zombcash', {cache:'no-store'}).then(r => {
+      fetch(apiBase + '/api/zombcash', {cache:'no-store',signal:AbortSignal.timeout(12000)}).then(r => {
         if (!r.ok) throw new Error('Market HTTP ' + r.status);
         return r.json();
       }),
-      fetch(apiBase + '/api/activity', {cache:'no-store'}).then(r => {
+      fetch(apiBase + '/api/activity', {cache:'no-store',signal:AbortSignal.timeout(12000)}).then(r => {
         if (!r.ok) throw new Error('Activity HTTP ' + r.status);
         return r.json();
       }),
-      fetch(apiBase + '/api/visits', {cache:'no-store'}).then(r => {
+      fetch(apiBase + '/api/visits', {cache:'no-store',signal:AbortSignal.timeout(12000)}).then(r => {
         if (!r.ok) throw new Error('Visits HTTP ' + r.status);
         return r.json();
       })
