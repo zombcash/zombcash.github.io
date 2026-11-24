@@ -33,7 +33,6 @@ body:has(#home) .world-panel-foot{background:#080e0deF}
 }
 @media(prefers-reduced-motion:reduce){body:has(#home) .zc-ribbon-track{animation:none!important;transform:none!important}body:has(#home) .zc-ribbon-copy:nth-child(n+2){display:none}}
 
-
 /* Keep the real reserved ad formats visible; legacy 90px rules must not clip 300x250 desktop slots. */
 @media (min-width:901px){
 }
@@ -137,7 +136,6 @@ body:has(#home) #home > section.hero .hero-bottom{
 @media(max-width:340px){
 }
 
-
 /* Responsive tool cards: preserve readable columns instead of squeezing three cards
    into tablet and phone widths. Shared by all nine localized homepages. */
 .tools,.tools .tool-grid,.tools .tool-card{min-width:0;max-width:100%}
@@ -148,11 +146,9 @@ body:has(#home) #home > section.hero .hero-bottom{
 @media(max-width:1024px){.tools .tool-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:640px){.tools .tool-card{padding-inline:clamp(12px,4vw,20px)}}
 
-
 /* ZOMBCASH tool cards: clean cinematic reveal, compact hierarchy, no visible play affordance. */
 .tools .tool-card{
-  
-  
+
   flex-direction:column!important;
   
   gap:0!important;
@@ -209,11 +205,7 @@ body:has(#home) #home > section.hero .hero-bottom{
 .tools .tool-video-shell.is-playing .tool-video-trigger{opacity:0!important}
 .tools .tool-card p{
   flex:0 0 auto!important;
-  
-  
-  
-  
-  
+
 }
 .tools .tool-card ul{
   flex:0 0 auto!important;
@@ -222,9 +214,7 @@ body:has(#home) #home > section.hero .hero-bottom{
 }
 .tools .tool-card .card-link{
   flex:0 0 auto!important;
-  
-  
-  
+
   font-size:9px!important;
   line-height:1.1!important;
 }
@@ -240,7 +230,6 @@ body:has(#home) #home > section.hero .hero-bottom{
   .tools .tool-card h3{font-size:21px!important}
   .tools .tool-card p{font-size:13px!important}
 }
-
 
 /* ZOMBIECASH tool showcase: stacked mission panels with restrained outbreak graffiti. */
 .tools .tool-grid{
@@ -406,146 +395,63 @@ body:has(#home) #home > section.hero .hero-bottom{
   .tools .tool-card:after{transition:none!important}
 }
 
-
 /* FINAL TOOL PANEL LAYOUT: hard one-column stack, aligned content grid, real graffiti artwork. */
 html body section.section.tools#radar > .tool-grid{
-  
-  
-  
-  
-  
-  
-  
-  
+
   margin-inline:auto!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card{
   --panel-accent:#9bff45;
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  
-  
-  
-  
-  
-  
-  
+
   background-image:
     linear-gradient(90deg,#080d0c 0%,#080d0c88 23%,#080d0c24 62%,#080d0c10 100%),
     url("/assets/images/tool-radar-outbreak.webp?v=20261109-real-art2")!important;
-  
-  
-  
-  
-  
+
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-top{
-  
-  
-  
-  
-  
+
   min-width:0!important;
-  
-  
-  
+
   position:relative!important;
   z-index:2!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > h3{
-  
-  
+
   position:relative!important;
   z-index:2!important;
   min-width:0!important;
-  
-  
-  
-  
-  
+
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > p{
-  
-  
+
   position:relative!important;
   z-index:2!important;
   min-width:0!important;
-  
-  
-  
-  
-  
-  
-  
-  
+
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > ul{
-  
-  
+
   position:relative!important;
   z-index:2!important;
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{
-  
-  
-  
+
   position:relative!important;
   z-index:3!important;
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:hover{
   transform:none!important;
-  
-  
+
 }
 @media(max-width:760px){
   html body section.section.tools#radar > .tool-grid{gap:14px!important;grid-auto-rows:auto!important}
   html body section.section.tools#radar > .tool-grid > article.tool-card{
-    
-    
-    
-    
+
     min-height:0!important;
     height:auto!important;
     padding:12px!important;
@@ -559,12 +465,9 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:hover{
   html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li{font-size:9px!important;padding:7px 4px!important}
 }
 
-
 /* DISTINCT CINEMATIC ARTWORK: one original scene per ZombieCash tool panel. */
 html body section.section.tools#radar > .tool-grid > article.tool-card{
-  
-  
-  
+
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-top{
   letter-spacing:1.2px!important;
@@ -582,11 +485,8 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li
 
 /* Keep the bespoke artwork atmospheric and behind readable copy. */
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  
-  
-  
-}
 
+}
 
 /* FINAL STRUCTURE PASS — equal-width, equal-rhythm mission rows with responsive media. */
 html body section.section.tools#radar{
@@ -607,26 +507,14 @@ html body section.section.tools#radar > .tool-grid{
   margin:24px auto 30px!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card{
-  
-  
-  
-  
-  
-  
-  
-  
+
   box-sizing:border-box!important;
   width:100%!important;
   min-width:0!important;
-  
-  
-  
-  
+
   position:relative!important;
   isolation:isolate!important;
-  
-  
-  
+
   box-shadow:0 10px 28px #0007,inset 0 0 0 1px #ffffff08!important;
 }
 html body section.section.tools#radar > .tool-grid > article.radar-card{--panel-accent:#a3ff45}
@@ -644,33 +532,18 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > .card-t
   border-bottom:1px solid color-mix(in srgb,var(--panel-accent) 34%,transparent)!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
-  
-  
-  
-  
-  
+
   min-width:0!important;
-  
-  
-  
-  
-  
-  
-  
+
   background:#050807!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell video{
-  
-  
-  
+
   min-height:100%!important;
-  
-  
+
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > h3{
-  
-  
-  
+
   padding:0!important;
   font-size:clamp(20px,1.65vw,26px)!important;
   line-height:1.02!important;
@@ -682,8 +555,7 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > p{
   align-self:start!important;
   
   max-width:760px!important;
-  
-  
+
   padding:0!important;
   color:#e0e6e1!important;
   font-size:clamp(12px,.88vw,14px)!important;
@@ -773,24 +645,15 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:hover{
 
 /* Cinematic art visibility tune: distinct color signatures, controlled contrast behind text. */
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
- 
- 
+
 }
 @media(max-width:640px){
 }
 
-
 /* TOOL CARD ARTWORK — palette-matched backgrounds, balanced crop and readable copy */
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-  
-  
-  
-  
-  
-  
-  
-}
 
+}
 
 /* FINAL READABILITY FIX: keep the artwork visible, but stop it competing with copy. */
 html body section.section.tools#radar > .tool-grid > article.tool-card{
@@ -840,7 +703,6 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > ul{
 @media(max-width:640px){
 }
 
-
 /* Artwork alignment: preserve the original image proportions and anchor each scene to the card's right edge. */
 html body section.section.tools#radar > .tool-grid > article.radar-card:before,
 html body section.section.tools#radar > .tool-grid > article.lab-card:before,
@@ -858,14 +720,10 @@ html body section.section.tools#radar > .tool-grid > article.network-card:before
  }
 }
 
-
 /* CRITICAL FIX: remove inherited decorative rotations from the artwork pseudo-elements.
    The old graffiti transforms were still rotating the new full-size background layers. */
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  
-  
-  
-  
+
   right:0!important;
   top:0!important;
   bottom:0!important;
@@ -876,10 +734,7 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:before{
   max-height:none!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:after{
-  
-  
-  
-  
+
   right:0!important;
   top:0!important;
   bottom:0!important;
@@ -895,8 +750,7 @@ html body section.section.tools#radar > .tool-grid > article.tool-card{
   clip-path:none!important;
   
   transform:none!important;
-  
-  
+
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
   clip-path:none!important;
@@ -904,14 +758,7 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:before{
   rotate:0deg!important;
   scale:1!important;
   translate:0 0!important;
-  
-  
-  
-  
-  
-  
-  
-  
+
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:after{
   clip-path:none!important;
@@ -923,19 +770,13 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:after{
 @media(max-width:640px){
 }
 
-
 /* ZOMBCASH TOOL CARD PHOTO BACKGROUNDS — FINAL OVERRIDE 2026-11-10
    This stylesheet loads after style.css. Replace the previous SVG artwork here,
    in the last cascade layer, while preserving the left video panel and card content. */
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  
-  
-  
-  
+
   background-attachment:scroll!important;
-  
-  
-  
+
 }
 @media(max-width:640px){
   html body section.section.tools#radar > .tool-grid > article.tool-card:before{
@@ -947,19 +788,11 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:before{
 
 /* Deployment retry marker: tool card photo backgrounds are finalized above. */
 
-
 /* ZOMBCASH — FULL-BLEED TOOL BANNERS 2026-11-10
    Three selected 1600x640 artworks now fill each card edge-to-edge.
    Hide the old inset video window so no framed panel competes with the banner. */
 html body section.section.tools#radar > .tool-grid > article.tool-card{
-  
-  
-  
-  
-  
-  
-  
-  
+
   overflow:hidden!important;
   border:1px solid color-mix(in srgb,var(--panel-accent) 34%,transparent)!important;
   border-radius:4px!important;
@@ -1043,7 +876,6 @@ html body section.section.tools#radar > .tool-grid > article.lab-card > .card-li
     grid-template-columns:1fr!important;
   }
 }
-
 
 /* HOTFIX 2026-11-10 — restore the original live video windows.
    Keep the three selected banner artworks as a subdued backdrop on the text side;
@@ -1156,7 +988,6 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > .card-l
   html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{aspect-ratio:16/9!important}
   html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{max-width:none!important;width:100%!important}
 }
-
 
 /* 2026-11-10 final responsive polish — shared by all nine localized homepages. */
 body:has(#home) #home,
@@ -1274,7 +1105,6 @@ body:has(#home) #home .zctv-player-column {
   }
 }
 
-
 /* Desktop native sponsor unit is 300px tall; never clip it inside the legacy 250px banner reservation. */
 @media (min-width: 768px) {
   body:has(#home) #home > section.hero #container-4420dadadbd2f0727c322cd6c632be3e {
@@ -1292,8 +1122,6 @@ body:has(#home) #home .zctv-player-column {
 
 @media (min-width: 768px) {
 }
-
-
 
 /* ZOMBCASH TV — single authoritative responsive layout (2026-11-10). */
 body:has(#home) #home > #zctv-channel-hub {
@@ -1320,29 +1148,18 @@ body:has(#home) #zctv-channel-hub > .zctv-inner {
   box-sizing:border-box!important;
 }
 body:has(#home) #zctv-channel-hub .zctv-layout {
-  
-  
-  
-  
-  
-  
+
   grid-auto-flow:row!important;
-  
-  
+
   margin:20px 0 26px!important;
 }
 body:has(#home) #zctv-channel-hub .zctv-host-art {
   display:flex!important;
-  
-  
-  
-  
+
 }
 body:has(#home) #zctv-channel-hub .zctv-player-column {
   display:flex!important;
-  
-  
-  
+
   flex-direction:column!important;gap:12px!important;
 }
 body:has(#home) #zctv-channel-hub .zctv-live-label,
@@ -1416,7 +1233,6 @@ body:has(#home) #zctv-channel-hub .zctv-channel-card {
     grid-template-columns:minmax(0,1fr)!important;
   }
 }
-
 
 /* 2026-11-10 — final full-width homepage content geometry.
    All homepage sections remain full-bleed; only their inner content is centered
@@ -1503,7 +1319,6 @@ body:has(#home) #home > section:not(.hero){
   }
 }
 
-
 /* Responsive viewport compensation:
    At reduced browser zoom the CSS viewport becomes very wide. Let capped homepage
    content expand with it instead of collapsing to a tiny 1440px island. */
@@ -1527,7 +1342,6 @@ body:has(#home) #home > section:not(.hero){
   }
 }
 
-
 /* Wide CSS viewports caused by browser zoom-out: scale both hero columns,
    not only their outer wrapper. Preserve the established two-column design. */
 @media (min-width:1800px) {
@@ -1545,7 +1359,6 @@ body:has(#home) #home > section:not(.hero){
     min-width:0!important;
   }
 }
-
 
 /* 2026-11-10 — wide viewport geometry repair.
    Keep the full-bleed sections anchored to the viewport, not the padded legacy
@@ -1589,7 +1402,6 @@ body:has(#home) #home > section:not(.hero){
   }
 }
 
-
 /* The global 1276px layout rule also offsets .hero-bottom. When the wide
    viewport rule gives it a 90vw width, those old left/right offsets add to
    the width and push the document beyond the viewport. Re-center it using
@@ -1604,7 +1416,6 @@ body:has(#home) #home > section:not(.hero){
   }
 }
 
-
 /* Wide .section children such as .world-grid and .intro-row use 90vw. The
    legacy global section padding was still 262/962/2562px, shifting those
    already-wide children to the right. Give these two content sections the
@@ -1616,7 +1427,6 @@ body:has(#home) #home > section:not(.hero){
     padding-right:5vw!important;
   }
 }
-
 
 /* 2026-11-11 — authoritative ZombieCash TV grid.
    This final block intentionally overrides the older Nov 10 layout patches.
@@ -1698,37 +1508,28 @@ body:has(#home) #zctv-channel-hub #zc-promo-player{
   }
 }
 
-
 /* 2026-11-11 — final TV alignment correction.
    Explicitly map each direct grid child to its named area. Earlier theme rules
    assigned intro/host/player areas in a different order, so changing only the
    grid-template-areas left the panels split across rows. */
 html body:has(main#home) #zctv-channel-hub .zctv-layout{
-  
-  
-  
-  
-  
+
 }
 html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-player-column{
   
   grid-column:auto!important;grid-row:auto!important;
-  
-  
+
 }
 html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-intro{
   
   grid-column:auto!important;grid-row:auto!important;
-  
-  
-  
+
   box-sizing:border-box!important;
 }
 html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art{
   
   grid-column:auto!important;grid-row:auto!important;
-  
-  
+
   box-sizing:border-box!important;
 }
 html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art img{
@@ -1748,7 +1549,6 @@ html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art img{
 }
 @media(max-width:760px){
 }
-
 
 /* 2026-11-11 — unified homepage geometry at every browser zoom.
    Browser zoom-out creates a very wide CSS viewport. Older 1800px rules let
@@ -1824,7 +1624,6 @@ html body:has(main#home) > main#home :is(
     gap:clamp(24px,2vw,48px)!important;
   }
 }
-
 
 /* 2026-11-11 — final ZombieCash TV composition:
    Desktop keeps the requested player-left composition.
@@ -1917,7 +1716,6 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     grid-template-columns:minmax(0,1fr)!important;
   }
 }
-
 
 /* Wide-viewport zoom mode: every major homepage section shares one expanding
    rail. This preserves readable proportions at browser zoom levels such as
@@ -2380,8 +2178,6 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   }
 }
 
-
-
 /* 2026-11-12 — keep the Community Console intro copy readable at extreme browser zoom-out. */
 @media (min-width: 2200px) {
   html body:has(main#home) > main#home > section#community-console#community-console > .section-heading {
@@ -2406,7 +2202,6 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     justify-self: end !important;
   }
 }
-
 
 /* 20% browser-zoom calibration: 1920–3200px displays become 9600–16000px CSS viewports.
    Keep every major homepage rail on one fluid width and scale typography with that effective viewport. */
@@ -2554,7 +2349,6 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   body:has(main#home) { overflow-x: clip !important; }
 }
 
-
 /* 20% browser-zoom legibility: scale the shared homepage header and market tickers
    with the same effective CSS viewport as the hero, without changing mobile/tablet layouts. */
 @media (min-width: 7600px) {
@@ -2623,7 +2417,6 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     line-height: inherit !important;
   }
 }
-
 
 /* 20% browser-zoom legibility: scale the three live outbreak ribbons as well as the header. */
 @media (min-width: 7600px) {
@@ -2813,8 +2606,6 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   }
 }
 
-
-
 /* ZOMBIE LAB PROMO — cinematic survivor composition across all nine locales */
 body:has(main#home) #home .zombie-maker-promo{position:relative!important;isolation:isolate!important;display:grid!important;grid-template-columns:minmax(0,.88fr) minmax(420px,1.12fr)!important;align-items:stretch!important;gap:clamp(26px,4vw,64px)!important;width:min(94%,1480px)!important;max-width:1480px!important;min-height:560px!important;margin:48px auto 58px!important;padding:clamp(30px,4vw,62px)!important;box-sizing:border-box!important;overflow:hidden!important;border:1px solid #526b45!important;background:radial-gradient(ellipse at 80% 48%,#8bff3920,transparent 40%),linear-gradient(112deg,#060b09 0%,#0b120e 46%,#101611 100%)!important;box-shadow:0 26px 90px #000a,0 0 36px #9bff450b!important}
 body:has(main#home) #home .zombie-maker-promo:before{content:""!important;position:absolute!important;inset:10px!important;border:1px solid #9bff4524!important;pointer-events:none!important;z-index:-1!important}
@@ -2837,8 +2628,6 @@ body:has(main#home) #home .zm-promo-coord{z-index:3!important;left:20px!importan
 @media(max-width:900px){body:has(main#home) #home .zombie-maker-promo{grid-template-columns:minmax(0,1fr) minmax(280px,.85fr)!important;min-height:0!important;gap:22px!important;padding:26px!important}body:has(main#home) #home .zm-promo-art{min-height:420px!important}}
 @media(max-width:680px){body:has(main#home) #home .zombie-maker-promo{grid-template-columns:minmax(0,1fr)!important;width:calc(100% - 24px)!important;margin:28px 12px 38px!important;padding:22px 18px 16px!important;gap:18px!important}body:has(main#home) #home .zombie-maker-promo h2{font-size:clamp(31px,8.6vw,46px)!important;letter-spacing:-1.3px!important}body:has(main#home) #home .zombie-maker-promo p{font-size:17px!important}body:has(main#home) #home .zm-promo-actions{margin-top:22px!important}body:has(main#home) #home .zm-promo-btn{width:100%!important;box-sizing:border-box!important}body:has(main#home) #home .zm-promo-art{min-height:0!important;height:auto!important;aspect-ratio:4/5!important}body:has(main#home) #home .zm-promo-character{object-position:center 16%!important}body:has(main#home) #home .zm-promo-stamp{right:12px!important;bottom:12px!important}body:has(main#home) #home .zm-promo-coord{left:12px!important;top:12px!important}}
 @media(prefers-reduced-motion:reduce){body:has(main#home) #home .zm-promo-ring:after{animation:none!important}body:has(main#home) #home .zm-promo-btn{transition:none!important}}
-
-
 
 /* ============================================
    CINEMATIC HOMEPAGE REDESIGN - Issue #655
@@ -2892,8 +2681,7 @@ body:has(#home) #home > section.hero .hero-content h1 {
 }
 
 body:has(#home) #home > section.hero .hero-content .hero-copy {
-  
-  
+
   color: var(--zc-text-cold) !important;
   max-width: 600px !important;
   margin-bottom: 24px !important;
