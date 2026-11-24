@@ -254,7 +254,7 @@
 
     // The locale font is only used for the homepage hero heading. Ask Google Fonts
     // for that heading's glyphs only instead of downloading every CJK subset.
-    const subsetText = document.querySelector('.hero-content h1')?.textContent?.replace(/\s+/g, ' ').trim() || '';
+    const subsetText = document.querySelector('.hero-content h1')?.innerText?.replace(/\s+/g, ' ').trim() || '';
     addFont(localeFont.family, localeFont.familyName, subsetText);
   };
   ensureZshFonts();
