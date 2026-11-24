@@ -46,6 +46,5 @@ jobs:
           name: seo-metadata-live-audit
           path: |
             seo-orphan-page-audit/
-            sitemap-live-smoke-report/
           if-no-files-found: warn
           retention-days: 30
