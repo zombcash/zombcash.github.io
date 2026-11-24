@@ -1,0 +1,38 @@
+name: Localized sitemap route consistency smoke
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "language.js"
+      - "shared-nav.js"
+      - "robots.txt"
+      - "sitemap.xml"
+      - "sitemap-*.xml"
+      - "tests/language-route-sitemap-smoke.py"
+      - ".github/workflows/language-route-sitemap-smoke.yml"
+  push:
+    branches: [main]
+    paths:
+      - "language.js"
+      - "shared-nav.js"
+      - "robots.txt"
+      - "sitemap.xml"
+      - "sitemap-*.xml"
+      - "tests/language-route-sitemap-smoke.py"
+      - ".github/workflows/language-route-sitemap-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  route-smoke:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compare every localized sitemap URL with all three route maps
+        run: python tests/language-route-sitemap-smoke.py
