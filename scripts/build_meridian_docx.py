@@ -114,6 +114,8 @@ def build(lang, output_dir):
     set_document_styles(doc)
     title_soup = page_soup(lang, FILES[0])
     book_title = visible_title(title_soup) or "THE MERIDIAN OF ASH"
+    if "THE MERIDIAN OF ASH" not in book_title.upper():
+        raise RuntimeError(f"Protected book title missing or mistranslated: {book_title}")
     subtitle = title_soup.select_one(".wrap .subtitle")
     dek = title_soup.select_one(".wrap .dek")
     epigraph = title_soup.select_one(".wrap blockquote")
