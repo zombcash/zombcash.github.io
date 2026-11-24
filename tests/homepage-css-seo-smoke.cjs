@@ -20,6 +20,7 @@ for (const file of pages) {
   assert.doesNotMatch(html, /brand-search-aliases/i, file + ': artificial brand-alias paragraph remains');
   const heroCss = html.match(/<style id="zombcash-hero-v8-inline">([\s\S]*?)<\/style>/i)?.[1] || '';
   assert.ok(heroCss.length > 0, file + ': hero CSS block missing');
+  assert.doesNotMatch(heroCss, /@(?:media|supports|container|layer)[^{]*\\{\\s*\\}/i, file + ': empty responsive CSS wrapper remains');
   const obsoleteHeroClasses = [
     'hero-mascot', 'mascot-orbit', 'mascot-hand', 'mascot-caption', 'mascot-signal',
     'hero-mascot-v9', 'hero-character-glow', 'hero-character-grid', 'hero-character-label',
