@@ -1654,9 +1654,9 @@ body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{grid-
       <h2 id="zc-promo-title">进入亡者互联网。</h2>
       <p>探索 ZombieCash 世界，体验各项工具，加入幸存者队伍。</p>
       <div class="zc-promo-video-controls" aria-label="Promo video navigation">
-        <button type="button" id="zc-promo-prev" disabled aria-label="Previous promo video">← 上一页</button>
+        <button type="button" id="zc-promo-prev" disabled>← 上一页</button>
         <span id="zc-promo-count" aria-live="polite">正在加载视频库…</span>
-        <button type="button" id="zc-promo-next" disabled aria-label="Next promo video">下一页 →</button>
+        <button type="button" id="zc-promo-next" disabled>下一页 →</button>
       </div>
       <p class="zc-promo-video-note" id="zc-promo-status" role="status">正在加载最新播报…</p>
       <a class="zc-promo-video-release" id="zc-promo-release" href="https://github.com/zombcash/zombcash.github.io/releases" target="_blank" rel="noopener noreferrer">查看全部视频 ↗</a>
@@ -1726,7 +1726,7 @@ body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{grid-
           <button type="button" class="zrai-period" data-radar-period="h1" aria-pressed="false">1小时</button>
           <button type="button" class="zrai-period" data-radar-period="h24" aria-pressed="false">24小时</button>
         </div>
-        <button type="button" id="zombie-radar-ai-refresh" class="zrai-refresh" aria-label="刷新推荐">↻ 刷新</button>
+        <button type="button" id="zombie-radar-ai-refresh" class="zrai-refresh">↻ 刷新</button>
       </div>
       <div class="zrai-period-note" id="zombie-radar-ai-period-note">动量与活跃度 · 最近5分钟</div>
       <div id="zombie-radar-ai-list" class="zrai-list" aria-live="polite">
@@ -1755,7 +1755,7 @@ body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{grid-
 <section class="section intro" id="outbreak">
   <div class="section-kicker">[ 01 / 灾后世界 ]</div>
   <div class="intro-row"><h2>加密世界已成鬼城。</h2><p>幸好我们带了铲子。ZombieCash 不只是一个代币代码，更是一个不断成长的社区空间，汇集工具、游戏、梗图和幸存者。没有水晶球，也不承诺价格暴涨，只有实用工具和亡者幽默。</p></div>
-  <div class="outbreak-panel" aria-label="Live ZombieCash system status"><div class="outbreak-icon" aria-hidden="true">☣</div><div class="outbreak-copy"><span class="mini-label">ZOMBIECASH 系统状态</span><h3 id="outbreak-status">正在检查实时系统</h3><p id="outbreak-message">正在连接市场数据和社区动态…</p><div class="outbreak-service-list" aria-live="polite"><span><i id="service-market-dot"></i> 市场 <b id="service-market">检查中</b></span><span><i id="service-api-dot"></i> API <b id="service-api">检查中</b></span><span><i id="service-community-dot"></i> 社区 <b id="service-community">检查中</b></span></div></div><div class="status-meter"><div class="meter-label"><span>24H 市场 SWING</span><b id="chaos-value">—</b></div><div class="meter" role="progressbar" aria-label="Absolute 24-hour ZombieCash price movement" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="meter-fill"></span></div><small id="status-meter-note">等待已验证的市场数据</small><div class="outbreak-mini-stats"><span>今日访问 <b id="outbreak-visits-today">—</b></span><span>24H 交易量 <b id="outbreak-volume">—</b></span></div><p class="outbreak-disclaimer">市场波动指24小时价格绝对变化，最高按100%显示。它不是风险评分，也不是交易信号。</p></div></div></section>
+  <div class="outbreak-panel" aria-label="Live ZombieCash system status"><div class="outbreak-icon" aria-hidden="true">☣</div><div class="outbreak-copy"><span class="mini-label">ZOMBIECASH 系统状态</span><h3 id="outbreak-status">正在检查实时系统</h3><p id="outbreak-message">正在连接市场数据和社区动态…</p><div class="outbreak-service-list" aria-live="polite"><span><i id="service-market-dot" aria-hidden="true"></i> 市场 <b id="service-market">检查中</b></span><span><i id="service-api-dot" aria-hidden="true"></i> API <b id="service-api">检查中</b></span><span><i id="service-community-dot" aria-hidden="true"></i> 社区 <b id="service-community">检查中</b></span></div></div><div class="status-meter"><div class="meter-label"><span>24H 市场 SWING</span><b id="chaos-value">—</b></div><div class="meter" role="progressbar" aria-label="Absolute 24-hour ZombieCash price movement" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="meter-fill"></span></div><small id="status-meter-note">等待已验证的市场数据</small><div class="outbreak-mini-stats"><span>今日访问 <b id="outbreak-visits-today">—</b></span><span>24H 交易量 <b id="outbreak-volume">—</b></span></div><p class="outbreak-disclaimer">市场波动指24小时价格绝对变化，最高按100%显示。它不是风险评分，也不是交易信号。</p></div></div></section>
 <section class="section tools" id="radar">
   <div class="section-kicker">[ 02 / 你的生存装备 ]</div><div class="section-heading"><h2>末日生存工具箱。</h2><p>三条入口，同一个亡者互联网。选择你的下一步行动。</p></div>
   <div class="tool-grid">
@@ -1900,7 +1900,7 @@ body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{grid-
 <footer id="site-footer" class="site-footer">
   <div class="site-footer-main">
     <div class="site-footer-brand">
-      <a class="brand footer-brand" href="#home" aria-label="ZombieCash — back to top"><span class="brand-mark">☣</span><span>ZOMBIE<span class="green">CASH</span><small>亡者互联网</small></span></a>
+      <a class="brand footer-brand" href="#home" aria-label="ZOMBIECASH — back to top"><span class="brand-mark">☣</span><span>ZOMBIE<span class="green">CASH</span><small>亡者互联网</small></span></a>
       <p>为亡者而建，由社区驱动。</p>
       <div class="footer-contract"><span>SOLANA 官方合约</span><code>6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump</code><button type="button" id="footer-copy-ca" aria-label="Copy official token contract">复制 ↗</button></div><div class="copy-feedback" id="footer-copy-feedback" aria-live="polite"></div>
     </div>
