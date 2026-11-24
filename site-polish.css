@@ -180,9 +180,6 @@ body{
  box-shadow:0 0 55px rgba(145,166,126,.22),0 0 160px rgba(74,104,84,.12);
  opacity:.42;
 }
-.hero-zombie{opacity:.38;filter:grayscale(.45)}
-.hero-zombie:before{color:#a6b895;text-shadow:0 0 25px rgba(177,198,154,.24),10px 10px 0 #241f2c}
-.hero-zombie:after{border-color:rgba(177,198,154,.12)}
 .hero-stats strong{color:#b4c59f}
 .ticker{background:#a9bf91;color:#101610}
 .outbreak-panel,.tool-card,.crew-card,.zom-market-panel,.campaign-card,.campaign-panel{
@@ -210,7 +207,6 @@ body{
 @media(max-width:760px){
  .hero{min-height:620px}
  .moon{width:270px;height:270px;right:-3%;top:9%}
- .hero-zombie{width:55%;opacity:.24}
 }
 
 
