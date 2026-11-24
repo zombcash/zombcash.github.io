@@ -82,6 +82,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=optional" rel="stylesheet">
 <link rel="stylesheet" href="/style.css?v=tools-card-bg-20261110-1">
 <style id="zombcash-hero-v8-inline">
+
 /* Removed 171 obsolete hero-art selector rules after checking homepage markup and loaded scripts. */
 
 /* V8 emergency inline hero override: intentionally distinct from cached external CSS */
@@ -135,17 +136,9 @@ h1{font-size:clamp(48px,4.45vw,66px)!important;line-height:.98!important;letter-
 .hero-stats{gap:14px!important}
 .hero-bottom{bottom:9px!important;left:7%!important;right:7%!important;padding-top:9px!important;font-size:8px!important}
 @media(max-width:950px){.hero{height:auto!important;min-height:650px!important;padding:48px 5% 60px!important;grid-template-columns:minmax(0,1fr) minmax(0,.9fr)!important}h1{font-size:clamp(43px,5vw,58px)!important}}
-@media(max-width:680px){.hero{height:auto!important;max-height:none!important;min-height:0!important;padding:40px 5% 0!important;display:flex!important;flex-direction:column!important;gap:12px!important;overflow:hidden!important}.hero-content{max-width:none!important}.hero:before{display:none!important}h1{font-size:clamp(40px,11vw,58px)!important;line-height:1!important;margin:19px 0 15px!important}.hero-copy{font-size:17px!important}.hero-actions{margin:19px 0 20px!important}.hero-stats{margin-bottom:5px!important}.hero-bottom{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;width:100%!important;margin-top:0!important;padding:12px 0!important}.hero-bottom span:nth-child(2),.hero-bottom span:last-child{display:none!important}}/* V10 polish: add cinematic depth and purple edge-light without changing the layout */
-/* V11: actual cinematic artwork replaces the placeholder SVG */
-
-@media(max-width:680px){}/* V14: remove unreliable bitmap artwork; use a crisp native neon emblem */
+@media(max-width:680px){.hero{height:auto!important;max-height:none!important;min-height:0!important;padding:40px 5% 0!important;display:flex!important;flex-direction:column!important;gap:12px!important;overflow:hidden!important}.hero-content{max-width:none!important}.hero:before{display:none!important}h1{font-size:clamp(40px,11vw,58px)!important;line-height:1!important;margin:19px 0 15px!important}.hero-copy{font-size:17px!important}.hero-actions{margin:19px 0 20px!important}.hero-stats{margin-bottom:5px!important}.hero-bottom{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;width:100%!important;margin-top:0!important;padding:12px 0!important}.hero-bottom span:nth-child(2),.hero-bottom span:last-child{display:none!important}}/* V14: remove unreliable bitmap artwork; use a crisp native neon emblem */
 
 @keyframes heroOrbit{to{transform:rotate(360deg)}}
-@media(max-width:680px){}/* V15: use the actual ZombieCash cash-hand coin mark in the hero */
-
-@media(max-width:680px){}/* V16: restore the previous trader artwork; keep the small original hand coin mark */
-
-@media(max-width:680px){}
 
 
 /* V17: text-first full-width hero; no character illustration, only small coin emblem */
@@ -253,10 +246,7 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 .outbreak-panel:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 5px,#b4ff4908 6px);pointer-events:none;z-index:-1}
 @keyframes panelOrbit{to{transform:rotate(360deg)}}@keyframes signalPulse{from{opacity:.35;transform:scaleY(.65)}to{opacity:.95;transform:scaleY(1)}}
 @media(max-width:900px){.hero-layout{grid-template-columns:minmax(0,1fr) minmax(250px,.72fr)!important;gap:22px!important}h1{font-size:clamp(44px,6.3vw,70px)!important}}
-@media(max-width:680px){.hero{padding:32px 5% 92px!important;min-height:auto!important}.hero-layout{grid-template-columns:1fr!important;gap:30px!important}.hero-content{grid-row:1}.outbreak-panel{grid-row:2}.hero-copy{max-width:100%!important}.hero-stats{gap:13px!important}.hero-bottom{display:none!important}}/* V23: replace the letter mark with a clean tactical targeting reticle */
-
-@media(max-width:900px){}
-@media(max-width:680px){}
+@media(max-width:680px){.hero{padding:32px 5% 92px!important;min-height:auto!important}.hero-layout{grid-template-columns:1fr!important;gap:30px!important}.hero-content{grid-row:1}.outbreak-panel{grid-row:2}.hero-copy{max-width:100%!important}.hero-stats{gap:13px!important}.hero-bottom{display:none!important}}
 
 
 /* Zombie-Maker homepage promotion */
@@ -359,6 +349,7 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
  section.section.mini-game#snake-game>.leaderboard-card{grid-column:auto!important}
 }
 @media(max-width:560px){section.section.mini-game#snake-game>.arcade-feature{grid-template-columns:minmax(0,1fr)}}
+
 
 </style>
 
