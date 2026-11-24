@@ -152,7 +152,7 @@ def build(lang, output_dir):
     props.author = "ZombieCash Fiction"
     props.comments = "Machine-translated editorial draft. Not approved for public release."
     output_dir.mkdir(parents=True, exist_ok=True)
-    target = output_dir / f"THE_MERIDIAN_OF_ASH_Book_I_{lang}.docx"
+    target = output_dir / f"THE_MERIDIAN_OF_ASH_Book_I_{lang.upper()}.docx"
     doc.save(target)
     print(f"CREATED {target} bytes={target.stat().st_size}", flush=True)
 
