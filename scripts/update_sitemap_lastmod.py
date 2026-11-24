@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Refresh sitemap.xml lastmod values from the latest Git commit for each page."""
+"""Refresh managed sitemap lastmod values from the latest Git commit for each page."""
 from __future__ import annotations
 
 import argparse
@@ -10,13 +10,15 @@ from urllib.parse import unquote, urlparse
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
-SITEMAP_PATH = ROOT / "sitemap.xml"
+SITEMAP_PATHS = (
+    ROOT / "sitemap.xml",
+    ROOT / "sitemap-zombie-fiction.xml",
+)
 SITE_ORIGIN = "https://zombcash.github.io"
 SITEMAP_NS = "http://www.sitemaps.org/schemas/sitemap/0.9"
-XHTML_NS = "http://www.w3.org/1999/xhtml"
 
 ET.register_namespace("", SITEMAP_NS)
-ET.register_namespace("xhtml", XHTML_NS)
+ET.register_namespace("xhtml", "http://www.w3.org/1999/xhtml")
 
 
 def local_path_for_url(url: str) -> str:
@@ -55,17 +57,17 @@ def latest_git_date(relative_path: str) -> str:
         raise RuntimeError(f"Invalid Git commit timestamp for {relative_path}: {timestamp}") from error
 
 
-def sitemap_records():
-    tree = ET.parse(SITEMAP_PATH)
+def sitemap_records(sitemap_path: Path):
+    tree = ET.parse(sitemap_path)
     root = tree.getroot()
     if root.tag != f"{{{SITEMAP_NS}}}urlset":
-        raise ValueError(f"Unexpected sitemap root: {root.tag}")
+        raise ValueError(f"Unexpected sitemap root in {sitemap_path.name}: {root.tag}")
 
     records = []
     for url_node in root.findall(f"{{{SITEMAP_NS}}}url"):
         loc_node = url_node.find(f"{{{SITEMAP_NS}}}loc")
         if loc_node is None or not (loc_node.text or "").strip():
-            raise ValueError("A sitemap URL entry is missing its loc value.")
+            raise ValueError(f"A sitemap URL entry is missing its loc value in {sitemap_path.name}.")
         url = loc_node.text.strip()
         relative_path = local_path_for_url(url)
         expected = latest_git_date(relative_path)
@@ -76,41 +78,58 @@ def sitemap_records():
 
 
 def refresh(check_only: bool = False) -> int:
-    tree, records = sitemap_records()
-    changed = []
-    for url_node, url, relative_path, lastmod_node, actual, expected in records:
-        if actual == expected:
-            continue
-        changed.append((url, relative_path, actual or "(missing)", expected))
-        if not check_only:
-            if lastmod_node is None:
-                lastmod_node = ET.Element(f"{{{SITEMAP_NS}}}lastmod")
-                loc_node = url_node.find(f"{{{SITEMAP_NS}}}loc")
-                url_node.insert(list(url_node).index(loc_node) + 1, lastmod_node)
-            lastmod_node.text = expected
+    total_records = 0
+    total_changed = 0
+    all_changes = []
 
-    print(f"Sitemap HTML URLs: {len(records)}")
-    print(f"lastmod values needing refresh: {len(changed)}")
-    for url, relative_path, actual, expected in changed:
-        print(f"{relative_path}: {actual} -> {expected} ({url})")
+    for sitemap_path in SITEMAP_PATHS:
+        tree, records = sitemap_records(sitemap_path)
+        changed = []
+        total_records += len(records)
+
+        for url_node, url, relative_path, lastmod_node, actual, expected in records:
+            if actual == expected:
+                continue
+            changed.append((url_node, url, relative_path, lastmod_node, actual, expected))
+
+        total_changed += len(changed)
+        print(f"{sitemap_path.name} HTML URLs: {len(records)}")
+        print(f"{sitemap_path.name} lastmod values needing refresh: {len(changed)}")
+
+        for _, url, relative_path, _, actual, expected in changed:
+            print(f"{sitemap_path.name}: {relative_path}: {actual or '(missing)'} -> {expected} ({url})")
+
+        all_changes.extend((sitemap_path.name, relative_path, actual or "(missing)", expected) for _, _, relative_path, _, actual, expected in changed)
+
+        if not check_only and changed:
+            for url_node, _, _, lastmod_node, _, expected in changed:
+                if lastmod_node is None:
+                    lastmod_node = ET.Element(f"{{{SITEMAP_NS}}}lastmod")
+                    loc_node = url_node.find(f"{{{SITEMAP_NS}}}loc")
+                    url_node.insert(list(url_node).index(loc_node) + 1, lastmod_node)
+                lastmod_node.text = expected
+
+            ET.indent(tree, space="  ")
+            tree.write(sitemap_path, encoding="utf-8", xml_declaration=True)
+            print(f"Updated {len(changed)} lastmod values in {sitemap_path.name}.")
+
+    print(f"Managed sitemap HTML URLs: {total_records}")
+    print(f"Total lastmod values needing refresh: {total_changed}")
 
     if check_only:
-        if changed:
-            raise SystemExit(f"FAIL: {len(changed)} sitemap lastmod values do not match Git history.")
-        print("PASS: every sitemap lastmod matches the latest Git commit for its HTML file.")
-        return 0
-
-    if changed:
-        ET.indent(tree, space="  ")
-        tree.write(SITEMAP_PATH, encoding="utf-8", xml_declaration=True)
-        print(f"Updated {len(changed)} lastmod values in {SITEMAP_PATH.name}.")
+        if all_changes:
+            raise SystemExit(f"FAIL: {len(all_changes)} managed sitemap lastmod values do not match Git history.")
+        print("PASS: every managed sitemap lastmod matches the latest Git commit for its HTML page.")
+    elif total_changed:
+        print(f"Updated {total_changed} lastmod values across {len(SITEMAP_PATHS)} managed sitemaps.")
     else:
-        print("Sitemap lastmod values are already current.")
-    return len(changed)
+        print("All managed sitemap lastmod values are already current.")
+
+    return total_changed
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--check", action="store_true", help="Fail if any sitemap lastmod differs from Git history.")
+    parser.add_argument("--check", action="store_true", help="Fail if any managed sitemap lastmod differs from Git history.")
     args = parser.parse_args()
     refresh(check_only=args.check)
