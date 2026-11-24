@@ -6,7 +6,7 @@ const assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '..');
 const source = fs.readFileSync(path.join(root, 'homepage-ribbons.js'), 'utf8');
 const start = source.indexOf('function updateCrypto(){');
-const end = source.indexOf('\\n function updateFx()', start);
+const end = source.indexOf('function updateFx()', start);
 assert.ok(start >= 0 && end > start, 'homepage crypto updater must exist');
 const updateCryptoSource = source.slice(start, end);
 
