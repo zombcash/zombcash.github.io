@@ -35,9 +35,6 @@ body:has(#home) .world-panel-foot{background:#080e0deF}
 
 /* Keep the real reserved ad formats visible; legacy 90px rules must not clip 300x250 desktop slots. */
 @media (min-width:901px){
- body:has(#home) .zc-hero-ad-stage{box-sizing:border-box!important;display:block!important;width:100%!important;height:250px!important;min-height:250px!important;max-height:250px!important;flex:0 0 250px!important;overflow:hidden!important}
- body:has(#home) .zc-adsterra-grid{box-sizing:border-box!important;display:grid!important;grid-template-columns:repeat(2,300px)!important;grid-template-rows:250px!important;justify-content:center!important;gap:12px!important;width:100%!important;height:250px!important;min-height:250px!important}
- body:has(#home) .zc-adsterra-slot{box-sizing:border-box!important;display:flex!important;width:300px!important;min-width:300px!important;height:250px!important;min-height:250px!important}
 }
 
 /* Use existing ZombieCash survivor art instead of the empty tactical-image placeholder. */
@@ -92,12 +89,6 @@ body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
   height:auto!important;min-height:0!important;max-height:none!important;
   margin:0!important;padding:10px!important;overflow:hidden!important;
 }
-body:has(#home) #home > section.hero .zc-hero-sponsor{
-  display:flex!important;flex-direction:column!important;align-items:stretch!important;
-  justify-content:flex-start!important;gap:12px!important;width:100%!important;
-  min-width:0!important;height:auto!important;min-height:0!important;
-}
-body:has(#home) #home > section.hero .zc-hero-ad-stage{max-width:100%!important}
 body:has(#home) #home > section.hero .zc-sponsor-art-slot{
   width:100%!important;height:clamp(220px,22vw,310px)!important;
   min-height:220px!important;max-height:310px!important;
@@ -105,10 +96,6 @@ body:has(#home) #home > section.hero .zc-sponsor-art-slot{
 }
 body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
   object-fit:cover!important;object-position:center 28%!important;
-}
-body:has(#home) #home > section.hero .zc-hero-sponsor-promo{
-  flex:0 0 auto!important;min-height:0!important;height:auto!important;
-  padding:clamp(18px,2vw,26px)!important;gap:10px!important;
 }
 body:has(#home) #home > section.hero .hero-stats{
   width:min(100%,1440px)!important;margin:clamp(22px,2.5vw,34px) auto 0!important;
@@ -142,27 +129,11 @@ body:has(#home) #home > section.hero .hero-bottom{
   body:has(#home) #home > section.hero .zc-sponsor-art-slot{
     height:clamp(190px,62vw,260px)!important;min-height:190px!important;max-height:260px!important;
   }
-  body:has(#home) #home > section.hero .zc-hero-sponsor-promo{padding:18px 14px!important}
   body:has(#home) #home > section.hero .hero-stats{margin-top:22px!important}
 }
 
 /* Narrow-phone banner safety: scale the fixed 320x50 ad into the actual 260px content width. */
 @media(max-width:340px){
-  body:has(#home) #home > section.hero .zc-hero-ad-stage{
-    box-sizing:border-box!important;display:flex!important;
-    flex:0 1 auto!important;width:100%!important;min-width:0!important;
-    max-width:100%!important;height:auto!important;min-height:0!important;
-    max-height:none!important;aspect-ratio:320 / 50!important;
-    overflow:hidden!important;
-  }
-  body:has(#home) #home > section.hero .zc-hero-ad-unit{
-    flex:0 0 320px!important;width:320px!important;min-width:320px!important;
-    margin-inline:auto!important;transform:scale(.8125)!important;
-    transform-origin:center center!important;
-  }
-  body:has(#home) #home > section.hero .zc-hero-ad-unit iframe{
-    width:320px!important;min-width:320px!important;height:50px!important;
-  }
 }
 
 
@@ -1627,17 +1598,6 @@ body:has(#home) #home .zctv-player-column {
 
 /* Desktop native sponsor unit is 300px tall; never clip it inside the legacy 250px banner reservation. */
 @media (min-width: 768px) {
-  body:has(#home) #home > section.hero .zc-hero-ad-stage {
-    box-sizing: border-box !important;
-    display: block !important;
-    width: 100% !important;
-    height: 300px !important;
-    min-height: 300px !important;
-    max-height: 300px !important;
-    flex: 0 0 300px !important;
-    overflow: visible !important;
-  }
-  body:has(#home) #home > section.hero .zc-adsterra-native-slot,
   body:has(#home) #home > section.hero #container-4420dadadbd2f0727c322cd6c632be3e {
     box-sizing: border-box !important;
     display: block !important;
@@ -1652,13 +1612,6 @@ body:has(#home) #home .zctv-player-column {
 }
 
 @media (min-width: 768px) {
-  body:has(#home) #home > section.hero .zc-adsterra-mobile-slot,
-  body:has(#home) #home > section.hero .zc-adsterra-grid {
-    display: none !important;
-  }
-  body:has(#home) #home > section.hero .zc-adsterra-native-slot {
-    display: block !important;
-  }
 }
 
 
@@ -2156,17 +2109,6 @@ html body:has(main#home) > main#home > section{
   box-sizing:border-box!important;width:100%!important;max-width:none!important;
   min-width:0!important;margin-inline:0!important;
 }
-html body:has(main#home) > main#home > section > :is(
-  .hero-layout,.field-manual-spotlight-inner,.zc-promo-video-shell,.zctv-inner,
-  .world-grid,.intro-row,.outbreak-panel,.tool-grid,.section-heading,
-  .crew-grid,.arcade-feature,.transmission-box,.site-visits-inner,
-  .campaign-dashboard-inner
-){
-  box-sizing:border-box!important;
-  width:min( calc(100% - 48px), 1440px )!important;
-  max-width:1440px!important;min-width:0!important;
-  margin-left:auto!important;margin-right:auto!important;
-}
 html body:has(main#home) > main#home > section.section{
   padding-left:0!important;padding-right:0!important;
 }
@@ -2196,29 +2138,17 @@ html body:has(main#home) > main#home :is(
   min-width:0;
 }
 @media(max-width:900px){
-  html body:has(main#home) > main#home > section > :is(
-    .hero-layout,.field-manual-spotlight-inner,.zc-promo-video-shell,.zctv-inner,
-    .world-grid,.intro-row,.outbreak-panel,.tool-grid,.section-heading,
-    .crew-grid,.arcade-feature,.transmission-box,.site-visits-inner,
-    .campaign-dashboard-inner
-  ),
   html body:has(main#home) > main#home > section.section > :is(
-    .section-kicker,.section-heading,.intro-row,.outbreak-panel,.tool-grid,
-    .world-grid,.crew-grid,.arcade-feature,.transmission-box
+    .section-kicker, .section-heading, .intro-row, .outbreak-panel, .tool-grid, 
+    .world-grid, .crew-grid, .arcade-feature, .transmission-box
   ){
     width:calc(100% - 32px)!important;max-width:760px!important;
   }
 }
 @media(max-width:600px){
-  html body:has(main#home) > main#home > section > :is(
-    .hero-layout,.field-manual-spotlight-inner,.zc-promo-video-shell,.zctv-inner,
-    .world-grid,.intro-row,.outbreak-panel,.tool-grid,.section-heading,
-    .crew-grid,.arcade-feature,.transmission-box,.site-visits-inner,
-    .campaign-dashboard-inner
-  ),
   html body:has(main#home) > main#home > section.section > :is(
-    .section-kicker,.section-heading,.intro-row,.outbreak-panel,.tool-grid,
-    .world-grid,.crew-grid,.arcade-feature,.transmission-box
+    .section-kicker, .section-heading, .intro-row, .outbreak-panel, .tool-grid, 
+    .world-grid, .crew-grid, .arcade-feature, .transmission-box
   ){
     width:calc(100% - 24px)!important;max-width:520px!important;
   }
@@ -2228,16 +2158,9 @@ html body:has(main#home) > main#home :is(
   }
 }
 @media(min-width:1800px){
-  /* Override legacy 90vw/5600px zoom-out compensation consistently. */
-  html body:has(main#home) > main#home > section > :is(
-    .hero-layout,.field-manual-spotlight-inner,.zc-promo-video-shell,.zctv-inner,
-    .world-grid,.intro-row,.outbreak-panel,.tool-grid,.section-heading,
-    .crew-grid,.arcade-feature,.transmission-box,.site-visits-inner,
-    .campaign-dashboard-inner
-  ),
   html body:has(main#home) > main#home > section.section > :is(
-    .section-kicker,.section-heading,.intro-row,.outbreak-panel,.tool-grid,
-    .world-grid,.crew-grid,.arcade-feature,.transmission-box
+    .section-kicker, .section-heading, .intro-row, .outbreak-panel, .tool-grid, 
+    .world-grid, .crew-grid, .arcade-feature, .transmission-box
   ){
     width:min(calc(100% - 48px),1440px)!important;
     max-width:1440px!important;margin-inline:auto!important;
@@ -2346,17 +2269,11 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
    rail. This preserves readable proportions at browser zoom levels such as
    20% without allowing one section to grow while its neighbours stay narrow. */
 @media(min-width:1800px){
-  html body:has(main#home) > main#home > section > :is(
-    .hero-layout,.field-manual-spotlight-inner,.zc-promo-video-shell,.zctv-inner,
-    .world-grid,.intro-row,.outbreak-panel,.tool-grid,.section-heading,
-    .crew-grid,.arcade-feature,.transmission-box,.site-visits-inner,
-    .campaign-dashboard-inner
-  ),
   html body:has(main#home) > main#home > section.section > :is(
-    .section-kicker,.section-heading,.intro-row,.outbreak-panel,.tool-grid,
-    .world-grid,.crew-grid,.arcade-feature,.transmission-box
-  ),
-  html body:has(main#home) > main#home > section.section > .section-heading,
+    .section-kicker, .section-heading, .intro-row, .outbreak-panel, .tool-grid, 
+    .world-grid, .crew-grid, .arcade-feature, .transmission-box
+  ), 
+  html body:has(main#home) > main#home > section.section > .section-heading, 
   html body:has(main#home) > main#home > section.section > .section-kicker{
     width:min(90vw,5600px)!important;
     max-width:5600px!important;
@@ -2436,26 +2353,10 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     min-width: 0;
     padding: clamp(14px, .65vw, 52px);
   }
-  body:has(main#home) #home > .hero .zc-hero-sponsor-label {
-    font-size: clamp(9px, .34vw, 27px);
-  }
-  body:has(main#home) #home > .hero .zc-hero-sponsor-promo h2 {
-    font-size: clamp(21px, 1.05vw, 84px);
-  }
-  body:has(main#home) #home > .hero .zc-hero-sponsor-promo p:not(.zc-hero-sponsor-kicker) {
-    max-width: 1800px;
-    font-size: clamp(15px, .56vw, 45px);
-  }
-  body:has(main#home) #home > .hero .zc-hero-sponsor-promo a {
-    min-height: clamp(38px, 2.4vw, 100px);
-    padding-inline: clamp(18px, .8vw, 64px);
-    font-size: clamp(9px, .38vw, 30px);
-  }
 
-  body:has(main#home) #home > .section,
-  body:has(main#home) #home > section.section,
-  body:has(main#home) #home > .living-world,
-  body:has(main#home) #home > .world-section {
+  body:has(main#home) #home > .section, 
+  body:has(main#home) #home > section.section, 
+  body:has(main#home) #home > .living-world{
     width: 100%;
     max-width: min(94vw, 7200px);
     margin-inline: auto;
@@ -2497,9 +2398,8 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   body:has(main#home) #home .section-kicker {
     font-size: clamp(9px, .38vw, 30px);
   }
-  body:has(main#home) #home .zombie-maker-promo,
-  body:has(main#home) #home .zc-promo-video-shell,
-  body:has(main#home) #home .zc-promo-video-inner {
+  body:has(main#home) #home .zombie-maker-promo, 
+  body:has(main#home) #home .zc-promo-video-shell{
     width: min(94vw, 6800px);
     max-width: 6800px;
   }
@@ -2571,8 +2471,7 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   html body:has(main#home) main#home > section.hero > .hero-layout > .zc-hero-art-panel {
     width:100%!important; max-width:none!important; min-width:0!important;
   }
-  html body:has(main#home) main#home > section.hero .hero-content h1,
-  html body:has(main#home) main#home > section.hero .hero-content .hero-title {
+  html body:has(main#home) main#home > section.hero .hero-content h1{
     max-width:100%!important;
     font-size:clamp(76px,3.6vw,290px)!important;
     line-height:.98!important;
@@ -2588,12 +2487,6 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     min-height:clamp(44px,2.4vw,96px)!important;
     padding:clamp(12px,.55vw,44px) clamp(18px,.8vw,64px)!important;
     font-size:clamp(11px,.42vw,34px)!important;
-  }
-  html body:has(main#home) main#home > section.hero .zc-hero-sponsor-promo h2 {
-    font-size:clamp(28px,1.15vw,92px)!important;
-  }
-  html body:has(main#home) main#home > section.hero .zc-hero-sponsor-promo p {
-    font-size:clamp(16px,.58vw,46px)!important;
   }
 
   html body:has(main#home) main#home section.section.tools#radar {
@@ -2661,9 +2554,8 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   html body:has(main#home) main#home .zombie-maker-promo p {
     font-size:clamp(18px,.65vw,52px)!important;
   }
-  html body:has(main#home) main#home .zc-promo-video,
-  html body:has(main#home) main#home .zc-promo-video-shell,
-  html body:has(main#home) main#home .zc-promo-video-inner {
+  html body:has(main#home) main#home .zc-promo-video, 
+  html body:has(main#home) main#home .zc-promo-video-shell{
     max-width:15000px!important; width:100%!important;
   }
   html body:has(main#home) main#home footer {
@@ -2871,14 +2763,6 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     box-sizing: border-box !important; width: 100% !important; max-width: none !important;
     padding-inline: 4vw !important;
   }
-  html body:has(main#home) > main#home > section > :is(
-    .hero-layout,.field-manual-spotlight-inner,.zc-promo-video-shell,.zctv-inner,
-    .world-grid,.intro-row,.outbreak-panel,.tool-grid,.section-heading,.section-kicker,
-    .crew-grid,.arcade-feature,.transmission-box,.site-visits-inner,.campaign-dashboard-inner
-  ) {
-    box-sizing: border-box !important; width: min(92vw,15000px) !important;
-    max-width: 15000px !important; min-width: 0 !important; margin-inline: auto !important;
-  }
   html body:has(main#home) > main#home > section.hero > .hero-layout {
     grid-template-columns: minmax(0,1.15fr) minmax(0,.85fr) !important;
     gap: clamp(40px,2vw,320px) !important; align-items: stretch !important;
@@ -2886,8 +2770,7 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   html body:has(main#home) > main#home > section.hero .hero-content {
     width: 100% !important; max-width: none !important; min-width: 0 !important;
   }
-  html body:has(main#home) > main#home > section.hero .hero-content h1,
-  html body:has(main#home) > main#home > section.hero .hero-content .hero-title {
+  html body:has(main#home) > main#home > section.hero .hero-content h1{
     width: 100% !important; max-width: 100% !important;
     font-size: clamp(100px,3.4vw,520px) !important; line-height: .98 !important;
     letter-spacing: -.055em !important; overflow-wrap: normal !important;
@@ -2978,20 +2861,19 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   }
 
   /* Override legacy 7,400px rails on nested homepage sections at 20% zoom. */
-  html body:has(main#home) main#home .hero-layout,
-  html body:has(main#home) main#home .field-manual-spotlight-inner,
-  html body:has(main#home) main#home .zc-promo-video-shell,
-  html body:has(main#home) main#home .zctv-inner,
-  html body:has(main#home) main#home .world-grid,
-  html body:has(main#home) main#home .intro-row,
-  html body:has(main#home) main#home .outbreak-panel,
-  html body:has(main#home) main#home .tool-grid,
-  html body:has(main#home) main#home .section-heading,
-  html body:has(main#home) main#home .section-kicker,
-  html body:has(main#home) main#home .crew-grid,
-  html body:has(main#home) main#home .arcade-feature,
-  html body:has(main#home) main#home .transmission-box,
-  html body:has(main#home) main#home .site-visits-inner,
+  html body:has(main#home) main#home .hero-layout, 
+  html body:has(main#home) main#home .zc-promo-video-shell, 
+  html body:has(main#home) main#home .zctv-inner, 
+  html body:has(main#home) main#home .world-grid, 
+  html body:has(main#home) main#home .intro-row, 
+  html body:has(main#home) main#home .outbreak-panel, 
+  html body:has(main#home) main#home .tool-grid, 
+  html body:has(main#home) main#home .section-heading, 
+  html body:has(main#home) main#home .section-kicker, 
+  html body:has(main#home) main#home .crew-grid, 
+  html body:has(main#home) main#home .arcade-feature, 
+  html body:has(main#home) main#home .transmission-box, 
+  html body:has(main#home) main#home .site-visits-inner, 
   html body:has(main#home) main#home .campaign-dashboard-inner {
     box-sizing: border-box !important;
     width: min(92vw,15000px) !important;
@@ -3130,37 +3012,19 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   html body:has(main#home) {
     --zc-homepage-content-rail: min(92vw, 15000px);
   }
-
-  html body:has(main#home) > main#home > section > :is(
-    .hero-layout,
-    .field-manual-spotlight-inner,
-    .zc-promo-video-shell,
-    .zctv-inner,
-    .world-grid,
-    .intro-row,
-    .outbreak-panel,
-    .tool-grid,
-    .section-heading,
-    .section-kicker,
-    .crew-grid,
-    .arcade-feature,
-    .transmission-box,
-    .site-visits-inner,
-    .campaign-dashboard-inner
-  ),
   html body:has(main#home) > main#home > section.section > :is(
-    .section-kicker,
-    .section-heading,
-    .intro-row,
-    .outbreak-panel,
-    .tool-grid,
-    .world-grid,
-    .crew-grid,
-    .arcade-feature,
+    .section-kicker, 
+    .section-heading, 
+    .intro-row, 
+    .outbreak-panel, 
+    .tool-grid, 
+    .world-grid, 
+    .crew-grid, 
+    .arcade-feature, 
     .transmission-box
-  ),
+  ), 
   html body:has(main#home) > footer#site-footer > :is(
-    .site-footer-main,
+    .site-footer-main, 
     .site-footer-bottom
   ) {
     box-sizing: border-box !important;
