@@ -64,7 +64,13 @@ def main():
         for match in re.finditer(r"<style\b[^>]*>([\s\S]*?)</style\s*>", html, re.I):
             if re.search(r"<meta\b", match.group(1), re.I):
                 style_meta.append(match.start())
-        if page_duplicates or style_meta:
+        missing_social = []
+        if path.as_posix() in sitemap_paths:
+            for required in ("twitter:title", "twitter:description"):
+                if not parser.tags.get(required):
+                    missing_social.append(required)
+                    errors.append(f"MISSING: {path.as_posix()}: {required}")
+        if page_duplicates or style_meta or missing_social:
             affected += 1
             print(f"PAGE: {path.as_posix()} (in_sitemap={path.as_posix() in sitemap_paths})")
             for key, values in page_duplicates:
@@ -75,6 +81,8 @@ def main():
             if style_meta:
                 print(f"  META_INSIDE_STYLE: {len(style_meta)} occurrence(s)")
                 errors.append(f"META_INSIDE_STYLE: {path.as_posix()}")
+            for required in missing_social:
+                print(f"  MISSING {required}")
     print(f"Unique sitemap HTML URLs: {len(sitemap_pages)}")
     print(f"Repository HTML files checked: {len(html_files)}")
     print(f"Pages with duplicate/misplaced social metadata: {affected}")
