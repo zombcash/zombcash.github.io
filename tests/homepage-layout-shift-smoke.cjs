@@ -78,6 +78,10 @@ const SITE_URL = process.env.SITE_URL || 'https://zombcash.github.io/';
       };
     });
     console.log('LIVE_HOMEPAGE_LAYOUT_SHIFT_REPORT=' + JSON.stringify(report));
+    const maxCls = Number(process.env.MAX_CLS);
+    if (Number.isFinite(maxCls) && report.cls > maxCls) {
+      throw new Error('Homepage CLS ' + report.cls + ' exceeds the configured budget ' + maxCls);
+    }
   } finally {
     await browser.close();
   }
