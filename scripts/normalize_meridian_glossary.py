@@ -90,8 +90,10 @@ def translate_with_explicit_glossary(model, text, target_code, protected_names):
     output = response["choices"][0]["message"]["content"] or ""
     output = re.sub(r"<think>[\s\S]*?</think>", "", output).strip()
     for name in names:
-        if not re.search(re.escape(name), output, re.I):
+        pattern = re.compile(re.escape(name), re.I)
+        if not pattern.search(output):
             return None, f"explicit_glossary_missing:{name}"
+        output = pattern.sub(lambda match: name, output)
     return output, None
 
 def translate_segment(model, text, target_code):
@@ -283,7 +285,7 @@ def process_all(model, lang, target_code):
             is_book_title = filename == "the-meridian-of-ash.html" and source_p.name == "h1" and source_text.strip().upper() == "THE MERIDIAN OF ASH"
             if not is_book_title:
                 target_text = target_p.get_text(" ", strip=True)
-                if all(re.search(re.escape(term), target_text, re.I) for term in hits):
+                if all(re.search(re.escape(term), target_text) for term in hits):
                     already_ok += 1
                     continue
             if is_book_title:
