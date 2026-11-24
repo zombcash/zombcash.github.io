@@ -1,4 +1,5 @@
 name: Full SEO metadata and live sitemap audit
+# Keep PR runs local-only; live metadata checks run after the branch is deployed.
 
 on:
   pull_request:
