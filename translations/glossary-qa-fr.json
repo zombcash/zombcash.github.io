@@ -4,38 +4,26 @@
   "pages": 48,
   "candidate_blocks": 222,
   "already_normalized_blocks": 216,
-  "repaired_blocks": 1,
-  "skipped_blocks": 5,
+  "repaired_blocks": 3,
+  "skipped_blocks": 3,
   "skipped_items": [
-    {
-      "file": "the-meridian-of-ash-chapter-01.html",
-      "block_index": 134,
-      "source": "The Core's diagnostic began.",
-      "error": "marker_failure:ZXQTERM000QZX"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-02.html",
-      "block_index": 20,
-      "source": "He pulled a portable diagnostic unit from beneath the desk and connected it through the isolated maintenance port. The screen filled with a stream of status messages, most of them routine. The Core had not shut down. Its processes were acti",
-      "error": "marker_failure:ZXQTERM000QZX"
-    },
     {
       "file": "the-meridian-of-ash-chapter-16.html",
       "block_index": 0,
       "source": "CHAPTER SIXTEEN — THE AUDITOR'S PROOF",
-      "error": "marker_failure:ZXQTERM000QZX"
+      "error": "bracketed_glossary_missing:THE AUDITOR"
     },
     {
       "file": "the-meridian-of-ash-chapter-18.html",
       "block_index": 0,
       "source": "CHAPTER EIGHTEEN — THE SAINT ORAN'S LEDGER",
-      "error": "marker_failure:ZXQTERM000QZX"
+      "error": "bracketed_glossary_missing:SAINT ORAN'S"
     },
     {
       "file": "the-meridian-of-ash-chapter-33.html",
       "block_index": 0,
       "source": "CHAPTER THIRTY-THREE — ZOMBIE LAB",
-      "error": "marker_failure:ZXQTERM000QZX"
+      "error": "bracketed_glossary_missing:ZOMBIE LAB"
     }
   ],
   "source_term_hits": {
