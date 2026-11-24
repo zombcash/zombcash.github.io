@@ -1,0 +1,78 @@
+name: Draft Meridian translations (free offline)
+
+on:
+  workflow_dispatch:
+    inputs:
+      language:
+        description: Target language
+        required: true
+        type: choice
+        options: [ru, de, fr, it, ja, zh-CN, tr, hi]
+      chapter:
+        description: all, prologue, or chapter number 01–46
+        required: true
+        default: all
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: meridian-translation-${{ inputs.language }}
+  cancel-in-progress: false
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install free offline translation engine
+        run: python -m pip install --disable-pip-version-check argostranslate==1.11.0 beautifulsoup4==4.13.4
+      - name: Prepare language draft branch
+        env:
+          TARGET_LANGUAGE: ${{ inputs.language }}
+        run: |
+          BRANCH="translation-draft/$TARGET_LANGUAGE"
+          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
+            git fetch origin "$BRANCH"
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+            git merge --no-edit origin/main
+          else
+            git checkout -b "$BRANCH"
+          fi
+          echo "TRANSLATION_BRANCH=$BRANCH" >> "$GITHUB_ENV"
+      - name: Translate selected chapter(s)
+        run: python scripts/translate_meridian_argos.py --language "${{ inputs.language }}" --chapter "${{ inputs.chapter }}"
+      - name: Commit draft and open or update draft PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_LANGUAGE: ${{ inputs.language }}
+          TARGET_CHAPTER: ${{ inputs.chapter }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$TARGET_LANGUAGE/"
+          if git diff --cached --quiet; then
+            echo "No translated files changed."
+            exit 0
+          fi
+          git commit -m "Draft $TARGET_LANGUAGE translation of THE MERIDIAN OF ASH"
+          git push --set-upstream origin "$TRANSLATION_BRANCH"
+          COUNT=$(gh pr list --head "$TRANSLATION_BRANCH" --base main --state open --json number --jq 'length')
+          if [ "$COUNT" = "0" ]; then
+            gh pr create --draft --base main --head "$TRANSLATION_BRANCH" \
+              --title "Draft $TARGET_LANGUAGE translation — THE MERIDIAN OF ASH" \
+              --body "## Machine translation draft\n\nGenerated chapter-by-chapter with the open-source Argos Translate offline model. No paid API or paid service was used.\n\n**This is not publication-ready.** The pages are marked noindex and visibly labeled as machine drafts. Literary editing, character-name/term consistency, dialogue quality, and continuity QA are required before merging and adding these URLs to the fiction sitemap.\n\nRequested scope: $TARGET_CHAPTER."
+          else
+            echo "Updated existing draft PR for $TARGET_LANGUAGE."
+          fi
