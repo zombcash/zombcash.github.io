@@ -1,7 +1,7 @@
 /* ZombieCash homepage visual refresh — additive, homepage-scoped styles only. */
 body:has(#home) .zc-outbreak-ribbons{position:relative;z-index:19;display:grid;gap:5px;padding:7px clamp(10px,2vw,28px);background:#050907;border-bottom:1px solid #25382a}
 body:has(#home) .zc-ribbon{height:34px;display:flex;align-items:center;overflow:hidden;position:relative;border:1px solid var(--ribbon-color);border-radius:9px;background:linear-gradient(90deg,var(--ribbon-tint),#080d0b 52%,#080d0b);box-shadow:0 0 18px color-mix(in srgb,var(--ribbon-color) 16%,transparent),inset 0 0 18px color-mix(in srgb,var(--ribbon-color) 8%,transparent)}
-body:has(#home) .zc-ribbon-label{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:0 14px;height:100%;color:var(--ribbon-color);font:800 10px/1 Orbitron,Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;border-right:1px solid color-mix(in srgb,var(--ribbon-color) 40%,transparent);white-space:nowrap}
+body:has(#home) .zc-ribbon-label{display:flex;align-items:center;gap:8px;padding:0 14px;height:100%;color:var(--ribbon-color);font:800 10px/1 Orbitron,Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;border-right:1px solid color-mix(in srgb,var(--ribbon-color) 40%,transparent);white-space:nowrap}
 body:has(#home) .zc-ribbon-track{display:flex;align-items:center;min-width:max-content;animation:zcRibbonMove var(--ribbon-speed,34s) linear infinite}
 body:has(#home) .zc-ribbon-copy{display:inline-flex;align-items:center;gap:26px;padding-left:26px;color:#d7e3d8;font:600 14px/1.1 Rajdhani,Arial,sans-serif;white-space:nowrap}
 body:has(#home) .zc-ribbon-copy b{color:var(--ribbon-color);font:700 12px Orbitron,Arial,sans-serif}
@@ -62,7 +62,7 @@ body:has(#home) .zc-ribbon-track{position:relative!important;z-index:1!important
 body:has(#home) #home > section.hero{
   box-sizing:border-box!important;
   height:auto!important;min-height:0!important;max-height:none!important;
-  padding:clamp(28px,3.2vw,52px) clamp(22px,4.5vw,72px) 30px!important;
+  
   overflow:visible!important;
 }
 body:has(#home) #home > section.hero > .hero-layout{
@@ -80,7 +80,7 @@ body:has(#home) #home > section.hero > .hero-layout{
 body:has(#home) #home > section.hero > .hero-layout > .hero-content{
   grid-area:content!important;grid-column:1!important;grid-row:1!important;
   align-self:center!important;justify-self:stretch!important;
-  width:100%!important;max-width:760px!important;min-width:0!important;
+  width:100%!important;min-width:0!important;
   margin:0!important;padding:0!important;transform:none!important;
 }
 body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
@@ -169,28 +169,28 @@ body:has(#home) #home > section.hero .hero-bottom{
 /* Responsive tool cards: preserve readable columns instead of squeezing three cards
    into tablet and phone widths. Shared by all nine localized homepages. */
 .tools,.tools .tool-grid,.tools .tool-card{min-width:0;max-width:100%}
-.tools .tool-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch;gap:clamp(14px,1.6vw,24px)!important}
-.tools .tool-card{display:flex;flex-direction:column;width:100%;overflow:hidden}
-.tools .tool-card h3{font-size:clamp(16px,1.4vw,22px);line-height:1.15;overflow-wrap:anywhere}
-.tools .tool-card p{min-height:0;flex:1 1 auto;overflow-wrap:anywhere}
-.tools .tool-card ul{flex:0 0 auto}
+.tools .tool-grid{
+.tools .tool-card{
+.tools .tool-card h3{overflow-wrap:anywhere}
+.tools .tool-card p{overflow-wrap:anywhere}
+.tools .tool-card ul{
 .tools .tool-card .card-link{min-width:0;margin-top:auto;overflow-wrap:anywhere}
-.tools .tool-video-shell{width:100%;min-width:0;height:auto;min-height:0!important;aspect-ratio:16/9}
+.tools .tool-video-shell{min-width:0;
 @media(max-width:1024px){.tools .tool-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
-@media(max-width:640px){.tools .tool-grid{grid-template-columns:minmax(0,1fr)!important;gap:18px!important}.tools .tool-card{padding-inline:clamp(12px,4vw,20px)}.tools .tool-card h3{font-size:clamp(19px,5vw,24px)}}
+@media(max-width:640px){.tools .tool-grid{.tools .tool-card{padding-inline:clamp(12px,4vw,20px)}.tools .tool-card h3{}
 
 
 /* ZOMBCASH tool cards: clean cinematic reveal, compact hierarchy, no visible play affordance. */
 .tools .tool-card{
-  padding:clamp(12px,1.1vw,17px)!important;
-  display:flex!important;
+  
+  
   flex-direction:column!important;
-  min-height:0!important;
+  
   gap:0!important;
 }
 .tools .tool-card .card-top{
   min-height:15px!important;
-  margin:0 0 7px!important;
+  
   gap:6px!important;
   font-size:8px!important;
   line-height:1.1!important;
@@ -239,36 +239,36 @@ body:has(#home) #home > section.hero .hero-bottom{
 .tools .tool-video-shell:focus-within .tool-video-trigger,
 .tools .tool-video-shell.is-playing .tool-video-trigger{opacity:0!important}
 .tools .tool-card h3{
-  margin:0 0 5px!important;
-  font-size:clamp(17px,1.25vw,21px)!important;
-  line-height:1.02!important;
-  letter-spacing:.15px!important;
+  
+  
+  
+  
 }
 .tools .tool-card p{
   flex:0 0 auto!important;
-  min-height:0!important;
-  margin:0 0 7px!important;
-  font-size:clamp(11px,.78vw,13px)!important;
-  line-height:1.3!important;
-  color:#aebbb3!important;
+  
+  
+  
+  
+  
 }
 .tools .tool-card ul{
   flex:0 0 auto!important;
-  margin:5px 0 8px!important;
+  
   padding:0!important;
 }
 .tools .tool-card li{
-  padding:5px 0!important;
-  line-height:1.15!important;
-  font-size:8px!important;
-  letter-spacing:.55px!important;
+  
+  
+  
+  
 }
-.tools .tool-card li:before{margin-right:7px!important}
+.tools .tool-card li:before{
 .tools .tool-card .card-link{
   flex:0 0 auto!important;
-  min-height:31px!important;
-  margin:0!important;
-  padding:7px 9px!important;
+  
+  
+  
   font-size:9px!important;
   line-height:1.1!important;
 }
@@ -453,275 +453,259 @@ body:has(#home) #home > section.hero .hero-bottom{
 
 /* FINAL TOOL PANEL LAYOUT: hard one-column stack, aligned content grid, real graffiti artwork. */
 html body section.section.tools#radar > .tool-grid{
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr)!important;
-  grid-auto-flow:row!important;
-  grid-auto-rows:300px!important;
-  align-items:stretch!important;
-  gap:20px!important;
-  width:100%!important;
-  max-width:100%!important;
+  
+  
+  
+  
+  
+  
+  
+  
   margin-inline:auto!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card{
   --panel-accent:#9bff45;
-  display:grid!important;
-  grid-template-columns:minmax(260px,36%) minmax(0,1fr)!important;
-  grid-template-rows:24px 42px minmax(54px,auto) minmax(55px,1fr) 36px!important;
-  grid-template-areas:
-    "top top"
-    "video title"
-    "video copy"
-    "video features"
-    "video action"!important;
-  align-items:stretch!important;
-  align-content:stretch!important;
-  column-gap:clamp(18px,2.2vw,34px)!important;
-  row-gap:9px!important;
-  box-sizing:border-box!important;
-  width:100%!important;
-  min-width:0!important;
-  min-height:300px!important;
-  height:300px!important;
-  padding:15px clamp(15px,1.8vw,25px)!important;
-  overflow:hidden!important;
-  isolation:isolate!important;
-  position:relative!important;
-  transform:none!important;
-  background:
-    linear-gradient(90deg,#080d0c 0%,#090f0d 46%,#080d0ce8 100%)!important;
-  border:1px solid color-mix(in srgb,var(--panel-accent) 65%,#17231b)!important;
-  box-shadow:0 0 0 1px #000 inset,0 8px 28px #0006!important;
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
-html body section.section.tools#radar > .tool-grid > article.radar-card{--panel-accent:#9bff45}
-html body section.section.tools#radar > .tool-grid > article.lab-card{--panel-accent:#d58aff}
-html body section.section.tools#radar > .tool-grid > article.network-card{--panel-accent:#ff626d}
+html body section.section.tools#radar > .tool-grid > article.radar-card{
+html body section.section.tools#radar > .tool-grid > article.lab-card{
+html body section.section.tools#radar > .tool-grid > article.network-card{
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  content:""!important;
-  position:absolute!important;
-  z-index:0!important;
-  inset:0 0 0 35%!important;
-  display:block!important;
-  pointer-events:none!important;
-  opacity:.30!important;
+  
+  
+  
+  
+  
+  
+  
   background-image:
     linear-gradient(90deg,#080d0c 0%,#080d0c88 23%,#080d0c24 62%,#080d0c10 100%),
     url("/assets/images/tool-radar-outbreak.webp?v=20261109-real-art2")!important;
-  background-repeat:no-repeat!important;
-  background-size:cover!important;
-  background-position:center right!important;
-  filter:saturate(1.12) contrast(1.06) drop-shadow(0 0 12px color-mix(in srgb,var(--panel-accent) 24%,transparent))!important;
-  opacity:.82!important;
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:before{
-  background-image:
-    linear-gradient(90deg,#080d0c 0%,#080d0c88 23%,#080d0c20 62%,#080d0c08 100%),
-    url("/assets/images/tool-zombie-lab.webp?v=20261109-real-art2")!important;
-  background-position:center right!important;
-  filter:saturate(1.18) contrast(1.08)!important;
-  opacity:.82!important;
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:before{
-  background-image:
-    linear-gradient(90deg,#080d0c 0%,#080d0c82 22%,#080d0c18 62%,#080d0c08 100%),
-    url("/assets/images/tool-survivor-network.webp?v=20261109-real-art2")!important;
-  background-position:left center!important;
-  filter:saturate(1.16) contrast(1.08)!important;
-  opacity:.82!important;
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:after{
-  content:""!important;
-  display:none!important;
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-top{
-  grid-area:top!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:space-between!important;
-  width:100%!important;
+  
+  
+  
+  
+  
   min-width:0!important;
-  margin:0!important;
-  padding:0 0 5px!important;
-  border-bottom:1px solid color-mix(in srgb,var(--panel-accent) 34%,transparent)!important;
+  
+  
+  
   position:relative!important;
   z-index:2!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
-  grid-area:video!important;
-  display:block!important;
-  position:relative!important;
-  align-self:stretch!important;
-  width:100%!important;
-  height:100%!important;
-  min-width:0!important;
-  min-height:0!important;
-  max-height:none!important;
-  aspect-ratio:auto!important;
-  margin:0!important;
-  overflow:hidden!important;
-  border:1px solid color-mix(in srgb,var(--panel-accent) 70%,transparent)!important;
-  background:#030706!important;
-  box-shadow:0 0 18px color-mix(in srgb,var(--panel-accent) 10%,transparent)!important;
-  z-index:1!important;
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell video{
-  width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 40%!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > h3{
-  grid-area:title!important;
-  align-self:end!important;
+  
+  
   position:relative!important;
   z-index:2!important;
   min-width:0!important;
-  margin:0!important;
-  padding:0!important;
-  font-size:clamp(20px,1.7vw,27px)!important;
-  line-height:1.02!important;
-  letter-spacing:.2px!important;
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > p{
-  grid-area:copy!important;
-  align-self:start!important;
+  
+  
   position:relative!important;
   z-index:2!important;
   min-width:0!important;
-  width:100%!important;
-  max-width:760px!important;
-  min-height:0!important;
-  margin:0!important;
-  padding:0!important;
-  color:#d0d8d2!important;
-  font-size:clamp(12px,.88vw,14px)!important;
-  line-height:1.45!important;
+  
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > ul{
-  grid-area:features!important;
-  align-self:stretch!important;
+  
+  
   position:relative!important;
   z-index:2!important;
-  display:grid!important;
-  grid-template-columns:repeat(3,minmax(0,1fr))!important;
-  align-items:stretch!important;
-  gap:0 14px!important;
-  min-width:0!important;
-  width:100%!important;
-  margin:0!important;
-  padding:0!important;
-  border-top:1px solid color-mix(in srgb,var(--panel-accent) 45%,transparent)!important;
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li{
-  display:flex!important;
-  align-items:center!important;
-  min-width:0!important;
-  min-height:0!important;
-  margin:0!important;
-  padding:7px 4px!important;
-  border-bottom:1px solid color-mix(in srgb,var(--panel-accent) 26%,transparent)!important;
-  font-size:clamp(8px,.68vw,10px)!important;
-  line-height:1.3!important;
-  letter-spacing:.45px!important;
-  overflow-wrap:anywhere!important;
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{
-  grid-area:action!important;
-  align-self:end!important;
-  justify-self:start!important;
+  
+  
+  
   position:relative!important;
   z-index:3!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:space-between!important;
-  width:min(100%,340px)!important;
-  min-height:36px!important;
-  height:36px!important;
-  box-sizing:border-box!important;
-  margin:0!important;
-  padding:8px 13px!important;
-  border:1px solid color-mix(in srgb,var(--panel-accent) 65%,transparent)!important;
-  color:var(--panel-accent)!important;
-  background:#070c0bd9!important;
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:hover{
   transform:none!important;
-  border-color:var(--panel-accent)!important;
-  box-shadow:0 8px 28px #0008,0 0 18px color-mix(in srgb,var(--panel-accent) 12%,transparent)!important;
+  
+  
 }
 @media(max-width:760px){
   html body section.section.tools#radar > .tool-grid{gap:14px!important;grid-auto-rows:auto!important}
   html body section.section.tools#radar > .tool-grid > article.tool-card{
-    grid-template-columns:minmax(0,1fr)!important;
-    grid-template-rows:22px auto auto auto auto 38px!important;
-    grid-template-areas:"top" "video" "title" "copy" "features" "action"!important;
-    gap:9px!important;
+    
+    
+    
+    
     min-height:0!important;
     height:auto!important;
     padding:12px!important;
   }
   html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
-    width:100%!important;height:auto!important;aspect-ratio:16/9!important;
+    width:100%!important;height:auto!important;
   }
   html body section.section.tools#radar > .tool-grid > article.tool-card > h3{font-size:22px!important}
   html body section.section.tools#radar > .tool-grid > article.tool-card > p{font-size:13px!important;line-height:1.45!important}
   html body section.section.tools#radar > .tool-grid > article.tool-card > ul{grid-template-columns:1fr!important;gap:0!important}
   html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li{font-size:9px!important;padding:7px 4px!important}
-  html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{width:100%!important}
-  html body section.section.tools#radar > .tool-grid > article.tool-card:before{inset:32% 0 0 0!important;opacity:.18!important}
+  html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{
+  html body section.section.tools#radar > .tool-grid > article.tool-card:before{
 }
 
 
 /* DISTINCT CINEMATIC ARTWORK: one original scene per ZombieCash tool panel. */
 html body section.section.tools#radar > .tool-grid > article.tool-card{
-  border-radius:12px!important;
-  background:#070b0a!important;
-  box-shadow:0 12px 32px #0008,0 0 0 1px #ffffff08 inset!important;
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  content:""!important;
-  position:absolute!important;
-  inset:0 0 0 30%!important;
-  z-index:0!important;
-  display:block!important;
-  pointer-events:none!important;
-  opacity:1!important;
-  background-repeat:no-repeat!important;
-  background-size:cover!important;
-  background-position:center!important;
-  mix-blend-mode:screen!important;
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-  background-image:
-   linear-gradient(90deg,rgba(4,9,7,.98) 0%,rgba(4,9,7,.90) 20%,rgba(4,9,7,.62) 56%,rgba(4,9,7,.40) 100%),
-   url("/assets/images/tool-radar-outbreak.svg?v=20261109-real-art2")!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:before{
-  background-image:
-   linear-gradient(90deg,rgba(7,5,11,.98) 0%,rgba(7,5,11,.90) 20%,rgba(7,5,11,.60) 56%,rgba(7,5,11,.38) 100%),
-   url("/assets/images/tool-zombie-lab.svg?v=20261109-real-art2")!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:before{
-  background-image:
-   linear-gradient(90deg,rgba(9,5,7,.98) 0%,rgba(9,5,7,.90) 20%,rgba(9,5,7,.60) 56%,rgba(9,5,7,.38) 100%),
-   url("/assets/images/tool-survivor-network.svg?v=20261109-real-art2")!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > *{
-  position:relative!important;
-  z-index:2!important;
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
-  border-radius:7px!important;
+  
 }
-html body section.section.tools#radar > .tool-grid > article.radar-card{--panel-accent:#a3ff45}
-html body section.section.tools#radar > .tool-grid > article.lab-card{--panel-accent:#d46cff}
-html body section.section.tools#radar > .tool-grid > article.network-card{--panel-accent:#ff5969}
+html body section.section.tools#radar > .tool-grid > article.radar-card{
+html body section.section.tools#radar > .tool-grid > article.lab-card{
+html body section.section.tools#radar > .tool-grid > article.network-card{
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-top{
   letter-spacing:1.2px!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > h3{
-  text-shadow:0 2px 14px #000!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > p{
-  color:#d8ded9!important;
-  text-shadow:0 1px 8px #000!important;
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li{
   background:linear-gradient(90deg,color-mix(in srgb,var(--panel-accent) 8%,transparent),transparent)!important;
@@ -736,9 +720,9 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li
 
 /* Keep the bespoke artwork atmospheric and behind readable copy. */
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  mix-blend-mode:normal!important;
-  opacity:.88!important;
-  filter:saturate(.86) contrast(.96)!important;
+  
+  
+  
 }
 
 
@@ -761,107 +745,102 @@ html body section.section.tools#radar > .tool-grid{
   margin:24px auto 30px!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card{
-  display:grid!important;
-  grid-template-columns:minmax(220px,34%) minmax(0,1fr)!important;
-  grid-template-rows:26px 42px minmax(58px,auto) minmax(54px,1fr) 38px!important;
-  grid-template-areas:
-    "top top"
-    "video title"
-    "video copy"
-    "video features"
-    "video action"!important;
-  align-items:stretch!important;
-  align-content:stretch!important;
-  column-gap:clamp(18px,2.4vw,34px)!important;
-  row-gap:8px!important;
+  
+  
+  
+  
+  
+  
+  
+  
   box-sizing:border-box!important;
   width:100%!important;
   min-width:0!important;
-  min-height:292px!important;
-  height:auto!important;
-  padding:14px clamp(14px,1.8vw,24px)!important;
-  overflow:hidden!important;
+  
+  
+  
+  
   position:relative!important;
   isolation:isolate!important;
-  border-radius:10px!important;
-  transform:none!important;
-  background:#070b0a!important;
+  
+  
+  
   box-shadow:0 10px 28px #0007,inset 0 0 0 1px #ffffff08!important;
 }
 html body section.section.tools#radar > .tool-grid > article.radar-card{--panel-accent:#a3ff45}
 html body section.section.tools#radar > .tool-grid > article.lab-card{--panel-accent:#d46cff}
 html body section.section.tools#radar > .tool-grid > article.network-card{--panel-accent:#ff5969}
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  content:""!important;
-  position:absolute!important;
-  inset:0 0 0 34%!important;
-  z-index:0!important;
-  display:block!important;
-  pointer-events:none!important;
-  opacity:.68!important;
-  background-repeat:no-repeat!important;
-  background-size:cover!important;
-  background-position:center right!important;
-  mix-blend-mode:normal!important;
-  filter:saturate(.9) contrast(.95)!important;
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-  background-image:linear-gradient(90deg,#070b0a 0%,#070b0ac9 22%,#070b0a55 66%,#070b0a22 100%),url("/assets/images/tool-radar-outbreak.svg?v=20261109-real-art2")!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:before{
-  background-image:linear-gradient(90deg,#09070d 0%,#09070dc9 22%,#09070d55 66%,#09070d22 100%),url("/assets/images/tool-zombie-lab.svg?v=20261109-real-art2")!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:before{
-  background-image:linear-gradient(90deg,#0c0709 0%,#0c0709c9 22%,#0c070955 66%,#0c070922 100%),url("/assets/images/tool-survivor-network.svg?v=20261109-real-art2")!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:after{
-  content:none!important;
-  display:none!important;
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > *{
-  position:relative!important;
-  z-index:2!important;
-  min-width:0!important;
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-top{
-  grid-area:top!important;
+  
   display:flex!important;
   align-items:center!important;
   justify-content:space-between!important;
-  width:100%!important;
+  
   min-height:0!important;
   margin:0!important;
   padding:0 0 5px!important;
   border-bottom:1px solid color-mix(in srgb,var(--panel-accent) 34%,transparent)!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
-  grid-area:video!important;
-  align-self:stretch!important;
-  justify-self:stretch!important;
-  width:100%!important;
-  height:100%!important;
+  
+  
+  
+  
+  
   min-width:0!important;
-  min-height:0!important;
-  max-height:none!important;
-  aspect-ratio:auto!important;
-  margin:0!important;
-  overflow:hidden!important;
-  border:1px solid color-mix(in srgb,var(--panel-accent) 72%,transparent)!important;
-  border-radius:7px!important;
+  
+  
+  
+  
+  
+  
+  
   background:#050807!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell video{
-  display:block!important;
-  width:100%!important;
-  height:100%!important;
+  
+  
+  
   min-height:100%!important;
-  object-fit:cover!important;
-  object-position:center 42%!important;
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > h3{
-  grid-area:title!important;
-  align-self:end!important;
-  margin:0!important;
+  
+  
+  
   padding:0!important;
   font-size:clamp(20px,1.65vw,26px)!important;
   line-height:1.02!important;
@@ -869,12 +848,12 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > h3{
   text-shadow:0 2px 14px #000!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > p{
-  grid-area:copy!important;
+  
   align-self:start!important;
-  width:100%!important;
+  
   max-width:760px!important;
-  min-height:0!important;
-  margin:0!important;
+  
+  
   padding:0!important;
   color:#e0e6e1!important;
   font-size:clamp(12px,.88vw,14px)!important;
@@ -882,15 +861,15 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > p{
   text-shadow:0 1px 8px #000!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > ul{
-  grid-area:features!important;
+  
   align-self:stretch!important;
   display:grid!important;
   grid-template-columns:repeat(3,minmax(0,1fr))!important;
   align-items:stretch!important;
   gap:0 12px!important;
-  width:100%!important;
+  
   min-width:0!important;
-  margin:0!important;
+  
   padding:0!important;
   border-top:1px solid color-mix(in srgb,var(--panel-accent) 42%,transparent)!important;
 }
@@ -908,17 +887,17 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li
   overflow-wrap:anywhere!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{
-  grid-area:action!important;
+  
   align-self:end!important;
-  justify-self:start!important;
+  
   display:flex!important;
   align-items:center!important;
   justify-content:space-between!important;
-  width:min(100%,340px)!important;
+  
   min-height:36px!important;
   height:36px!important;
   box-sizing:border-box!important;
-  margin:0!important;
+  
   padding:8px 13px!important;
   border:1px solid color-mix(in srgb,var(--panel-accent) 65%,transparent)!important;
   color:var(--panel-accent)!important;
@@ -942,12 +921,12 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:hover{
  html body section.section.tools#radar > .tool-grid{gap:14px!important;margin:18px auto 24px!important}
  html body section.section.tools#radar > .tool-grid > article.tool-card{
   grid-template-columns:minmax(0,1fr)!important;
-  grid-template-rows:26px auto auto auto auto 38px!important;
+  
   grid-template-areas:"top" "video" "title" "copy" "features" "action"!important;
   gap:9px!important;
-  min-height:0!important;
+  
   height:auto!important;
-  padding:12px!important;
+  
  }
  html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
   width:100%!important;
@@ -957,65 +936,59 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:hover{
  html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell video{height:100%!important}
  html body section.section.tools#radar > .tool-grid > article.tool-card > h3{font-size:22px!important}
  html body section.section.tools#radar > .tool-grid > article.tool-card > p{font-size:13px!important;line-height:1.45!important}
- html body section.section.tools#radar > .tool-grid > article.tool-card > ul{grid-template-columns:1fr!important;gap:0!important}
+ html body section.section.tools#radar > .tool-grid > article.tool-card > ul{gap:0!important}
  html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li{font-size:9px!important;padding:7px 4px!important}
  html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{width:100%!important}
- html body section.section.tools#radar > .tool-grid > article.tool-card:before{inset:40% 0 0 0!important;opacity:.28!important;background-position:center!important}
+ html body section.section.tools#radar > .tool-grid > article.tool-card:before{
 }
 
 /* Cinematic art visibility tune: distinct color signatures, controlled contrast behind text. */
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
- opacity:.90!important;
- filter:saturate(1.22) contrast(1.08)!important;
+ 
+ 
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:before{
- opacity:.88!important;
- filter:saturate(1.28) contrast(1.08)!important;
+ 
+ 
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:before{
- opacity:.90!important;
- filter:saturate(1.22) contrast(1.08)!important;
+ 
+ 
 }
 @media(max-width:640px){
  html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  opacity:.42!important;
+  
  }
 }
 
 
 /* TOOL CARD ARTWORK — palette-matched backgrounds, balanced crop and readable copy */
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-  background-image:
-    linear-gradient(90deg,rgba(3,7,8,.94) 0%,rgba(3,7,8,.76) 27%,rgba(3,7,8,.38) 62%,rgba(3,7,8,.12) 100%),
-    url("/assets/images/tool-survivor-network.webp?v=20261109-card-art-fix2")!important;
-  background-size:cover!important;
-  background-position:center center!important;
-  background-repeat:no-repeat!important;
-  opacity:1!important;
-  mix-blend-mode:normal!important;
-  filter:saturate(1.08) contrast(1.04)!important;
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:before{
-  background-image:
-    linear-gradient(90deg,rgba(5,3,9,.94) 0%,rgba(5,3,9,.74) 27%,rgba(5,3,9,.34) 62%,rgba(5,3,9,.10) 100%),
-    url("/assets/images/tool-zombie-lab.webp?v=20261109-card-art-fix2")!important;
-  background-size:cover!important;
-  background-position:center center!important;
-  background-repeat:no-repeat!important;
-  opacity:1!important;
-  mix-blend-mode:normal!important;
-  filter:saturate(1.10) contrast(1.05)!important;
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:before{
-  background-image:
-    linear-gradient(90deg,rgba(5,4,7,.94) 0%,rgba(5,4,7,.76) 27%,rgba(5,4,7,.38) 62%,rgba(5,4,7,.12) 100%),
-    url("/assets/images/tool-radar-outbreak.webp?v=20261109-card-art-fix2")!important;
-  background-size:cover!important;
-  background-position:center center!important;
-  background-repeat:no-repeat!important;
-  opacity:1!important;
-  mix-blend-mode:normal!important;
-  filter:saturate(1.10) contrast(1.05)!important;
+  
+  
+  
+  
+  
+  
+  
 }
 
 
@@ -1025,10 +998,9 @@ html body section.section.tools#radar > .tool-grid > article.tool-card{
 }
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
   inset:0 0 0 34%!important;
-  background-image:
-    url("/assets/images/tool-survivor-network.webp?v=20261109-card-art-final3")!important;
+  
   background-size:cover!important;
-  background-position:center center!important;
+  
   background-repeat:no-repeat!important;
   opacity:.78!important;
   filter:saturate(1.08) contrast(1.06)!important;
@@ -1036,10 +1008,9 @@ html body section.section.tools#radar > .tool-grid > article.radar-card:before{
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:before{
   inset:0 0 0 34%!important;
-  background-image:
-    url("/assets/images/tool-zombie-lab.webp?v=20261109-card-art-final3")!important;
+  
   background-size:cover!important;
-  background-position:center center!important;
+  
   background-repeat:no-repeat!important;
   opacity:.76!important;
   filter:saturate(1.12) contrast(1.06)!important;
@@ -1047,35 +1018,28 @@ html body section.section.tools#radar > .tool-grid > article.lab-card:before{
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:before{
   inset:0 0 0 34%!important;
-  background-image:
-    url("/assets/images/tool-radar-outbreak.webp?v=20261109-card-art-final3")!important;
+  
   background-size:cover!important;
-  background-position:center center!important;
+  
   background-repeat:no-repeat!important;
   opacity:.78!important;
   filter:saturate(1.08) contrast(1.06)!important;
   mix-blend-mode:normal!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:after{
-  content:""!important;
-  display:block!important;
-  position:absolute!important;
-  inset:0 0 0 34%!important;
-  z-index:1!important;
-  pointer-events:none!important;
-  background:
-    linear-gradient(90deg,rgba(5,9,8,.72) 0%,rgba(5,9,8,.60) 36%,rgba(5,9,8,.48) 100%),
-    linear-gradient(0deg,rgba(3,6,6,.46) 0%,transparent 42%,rgba(3,6,6,.16) 100%)!important;
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:after{
-  background:
-    linear-gradient(90deg,rgba(8,4,12,.72) 0%,rgba(8,4,12,.58) 36%,rgba(8,4,12,.46) 100%),
-    linear-gradient(0deg,rgba(3,2,6,.46) 0%,transparent 42%,rgba(3,2,6,.16) 100%)!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:after{
-  background:
-    linear-gradient(90deg,rgba(10,4,6,.72) 0%,rgba(10,4,6,.60) 36%,rgba(10,4,6,.48) 100%),
-    linear-gradient(0deg,rgba(5,2,3,.46) 0%,transparent 42%,rgba(5,2,3,.16) 100%)!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > h3,
 html body section.section.tools#radar > .tool-grid > article.tool-card > p,
@@ -1090,12 +1054,12 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > ul{
 }
 @media(max-width:640px){
  html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-   inset:42% 0 0 0!important;
-   opacity:.54!important;
+   
+   
  }
  html body section.section.tools#radar > .tool-grid > article.tool-card:after{
-   inset:42% 0 0 0!important;
-   background:linear-gradient(0deg,rgba(0,0,0,.52),rgba(0,0,0,.22))!important;
+   
+   
  }
 }
 
@@ -1111,42 +1075,42 @@ html body section.section.tools#radar > .tool-grid > article.network-card:before
   opacity:.88!important;
 }
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-  background-image:url("/assets/images/tool-survivor-network.webp?v=20261109-art-align4")!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:before{
-  background-image:url("/assets/images/tool-zombie-lab.webp?v=20261109-art-align4")!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:before{
-  background-image:url("/assets/images/tool-radar-outbreak.webp?v=20261109-art-align4")!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:after{
-  content:""!important;
-  display:block!important;
-  position:absolute!important;
-  inset:0!important;
-  z-index:1!important;
-  pointer-events:none!important;
-  background:linear-gradient(90deg,rgba(5,9,8,.98) 0%,rgba(5,9,8,.90) 36%,rgba(5,9,8,.54) 68%,rgba(5,9,8,.20) 100%)!important;
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:after{
-  background:linear-gradient(90deg,rgba(8,4,12,.98) 0%,rgba(8,4,12,.90) 36%,rgba(8,4,12,.54) 68%,rgba(8,4,12,.20) 100%)!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:after{
-  background:linear-gradient(90deg,rgba(10,4,6,.98) 0%,rgba(10,4,6,.90) 36%,rgba(10,4,6,.54) 68%,rgba(10,4,6,.20) 100%)!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > *{
-  z-index:2!important;
+  
 }
 @media(max-width:640px){
  html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-   inset:0!important;
-   background-size:auto 58%!important;
-   background-position:right bottom!important;
-   opacity:.66!important;
+   
+   
+   
+   
  }
  html body section.section.tools#radar > .tool-grid > article.tool-card:after{
    inset:0!important;
-   background:linear-gradient(180deg,rgba(5,9,8,.98) 0%,rgba(5,9,8,.88) 55%,rgba(5,9,8,.35) 100%)!important;
+   
  }
 }
 
@@ -1154,10 +1118,10 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > *{
 /* CRITICAL FIX: remove inherited decorative rotations from the artwork pseudo-elements.
    The old graffiti transforms were still rotating the new full-size background layers. */
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  transform:none!important;
-  rotate:none!important;
-  scale:1!important;
-  translate:none!important;
+  
+  
+  
+  
   right:0!important;
   top:0!important;
   bottom:0!important;
@@ -1168,10 +1132,10 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:before{
   max-height:none!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:after{
-  transform:none!important;
-  rotate:none!important;
-  scale:1!important;
-  translate:none!important;
+  
+  
+  
+  
   right:0!important;
   top:0!important;
   bottom:0!important;
@@ -1185,10 +1149,10 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:after{
 /* FINAL FLAT ARTWORK ALIGNMENT — square, level image planes inside straight panels. */
 html body section.section.tools#radar > .tool-grid > article.tool-card{
   clip-path:none!important;
-  border-radius:3px!important;
+  
   transform:none!important;
-  overflow:hidden!important;
-  border:1px solid color-mix(in srgb,var(--panel-accent,#9bff45) 68%,#17231b)!important;
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
   clip-path:none!important;
@@ -1196,26 +1160,26 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:before{
   rotate:0deg!important;
   scale:1!important;
   translate:0 0!important;
-  inset:0 0 0 34%!important;
-  background-repeat:no-repeat!important;
-  background-size:cover!important;
-  background-position:center center!important;
-  background-attachment:scroll!important;
-  opacity:.72!important;
-  mix-blend-mode:normal!important;
-  filter:saturate(1.08) contrast(1.04)!important;
+  
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-  background-image:url("/assets/images/tool-radar-outbreak.svg?v=20261109-flat2")!important;
-  background-position:center center!important;
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:before{
-  background-image:url("/assets/images/tool-zombie-lab.svg?v=20261109-flat2")!important;
-  background-position:center center!important;
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:before{
-  background-image:url("/assets/images/tool-survivor-network.svg?v=20261109-flat2")!important;
-  background-position:center center!important;
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:after{
   clip-path:none!important;
@@ -1226,9 +1190,9 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:after{
 }
 @media(max-width:640px){
  html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-   inset:0!important;
-   background-size:cover!important;
-   background-position:center center!important;
+   
+   
+   
  }
 }
 
@@ -1237,29 +1201,29 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:after{
    This stylesheet loads after style.css. Replace the previous SVG artwork here,
    in the last cascade layer, while preserving the left video panel and card content. */
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  inset:0 0 0 34%!important;
-  background-repeat:no-repeat!important;
-  background-position:center center,right bottom!important;
-  background-size:100% 100%,auto 82%!important;
+  
+  
+  
+  
   background-attachment:scroll!important;
-  opacity:.88!important;
-  mix-blend-mode:normal!important;
-  filter:saturate(1.06) contrast(1.04)!important;
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-  background-image:linear-gradient(90deg,#070b0ef2 0%,#070b0ec9 28%,#070b0e45 70%,#070b0e12 100%),url("/assets/tools/meme-radar.jpg?v=20261110-final")!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:before{
-  background-image:linear-gradient(90deg,#09070df2 0%,#09070dc9 28%,#09070d45 70%,#09070d12 100%),url("/assets/tools/zombie-lab.jpg?v=20261110-final")!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:before{
-  background-image:linear-gradient(90deg,#0c0709f2 0%,#0c0709c9 28%,#0c070945 70%,#0c070912 100%),url("/assets/tools/survivor-network.jpg?v=20261110-final")!important;
+  
 }
 @media(max-width:640px){
   html body section.section.tools#radar > .tool-grid > article.tool-card:before{
     inset:0!important;
     background-size:100% 100%,auto 48%!important;
-    background-position:center center,right bottom!important;
+    
   }
 }
 
@@ -1270,58 +1234,58 @@ html body section.section.tools#radar > .tool-grid > article.network-card:before
    Three selected 1600x640 artworks now fill each card edge-to-edge.
    Hide the old inset video window so no framed panel competes with the banner. */
 html body section.section.tools#radar > .tool-grid > article.tool-card{
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr)!important;
-  grid-template-rows:26px auto auto auto 38px!important;
-  grid-template-areas:"top" "title" "copy" "features" "action"!important;
-  align-content:stretch!important;
-  min-height:320px!important;
-  height:auto!important;
-  padding:16px 22px!important;
+  
+  
+  
+  
+  
+  
+  
+  
   overflow:hidden!important;
   border:1px solid color-mix(in srgb,var(--panel-accent) 34%,transparent)!important;
   border-radius:4px!important;
-  background:#07090b!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-  inset:0!important;
-  z-index:0!important;
-  background-repeat:no-repeat!important;
-  background-size:cover!important;
-  background-position:center center!important;
-  opacity:1!important;
-  filter:saturate(1.08) contrast(1.06)!important;
-  mix-blend-mode:normal!important;
+  
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card:after{
-  content:""!important;
-  display:block!important;
-  position:absolute!important;
-  inset:0!important;
-  z-index:1!important;
-  pointer-events:none!important;
-  background:linear-gradient(90deg,rgba(3,5,7,.20) 0%,rgba(3,5,7,.38) 42%,rgba(3,5,7,.82) 100%)!important;
+  
+  
+  
+  
+  
+  
+  
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:after{
-  background:linear-gradient(90deg,rgba(5,2,9,.82) 0%,rgba(5,2,9,.46) 54%,rgba(5,2,9,.20) 100%)!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:after{
-  background:linear-gradient(90deg,rgba(8,1,3,.16) 0%,rgba(8,1,3,.40) 42%,rgba(8,1,3,.82) 100%)!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-  background-image:url("/assets/tools/meme-radar.jpg?v=fullbleed-banners-20261110-3")!important;
+  
   background-position:center center!important;
 }
 html body section.section.tools#radar > .tool-grid > article.lab-card:before{
-  background-image:url("/assets/tools/zombie-lab.jpg?v=fullbleed-banners-20261110-3")!important;
+  
   background-position:center center!important;
 }
 html body section.section.tools#radar > .tool-grid > article.network-card:before{
-  background-image:url("/assets/tools/survivor-network.jpg?v=fullbleed-banners-20261110-3")!important;
+  
   background-position:center center!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .tool-video-shell{
-  display:none!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > *{
   position:relative!important;
@@ -1329,23 +1293,23 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > *{
   min-width:0!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-top{
-  grid-area:top!important;
+  
   width:100%!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > h3{
-  grid-area:title!important;
+  
   width:min(62%,680px)!important;
   margin:0 0 7px auto!important;
-  align-self:end!important;
+  
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > p{
-  grid-area:copy!important;
+  
   width:min(62%,680px)!important;
   margin:0 0 10px auto!important;
   min-height:0!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > ul{
-  grid-area:features!important;
+  
   width:min(62%,680px)!important;
   margin:0 0 10px auto!important;
 }
@@ -1356,7 +1320,7 @@ html body section.section.tools#radar > .tool-grid > article.lab-card > ul{
   margin-right:auto!important;
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{
-  grid-area:action!important;
+  
   width:min(62%,420px)!important;
   margin:0 0 0 auto!important;
 }
@@ -1511,8 +1475,8 @@ body:has(#home) #home > section {
   min-width: 0;
 }
 body:has(#home) #home > section:not(.hero) {
-  width: 100%;
-  max-width: 100%;
+  
+  
 }
 body:has(#home) #home .hero-layout,
 body:has(#home) #home .zc-promo-video-shell,
@@ -1688,38 +1652,38 @@ body:has(#home) #zctv-channel-hub > .zctv-inner {
   box-sizing:border-box!important;
 }
 body:has(#home) #zctv-channel-hub .zctv-layout {
-  display:grid!important;
-  width:100%!important;
-  min-width:0!important;
-  grid-template-columns:minmax(250px,.86fr) minmax(280px,1fr) minmax(360px,1.18fr)!important;
-  grid-template-rows:auto!important;
-  grid-template-areas:"intro host player"!important;
+  
+  
+  
+  
+  
+  
   grid-auto-flow:row!important;
-  gap:clamp(16px,1.9vw,28px)!important;
-  align-items:stretch!important;
+  
+  
   margin:20px 0 26px!important;
 }
 body:has(#home) #zctv-channel-hub .zctv-intro {
-  grid-area:intro!important;
-  min-width:0!important;
-  align-self:center!important;
+  
+  
+  
 }
 body:has(#home) #zctv-channel-hub .zctv-host-art {
   display:flex!important;
-  grid-area:host!important;
-  width:100%!important;min-width:0!important;
-  height:clamp(320px,31vw,420px)!important;
-  min-height:300px!important;max-height:420px!important;
+  
+  
+  
+  
 }
 body:has(#home) #zctv-channel-hub .zctv-host-art img {
-  width:100%!important;height:100%!important;
-  object-fit:cover!important;object-position:center 18%!important;
+  
+  
 }
 body:has(#home) #zctv-channel-hub .zctv-player-column {
   display:flex!important;
-  grid-area:player!important;
-  width:100%!important;max-width:none!important;min-width:0!important;
-  margin:0!important;align-self:stretch!important;
+  
+  
+  
   flex-direction:column!important;gap:12px!important;
 }
 body:has(#home) #zctv-channel-hub .zctv-live-label,
@@ -1738,8 +1702,8 @@ body:has(#home) #zctv-channel-hub .zc-promo-player-wrap {
   margin:0!important;overflow:hidden!important;
 }
 body:has(#home) #zctv-channel-hub #zc-promo-player {
-  height:auto!important;max-height:none!important;aspect-ratio:16/9!important;
-  object-fit:contain!important;background:#020403!important;
+  max-height:none!important;
+  
 }
 body:has(#home) #zctv-channel-hub .zctv-archive {
   flex:0 0 auto!important;align-self:stretch!important;
@@ -1780,14 +1744,14 @@ body:has(#home) #zctv-channel-hub .zctv-channel-card {
 }
 @media(max-width:760px) {
   body:has(#home) #zctv-channel-hub .zctv-layout {
-    grid-template-columns:minmax(0,1fr)!important;
-    grid-template-rows:auto auto auto!important;
-    grid-template-areas:"intro" "host" "player"!important;
+    
+    
+    
   }
   body:has(#home) #zctv-channel-hub .zctv-intro {grid-area:intro!important}
   body:has(#home) #zctv-channel-hub .zctv-host-art {
     grid-area:host!important;width:100%!important;max-width:100%!important;
-    height:clamp(240px,65vw,390px)!important;
+    
   }
   body:has(#home) #zctv-channel-hub .zctv-player-column {
     grid-area:player!important;width:100%!important;max-width:100%!important;
@@ -1902,7 +1866,7 @@ body:has(#home) #home > section:not(.hero){
     margin-inline:auto!important;
   }
   body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel {
-    max-width:min(40vw,2400px)!important;
+    
   }
 }
 @media (max-width:600px) {
@@ -2089,32 +2053,32 @@ body:has(#home) #zctv-channel-hub #zc-promo-player{
    assigned intro/host/player areas in a different order, so changing only the
    grid-template-areas left the panels split across rows. */
 html body:has(main#home) #zctv-channel-hub .zctv-layout{
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.18fr)!important;
-  grid-template-rows:minmax(0,1fr)!important;
-  grid-template-areas:"player intro host"!important;
-  align-items:stretch!important;
+  
+  
+  
+  
+  
 }
 html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-player-column{
-  grid-area:player!important;
+  
   grid-column:auto!important;grid-row:auto!important;
-  width:100%!important;max-width:none!important;min-width:0!important;
-  height:100%!important;min-height:0!important;align-self:stretch!important;
+  
+  
 }
 html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-intro{
-  grid-area:intro!important;
+  
   grid-column:auto!important;grid-row:auto!important;
-  width:100%!important;max-width:none!important;min-width:0!important;
-  height:100%!important;min-height:0!important;align-self:stretch!important;
-  display:flex!important;flex-direction:column!important;justify-content:center!important;
+  
+  
+  
   box-sizing:border-box!important;
 }
 html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art{
-  grid-area:host!important;
+  
   grid-column:auto!important;grid-row:auto!important;
-  width:100%!important;max-width:none!important;min-width:0!important;
-  height:100%!important;min-height:0!important;max-height:none!important;
-  align-self:stretch!important;box-sizing:border-box!important;
+  
+  
+  box-sizing:border-box!important;
 }
 html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art img{
   width:100%!important;height:100%!important;object-fit:cover!important;
@@ -2133,13 +2097,13 @@ html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art img{
 }
 @media(max-width:760px){
   html body:has(main#home) #zctv-channel-hub .zctv-layout{
-    grid-template-columns:minmax(0,1fr)!important;
-    grid-template-rows:auto auto auto!important;
-    grid-template-areas:"player" "intro" "host"!important;
+    
+    
+    
   }
-  html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-player-column{grid-area:player!important;height:auto!important}
-  html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-intro{grid-area:intro!important;height:auto!important}
-  html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art{grid-area:host!important;height:clamp(240px,65vw,390px)!important}
+  html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-player-column{
+  html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-intro{
+  html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art{
 }
 
 
@@ -2955,8 +2919,8 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
   }
   html body:has(main#home) > footer#site-footer .site-footer-main,
   html body:has(main#home) > footer#site-footer .site-footer-bottom {
-    box-sizing: border-box !important; width: min(92vw,15000px) !important;
-    max-width: 15000px !important; margin-inline: auto !important;
+    box-sizing: border-box !important; 
+     margin-inline: auto !important;
   }
   html body:has(main#home) > footer#site-footer .site-footer-main {
     grid-template-columns: minmax(0,1.2fr) minmax(0,.8fr) minmax(0,.8fr) !important;
@@ -3366,7 +3330,7 @@ body:has(#home) #home > section.hero .hero-content .eyebrow {
 }
 
 body:has(#home) #home > section.hero .hero-content h1 {
-  font-size: clamp(48px, 5.5vw, 120px) !important;
+  
   line-height: 0.92 !important;
   letter-spacing: -0.04em !important;
   margin-bottom: 20px !important;
@@ -3374,8 +3338,8 @@ body:has(#home) #home > section.hero .hero-content h1 {
 }
 
 body:has(#home) #home > section.hero .hero-content .hero-copy {
-  font-size: clamp(16px, 1.2vw, 20px) !important;
-  line-height: 1.6 !important;
+  
+  
   color: var(--zc-text-cold) !important;
   max-width: 600px !important;
   margin-bottom: 24px !important;
