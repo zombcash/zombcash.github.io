@@ -9,7 +9,7 @@ assert "GSC_SERVICE_ACCOUNT_JSON" in workflow, "GSC URL inspection audit must us
 assert "urlInspection().index().inspect(" in workflow, "GSC URL inspection audit must call Google's URL Inspection API"
 assert '"inspectionUrl": url' in workflow and '"siteUrl": site_url' in workflow, "GSC inspection requests must identify both the inspected URL and verified property"
 assert "time.sleep(delay)" in workflow and "next_request_at[0] = time.monotonic() + 1.0" in workflow, "GSC inspection requests must be globally paced at one-second intervals below the per-site quota"
-assert "ThreadPoolExecutor(max_workers=4)" in workflow, "GSC URL inspection must use bounded parallel workers"
+assert "ThreadPoolExecutor(max_workers=1)" in workflow, "GSC URL inspection must use a single worker so the one-second global request pacing cannot be bypassed"
 assert "thread_local.service = build(" in workflow, "Each GSC inspection worker must use its own API client"
 assert 'name: gsc-url-inspection-report' in workflow, "GSC URL inspection results must be archived as an Actions artifact"
 assert "unique_sitemap_urls" in workflow and "coverage_state" in workflow, "GSC report must preserve per-URL index coverage details"
