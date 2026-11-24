@@ -31,7 +31,7 @@ for (const file of pages) {
   assert.equal(styles.length, 3, file + ': homepage CSS should be consolidated into three cascade-preserving blocks');
   assert.equal(bodyStyles.length, 0, file + ': inline CSS must be loaded before body content');
   if (file === 'index.html') {
-    assert.match(html, /src="\\/ai-model-status\\.js\\?v=20261124-timeout-1"/,
+    assert.ok(html.includes('src="/ai-model-status.js?v=20261124-timeout-1"'),
       'English homepage must use the cache-busted AI status script');
   }
   const ribbonIndex = html.indexOf('class="zc-outbreak-ribbons zc-ribbons-pending"');
