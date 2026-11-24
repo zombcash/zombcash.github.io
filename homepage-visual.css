@@ -4,7 +4,7 @@ body > header.zc-homepage-header{min-height:110px!important;box-sizing:border-bo
 @media(max-width:760px){body > header.zc-homepage-header{min-height:95px!important}}
 
 /* ZombieCash homepage visual refresh — additive, homepage-scoped styles only. */
-body:has(#home) .zc-outbreak-ribbons{position:relative;z-index:19;display:grid;gap:5px;padding:7px clamp(10px,2vw,28px);min-height:127px;box-sizing:border-box;background:#050907;border-bottom:1px solid #25382a}
+body > .zc-outbreak-ribbons{position:relative;z-index:19;display:grid;gap:5px;padding:7px clamp(10px,2vw,28px);min-height:127px;box-sizing:border-box;background:#050907;border-bottom:1px solid #25382a}
 body:has(#home) .zc-ribbon{height:34px;display:flex;align-items:center;overflow:hidden;position:relative;border:1px solid var(--ribbon-color);border-radius:9px;background:linear-gradient(90deg,var(--ribbon-tint),#080d0b 52%,#080d0b);box-shadow:0 0 18px color-mix(in srgb,var(--ribbon-color) 16%,transparent),inset 0 0 18px color-mix(in srgb,var(--ribbon-color) 8%,transparent)}
 body:has(#home) .zc-ribbon-label{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:0 14px;height:100%;color:var(--ribbon-color);font:800 10px/1 Orbitron,Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;border-right:1px solid color-mix(in srgb,var(--ribbon-color) 40%,transparent);white-space:nowrap}
 body:has(#home) .zc-ribbon-track{display:flex;align-items:center;min-width:max-content;animation:zcRibbonMove var(--ribbon-speed,34s) linear infinite}
@@ -29,7 +29,7 @@ body:has(#home) .world-panel-head{background:linear-gradient(100deg,#16251bd9,#0
 body:has(#home) .world-panel:nth-child(2) .world-panel-head{background:linear-gradient(100deg,#321722e8,#0a1014e8)}
 body:has(#home) .world-panel-foot{background:#080e0deF}
 @media(max-width:760px){
- body:has(#home) .zc-outbreak-ribbons{gap:4px;padding:6px 8px;min-height:123px}
+ body > .zc-outbreak-ribbons{gap:4px;padding:6px 8px;min-height:123px}
  body:has(#home) .zc-ribbon{height:31px;border-radius:7px}
  body:has(#home) .zc-ribbon-label{padding:0 9px;font-size:8px;letter-spacing:.55px}
  body:has(#home) .zc-ribbon-copy{font-size:12px;gap:17px;padding-left:17px}
@@ -3096,17 +3096,17 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
 
 /* 20% browser-zoom legibility: scale the three live outbreak ribbons as well as the header. */
 @media (min-width: 7600px) {
-  html body:has(main#home) .zc-outbreak-ribbons {
+  html body > .zc-outbreak-ribbons {
     gap: clamp(8px, .08vw, 14px) !important;
     padding: clamp(12px, .2vw, 32px) clamp(20px, 2vw, 320px) !important;
     min-height: calc(3 * clamp(84px, .9vw, 144px) + 2 * clamp(8px, .08vw, 14px) + 2 * clamp(12px, .2vw, 32px) + 1px) !important;
     box-sizing: border-box !important;
   }
-  html body:has(main#home) .zc-outbreak-ribbons .zc-ribbon {
+  html body > .zc-outbreak-ribbons .zc-ribbon {
     height: clamp(84px, .9vw, 144px) !important;
     border-radius: clamp(8px, .1vw, 16px) !important;
   }
-  html body:has(main#home) .zc-outbreak-ribbons .zc-ribbon-label {
+  html body > .zc-outbreak-ribbons .zc-ribbon-label {
     flex: 0 0 clamp(260px, 3vw, 480px) !important;
     width: clamp(260px, 3vw, 480px) !important;
     min-width: clamp(260px, 3vw, 480px) !important;
@@ -3117,13 +3117,13 @@ html body:has(main#home) #zctv-channel-hub .zctv-host-art img{
     letter-spacing: 0 !important;
     text-overflow: clip !important;
   }
-  html body:has(main#home) .zc-outbreak-ribbons .zc-ribbon-copy {
+  html body > .zc-outbreak-ribbons .zc-ribbon-copy {
     gap: clamp(26px, .3vw, 48px) !important;
     padding-left: clamp(26px, .3vw, 48px) !important;
     font-size: clamp(28px, .42vw, 56px) !important;
     line-height: 1.15 !important;
   }
-  html body:has(main#home) .zc-outbreak-ribbons .zc-ribbon-copy b {
+  html body > .zc-outbreak-ribbons .zc-ribbon-copy b {
     font-size: clamp(24px, .3vw, 40px) !important;
     line-height: 1 !important;
   }
