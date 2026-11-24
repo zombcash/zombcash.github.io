@@ -81,147 +81,17 @@
 <link rel="preload" href="https://fonts.gstatic.com/s/rajdhani/v17/LDI2apCSOBg7S-QT7pb0EPOreefkkbIx.woff2" as="font" type="font/woff2" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=optional" rel="stylesheet">
 <link rel="stylesheet" href="/style.css?v=tools-card-bg-20261110-1">
-<style id="zombcash-hero-v8-inline">
-
-/* Removed 171 obsolete hero-art selector rules after checking homepage markup and loaded scripts. */
-
-/* V8 emergency inline hero override: intentionally distinct from cached external CSS */
-.hero{
- min-height:760px!important;padding:70px 6.5% 78px!important;
- display:grid!important;grid-template-columns:minmax(0,1.08fr) minmax(380px,.92fr)!important;
- align-items:center!important;gap:2.5%!important;
- background:radial-gradient(ellipse at 78% 48%,#173e22 0,transparent 34%),linear-gradient(115deg,#050708 0%,#080d0a 54%,#11151a 100%)!important;
-}
-.hero:before{content:"";position:absolute;inset:0 0 0 53%;z-index:1;border-left:1px solid #9bff4538;background:linear-gradient(135deg,#9bff4508,transparent 45%,#a855f70a)!important;pointer-events:none}
-.hero:after{content:"ZOMBIECASH / LIVE SYSTEM";position:absolute;right:2%;top:50%;writing-mode:vertical-rl;transform:translateY(-50%);font:700 9px Orbitron,sans-serif;letter-spacing:4px;color:#70816f}
-.hero-grid{opacity:.28!important;background-size:36px 36px!important;mask-image:linear-gradient(90deg,black,transparent 95%)!important}
+<style id="homepage-pre-polish">
+/* Active homepage hero: consolidated from the current V22 layout; superseded V8–V21 drafts removed. */
+.hero-grid{background-size:36px 36px!important;mask-image:linear-gradient(90deg,black,transparent 95%)!important}
 .moon{right:8%!important;top:12%!important;width:390px!important;height:390px!important;opacity:.14!important;filter:blur(1px)!important}
 .city{opacity:.16!important}
-.hero-content{grid-column:1;grid-row:1;width:100%!important;max-width:720px!important}
-.eyebrow{display:inline-flex!important;padding:12px 15px!important;border:1px solid #496b42!important;background:#0b150c!important;letter-spacing:2px!important}
-h1{font-size:clamp(48px,5.1vw,74px)!important;line-height:1.01!important;letter-spacing:-2.8px!important;margin:27px 0 22px!important}
-h1 .dead{color:#f1f4e9!important;text-shadow:none!important}
-h1 .alive{text-shadow:0 0 35px #9bff4550!important}
-.hero-copy{font-size:21px!important;line-height:1.4!important;max-width:470px!important}
-.hero-actions{margin:26px 0 32px!important}
-.hero-stats{gap:18px!important}
-.hero-bottom{left:6.5%!important;right:6.5%!important;bottom:16px!important;border-top:1px solid #27382b!important;padding-top:12px!important;z-index:5!important}
-@media(max-width:950px){
- .hero{grid-template-columns:minmax(0,1fr) minmax(300px,.8fr)!important;padding:60px 4% 75px!important;min-height:700px!important;gap:1%!important}
- h1{font-size:clamp(42px,5.4vw,60px)!important;letter-spacing:-1.8px!important}
-}
-@media(max-width:680px){
- .hero{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:20px!important;padding:42px 5% 350px!important;min-height:1010px!important;background:linear-gradient(180deg,#050708,#0b120d 62%,#090c12)!important}
- .hero:before{inset:auto 5% 335px!important;height:1px!important;border:0!important;background:#9bff4538!important}
- .hero:after{right:3%!important;top:30%!important;font-size:7px!important}
- .hero-content{width:100%!important}
- h1{font-size:clamp(39px,10vw,58px)!important;letter-spacing:-1.5px!important}
- h1 .dead{white-space:normal!important}
- .hero-copy{font-size:18px!important}
- .hero-actions{gap:8px!important}
- .btn{padding:12px 10px!important;font-size:9px!important}
- .hero-bottom{left:5%!important;right:5%!important;bottom:12px!important;font-size:7px!important}
- .hero-bottom span:nth-child(2),.hero-bottom span:last-child{display:none!important}
-}
-
-/* V9: tighter cinematic hero, new undead survivor, original hand reduced to coin badge */
-.hero{min-height:650px!important;height:calc(100vh - 112px)!important;max-height:760px!important;padding:36px 7% 54px!important;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr)!important;gap:1.5%!important;overflow:hidden!important}
-.hero:before{inset:0 0 0 51%!important;border-left:1px solid #9bff4520!important;background:linear-gradient(110deg,#9bff4506,transparent 50%,#a855f707)!important}
-.hero:after{display:none!important}
-.hero-content{max-width:610px!important;align-self:center!important;z-index:4!important}
-.eyebrow{font-size:10px!important;padding:9px 12px!important}
-h1{font-size:clamp(48px,4.45vw,66px)!important;line-height:.98!important;letter-spacing:-2.5px!important;margin:21px 0 18px!important}
-.hero-copy{max-width:430px!important;font-size:19px!important;line-height:1.32!important}
-.hero-actions{margin:22px 0 25px!important}
-.hero-stats{gap:14px!important}
-.hero-bottom{bottom:9px!important;left:7%!important;right:7%!important;padding-top:9px!important;font-size:8px!important}
-@media(max-width:950px){.hero{height:auto!important;min-height:650px!important;padding:48px 5% 60px!important;grid-template-columns:minmax(0,1fr) minmax(0,.9fr)!important}h1{font-size:clamp(43px,5vw,58px)!important}}
-@media(max-width:680px){.hero{height:auto!important;max-height:none!important;min-height:0!important;padding:40px 5% 0!important;display:flex!important;flex-direction:column!important;gap:12px!important;overflow:hidden!important}.hero-content{max-width:none!important}.hero:before{display:none!important}h1{font-size:clamp(40px,11vw,58px)!important;line-height:1!important;margin:19px 0 15px!important}.hero-copy{font-size:17px!important}.hero-actions{margin:19px 0 20px!important}.hero-stats{margin-bottom:5px!important}.hero-bottom{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;width:100%!important;margin-top:0!important;padding:12px 0!important}.hero-bottom span:nth-child(2),.hero-bottom span:last-child{display:none!important}}/* V14: remove unreliable bitmap artwork; use a crisp native neon emblem */
-
-@keyframes heroOrbit{to{transform:rotate(360deg)}}
-
-
-/* V17: text-first full-width hero; no character illustration, only small coin emblem */
-.hero{min-height:calc(100vh - 92px)!important;padding:52px 5.5% 72px!important;display:flex!important;align-items:center!important;background:radial-gradient(ellipse at 78% 50%,#14321a 0,transparent 42%),radial-gradient(ellipse at 60% 75%,#32104418 0,transparent 40%),linear-gradient(115deg,#050708 0%,#080d0a 62%,#111015 100%)!important}
-.hero:before{inset:0!important;border-left:0!important;background:repeating-linear-gradient(0deg,transparent 0 39px,#9bff4509 40px),repeating-linear-gradient(90deg,transparent 0 39px,#9bff4509 40px)!important;mask-image:linear-gradient(90deg,#000,transparent 100%)}
-.hero:after{display:none!important}
-.hero-grid{opacity:.35!important;background-size:40px 40px!important}
-.hero-content{width:100%!important;max-width:none!important;grid-column:auto!important;grid-row:auto!important;z-index:3!important;padding-right:0!important}
-.eyebrow{padding:10px 14px!important;font-size:clamp(9px,1vw,12px)!important}
-h1{width:100%!important;max-width:none!important;font-size:clamp(48px,8.4vw,132px)!important;line-height:.91!important;letter-spacing:-.055em!important;margin:25px 0 22px!important}
-h1 .dead{color:#f4f5ed!important;text-shadow:2px 2px 0 #475147!important}
-h1 .alive{text-shadow:0 0 38px #9bff4555!important}
-.hero-copy{max-width:760px!important;font-size:clamp(17px,1.65vw,24px)!important}
-.hero-actions{margin:24px 0 28px!important}
-.hero-stats{gap:clamp(18px,3vw,44px)!important}
-.hero-bottom{left:5.5%!important;right:5.5%!important}
-@media(max-width:760px){.hero{min-height:auto!important;padding:38px 5% 86px!important}.hero-content{padding-right:0!important}h1{font-size:clamp(42px,10.5vw,78px)!important;line-height:.96!important;letter-spacing:-.06em!important}.hero-copy{max-width:88%!important}.hero-stats{gap:15px!important}.hero-stats span{font-size:8px!important}.hero-bottom{display:none!important}}
-
-
-/* V18: clean neon biohazard mark, balanced two-part hero */
-.hero{min-height:calc(100vh - 92px)!important;padding:48px 5.3% 76px!important;display:flex!important;align-items:center!important;overflow:hidden!important;background:radial-gradient(ellipse at 82% 47%,#163a1b 0,transparent 34%),radial-gradient(ellipse at 83% 67%,#6b1c8d15 0,transparent 28%),linear-gradient(115deg,#050708 0%,#080d0a 62%,#111015 100%)!important}
-.hero-content{width:100%!important;max-width:100%!important;position:relative!important;z-index:3!important;padding-right:0!important}
-h1{width:75%!important;max-width:1180px!important;font-size:clamp(44px,6.1vw,102px)!important;line-height:.98!important;letter-spacing:-.055em!important;margin:25px 0 22px!important}
-.hero-copy{max-width:700px!important;font-size:clamp(16px,1.5vw,22px)!important}
-.hero-bottom{left:5.3%!important;right:5.3%!important}
-@media(max-width:760px){.hero{min-height:auto!important;padding:36px 5% 94px!important;align-items:flex-start!important}.hero-content{padding-right:0!important}h1{width:100%!important;max-width:100%!important;font-size:clamp(40px,9vw,68px)!important;line-height:.98!important}.hero-copy{max-width:100%!important;padding-right:4%!important}.hero-stats{gap:15px!important}.hero-stats span{font-size:8px!important}.hero-bottom{display:none!important}}/* V19: typography-first outbreak hero, no hero emblem */
-
-.hero{min-height:calc(100vh - 92px)!important;padding:28px 5.2% 72px!important;display:flex!important;align-items:center!important;position:relative!important;overflow:hidden!important;background:
-radial-gradient(ellipse at 54% 34%,#10281755 0,transparent 44%),
-radial-gradient(ellipse at 82% 72%,#6b1c8d20 0,transparent 33%),
-repeating-linear-gradient(0deg,transparent 0 47px,#9bff4508 48px),
-repeating-linear-gradient(90deg,transparent 0 47px,#9bff4508 48px),
-linear-gradient(120deg,#030605 0%,#080d09 55%,#050708 100%)!important}
-.hero:before{content:"";position:absolute!important;inset:0!important;border:0!important;background:
-radial-gradient(ellipse at 12% 47%,#9bff4522 0,transparent 28%),
-radial-gradient(ellipse at 77% 35%,#9bff4518 0,transparent 26%),
-linear-gradient(90deg,transparent 0 49.8%,#9bff4514 50%,transparent 50.2%)!important;opacity:1!important;pointer-events:none!important}
-.hero:after{content:"";display:block!important;position:absolute!important;left:0!important;right:0!important;top:13%!important;height:1px!important;background:linear-gradient(90deg,transparent,#9bff4533,transparent)!important}
-.hero-grid{opacity:.18!important}
-.hero-content{width:100%!important;max-width:none!important;position:relative!important;z-index:3!important;padding:0!important}
-.eyebrow{margin-bottom:clamp(16px,2vw,30px)!important;letter-spacing:.18em!important}
-h1{display:block!important;width:100%!important;max-width:none!important;font-size:clamp(48px,10.1vw,156px)!important;line-height:.83!important;letter-spacing:-.065em!important;margin:0 0 clamp(22px,2.5vw,38px)!important;text-wrap:balance!important}
-h1 .dead{color:#f4f5ed!important;text-shadow:2px 3px 0 #303a31,0 0 24px #ffffff12!important}
-h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0 22px #9bff4538,0 4px 0 #31531a!important;letter-spacing:-.07em!important}
-.hero-copy{max-width:780px!important;font-size:clamp(16px,1.65vw,23px)!important;line-height:1.5!important;margin-top:clamp(15px,2vw,25px)!important}
-.hero-actions{margin-top:clamp(18px,2vw,28px)!important}
-.hero-stats{margin-top:clamp(22px,2.5vw,36px)!important}
-.hero-bottom{left:5.2%!important;right:5.2%!important}
-@media(min-width:1400px){h1{font-size:clamp(120px,9.6vw,166px)!important}.hero-copy{max-width:900px!important}}
-@media(max-width:760px){.hero{min-height:auto!important;padding:35px 5% 92px!important}h1{font-size:clamp(43px,10.5vw,78px)!important;line-height:.9!important;letter-spacing:-.06em!important}.hero-copy{max-width:100%!important;font-size:16px!important}.hero-stats{gap:14px!important}.hero-bottom{display:none!important}}
-
-
-/* V20: restore deliberate editorial proportions; no emblem or giant stretched text */
-.hero{min-height:calc(100vh - 92px)!important;padding:clamp(34px,5vh,60px) 5.2% 78px!important;display:flex!important;align-items:center!important;overflow:hidden!important;background:
-radial-gradient(ellipse at 72% 42%,#12271945 0,transparent 34%),
-radial-gradient(ellipse at 85% 74%,#6b1c8d13 0,transparent 30%),
-repeating-linear-gradient(0deg,transparent 0 43px,#9bff4507 44px),
-repeating-linear-gradient(90deg,transparent 0 43px,#9bff4507 44px),
-linear-gradient(120deg,#030605 0%,#080d09 62%,#07090a 100%)!important}
-.hero:before{content:"";position:absolute!important;inset:0!important;border:0!important;background:linear-gradient(90deg,#9bff450c,transparent 65%),radial-gradient(ellipse at 78% 50%,#9bff450b,transparent 35%)!important;pointer-events:none!important}
-.hero:after{display:none!important}
-.hero-content{width:100%!important;max-width:100%!important;position:relative!important;z-index:3!important;padding:0!important}
-.eyebrow{display:inline-flex!important;margin-bottom:clamp(20px,3vh,34px)!important;letter-spacing:.16em!important}
-h1{display:block!important;width:100%!important;max-width:1300px!important;font-size:clamp(48px,7.6vw,116px)!important;line-height:.91!important;letter-spacing:-.064em!important;margin:0 0 clamp(22px,3vh,34px)!important;text-wrap:balance!important}
-h1 .dead{color:#f4f5ed!important;text-shadow:2px 3px 0 #303a31,0 0 24px #ffffff10!important}
-h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0 24px #9bff4538,0 3px 0 #31531a!important;letter-spacing:-.07em!important}
-.hero-copy{max-width:730px!important;font-size:clamp(16px,1.35vw,20px)!important;line-height:1.55!important;margin-top:0!important;color:#bdc9c0!important}
-.hero-actions{margin-top:clamp(20px,2.7vh,30px)!important}
-.hero-stats{margin-top:clamp(24px,3vh,36px)!important}
-.hero-bottom{left:5.2%!important;right:5.2%!important}
-@media(min-width:1400px){h1{font-size:clamp(104px,7.3vw,132px)!important;max-width:1400px!important}}
-@media(max-width:760px){.hero{min-height:auto!important;padding:34px 5% 90px!important}h1{font-size:clamp(42px,9.4vw,70px)!important;line-height:.94!important;letter-spacing:-.06em!important}.hero-copy{max-width:100%!important;font-size:16px!important}.hero-stats{gap:14px!important}.hero-bottom{display:none!important}}
-
-
-/* V21: actual right-side zombie claw graphic built into the live homepage */
-.hero{isolation:isolate!important}
-.hero-content{width:65%!important;max-width:1020px!important}
-h1{width:100%!important;max-width:1000px!important;font-size:clamp(46px,6.3vw,98px)!important;line-height:.94!important;letter-spacing:-.063em!important}
-.hero-copy{max-width:690px!important}
-.hero-bottom{z-index:5}
-@media(max-width:760px){.hero-content{width:100%!important;max-width:100%!important}h1{font-size:clamp(40px,9vw,68px)!important}.hero-bottom{display:none!important}}
-
-
+.hero:before{z-index:1!important}
+.hero-content{position:relative!important;align-self:center!important;z-index:3!important}
+.eyebrow{border:1px solid #496b42!important;background:#0b150c!important}
+.hero-actions{margin-bottom:28px!important}
+.hero-copy{margin-top:clamp(15px,2vw,25px)!important}
+.hero-bottom{bottom:9px!important;border-top:1px solid #27382b!important;padding-top:9px!important;font-size:8px!important}
 /* V22: redesigned welcome hero — editorial typography plus a live terminal panel */
 .hero{min-height:calc(100vh - 92px)!important;padding:clamp(34px,5vh,58px) 5.2% 76px!important;display:flex!important;align-items:center!important;overflow:hidden!important;isolation:isolate!important;background:
 radial-gradient(ellipse at 75% 48%,#14321d66 0,transparent 35%),
@@ -242,13 +112,13 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 .hero-stats{margin-top:clamp(27px,4vh,40px)!important;gap:clamp(15px,2.3vw,32px)!important}
 .hero-stats strong{font-size:clamp(23px,2.1vw,30px)!important}
 .hero-bottom{left:5.2%!important;right:5.2%!important;z-index:5!important}
-.outbreak-panel{position:relative;min-width:0;overflow:hidden;border:1px solid #9bff4538;background:linear-gradient(145deg,#0b1510ed,#080b0bed 58%,#110d16ed);box-shadow:0 25px 90px #0008,inset 0 0 45px #9bff4507;padding:clamp(18px,2.2vw,30px);isolation:isolate}
-.outbreak-panel:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 5px,#b4ff4908 6px);pointer-events:none;z-index:-1}
-@keyframes panelOrbit{to{transform:rotate(360deg)}}@keyframes signalPulse{from{opacity:.35;transform:scaleY(.65)}to{opacity:.95;transform:scaleY(1)}}
 @media(max-width:900px){.hero-layout{grid-template-columns:minmax(0,1fr) minmax(250px,.72fr)!important;gap:22px!important}h1{font-size:clamp(44px,6.3vw,70px)!important}}
-@media(max-width:680px){.hero{padding:32px 5% 92px!important;min-height:auto!important}.hero-layout{grid-template-columns:1fr!important;gap:30px!important}.hero-content{grid-row:1}.outbreak-panel{grid-row:2}.hero-copy{max-width:100%!important}.hero-stats{gap:13px!important}.hero-bottom{display:none!important}}
+@media(max-width:680px){.hero{padding:32px 5% 92px!important;min-height:auto!important}.hero-layout{grid-template-columns:1fr!important;gap:30px!important}.hero-content{grid-row:1}.hero-copy{max-width:100%!important}.hero-stats{gap:13px!important}.hero-bottom{display:none!important}}
 
 
+
+/* Reset properties left behind by superseded vertical hero-label drafts. */
+.hero:after{writing-mode:horizontal-tb!important;text-orientation:mixed!important;transform:none!important;font:inherit!important;letter-spacing:normal!important;color:inherit!important}
 /* Zombie-Maker homepage promotion */
 .zombie-maker-promo{position:relative;isolation:isolate;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);align-items:center;gap:24px;max-width:1240px;margin:54px auto 64px;padding:clamp(28px,5vw,62px);border:1px solid #42633b;background:radial-gradient(ellipse at 78% 48%,#9bff4520,transparent 34%),radial-gradient(ellipse at 95% 8%,#a855f71b,transparent 34%),linear-gradient(115deg,#0b120d,#101a14 55%,#090d13);box-shadow:0 20px 70px #0005}
 .zombie-maker-promo:before{content:"";position:absolute;inset:10px;border:1px solid #9bff451b;pointer-events:none;z-index:-1}
@@ -351,9 +221,9 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 @media(max-width:560px){section.section.mini-game#snake-game>.arcade-feature{grid-template-columns:minmax(0,1fr)}}
 
 
-</style>
 
-<style id="jupiter-buy-widget-styles">
+
+
 :root{--jupiter-plugin-primary:155,255,69;--jupiter-plugin-background:8,12,10;--jupiter-plugin-primaryText:235,244,229;--jupiter-plugin-warning:255,190,70;--jupiter-plugin-interactive:26,37,28;--jupiter-plugin-module:13,19,15}
 .jupiter-buy-section{border-top:1px solid #9bff4524;background:radial-gradient(ellipse at 75% 35%,#19331d70 0,transparent 48%),linear-gradient(180deg,#090d0b,#080b11);padding-top:76px;padding-bottom:82px}
 .jupiter-buy-heading{align-items:end}
@@ -382,13 +252,15 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 @keyframes jupiterSpin{to{transform:rotate(360deg)}}
 @media(max-width:850px){.jupiter-buy-layout{grid-template-columns:1fr}.jupiter-buy-copy{padding:23px}.jupiter-terminal-shell{max-width:100%}}
 @media(max-width:560px){.jupiter-buy-section{padding:48px 5%}.jupiter-buy-layout{margin-top:20px;gap:16px}.jupiter-buy-copy{padding:19px}.jupiter-terminal-top{padding:0 11px;font-size:7px}#jupiter-zombcash-terminal{min-height:560px}}
+
 </style>
 <!-- Current official Jupiter Plugin (replaces deprecated Jupiter Terminal v4). -->
 
 
 <link rel="stylesheet" href="/site-polish.css?v=20261109-video-cards1">
 
-<style id="zombcash-hero-art-panel">
+<style id="homepage-components-inline">
+
 .zc-hero-art-panel{position:relative!important;display:block!important;min-width:0!important;width:100%!important;height:clamp(390px,38vw,520px)!important;max-height:520px!important;overflow:hidden!important;border:1px solid #456b37!important;border-radius:3px!important;background:#050906!important;box-shadow:inset 0 0 50px #9bff4510,0 0 35px #9bff4508!important;isolation:isolate!important}
 .zc-hero-art-panel .zc-radar-art{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;overflow:hidden!important;background:#050906!important}
 .zc-hero-art-panel .zc-radar-scene{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;filter:saturate(.9) contrast(1.08)!important}
@@ -402,9 +274,9 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 .zc-hero-art-panel .zc-art-live-dot{width:7px;height:7px;border-radius:50%;background:#a4ff43;box-shadow:0 0 12px #a4ff43;flex:0 0 auto}
 @media(max-width:950px){.zc-hero-art-panel{height:clamp(330px,42vw,450px)!important}}
 @media(max-width:680px){.zc-hero-art-panel{height:300px!important;max-height:300px!important;width:100%!important}.zc-hero-art-panel .zc-art-caption{left:12px;right:12px;bottom:12px;padding:10px;font-size:8px;letter-spacing:1px}.zc-hero-art-panel .zc-art-caption b{font-size:8px}}
-</style>
 
-<style id="zombcash-activity-chart-trades">
+
+
 .activity-market-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:stretch;margin-top:22px}
 .activity-chart-panel,.recent-trades-panel{display:flex;flex-direction:column;min-width:0;min-height:300px;height:100%;align-self:stretch;margin:0;padding:16px 14px;border:1px solid #263a2a;background:linear-gradient(145deg,#09110b,#070b09)}
 .activity-chart-panel #activity-price-chart{flex:0 0 180px;height:180px}.recent-trades-list{flex:1;min-height:0;align-content:start}
@@ -452,9 +324,9 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
   .hero .hero-actions{gap:10px!important;row-gap:10px!important}
   .hero .hero-actions>.btn{padding:11px 13px!important;font-size:clamp(9px,1vw,12px)!important}
 }
-</style>
 
-<style id="multilingual-layout-safety">
+
+
 /* Multilingual header safety: keep the language picker out of the crowded navigation row. */
 .topbar{position:sticky;isolation:isolate}
 .topbar>.language-switcher{flex:0 0 auto;position:relative;margin-left:0}
@@ -469,8 +341,9 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 .btn,.top-cta,.home-return-button,.zrai-period,.zrai-toolbar button,.language-trigger{max-width:100%;overflow-wrap:anywhere}
 .hero-actions,.community-buttons,.zrai-toolbar{flex-wrap:wrap}
 .zrai-toolbar>*{min-width:0}
-</style><script>if(new URLSearchParams(location.search).get('arcadeSnake')==='1')document.documentElement.classList.add('arcade-snake-embed');</script>
-<style id="arcade-snake-embed-style">
+
+
+
 html.arcade-snake-embed,html.arcade-snake-embed body{margin:0!important;padding:0!important;width:100%!important;min-width:0!important;min-height:0!important;height:auto!important;overflow:hidden!important;background:#080b11!important}
 html.arcade-snake-embed body>*:not(:has(#snake-modal)){display:none!important}
 html.arcade-snake-embed body>*:has(#snake-modal){display:contents!important}
@@ -494,9 +367,9 @@ html.arcade-snake-embed.arcade-snake-fullscreen .game-box{height:100%!important;
 html.arcade-snake-embed.arcade-snake-fullscreen .game-screen{flex:1 1 auto!important;width:100%!important;height:100%!important;min-height:0!important;aspect-ratio:auto!important}
 html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute!important;inset:0!important;width:100%!important;height:100%!important}
 @media(max-width:560px){html.arcade-snake-embed .game-screen{aspect-ratio:4/3!important}}
-</style>
 
-<style id="zc-multilingual-hero-layout-fix">
+
+
 /* Multilingual hero: translated headlines must grow naturally instead of being cropped. */
 @media (min-width:761px){
   .hero{
@@ -542,8 +415,9 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
   html[lang="ja"] .hero h1,html[lang="zh-CN"] .hero h1,html[lang="hi"] .hero h1{font-size:clamp(32px,8.5vw,46px)!important;line-height:1.12!important}
   .hero-bottom{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;margin-top:18px!important}
 }
-</style>
-<style id="desktop-mode-touch-layout-fix">
+
+
+
 
 /* Desktop-site mode on phones: Chrome widens the CSS viewport, so width-only
    breakpoints miss the real device. Coarse pointer keeps touch phones stacked. */
@@ -558,9 +432,11 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
   .hero-stats { gap:14px!important; }
   .hero-bottom { display:none!important; }
 }
-</style>
-<style id="field-manual-spotlight-style">.field-manual-spotlight{display:flex;align-items:center;justify-content:space-between;gap:28px;margin:28px 0 10px;padding:clamp(20px,3vw,34px);border:1px solid #385039;border-left:4px solid #9bff45;border-radius:14px;background:radial-gradient(ellipse at 90% 0,rgba(72,133,45,.2),transparent 55%),linear-gradient(135deg,#0e1712,#090e13);box-shadow:0 12px 34px rgba(0,0,0,.22)}.field-manual-copy{min-width:0}.field-manual-kicker{font:700 10px Orbitron,sans-serif;letter-spacing:.14em;color:#9bff45}.field-manual-spotlight h2{font-size:clamp(22px,3vw,34px);line-height:1.15;margin:9px 0}.field-manual-spotlight p{max-width:700px;color:#c1cec3;line-height:1.6;margin:8px 0 18px}.field-manual-link{display:inline-flex;gap:12px;align-items:center;padding:12px 16px;background:#9bff45;color:#091007;text-decoration:none;font:800 11px Orbitron,sans-serif;letter-spacing:.05em;border-radius:5px}.field-manual-link:hover{background:#c5ff9b;color:#091007}.field-manual-status{display:flex;flex:0 0 180px;flex-direction:column;gap:8px;padding:16px;border:1px solid #2b4030;background:#080e0a;border-radius:9px;font:700 10px Orbitron,sans-serif;letter-spacing:.08em;color:#a6b5a5}.field-manual-status strong{color:#edf5eb;font-size:12px}.field-manual-status small{color:#72836f;font-size:9px}.field-manual-dot{width:8px;height:8px;border-radius:50%;background:#9bff45;box-shadow:0 0 12px #9bff45}@media(max-width:650px){.field-manual-spotlight{flex-direction:column;align-items:stretch}.field-manual-status{flex-basis:auto}}</style>
-<style id="mobile-overflow-guard-20261023">
+
+
+.field-manual-spotlight{display:flex;align-items:center;justify-content:space-between;gap:28px;margin:28px 0 10px;padding:clamp(20px,3vw,34px);border:1px solid #385039;border-left:4px solid #9bff45;border-radius:14px;background:radial-gradient(ellipse at 90% 0,rgba(72,133,45,.2),transparent 55%),linear-gradient(135deg,#0e1712,#090e13);box-shadow:0 12px 34px rgba(0,0,0,.22)}.field-manual-copy{min-width:0}.field-manual-kicker{font:700 10px Orbitron,sans-serif;letter-spacing:.14em;color:#9bff45}.field-manual-spotlight h2{font-size:clamp(22px,3vw,34px);line-height:1.15;margin:9px 0}.field-manual-spotlight p{max-width:700px;color:#c1cec3;line-height:1.6;margin:8px 0 18px}.field-manual-link{display:inline-flex;gap:12px;align-items:center;padding:12px 16px;background:#9bff45;color:#091007;text-decoration:none;font:800 11px Orbitron,sans-serif;letter-spacing:.05em;border-radius:5px}.field-manual-link:hover{background:#c5ff9b;color:#091007}.field-manual-status{display:flex;flex:0 0 180px;flex-direction:column;gap:8px;padding:16px;border:1px solid #2b4030;background:#080e0a;border-radius:9px;font:700 10px Orbitron,sans-serif;letter-spacing:.08em;color:#a6b5a5}.field-manual-status strong{color:#edf5eb;font-size:12px}.field-manual-status small{color:#72836f;font-size:9px}.field-manual-dot{width:8px;height:8px;border-radius:50%;background:#9bff45;box-shadow:0 0 12px #9bff45}@media(max-width:650px){.field-manual-spotlight{flex-direction:column;align-items:stretch}.field-manual-status{flex-basis:auto}}
+
+
 /* Keep the mobile canvas within the viewport; wide data tables retain their own scrolling. */
 @media (max-width: 600px) {
   html, body { max-width: 100%; overflow-x: clip; }
@@ -571,9 +447,9 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
     max-width: 100%;
   }
 }
-</style>
 
-<style id="zombcash-promo-video-library">
+
+
 .zc-promo-video{padding:clamp(34px,5vw,68px) 5.5%;border-top:1px solid #9bff4520;border-bottom:1px solid #9bff4518;background:radial-gradient(ellipse at 18% 10%,#19351d80,transparent 48%),linear-gradient(120deg,#080d0a,#0a0d12 72%,#100b16)}
 .zc-promo-video-shell{width:100%;max-width:1440px;margin:0 auto;display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:clamp(22px,4vw,56px);align-items:center}
 .zc-promo-video-copy{min-width:0}
@@ -602,10 +478,9 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 .zc-promo-player-foot a:hover{color:#9bff45}
 @media(max-width:850px){.zc-promo-video-shell{grid-template-columns:minmax(0,1fr);gap:22px}.zc-promo-video-copy h2{font-size:clamp(28px,5vw,40px)}.zc-promo-video-copy>p{max-width:620px}.zc-promo-player-wrap{width:100%}}
 @media(max-width:520px){.zc-promo-video{padding:34px 4%}.zc-promo-video-controls{gap:6px}.zc-promo-video-controls button{padding:9px 8px;font-size:7px}.zc-promo-player-top,.zc-promo-player-foot{padding:10px 9px;font-size:7px;letter-spacing:.2px}.zc-promo-video-kicker{font-size:8px;letter-spacing:.7px}.zc-promo-video-copy h2{letter-spacing:-.8px}}
-</style>
 
-<meta name="38200f66893a4042799616bc41b0aa824be9a7b0" content="38200f66893a4042799616bc41b0aa824be9a7b0" />
-<style id="de-field-manual-heading-fit-20261101">
+
+
 /* Keep the German field-manual spotlight inside the hero content column. */
 .field-manual-spotlight{min-width:0;max-width:100%;gap:clamp(12px,2vw,24px)}
 .field-manual-copy{flex:1 1 auto;min-width:0;max-width:100%}
@@ -629,10 +504,12 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
   .field-manual-spotlight h2{font-size:clamp(19px,6vw,25px);overflow-wrap:anywhere}
   .field-manual-status{width:100%;flex:0 1 auto}
 }
+
 </style>
 
 <link rel="stylesheet" href="/homepage-visual.css?v=cinematic-redesign-20261123-1">
-<style id="zc-home-hero-compact-ad-placement">
+<style id="homepage-late-overrides">
+
 /* Keep the home hero content-led: browser zoom must not turn 100vh into a huge empty panel. */
 body > main#home > section.hero {
   height: auto !important;
@@ -664,8 +541,9 @@ body > main#home > section.zc-adsterra-section .zc-adsterra-inner {
   body > main#home > section.hero .zc-hero-art-panel { aspect-ratio: 1.35 / 1; }
   body > main#home > section.zc-adsterra-section { padding: 10px 4% 16px !important; }
 }
-</style>
-<style id="zc-homepage-final-layout-20261104-priority">
+
+
+
 /* Final homepage layout: balanced hero, compact sponsor panel, no oversized empty ad frame. */
 body > main#home > section.hero {
   min-height: 0 !important;
@@ -738,8 +616,9 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
     padding: 20px 12px !important;
   }
 }
-</style>
-<style id="zc-remove-native-ad-dead-space-20261112">
+
+
+
 /* Last-in-document override: native creative is ~195px tall; remove the unused 250px reserve. */
 @media (min-width: 901px) {
   body:has(#home) #home > section.hero .zc-hero-sponsor {
@@ -769,8 +648,9 @@ body > main#home > section.hero .zc-hero-sponsor-promo {
     margin-top: 0 !important;
   }
 }
-</style>
-<style id="homepage-cinematic-refresh-2026">
+
+
+
 /* ZOMBCASH // Cinematic homepage refresh — visual-only, keep existing components and data hooks */
 :root{
   --zc-acid:#9bff45;
@@ -1004,8 +884,9 @@ body:has(#home) .site-footer{
   body:has(#home) #home .tool-card{transition:none}
   html{scroll-behavior:auto}
 }
-</style>
-<style id="homepage-tool-card-softness-override-2026">
+
+
+
 /* Override the legacy high-specificity homepage card treatment intentionally. */
 body:has(#home) #home .tools#radar .tool-card{
   border-radius:18px!important;
@@ -1031,8 +912,9 @@ body:has(#home) #home .tools#radar .tool-card .tool-art{
   body:has(#home) #home .tools#radar .tool-card{transition:none!important}
   body:has(#home) #home .tools#radar .tool-card:hover{transform:none!important}
 }
-</style>
-<style id="homepage-late-overrides">
+
+
+
 /* Consolidated from zctv-studio-v2; original order preserved. */
 #promo-video{display:none!important}
 .zctv-channel-hub{position:relative;isolation:isolate;padding:clamp(30px,4vw,58px) 4.5%;overflow:hidden;border-block:1px solid #9bff4540;background:radial-gradient(ellipse at 48% 42%,#1c3b2080,transparent 42%),linear-gradient(120deg,#050807,#0a1010 55%,#100b16)}
@@ -1827,6 +1709,7 @@ body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
 body:has(#home) #home > section.hero > .hero-layout{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-areas:none!important;align-items:start!important;gap:24px!important}
 body:has(#home) #home > section.hero > .hero-layout > .hero-content,
 body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{grid-column:1!important;grid-area:auto!important;width:100%!important;max-width:none!important}
+
 </style>
 </head>
 <body>
