@@ -4,6 +4,17 @@ const assert = require('node:assert/strict');
 
 const root = path.resolve(__dirname, '..');
 const ribbonScript = fs.readFileSync(path.join(root, 'homepage-ribbons.js'), 'utf8');
+const homepageVisualCss = fs.readFileSync(path.join(root, 'homepage-visual.css'), 'utf8');
+const aiStatusScript = fs.readFileSync(path.join(root, 'ai-model-status.js'), 'utf8');
+assert.match(homepageVisualCss, /\\.zc-ai-engine-card\\{/,
+  'community AI status card styles must live in the cached homepage stylesheet');
+assert.doesNotMatch(aiStatusScript, /createElement\\(["']style["']\\)/,
+  'AI status script must not inject a duplicate runtime stylesheet');
+assert.match(aiStatusScript, /signal:\\s*AbortSignal\\.timeout\\(10000\\)/,
+  'AI status endpoint request must have a 10-second timeout');
+assert.match(aiStatusScript, /if \\(refreshing\\) return;/,
+  'AI status polling must not overlap requests');
+
 assert.doesNotMatch(ribbonScript, /if\s*\(existing\)\s*existing\.remove\(\)/, 'live ribbons must reuse the reserved wrapper instead of removing/reinserting it');
 assert.match(ribbonScript, /wrap\.removeAttribute\('aria-busy'\)/, 'live ribbon wrapper must clear its busy state after rendering');
 const pages = [
