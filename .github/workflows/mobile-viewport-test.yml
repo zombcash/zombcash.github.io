@@ -127,6 +127,7 @@ jobs:
       - name: Validate homepage, Hub and Arcade smoke-test JavaScript syntax
         run: |
           node --check assets/js/zctv-player.js
+          node --check ai-model-status.js
           node --check shared-nav.js
           node --check tests/shared-nav-accessibility-smoke.cjs
           node --check tests/homepage-css-seo-smoke.cjs
