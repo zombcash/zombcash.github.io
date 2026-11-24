@@ -76,12 +76,15 @@ def translate_protected(model, source_text, target_code):
 
 def translate_with_explicit_glossary(model, text, target_code, protected_names):
     names = list(dict.fromkeys(protected_names))
+    marked_text = text
+    for name in sorted(names, key=len, reverse=True):
+        pattern = re.compile(re.escape(name), re.I)
+        marked_text = pattern.sub(lambda match: "⟦" + match.group(0) + "⟧", marked_text)
     prompt = (
         f"Translate the following English text into {target_code}. "
-        "The listed items are proper names and must be copied exactly as written: "
-        + json.dumps(names, ensure_ascii=False)
-        + ". Do not translate, transliterate, respell, or change their capitalization. "
-        "Output only the translated text.\n\nTEXT:\n" + text
+        "Copy every phrase enclosed in the special brackets ⟦ and ⟧ exactly as written. "
+        "Do not translate, transliterate, respell, or change capitalization inside those brackets. "
+        "Keep the brackets in the output. Output only the translated text.\n\nTEXT:\n" + marked_text
     )
     response = model.create_chat_completion(
         messages=[{"role": "user", "content": prompt}],
@@ -90,8 +93,15 @@ def translate_with_explicit_glossary(model, text, target_code, protected_names):
     output = response["choices"][0]["message"]["content"] or ""
     output = re.sub(r"<think>[\s\S]*?</think>", "", output).strip()
     for name in names:
-        if not re.search(re.escape(name), output, re.I):
-            return None, f"explicit_glossary_missing:{name}"
+        bracketed = re.compile("⟦" + re.escape(name) + "⟧", re.I)
+        if bracketed.search(output):
+            output = bracketed.sub(lambda match: name, output)
+            continue
+        plain = re.compile(re.escape(name), re.I)
+        if plain.search(output):
+            output = plain.sub(lambda match: name, output)
+            continue
+        return None, f"bracketed_glossary_missing:{name}"
     return output, None
 
 def translate_segment(model, text, target_code):
@@ -273,17 +283,20 @@ def process_all(model, lang, target_code):
         page_changed = False
         for block_index, (source_p, target_p) in enumerate(zip(source_ps, target_ps)):
             source_text = source_p.get_text(" ", strip=True)
-            hits = [term for term in PROTECTED_TERMS if re.search(re.escape(term), source_text, re.I)]
+            hits = []
+            for term in PROTECTED_TERMS:
+                matches = [match.group(0) for match in re.finditer(re.escape(term), source_text, re.I)]
+                if matches:
+                    per_term[term] += 1
+                    hits.extend(matches)
             if not hits:
                 continue
             candidates += 1
-            for term in hits:
-                per_term[term] += 1
             # The title is a protected publication name, not a translatable phrase.
             is_book_title = filename == "the-meridian-of-ash.html" and source_p.name == "h1" and source_text.strip().upper() == "THE MERIDIAN OF ASH"
             if not is_book_title:
                 target_text = target_p.get_text(" ", strip=True)
-                if all(re.search(re.escape(term), target_text, re.I) for term in hits):
+                if all(re.search(re.escape(term), target_text) for term in hits):
                     already_ok += 1
                     continue
             if is_book_title:
