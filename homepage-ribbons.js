@@ -75,30 +75,36 @@
   return (v>=0?'+':'')+v.toFixed(2)+'%';
  }
  function updateCrypto(){
-  var symbols=['BTCUSDT','ETHUSDT','SOLUSDT'];
-  // Bound provider requests so a stalled Binance edge can reach the CoinGecko fallback.
-  fetch('https://api.binance.com/api/v3/ticker/24hr?symbols='+encodeURIComponent(JSON.stringify(symbols)),{cache:'no-store',signal:AbortSignal.timeout(10000)})
-   .then(function(r){if(!r.ok)throw new Error('Binance HTTP '+r.status);return r.json();})
-   .then(function(rows){
-    if(!Array.isArray(rows)||!symbols.every(function(symbol){return rows.some(function(row){return row&&row.symbol===symbol&&Number(row.lastPrice)>0;});}))throw new Error('Binance incomplete ticker response');
-    setMarketSource('');
-    rows.forEach(function(row){
-     var name=row.symbol.replace('USDT','');
-     var change=Number(row.priceChangePercent);
-     setItem(name+':',name+': '+fmtPrice(Number(row.lastPrice))+' ('+fmtChange(change)+')');
+  var ids={BTC:'bitcoin',ETH:'ethereum',SOL:'solana'};
+  // CoinGecko supports browser CORS from the live site origin; use it first to avoid a predictable Binance CORS failure.
+  fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Csolana&vs_currencies=usd&include_24hr_change=true',{cache:'no-store',signal:AbortSignal.timeout(10000)})
+   .then(function(r){if(!r.ok)throw new Error('CoinGecko HTTP '+r.status);return r.json();})
+   .then(function(data){
+    var available=Object.keys(ids).some(function(symbol){var quote=data[ids[symbol]]||{};return Number(quote.usd)>0;});
+    if(!available)throw new Error('CoinGecko returned no valid ticker prices');
+    setMarketSource('COINGECKO');
+    Object.keys(ids).forEach(function(symbol){
+     var quote=data[ids[symbol]]||{},price=Number(quote.usd),rawChange=quote.usd_24h_change,change=rawChange===null||rawChange===undefined?NaN:Number(rawChange);
+     if(Number.isFinite(price)&&price>0)setItem(symbol+':',symbol+': '+fmtPrice(price)+(Number.isFinite(change)?' ('+fmtChange(change)+')':''));
+     else setItem(symbol+':',symbol+': temporarily unavailable');
     });
    }).catch(function(){
-    var ids={BTC:'bitcoin',ETH:'ethereum',SOL:'solana'};
-    fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Csolana&vs_currencies=usd&include_24hr_change=true',{cache:'no-store',signal:AbortSignal.timeout(10000)})
-     .then(function(r){if(!r.ok)throw new Error('CoinGecko HTTP '+r.status);return r.json();})
-     .then(function(data){
-      if(Object.keys(ids).some(function(symbol){var quote=data[ids[symbol]]||{};return Number(quote.usd)>0;}))setMarketSource('COINGECKO');
-      Object.keys(ids).forEach(function(symbol){
-       var quote=data[ids[symbol]]||{},price=Number(quote.usd),rawChange=quote.usd_24h_change,change=rawChange===null||rawChange===undefined?NaN:Number(rawChange);
-       if(Number.isFinite(price)&&price>0)setItem(symbol+':',symbol+': '+fmtPrice(price)+(Number.isFinite(change)?' ('+fmtChange(change)+')':''));
-       else setItem(symbol+':',symbol+': temporarily unavailable');
+    // Binance remains a secondary fallback if CoinGecko is unavailable or rate-limited.
+    var symbols=['BTCUSDT','ETHUSDT','SOLUSDT'];
+    fetch('https://api.binance.com/api/v3/ticker/24hr?symbols='+encodeURIComponent(JSON.stringify(symbols)),{cache:'no-store',signal:AbortSignal.timeout(10000)})
+     .then(function(r){if(!r.ok)throw new Error('Binance HTTP '+r.status);return r.json();})
+     .then(function(rows){
+      if(!Array.isArray(rows)||!symbols.every(function(symbol){return rows.some(function(row){return row&&row.symbol===symbol&&Number(row.lastPrice)>0;});}))throw new Error('Binance incomplete ticker response');
+      setMarketSource('');
+      rows.forEach(function(row){
+       var name=row.symbol.replace('USDT','');
+       var change=Number(row.priceChangePercent);
+       setItem(name+':',name+': '+fmtPrice(Number(row.lastPrice))+' ('+fmtChange(change)+')');
       });
-     }).catch(function(){['BTC','ETH','SOL'].forEach(function(symbol){setItem(symbol+':',symbol+': temporarily unavailable');});});
+     }).catch(function(){
+      setMarketSource('');
+      ['BTC','ETH','SOL'].forEach(function(symbol){setItem(symbol+':',symbol+': temporarily unavailable');});
+     });
    });
  }
  function updateFx(){
