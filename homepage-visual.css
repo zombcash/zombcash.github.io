@@ -1,3 +1,7 @@
+/* Reserve the final shared-header height before shared-nav.js replaces the legacy header markup. */
+body:has(#home)>header.topbar{min-height:82px!important;box-sizing:border-box!important}
+@media(max-width:760px){body:has(#home)>header.topbar{min-height:95px!important}}
+
 /* ZombieCash homepage visual refresh — additive, homepage-scoped styles only. */
 body:has(#home) .zc-outbreak-ribbons{position:relative;z-index:19;display:grid;gap:5px;padding:7px clamp(10px,2vw,28px);min-height:127px;box-sizing:border-box;background:#050907;border-bottom:1px solid #25382a}
 body:has(#home) .zc-ribbon{height:34px;display:flex;align-items:center;overflow:hidden;position:relative;border:1px solid var(--ribbon-color);border-radius:9px;background:linear-gradient(90deg,var(--ribbon-tint),#080d0b 52%,#080d0b);box-shadow:0 0 18px color-mix(in srgb,var(--ribbon-color) 16%,transparent),inset 0 0 18px color-mix(in srgb,var(--ribbon-color) 8%,transparent)}
