@@ -38,7 +38,7 @@
   const loginWaiting = {"en":"Open Telegram and press Start. This page will finish login automatically.","de":"Öffne Telegram und tippe auf Start. Diese Seite schließt die Anmeldung automatisch ab.","fr":"Ouvrez Telegram et appuyez sur Démarrer. La connexion se terminera automatiquement ici.","it":"Apri Telegram e premi Avvia. L’accesso verrà completato automaticamente su questa pagina.","ja":"Telegramを開いて「Start」を押してください。このページで自動的にログインが完了します。","zh-CN":"打开 Telegram 并点击 Start。此页面将自动完成登录。","ru":"Откройте Telegram и нажмите «Запустить». Вход на этой странице завершится автоматически.","tr":"Telegram'ı açıp Başlat'a dokunun. Giriş bu sayfada otomatik tamamlanacak.","hi":"Telegram खोलें और Start दबाएँ। इस पेज पर लॉगिन अपने आप पूरा हो जाएगा。"};
 
   const safe = value => String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  let overlay, statusNode, bodyNode, widgetNode, isBusy = false, presenceOnline = false, presenceTimer = 0;
+  let overlay, statusNode, bodyNode, widgetNode, isBusy = false, presenceOnline = false, presenceTimer = 0, modalOpener = null, modalTrigger = null;
   const readProfile = () => { try { return JSON.parse(localStorage.getItem(STORAGE_PROFILE) || 'null'); } catch (_) { return null; } };
   const token = () => { try { return localStorage.getItem(STORAGE_TOKEN) || ''; } catch (_) { return ''; } };
   function updateCta() {
@@ -50,6 +50,9 @@
     cta.textContent = p ? '☣ ' + (p.publicDisplayName || p.firstName || 'SURVIVOR') : unauthenticatedLabel;
     cta.classList.toggle('survivor-online', Boolean(p && presenceOnline && p.presenceVisible !== false));
     cta.setAttribute('aria-label', p ? t('profile') + (presenceOnline ? ' · ONLINE' : '') : unauthenticatedLabel);
+    cta.setAttribute('aria-haspopup', 'dialog');
+    cta.setAttribute('aria-controls', 'survivor-profile-modal');
+    cta.setAttribute('aria-expanded', String(Boolean(overlay && !overlay.hidden)));
     cta.href = '#survivor-profile';
   }
   function ensureModal() {
@@ -58,9 +61,10 @@
     style.textContent = '.survivor-overlay[hidden]{display:none!important}.survivor-overlay{position:fixed;inset:0;z-index:20000;display:grid;place-items:center;padding:18px;background:#020603df;backdrop-filter:blur(7px)}.survivor-modal{position:relative;width:min(440px,100%);max-height:calc(100vh - 36px);max-height:calc(100dvh - 36px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#426341 #07100a;padding:26px;border:1px solid #6a9d42;background:linear-gradient(145deg,#101b12,#070b09);color:#edf5e5;box-shadow:0 22px 80px #000b;font-family:Rajdhani,system-ui,sans-serif}.survivor-modal h2{margin:0 0 10px;color:#9bff45;font:700 19px Orbitron,system-ui,sans-serif}.survivor-modal p{color:#b8c8b6;line-height:1.5}.survivor-modal .survivor-status{min-height:24px;color:#9bff45;font-size:14px}.survivor-modal .survivor-widget{display:flex;justify-content:center;min-height:46px;margin:20px 0}.survivor-modal .survivor-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.survivor-modal button{border:1px solid #426341;background:#0b120c;color:#b8f992;padding:10px 14px;cursor:pointer;font:700 11px Orbitron,system-ui,sans-serif}.survivor-modal .survivor-stats{border:1px solid #2b4930;padding:14px;margin-top:16px}.survivor-modal .survivor-points{font:700 26px Orbitron,system-ui,sans-serif;color:#9bff45}.survivor-modal .survivor-dashboard{display:grid;gap:12px}.survivor-modal .survivor-stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.survivor-modal .survivor-stat-tile{border:1px solid #263b29;background:#080f0a;padding:12px;min-width:0}.survivor-modal .survivor-stat-tile span{display:block;color:#9aa996;font:600 9px Orbitron,system-ui,sans-serif;letter-spacing:.5px}.survivor-modal .survivor-stat-tile b{display:block;color:#9bff45;font:700 22px Orbitron,system-ui,sans-serif;margin:8px 0}.survivor-modal .survivor-stat-tile small{color:#9aa996}.survivor-modal .survivor-activity{border-top:1px solid #29402b;padding-top:10px}.survivor-modal .survivor-activity h3{font:700 10px Orbitron,system-ui,sans-serif;color:#9bff45}.survivor-modal .survivor-activity-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid #17251a;color:#b9c8b5;font-size:13px}.survivor-modal .survivor-activity-row b{color:#9bff45;white-space:nowrap}@media(max-width:420px){.survivor-modal{padding:18px}.survivor-modal .survivor-stat-grid{grid-template-columns:1fr 1fr}}.survivor-modal .survivor-privacy{font-size:12px;color:#8e9c8d}.survivor-modal [hidden]{display:none!important}.survivor-entry-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;margin:10px 0 0;padding:10px 12px;border:1px solid #426341;background:#0b120c;color:#b8f992;font:700 10px Orbitron,system-ui,sans-serif;cursor:pointer;white-space:normal}.survivor-entry-button.survivor-online:after{content:"";display:inline-block;width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:#9bff45;box-shadow:0 0 8px #9bff45}';
     document.head.append(style);
     overlay = document.createElement('div');
+    overlay.id = 'survivor-profile-modal';
     overlay.className = 'survivor-overlay';
     overlay.hidden = true;
-    overlay.innerHTML = '<section class="survivor-modal" role="dialog" aria-modal="true" aria-labelledby="survivor-title"><h2 id="survivor-title"></h2><p id="survivor-intro"></p><div id="survivor-body"></div><p class="survivor-status" id="survivor-status" role="status"></p><p class="survivor-privacy" id="survivor-privacy"></p><div class="survivor-actions"><button type="button" id="survivor-logout" hidden></button><button type="button" id="survivor-close"></button></div></section>';
+    overlay.innerHTML = '<section class="survivor-modal" role="dialog" aria-modal="true" aria-labelledby="survivor-title" aria-describedby="survivor-intro" tabindex="-1"><h2 id="survivor-title"></h2><p id="survivor-intro"></p><div id="survivor-body"></div><p class="survivor-status" id="survivor-status" role="status"></p><p class="survivor-privacy" id="survivor-privacy"></p><div class="survivor-actions"><button type="button" id="survivor-logout" hidden></button><button type="button" id="survivor-close"></button></div></section>';
     document.body.append(overlay);
     statusNode = overlay.querySelector('#survivor-status');
     bodyNode = overlay.querySelector('#survivor-body');
@@ -68,12 +72,63 @@
     overlay.querySelector('#survivor-close').addEventListener('click', closeModal);
     overlay.querySelector('#survivor-logout').addEventListener('click', () => {
       try { localStorage.removeItem(STORAGE_TOKEN); localStorage.removeItem(STORAGE_PROFILE); } catch (_) {}
-      updateCta(); renderModal(); statusNode.textContent = '';
+      updateCta(); renderModal(); focusModalFirst(); statusNode.textContent = '';
     });
     overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !overlay.hidden) closeModal(); });
+    document.addEventListener('keydown', e => {
+      if (!overlay || overlay.hidden) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeModal();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const focusable = Array.from(overlay.querySelectorAll('a[href],button:not([disabled]):not([hidden]),input:not([disabled]):not([hidden]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'))
+        .filter(element => element.getClientRects().length > 0);
+      const dialog = overlay.querySelector('.survivor-modal');
+      if (!focusable.length) {
+        e.preventDefault();
+        if (dialog) dialog.focus();
+        return;
+      }
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && (document.activeElement === first || document.activeElement === dialog)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
+    document.addEventListener('focusin', e => {
+      if (!overlay || overlay.hidden || overlay.contains(e.target)) return;
+      focusModalFirst();
+    });
   }
-  function closeModal() { if (overlay) overlay.hidden = true; }
+  function focusModalFirst() {
+    if (!overlay || overlay.hidden) return;
+    const first = Array.from(overlay.querySelectorAll('a[href],button:not([disabled]):not([hidden]),input:not([disabled]):not([hidden]),select:not([disabled]),textarea:not([disabled])'))
+      .find(element => element.getClientRects().length > 0);
+    (first || overlay.querySelector('.survivor-modal'))?.focus();
+  }
+  function openModal(trigger) {
+    ensureModal();
+    modalOpener = trigger || document.activeElement;
+    modalTrigger = trigger || modalOpener;
+    overlay.hidden = false;
+    if (modalTrigger) modalTrigger.setAttribute('aria-expanded', 'true');
+    renderModal();
+    focusModalFirst();
+  }
+  function closeModal() {
+    if (overlay) overlay.hidden = true;
+    if (modalTrigger) modalTrigger.setAttribute('aria-expanded', 'false');
+    const restore = modalOpener;
+    modalOpener = null;
+    modalTrigger = null;
+    if (restore && restore.isConnected && typeof restore.focus === 'function') restore.focus();
+  }
   function renderModal() {
     ensureModal();
     const profile = readProfile();
@@ -112,6 +167,7 @@
       const saveSettings = bodyNode.querySelector('#survivor-save-settings');
       if (saveSettings) saveSettings.addEventListener('click', saveSurvivorSettings);
       loadSurvivorDashboard();
+      focusModalFirst();
       return;
     }
     const label = document.createElement('p'); label.textContent = t('connect'); bodyNode.append(label, widgetNode);
@@ -129,6 +185,7 @@
     qrButton.style.cssText = 'margin-left:8px;border-color:#2b4930;color:#9aa996;';
     qrButton.addEventListener('click', beginQrLogin);
     widgetNode.append(qrButton);
+    focusModalFirst();
   }
   async function beginQrLogin() {
     if (isBusy) return;
@@ -136,7 +193,7 @@
     statusNode.textContent = t('loading');
     try {
       const response = await fetch(API + '/api/auth/telegram/start', {
-        method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}', cache: 'no-store'
+        method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}', cache: 'no-store', signal: AbortSignal.timeout(12000)
       });
       const data = await response.json();
       if (!response.ok || !data.ok || !data.nonce || !data.botUrl) {
@@ -173,7 +230,7 @@
       const expiresAt = Date.now() + 115000;
       while (Date.now() < expiresAt) {
         await new Promise(resolve => setTimeout(resolve, 2000));
-        const statusResponse = await fetch(API + '/api/auth/telegram/status?nonce=' + encodeURIComponent(data.nonce), {cache:'no-store'});
+        const statusResponse = await fetch(API + '/api/auth/telegram/status?nonce=' + encodeURIComponent(data.nonce), {cache:'no-store', signal:AbortSignal.timeout(8000)});
         const statusData = await statusResponse.json().catch(() => ({}));
         if (statusResponse.status === 410) {
           statusNode.textContent = t('error');
@@ -208,7 +265,7 @@
     statusNode.textContent = t('loading');
     try {
       const response = await fetch(API + '/api/auth/telegram/start', {
-        method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}', cache: 'no-store'
+        method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}', cache: 'no-store', signal: AbortSignal.timeout(12000)
       });
       const data = await response.json();
       if (!response.ok || !data.ok || !data.nonce || !data.botUrl) {
@@ -228,7 +285,7 @@
       const expiresAt = Date.now() + 175000;
       while (Date.now() < expiresAt) {
         await new Promise(resolve => setTimeout(resolve, 2000));
-        const statusResponse = await fetch(API + '/api/auth/telegram/status?nonce=' + encodeURIComponent(data.nonce), {cache:'no-store'});
+        const statusResponse = await fetch(API + '/api/auth/telegram/status?nonce=' + encodeURIComponent(data.nonce), {cache:'no-store', signal:AbortSignal.timeout(8000)});
         const statusData = await statusResponse.json().catch(() => ({}));
         if (statusResponse.status === 410) {
           statusNode.textContent = t('error');
@@ -258,9 +315,9 @@
     const set = (id, value) => { const node = bodyNode.querySelector('#' + id); if (node) node.textContent = String(value); };
     try {
       const [profileResponse, activityResponse, referralResponse] = await Promise.all([
-        fetch(API + '/api/profile', {headers:{'Authorization':'Bearer ' + auth}, cache:'no-store'}),
-        fetch(API + '/api/profile/activity', {headers:{'Authorization':'Bearer ' + auth}, cache:'no-store'}),
-        fetch(API + '/api/referrals/me', {headers:{'Authorization':'Bearer ' + auth}, cache:'no-store'})
+        fetch(API + '/api/profile', {headers:{'Authorization':'Bearer ' + auth}, cache:'no-store', signal:AbortSignal.timeout(8000)}),
+        fetch(API + '/api/profile/activity', {headers:{'Authorization':'Bearer ' + auth}, cache:'no-store', signal:AbortSignal.timeout(8000)}),
+        fetch(API + '/api/referrals/me', {headers:{'Authorization':'Bearer ' + auth}, cache:'no-store', signal:AbortSignal.timeout(8000)})
       ]);
       if (profileResponse.ok) {
         const data = await profileResponse.json();
@@ -332,7 +389,7 @@
           leaderboardVisible: Boolean(leaderboardToggle && leaderboardToggle.checked),
           presenceVisible: Boolean(presenceToggle && presenceToggle.checked)
         }),
-        cache: 'no-store'
+        cache: 'no-store', signal: AbortSignal.timeout(12000)
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok || !data.ok) throw new Error(data.error || 'Could not save profile settings.');
@@ -358,7 +415,7 @@
         method: 'POST',
         headers: {'Authorization':'Bearer ' + token(), 'Content-Type':'application/json'},
         body: '{}',
-        cache: 'no-store'
+        cache: 'no-store', signal: AbortSignal.timeout(12000)
       });
       const data = await response.json().catch(() => ({}));
       presenceOnline = Boolean(response.ok && data.online);
@@ -383,7 +440,7 @@
         method: 'POST',
         headers: {'Authorization':'Bearer ' + token(), 'Content-Type':'application/json'},
         body: '{}',
-        cache: 'no-store'
+        cache: 'no-store', signal: AbortSignal.timeout(12000)
       });
       if (response.ok) { try { localStorage.setItem(key, '1'); } catch (_) {} }
     } catch (_) {}
@@ -391,7 +448,7 @@
   async function refreshProfile() {
     if (!token()) return;
     try {
-      const response = await fetch(API + '/api/profile', {headers:{'Authorization':'Bearer ' + token()}, cache:'no-store'});
+      const response = await fetch(API + '/api/profile', {headers:{'Authorization':'Bearer ' + token()}, cache:'no-store', signal:AbortSignal.timeout(8000)});
       if (response.status === 401) { localStorage.removeItem(STORAGE_TOKEN); localStorage.removeItem(STORAGE_PROFILE); return; }
       if (response.ok) {
         const data = await response.json();
@@ -413,8 +470,8 @@
       if (actions) actions.append(cta);
       else if (nav) nav.append(cta);
     }
-    if (cta) cta.addEventListener('click', e => { e.preventDefault(); overlay.hidden = false; renderModal(); });
-    document.addEventListener('zombcash:languagechange', () => { updateCta(); if (overlay && !overlay.hidden) renderModal(); });
+    if (cta) cta.addEventListener('click', e => { e.preventDefault(); openModal(cta); });
+    document.addEventListener('zombcash:languagechange', () => { updateCta(); if (overlay && !overlay.hidden) { renderModal(); focusModalFirst(); } });
     refreshProfile().finally(() => { updateCta(); startPresenceHeartbeat(); });
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') sendPresenceHeartbeat();
