@@ -1,0 +1,31 @@
+name: Sitemap metadata audit
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check out selected branch
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Audit title, description and social metadata for every sitemap page
+        run: |
+          python -m py_compile tests/sitemap-meta-audit.py
+          python tests/sitemap-meta-audit.py
+      - name: Upload metadata audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitemap-meta-audit
+          path: sitemap-meta-audit/
+          if-no-files-found: warn
+          retention-days: 30
