@@ -1559,7 +1559,7 @@
       if (online && Number.isFinite(Number(data.online))) online.textContent = Number(data.online).toLocaleString();
       if (updated) updated.textContent = footprintText[5] + ' ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
     };
-    const refresh = () => fetch(api, {cache:'no-store'}).then(response => {
+    const refresh = () => fetch(api, {cache:'no-store',signal:AbortSignal.timeout(10000)}).then(response => {
       if (!response.ok) throw new Error('stats unavailable');
       return response.json();
     }).then(render).catch(() => {

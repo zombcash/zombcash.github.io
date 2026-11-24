@@ -38,9 +38,15 @@ on:
       - 'tests/arcade-snake-iframe-smoke.cjs'
       - 'tests/arcade-snake-session-save-smoke.cjs'
       - 'script.js'
+      - 'survivor-auth.js'
+      - 'living-world-recovery.js'
+      - 'tests/frontend-api-timeout-smoke.cjs'
       - 'tests/arcade-snake-iframe-smoke.cjs'
       - 'tests/arcade-snake-session-save-smoke.cjs'
       - 'script.js'
+      - 'survivor-auth.js'
+      - 'living-world-recovery.js'
+      - 'tests/frontend-api-timeout-smoke.cjs'
       - 'index.html'
       - '.github/workflows/mobile-viewport-test.yml'
   push:
@@ -127,6 +133,8 @@ jobs:
           node --check tests/survivor-hub-localization-smoke.cjs
           node --check tests/survivor-hub-visual-smoke.cjs
           node --check tests/arcade-dynamic-localization-smoke.cjs
+          node --check tests/frontend-api-timeout-smoke.cjs
+          node tests/frontend-api-timeout-smoke.cjs
           node --check tests/arcade-snake-iframe-smoke.cjs
           node --check tests/arcade-snake-session-save-smoke.cjs
           node --check tests/arcade-ai-worlds-visual-smoke.cjs

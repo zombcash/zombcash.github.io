@@ -1,0 +1,28 @@
+name: Live FadeHost API smoke
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - "tests/live-fadehost-api-smoke.cjs"
+      - ".github/workflows/live-fadehost-api-smoke.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  live-api-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright
+        run: npm install --no-save playwright
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Check live API endpoints and CORS from the real site origin
+        run: node tests/live-fadehost-api-smoke.cjs

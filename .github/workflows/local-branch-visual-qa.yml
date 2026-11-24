@@ -38,6 +38,8 @@ on:
       - "script.js"
       - "living-world-recovery.js"
       - "survivor-auth.js"
+      - "living-world-recovery.js"
+      - "tests/frontend-api-timeout-smoke.cjs"
       - "tests/living-world-single-loader-smoke.cjs"
       - ".github/workflows/local-branch-visual-qa.yml"
 
@@ -70,6 +72,8 @@ jobs:
           node tests/homepage-css-seo-smoke.cjs
           node --check language.js
           node --check survivor-auth.js
+          node --check tests/frontend-api-timeout-smoke.cjs
+          node tests/frontend-api-timeout-smoke.cjs
           node --check tests/mobile-viewport-smoke.cjs
           node --check tests/zctv-layout-smoke.cjs
           node --check tests/localized-article-visual.cjs

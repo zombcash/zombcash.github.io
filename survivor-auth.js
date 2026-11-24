@@ -2,6 +2,10 @@
 (() => {
   'use strict';
   const API = 'https://zombcash-bot.fadehost.app';
+  const survivorApiFetch = (url, options = {}, timeoutMs = 15000) => fetch(url, {
+    ...options,
+    signal: options.signal || AbortSignal.timeout(timeoutMs)
+  });
   // Existing project bot; its domain must be linked in @BotFather before login works.
   const BOT_USERNAME = 'MemeCoinAIAgent_bot';
   const STORAGE_TOKEN = 'zombcash-survivor-token';
@@ -183,7 +187,7 @@
     isBusy = true;
     statusNode.textContent = t('loading');
     try {
-      const response = await fetch(API + '/api/auth/telegram/start', {
+      const response = await survivorApiFetch(API + '/api/auth/telegram/start', {
         method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}', cache: 'no-store'
       });
       const data = await response.json();
@@ -221,7 +225,7 @@
       const expiresAt = Date.now() + 115000;
       while (Date.now() < expiresAt) {
         await new Promise(resolve => setTimeout(resolve, 2000));
-        const statusResponse = await fetch(API + '/api/auth/telegram/status?nonce=' + encodeURIComponent(data.nonce), {cache:'no-store'});
+        const statusResponse = await survivorApiFetch(API + '/api/auth/telegram/status?nonce=' + encodeURIComponent(data.nonce), {cache:'no-store'});
         const statusData = await statusResponse.json().catch(() => ({}));
         if (statusResponse.status === 410) {
           statusNode.textContent = t('error');
@@ -256,7 +260,7 @@
     isBusy = true;
     statusNode.textContent = t('loading');
     try {
-      const response = await fetch(API + '/api/auth/telegram/start', {
+      const response = await survivorApiFetch(API + '/api/auth/telegram/start', {
         method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}', cache: 'no-store'
       });
       const data = await response.json();
@@ -277,7 +281,7 @@
       const expiresAt = Date.now() + 175000;
       while (Date.now() < expiresAt) {
         await new Promise(resolve => setTimeout(resolve, 2000));
-        const statusResponse = await fetch(API + '/api/auth/telegram/status?nonce=' + encodeURIComponent(data.nonce), {cache:'no-store'});
+        const statusResponse = await survivorApiFetch(API + '/api/auth/telegram/status?nonce=' + encodeURIComponent(data.nonce), {cache:'no-store'});
         const statusData = await statusResponse.json().catch(() => ({}));
         if (statusResponse.status === 410) {
           statusNode.textContent = t('error');
@@ -308,9 +312,9 @@
     const set = (id, value) => { const node = bodyNode.querySelector('#' + id); if (node) node.textContent = String(value); };
     try {
       const [profileResponse, activityResponse, referralResponse] = await Promise.all([
-        fetch(API + '/api/profile', {headers:{'Authorization':'Bearer ' + auth}, cache:'no-store'}),
-        fetch(API + '/api/profile/activity', {headers:{'Authorization':'Bearer ' + auth}, cache:'no-store'}),
-        fetch(API + '/api/referrals/me', {headers:{'Authorization':'Bearer ' + auth}, cache:'no-store'})
+        survivorApiFetch(API + '/api/profile', {headers:{'Authorization':'Bearer ' + auth}, cache:'no-store'}),
+        survivorApiFetch(API + '/api/profile/activity', {headers:{'Authorization':'Bearer ' + auth}, cache:'no-store'}),
+        survivorApiFetch(API + '/api/referrals/me', {headers:{'Authorization':'Bearer ' + auth}, cache:'no-store'})
       ]);
       if (profileResponse.ok) {
         const data = await profileResponse.json();
@@ -374,7 +378,7 @@
     button.disabled = true;
     statusNode.textContent = it('saving');
     try {
-      const response = await fetch(API + '/api/profile/settings', {
+      const response = await survivorApiFetch(API + '/api/profile/settings', {
         method: 'POST',
         headers: {'Authorization':'Bearer ' + token(), 'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -404,7 +408,7 @@
     if (!token() || document.visibilityState === 'hidden') return;
     try {
       const page = (location.pathname.split('/').pop() || 'site').replace(/[^a-z0-9_-]/gi, '').slice(0, 32) || 'site';
-      const response = await fetch(API + '/api/presence/heartbeat?page=' + encodeURIComponent(page), {
+      const response = await survivorApiFetch(API + '/api/presence/heartbeat?page=' + encodeURIComponent(page), {
         method: 'POST',
         headers: {'Authorization':'Bearer ' + token(), 'Content-Type':'application/json'},
         body: '{}',
@@ -429,7 +433,7 @@
     const key = 'zombcash-survivor-visit:' + String(profile.telegramId) + ':' + day;
     try { if (localStorage.getItem(key) === '1') return; } catch (_) {}
     try {
-      const response = await fetch(API + '/api/survival/visit', {
+      const response = await survivorApiFetch(API + '/api/survival/visit', {
         method: 'POST',
         headers: {'Authorization':'Bearer ' + token(), 'Content-Type':'application/json'},
         body: '{}',
@@ -441,7 +445,7 @@
   async function refreshProfile() {
     if (!token()) return;
     try {
-      const response = await fetch(API + '/api/profile', {headers:{'Authorization':'Bearer ' + token()}, cache:'no-store'});
+      const response = await survivorApiFetch(API + '/api/profile', {headers:{'Authorization':'Bearer ' + token()}, cache:'no-store'});
       if (response.status === 401) { localStorage.removeItem(STORAGE_TOKEN); localStorage.removeItem(STORAGE_PROFILE); return; }
       if (response.ok) {
         const data = await response.json();
