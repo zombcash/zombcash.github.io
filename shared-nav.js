@@ -1269,6 +1269,17 @@
     }
   });
 
+  // Escape closes the disclosure menu and returns keyboard focus to its trigger.
+  // Tab and Shift+Tab remain in the document's natural navigation order.
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !nav.classList.contains('zsh-open')) return;
+    event.preventDefault();
+    nav.classList.remove('zsh-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    updateMenuToggleLabel(false);
+    toggle.focus();
+  });
+
   // Keep the generated navigation labels in sync with the existing nine-language selector.
   const navDictionary = {
     de:['STARTSEITE','FELDHANDBUCH','WHITEPAPER','MARKTDATEN','ÜBERTRAGUNGEN','CREW-ABSTIMMUNG','ÜBERLEBENDEN-ZENTRUM','ARCADE','ZOMBIE-GALERIE','ZOMBIE-GENERATOR','LOTTERIE','$ZOMBCASH KAUFEN','ZURÜCK ZUR STARTSEITE','MIT TELEGRAM REGISTRIEREN','TELEGRAM ÖFFNEN','MENÜ'],

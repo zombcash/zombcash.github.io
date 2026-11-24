@@ -82,6 +82,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=optional" rel="stylesheet">
 <link rel="stylesheet" href="/style.css?v=tools-card-bg-20261110-1">
 <style id="zombcash-hero-v8-inline">
+
+/* Removed 171 obsolete hero-art selector rules after checking homepage markup and loaded scripts. */
+
 /* V8 emergency inline hero override: intentionally distinct from cached external CSS */
 .hero{
  min-height:760px!important;padding:70px 6.5% 78px!important;
@@ -102,19 +105,19 @@ h1 .alive{text-shadow:0 0 35px #9bff4550!important}
 .hero-copy{font-size:21px!important;line-height:1.4!important;max-width:470px!important}
 .hero-actions{margin:26px 0 32px!important}
 .hero-stats{gap:18px!important}
-.hero-mascot{grid-column:2;grid-row:1;position:relative!important;inset:auto!important;width:100%!important;height:520px!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;clip-path:polygon(10% 0,100% 0,100% 100%,0 100%,0 12%)!important;background:linear-gradient(145deg,#101b12b8,#090d12e8)!important;border:1px solid #9bff4528!important;isolation:isolate!important}
-.hero-mascot:before{content:"";position:absolute;inset:20px;border:1px solid #9bff4520;background:linear-gradient(145deg,#9bff4509,transparent 45%,#a855f70a);z-index:-1}
-.mascot-orbit{width:min(31vw,370px)!important;border-color:#a3ff4575!important;box-shadow:0 0 0 14px #9bff4508,0 0 0 42px #9bff4505,0 0 100px #9bff4520,inset 0 0 55px #9bff4515!important}
-.mascot-hand{width:min(27vw,330px)!important;height:min(27vw,330px)!important;background-size:180% auto!important;border:1px solid #a3ff4575!important;box-shadow:0 0 0 8px #9bff4508,0 0 85px #9bff4535,inset 0 0 35px #9bff4510!important;transform:translateY(-5px)!important}
-.mascot-caption{right:5%!important;bottom:5%!important}
-.mascot-signal{left:5%!important;top:5%!important}
+
+
+
+
+
+
 .hero-bottom{left:6.5%!important;right:6.5%!important;bottom:16px!important;border-top:1px solid #27382b!important;padding-top:12px!important;z-index:5!important}
 @media(max-width:950px){
  .hero{grid-template-columns:minmax(0,1fr) minmax(300px,.8fr)!important;padding:60px 4% 75px!important;min-height:700px!important;gap:1%!important}
  h1{font-size:clamp(42px,5.4vw,60px)!important;letter-spacing:-1.8px!important}
- .hero-mascot{height:450px!important}
- .mascot-hand{width:min(31vw,285px)!important;height:min(31vw,285px)!important}
- .mascot-orbit{width:min(35vw,320px)!important}
+
+
+
 }
 @media(max-width:680px){
  .hero{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:20px!important;padding:42px 5% 350px!important;min-height:1010px!important;background:linear-gradient(180deg,#050708,#0b120d 62%,#090c12)!important}
@@ -126,11 +129,11 @@ h1 .alive{text-shadow:0 0 35px #9bff4550!important}
  .hero-copy{font-size:18px!important}
  .hero-actions{gap:8px!important}
  .btn{padding:12px 10px!important;font-size:9px!important}
- .hero-mascot{position:absolute!important;left:4%!important;right:4%!important;bottom:54px!important;top:auto!important;width:92%!important;height:280px!important}
- .mascot-hand{width:190px!important;height:190px!important}
- .mascot-orbit{width:225px!important}
- .mascot-caption{font-size:7px!important;right:5%!important;bottom:0!important}
- .mascot-signal{font-size:7px!important;left:5%!important;top:0!important}
+
+
+
+
+
  .hero-bottom{left:5%!important;right:5%!important;bottom:12px!important;font-size:7px!important}
  .hero-bottom span:nth-child(2),.hero-bottom span:last-child{display:none!important}
 }
@@ -145,70 +148,43 @@ h1{font-size:clamp(48px,4.45vw,66px)!important;line-height:.98!important;letter-
 .hero-copy{max-width:430px!important;font-size:19px!important;line-height:1.32!important}
 .hero-actions{margin:22px 0 25px!important}
 .hero-stats{gap:14px!important}
-.hero-mascot-v9{height:100%!important;min-height:0!important;max-height:600px!important;clip-path:none!important;border:0!important;background:radial-gradient(ellipse at 55% 43%,#244a2480 0,transparent 47%),linear-gradient(130deg,#0a100c30,#080c10a0)!important;overflow:visible!important}
-.hero-mascot-v9:before{inset:18px 0 18px 16px!important;border:1px solid #9bff4524!important;clip-path:polygon(12% 0,100% 0,100% 88%,88% 100%,0 100%,0 12%)}
-.hero-character-glow{position:absolute;width:65%;aspect-ratio:1;border-radius:50%;background:#79ff2630;filter:blur(75px);top:18%;left:19%;z-index:-1}
-.hero-character-grid{position:absolute;inset:0;background-image:linear-gradient(#9bff450b 1px,transparent 1px),linear-gradient(90deg,#9bff450b 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(transparent,#000 30%,#000 75%,transparent)}
-.hero-character-label{position:absolute;top:5%;left:8%;font:600 9px Orbitron,sans-serif;letter-spacing:2px;color:#c5d4be;border:1px solid #506747;background:#08100bd9;padding:10px 12px;z-index:3}
-.hero-character-label i{display:inline-block;width:6px;height:6px;background:#9bff45;border-radius:50%;margin-right:8px;box-shadow:0 0 10px #9bff45}
-.hero-character-label span{color:#9bff45;margin-left:14px}
-.hero-zombie{position:relative;width:min(100%,500px);height:100%;max-height:560px;align-self:end;z-index:2;filter:drop-shadow(0 0 30px #9bff4510);transform:translate(2%,3%)}
-.hero-coin-badge{position:absolute;right:2%;bottom:7%;width:92px;height:92px;border-radius:50%;background:#080d0b;border:1px solid #9bff4580;box-shadow:0 0 0 8px #9bff4508,0 0 35px #9bff4525;display:flex;align-items:center;justify-content:center;z-index:5}
-.hero-coin-badge .mascot-orbit{width:74px!important;height:74px!important;border:1px solid #9bff4540!important;box-shadow:none!important}
-.hero-coin-badge .mascot-hand{position:absolute!important;width:57px!important;height:57px!important;min-width:0!important;min-height:0!important;border-radius:50%!important;background-size:190% auto!important;border:1px solid #9bff4580!important;box-shadow:0 0 18px #9bff4525!important;transform:none!important}
-.hero-coin-badge span{position:absolute;bottom:-20px;right:-4px;white-space:nowrap;font:600 7px Orbitron,sans-serif;letter-spacing:1px;color:#9bff45}
-.hero-character-caption{position:absolute;left:8%;bottom:8%;font:800 clamp(19px,2vw,29px) Orbitron,sans-serif;line-height:1.08;letter-spacing:-.5px;color:#edf5e5;z-index:4;text-shadow:0 3px 25px #000}
-.hero-character-caption b{color:#9bff45}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .hero-bottom{bottom:9px!important;left:7%!important;right:7%!important;padding-top:9px!important;font-size:8px!important}
-@media(max-width:950px){.hero{height:auto!important;min-height:650px!important;padding:48px 5% 60px!important;grid-template-columns:minmax(0,1fr) minmax(0,.9fr)!important}.hero-zombie{max-height:490px!important}h1{font-size:clamp(43px,5vw,58px)!important}.hero-character-caption{font-size:21px!important}}
-@media(max-width:680px){.hero{height:auto!important;max-height:none!important;min-height:0!important;padding:40px 5% 0!important;display:flex!important;flex-direction:column!important;gap:12px!important;overflow:hidden!important}.hero-content{max-width:none!important}.hero:before{display:none!important}h1{font-size:clamp(40px,11vw,58px)!important;line-height:1!important;margin:19px 0 15px!important}.hero-copy{font-size:17px!important}.hero-actions{margin:19px 0 20px!important}.hero-stats{margin-bottom:5px!important}.hero-mascot-v9{height:330px!important;min-height:330px!important;width:100%!important;max-height:330px!important;margin-top:0!important}.hero-zombie{height:330px!important;width:min(100%,330px)!important;max-height:330px!important;transform:translateY(12px)!important}.hero-character-label{top:8px!important;left:8px!important;font-size:7px!important;padding:8px!important}.hero-character-caption{left:8px!important;bottom:28px!important;font-size:18px!important}.hero-coin-badge{width:67px!important;height:67px!important;right:5px!important;bottom:23px!important}.hero-coin-badge .mascot-orbit{width:54px!important;height:54px!important}.hero-coin-badge .mascot-hand{width:42px!important;height:42px!important}.hero-coin-badge span{font-size:6px!important;bottom:-15px!important}.hero-bottom{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;width:100%!important;margin-top:0!important;padding:12px 0!important}.hero-bottom span:nth-child(2),.hero-bottom span:last-child{display:none!important}}
+@media(max-width:950px){.hero{height:auto!important;min-height:650px!important;padding:48px 5% 60px!important;grid-template-columns:minmax(0,1fr) minmax(0,.9fr)!important}
+h1{font-size:clamp(43px,5vw,58px)!important}
+}
+@media(max-width:680px){.hero{height:auto!important;max-height:none!important;min-height:0!important;padding:40px 5% 0!important;display:flex!important;flex-direction:column!important;gap:12px!important;overflow:hidden!important}.hero-content{max-width:none!important}.hero:before{display:none!important}h1{font-size:clamp(40px,11vw,58px)!important;line-height:1!important;margin:19px 0 15px!important}.hero-copy{font-size:17px!important}.hero-actions{margin:19px 0 20px!important}.hero-stats{margin-bottom:5px!important}
 
 
-/* V10 polish: add cinematic depth and purple edge-light without changing the layout */
-.hero-mascot-v9{background:radial-gradient(ellipse at 56% 42%,#2b572b85 0,transparent 43%),linear-gradient(125deg,#0a100c20,#080c10a0)!important}
-.hero-mascot-v9:before{border-color:#9bff4520!important;background:linear-gradient(135deg,#9bff4508,transparent 35%,#a855f708)!important}
-.hero-character-glow{background:radial-gradient(circle,#9bff4540 0,#7dff2618 40%,transparent 72%)!important;filter:blur(58px)!important}
-.hero-zombie{filter:drop-shadow(-8px 0 0 #a855f71b) drop-shadow(0 12px 24px #000b) drop-shadow(0 0 22px #9bff451b)!important}
-.hero-coin-badge{background:radial-gradient(circle at 35% 25%,#172619,#070b09 75%)!important;box-shadow:0 0 0 6px #9bff4507,0 0 25px #9bff4520!important}
-.hero-character-caption{text-shadow:0 4px 22px #000,0 0 20px #9bff4510!important}
 
 
-/* V11: actual cinematic artwork replaces the placeholder SVG */
-.hero-zombie-art{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center bottom!important;align-self:end!important;position:relative!important;z-index:2!important;transform:none!important;filter:drop-shadow(0 10px 28px #000c)!important}
-.hero-mascot-v9 .hero-zombie-art{width:100%!important;height:100%!important}
-.hero-mascot-v9 .hero-character-caption{z-index:5!important}
-.hero-mascot-v9 .hero-character-glow{z-index:0!important}
-@media(max-width:680px){.hero-zombie-art{width:100%!important;height:100%!important;object-fit:contain!important;transform:none!important}}
 
 
-/* V14: remove unreliable bitmap artwork; use a crisp native neon emblem */
-.hero-mascot-v9{overflow:hidden!important;isolation:isolate!important;background:radial-gradient(ellipse at 50% 43%,#75ff1828 0,transparent 34%),radial-gradient(ellipse at 68% 65%,#a855f720 0,transparent 42%),linear-gradient(145deg,#080d0b,#0a1110 52%,#090a10)!important}
-.hero-emblem{position:absolute;inset:12% 8% 10%;display:flex;align-items:center;justify-content:center;z-index:2;overflow:hidden}
-.hero-emblem:before{content:"";position:absolute;inset:8%;border:1px solid #9bff4526;transform:rotate(45deg);box-shadow:0 0 55px #9bff4510,inset 0 0 45px #9bff4508}
-.hero-emblem-ring{position:absolute;width:min(65%,360px);aspect-ratio:1;border-radius:50%;border:1px solid #9bff4566;box-shadow:0 0 0 12px #9bff4508,0 0 0 34px #9bff4505,0 0 55px #9bff4518,inset 0 0 45px #9bff4510}
-.hero-emblem-ring:before,.hero-emblem-ring:after{content:"";position:absolute;inset:8%;border:1px dashed #a855f766;border-radius:50%;animation:heroOrbit 28s linear infinite}
-.hero-emblem-ring:after{inset:-12%;border-color:#9bff452b;animation-direction:reverse;animation-duration:42s}
-.hero-emblem-core{position:relative;font:400 clamp(150px,22vw,300px)/1 Arial,sans-serif;color:#a6ff45;text-shadow:0 0 8px #9bff45,0 0 28px #9bff4590,0 0 70px #9bff4538;transform:translateY(-3%);z-index:2}
-.hero-emblem-code{position:absolute;bottom:10%;font:700 clamp(11px,1.2vw,16px) Orbitron,sans-serif;letter-spacing:clamp(4px,1vw,10px);color:#d3ffb3;text-shadow:0 0 18px #9bff4570;z-index:3}
-.hero-emblem-scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 5px,#9bff4508 6px,transparent 7px);pointer-events:none}
+
+.hero-bottom{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;width:100%!important;margin-top:0!important;padding:12px 0!important}.hero-bottom span:nth-child(2),.hero-bottom span:last-child{display:none!important}}/* V14: remove unreliable bitmap artwork; use a crisp native neon emblem */
+
+
+
+
+
+
+
+
+
 @keyframes heroOrbit{to{transform:rotate(360deg)}}
-.hero-mascot-v9 .hero-character-caption{z-index:5!important}
-@media(max-width:680px){.hero-emblem{inset:13% 4% 10%}.hero-emblem-ring{width:64%}.hero-emblem-core{font-size:clamp(140px,45vw,220px)}.hero-emblem-code{bottom:9%;font-size:10px;letter-spacing:4px}}
-
-
-/* V15: use the actual ZombieCash cash-hand coin mark in the hero */
-.hero-emblem-core{display:none!important}
-.hero-hand-logo{position:relative;z-index:2;width:min(70%,390px);height:auto;overflow:visible;filter:drop-shadow(0 0 24px #8cff3b40)}
-.hero-emblem-ring{width:min(72%,420px)!important}
-.hero-emblem-code{bottom:5%!important}
-@media(max-width:680px){.hero-hand-logo{width:min(75%,300px)}.hero-emblem-ring{width:75%!important}.hero-emblem-code{bottom:6%!important}}
-
-
-/* V16: restore the previous trader artwork; keep the small original hand coin mark */
-.hero-mascot-v9{overflow:hidden!important;isolation:isolate!important;background:radial-gradient(ellipse at 58% 48%,#17411e 0,transparent 45%),linear-gradient(120deg,#080b09,#101515)!important}
-.hero-zombie-art{display:block!important;position:absolute!important;inset:8% 3% 4%!important;width:94%!important;height:88%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center center!important;z-index:2!important;transform:none!important;filter:drop-shadow(0 10px 28px #000b)!important}
-.hero-mascot-v9 .hero-character-caption{z-index:5!important}
-@media(max-width:680px){.hero-zombie-art{inset:10% 2% 4%!important;width:96%!important;height:86%!important;object-fit:contain!important}}
 
 
 /* V17: text-first full-width hero; no character illustration, only small coin emblem */
@@ -224,17 +200,19 @@ h1 .alive{text-shadow:0 0 38px #9bff4555!important}
 .hero-copy{max-width:760px!important;font-size:clamp(17px,1.65vw,24px)!important}
 .hero-actions{margin:24px 0 28px!important}
 .hero-stats{gap:clamp(18px,3vw,44px)!important}
-.hero-mascot-v9{position:absolute!important;right:5.5%!important;bottom:17%!important;inset:auto 5.5% 17% auto!important;width:clamp(86px,10vw,142px)!important;height:clamp(86px,10vw,142px)!important;display:block!important;overflow:visible!important;clip-path:none!important;border:0!important;background:transparent!important;z-index:4!important;isolation:isolate!important}
-.hero-mascot-v9:before,.hero-mascot-v9 .hero-character-glow,.hero-mascot-v9 .hero-character-grid,.hero-mascot-v9 .hero-character-label,.hero-mascot-v9 .hero-character-caption{display:none!important}
-.hero-emblem{position:absolute!important;inset:0!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:visible!important}
-.hero-emblem:before,.hero-emblem-scan{display:none!important}
-.hero-emblem-ring{position:absolute!important;width:100%!important;height:100%!important;border:2px solid #9bff45!important;box-shadow:0 0 0 5px #9bff4514,0 0 24px #9bff4545!important}
-.hero-emblem-ring:before{inset:6%!important;border:1px dashed #a855f7!important}
-.hero-emblem-ring:after{inset:-9%!important;border:1px solid #9bff4530!important}
-.hero-hand-logo{width:77%!important;height:auto!important;position:relative!important;z-index:2!important;filter:drop-shadow(0 0 10px #9bff4540)!important}
-.hero-emblem-code{position:absolute!important;bottom:-20px!important;font:700 8px Orbitron,sans-serif!important;letter-spacing:2px!important;color:#d3ffb3!important;text-shadow:0 0 8px #9bff4570!important}
+
+
+
+
+
+
+
+
+
 .hero-bottom{left:5.5%!important;right:5.5%!important}
-@media(max-width:760px){.hero{min-height:auto!important;padding:38px 5% 86px!important}.hero-content{padding-right:0!important}h1{font-size:clamp(42px,10.5vw,78px)!important;line-height:.96!important;letter-spacing:-.06em!important}.hero-mascot-v9{right:6%!important;bottom:12%!important;width:78px!important;height:78px!important}.hero-emblem-code{font-size:6px!important;bottom:-15px!important}.hero-copy{max-width:88%!important}.hero-stats{gap:15px!important}.hero-stats span{font-size:8px!important}.hero-bottom{display:none!important}}
+@media(max-width:760px){.hero{min-height:auto!important;padding:38px 5% 86px!important}.hero-content{padding-right:0!important}h1{font-size:clamp(42px,10.5vw,78px)!important;line-height:.96!important;letter-spacing:-.06em!important}
+
+.hero-copy{max-width:88%!important}.hero-stats{gap:15px!important}.hero-stats span{font-size:8px!important}.hero-bottom{display:none!important}}
 
 
 /* V18: clean neon biohazard mark, balanced two-part hero */
@@ -242,21 +220,20 @@ h1 .alive{text-shadow:0 0 38px #9bff4555!important}
 .hero-content{width:100%!important;max-width:100%!important;position:relative!important;z-index:3!important;padding-right:0!important}
 h1{width:75%!important;max-width:1180px!important;font-size:clamp(44px,6.1vw,102px)!important;line-height:.98!important;letter-spacing:-.055em!important;margin:25px 0 22px!important}
 .hero-copy{max-width:700px!important;font-size:clamp(16px,1.5vw,22px)!important}
-.hero-mascot-v9{position:absolute!important;right:4.8%!important;top:50%!important;bottom:auto!important;left:auto!important;transform:translateY(-50%)!important;width:clamp(210px,25vw,390px)!important;height:clamp(210px,25vw,390px)!important;display:block!important;overflow:visible!important;clip-path:none!important;border:0!important;background:transparent!important;z-index:2!important;isolation:isolate!important}
-.hero-mascot-v9:before,.hero-mascot-v9 .hero-character-glow,.hero-mascot-v9 .hero-character-grid,.hero-mascot-v9 .hero-character-label,.hero-mascot-v9 .hero-character-caption{display:none!important}
-.hero-emblem{position:absolute!important;inset:0!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:visible!important}
-.hero-emblem:before,.hero-emblem-scan{display:none!important}
-.hero-emblem-ring{position:absolute!important;width:86%!important;height:86%!important;border:2px solid #9bff45!important;border-radius:50%!important;box-shadow:0 0 0 8px #9bff4514,0 0 42px #9bff4540,inset 0 0 28px #9bff4518!important}
-.hero-emblem-ring:before{inset:7%!important;border:2px dashed #a855f7!important;border-radius:50%!important}
-.hero-emblem-ring:after{inset:-13%!important;border:1px solid #9bff4535!important;border-radius:50%!important}
-.hero-biohazard{position:relative!important;z-index:2!important;width:79%!important;height:auto!important;overflow:visible!important;filter:drop-shadow(0 0 15px #9bff4580)!important}
-.hero-emblem-code{position:absolute!important;bottom:-8%!important;font:700 clamp(8px,.7vw,11px) Orbitron,sans-serif!important;letter-spacing:2px!important;color:#d3ffb3!important;text-shadow:0 0 12px #9bff4570!important;white-space:nowrap!important}
+
+
+
+
+
+
+
+
+
 .hero-bottom{left:5.3%!important;right:5.3%!important}
-@media(max-width:760px){.hero{min-height:auto!important;padding:36px 5% 94px!important;align-items:flex-start!important}.hero-content{padding-right:0!important}h1{width:100%!important;max-width:100%!important;font-size:clamp(40px,9vw,68px)!important;line-height:.98!important}.hero-copy{max-width:100%!important;padding-right:4%!important}.hero-mascot-v9{position:relative!important;top:auto!important;right:auto!important;left:auto!important;bottom:auto!important;transform:none!important;width:108px!important;height:108px!important;margin:28px 0 0 auto!important}.hero-emblem-code{font-size:6px!important;letter-spacing:1px!important}.hero-stats{gap:15px!important}.hero-stats span{font-size:8px!important}.hero-bottom{display:none!important}}
+@media(max-width:760px){.hero{min-height:auto!important;padding:36px 5% 94px!important;align-items:flex-start!important}.hero-content{padding-right:0!important}h1{width:100%!important;max-width:100%!important;font-size:clamp(40px,9vw,68px)!important;line-height:.98!important}.hero-copy{max-width:100%!important;padding-right:4%!important}
 
+.hero-stats{gap:15px!important}.hero-stats span{font-size:8px!important}.hero-bottom{display:none!important}}/* V19: typography-first outbreak hero, no hero emblem */
 
-/* V19: typography-first outbreak hero, no hero emblem */
-.hero-mascot-v9{display:none!important}
 .hero{min-height:calc(100vh - 92px)!important;padding:28px 5.2% 72px!important;display:flex!important;align-items:center!important;position:relative!important;overflow:hidden!important;background:
 radial-gradient(ellipse at 54% 34%,#10281755 0,transparent 44%),
 radial-gradient(ellipse at 82% 72%,#6b1c8d20 0,transparent 33%),
@@ -309,18 +286,20 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 .hero-content{width:65%!important;max-width:1020px!important}
 h1{width:100%!important;max-width:1000px!important;font-size:clamp(46px,6.3vw,98px)!important;line-height:.94!important;letter-spacing:-.063em!important}
 .hero-copy{max-width:690px!important}
-.hero-zombie-sigil{position:absolute;z-index:2;right:3.2%;top:50%;transform:translateY(-51%);width:clamp(280px,33vw,510px);height:min(68vh,650px);display:flex;align-items:center;justify-content:center;pointer-events:none}
-.hero-zombie-sigil:before{content:"";position:absolute;width:76%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#9bff4524 0, #9bff450d 38%,transparent 70%);filter:blur(14px)}
-.sigil-orbit{position:absolute;aspect-ratio:1;border-radius:50%;border:1px solid #a4ff4340}
-.sigil-orbit-a{width:88%;box-shadow:0 0 42px #9bff4518,inset 0 0 42px #9bff450d}
-.sigil-orbit-b{width:70%;border:2px dashed #a855f788;transform:rotate(-18deg)}
-.sigil-crosshair{position:absolute;inset:4%;background:linear-gradient(90deg,transparent 49.8%,#9bff451b 50%,transparent 50.2%),linear-gradient(0deg,transparent 49.8%,#9bff451b 50%,transparent 50.2%);clip-path:circle(48%);opacity:.7}
-.sigil-claw{position:relative;width:92%;height:100%;max-height:610px;object-fit:contain;filter:drop-shadow(0 0 20px #9bff4540)}
-.sigil-label{position:absolute;bottom:1%;left:50%;transform:translateX(-50%);white-space:nowrap;font:700 9px Orbitron,sans-serif;letter-spacing:2px;color:#caff91;border:1px solid #9bff4540;background:#050a07c9;padding:10px 13px}
-.sigil-label span{display:inline-block;width:6px;height:6px;border-radius:50%;background:#a4ff43;box-shadow:0 0 10px #9bff45;margin-right:8px}
-.sigil-label b{color:#a855f7;font-weight:700;margin-left:8px}
+
+
+
+
+
+
+
+
+
+
 .hero-bottom{z-index:5}
-@media(max-width:760px){.hero-content{width:100%!important;max-width:100%!important}h1{font-size:clamp(40px,9vw,68px)!important}.hero-zombie-sigil{position:relative;top:auto;right:auto;transform:none;width:160px;height:185px;margin:18px 0 0 auto;opacity:.92}.sigil-label{font-size:6px;letter-spacing:1px;padding:7px}.hero-bottom{display:none!important}}
+@media(max-width:760px){.hero-content{width:100%!important;max-width:100%!important}h1{font-size:clamp(40px,9vw,68px)!important}
+
+.hero-bottom{display:none!important}}
 
 
 /* V22: redesigned welcome hero — editorial typography plus a live terminal panel */
@@ -343,47 +322,47 @@ h1 .alive{display:inline-block!important;color:#a4ff2e!important;text-shadow:0 0
 .hero-stats{margin-top:clamp(27px,4vh,40px)!important;gap:clamp(15px,2.3vw,32px)!important}
 .hero-stats strong{font-size:clamp(23px,2.1vw,30px)!important}
 .hero-bottom{left:5.2%!important;right:5.2%!important;z-index:5!important}
-.hero-mascot-v9,.hero-zombie-sigil{display:none!important}
+
 .outbreak-panel{position:relative;min-width:0;overflow:hidden;border:1px solid #9bff4538;background:linear-gradient(145deg,#0b1510ed,#080b0bed 58%,#110d16ed);box-shadow:0 25px 90px #0008,inset 0 0 45px #9bff4507;padding:clamp(18px,2.2vw,30px);isolation:isolate}
 .outbreak-panel:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 5px,#b4ff4908 6px);pointer-events:none;z-index:-1}
-.panel-topline,.panel-foot,.panel-status{display:flex;align-items:center;justify-content:space-between;gap:12px;font:700 10px Orbitron,sans-serif;letter-spacing:.14em}
-.panel-topline{color:#d9e5d8;padding-bottom:16px;border-bottom:1px solid #9bff4524}
-.live-dot,.panel-status i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#a4ff43;box-shadow:0 0 12px #a4ff43}
-.panel-live{margin-left:auto;color:#a4ff43;border:1px solid #a4ff4545;padding:5px 7px}
-.panel-core{height:clamp(220px,27vw,350px);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.panel-core:before{content:"";position:absolute;width:68%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#a4ff431b,transparent 68%);filter:blur(5px)}
-.panel-orbit{position:absolute;aspect-ratio:1;border-radius:50%}
-.orbit-one{width:65%;border:1px solid #a4ff4360;box-shadow:0 0 35px #a4ff4310,inset 0 0 35px #a4ff430b}
-.orbit-two{width:48%;border:1px dashed #a855f7a8;animation:panelOrbit 45s linear infinite}
-.panel-core-mark{position:relative;width:clamp(100px,12vw,160px);aspect-ratio:1;display:flex;align-items:center;justify-content:center;border:1px solid #a4ff4350;background:linear-gradient(145deg,#a4ff431b,#a855f70b);box-shadow:0 0 55px #a4ff4312,inset 0 0 30px #a4ff430d}
-.panel-core-mark:before,.panel-core-mark:after{content:"";position:absolute;width:18px;height:18px;border-color:#a4ff43;border-style:solid}
-.panel-core-mark:before{left:-5px;top:-5px;border-width:2px 0 0 2px}.panel-core-mark:after{right:-5px;bottom:-5px;border-width:0 2px 2px 0}
-.panel-core-mark strong{font:900 clamp(72px,9vw,120px)/1 Orbitron,sans-serif;color:#b4ff50;text-shadow:0 0 25px #9bff4560;letter-spacing:-.12em;transform:skew(-7deg)}
-.mark-slash{position:absolute;width:145%;height:1px;background:linear-gradient(90deg,transparent,#a4ff43aa,transparent);transform:rotate(-34deg)}
-.mark-dot{position:absolute;width:6px;height:6px;background:#a855f7;box-shadow:0 0 12px #a855f7;right:17%;top:18%}
-.panel-coordinate{position:absolute;bottom:12px;font:700 9px Orbitron,sans-serif;letter-spacing:.2em;color:#8b9b8c}
-.panel-status{padding:14px 0;border-top:1px solid #9bff4524;color:#718073;font-size:9px}
-.panel-status b{color:#a4ff43;display:flex;align-items:center;gap:8px}
-.panel-status i{width:6px;height:6px}
-.panel-bars{height:42px;display:flex;align-items:flex-end;gap:4px;padding:0 0 9px;border-bottom:1px solid #9bff4524}
-.panel-bars i{flex:1;height:var(--h,30%);background:linear-gradient(0deg,#5bbd21,#a4ff43);opacity:.72;animation:signalPulse 1.4s ease-in-out infinite alternate}
-.panel-bars i:nth-child(3n){height:76%;animation-delay:-.4s}.panel-bars i:nth-child(4n){height:46%;animation-delay:-.9s}.panel-bars i:nth-child(5n){height:92%;animation-delay:-.2s}.panel-bars i:nth-child(7n){height:25%;animation-delay:-1.1s}
-.panel-foot{padding-top:13px;font-size:8px;color:#7e9180}
-.panel-foot span:last-child{color:#a855f7}
-.panel-glitch{position:absolute;right:-22px;top:42%;width:80px;height:2px;background:#a4ff43;box-shadow:0 0 15px #a4ff43;opacity:.5;transform:rotate(-38deg)}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @keyframes panelOrbit{to{transform:rotate(360deg)}}@keyframes signalPulse{from{opacity:.35;transform:scaleY(.65)}to{opacity:.95;transform:scaleY(1)}}
-@media(max-width:900px){.hero-layout{grid-template-columns:minmax(0,1fr) minmax(250px,.72fr)!important;gap:22px!important}h1{font-size:clamp(44px,6.3vw,70px)!important}.panel-core{height:240px}.panel-core-mark{width:100px}.panel-core-mark strong{font-size:80px}}
-@media(max-width:680px){.hero{padding:32px 5% 92px!important;min-height:auto!important}.hero-layout{grid-template-columns:1fr!important;gap:30px!important}.hero-content{grid-row:1}.outbreak-panel{grid-row:2}.hero-copy{max-width:100%!important}.hero-stats{gap:13px!important}.hero-bottom{display:none!important}.panel-core{height:210px}.panel-core-mark{width:105px}.panel-core-mark strong{font-size:78px}}
+@media(max-width:900px){.hero-layout{grid-template-columns:minmax(0,1fr) minmax(250px,.72fr)!important;gap:22px!important}h1{font-size:clamp(44px,6.3vw,70px)!important}
 
 
-/* V23: replace the letter mark with a clean tactical targeting reticle */
-.panel-core-mark{width:clamp(145px,16vw,210px)!important;aspect-ratio:1!important;border:1px solid #a4ff4350!important;background:radial-gradient(circle,#a4ff4312,transparent 68%)!important;box-shadow:0 0 55px #a4ff4312,inset 0 0 30px #a4ff430d!important;display:flex!important;align-items:center!important;justify-content:center!important}
-.panel-core-mark:before,.panel-core-mark:after{display:none!important}
-.panel-core-mark strong,.panel-core-mark .mark-slash,.panel-core-mark .mark-dot{display:none!important}
-.panel-reticle{width:100%!important;height:100%!important;overflow:visible!important;filter:drop-shadow(0 0 7px #a4ff4370)!important}
-.panel-core{background:radial-gradient(ellipse at center,#a4ff4307,transparent 65%)}
-@media(max-width:900px){.panel-core-mark{width:130px!important}}
-@media(max-width:680px){.panel-core-mark{width:120px!important}}
+}
+@media(max-width:680px){.hero{padding:32px 5% 92px!important;min-height:auto!important}.hero-layout{grid-template-columns:1fr!important;gap:30px!important}.hero-content{grid-row:1}.outbreak-panel{grid-row:2}.hero-copy{max-width:100%!important}.hero-stats{gap:13px!important}.hero-bottom{display:none!important}
+
+
+}
 
 
 /* 僵尸生成器 homepage promotion */
@@ -486,6 +465,8 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
  section.section.mini-game#snake-game>.leaderboard-card{grid-column:auto!important}
 }
 @media(max-width:560px){section.section.mini-game#snake-game>.arcade-feature{grid-template-columns:minmax(0,1fr)}}
+
+
 </style>
 
 <style id="jupiter-buy-widget-styles">
@@ -1142,77 +1123,8 @@ body:has(#home) #home .tools#radar .tool-card .tool-art{
   body:has(#home) #home .tools#radar .tool-card:hover{transform:none!important}
 }
 </style>
-</head>
-<body>
-<div class="scanlines"></div>
-<header class="topbar">
-  <a class="brand" href="#home" aria-label="ZombieCash home"><span class="brand-mark">☣</span><span>ZOMBIE<span class="green">CASH</span><small>亡者互联网</small></span></a>
-  <nav><a href="#living-world">实时世界</a><a href="/zh-CN/survivor-field-manual.html">幸存者手册</a><a href="/zh-CN/outbreak-transmission.html">疫情播报</a><a href="/crew-vote.html">团队投票</a><a href="#lab">ZOMBIE LAB</a><a href="/arcade.html">ARCADE</a><a href="/gallery.html">僵尸画廊</a><a href="/zombie-maker.html">僵尸生成器</a><a href="#community">社区</a><a href="/zh-CN/buy-zombcash.html">购买 $ZOMBCASH</a></nav>
-  <a class="top-cta" href="#community">加入幸存者队伍 <span>↗</span></a>
-  <button class="menu-toggle" aria-label="Open menu">☰</button>
-</header>
-<main id="home">
-<section class="hero">
-  <div class="hero-grid"></div><div class="moon"></div><div class="city city-back"></div><div class="city city-front"></div>
-  <div class="hero-layout">
-  <div class="hero-content">
-    <div class="eyebrow"><span class="pulse"></span> ZOMBCASH // 亡者互联网</div>
-    <h1>加密世界是<br><span class="dead">一座墓园。</span><br><span class="alive">我们正在复苏。</span></h1>
-    <p class="hero-copy">为沉寂的市场注入活力的亡者世界。寻找最新信号，集结你的队伍，挺过下一轮爆发。</p><p class="brand-search-aliases" style="max-width:760px;margin:10px 0 0;color:#a6b5a5;font-size:13px;line-height:1.5">正在寻找 ZombieCash？这个 Solana 官方社区项目也常以 <strong style="color:#d5e1d0">Zombie Cash</strong> 或 <strong style="color:#d5e1d0">ZombCash</strong> 被搜索。<strong style="color:#d5e1d0">Cash Zombie</strong> 和 <strong style="color:#d5e1d0">CashZombie</strong> 也指向同一个项目。代币代码：<strong style="color:#9bff45">$ZOMBCASH</strong>。</p>
-    <div class="hero-actions"><a class="btn btn-primary" href="#radar">⌁ 打开雷达</a><a class="btn btn-ghost" href="#lab">☣ 进入僵尸实验室</a></div><section class="field-manual-spotlight" aria-labelledby="field-manual-title"><div class="field-manual-copy"><span class="field-manual-kicker">幸存者情报 / 实用指南</span><h2 id="field-manual-title">情报与生存指南</h2><p>研究 Solana 代币、解读市场信号、保护你的钱包，并识别常见骗局。提供可按主题和日期搜索的实用指南。</p><a class="field-manual-link" href="/zh-CN/survivor-field-manual.html">打开生存手册 <span aria-hidden="true">↗</span></a></div><div class="field-manual-status"><span class="field-manual-dot"></span><span>前线档案</span><strong>现有 3 篇指南</strong><small>更多档案即将推出</small></div></section>
-
-    <div class="hero-stats"><div><strong>24/7</strong><span>疫情实时动态</span></div><i></i><div><strong>3</strong><span>SOLANA 区域</span></div><i></i><div><strong>0</strong><span>仅限队伍</span></div></div>
-  </div>
-
-  <div class="zc-hero-art-panel">
-    <div class="zc-sponsor-art-slot">
-      <img src="/assets/zombcash-survivor-realistic-520.avif" alt="ZombieCash zombie survivor heroine">
-    </div>
-  </div>
-
-  </div>
-  <div class="hero-bottom"><span>正在扫描生命迹象…</span><span>系统状态： <b>亡者</b></span><span>坐标：6C-CB-F9</span></div>
-</section>
-
-<!-- ZombieCash promo video library: each new video is added to promo-videos.json; previous releases remain available. -->
-<section class="zc-promo-video section" id="promo-video" aria-labelledby="zc-promo-title">
-  <div class="zc-promo-video-shell">
-    <div class="zc-promo-video-copy">
-      <span class="zc-promo-video-kicker"><i></i> [ WELCOME 疫情播报 / OFFICIAL VIDEO ]</span>
-      <h2 id="zc-promo-title">进入亡者互联网。</h2>
-      <p>探索 ZombieCash 世界，体验各项工具，加入幸存者队伍。</p>
-      <div class="zc-promo-video-controls" aria-label="Promo video navigation">
-        <button type="button" id="zc-promo-prev" disabled aria-label="Previous promo video">← 上一页</button>
-        <span id="zc-promo-count" aria-live="polite">正在加载视频库…</span>
-        <button type="button" id="zc-promo-next" disabled aria-label="Next promo video">下一页 →</button>
-      </div>
-      <p class="zc-promo-video-note" id="zc-promo-status" role="status">正在加载最新播报…</p>
-      <a class="zc-promo-video-release" id="zc-promo-release" href="https://github.com/zombcash/zombcash.github.io/releases" target="_blank" rel="noopener noreferrer">查看全部视频 ↗</a>
-    </div>
-    <div class="zc-promo-player-wrap">
-      <div class="zc-promo-player-top"><span><i></i> ZC // PROMO 疫情播报</span><span id="zc-promo-version">ARCHIVE</span></div>
-      <video id="zc-promo-player" controls playsinline preload="none" aria-label="ZombieCash promotional video">
-        <p>浏览器无法播放此视频。 <a href="https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10">改为打开已发布的视频。</a></p>
-      </video>
-      <div class="zc-promo-player-foot"><span>按需播放 · 开启声音</span><a id="zc-promo-download" href="https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10" target="_blank" rel="noopener noreferrer">打开 / 下载 ↗</a></div>
-    </div>
-  </div>
-</section>
-
-
-<section class="zctv-channel-hub" id="zctv-channel-hub" aria-labelledby="zctv-title">
-<div class="zctv-inner"><div class="zctv-kicker"><i></i> ZOMBIECASH TV // BROADCAST STUDIO</div>
-<div class="zctv-layout">
-<div class="zctv-intro"><span class="eyebrow">亡者互联网 — 正在播出</span><h2 id="zctv-title">三个频道。<br><span>一个不死信号。</span></h2><p>认识我们的主持人，接入ZombieCash广播网络。选择下方频道，所有节目都将在同一个播放器中播放。</p><div class="zctv-host-tag">☣ <div>你的ZOMBIECASH主持人<small>来自疫情爆发演播室</small></div></div></div>
-<div class="zctv-host-art"><img src="/assets/zombcash-survivor-640.avif" alt="ZombieCash霓虹直播演播室女主持人" loading="lazy" fetchpriority="low" decoding="async"></div>
-<div class="zctv-player-column"><div class="zctv-live-label"><strong>● 正在播放</strong><span>点播节目</span></div><div class="zctv-player-mount" data-zctv-player-mount></div><div class="zctv-archive"><div class="zctv-archive-head"><span>节目档案</span><span data-zctv-archive-title>全部节目</span></div><div class="zctv-episodes" data-zctv-episodes><div class="zctv-empty">此频道暂时还没有发布节目。</div></div></div></div>
-</div>
-<div class="zctv-channels" role="group" aria-label="ZombieCash电视频道">
-<button class="zctv-channel-card" type="button" data-channel="news" aria-pressed="false"><span class="num">01 // CHANNEL</span><strong>OUTBREAK NEWS</strong><p>新闻与现场报道</p><span class="actions"><b>观看 CHANNEL ↗</b><span>全部节目</span></span></button>
-<button class="zctv-channel-card" type="button" data-channel="meme" aria-pressed="false"><span class="num">02 // CHANNEL</span><strong>MEME SHOW</strong><p>表情包与社区</p><span class="actions"><b>观看 CHANNEL ↗</b><span>全部节目</span></span></button>
-<button class="zctv-channel-card" type="button" data-channel="lab" aria-pressed="false"><span class="num">03 // CHANNEL</span><strong>ZOMBIE LAB</strong><p>游戏与实验</p><span class="actions"><b>观看 CHANNEL ↗</b><span>全部节目</span></span></button>
-</div><div class="zctv-foot"><span>☣ ZOMBCASH BROADCAST NETWORK</span><span>ONE PLAYER · THREE CHANNELS · ON DEMAND</span></div>
-</div></section><style id="zctv-studio-v2">
+<style id="homepage-late-overrides">
+/* Consolidated from zctv-studio-v2; original order preserved. */
 #promo-video{display:none!important}
 .zctv-channel-hub{position:relative;isolation:isolate;padding:clamp(30px,4vw,58px) 4.5%;overflow:hidden;border-block:1px solid #9bff4540;background:radial-gradient(ellipse at 48% 42%,#1c3b2080,transparent 42%),linear-gradient(120deg,#050807,#0a1010 55%,#100b16)}
 .zctv-inner{display:block;width:100%;max-width:1500px;min-width:0;margin-inline:auto;box-sizing:border-box}
@@ -1300,7 +1212,784 @@ body:has(#home) #home .tools#radar .tool-card .tool-art{
 #zctv-channel-hub .zctv-archive,
 #zctv-channel-hub .zctv-host-art{box-sizing:border-box!important;min-width:0!important}
 #zctv-channel-hub .zctv-player-mount .zc-promo-player-wrap{width:100%!important;max-width:100%!important}
+
+/* Consolidated from footer-growth-donation; original order preserved. */
+/* Footer layout repair: keep the original three-column info row and the three support cards below it. */
+.site-footer-main{display:grid!important;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr) minmax(0,1.15fr)!important;gap:clamp(22px,3vw,42px)!important;align-items:start!important}
+.site-footer-main>.site-footer-brand,.site-footer-main>nav.site-footer-column{display:flex!important;flex-direction:column!important;align-items:flex-start!important;min-width:0!important;grid-column:auto!important}
+.site-footer-main>.site-footer-brand{grid-column:1!important}
+.site-footer-main>nav.site-footer-column{gap:0!important}
+.site-footer-main>nav.site-footer-column h2{display:block!important;width:100%!important;margin:0 0 16px!important}
+.site-footer-main>nav.site-footer-column a{display:block!important;position:static!important;width:auto!important;max-width:100%!important;margin:0 0 10px!important;padding:0!important;line-height:1.45!important;white-space:normal!important;overflow-wrap:anywhere!important;text-decoration:none!important}
+.site-footer-main>nav.site-footer-column a:hover{color:#9bff45!important;text-decoration:underline!important}
+.site-footer-brand .footer-contract{max-width:100%;box-sizing:border-box}
+.footer-support-grid{grid-column:1/-1!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:clamp(16px,2vw,28px)!important;align-items:stretch!important;min-width:0!important}
+.footer-support-grid>.site-feedback,.footer-support-grid>.footer-growth,.footer-support-grid>.footer-donate{box-sizing:border-box;min-width:0;min-height:300px;padding:22px;display:flex;flex-direction:column;align-items:stretch;gap:10px;border:1px solid #2c4932;border-radius:2px;background:linear-gradient(155deg,rgba(13,25,16,.98),rgba(8,13,10,.98));box-shadow:inset 0 1px 0 rgba(155,255,69,.04)}
+.footer-support-grid h2{margin:0 0 6px;color:#b8ff8b;font:700 11px/1.5 Orbitron,sans-serif;letter-spacing:.65px;text-transform:uppercase}
+.footer-support-grid p{max-width:none;margin:0 0 10px;color:#a5b5a7;font:500 15px/1.55 Rajdhani,sans-serif}
+.footer-support-grid .site-feedback>a,.footer-support-grid .footer-action,.footer-support-grid .footer-copy-wallet{box-sizing:border-box;width:100%;min-height:42px;margin:0;padding:11px 12px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #527b45;border-radius:2px;background:#122315;color:#b8ff8b;font:700 9px/1.45 Orbitron,sans-serif;letter-spacing:.35px;text-align:center;text-decoration:none;overflow-wrap:anywhere;cursor:pointer;transition:background .18s ease,border-color .18s ease,color .18s ease}
+.footer-support-grid .site-feedback>a{margin-top:2px}
+.footer-support-grid .site-feedback>a:first-of-type{margin-top:auto}
+.footer-support-grid .site-feedback>a:hover,.footer-support-grid .footer-action:hover,.footer-support-grid .footer-copy-wallet:hover{background:#1b321c;border-color:#9bff45;color:#d8ffbd;text-decoration:none}
+.footer-support-grid .footer-growth .footer-action{margin-top:auto}
+.footer-support-grid .footer-donation-address{display:block;box-sizing:border-box;width:100%;margin:0 0 4px;padding:11px;border:1px solid #2b4430;border-radius:2px;background:#07100a;color:#d4e6d1;font:500 11px/1.55 monospace;overflow-wrap:anywhere;user-select:all}
+.footer-support-grid .footer-donate .footer-phantom{margin-top:auto}
+.footer-support-grid .footer-donation-feedback{color:#9bff45;font:500 12px/1.45 Rajdhani,sans-serif}
+@media(max-width:900px){.site-footer-main{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:24px!important}.site-footer-main>.site-footer-brand{grid-column:1/-1!important}.footer-support-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.footer-support-grid>.site-feedback{grid-column:1/-1!important}}
+@media(max-width:560px){.site-footer-main{grid-template-columns:minmax(0,1fr)!important;gap:26px!important}.site-footer-main>.site-footer-brand,.site-footer-main>nav.site-footer-column{grid-column:1!important}.footer-support-grid{grid-template-columns:minmax(0,1fr)!important}.footer-support-grid>.site-feedback{grid-column:auto!important}.footer-support-grid>.site-feedback,.footer-support-grid>.footer-growth,.footer-support-grid>.footer-donate{min-height:0;padding:18px}}
+
+/* Consolidated from campaign-dashboard-styles; original order preserved. */
+.campaign-dashboard{padding:64px 6.5%;border-top:1px solid #9bff4520;background:linear-gradient(180deg,#090d0b,#080b11)}
+.campaign-dashboard-inner{max-width:1240px;margin:auto}
+.campaign-heading{margin-bottom:26px}.campaign-heading h2{font:700 clamp(28px,4vw,42px) Orbitron,sans-serif;letter-spacing:-1px;margin:12px 0}.campaign-heading p{color:#a8b2a5;font-size:15px}
+.campaign-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.campaign-card,.campaign-panel{border:1px solid #33452f;background:linear-gradient(145deg,#101710,#0b0e12);padding:22px;min-width:0}
+.campaign-card small{display:block;color:#9bff45;font:700 10px Orbitron,sans-serif;letter-spacing:1px;line-height:1.6}
+.campaign-card strong{display:block;color:#f1f5ed;font:700 clamp(25px,3vw,36px) Orbitron,sans-serif;margin:14px 0 7px;overflow-wrap:anywhere}
+.campaign-card span,.campaign-list span{color:#9ba69a;font-size:12px}
+.campaign-details{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.campaign-panel h3{font:700 13px Orbitron,sans-serif;letter-spacing:1px;margin:0 0 18px;color:#d8e5d2}
+.campaign-list{display:grid;gap:13px}
+.campaign-row{display:grid;grid-template-columns:minmax(90px,1fr) minmax(80px,2fr) auto;gap:12px;align-items:center;font-size:12px;color:#d4ddd0}
+.campaign-bar{height:6px;background:#273027;border-radius:8px;overflow:hidden}.campaign-bar i{display:block;height:100%;background:#9bff45;border-radius:8px}
+.campaign-count{font-variant-numeric:tabular-nums;color:#f1f5ed}
+.campaign-updated{margin:18px 0 0;color:#82917e;font:10px Orbitron,sans-serif;letter-spacing:1px}
+@media(max-width:800px){.campaign-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.campaign-dashboard{padding:48px 5%}}
+@media(max-width:560px){.campaign-details{grid-template-columns:1fr}.campaign-card{padding:16px}.campaign-row{grid-template-columns:minmax(80px,1fr) minmax(45px,1fr) auto;gap:8px}}
+
+/* Consolidated from zombcash-layout-width-fix; original order preserved. */
+/* Global layout system: full-bleed backgrounds, one centered 1276px content grid. */
+:root { --zc-content-width: 1276px; --zc-section-gap: 72px; }
+.hero {
+  padding-left: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
+  padding-right: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
+}
+.hero-layout {
+  width: 100% !important;
+  max-width: var(--zc-content-width) !important;
+  margin-inline: auto !important;
+}
+.hero-bottom {
+  left: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
+  right: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
+}
+section.section {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: var(--zc-section-gap) max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
+  box-sizing: border-box !important;
+}
+section.section > .section-heading,
+section.section > .intro-row {
+  width: 100% !important;
+  max-width: var(--zc-content-width) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+section.section > :not(.section-heading):not(.intro-row) {
+  min-width: 0;
+}
+section.section .world-grid,
+section.section .daily-mission-inner,
+section.section .outbreak-panel,
+section.section .tool-grid,
+section.section .crew-grid,
+section.section .transmission-box,
+section.section .arcade-feature,
+section.section .leaderboard-card {
+  width: 100% !important;
+  max-width: var(--zc-content-width) !important;
+  min-width: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+section.section .section-heading {
+  margin-top: 0 !important;
+  margin-bottom: 28px !important;
+}
+section.section .intro-row {
+  margin-top: 0 !important;
+  margin-bottom: 28px !important;
+}
+section.section .world-grid,
+section.section .tool-grid,
+section.section .crew-grid {
+  gap: 18px !important;
+}
+section.section.community-console .crew-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-template-areas: "market jupiter" "chart feed" !important;
+  grid-auto-flow: row !important;
+  align-items: stretch !important;
+}
+section.section.community-console .crew-grid > article:first-of-type { grid-area: market !important; align-self:stretch !important; height:100% !important; }
+section.section.community-console .crew-grid > .jupiter-swap-card { grid-area: jupiter !important; align-self:stretch !important; height:100% !important; }
+section.section.community-console .crew-grid > .activity-chart-panel { grid-area: chart !important; align-self:stretch !important; }
+section.section.community-console .crew-grid > .recent-trades-panel { grid-area: feed !important; align-self:stretch !important; }
+section.section.community-console .crew-grid > .crew-card {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: auto !important;
+  box-sizing: border-box !important;
+  align-self: start !important;
+}
+section.section.community-console .activity-chart-panel,
+section.section.community-console .recent-trades-panel {
+  display:flex !important;
+  flex-direction:column !important;
+  align-self:stretch !important;
+  height:100% !important;
+  min-height:300px !important;
+}
+section.section.community-console .activity-chart-panel #activity-price-chart {
+  flex:0 0 auto;
+  min-height:180px;
+}
+section.section.community-console .recent-trades-panel .recent-trades-list {
+  flex:1 1 auto;
+  min-height:0;
+}
+@media(max-width:800px) {
+  section.section.community-console .crew-grid { grid-template-columns:minmax(0,1fr) !important; grid-template-areas:"market" "jupiter" "chart" "feed" !important; align-items:start !important; }
+  section.section.community-console .crew-grid > .crew-card,
+  section.section.community-console .crew-grid > article:first-of-type,
+  section.section.community-console .crew-grid > .jupiter-swap-card { height:auto !important; align-self:start !important; }
+  section.section.community-console .activity-chart-panel,
+  section.section.community-console .recent-trades-panel { height:auto !important; }
+  section.section.community-console .activity-chart-panel,
+  section.section.community-console .recent-trades-panel { min-height:0 !important; }
+}
+section.section.community-console .crew-card,
+section.section.community-console .zombcash-market,
+section.section.community-console .merged-market,
+section.section.community-console .jupiter-terminal-shell,
+section.section.community-console #jupiter-zombcash-terminal {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+section.section.community-console .zombcash-market-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+}
+section.section.mini-game#snake-game {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.22fr) minmax(0, .88fr) !important;
+  grid-template-areas: "feature records" !important;
+  align-items: stretch !important;
+  gap: 18px !important;
+  background: radial-gradient(ellipse at 75% 46%, #15281b 0%, #0a100c 42%, #070b0a 76%) !important;
+}
+section.section.mini-game#snake-game > .arcade-feature {
+  grid-area: feature !important;
+  display: grid !important;
+  grid-template-columns: minmax(110px, .55fr) minmax(0, 1.45fr) !important;
+  align-items: center !important;
+  gap: 18px !important;
+  padding: 24px !important;
+  border: 1px solid #263d2d !important;
+  background: linear-gradient(135deg, #0d1711e8, #0a0e13f2) !important;
+}
+section.section.mini-game#snake-game > .arcade-feature > .snake-promo-art {
+  width: 100% !important;
+  max-width: 230px !important;
+  min-width: 0 !important;
+  margin-inline: auto !important;
+}
+section.section.mini-game#snake-game > .arcade-feature > .game-copy { min-width: 0 !important; }
+section.section.mini-game#snake-game .game-copy h2 {
+  font-size: clamp(28px, 2.6vw, 42px) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -.035em !important;
+  overflow-wrap: anywhere !important;
+}
+section.section.mini-game#snake-game > .leaderboard-card {
+  grid-area: records !important;
+  align-self: stretch !important;
+  margin: 0 !important;
+  padding: 24px !important;
+  min-width: 0 !important;
+}
+.site-visits {
+  padding: 28px max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
+  box-sizing: border-box !important;
+}
+.site-visits-inner {
+  width: 100% !important;
+  max-width: var(--zc-content-width) !important;
+  padding: 0 !important;
+  margin-inline: auto !important;
+  box-sizing: border-box !important;
+}
+.campaign-dashboard {
+  width: 100% !important;
+  padding: var(--zc-section-gap) max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
+  box-sizing: border-box !important;
+}
+.campaign-dashboard-inner {
+  width: 100% !important;
+  max-width: var(--zc-content-width) !important;
+  margin-inline: auto !important;
+  box-sizing: border-box !important;
+}
+footer {
+  padding-left: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
+  padding-right: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
+}
+@media (max-width: 1050px) {
+  section.section.mini-game#snake-game {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas: "feature" "records" !important;
+  }
+  section.section.mini-game#snake-game > .arcade-feature {
+    grid-template-columns: minmax(130px, .55fr) minmax(0, 1.45fr) !important;
+  }
+}
+@media (max-width: 800px) {
+  section.section.community-console .crew-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  section.section.community-console .zombcash-market-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  section.section.living-world .world-grid { grid-template-columns: minmax(0, 1fr) !important; }
+}
+@media (max-width: 560px) {
+  :root { --zc-section-gap: 44px; }
+  section.section.mini-game#snake-game { gap: 18px !important; }
+  section.section.mini-game#snake-game > .arcade-feature {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px !important;
+    padding: 18px !important;
+  }
+  section.section.mini-game#snake-game .snake-promo-art {
+    width: min(66vw, 220px) !important;
+    margin: 0 auto !important;
+  }
+  section.section.mini-game#snake-game .leaderboard-card .crew-card-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* Consolidated from zombcash-market-panels-final-alignment; original order preserved. */
+section.section.community-console .crew-grid { align-items: stretch !important; }
+section.section.community-console .crew-grid > .activity-chart-panel,
+section.section.community-console .crew-grid > .recent-trades-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  align-self: stretch !important;
+  height: auto !important;
+  min-height: 300px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+section.section.community-console .crew-grid > .activity-chart-panel #activity-price-chart {
+  display: block !important;
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  height: 180px !important;
+  min-height: 180px !important;
+}
+section.section.community-console .crew-grid > .recent-trades-panel .recent-trades-list {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  align-content: start !important;
+}
+section.section.community-console .crew-grid > .recent-trades-panel .recent-trade-empty {
+  margin: 0 !important;
+  padding: 12px 0 !important;
+}
+@media (max-width: 800px) {
+  section.section.community-console .crew-grid { align-items: start !important; }
+  section.section.community-console .crew-grid > .activity-chart-panel,
+  section.section.community-console .crew-grid > .recent-trades-panel {
+    min-height: 0 !important;
+    height: auto !important;
+    align-self: start !important;
+  }
+  section.section.community-console .crew-grid > .activity-chart-panel #activity-price-chart {
+    flex: 0 0 180px !important;
+  }
+}
+
+/* Consolidated from zombcash-community-panels-compact-height; original order preserved. */
+/* Match Jupiter's documented integrated-terminal dimensions so the wallet form stays inside its card. */
+section.section.community-console .jupiter-swap-card #jupiter-zombcash-terminal {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 390px !important;
+  height: 390px !important;
+  box-sizing: border-box !important;
+}
+@media (max-width: 850px) {
+  section.section.community-console .jupiter-swap-card #jupiter-zombcash-terminal {
+    min-height: 390px !important;
+  height: 390px !important;
+  }
+}
+
+/* Consolidated from zombcash-jupiter-wallet-overlay-fix; original order preserved. */
+/* Let Jupiter's wallet picker and connect overlays escape the embedded terminal bounds. */
+section.section.community-console .jupiter-swap-card,
+section.section.community-console .jupiter-swap-card .jupiter-terminal-shell {
+  position: relative !important;
+  overflow: visible !important;
+}
+section.section.community-console .jupiter-swap-card #jupiter-zombcash-terminal {
+  position: relative !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Consolidated from zombcash-outbreak-live-operations; original order preserved. */
+section.section.living-world .outbreak-status-panel{display:flex!important;flex-direction:column!important;min-width:0!important;overflow:hidden!important}
+section.section.living-world .outbreak-status-panel .world-panel-head{align-items:flex-start!important;gap:12px!important}
+section.section.living-world .ops-status-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;padding:16px 16px 18px!important}
+section.section.living-world .ops-status-tile{display:flex!important;align-items:center!important;gap:9px!important;min-width:0!important;padding:12px 9px!important;border:1px solid #2c432e!important;background:linear-gradient(135deg,#101a12,#080d0a)!important}
+section.section.living-world .ops-status-tile>span:last-child{display:grid!important;gap:6px!important;min-width:0!important}
+section.section.living-world .ops-status-tile small{font:600 8px Orbitron,sans-serif!important;letter-spacing:.25px!important;color:#8c9e87!important;white-space:nowrap!important}
+section.section.living-world .ops-status-tile strong{font:700 10px Orbitron,sans-serif!important;color:#9bff45!important;overflow-wrap:anywhere!important}
+section.section.living-world .ops-status-dot{flex:0 0 7px!important;width:7px!important;height:7px!important;border-radius:50%!important;background:#788273!important;box-shadow:0 0 8px currentColor!important;color:#788273!important}
+section.section.living-world .ops-status-dot.is-online{background:#9bff45!important;color:#9bff45!important}
+section.section.living-world .ops-status-dot.is-warning{background:#ffb547!important;color:#ffb547!important}
+section.section.living-world .ops-status-dot.is-offline{background:#ff626d!important;color:#ff626d!important}
+section.section.living-world .ops-transmissions-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;padding:0 16px 11px!important;border-bottom:1px solid #263728!important}
+section.section.living-world .ops-transmissions-head>span:last-child{font:600 8px Orbitron,sans-serif!important;letter-spacing:.35px!important;color:#81917d!important;text-align:right!important}
+section.section.living-world .ops-transmissions{display:grid!important;gap:0!important;padding:0 16px!important;flex:1 1 auto!important;align-content:start!important}
+section.section.living-world .ops-transmission{display:grid!important;grid-template-columns:34px minmax(0,1fr) auto!important;align-items:center!important;gap:11px!important;padding:15px 0!important;border-bottom:1px solid #203024!important;min-width:0!important}
+section.section.living-world .ops-transmission:last-child{border-bottom:0!important}
+section.section.living-world .ops-transmission-icon{display:grid!important;place-items:center!important;width:32px!important;height:32px!important;border:1px solid #426537!important;color:#9bff45!important;font:700 14px Orbitron,sans-serif!important;background:linear-gradient(145deg,#101b11,#080e0a)!important}
+section.section.living-world .ops-transmission-copy{min-width:0!important}
+section.section.living-world .ops-transmission strong{display:block!important;color:#e6f2df!important;font:700 10px Orbitron,sans-serif!important;letter-spacing:.4px!important;line-height:1.5!important}
+section.section.living-world .ops-transmission p{margin:5px 0 0!important;color:#a0b09b!important;font:500 14px/1.35 Rajdhani,sans-serif!important;overflow-wrap:anywhere!important}
+section.section.living-world .ops-transmission>small{color:#7d9077!important;font:600 8px Orbitron,sans-serif!important;white-space:nowrap!important;padding-top:2px!important}
+section.section.living-world .ops-monitor-footer{display:flex!important;align-items:center!important;gap:11px!important;margin:12px 16px 10px!important;padding:13px!important;border:1px solid #2d462e!important;background:linear-gradient(100deg,#101a11,#0a100c)!important}
+section.section.living-world .ops-monitor-pulse{flex:0 0 8px!important;width:8px!important;height:8px!important;border-radius:50%!important;background:#9bff45!important;box-shadow:0 0 10px #9bff4580!important}
+section.section.living-world .ops-monitor-footer>div{display:grid!important;gap:5px!important;min-width:0!important;flex:1 1 auto!important}
+section.section.living-world .ops-monitor-footer strong{font:700 9px Orbitron,sans-serif!important;letter-spacing:.5px!important;color:#9bff45!important}
+section.section.living-world .ops-monitor-footer small{font:500 12px/1.3 Rajdhani,sans-serif!important;color:#8d9d88!important}
+section.section.living-world .ops-monitor-live{font:700 8px Orbitron,sans-serif!important;letter-spacing:.4px!important;color:#d9e6d3!important;white-space:nowrap!important}
+section.section.living-world .outbreak-status-panel .world-disclaimer{margin:0 16px 16px!important;font-size:11px!important;line-height:1.4!important}
+@media(max-width:1050px){section.section.living-world .ops-status-grid{grid-template-columns:1fr!important}section.section.living-world .ops-status-tile{padding:10px!important}}
+@media(max-width:760px){section.section.living-world .ops-status-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;padding:12px 12px 14px!important;gap:6px!important}section.section.living-world .ops-status-tile{gap:6px!important;padding:9px 6px!important}section.section.living-world .ops-status-tile small{font-size:7px!important;white-space:normal!important}section.section.living-world .ops-status-tile strong{font-size:8px!important}section.section.living-world .ops-transmissions-head{padding:0 12px 9px!important}section.section.living-world .ops-transmissions{padding:0 12px!important}section.section.living-world .ops-transmission{grid-template-columns:28px minmax(0,1fr) auto!important;gap:8px!important;padding:12px 0!important}section.section.living-world .ops-transmission-icon{width:27px!important;height:27px!important}section.section.living-world .ops-transmission p{font-size:12px!important}section.section.living-world .ops-monitor-footer{margin:10px 12px!important;padding:10px!important;gap:8px!important}section.section.living-world .ops-monitor-footer small{font-size:11px!important}section.section.living-world .ops-monitor-live{font-size:7px!important}section.section.living-world .outbreak-status-panel .world-disclaimer{margin:0 12px 12px!important}}
+
+/* Consolidated from zombcash-community-card-bottom-alignment; original order preserved. */
+/* Pixel-level alignment: make both cards in each crew-grid row share the same bottom edge. */
+section.section.community-console .crew-grid {
+  align-items: stretch !important;
+}
+section.section.community-console .crew-grid > .crew-card,
+section.section.community-console .crew-grid > .activity-chart-panel,
+section.section.community-console .crew-grid > .recent-trades-panel {
+  align-self: stretch !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+section.section.community-console .crew-grid > .crew-card {
+  display: flex !important;
+  flex-direction: column !important;
+}
+section.section.community-console .crew-grid > .crew-card.jupiter-swap-card .jupiter-terminal-shell {
+  flex: 1 1 auto !important;
+}
+@media (max-width: 800px) {
+  section.section.community-console .crew-grid {
+    align-items: stretch !important;
+  }
+  section.section.community-console .crew-grid > .crew-card,
+  section.section.community-console .crew-grid > .activity-chart-panel,
+  section.section.community-console .crew-grid > .recent-trades-panel {
+    height: auto !important;
+  }
+}
+
+/* Token Intel panel: replaces duplicate service telemetry with useful token data and actions. */
+section.section.living-world .token-intel-panel{display:flex!important;flex-direction:column!important;min-width:0!important;overflow:hidden!important}
+section.section.living-world .token-intel-price-block{display:grid!important;gap:9px!important;padding:22px 18px 18px!important;border-bottom:1px solid #263728!important;background:radial-gradient(ellipse at 80% 0%,#20351b55,transparent 65%),linear-gradient(135deg,#101a12,#090e0b)!important}
+.token-intel-label,.token-intel-stats small,.token-intel-contract small{color:#849780!important;font:700 8px Orbitron,sans-serif!important;letter-spacing:1px!important}
+#token-intel-price{display:block!important;color:#eff8e8!important;font:700 clamp(26px,3vw,38px)/1.15 Orbitron,sans-serif!important;letter-spacing:-1px!important;overflow-wrap:anywhere!important}
+.token-intel-change{font:700 10px Orbitron,sans-serif!important;color:#9ba997!important}
+.token-intel-change.is-positive{color:#9bff45!important}.token-intel-change.is-negative{color:#ff8585!important}
+.token-intel-stats{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;padding:14px 16px!important}
+.token-intel-stats>div{display:grid!important;gap:8px!important;min-width:0!important;padding:13px 11px!important;border:1px solid #2a3e2c!important;background:#0b120d!important}
+.token-intel-stats strong{color:#e8f2e3!important;font:700 12px Orbitron,sans-serif!important;overflow-wrap:anywhere!important}
+.token-intel-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:9px!important;padding:2px 16px 15px!important}
+.token-intel-actions a{display:flex!important;align-items:center!important;justify-content:center!important;min-height:42px!important;padding:10px 8px!important;border:1px solid #47643b!important;color:#b9f58e!important;text-align:center!important;text-decoration:none!important;font:700 8px Orbitron,sans-serif!important;letter-spacing:.45px!important}
+.token-intel-actions a:last-child{background:#9bff4510!important;border-color:#9bff45!important;color:#9bff45!important}
+.token-intel-actions a:hover{background:#9bff4518!important;border-color:#9bff45!important}
+.token-intel-contract{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;margin:0 16px!important;padding:13px 11px!important;border:1px solid #293a2b!important;background:#080d0a!important}
+.token-intel-contract>span{display:grid!important;gap:7px!important;min-width:0!important}
+.token-intel-contract code{color:#b5c5af!important;font:500 10px/1.5 monospace!important;overflow-wrap:anywhere!important}
+.token-intel-contract button{flex:none!important;padding:9px 10px!important;border:1px solid #4b6b3d!important;background:#101a11!important;color:#aaff6e!important;font:700 8px Orbitron,sans-serif!important;cursor:pointer!important}
+.token-intel-foot{display:flex!important;justify-content:space-between!important;gap:8px!important;flex-wrap:wrap!important;padding:14px 16px 0!important;color:#738570!important;font:600 7px Orbitron,sans-serif!important;letter-spacing:.4px!important}
+.token-intel-panel .world-disclaimer{margin:12px 16px 16px!important;font-size:11px!important;line-height:1.45!important}
+@media(max-width:760px){.token-intel-stats{padding:12px!important}.token-intel-actions{padding-left:12px!important;padding-right:12px!important}.token-intel-contract{margin-left:12px!important;margin-right:12px!important}.token-intel-foot{padding-left:12px!important;padding-right:12px!important}}
+
+/* Consolidated from daily-missions-panel-fix; original order preserved. */
+/* The missions widget must render independently of the removed legacy alert list. */
+section.section.living-world .missions-panel{display:flex!important;flex-direction:column!important;min-height:100%!important}
+section.section.living-world #world-missions.world-missions{display:grid!important;grid-template-columns:minmax(0,1fr)!important;align-content:start!important;gap:0!important;flex:1 1 auto!important;min-height:220px!important;padding:8px 20px 14px!important;visibility:visible!important;opacity:1!important}
+section.section.living-world #world-missions .world-mission{display:flex!important;align-items:flex-start!important;gap:12px!important;padding:15px 0!important;margin:0!important;border-bottom:1px solid #203024!important;cursor:pointer!important;min-width:0!important}
+section.section.living-world #world-missions .world-mission:last-child{border-bottom:0!important}
+section.section.living-world #world-missions .world-mission input{display:block!important;appearance:none!important;flex:0 0 17px!important;width:17px!important;height:17px!important;margin:2px 0 0!important;border:1px solid #587b48!important;background:#080f0d!important;cursor:pointer!important}
+section.section.living-world #world-missions .world-mission input:checked{background:#9bff45!important;border-color:#9bff45!important;box-shadow:inset 0 0 0 4px #0b150c!important}
+section.section.living-world #world-missions .world-mission-copy{display:block!important;min-width:0!important;flex:1 1 auto!important}
+section.section.living-world #world-missions .world-mission strong{display:block!important;color:#e2f0dc!important;font:700 10px Orbitron,sans-serif!important;line-height:1.5!important;letter-spacing:.3px!important}
+section.section.living-world #world-missions .world-mission p{margin:5px 0 0!important;color:#91a18e!important;font:500 14px/1.35 Rajdhani,sans-serif!important}
+section.section.living-world #world-missions .world-mission-action{display:inline-flex!important;margin-top:8px!important;color:#9bff45!important;font:700 8px Orbitron,sans-serif!important;letter-spacing:.45px!important;text-decoration:none!important}
+section.section.living-world #world-missions .world-mission-action:hover{color:#d0ffab!important;text-decoration:underline!important}
+section.section.living-world #world-missions .world-mission.done .world-mission-copy>strong{text-decoration:line-through!important;color:#6d8272!important}
+@media(max-width:760px){section.section.living-world #world-missions.world-missions{padding-left:13px!important;padding-right:13px!important;min-height:0!important}section.section.living-world #world-missions .world-mission{padding:13px 0!important}}
+.site-feedback p{max-width:290px;margin:0 0 10px;color:#91a18e;font:500 14px/1.45 Rajdhani,sans-serif}
+.site-footer .site-feedback>a{display:block;width:fit-content;max-width:100%;margin:8px 0;color:#b9f58e;font:700 9px/1.5 Orbitron,sans-serif;letter-spacing:.35px;text-decoration:none}
+.site-footer .site-feedback>a:hover{color:#9bff45;text-decoration:underline}
+@media(max-width:760px){.site-footer .site-feedback{min-width:0}.site-feedback p{max-width:100%}}
+
+/* Consolidated from zombcash-jupiter-mobile-width-fix; original order preserved. */
+/* Jupiter injects its app beside the initial loading placeholder; prevent that stale flex item from shrinking the app on narrow screens. */
+section.section.community-console #jupiter-zombcash-terminal:has(#jupiter-terminal-instance) {
+  display: block !important;
+  min-width: 0 !important;
+}
+section.section.community-console #jupiter-zombcash-terminal:has(#jupiter-terminal-instance) > .jupiter-terminal-loading {
+  display: none !important;
+}
+section.section.community-console #jupiter-zombcash-terminal #jupiter-terminal-instance {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  flex: 1 1 100% !important;
+  box-sizing: border-box !important;
+}
+section.section.community-console #jupiter-zombcash-terminal #jupiter-terminal-instance > div {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Consolidated from zombcash-sticky-header-jupiter-layer-fix; original order preserved. */
+header.topbar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 2147483000 !important;
+    isolation: isolate !important;
+  }
+
+/* Consolidated from zc-home-locale-typography; original order preserved. */
+.hero-content h1{max-width:100%;text-wrap:balance;}
+html[lang="de"] .hero-content h1,html[lang="fr"] .hero-content h1,html[lang="it"] .hero-content h1,html[lang="tr"] .hero-content h1,html[lang="ru"] .hero-content h1{font-size:clamp(32px,4.1vw,62px);}
+html[lang="ja"] .hero-content h1,html[lang="zh-CN"] .hero-content h1{line-height:1.3;letter-spacing:.02em;font-family:"Noto Sans JP","Noto Sans SC",sans-serif;}
+html[lang="hi"] .hero-content h1{line-height:1.45;letter-spacing:0;font-family:"Noto Sans Devanagari",sans-serif;}
+@media(max-width:760px){html[lang] .hero-content h1{font-size:clamp(28px,7.2vw,44px);line-height:1.2;}}
+
+/* Consolidated from zc-touch-hero-single-column-fix-20261104; original order preserved. */
+/* Touch devices using a desktop-width viewport must still stack the hero. */
+@media (max-width: 1100px) and (pointer: coarse) {
+  body > main#home > section.hero > .hero-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto !important;
+    grid-template-areas: "content" "radar" !important;
+    grid-auto-flow: row !important;
+    align-items: stretch !important;
+  }
+  body > main#home > section.hero > .hero-layout > .hero-content {
+    grid-area: content !important;
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    position: relative !important;
+    transform: none !important;
+  }
+  body > main#home > section.hero > .hero-layout > .outbreak-panel {
+    grid-area: radar !important;
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    position: relative !important;
+    transform: none !important;
+  }
+}
+
+/* Consolidated from zc-touch-hero-grid-placement-fix-20261104; original order preserved. */
+/* Force every direct hero child into the same single grid column on touch devices. */
+@media (max-width: 1100px) and (pointer: coarse) {
+  body > main#home > section.hero > .hero-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto !important;
+    grid-template-areas: "content" "radar" !important;
+    grid-auto-columns: minmax(0, 1fr) !important;
+    grid-auto-flow: row !important;
+    align-items: stretch !important;
+  }
+  body > main#home > section.hero > .hero-layout > * {
+    grid-column: 1 / -1 !important;
+    position: relative !important;
+    inset: auto !important;
+    margin: 0 !important;
+    transform: none !important;
+    justify-self: stretch !important;
+    align-self: stretch !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  body > main#home > section.hero > .hero-layout > .hero-content {
+    grid-area: content !important;
+    grid-row: 1 !important;
+  }
+  body > main#home > section.hero > .hero-layout > .outbreak-panel {
+    grid-area: radar !important;
+    grid-row: 2 !important;
+  }
+}
+
+/* Consolidated from zc-hero-layout-final-20261105-v4; original order preserved. */
+/* Definitive hero geometry: text and sponsor card are independent grid columns. */
+body:has(#home) #home > section.hero{
+  box-sizing:border-box!important;display:block!important;
+  height:auto!important;min-height:0!important;max-height:none!important;
+  padding:clamp(28px,3.5vw,52px) clamp(24px,4.5vw,72px) 30px!important;
+  overflow:visible!important;
+}
+body:has(#home) #home > section.hero > .hero-layout{
+  box-sizing:border-box!important;display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(560px,640px)!important;
+  grid-template-areas:"content sponsor"!important;
+  grid-template-rows:auto!important;grid-auto-flow:row!important;
+  align-items:start!important;align-content:start!important;
+  gap:clamp(24px,2.5vw,40px)!important;
+  width:min(100%,1440px)!important;max-width:1440px!important;
+  min-width:0!important;height:auto!important;min-height:0!important;
+  margin:0 auto!important;transform:none!important;
+}
+body:has(#home) #home > section.hero > .hero-layout > .hero-content{
+  grid-area:content!important;grid-column:1!important;grid-row:1!important;
+  position:relative!important;inset:auto!important;float:none!important;
+  align-self:start!important;justify-self:stretch!important;
+  box-sizing:border-box!important;width:100%!important;max-width:680px!important;
+  min-width:0!important;margin:0!important;padding:0!important;transform:none!important;
+}
+body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
+  grid-area:sponsor!important;grid-column:2!important;grid-row:1!important;
+  position:relative!important;inset:auto!important;float:none!important;
+  align-self:start!important;justify-self:stretch!important;
+  box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
+  width:100%!important;max-width:640px!important;min-width:0!important;
+  height:auto!important;min-height:0!important;max-height:none!important;
+  margin:0!important;padding:10px!important;transform:none!important;
+  overflow:hidden!important;
+}
+body:has(#home) #home > section.hero .zc-hero-sponsor{
+  box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
+  align-items:stretch!important;justify-content:flex-start!important;
+  gap:12px!important;width:100%!important;min-width:0!important;
+  height:auto!important;min-height:0!important;margin:0!important;
+}
+body:has(#home) #home > section.hero .zc-hero-sponsor-label{
+  flex:0 0 auto!important;width:100%!important;margin:0!important;text-align:center!important;
+}
+@media(min-width:901px){
+  body:has(#home) #home > section.hero .zc-hero-ad-stage{
+    box-sizing:border-box!important;display:block!important;position:relative!important;
+    flex:0 0 250px!important;width:100%!important;max-width:100%!important;
+    height:250px!important;min-height:250px!important;max-height:250px!important;
+    margin:0 auto!important;padding:0!important;overflow:hidden!important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-grid{
+    box-sizing:border-box!important;display:grid!important;
+    grid-template-columns:repeat(2,300px)!important;grid-template-rows:250px!important;
+    justify-content:center!important;align-items:start!important;gap:12px!important;
+    width:100%!important;min-width:0!important;height:250px!important;min-height:250px!important;
+    margin:0 auto!important;padding:0!important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-slot{
+    box-sizing:border-box!important;display:flex!important;align-items:center!important;
+    justify-content:center!important;flex:0 0 300px!important;width:300px!important;
+    min-width:300px!important;max-width:300px!important;height:250px!important;
+    min-height:250px!important;max-height:250px!important;overflow:hidden!important;
+    margin:0!important;padding:0!important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-mobile-slot{display:none!important}
+}
+body:has(#home) #home > section.hero .zc-sponsor-art-slot{
+  box-sizing:border-box!important;position:relative!important;display:block!important;
+  flex:0 0 auto!important;width:100%!important;min-width:0!important;
+  height:clamp(260px,22vw,340px)!important;min-height:260px!important;max-height:340px!important;
+  margin:0!important;padding:0!important;overflow:hidden!important;
+  border:1px solid #9bff4560!important;border-radius:5px!important;background:#080d0a!important;
+}
+body:has(#home) #home > section.hero .zc-sponsor-art-slot:before{content:none!important;display:none!important}
+body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
+  position:absolute!important;inset:0!important;display:block!important;
+  width:100%!important;height:100%!important;max-width:none!important;
+  object-fit:cover!important;object-position:center 32%!important;
+  filter:saturate(.96) contrast(1.04)!important;z-index:1!important;
+}
+body:has(#home) #home > section.hero .zc-hero-sponsor-promo{
+  box-sizing:border-box!important;display:flex!important;flex:0 0 auto!important;
+  flex-direction:column!important;justify-content:center!important;gap:10px!important;
+  width:100%!important;min-width:0!important;min-height:190px!important;height:auto!important;
+  margin:0!important;padding:22px 18px!important;
+}
+body:has(#home) #home > section.hero .hero-bottom{
+  position:relative!important;inset:auto!important;display:flex!important;
+  width:min(100%,1440px)!important;margin:20px auto 0!important;
+}
+@media(max-width:1359px){
+  body:has(#home) #home > section.hero > .hero-layout{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"content" "sponsor"!important;
+    gap:26px!important;
+  }
+  body:has(#home) #home > section.hero > .hero-layout > .hero-content,
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
+    grid-column:1!important;grid-row:auto!important;
+    width:min(100%,900px)!important;max-width:900px!important;
+    justify-self:center!important;
+  }
+}
+@media(max-width:900px){
+  body:has(#home) #home > section.hero .zc-hero-ad-stage{
+    box-sizing:border-box!important;display:flex!important;align-items:center!important;
+    justify-content:center!important;flex:0 0 50px!important;
+    width:min(320px,100%)!important;max-width:320px!important;
+    height:50px!important;min-height:50px!important;max-height:50px!important;
+    margin:0 auto!important;overflow:hidden!important;
+  }
+  body:has(#home) #home > section.hero .zc-adsterra-grid{display:none!important}
+  body:has(#home) #home > section.hero .zc-adsterra-mobile-slot{
+    box-sizing:border-box!important;display:flex!important;align-items:center!important;
+    justify-content:center!important;width:320px!important;max-width:100%!important;
+    height:50px!important;min-height:50px!important;max-height:50px!important;overflow:hidden!important;
+  }
+  body:has(#home) #home > section.hero .zc-sponsor-art-slot{
+    height:clamp(210px,46vw,300px)!important;min-height:210px!important;max-height:300px!important;
+  }
+}
+@media(max-width:760px){
+  body:has(#home) #home > section.hero{padding:26px 5% 24px!important}
+  body:has(#home) #home > section.hero > .hero-layout{gap:20px!important}
+  body:has(#home) #home > section.hero .zc-hero-art-panel{padding:9px!important}
+  body:has(#home) #home > section.hero .zc-hero-sponsor-promo{min-height:170px!important;padding:18px 14px!important}
+  body:has(#home) #home > section.hero .hero-stats{flex-wrap:wrap!important;gap:12px!important}
+}
+
+/* Consolidated from zc-final-marquee-art-fix-20261105; original order preserved. */
+/* Equal-width ribbon headers across every translated homepage. */
+body:has(#home) .zc-ribbon-label{
+  box-sizing:border-box!important;flex:0 0 clamp(118px,9.6vw,154px)!important;
+  width:clamp(118px,9.6vw,154px)!important;min-width:clamp(118px,9.6vw,154px)!important;
+  max-width:clamp(118px,9.6vw,154px)!important;justify-content:center!important;
+  padding:0 7px!important;white-space:nowrap!important;overflow:hidden!important;
+  text-overflow:ellipsis!important;font-size:clamp(7px,.66vw,10px)!important;
+  letter-spacing:.25px!important;text-align:center!important;
+}
+/* Real 640x360 survivor artwork; override the old placeholder/fallback geometry. */
+body:has(#home) #home > section.hero .zc-sponsor-art-slot{
+  box-sizing:border-box!important;position:relative!important;display:block!important;
+  width:100%!important;height:clamp(240px,22vw,340px)!important;
+  min-height:240px!important;max-height:340px!important;padding:0!important;
+  overflow:hidden!important;border:1px solid #9bff4570!important;
+  border-radius:5px!important;background:#080d0a!important;
+}
+body:has(#home) #home > section.hero .zc-sponsor-art-slot:before,
+body:has(#home) #home > section.hero .zc-sponsor-art-slot:after{content:none!important;display:none!important}
+body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
+  position:absolute!important;inset:0!important;display:block!important;
+  width:100%!important;height:100%!important;max-width:none!important;
+  object-fit:cover!important;object-position:center 30%!important;
+  filter:saturate(1.04) contrast(1.04)!important;opacity:1!important;z-index:1!important;
+}
+@media(max-width:760px){
+ body:has(#home) .zc-ribbon-label{flex-basis:118px!important;width:118px!important;min-width:118px!important;max-width:118px!important;font-size:7px!important;letter-spacing:0!important;padding:0 5px!important}
+ body:has(#home) #home > section.hero .zc-sponsor-art-slot{height:clamp(210px,62vw,290px)!important;min-height:210px!important;max-height:290px!important}
+}
+
+/* Consolidated from zc-ad-free-hero-layout-20261122; original order preserved. */
+/* Advertising integrations are disabled; let homepage content use the full hero width. */
+body:has(#home) #home > section.hero > .hero-layout{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-areas:none!important;align-items:start!important;gap:24px!important}
+body:has(#home) #home > section.hero > .hero-layout > .hero-content,
+body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{grid-column:1!important;grid-area:auto!important;width:100%!important;max-width:none!important}
 </style>
+</head>
+<body>
+<div class="scanlines"></div>
+<header class="topbar">
+  <a class="brand" href="#home" aria-label="ZombieCash home"><span class="brand-mark">☣</span><span>ZOMBIE<span class="green">CASH</span><small>亡者互联网</small></span></a>
+  <nav><a href="#living-world">实时世界</a><a href="/zh-CN/survivor-field-manual.html">幸存者手册</a><a href="/zh-CN/outbreak-transmission.html">疫情播报</a><a href="/crew-vote.html">团队投票</a><a href="#lab">ZOMBIE LAB</a><a href="/arcade.html">ARCADE</a><a href="/gallery.html">僵尸画廊</a><a href="/zombie-maker.html">僵尸生成器</a><a href="#community">社区</a><a href="/zh-CN/buy-zombcash.html">购买 $ZOMBCASH</a></nav>
+  <a class="top-cta" href="#community">加入幸存者队伍 <span>↗</span></a>
+  <button class="menu-toggle" aria-label="Open menu">☰</button>
+</header>
+<main id="home">
+<section class="hero">
+  <div class="hero-grid"></div><div class="moon"></div><div class="city city-back"></div><div class="city city-front"></div>
+  <div class="hero-layout">
+  <div class="hero-content">
+    <div class="eyebrow"><span class="pulse"></span> ZOMBCASH // 亡者互联网</div>
+    <h1>加密世界是<br><span class="dead">一座墓园。</span><br><span class="alive">我们正在复苏。</span></h1>
+    <p class="hero-copy">为沉寂的市场注入活力的亡者世界。寻找最新信号，集结你的队伍，挺过下一轮爆发。</p>
+    <div class="hero-actions"><a class="btn btn-primary" href="#radar">⌁ 打开雷达</a><a class="btn btn-ghost" href="#lab">☣ 进入僵尸实验室</a></div><section class="field-manual-spotlight" aria-labelledby="field-manual-title"><div class="field-manual-copy"><span class="field-manual-kicker">幸存者情报 / 实用指南</span><h2 id="field-manual-title">情报与生存指南</h2><p>研究 Solana 代币、解读市场信号、保护你的钱包，并识别常见骗局。提供可按主题和日期搜索的实用指南。</p><a class="field-manual-link" href="/zh-CN/survivor-field-manual.html">打开生存手册 <span aria-hidden="true">↗</span></a></div><div class="field-manual-status"><span class="field-manual-dot"></span><span>前线档案</span><strong>现有 3 篇指南</strong><small>更多档案即将推出</small></div></section>
+
+    <div class="hero-stats"><div><strong>24/7</strong><span>疫情实时动态</span></div><i></i><div><strong>3</strong><span>SOLANA 区域</span></div><i></i><div><strong>0</strong><span>仅限队伍</span></div></div>
+  </div>
+
+  <div class="zc-hero-art-panel">
+    <div class="zc-sponsor-art-slot">
+      <img src="/assets/zombcash-survivor-realistic-520.avif" alt="ZombieCash zombie survivor heroine">
+    </div>
+  </div>
+
+  </div>
+  <div class="hero-bottom"><span>正在扫描生命迹象…</span><span>系统状态： <b>亡者</b></span><span>坐标：6C-CB-F9</span></div>
+</section>
+
+<!-- ZombieCash promo video library: each new video is added to promo-videos.json; previous releases remain available. -->
+<section class="zc-promo-video section" id="promo-video" aria-labelledby="zc-promo-title">
+  <div class="zc-promo-video-shell">
+    <div class="zc-promo-video-copy">
+      <span class="zc-promo-video-kicker"><i></i> [ WELCOME 疫情播报 / OFFICIAL VIDEO ]</span>
+      <h2 id="zc-promo-title">进入亡者互联网。</h2>
+      <p>探索 ZombieCash 世界，体验各项工具，加入幸存者队伍。</p>
+      <div class="zc-promo-video-controls" aria-label="Promo video navigation">
+        <button type="button" id="zc-promo-prev" disabled aria-label="Previous promo video">← 上一页</button>
+        <span id="zc-promo-count" aria-live="polite">正在加载视频库…</span>
+        <button type="button" id="zc-promo-next" disabled aria-label="Next promo video">下一页 →</button>
+      </div>
+      <p class="zc-promo-video-note" id="zc-promo-status" role="status">正在加载最新播报…</p>
+      <a class="zc-promo-video-release" id="zc-promo-release" href="https://github.com/zombcash/zombcash.github.io/releases" target="_blank" rel="noopener noreferrer">查看全部视频 ↗</a>
+    </div>
+    <div class="zc-promo-player-wrap">
+      <div class="zc-promo-player-top"><span><i></i> ZC // PROMO 疫情播报</span><span id="zc-promo-version">ARCHIVE</span></div>
+      <video id="zc-promo-player" controls playsinline preload="none" aria-label="ZombieCash promotional video">
+        <p>浏览器无法播放此视频。 <a href="https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10">改为打开已发布的视频。</a></p>
+      </video>
+      <div class="zc-promo-player-foot"><span>按需播放 · 开启声音</span><a id="zc-promo-download" href="https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10" target="_blank" rel="noopener noreferrer">打开 / 下载 ↗</a></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="zctv-channel-hub" id="zctv-channel-hub" aria-labelledby="zctv-title">
+<div class="zctv-inner"><div class="zctv-kicker"><i></i> ZOMBIECASH TV // BROADCAST STUDIO</div>
+<div class="zctv-layout">
+<div class="zctv-intro"><span class="eyebrow">亡者互联网 — 正在播出</span><h2 id="zctv-title">三个频道。<br><span>一个不死信号。</span></h2><p>认识我们的主持人，接入ZombieCash广播网络。选择下方频道，所有节目都将在同一个播放器中播放。</p><div class="zctv-host-tag">☣ <div>你的ZOMBIECASH主持人<small>来自疫情爆发演播室</small></div></div></div>
+<div class="zctv-host-art"><img src="/assets/zombcash-survivor-640.avif" alt="ZombieCash霓虹直播演播室女主持人" loading="lazy" fetchpriority="low" decoding="async"></div>
+<div class="zctv-player-column"><div class="zctv-live-label"><strong>● 正在播放</strong><span>点播节目</span></div><div class="zctv-player-mount" data-zctv-player-mount></div><div class="zctv-archive"><div class="zctv-archive-head"><span>节目档案</span><span data-zctv-archive-title>全部节目</span></div><div class="zctv-episodes" data-zctv-episodes><div class="zctv-empty">此频道暂时还没有发布节目。</div></div></div></div>
+</div>
+<div class="zctv-channels" role="group" aria-label="ZombieCash电视频道">
+<button class="zctv-channel-card" type="button" data-channel="news" aria-pressed="false"><span class="num">01 // CHANNEL</span><strong>OUTBREAK NEWS</strong><p>新闻与现场报道</p><span class="actions"><b>观看 CHANNEL ↗</b><span>全部节目</span></span></button>
+<button class="zctv-channel-card" type="button" data-channel="meme" aria-pressed="false"><span class="num">02 // CHANNEL</span><strong>MEME SHOW</strong><p>表情包与社区</p><span class="actions"><b>观看 CHANNEL ↗</b><span>全部节目</span></span></button>
+<button class="zctv-channel-card" type="button" data-channel="lab" aria-pressed="false"><span class="num">03 // CHANNEL</span><strong>ZOMBIE LAB</strong><p>游戏与实验</p><span class="actions"><b>观看 CHANNEL ↗</b><span>全部节目</span></span></button>
+</div><div class="zctv-foot"><span>☣ ZOMBCASH BROADCAST NETWORK</span><span>ONE PLAYER · THREE CHANNELS · ON DEMAND</span></div>
+</div></section>
 <script src="/assets/js/zctv-player.js?v=tv-grid-fix-20261111-2" defer></script>
 
 <section class="ticker" aria-label="Project motto"><div>市场已死。ZOMBIECASH 仍在。 <b>☣</b> 市场已死。ZOMBIECASH 仍在。 <b>☣</b> 市场已死。ZOMBIECASH 仍在。</div></section>
@@ -1569,273 +2258,17 @@ body:has(#home) #home .tools#radar .tool-card .tool-art{
     </div>
   </div>
   <div class="site-footer-bottom"><span class="footer-right">市场 DIED. ZOMBIECASH DIDN'T. <b>© 2026</b></span><p>$ZOMBCASH 是社区模因币。加密资产价格波动较大，请务必核实合约地址并自行研究。本网站仅供信息参考，不构成投资建议。</p></div>
-<style id="footer-growth-donation">
-/* Footer layout repair: keep the original three-column info row and the three support cards below it. */
-.site-footer-main{display:grid!important;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr) minmax(0,1.15fr)!important;gap:clamp(22px,3vw,42px)!important;align-items:start!important}
-.site-footer-main>.site-footer-brand,.site-footer-main>nav.site-footer-column{display:flex!important;flex-direction:column!important;align-items:flex-start!important;min-width:0!important;grid-column:auto!important}
-.site-footer-main>.site-footer-brand{grid-column:1!important}
-.site-footer-main>nav.site-footer-column{gap:0!important}
-.site-footer-main>nav.site-footer-column h2{display:block!important;width:100%!important;margin:0 0 16px!important}
-.site-footer-main>nav.site-footer-column a{display:block!important;position:static!important;width:auto!important;max-width:100%!important;margin:0 0 10px!important;padding:0!important;line-height:1.45!important;white-space:normal!important;overflow-wrap:anywhere!important;text-decoration:none!important}
-.site-footer-main>nav.site-footer-column a:hover{color:#9bff45!important;text-decoration:underline!important}
-.site-footer-brand .footer-contract{max-width:100%;box-sizing:border-box}
-.footer-support-grid{grid-column:1/-1!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:clamp(16px,2vw,28px)!important;align-items:stretch!important;min-width:0!important}
-.footer-support-grid>.site-feedback,.footer-support-grid>.footer-growth,.footer-support-grid>.footer-donate{box-sizing:border-box;min-width:0;min-height:300px;padding:22px;display:flex;flex-direction:column;align-items:stretch;gap:10px;border:1px solid #2c4932;border-radius:2px;background:linear-gradient(155deg,rgba(13,25,16,.98),rgba(8,13,10,.98));box-shadow:inset 0 1px 0 rgba(155,255,69,.04)}
-.footer-support-grid h2{margin:0 0 6px;color:#b8ff8b;font:700 11px/1.5 Orbitron,sans-serif;letter-spacing:.65px;text-transform:uppercase}
-.footer-support-grid p{max-width:none;margin:0 0 10px;color:#a5b5a7;font:500 15px/1.55 Rajdhani,sans-serif}
-.footer-support-grid .site-feedback>a,.footer-support-grid .footer-action,.footer-support-grid .footer-copy-wallet{box-sizing:border-box;width:100%;min-height:42px;margin:0;padding:11px 12px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #527b45;border-radius:2px;background:#122315;color:#b8ff8b;font:700 9px/1.45 Orbitron,sans-serif;letter-spacing:.35px;text-align:center;text-decoration:none;overflow-wrap:anywhere;cursor:pointer;transition:background .18s ease,border-color .18s ease,color .18s ease}
-.footer-support-grid .site-feedback>a{margin-top:2px}
-.footer-support-grid .site-feedback>a:first-of-type{margin-top:auto}
-.footer-support-grid .site-feedback>a:hover,.footer-support-grid .footer-action:hover,.footer-support-grid .footer-copy-wallet:hover{background:#1b321c;border-color:#9bff45;color:#d8ffbd;text-decoration:none}
-.footer-support-grid .footer-growth .footer-action{margin-top:auto}
-.footer-support-grid .footer-donation-address{display:block;box-sizing:border-box;width:100%;margin:0 0 4px;padding:11px;border:1px solid #2b4430;border-radius:2px;background:#07100a;color:#d4e6d1;font:500 11px/1.55 monospace;overflow-wrap:anywhere;user-select:all}
-.footer-support-grid .footer-donate .footer-phantom{margin-top:auto}
-.footer-support-grid .footer-donation-feedback{color:#9bff45;font:500 12px/1.45 Rajdhani,sans-serif}
-@media(max-width:900px){.site-footer-main{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:24px!important}.site-footer-main>.site-footer-brand{grid-column:1/-1!important}.footer-support-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.footer-support-grid>.site-feedback{grid-column:1/-1!important}}
-@media(max-width:560px){.site-footer-main{grid-template-columns:minmax(0,1fr)!important;gap:26px!important}.site-footer-main>.site-footer-brand,.site-footer-main>nav.site-footer-column{grid-column:1!important}.footer-support-grid{grid-template-columns:minmax(0,1fr)!important}.footer-support-grid>.site-feedback{grid-column:auto!important}.footer-support-grid>.site-feedback,.footer-support-grid>.footer-growth,.footer-support-grid>.footer-donate{min-height:0;padding:18px}}
-</style>
+
 </footer>
 <div class="page-scroll-controls" aria-label="Page navigation">
   <button type="button" id="scroll-to-top" aria-label="Scroll to top" title="Back to top"><span aria-hidden="true">↑</span></button>
   <button type="button" id="scroll-to-bottom" aria-label="Scroll to bottom" title="Go to bottom"><span aria-hidden="true">↓</span></button>
 </div>
 
-<style id="campaign-dashboard-styles">
-.campaign-dashboard{padding:64px 6.5%;border-top:1px solid #9bff4520;background:linear-gradient(180deg,#090d0b,#080b11)}
-.campaign-dashboard-inner{max-width:1240px;margin:auto}
-.campaign-heading{margin-bottom:26px}.campaign-heading h2{font:700 clamp(28px,4vw,42px) Orbitron,sans-serif;letter-spacing:-1px;margin:12px 0}.campaign-heading p{color:#a8b2a5;font-size:15px}
-.campaign-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.campaign-card,.campaign-panel{border:1px solid #33452f;background:linear-gradient(145deg,#101710,#0b0e12);padding:22px;min-width:0}
-.campaign-card small{display:block;color:#9bff45;font:700 10px Orbitron,sans-serif;letter-spacing:1px;line-height:1.6}
-.campaign-card strong{display:block;color:#f1f5ed;font:700 clamp(25px,3vw,36px) Orbitron,sans-serif;margin:14px 0 7px;overflow-wrap:anywhere}
-.campaign-card span,.campaign-list span{color:#9ba69a;font-size:12px}
-.campaign-details{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
-.campaign-panel h3{font:700 13px Orbitron,sans-serif;letter-spacing:1px;margin:0 0 18px;color:#d8e5d2}
-.campaign-list{display:grid;gap:13px}
-.campaign-row{display:grid;grid-template-columns:minmax(90px,1fr) minmax(80px,2fr) auto;gap:12px;align-items:center;font-size:12px;color:#d4ddd0}
-.campaign-bar{height:6px;background:#273027;border-radius:8px;overflow:hidden}.campaign-bar i{display:block;height:100%;background:#9bff45;border-radius:8px}
-.campaign-count{font-variant-numeric:tabular-nums;color:#f1f5ed}
-.campaign-updated{margin:18px 0 0;color:#82917e;font:10px Orbitron,sans-serif;letter-spacing:1px}
-@media(max-width:800px){.campaign-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.campaign-dashboard{padding:48px 5%}}
-@media(max-width:560px){.campaign-details{grid-template-columns:1fr}.campaign-card{padding:16px}.campaign-row{grid-template-columns:minmax(80px,1fr) minmax(45px,1fr) auto;gap:8px}}
-</style>
 
 
-<style id="zombcash-layout-width-fix">
-/* Global layout system: full-bleed backgrounds, one centered 1276px content grid. */
-:root { --zc-content-width: 1276px; --zc-section-gap: 72px; }
-.hero {
-  padding-left: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
-  padding-right: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
-}
-.hero-layout {
-  width: 100% !important;
-  max-width: var(--zc-content-width) !important;
-  margin-inline: auto !important;
-}
-.hero-bottom {
-  left: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
-  right: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
-}
-section.section {
-  width: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
-  padding: var(--zc-section-gap) max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
-  box-sizing: border-box !important;
-}
-section.section > .section-heading,
-section.section > .intro-row {
-  width: 100% !important;
-  max-width: var(--zc-content-width) !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-section.section > :not(.section-heading):not(.intro-row) {
-  min-width: 0;
-}
-section.section .world-grid,
-section.section .daily-mission-inner,
-section.section .outbreak-panel,
-section.section .tool-grid,
-section.section .crew-grid,
-section.section .transmission-box,
-section.section .arcade-feature,
-section.section .leaderboard-card {
-  width: 100% !important;
-  max-width: var(--zc-content-width) !important;
-  min-width: 0 !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  box-sizing: border-box !important;
-}
-section.section .section-heading {
-  margin-top: 0 !important;
-  margin-bottom: 28px !important;
-}
-section.section .intro-row {
-  margin-top: 0 !important;
-  margin-bottom: 28px !important;
-}
-section.section .world-grid,
-section.section .tool-grid,
-section.section .crew-grid {
-  gap: 18px !important;
-}
-section.section.community-console .crew-grid {
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  grid-template-areas: "market jupiter" "chart feed" !important;
-  grid-auto-flow: row !important;
-  align-items: stretch !important;
-}
-section.section.community-console .crew-grid > article:first-of-type { grid-area: market !important; align-self:stretch !important; height:100% !important; }
-section.section.community-console .crew-grid > .jupiter-swap-card { grid-area: jupiter !important; align-self:stretch !important; height:100% !important; }
-section.section.community-console .crew-grid > .activity-chart-panel { grid-area: chart !important; align-self:stretch !important; }
-section.section.community-console .crew-grid > .recent-trades-panel { grid-area: feed !important; align-self:stretch !important; }
-section.section.community-console .crew-grid > .crew-card {
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: 100% !important;
-  height: auto !important;
-  box-sizing: border-box !important;
-  align-self: start !important;
-}
-section.section.community-console .activity-chart-panel,
-section.section.community-console .recent-trades-panel {
-  display:flex !important;
-  flex-direction:column !important;
-  align-self:stretch !important;
-  height:100% !important;
-  min-height:300px !important;
-}
-section.section.community-console .activity-chart-panel #activity-price-chart {
-  flex:0 0 auto;
-  min-height:180px;
-}
-section.section.community-console .recent-trades-panel .recent-trades-list {
-  flex:1 1 auto;
-  min-height:0;
-}
-@media(max-width:800px) {
-  section.section.community-console .crew-grid { grid-template-columns:minmax(0,1fr) !important; grid-template-areas:"market" "jupiter" "chart" "feed" !important; align-items:start !important; }
-  section.section.community-console .crew-grid > .crew-card,
-  section.section.community-console .crew-grid > article:first-of-type,
-  section.section.community-console .crew-grid > .jupiter-swap-card { height:auto !important; align-self:start !important; }
-  section.section.community-console .activity-chart-panel,
-  section.section.community-console .recent-trades-panel { height:auto !important; }
-  section.section.community-console .activity-chart-panel,
-  section.section.community-console .recent-trades-panel { min-height:0 !important; }
-}
-section.section.community-console .crew-card,
-section.section.community-console .zombcash-market,
-section.section.community-console .merged-market,
-section.section.community-console .jupiter-terminal-shell,
-section.section.community-console #jupiter-zombcash-terminal {
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  box-sizing: border-box !important;
-}
-section.section.community-console .zombcash-market-grid {
-  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-}
-section.section.mini-game#snake-game {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1.22fr) minmax(0, .88fr) !important;
-  grid-template-areas: "feature records" !important;
-  align-items: stretch !important;
-  gap: 18px !important;
-  background: radial-gradient(ellipse at 75% 46%, #15281b 0%, #0a100c 42%, #070b0a 76%) !important;
-}
-section.section.mini-game#snake-game > .arcade-feature {
-  grid-area: feature !important;
-  display: grid !important;
-  grid-template-columns: minmax(110px, .55fr) minmax(0, 1.45fr) !important;
-  align-items: center !important;
-  gap: 18px !important;
-  padding: 24px !important;
-  border: 1px solid #263d2d !important;
-  background: linear-gradient(135deg, #0d1711e8, #0a0e13f2) !important;
-}
-section.section.mini-game#snake-game > .arcade-feature > .snake-promo-art {
-  width: 100% !important;
-  max-width: 230px !important;
-  min-width: 0 !important;
-  margin-inline: auto !important;
-}
-section.section.mini-game#snake-game > .arcade-feature > .game-copy { min-width: 0 !important; }
-section.section.mini-game#snake-game .game-copy h2 {
-  font-size: clamp(28px, 2.6vw, 42px) !important;
-  line-height: 1.08 !important;
-  letter-spacing: -.035em !important;
-  overflow-wrap: anywhere !important;
-}
-section.section.mini-game#snake-game > .leaderboard-card {
-  grid-area: records !important;
-  align-self: stretch !important;
-  margin: 0 !important;
-  padding: 24px !important;
-  min-width: 0 !important;
-}
-.site-visits {
-  padding: 28px max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
-  box-sizing: border-box !important;
-}
-.site-visits-inner {
-  width: 100% !important;
-  max-width: var(--zc-content-width) !important;
-  padding: 0 !important;
-  margin-inline: auto !important;
-  box-sizing: border-box !important;
-}
-.campaign-dashboard {
-  width: 100% !important;
-  padding: var(--zc-section-gap) max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
-  box-sizing: border-box !important;
-}
-.campaign-dashboard-inner {
-  width: 100% !important;
-  max-width: var(--zc-content-width) !important;
-  margin-inline: auto !important;
-  box-sizing: border-box !important;
-}
-footer {
-  padding-left: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
-  padding-right: max(22px, calc((100vw - var(--zc-content-width))/2)) !important;
-}
-@media (max-width: 1050px) {
-  section.section.mini-game#snake-game {
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-areas: "feature" "records" !important;
-  }
-  section.section.mini-game#snake-game > .arcade-feature {
-    grid-template-columns: minmax(130px, .55fr) minmax(0, 1.45fr) !important;
-  }
-}
-@media (max-width: 800px) {
-  section.section.community-console .crew-grid { grid-template-columns: minmax(0, 1fr) !important; }
-  section.section.community-console .zombcash-market-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-  section.section.living-world .world-grid { grid-template-columns: minmax(0, 1fr) !important; }
-}
-@media (max-width: 560px) {
-  :root { --zc-section-gap: 44px; }
-  section.section.mini-game#snake-game { gap: 18px !important; }
-  section.section.mini-game#snake-game > .arcade-feature {
-    grid-template-columns: minmax(0, 1fr) !important;
-    gap: 12px !important;
-    padding: 18px !important;
-  }
-  section.section.mini-game#snake-game .snake-promo-art {
-    width: min(66vw, 220px) !important;
-    margin: 0 auto !important;
-  }
-  section.section.mini-game#snake-game .leaderboard-card .crew-card-head {
-    flex-direction: column;
-    align-items: stretch;
-  }
-}
-</style>
+
+
 
 <script src="/runtime-fixes.js?v=20261027-2" defer></script>
 <script src="/script.js?v=radar-icon-fallback-20261027-3" defer></script>
@@ -1900,229 +2333,26 @@ footer {
 })();
 </script>
 
-<style id="zombcash-market-panels-final-alignment">
-section.section.community-console .crew-grid { align-items: stretch !important; }
-section.section.community-console .crew-grid > .activity-chart-panel,
-section.section.community-console .crew-grid > .recent-trades-panel {
-  display: flex !important;
-  flex-direction: column !important;
-  align-self: stretch !important;
-  height: auto !important;
-  min-height: 300px !important;
-  margin: 0 !important;
-  box-sizing: border-box !important;
-}
-section.section.community-console .crew-grid > .activity-chart-panel #activity-price-chart {
-  display: block !important;
-  flex: 1 1 auto !important;
-  width: 100% !important;
-  height: 180px !important;
-  min-height: 180px !important;
-}
-section.section.community-console .crew-grid > .recent-trades-panel .recent-trades-list {
-  flex: 1 1 auto !important;
-  min-height: 0 !important;
-  align-content: start !important;
-}
-section.section.community-console .crew-grid > .recent-trades-panel .recent-trade-empty {
-  margin: 0 !important;
-  padding: 12px 0 !important;
-}
-@media (max-width: 800px) {
-  section.section.community-console .crew-grid { align-items: start !important; }
-  section.section.community-console .crew-grid > .activity-chart-panel,
-  section.section.community-console .crew-grid > .recent-trades-panel {
-    min-height: 0 !important;
-    height: auto !important;
-    align-self: start !important;
-  }
-  section.section.community-console .crew-grid > .activity-chart-panel #activity-price-chart {
-    flex: 0 0 180px !important;
-  }
-}
-</style>
 
 
-<style id="zombcash-community-panels-compact-height">
-/* Match Jupiter's documented integrated-terminal dimensions so the wallet form stays inside its card. */
-section.section.community-console .jupiter-swap-card #jupiter-zombcash-terminal {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: stretch !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  min-height: 390px !important;
-  height: 390px !important;
-  box-sizing: border-box !important;
-}
-@media (max-width: 850px) {
-  section.section.community-console .jupiter-swap-card #jupiter-zombcash-terminal {
-    min-height: 390px !important;
-  height: 390px !important;
-  }
-}</style>
 
 
-<style id="zombcash-jupiter-wallet-overlay-fix">
-/* Let Jupiter's wallet picker and connect overlays escape the embedded terminal bounds. */
-section.section.community-console .jupiter-swap-card,
-section.section.community-console .jupiter-swap-card .jupiter-terminal-shell {
-  position: relative !important;
-  overflow: visible !important;
-}
-section.section.community-console .jupiter-swap-card #jupiter-zombcash-terminal {
-  position: relative !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-}
-</style>
 
 
-<style id="zombcash-outbreak-live-operations">
-section.section.living-world .outbreak-status-panel{display:flex!important;flex-direction:column!important;min-width:0!important;overflow:hidden!important}
-section.section.living-world .outbreak-status-panel .world-panel-head{align-items:flex-start!important;gap:12px!important}
-section.section.living-world .ops-status-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;padding:16px 16px 18px!important}
-section.section.living-world .ops-status-tile{display:flex!important;align-items:center!important;gap:9px!important;min-width:0!important;padding:12px 9px!important;border:1px solid #2c432e!important;background:linear-gradient(135deg,#101a12,#080d0a)!important}
-section.section.living-world .ops-status-tile>span:last-child{display:grid!important;gap:6px!important;min-width:0!important}
-section.section.living-world .ops-status-tile small{font:600 8px Orbitron,sans-serif!important;letter-spacing:.25px!important;color:#8c9e87!important;white-space:nowrap!important}
-section.section.living-world .ops-status-tile strong{font:700 10px Orbitron,sans-serif!important;color:#9bff45!important;overflow-wrap:anywhere!important}
-section.section.living-world .ops-status-dot{flex:0 0 7px!important;width:7px!important;height:7px!important;border-radius:50%!important;background:#788273!important;box-shadow:0 0 8px currentColor!important;color:#788273!important}
-section.section.living-world .ops-status-dot.is-online{background:#9bff45!important;color:#9bff45!important}
-section.section.living-world .ops-status-dot.is-warning{background:#ffb547!important;color:#ffb547!important}
-section.section.living-world .ops-status-dot.is-offline{background:#ff626d!important;color:#ff626d!important}
-section.section.living-world .ops-transmissions-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;padding:0 16px 11px!important;border-bottom:1px solid #263728!important}
-section.section.living-world .ops-transmissions-head>span:last-child{font:600 8px Orbitron,sans-serif!important;letter-spacing:.35px!important;color:#81917d!important;text-align:right!important}
-section.section.living-world .ops-transmissions{display:grid!important;gap:0!important;padding:0 16px!important;flex:1 1 auto!important;align-content:start!important}
-section.section.living-world .ops-transmission{display:grid!important;grid-template-columns:34px minmax(0,1fr) auto!important;align-items:center!important;gap:11px!important;padding:15px 0!important;border-bottom:1px solid #203024!important;min-width:0!important}
-section.section.living-world .ops-transmission:last-child{border-bottom:0!important}
-section.section.living-world .ops-transmission-icon{display:grid!important;place-items:center!important;width:32px!important;height:32px!important;border:1px solid #426537!important;color:#9bff45!important;font:700 14px Orbitron,sans-serif!important;background:linear-gradient(145deg,#101b11,#080e0a)!important}
-section.section.living-world .ops-transmission-copy{min-width:0!important}
-section.section.living-world .ops-transmission strong{display:block!important;color:#e6f2df!important;font:700 10px Orbitron,sans-serif!important;letter-spacing:.4px!important;line-height:1.5!important}
-section.section.living-world .ops-transmission p{margin:5px 0 0!important;color:#a0b09b!important;font:500 14px/1.35 Rajdhani,sans-serif!important;overflow-wrap:anywhere!important}
-section.section.living-world .ops-transmission>small{color:#7d9077!important;font:600 8px Orbitron,sans-serif!important;white-space:nowrap!important;padding-top:2px!important}
-section.section.living-world .ops-monitor-footer{display:flex!important;align-items:center!important;gap:11px!important;margin:12px 16px 10px!important;padding:13px!important;border:1px solid #2d462e!important;background:linear-gradient(100deg,#101a11,#0a100c)!important}
-section.section.living-world .ops-monitor-pulse{flex:0 0 8px!important;width:8px!important;height:8px!important;border-radius:50%!important;background:#9bff45!important;box-shadow:0 0 10px #9bff4580!important}
-section.section.living-world .ops-monitor-footer>div{display:grid!important;gap:5px!important;min-width:0!important;flex:1 1 auto!important}
-section.section.living-world .ops-monitor-footer strong{font:700 9px Orbitron,sans-serif!important;letter-spacing:.5px!important;color:#9bff45!important}
-section.section.living-world .ops-monitor-footer small{font:500 12px/1.3 Rajdhani,sans-serif!important;color:#8d9d88!important}
-section.section.living-world .ops-monitor-live{font:700 8px Orbitron,sans-serif!important;letter-spacing:.4px!important;color:#d9e6d3!important;white-space:nowrap!important}
-section.section.living-world .outbreak-status-panel .world-disclaimer{margin:0 16px 16px!important;font-size:11px!important;line-height:1.4!important}
-@media(max-width:1050px){section.section.living-world .ops-status-grid{grid-template-columns:1fr!important}section.section.living-world .ops-status-tile{padding:10px!important}}
-@media(max-width:760px){section.section.living-world .ops-status-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;padding:12px 12px 14px!important;gap:6px!important}section.section.living-world .ops-status-tile{gap:6px!important;padding:9px 6px!important}section.section.living-world .ops-status-tile small{font-size:7px!important;white-space:normal!important}section.section.living-world .ops-status-tile strong{font-size:8px!important}section.section.living-world .ops-transmissions-head{padding:0 12px 9px!important}section.section.living-world .ops-transmissions{padding:0 12px!important}section.section.living-world .ops-transmission{grid-template-columns:28px minmax(0,1fr) auto!important;gap:8px!important;padding:12px 0!important}section.section.living-world .ops-transmission-icon{width:27px!important;height:27px!important}section.section.living-world .ops-transmission p{font-size:12px!important}section.section.living-world .ops-monitor-footer{margin:10px 12px!important;padding:10px!important;gap:8px!important}section.section.living-world .ops-monitor-footer small{font-size:11px!important}section.section.living-world .ops-monitor-live{font-size:7px!important}section.section.living-world .outbreak-status-panel .world-disclaimer{margin:0 12px 12px!important}}
-</style>
 
-<style id="zombcash-community-card-bottom-alignment">
-/* Pixel-level alignment: make both cards in each crew-grid row share the same bottom edge. */
-section.section.community-console .crew-grid {
-  align-items: stretch !important;
-}
-section.section.community-console .crew-grid > .crew-card,
-section.section.community-console .crew-grid > .activity-chart-panel,
-section.section.community-console .crew-grid > .recent-trades-panel {
-  align-self: stretch !important;
-  height: 100% !important;
-  min-width: 0 !important;
-  box-sizing: border-box !important;
-}
-section.section.community-console .crew-grid > .crew-card {
-  display: flex !important;
-  flex-direction: column !important;
-}
-section.section.community-console .crew-grid > .crew-card.jupiter-swap-card .jupiter-terminal-shell {
-  flex: 1 1 auto !important;
-}
-@media (max-width: 800px) {
-  section.section.community-console .crew-grid {
-    align-items: stretch !important;
-  }
-  section.section.community-console .crew-grid > .crew-card,
-  section.section.community-console .crew-grid > .activity-chart-panel,
-  section.section.community-console .crew-grid > .recent-trades-panel {
-    height: auto !important;
-  }
-}
 
-/* Token Intel panel: replaces duplicate service telemetry with useful token data and actions. */
-section.section.living-world .token-intel-panel{display:flex!important;flex-direction:column!important;min-width:0!important;overflow:hidden!important}
-section.section.living-world .token-intel-price-block{display:grid!important;gap:9px!important;padding:22px 18px 18px!important;border-bottom:1px solid #263728!important;background:radial-gradient(ellipse at 80% 0%,#20351b55,transparent 65%),linear-gradient(135deg,#101a12,#090e0b)!important}
-.token-intel-label,.token-intel-stats small,.token-intel-contract small{color:#849780!important;font:700 8px Orbitron,sans-serif!important;letter-spacing:1px!important}
-#token-intel-price{display:block!important;color:#eff8e8!important;font:700 clamp(26px,3vw,38px)/1.15 Orbitron,sans-serif!important;letter-spacing:-1px!important;overflow-wrap:anywhere!important}
-.token-intel-change{font:700 10px Orbitron,sans-serif!important;color:#9ba997!important}
-.token-intel-change.is-positive{color:#9bff45!important}.token-intel-change.is-negative{color:#ff8585!important}
-.token-intel-stats{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;padding:14px 16px!important}
-.token-intel-stats>div{display:grid!important;gap:8px!important;min-width:0!important;padding:13px 11px!important;border:1px solid #2a3e2c!important;background:#0b120d!important}
-.token-intel-stats strong{color:#e8f2e3!important;font:700 12px Orbitron,sans-serif!important;overflow-wrap:anywhere!important}
-.token-intel-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:9px!important;padding:2px 16px 15px!important}
-.token-intel-actions a{display:flex!important;align-items:center!important;justify-content:center!important;min-height:42px!important;padding:10px 8px!important;border:1px solid #47643b!important;color:#b9f58e!important;text-align:center!important;text-decoration:none!important;font:700 8px Orbitron,sans-serif!important;letter-spacing:.45px!important}
-.token-intel-actions a:last-child{background:#9bff4510!important;border-color:#9bff45!important;color:#9bff45!important}
-.token-intel-actions a:hover{background:#9bff4518!important;border-color:#9bff45!important}
-.token-intel-contract{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;margin:0 16px!important;padding:13px 11px!important;border:1px solid #293a2b!important;background:#080d0a!important}
-.token-intel-contract>span{display:grid!important;gap:7px!important;min-width:0!important}
-.token-intel-contract code{color:#b5c5af!important;font:500 10px/1.5 monospace!important;overflow-wrap:anywhere!important}
-.token-intel-contract button{flex:none!important;padding:9px 10px!important;border:1px solid #4b6b3d!important;background:#101a11!important;color:#aaff6e!important;font:700 8px Orbitron,sans-serif!important;cursor:pointer!important}
-.token-intel-foot{display:flex!important;justify-content:space-between!important;gap:8px!important;flex-wrap:wrap!important;padding:14px 16px 0!important;color:#738570!important;font:600 7px Orbitron,sans-serif!important;letter-spacing:.4px!important}
-.token-intel-panel .world-disclaimer{margin:12px 16px 16px!important;font-size:11px!important;line-height:1.45!important}
-@media(max-width:760px){.token-intel-stats{padding:12px!important}.token-intel-actions{padding-left:12px!important;padding-right:12px!important}.token-intel-contract{margin-left:12px!important;margin-right:12px!important}.token-intel-foot{padding-left:12px!important;padding-right:12px!important}}
 
-</style>
 
-<style id="daily-missions-panel-fix">
-/* The missions widget must render independently of the removed legacy alert list. */
-section.section.living-world .missions-panel{display:flex!important;flex-direction:column!important;min-height:100%!important}
-section.section.living-world #world-missions.world-missions{display:grid!important;grid-template-columns:minmax(0,1fr)!important;align-content:start!important;gap:0!important;flex:1 1 auto!important;min-height:220px!important;padding:8px 20px 14px!important;visibility:visible!important;opacity:1!important}
-section.section.living-world #world-missions .world-mission{display:flex!important;align-items:flex-start!important;gap:12px!important;padding:15px 0!important;margin:0!important;border-bottom:1px solid #203024!important;cursor:pointer!important;min-width:0!important}
-section.section.living-world #world-missions .world-mission:last-child{border-bottom:0!important}
-section.section.living-world #world-missions .world-mission input{display:block!important;appearance:none!important;flex:0 0 17px!important;width:17px!important;height:17px!important;margin:2px 0 0!important;border:1px solid #587b48!important;background:#080f0d!important;cursor:pointer!important}
-section.section.living-world #world-missions .world-mission input:checked{background:#9bff45!important;border-color:#9bff45!important;box-shadow:inset 0 0 0 4px #0b150c!important}
-section.section.living-world #world-missions .world-mission-copy{display:block!important;min-width:0!important;flex:1 1 auto!important}
-section.section.living-world #world-missions .world-mission strong{display:block!important;color:#e2f0dc!important;font:700 10px Orbitron,sans-serif!important;line-height:1.5!important;letter-spacing:.3px!important}
-section.section.living-world #world-missions .world-mission p{margin:5px 0 0!important;color:#91a18e!important;font:500 14px/1.35 Rajdhani,sans-serif!important}
-section.section.living-world #world-missions .world-mission-action{display:inline-flex!important;margin-top:8px!important;color:#9bff45!important;font:700 8px Orbitron,sans-serif!important;letter-spacing:.45px!important;text-decoration:none!important}
-section.section.living-world #world-missions .world-mission-action:hover{color:#d0ffab!important;text-decoration:underline!important}
-section.section.living-world #world-missions .world-mission.done .world-mission-copy>strong{text-decoration:line-through!important;color:#6d8272!important}
-@media(max-width:760px){section.section.living-world #world-missions.world-missions{padding-left:13px!important;padding-right:13px!important;min-height:0!important}section.section.living-world #world-missions .world-mission{padding:13px 0!important}}
-.site-feedback p{max-width:290px;margin:0 0 10px;color:#91a18e;font:500 14px/1.45 Rajdhani,sans-serif}
-.site-footer .site-feedback>a{display:block;width:fit-content;max-width:100%;margin:8px 0;color:#b9f58e;font:700 9px/1.5 Orbitron,sans-serif;letter-spacing:.35px;text-decoration:none}
-.site-footer .site-feedback>a:hover{color:#9bff45;text-decoration:underline}
-@media(max-width:760px){.site-footer .site-feedback{min-width:0}.site-feedback p{max-width:100%}}
-</style>
+
+
+
+
 <script src="/shared-nav.js?v=ad-free-20261122-2" defer></script><script src="/language.js?v=i18n-persist-route-20261104-10" defer></script><script src="/survivor-auth.js?v=survivor-identity-online-20261023-3" defer></script><script id="footer-donation-actions">(()=>{const b=document.getElementById("footer-copy-wallet"),o=document.getElementById("footer-donation-feedback"),a="6jsHhJk2vFGmRW5L12UQqBK9zgjewH8KRtqB7rogwX7u";if(!b||!o)return;b.addEventListener("click",async()=>{try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(a)}else{const t=document.createElement("textarea");t.value=a;t.style.position="fixed";t.style.opacity="0";document.body.appendChild(t);t.select();const ok=document.execCommand("copy");t.remove();if(!ok)throw Error("copy blocked")}o.textContent="Donation address copied."}catch(_){o.textContent="Copy blocked — select the wallet address above and copy it manually."}})})();</script>
 
-<style id="zombcash-jupiter-mobile-width-fix">
-/* Jupiter injects its app beside the initial loading placeholder; prevent that stale flex item from shrinking the app on narrow screens. */
-section.section.community-console #jupiter-zombcash-terminal:has(#jupiter-terminal-instance) {
-  display: block !important;
-  min-width: 0 !important;
-}
-section.section.community-console #jupiter-zombcash-terminal:has(#jupiter-terminal-instance) > .jupiter-terminal-loading {
-  display: none !important;
-}
-section.section.community-console #jupiter-zombcash-terminal #jupiter-terminal-instance {
-  display: block !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  flex: 1 1 100% !important;
-  box-sizing: border-box !important;
-}
-section.section.community-console #jupiter-zombcash-terminal #jupiter-terminal-instance > div {
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  box-sizing: border-box !important;
-}
-</style>
+
 
 <!-- Keep the sticky site navigation above the embedded Jupiter terminal while scrolling. -->
-<style id="zombcash-sticky-header-jupiter-layer-fix">
-  header.topbar {
-    position: sticky !important;
-    top: 0 !important;
-    z-index: 2147483000 !important;
-    isolation: isolate !important;
-  }
-</style>
+
 
 <script id="zombcash-promo-video-library-script">
 (()=>{if(document.getElementById('zctv-channel-hub'))return;const player=document.getElementById('zc-promo-player'),prev=document.getElementById('zc-promo-prev'),next=document.getElementById('zc-promo-next'),count=document.getElementById('zc-promo-count'),status=document.getElementById('zc-promo-status'),version=document.getElementById('zc-promo-version'),download=document.getElementById('zc-promo-download'),release=document.getElementById('zc-promo-release');if(!player||!prev||!next||!count||!status)return;
@@ -2137,248 +2367,18 @@ fetch('../promo-videos.json?v=20261105-i18n1',{cache:'no-store'}).then(r=>{if(!r
 })();</script>
 
 
-<style id="zc-home-locale-typography">
-.hero-content h1{max-width:100%;text-wrap:balance;}
-html[lang="de"] .hero-content h1,html[lang="fr"] .hero-content h1,html[lang="it"] .hero-content h1,html[lang="tr"] .hero-content h1,html[lang="ru"] .hero-content h1{font-size:clamp(32px,4.1vw,62px);}
-html[lang="ja"] .hero-content h1,html[lang="zh-CN"] .hero-content h1{line-height:1.3;letter-spacing:.02em;font-family:"Noto Sans JP","Noto Sans SC",sans-serif;}
-html[lang="hi"] .hero-content h1{line-height:1.45;letter-spacing:0;font-family:"Noto Sans Devanagari",sans-serif;}
-@media(max-width:760px){html[lang] .hero-content h1{font-size:clamp(28px,7.2vw,44px);line-height:1.2;}}
-</style>
-<style id="zc-touch-hero-single-column-fix-20261104">
-/* Touch devices using a desktop-width viewport must still stack the hero. */
-@media (max-width: 1100px) and (pointer: coarse) {
-  body > main#home > section.hero > .hero-layout {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-rows: auto auto !important;
-    grid-template-areas: "content" "radar" !important;
-    grid-auto-flow: row !important;
-    align-items: stretch !important;
-  }
-  body > main#home > section.hero > .hero-layout > .hero-content {
-    grid-area: content !important;
-    grid-column: 1 !important;
-    grid-row: 1 !important;
-    position: relative !important;
-    transform: none !important;
-  }
-  body > main#home > section.hero > .hero-layout > .outbreak-panel {
-    grid-area: radar !important;
-    grid-column: 1 !important;
-    grid-row: 2 !important;
-    position: relative !important;
-    transform: none !important;
-  }
-}
-</style>
-<style id="zc-touch-hero-grid-placement-fix-20261104">
-/* Force every direct hero child into the same single grid column on touch devices. */
-@media (max-width: 1100px) and (pointer: coarse) {
-  body > main#home > section.hero > .hero-layout {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-rows: auto auto !important;
-    grid-template-areas: "content" "radar" !important;
-    grid-auto-columns: minmax(0, 1fr) !important;
-    grid-auto-flow: row !important;
-    align-items: stretch !important;
-  }
-  body > main#home > section.hero > .hero-layout > * {
-    grid-column: 1 / -1 !important;
-    position: relative !important;
-    inset: auto !important;
-    margin: 0 !important;
-    transform: none !important;
-    justify-self: stretch !important;
-    align-self: stretch !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-  }
-  body > main#home > section.hero > .hero-layout > .hero-content {
-    grid-area: content !important;
-    grid-row: 1 !important;
-  }
-  body > main#home > section.hero > .hero-layout > .outbreak-panel {
-    grid-area: radar !important;
-    grid-row: 2 !important;
-  }
-}
-</style>
+
+
+
 <script src="/homepage-ribbons.js?v=20261105" defer></script>
 
-<style id="zc-hero-layout-final-20261105-v4">
-/* Definitive hero geometry: text and sponsor card are independent grid columns. */
-body:has(#home) #home > section.hero{
-  box-sizing:border-box!important;display:block!important;
-  height:auto!important;min-height:0!important;max-height:none!important;
-  padding:clamp(28px,3.5vw,52px) clamp(24px,4.5vw,72px) 30px!important;
-  overflow:visible!important;
-}
-body:has(#home) #home > section.hero > .hero-layout{
-  box-sizing:border-box!important;display:grid!important;
-  grid-template-columns:minmax(0,1fr) minmax(560px,640px)!important;
-  grid-template-areas:"content sponsor"!important;
-  grid-template-rows:auto!important;grid-auto-flow:row!important;
-  align-items:start!important;align-content:start!important;
-  gap:clamp(24px,2.5vw,40px)!important;
-  width:min(100%,1440px)!important;max-width:1440px!important;
-  min-width:0!important;height:auto!important;min-height:0!important;
-  margin:0 auto!important;transform:none!important;
-}
-body:has(#home) #home > section.hero > .hero-layout > .hero-content{
-  grid-area:content!important;grid-column:1!important;grid-row:1!important;
-  position:relative!important;inset:auto!important;float:none!important;
-  align-self:start!important;justify-self:stretch!important;
-  box-sizing:border-box!important;width:100%!important;max-width:680px!important;
-  min-width:0!important;margin:0!important;padding:0!important;transform:none!important;
-}
-body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
-  grid-area:sponsor!important;grid-column:2!important;grid-row:1!important;
-  position:relative!important;inset:auto!important;float:none!important;
-  align-self:start!important;justify-self:stretch!important;
-  box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
-  width:100%!important;max-width:640px!important;min-width:0!important;
-  height:auto!important;min-height:0!important;max-height:none!important;
-  margin:0!important;padding:10px!important;transform:none!important;
-  overflow:hidden!important;
-}
-body:has(#home) #home > section.hero .zc-hero-sponsor{
-  box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
-  align-items:stretch!important;justify-content:flex-start!important;
-  gap:12px!important;width:100%!important;min-width:0!important;
-  height:auto!important;min-height:0!important;margin:0!important;
-}
-body:has(#home) #home > section.hero .zc-hero-sponsor-label{
-  flex:0 0 auto!important;width:100%!important;margin:0!important;text-align:center!important;
-}
-@media(min-width:901px){
-  body:has(#home) #home > section.hero .zc-hero-ad-stage{
-    box-sizing:border-box!important;display:block!important;position:relative!important;
-    flex:0 0 250px!important;width:100%!important;max-width:100%!important;
-    height:250px!important;min-height:250px!important;max-height:250px!important;
-    margin:0 auto!important;padding:0!important;overflow:hidden!important;
-  }
-  body:has(#home) #home > section.hero .zc-adsterra-grid{
-    box-sizing:border-box!important;display:grid!important;
-    grid-template-columns:repeat(2,300px)!important;grid-template-rows:250px!important;
-    justify-content:center!important;align-items:start!important;gap:12px!important;
-    width:100%!important;min-width:0!important;height:250px!important;min-height:250px!important;
-    margin:0 auto!important;padding:0!important;
-  }
-  body:has(#home) #home > section.hero .zc-adsterra-slot{
-    box-sizing:border-box!important;display:flex!important;align-items:center!important;
-    justify-content:center!important;flex:0 0 300px!important;width:300px!important;
-    min-width:300px!important;max-width:300px!important;height:250px!important;
-    min-height:250px!important;max-height:250px!important;overflow:hidden!important;
-    margin:0!important;padding:0!important;
-  }
-  body:has(#home) #home > section.hero .zc-adsterra-mobile-slot{display:none!important}
-}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot{
-  box-sizing:border-box!important;position:relative!important;display:block!important;
-  flex:0 0 auto!important;width:100%!important;min-width:0!important;
-  height:clamp(260px,22vw,340px)!important;min-height:260px!important;max-height:340px!important;
-  margin:0!important;padding:0!important;overflow:hidden!important;
-  border:1px solid #9bff4560!important;border-radius:5px!important;background:#080d0a!important;
-}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot:before{content:none!important;display:none!important}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
-  position:absolute!important;inset:0!important;display:block!important;
-  width:100%!important;height:100%!important;max-width:none!important;
-  object-fit:cover!important;object-position:center 32%!important;
-  filter:saturate(.96) contrast(1.04)!important;z-index:1!important;
-}
-body:has(#home) #home > section.hero .zc-hero-sponsor-promo{
-  box-sizing:border-box!important;display:flex!important;flex:0 0 auto!important;
-  flex-direction:column!important;justify-content:center!important;gap:10px!important;
-  width:100%!important;min-width:0!important;min-height:190px!important;height:auto!important;
-  margin:0!important;padding:22px 18px!important;
-}
-body:has(#home) #home > section.hero .hero-bottom{
-  position:relative!important;inset:auto!important;display:flex!important;
-  width:min(100%,1440px)!important;margin:20px auto 0!important;
-}
-@media(max-width:1359px){
-  body:has(#home) #home > section.hero > .hero-layout{
-    grid-template-columns:minmax(0,1fr)!important;
-    grid-template-areas:"content" "sponsor"!important;
-    gap:26px!important;
-  }
-  body:has(#home) #home > section.hero > .hero-layout > .hero-content,
-  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
-    grid-column:1!important;grid-row:auto!important;
-    width:min(100%,900px)!important;max-width:900px!important;
-    justify-self:center!important;
-  }
-}
-@media(max-width:900px){
-  body:has(#home) #home > section.hero .zc-hero-ad-stage{
-    box-sizing:border-box!important;display:flex!important;align-items:center!important;
-    justify-content:center!important;flex:0 0 50px!important;
-    width:min(320px,100%)!important;max-width:320px!important;
-    height:50px!important;min-height:50px!important;max-height:50px!important;
-    margin:0 auto!important;overflow:hidden!important;
-  }
-  body:has(#home) #home > section.hero .zc-adsterra-grid{display:none!important}
-  body:has(#home) #home > section.hero .zc-adsterra-mobile-slot{
-    box-sizing:border-box!important;display:flex!important;align-items:center!important;
-    justify-content:center!important;width:320px!important;max-width:100%!important;
-    height:50px!important;min-height:50px!important;max-height:50px!important;overflow:hidden!important;
-  }
-  body:has(#home) #home > section.hero .zc-sponsor-art-slot{
-    height:clamp(210px,46vw,300px)!important;min-height:210px!important;max-height:300px!important;
-  }
-}
-@media(max-width:760px){
-  body:has(#home) #home > section.hero{padding:26px 5% 24px!important}
-  body:has(#home) #home > section.hero > .hero-layout{gap:20px!important}
-  body:has(#home) #home > section.hero .zc-hero-art-panel{padding:9px!important}
-  body:has(#home) #home > section.hero .zc-hero-sponsor-promo{min-height:170px!important;padding:18px 14px!important}
-  body:has(#home) #home > section.hero .hero-stats{flex-wrap:wrap!important;gap:12px!important}
-}
-</style>
 
 
-<style id="zc-final-marquee-art-fix-20261105">
-/* Equal-width ribbon headers across every translated homepage. */
-body:has(#home) .zc-ribbon-label{
-  box-sizing:border-box!important;flex:0 0 clamp(118px,9.6vw,154px)!important;
-  width:clamp(118px,9.6vw,154px)!important;min-width:clamp(118px,9.6vw,154px)!important;
-  max-width:clamp(118px,9.6vw,154px)!important;justify-content:center!important;
-  padding:0 7px!important;white-space:nowrap!important;overflow:hidden!important;
-  text-overflow:ellipsis!important;font-size:clamp(7px,.66vw,10px)!important;
-  letter-spacing:.25px!important;text-align:center!important;
-}
-/* Real 640x360 survivor artwork; override the old placeholder/fallback geometry. */
-body:has(#home) #home > section.hero .zc-sponsor-art-slot{
-  box-sizing:border-box!important;position:relative!important;display:block!important;
-  width:100%!important;height:clamp(240px,22vw,340px)!important;
-  min-height:240px!important;max-height:340px!important;padding:0!important;
-  overflow:hidden!important;border:1px solid #9bff4570!important;
-  border-radius:5px!important;background:#080d0a!important;
-}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot:before,
-body:has(#home) #home > section.hero .zc-sponsor-art-slot:after{content:none!important;display:none!important}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
-  position:absolute!important;inset:0!important;display:block!important;
-  width:100%!important;height:100%!important;max-width:none!important;
-  object-fit:cover!important;object-position:center 30%!important;
-  filter:saturate(1.04) contrast(1.04)!important;opacity:1!important;z-index:1!important;
-}
-@media(max-width:760px){
- body:has(#home) .zc-ribbon-label{flex-basis:118px!important;width:118px!important;min-width:118px!important;max-width:118px!important;font-size:7px!important;letter-spacing:0!important;padding:0 5px!important}
- body:has(#home) #home > section.hero .zc-sponsor-art-slot{height:clamp(210px,62vw,290px)!important;min-height:210px!important;max-height:290px!important}
-}
-</style>
+
+
 
 
 <script src="/tool-video-cards.js?v=20261109-2" defer></script>
 
-<style id="zc-ad-free-hero-layout-20261122">
-/* Advertising integrations are disabled; let homepage content use the full hero width. */
-body:has(#home) #home > section.hero > .hero-layout{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-areas:none!important;align-items:start!important;gap:24px!important}
-body:has(#home) #home > section.hero > .hero-layout > .hero-content,
-body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{grid-column:1!important;grid-area:auto!important;width:100%!important;max-width:none!important}
-</style>
+
 </body></html>

@@ -16,6 +16,8 @@ on:
       - "tr/index.html"
       - "hi/index.html"
       - "shared-nav.js"
+      - "tests/shared-nav-accessibility-smoke.cjs"
+      - "tests/homepage-css-seo-smoke.cjs"
       - "language.js"
       - "homepage-visual.css"
       - "assets/js/zctv-player.js"
@@ -58,6 +60,9 @@ jobs:
       - name: Validate JavaScript syntax
         run: |
           node --check shared-nav.js
+          node --check tests/shared-nav-accessibility-smoke.cjs
+          node --check tests/homepage-css-seo-smoke.cjs
+          node tests/homepage-css-seo-smoke.cjs
           node --check language.js
           node --check tests/mobile-viewport-smoke.cjs
           node --check tests/zctv-layout-smoke.cjs
@@ -103,6 +108,11 @@ jobs:
         env:
           SITE_URL: http://127.0.0.1:4173/
         run: node tests/mobile-viewport-smoke.cjs
+
+      - name: Test shared navigation keyboard access and ARIA state in all locales
+        env:
+          SITE_URL: http://127.0.0.1:4173/
+        run: node tests/shared-nav-accessibility-smoke.cjs
 
       - name: Test localized articles across desktop and mobile
         env:

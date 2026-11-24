@@ -10,6 +10,8 @@ on:
       - 'shared-nav.js'
       - 'cinematic-theme.css'
       - 'tests/language-transition-smoke.cjs'
+      - 'tests/shared-nav-accessibility-smoke.cjs'
+      - 'tests/homepage-css-seo-smoke.cjs'
       - 'tests/homepage-locales-layout-smoke.cjs'
       - 'tests/homepage-zoom-layout-smoke.cjs'
       - 'de/index.html'
@@ -119,6 +121,9 @@ jobs:
         run: |
           node --check assets/js/zctv-player.js
           node --check shared-nav.js
+          node --check tests/shared-nav-accessibility-smoke.cjs
+          node --check tests/homepage-css-seo-smoke.cjs
+          node tests/homepage-css-seo-smoke.cjs
           node --check tests/survivor-hub-localization-smoke.cjs
           node --check tests/survivor-hub-visual-smoke.cjs
           node --check tests/arcade-dynamic-localization-smoke.cjs
@@ -143,6 +148,8 @@ jobs:
         run: node tests/mobile-viewport-smoke.cjs
       - name: Test language switching after page transitions
         run: node tests/language-transition-smoke.cjs
+      - name: Test shared navigation keyboard access and ARIA state in all locales
+        run: node tests/shared-nav-accessibility-smoke.cjs
       - name: Test homepage layout across all locales and viewports
         if: always()
         run: node tests/homepage-locales-layout-smoke.cjs
