@@ -136,7 +136,43 @@ const BASE = process.env.SITE_URL || 'https://zombcash.github.io/';
       }
     }
 
-    console.log('PASS: fallback language persistence, Market Data static locales, buying-guide links, and Whitepaper/Gallery routing in all 8 locales.');
+    const meridianSlugs = [
+      'the-meridian-of-ash.html',
+      'the-meridian-of-ash-prologue.html',
+      'the-meridian-of-ash-chapter-01.html',
+      'the-meridian-of-ash-chapter-23.html',
+      'the-meridian-of-ash-chapter-46.html',
+    ];
+    for (const slug of meridianSlugs) {
+      for (const locale of locales) {
+        await page.goto(new URL(\`\${slug}?lang=en\`, BASE).href, { waitUntil: 'domcontentloaded' });
+        await waitForLanguage('en');
+        await chooseLanguage(locale);
+        await page.waitForURL(
+          url => url.pathname === \`/\${locale}/\${slug}\` && !url.searchParams.has('lang'),
+          { timeout: 25000, waitUntil: 'domcontentloaded' },
+        );
+        await waitForLanguage(locale);
+
+        const localizedCanonical = await page.locator('link[rel="canonical"]').getAttribute('href');
+        if (localizedCanonical !== \`https://zombcash.github.io/\${locale}/\${slug}\`) {
+          throw new Error(\`Meridian \${slug} canonical mismatch for \${locale}: \${localizedCanonical}\`);
+        }
+
+        await chooseLanguage('en');
+        await page.waitForURL(
+          url => url.pathname === \`/\${slug}\` && !url.searchParams.has('lang'),
+          { timeout: 25000, waitUntil: 'domcontentloaded' },
+        );
+        await waitForLanguage('en');
+        const englishCanonical = await page.locator('link[rel="canonical"]').getAttribute('href');
+        if (englishCanonical !== \`https://zombcash.github.io/\${slug}\`) {
+          throw new Error(\`Meridian \${slug} did not return to its English canonical: \${englishCanonical}\`);
+        }
+      }
+    }
+
+    console.log('PASS: fallback persistence, all 8 locale routes, Whitepaper/Gallery, and Meridian book/prologue/chapter switching in both directions.');
   } catch (error) {
     console.error('FAIL: language persistence smoke test:', error);
     process.exitCode = 1;
