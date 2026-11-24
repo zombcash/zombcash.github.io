@@ -38,12 +38,15 @@
   const loginWaiting = {"en":"Open Telegram and press Start. This page will finish login automatically.","de":"Öffne Telegram und tippe auf Start. Diese Seite schließt die Anmeldung automatisch ab.","fr":"Ouvrez Telegram et appuyez sur Démarrer. La connexion se terminera automatiquement ici.","it":"Apri Telegram e premi Avvia. L’accesso verrà completato automaticamente su questa pagina.","ja":"Telegramを開いて「Start」を押してください。このページで自動的にログインが完了します。","zh-CN":"打开 Telegram 并点击 Start。此页面将自动完成登录。","ru":"Откройте Telegram и нажмите «Запустить». Вход на этой странице завершится автоматически.","tr":"Telegram'ı açıp Başlat'a dokunun. Giriş bu sayfada otomatik tamamlanacak.","hi":"Telegram खोलें और Start दबाएँ। इस पेज पर लॉगिन अपने आप पूरा हो जाएगा。"};
 
   const safe = value => String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  let overlay, statusNode, bodyNode, widgetNode, isBusy = false, presenceOnline = false, presenceTimer = 0;
+  let overlay, statusNode, bodyNode, widgetNode, modalTrigger = null, isBusy = false, presenceOnline = false, presenceTimer = 0;
   const readProfile = () => { try { return JSON.parse(localStorage.getItem(STORAGE_PROFILE) || 'null'); } catch (_) { return null; } };
   const token = () => { try { return localStorage.getItem(STORAGE_TOKEN) || ''; } catch (_) { return ''; } };
   function updateCta() {
     const cta = document.querySelector('header.zombcash-shared-header .zsh-actions .zsh-login-button, header.zombcash-shared-header .zsh-actions .survivor-entry-button, .top-cta, .survivor-entry-button');
     if (!cta) return;
+    cta.setAttribute('aria-haspopup', 'dialog');
+    cta.setAttribute('aria-controls', 'survivor-profile-modal');
+    if (!cta.hasAttribute('aria-expanded')) cta.setAttribute('aria-expanded', 'false');
     const p = readProfile();
     // The approved global header uses LOGIN WITH TELEGRAM on every page.
     const unauthenticatedLabel = t('login');
@@ -58,9 +61,10 @@
     style.textContent = '.survivor-overlay[hidden]{display:none!important}.survivor-overlay{position:fixed;inset:0;z-index:20000;display:grid;place-items:center;padding:18px;background:#020603df;backdrop-filter:blur(7px)}.survivor-modal{position:relative;width:min(440px,100%);max-height:calc(100vh - 36px);max-height:calc(100dvh - 36px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#426341 #07100a;padding:26px;border:1px solid #6a9d42;background:linear-gradient(145deg,#101b12,#070b09);color:#edf5e5;box-shadow:0 22px 80px #000b;font-family:Rajdhani,system-ui,sans-serif}.survivor-modal h2{margin:0 0 10px;color:#9bff45;font:700 19px Orbitron,system-ui,sans-serif}.survivor-modal p{color:#b8c8b6;line-height:1.5}.survivor-modal .survivor-status{min-height:24px;color:#9bff45;font-size:14px}.survivor-modal .survivor-widget{display:flex;justify-content:center;min-height:46px;margin:20px 0}.survivor-modal .survivor-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.survivor-modal button{border:1px solid #426341;background:#0b120c;color:#b8f992;padding:10px 14px;cursor:pointer;font:700 11px Orbitron,system-ui,sans-serif}.survivor-modal .survivor-stats{border:1px solid #2b4930;padding:14px;margin-top:16px}.survivor-modal .survivor-points{font:700 26px Orbitron,system-ui,sans-serif;color:#9bff45}.survivor-modal .survivor-dashboard{display:grid;gap:12px}.survivor-modal .survivor-stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.survivor-modal .survivor-stat-tile{border:1px solid #263b29;background:#080f0a;padding:12px;min-width:0}.survivor-modal .survivor-stat-tile span{display:block;color:#9aa996;font:600 9px Orbitron,system-ui,sans-serif;letter-spacing:.5px}.survivor-modal .survivor-stat-tile b{display:block;color:#9bff45;font:700 22px Orbitron,system-ui,sans-serif;margin:8px 0}.survivor-modal .survivor-stat-tile small{color:#9aa996}.survivor-modal .survivor-activity{border-top:1px solid #29402b;padding-top:10px}.survivor-modal .survivor-activity h3{font:700 10px Orbitron,system-ui,sans-serif;color:#9bff45}.survivor-modal .survivor-activity-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid #17251a;color:#b9c8b5;font-size:13px}.survivor-modal .survivor-activity-row b{color:#9bff45;white-space:nowrap}@media(max-width:420px){.survivor-modal{padding:18px}.survivor-modal .survivor-stat-grid{grid-template-columns:1fr 1fr}}.survivor-modal .survivor-privacy{font-size:12px;color:#8e9c8d}.survivor-modal [hidden]{display:none!important}.survivor-entry-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;margin:10px 0 0;padding:10px 12px;border:1px solid #426341;background:#0b120c;color:#b8f992;font:700 10px Orbitron,system-ui,sans-serif;cursor:pointer;white-space:normal}.survivor-entry-button.survivor-online:after{content:"";display:inline-block;width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:#9bff45;box-shadow:0 0 8px #9bff45}';
     document.head.append(style);
     overlay = document.createElement('div');
+    overlay.id = 'survivor-profile-modal';
     overlay.className = 'survivor-overlay';
     overlay.hidden = true;
-    overlay.innerHTML = '<section class="survivor-modal" role="dialog" aria-modal="true" aria-labelledby="survivor-title"><h2 id="survivor-title"></h2><p id="survivor-intro"></p><div id="survivor-body"></div><p class="survivor-status" id="survivor-status" role="status"></p><p class="survivor-privacy" id="survivor-privacy"></p><div class="survivor-actions"><button type="button" id="survivor-logout" hidden></button><button type="button" id="survivor-close"></button></div></section>';
+    overlay.innerHTML = '<section class="survivor-modal" role="dialog" aria-modal="true" aria-labelledby="survivor-title" aria-describedby="survivor-intro" tabindex="-1"><h2 id="survivor-title"></h2><p id="survivor-intro"></p><div id="survivor-body"></div><p class="survivor-status" id="survivor-status" role="status"></p><p class="survivor-privacy" id="survivor-privacy"></p><div class="survivor-actions"><button type="button" id="survivor-logout" hidden></button><button type="button" id="survivor-close"></button></div></section>';
     document.body.append(overlay);
     statusNode = overlay.querySelector('#survivor-status');
     bodyNode = overlay.querySelector('#survivor-body');
@@ -68,12 +72,56 @@
     overlay.querySelector('#survivor-close').addEventListener('click', closeModal);
     overlay.querySelector('#survivor-logout').addEventListener('click', () => {
       try { localStorage.removeItem(STORAGE_TOKEN); localStorage.removeItem(STORAGE_PROFILE); } catch (_) {}
-      updateCta(); renderModal(); statusNode.textContent = '';
+      updateCta(); renderModal(); focusModalStart(); statusNode.textContent = '';
     });
     overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !overlay.hidden) closeModal(); });
+    overlay.addEventListener('keydown', e => {
+      if (e.key !== 'Tab' || overlay.hidden) return;
+      const focusable = modalFocusableElements();
+      if (!focusable.length) { e.preventDefault(); overlay.querySelector('[role="dialog"]')?.focus(); return; }
+      const first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey && (document.activeElement === first || !overlay.querySelector('[role="dialog"]')?.contains(document.activeElement))) {
+        e.preventDefault(); last.focus();
+      } else if (!e.shiftKey && (document.activeElement === last || !overlay.querySelector('[role="dialog"]')?.contains(document.activeElement))) {
+        e.preventDefault(); first.focus();
+      }
+    });
+    document.addEventListener('focusin', e => {
+      if (!overlay || overlay.hidden) return;
+      const dialog = overlay.querySelector('[role="dialog"]');
+      if (dialog && !dialog.contains(e.target)) focusModalStart();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay && !overlay.hidden) closeModal(); });
   }
-  function closeModal() { if (overlay) overlay.hidden = true; }
+  function modalFocusableElements() {
+    if (!overlay) return [];
+    const dialog = overlay.querySelector('[role="dialog"]');
+    if (!dialog) return [];
+    return Array.from(dialog.querySelectorAll('a[href],button:not([disabled]):not([hidden]),input:not([disabled]):not([type="hidden"]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'))
+      .filter(element => !element.hidden && element.getAttribute('aria-hidden') !== 'true' && element.getClientRects().length > 0);
+  }
+  function focusModalStart() {
+    if (!overlay || overlay.hidden) return;
+    const dialog = overlay.querySelector('[role="dialog"]');
+    const first = modalFocusableElements()[0];
+    (first || dialog)?.focus();
+  }
+  function openModal(trigger) {
+    ensureModal();
+    modalTrigger = trigger || document.activeElement;
+    renderModal();
+    overlay.hidden = false;
+    if (modalTrigger && modalTrigger.setAttribute) modalTrigger.setAttribute('aria-expanded', 'true');
+    focusModalStart();
+  }
+  function closeModal() {
+    if (!overlay || overlay.hidden) return;
+    overlay.hidden = true;
+    if (modalTrigger && modalTrigger.setAttribute) {
+      modalTrigger.setAttribute('aria-expanded', 'false');
+      if (typeof modalTrigger.focus === 'function') modalTrigger.focus();
+    }
+  }
   function renderModal() {
     ensureModal();
     const profile = readProfile();
@@ -188,6 +236,7 @@
           updateCta();
           refreshProfile();
           renderModal();
+          focusModalStart();
           statusNode.textContent = '';
           isBusy = false;
           return;
@@ -241,6 +290,7 @@
           updateCta();
           refreshProfile();
           renderModal();
+          focusModalStart();
           statusNode.textContent = '';
           return;
         }
@@ -413,7 +463,7 @@
       if (actions) actions.append(cta);
       else if (nav) nav.append(cta);
     }
-    if (cta) cta.addEventListener('click', e => { e.preventDefault(); overlay.hidden = false; renderModal(); });
+    if (cta) cta.addEventListener('click', e => { e.preventDefault(); openModal(cta); });
     document.addEventListener('zombcash:languagechange', () => { updateCta(); if (overlay && !overlay.hidden) renderModal(); });
     refreshProfile().finally(() => { updateCta(); startPresenceHeartbeat(); });
     document.addEventListener('visibilitychange', () => {
