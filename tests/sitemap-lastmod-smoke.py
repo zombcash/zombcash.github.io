@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify every main sitemap lastmod equals the latest Git commit for its HTML page."""
+"""Verify every managed sitemap lastmod equals the latest Git commit for its HTML page."""
 from pathlib import Path
 import sys
 
