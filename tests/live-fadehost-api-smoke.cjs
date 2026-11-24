@@ -62,6 +62,28 @@ function record(name, response, expectedStatus, failures, details = {}) {
     const navigation = await page.goto(SITE_ORIGIN + '/', { waitUntil: 'domcontentloaded', timeout: 45000 });
     if (!navigation || !navigation.ok()) throw new Error('Live ZombieCash site origin did not return a successful response');
 
+    let uiSettled = false;
+    try {
+      await page.waitForFunction(() => {
+        const settled = id => {
+          const value = document.getElementById(id)?.textContent?.trim() || '';
+          return value && !/CONNECTING|SCANNING|SYNCING|LOADING|WAITING FOR FIRST/i.test(value);
+        };
+        return settled('world-news-status') && settled('radar-status') && settled('zombcash-market-status');
+      }, null, { timeout: 25000 });
+      uiSettled = true;
+    } catch (_) {}
+    const uiSnapshot = await page.evaluate(() => ({
+      newsStatus: document.getElementById('world-news-status')?.textContent?.trim() || '',
+      newsItems: document.querySelectorAll('#world-news-list .world-news-item').length,
+      newsEmpty: document.querySelector('#world-news-list .world-empty')?.textContent?.trim() || '',
+      radarStatus: document.getElementById('radar-status')?.textContent?.trim() || '',
+      radarRows: document.querySelectorAll('#radar-rows tr:not(.radar-message)').length,
+      radarMessage: document.querySelector('#radar-rows .radar-message')?.textContent?.trim() || '',
+      marketStatus: document.getElementById('zombcash-market-status')?.textContent?.trim() || '',
+      marketPrice: document.getElementById('zombcash-price')?.textContent?.trim() || '',
+    }));
+
     const health = await requestFromSite(page, '/health');
     results.push(record('health', health, 200, failures));
     if (health.data?.ok !== true) failures.push('health: response did not contain ok=true');
@@ -154,12 +176,51 @@ function record(name, response, expectedStatus, failures, details = {}) {
       record('telegram-login-start', authStart, 200, failures);
     }
 
+    const externalNewsCount = Array.isArray(news.data?.articles)
+      ? news.data.articles.filter(article => article && article.enriched !== true).length
+      : 0;
+    const marketPriceAvailable = market.resolved && market.status === 200 &&
+      Number.isFinite(Number(market.data?.priceUsd)) && Number(market.data.priceUsd) > 0;
+    const radarPairCount = Array.isArray(radar.data?.pairs) ? radar.data.pairs.length : 0;
+    if (!uiSettled) failures.push('homepage panels: news, radar and market statuses did not leave their loading states within 25 seconds');
+    if (/FEED ERROR|API ERROR/i.test(uiSnapshot.newsStatus) && externalNewsCount > 0) {
+      failures.push('homepage news panel: API returned external articles but the panel reports an error');
+    }
+    if (externalNewsCount > 0 && uiSnapshot.newsItems === 0) {
+      failures.push('homepage news panel: external RSS articles were returned but no article cards rendered');
+    } else if (externalNewsCount === 0) {
+      degraded.push('homepage news panel: no external RSS articles available after excluding enriched/generated items');
+    }
+    if (marketPriceAvailable && (!uiSnapshot.marketPrice || uiSnapshot.marketPrice === '—')) {
+      failures.push('homepage market panel: API returned a positive price but the price card did not render it');
+    }
+    if (radarPairCount > 0 && uiSnapshot.radarRows === 0) {
+      failures.push('homepage radar panel: API returned token pairs but no radar rows rendered');
+    } else if (radarPairCount === 0) {
+      degraded.push('homepage radar panel: API returned no token pairs');
+    }
+    if (/API ERROR/i.test(uiSnapshot.radarStatus) && radarPairCount > 0) {
+      failures.push('homepage radar panel: API returned pairs but the panel reports an error');
+    }
+    results.push({
+      name: 'homepage-dynamic-panels',
+      result: failures.length ? 'FAIL' : degraded.length ? 'DEGRADED' : 'PASS',
+      settled: uiSettled,
+      newsStatus: uiSnapshot.newsStatus,
+      newsItems: uiSnapshot.newsItems,
+      radarStatus: uiSnapshot.radarStatus,
+      radarRows: uiSnapshot.radarRows,
+      marketStatus: uiSnapshot.marketStatus,
+      marketPrice: uiSnapshot.marketPrice,
+    });
+
     const report = {
       result: failures.length ? 'FAIL' : degraded.length ? 'DEGRADED' : 'PASS',
       origin: SITE_ORIGIN,
       apiOrigin: API_ORIGIN,
       checkedAt: new Date().toISOString(),
       results,
+      homepage: uiSnapshot,
       degraded,
       failures,
       note: 'Live public endpoints and unauthenticated security guards were checked from the real site origin. Telegram completion and authenticated profile writes were not attempted.',
