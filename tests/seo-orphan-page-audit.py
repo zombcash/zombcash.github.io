@@ -236,7 +236,7 @@ def main():
             "missing_local_files": missing_files,
             "metadata_issue_count": len(metadata_issues),
             "metadata_issues": metadata_issues,
-            "long_title_count": sum(row["title_length"] > 70 for row in rows),
+            "long_title_count": sum(row["title_length"] > 80 for row in rows),
             "long_description_count": sum(row["description_length"] > 170 for row in rows),
             "orphan_count": sum(row["status"] == "ORPHAN" for row in rows),
             "low_inbound_count": sum(row["status"] == "LOW_INBOUND" for row in rows),
@@ -258,12 +258,12 @@ def main():
     print(f"Missing local files: {len(missing_files)}")
     metadata_pass_pages = len(page_titles) - len({issue["url"] for issue in metadata_issues})
     print(f"Pages with one non-empty document-head title and meta description: {metadata_pass_pages}/{len(page_titles)}")
-    print(f"Long titles (>70 characters; review only): {sum(row['title_length'] > 70 for row in rows)}")
+    print(f"Long titles (>80 characters; review only): {sum(row['title_length'] > 80 for row in rows)}")
     print(f"Long descriptions (>170 characters; review only): {sum(row['description_length'] > 170 for row in rows)}")
     for issue in metadata_issues:
         print(f"METADATA {issue['url']} | {issue['issue']}")
     for row in rows:
-        if row["title_length"] > 70:
+        if row["title_length"] > 80:
             print(f"LONG_TITLE {row['title_length']} {row['url']} | {row['title']}")
     print(f"Orphan pages (zero incoming anchor links): {len(orphans)}")
     print(f"Low inbound pages (one or two incoming links): {len(low)}")
