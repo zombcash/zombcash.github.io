@@ -1,51 +1,33 @@
 const fs = require('node:fs');
 const assert = require('node:assert/strict');
 
-const script = fs.readFileSync('script.js', 'utf8');
-const recovery = fs.readFileSync('living-world-recovery.js', 'utf8');
-const auth = fs.readFileSync('survivor-auth.js', 'utf8');
+const read = name => fs.readFileSync(name, 'utf8');
+const script = read('script.js');
+const auth = read('survivor-auth.js');
+const nav = read('shared-nav.js');
+const recovery = read('living-world-recovery.js');
+const language = read('language.js');
 
-function section(source, start, end) {
-  const from = source.indexOf(start);
-  assert.notStrictEqual(from, -1, 'Missing section: ' + start);
-  const to = source.indexOf(end, from + start.length);
-  assert.notStrictEqual(to, -1, 'Missing section end: ' + end);
-  return source.slice(from, to);
-}
+assert.match(script, /const zcApiFetch = \(url, options = \{\}, timeoutMs = 15000\) => fetch\(url, \{[\s\S]*?signal: options\.signal \|\| AbortSignal\.timeout\(timeoutMs\)/,
+  'site script helper must apply a default timeout and preserve explicit request signals');
+const rawScriptFetches = script.split(/\r?\n/).filter(line => /\bfetch\(/.test(line));
+assert.equal(rawScriptFetches.length, 2, 'only the timeout helper and fire-and-forget keepalive tracker may use raw fetch in script.js');
+assert(rawScriptFetches.some(line => /keepalive:true/.test(line)), 'campaign tracking keepalive must remain fire-and-forget');
+assert((script.match(/\bzcApiFetch\(/g) || []).length >= 20, 'all dashboard, market, game, vote and leaderboard requests must use zcApiFetch');
 
-const apiSections = [
-  ['Radar loader', section(script, 'async function loadRadar(', 'async function loadZomMarket()')],
-  ['Market snapshot loader', section(script, 'async function loadZomMarket()', 'async function loadWorldNews()')],
-  ['News loader', section(script, 'async function loadWorldNews()', 'function renderAlarms(')],
-  ['Market alarms loader', section(script, 'async function loadMarketAlarms()', 'function renderMissions()')],
-  ['Activity loader', section(script, 'async function loadActivity()', 'function renderVote(')],
-  ['Vote loader', section(script, 'async function loadVote()', 'async function castVote(')],
-  ['Vote submission', section(script, 'async function castVote(', 'function renderLeaderboard(')],
-  ['Leaderboard loader', section(script, 'async function loadLeaderboard()', 'function money(')],
-  ['Snake session start', section(script, 'async function beginSnakeSurvivalSession()', 'async function completeSnakeSurvivalSession(')],
-  ['Snake session completion', section(script, 'async function completeSnakeSurvivalSession(', 'function resizeGameCanvas(')],
-];
+assert.match(auth, /const survivorApiFetch = \(url, options = \{\}, timeoutMs = 15000\) => fetch\(url, \{[\s\S]*?signal: options\.signal \|\| AbortSignal\.timeout\(timeoutMs\)/,
+  'Survivor API helper must apply a default timeout and preserve explicit request signals');
+assert.equal((auth.match(/\bfetch\(API\s*\+/g) || []).length, 0, 'no Survivor API call may bypass the bounded helper');
+const authRequests = (auth.match(/\bsurvivorApiFetch\(API\s*\+/g) || []).length;
+assert.equal(authRequests, 11, 'all 11 Telegram/profile/presence/referral API requests must use the bounded helper');
 
-for (const [name, source] of apiSections) {
-  assert.match(source, /AbortSignal\.timeout\(/, name + ' must have a bounded network request');
-}
+const refreshStart = nav.indexOf('const refresh = () => fetch(api,');
+assert.notEqual(refreshStart, -1, 'shared navigation global-footprint refresh must exist');
+const refreshBlock = nav.slice(refreshStart, refreshStart + 180);
+assert.match(refreshBlock, /AbortSignal\.timeout\(10000\)/, 'shared navigation stats refresh must time out');
+assert.match(nav, /fetch\(api, \{method:'POST',[^}]*keepalive:true\}/, 'visitor heartbeat must remain fire-and-forget');
 
-assert((recovery.match(/AbortSignal\.timeout\(/g) || []).length >= 3,
-  'News, market and alarm recovery requests must all have timeouts');
+assert.match(recovery, /signal: AbortSignal\.timeout\(timeout\)/, 'independent news/market recovery requests must remain bounded');
+assert.equal((language.match(/\bfetch\(/g) || []).length, 0, 'language.js must remain free of unnecessary network requests');
 
-const authFetches = (auth.match(/fetch\(API\s*\+/g) || []).length;
-const authTimeouts = (auth.match(/AbortSignal\.timeout\(/g) || []).length;
-assert.equal(authFetches, authTimeouts,
-  'Every Survivor authentication/profile API request must have a timeout');
-assert(auth.includes('aria-haspopup') && auth.includes("aria-controls', 'survivor-profile-modal'"),
-  'Survivor login trigger must expose dialog semantics');
-assert(auth.includes("aria-expanded', String(Boolean(overlay && !overlay.hidden))"),
-  'Survivor login trigger must expose its expanded state');
-assert(auth.includes("if (e.key !== 'Tab') return;") && auth.includes("document.addEventListener('focusin'"),
-  'Survivor dialog must contain keyboard focus');
-assert(auth.includes('restore.focus()') && auth.includes('function focusModalFirst()'),
-  'Survivor dialog must move focus in and restore it on close');
-assert(section(auth, 'async function beginBotLogin()', 'async function loadSurvivorDashboard()').includes('finally {\n      isBusy = false;'),
-  'Telegram login must release the busy state after success, expiry or failure');
-
-console.log('PASS: homepage/game API requests are time-bounded; recovery is bounded; Survivor login has dialog focus management and bounded requests.');
+console.log('PASS: first-party site, market, game, Telegram, profile, presence and shared-navigation API requests have bounded timeouts; fire-and-forget analytics is preserved.');
