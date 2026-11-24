@@ -36,6 +36,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
+          import re
           pages = {
               "index.html": "en",
               "de/index.html": "de",
@@ -59,6 +60,10 @@ jobs:
           expected_ribbons["index.html"] = "20261112-live-market-8"
           for filename, lang in pages.items():
               html = Path(filename).read_text(encoding="utf-8")
+              head_end = html.lower().find("</head>")
+              assert head_end >= 0, f"{filename}: missing head close"
+              assert not any(m.start() > head_end for m in re.finditer(r"<style\b", html, re.I)), f"{filename}: layout CSS appears after the document head and can cause layout shifts"
+              assert html.count('as="font" type="font/woff2" crossorigin>') == 5, f"{filename}: expected five preloaded homepage brand fonts"
               assert f'<html lang="{lang}">' in html, f"{filename}: wrong language tag"
               assert html.count('href="/homepage-visual.css?') == 1, f"{filename}: stylesheet missing or duplicated"
               assert html.count(f'src="/homepage-ribbons.js?v={expected_ribbons[filename]}"') == 1, f"{filename}: ticker script missing or duplicated"
