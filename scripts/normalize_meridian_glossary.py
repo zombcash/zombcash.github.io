@@ -19,6 +19,9 @@ LANGUAGES = {
 PROTECTED_TERMS = json.loads((ROOT / "translations/glossary.json").read_text(encoding="utf-8"))["protected_terms"]
 INLINE_TAGS = {"strong", "em", "b", "i", "a", "span"}
 
+def term_pattern(term):
+    return re.compile(r"(?<![A-Za-z0-9])" + re.escape(term) + r"(?![A-Za-z0-9])", re.I)
+
 def load_model():
     path = hf_hub_download(repo_id=MODEL_REPO, filename=MODEL_FILE)
     return Llama(model_path=path, n_ctx=2048, n_threads=min(4, max(2, os.cpu_count() or 2)),
@@ -43,7 +46,7 @@ def protect_terms(text):
     protected = {}
     value = text
     for term in sorted(PROTECTED_TERMS, key=len, reverse=True):
-        pattern = re.compile(re.escape(term), re.IGNORECASE)
+        pattern = term_pattern(term)
         def repl(match):
             token = f"ZXQTERM{len(protected):03d}QZX"
             protected[token] = match.group(0)
@@ -74,11 +77,63 @@ def translate_protected(model, source_text, target_code):
         output = output.replace(token, original)
     return output, None
 
+def translate_by_segments(model, text, target_code, protected_names):
+    names = sorted(set(protected_names), key=len, reverse=True)
+    alternatives = "|".join(re.escape(name) for name in names)
+    pattern = re.compile(r"(?<![A-Za-z0-9])(" + alternatives + r")(?![A-Za-z0-9])", re.I)
+    matches = list(pattern.finditer(text))
+    if not matches:
+        return None, "segment_fallback_no_protected_name"
+
+    def translate_fragment(fragment, protected_name, side):
+        if not fragment or not fragment.strip():
+            return fragment, None
+        leading = fragment[:len(fragment) - len(fragment.lstrip())]
+        trailing = fragment[len(fragment.rstrip()):]
+        body = fragment.strip()
+        prompt = (
+            f"Translate only this English fragment into {target_code}. "
+            f"It appears immediately {side} the proper name {protected_name!r} in the full sentence {text!r}. "
+            "Keep the translation natural in that context. Do not repeat or translate the proper name. "
+            "Output only the translated fragment.\n\nFRAGMENT:\n" + body
+        )
+        response = model.create_chat_completion(
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.1, top_p=0.95, repeat_penalty=1.0, max_tokens=700, seed=42
+        )
+        translated = response["choices"][0]["message"]["content"] or ""
+        translated = re.sub(r"<think>[\s\S]*?</think>", "", translated).strip()
+        return leading + translated + trailing, None
+
+    parts = []
+    cursor = 0
+    previous_name = matches[0].group(0)
+    for match in matches:
+        before = text[cursor:match.start()]
+        translated, error = translate_fragment(before, match.group(0), "before")
+        if error:
+            return None, error
+        parts.append(translated)
+        parts.append(match.group(0))
+        cursor = match.end()
+        previous_name = match.group(0)
+    after = text[cursor:]
+    translated, error = translate_fragment(after, previous_name, "after")
+    if error:
+        return None, error
+    parts.append(translated)
+    output = "".join(parts)
+    for name in names:
+        if not term_pattern(name).search(output):
+            return None, f"segment_fallback_lost_name:{name}"
+    return output, None
+
+
 def translate_with_explicit_glossary(model, text, target_code, protected_names):
     names = list(dict.fromkeys(protected_names))
     marked_text = text
     for name in sorted(names, key=len, reverse=True):
-        pattern = re.compile(re.escape(name), re.I)
+        pattern = term_pattern(name)
         marked_text = pattern.sub(lambda match: "⟦" + match.group(0) + "⟧", marked_text)
     prompt = (
         f"Translate the following English text into {target_code}. "
@@ -92,16 +147,20 @@ def translate_with_explicit_glossary(model, text, target_code, protected_names):
     )
     output = response["choices"][0]["message"]["content"] or ""
     output = re.sub(r"<think>[\s\S]*?</think>", "", output).strip()
+    failed = False
     for name in names:
         bracketed = re.compile("⟦" + re.escape(name) + "⟧", re.I)
         if bracketed.search(output):
             output = bracketed.sub(lambda match: name, output)
             continue
-        plain = re.compile(re.escape(name), re.I)
+        plain = term_pattern(name)
         if plain.search(output):
             output = plain.sub(lambda match: name, output)
             continue
-        return None, f"bracketed_glossary_missing:{name}"
+        failed = True
+        break
+    if failed:
+        return translate_by_segments(model, text, target_code, names)
     return output, None
 
 def translate_segment(model, text, target_code):
@@ -151,7 +210,7 @@ def normalize_inline_terms(model, source_paragraph, target_paragraph, target_cod
     changed = False
     for source_tag, target_tag in zip(source_tags, target_tags):
         source_text = source_tag.get_text(" ", strip=True)
-        hits = [term for term in PROTECTED_TERMS if re.search(re.escape(term), source_text, re.I)]
+        hits = [term for term in PROTECTED_TERMS if term_pattern(term).search(source_text)]
         if not hits:
             continue
         if any(re.fullmatch(re.escape(term), source_text, re.I) for term in hits):
@@ -191,13 +250,13 @@ def translate_full_block_with_inline_terms(model, source_paragraph, target_code)
     # Reapply the original inline tag to the corresponding protected term.
     for source_tag in source_paragraph.find_all(list(INLINE_TAGS)):
         tag_text = source_tag.get_text(" ", strip=True)
-        hits = [term for term in PROTECTED_TERMS if re.search(re.escape(term), tag_text, re.I)]
+        hits = [term for term in PROTECTED_TERMS if term_pattern(term).search(tag_text)]
         for term in hits:
-            match = re.search(re.escape(term), tag_text, re.I)
+            match = term_pattern(term).search(tag_text)
             exact = match.group(0) if match else term
             open_tag = str(source_tag).split(">", 1)[0] + ">"
             close_tag = f"</{source_tag.name}>"
-            pattern = re.compile(re.escape(exact), re.I)
+            pattern = term_pattern(exact)
             output, count = pattern.subn(open_tag + exact + close_tag, output, count=1)
             if count != 1:
                 return None, f"inline_term_reinsert_failure:{exact}"
@@ -218,7 +277,7 @@ def process_sample(model, lang, target_code, target_name):
            "This sample is not a published chapter.", ""]
     count = 0
     for p in soup.select(".wrap h1, .wrap h2, .wrap h3, .wrap p, .wrap blockquote"):
-        if not any(re.search(re.escape(t), p.get_text(" ", strip=True), re.I) for t in PROTECTED_TERMS):
+        if not any(term_pattern(t).search(p.get_text(" ", strip=True)) for t in PROTECTED_TERMS):
             continue
         translated, error = translate_protected(model, p, target_code)
         if error:
@@ -229,13 +288,37 @@ def process_sample(model, lang, target_code, target_name):
                 f"## Example {count} — {target_name}", BeautifulSoup(translated, "html.parser").get_text(" ", strip=True), ""]
         if count >= 5:
             break
+    # Explicitly test difficult protected terms in a chapter heading and in the Morrow/tomorrow contrast.
+    for sample_file, sample_selector, sample_label in [
+        ("the-meridian-of-ash-chapter-16.html", ".wrap h1", "Auditor chapter heading"),
+        ("the-meridian-of-ash-chapter-38.html", ".wrap p", "Morrow and tomorrow contrast"),
+    ]:
+        sample_soup = BeautifulSoup((ROOT / sample_file).read_text(encoding="utf-8"), "html.parser")
+        sample_block = None
+        for candidate in sample_soup.select(sample_selector):
+            candidate_text = candidate.get_text(" ", strip=True)
+            if sample_label == "Auditor chapter heading" and term_pattern("The Auditor").search(candidate_text):
+                sample_block = candidate
+                break
+            if sample_label == "Morrow and tomorrow contrast" and "A tomorrow built from broken yesterday." in candidate_text:
+                sample_block = candidate
+                break
+        if sample_block:
+            translated, error = translate_protected(model, sample_block, target_code)
+            if error:
+                out += [f"## {sample_label} — SKIPPED: {error}", str(sample_block), ""]
+            else:
+                count += 1
+                out += [f"## {sample_label} — English", str(sample_block), "",
+                        f"## {sample_label} — {target_name}", translated, ""]
+
     # Explicitly test the one source paragraph that contains inline formatting and a protected name.
     import copy
     formatted_page = BeautifulSoup((ROOT / "the-meridian-of-ash-chapter-32.html").read_text(encoding="utf-8"), "html.parser")
     formatted_items = formatted_page.select(".wrap p")
     formatted_index = next((i for i,p in enumerate(formatted_items)
                             if p.find(list(INLINE_TAGS)) and
-                            any(re.search(re.escape(t), p.get_text(" ", strip=True), re.I) for t in PROTECTED_TERMS)), None)
+                            any(term_pattern(t).search(p.get_text(" ", strip=True)) for t in PROTECTED_TERMS)), None)
     if formatted_index is not None:
         target_url = f"https://raw.githubusercontent.com/zombcash/zombcash.github.io/translation-tgemma-combined/{lang}/{lang}/the-meridian-of-ash-chapter-32.html"
         target_response = requests.get(target_url, timeout=40)
@@ -285,7 +368,7 @@ def process_all(model, lang, target_code):
             source_text = source_p.get_text(" ", strip=True)
             hits = []
             for term in PROTECTED_TERMS:
-                matches = [match.group(0) for match in re.finditer(re.escape(term), source_text, re.I)]
+                matches = [match.group(0) for match in term_pattern(term).finditer(source_text)]
                 if matches:
                     per_term[term] += 1
                     hits.extend(matches)
@@ -296,7 +379,7 @@ def process_all(model, lang, target_code):
             is_book_title = filename == "the-meridian-of-ash.html" and source_p.name == "h1" and source_text.strip().upper() == "THE MERIDIAN OF ASH"
             if not is_book_title:
                 target_text = target_p.get_text(" ", strip=True)
-                if all(re.search(re.escape(term), target_text) for term in hits):
+                if all(target_text.count(term) >= hits.count(term) for term in set(hits)):
                     already_ok += 1
                     continue
             if is_book_title:
