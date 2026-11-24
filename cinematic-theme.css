@@ -150,7 +150,6 @@ body:has(#home) .zombcash-market-grid>div{background:#101719!important;border-co
 body:has(#home) .zombcash-market-grid small{color:#a0aaa6!important}
 body:has(#home) .zombcash-market-grid strong{color:#e2e4dc!important}
 body:has(#home) .zombcash-market-bottom a,body:has(#home) .zombcash-market-bottom button{color:#c2cca0!important;border-color:#65705e!important}
-body:has(#home) .hero-zombie{filter:grayscale(.58) saturate(.62) contrast(1.08) drop-shadow(0 0 22px #aab58e1c)!important}
 /* Keep alerts distinct without letting red dominate the interface. */
 .alarm-tag,.status-danger,.error-text{color:#c47b70!important}
 @media(max-width:760px){
