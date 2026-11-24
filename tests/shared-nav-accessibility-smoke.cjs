@@ -1,5 +1,23 @@
 const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+
+const sharedNavSource = fs.readFileSync(path.join(__dirname, '..', 'shared-nav.js'), 'utf8');
+const updateStart = sharedNavSource.indexOf('const updateScrollControlsVisibility = () => {');
+const updateEnd = sharedNavSource.indexOf('\n  };', updateStart);
+assert.ok(updateStart >= 0 && updateEnd > updateStart, 'shared scroll-control updater must exist');
+const updateSource = sharedNavSource.slice(updateStart, updateEnd);
+const firstClassWrite = updateSource.indexOf('controls.classList.toggle');
+const lastGeometryRead = updateSource.lastIndexOf('getBoundingClientRect');
+assert.ok(firstClassWrite > lastGeometryRead, 'scroll-control geometry reads must finish before CSS classes change');
+assert.match(sharedNavSource, /let scrollControlsUpdateFrame = 0;/, 'scroll-control updates must be frame-coalesced');
+assert.match(sharedNavSource, /window\.requestAnimationFrame\(\(\) => \{/, 'scroll-control updates must be scheduled in requestAnimationFrame');
+assert.match(sharedNavSource, /scrollControlsUpdateFrame = window\.requestAnimationFrame\(\(\) => \{\s*scrollControlsUpdateFrame = 0;\s*updateScrollControlsVisibility\(\);\s*\}\)/, 'the animation-frame callback must execute the geometry update, not reschedule itself');
+assert.match(sharedNavSource, /window\.addEventListener\('scroll', scheduleScrollControlsVisibilityUpdate/, 'scroll events must use the frame scheduler');
+assert.match(sharedNavSource, /window\.addEventListener\('resize', scheduleScrollControlsVisibilityUpdate/, 'resize events must use the frame scheduler');
+assert.match(sharedNavSource, /new MutationObserver\(scheduleScrollControlsVisibilityUpdate\)/, 'DOM mutations must use the frame scheduler');
+
 
 const base = process.env.SITE_URL || 'http://127.0.0.1:4173/';
 const routes = ['', 'de/', 'fr/', 'it/', 'ja/', 'zh-CN/', 'ru/', 'tr/', 'hi/'];
@@ -44,6 +62,8 @@ const routes = ['', 'de/', 'fr/', 'it/', 'ja/', 'zh-CN/', 'ru/', 'tr/', 'hi/'];
       results.push({ route: route || '/', status: 'PASS' });
       await page.close();
     }
+
+
 
     const tablet = await browser.newPage({ viewport: { width: 1024, height: 768 } });
     await tablet.goto(base, { waitUntil: 'domcontentloaded' });
