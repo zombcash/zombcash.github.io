@@ -1,0 +1,65 @@
+{
+  "mode": "incremental_repair",
+  "language": "tr",
+  "pages": 48,
+  "candidate_blocks": 222,
+  "already_normalized_blocks": 209,
+  "repaired_blocks": 7,
+  "skipped_blocks": 6,
+  "skipped_items": [
+    {
+      "file": "the-meridian-of-ash-chapter-16.html",
+      "block_index": 0,
+      "source": "CHAPTER SIXTEEN — THE AUDITOR'S PROOF",
+      "error": "explicit_glossary_missing:THE AUDITOR"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-16.html",
+      "block_index": 114,
+      "source": "The Auditor's terminal displayed a final line:",
+      "error": "explicit_glossary_missing:The Auditor"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-38.html",
+      "block_index": 86,
+      "source": "Morrow's voice came through her earpiece. “The sensor is not transmitting now.”",
+      "error": "explicit_glossary_missing:Morrow"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-39.html",
+      "block_index": 97,
+      "source": "Morrow's voice returned.",
+      "error": "explicit_glossary_missing:Morrow"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-43.html",
+      "block_index": 117,
+      "source": "Morrow's voice became very quiet.",
+      "error": "explicit_glossary_missing:Morrow"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-46.html",
+      "block_index": 96,
+      "source": "Morrow spoke.",
+      "error": "explicit_glossary_missing:Morrow"
+    }
+  ],
+  "source_term_hits": {
+    "THE MERIDIAN OF ASH": 1,
+    "The Meridian of Ash": 1,
+    "Meridian of Ash": 1,
+    "ZombieCash": 10,
+    "ZOMBCASH": 5,
+    "Zombie Lab": 13,
+    "The Core": 36,
+    "Morrow": 103,
+    "Saint Oran's": 19,
+    "Bellwether": 9,
+    "Grey Orchard": 3,
+    "The Auditor": 15,
+    "Survivor Field Manual": 0,
+    "Outbreak Transmission": 7,
+    "OUTBREAK RADAR": 6
+  },
+  "status": "draft_only_requires_editorial_review"
+}

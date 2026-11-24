@@ -67,9 +67,31 @@ def translate_protected(model, source_text, target_code):
     output = re.sub(r"<think>[\s\S]*?</think>", "", output).strip()
     for token in all_markers:
         if output.count(token) != 1:
-            return None, f"marker_failure:{token}"
+            if inline_map:
+                return None, f"marker_failure:{token}"
+            return translate_with_explicit_glossary(model, source_text.get_text(" ", strip=True), target_code, term_map.values())
     for token, original in all_markers.items():
         output = output.replace(token, original)
+    return output, None
+
+def translate_with_explicit_glossary(model, text, target_code, protected_names):
+    names = list(dict.fromkeys(protected_names))
+    prompt = (
+        f"Translate the following English text into {target_code}. "
+        "The listed items are proper names and must be copied exactly as written: "
+        + json.dumps(names, ensure_ascii=False)
+        + ". Do not translate, transliterate, respell, or change their capitalization. "
+        "Output only the translated text.\n\nTEXT:\n" + text
+    )
+    response = model.create_chat_completion(
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.1, top_p=0.95, repeat_penalty=1.0, max_tokens=1400, seed=42
+    )
+    output = response["choices"][0]["message"]["content"] or ""
+    output = re.sub(r"<think>[\s\S]*?</think>", "", output).strip()
+    for name in names:
+        if not re.search(re.escape(name), output, re.I):
+            return None, f"explicit_glossary_missing:{name}"
     return output, None
 
 def translate_segment(model, text, target_code):
@@ -85,7 +107,7 @@ def translate_segment(model, text, target_code):
         temperature=0.1, top_p=0.95, repeat_penalty=1.0, max_tokens=512, seed=42
     )
     output = response["choices"][0]["message"]["content"] or ""
-    output = re.sub(r"<think>[\\s\\S]*?</think>", "", output).strip()
+    output = re.sub(r"<think>[\s\S]*?</think>", "", output).strip()
     for token, original in term_map.items():
         if output.count(token) != 1:
             return None, f"segment_marker_failure:{token}"
@@ -147,11 +169,15 @@ def translate_full_block_with_inline_terms(model, source_paragraph, target_code)
         temperature=0.1, top_p=0.95, repeat_penalty=1.0, max_tokens=1400, seed=42
     )
     output = response["choices"][0]["message"]["content"] or ""
-    output = re.sub(r"<think>[\\s\\S]*?</think>", "", output).strip()
-    for token, original in term_map.items():
-        if output.count(token) != 1:
-            return None, f"inline_block_marker_failure:{token}"
-        output = output.replace(token, original)
+    output = re.sub(r"<think>[\s\S]*?</think>", "", output).strip()
+    marker_failed = any(output.count(token) != 1 for token in term_map)
+    if marker_failed:
+        output, error = translate_with_explicit_glossary(model, source_text, target_code, term_map.values())
+        if error:
+            return None, f"inline_block_{error}"
+    else:
+        for token, original in term_map.items():
+            output = output.replace(token, original)
     # Reapply the original inline tag to the corresponding protected term.
     for source_tag in source_paragraph.find_all(list(INLINE_TAGS)):
         tag_text = source_tag.get_text(" ", strip=True)
@@ -229,8 +255,9 @@ def process_all(model, lang, target_code):
     files = ["the-meridian-of-ash.html", "the-meridian-of-ash-prologue.html"] + [
         f"the-meridian-of-ash-chapter-{i:02d}.html" for i in range(1,47)
     ]
-    updated = candidates = skipped = 0
+    updated = candidates = skipped = already_ok = 0
     per_term = {term: 0 for term in PROTECTED_TERMS}
+    skipped_items = []
     for filename in files:
         source_path = ROOT / filename
         target_path = ROOT / lang / filename
@@ -238,14 +265,13 @@ def process_all(model, lang, target_code):
             raise FileNotFoundError(f"Missing source or translated page: {filename}")
         source_soup = BeautifulSoup(source_path.read_text(encoding="utf-8"), "html.parser")
         target_soup = BeautifulSoup(target_path.read_text(encoding="utf-8"), "html.parser")
-        # Include the title page and prologue, which use .wrap blocks rather than .chapter-copy.
         selector = ".wrap h1, .wrap h2, .wrap h3, .wrap p, .wrap blockquote"
         source_ps = source_soup.select(selector)
         target_ps = target_soup.select(selector)
         if len(source_ps) != len(target_ps):
             raise RuntimeError(f"Content-block count mismatch in {filename}: {len(source_ps)} vs {len(target_ps)}")
         page_changed = False
-        for source_p, target_p in zip(source_ps, target_ps):
+        for block_index, (source_p, target_p) in enumerate(zip(source_ps, target_ps)):
             source_text = source_p.get_text(" ", strip=True)
             hits = [term for term in PROTECTED_TERMS if re.search(re.escape(term), source_text, re.I)]
             if not hits:
@@ -253,13 +279,23 @@ def process_all(model, lang, target_code):
             candidates += 1
             for term in hits:
                 per_term[term] += 1
-            if source_p.find(list(INLINE_TAGS)):
+            # The title is a protected publication name, not a translatable phrase.
+            is_book_title = filename == "the-meridian-of-ash.html" and source_p.name == "h1" and source_text.strip().upper() == "THE MERIDIAN OF ASH"
+            if not is_book_title:
+                target_text = target_p.get_text(" ", strip=True)
+                if all(re.search(re.escape(term), target_text, re.I) for term in hits):
+                    already_ok += 1
+                    continue
+            if is_book_title:
+                translated, error = "THE MERIDIAN<br/>OF ASH", None
+            elif source_p.find(list(INLINE_TAGS)):
                 translated, error = translate_full_block_with_inline_terms(model, source_p, target_code)
             else:
                 translated, error = translate_protected(model, source_p, target_code)
             if error:
                 skipped += 1
-                print(f"SKIP {filename}: {error}", flush=True)
+                skipped_items.append({"file": filename, "block_index": block_index, "source": source_text[:240], "error": error})
+                print(f"SKIP {filename} block={block_index}: {error}", flush=True)
                 continue
             set_paragraph_html(target_p, translated)
             updated += 1
@@ -267,9 +303,13 @@ def process_all(model, lang, target_code):
         if page_changed:
             target_path.write_text(str(target_soup), encoding="utf-8")
             print(f"UPDATED {lang}/{filename}", flush=True)
-    report = {"mode":"all","language":lang,"pages":len(files),"candidate_blocks":candidates,
-              "updated_blocks":updated,"skipped_blocks":skipped,"source_term_hits":per_term,
+    report = {"mode":"incremental_repair","language":lang,"pages":len(files),"candidate_blocks":candidates,
+              "already_normalized_blocks":already_ok,"repaired_blocks":updated,"skipped_blocks":skipped,
+              "skipped_items":skipped_items,"source_term_hits":per_term,
               "status":"draft_only_requires_editorial_review"}
+    report_path = ROOT / "translations" / f"glossary-qa-{lang}.json"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps(report,ensure_ascii=False),flush=True)
 
 def main():
