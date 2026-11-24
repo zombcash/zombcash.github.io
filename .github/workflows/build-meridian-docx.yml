@@ -1,0 +1,90 @@
+name: Build Word manuscripts — THE MERIDIAN OF ASH
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ru, de, fr, it, ja, zh-CN, tr, hi]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch normalized translation branch
+        env:
+          TARGET_LANGUAGE: ${{ matrix.language }}
+        run: |
+          set -euo pipefail
+          SOURCE_BRANCH="translation-tgemma-glossary/$TARGET_LANGUAGE"
+          git fetch origin "+refs/heads/$SOURCE_BRANCH:refs/remotes/origin/$SOURCE_BRANCH"
+          git checkout -B "docx-build/$TARGET_LANGUAGE" "origin/$SOURCE_BRANCH"
+          git checkout origin/main -- scripts/build_meridian_docx.py
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install document dependencies
+        run: python -m pip install --disable-pip-version-check python-docx==1.2.0 beautifulsoup4==4.13.4
+      - name: Build Word manuscript
+        env:
+          TARGET_LANGUAGE: ${{ matrix.language }}
+        run: python scripts/build_meridian_docx.py --language "$TARGET_LANGUAGE" --output dist
+      - name: Upload language manuscript
+        uses: actions/upload-artifact@v4
+        with:
+          name: meridian-book-${{ matrix.language }}
+          path: dist/*.docx
+          if-no-files-found: error
+          retention-days: 30
+
+  package:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all language manuscripts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: meridian-book-*
+          path: dist
+          merge-multiple: true
+      - name: Create shared glossary and QA report
+        run: |
+          python -m pip install --disable-pip-version-check python-docx==1.2.0
+          python - <<'PY'
+          from docx import Document
+          from pathlib import Path
+          out=Path("dist")
+          glossary=Document()
+          glossary.add_heading("THE MERIDIAN OF ASH — Literary Glossary",0)
+          glossary.add_paragraph("Protected names and fictional service titles must retain their exact English spelling in all language editions.")
+          terms=["THE MERIDIAN OF ASH","The Meridian of Ash","Meridian of Ash","ZombieCash","ZOMBCASH","Zombie Lab","The Core","Morrow","Saint Oran's","Bellwether","Grey Orchard","The Auditor","Survivor Field Manual","Outbreak Transmission","OUTBREAK RADAR"]
+          for term in terms: glossary.add_paragraph(term,style="List Bullet")
+          glossary.add_paragraph("Do not translate, transliterate, or vary these protected forms. Preserve capitalization and apostrophes.")
+          glossary.save(out/"Literary_Glossary.docx")
+          qa=Document()
+          qa.add_heading("THE MERIDIAN OF ASH — Translation QA",0)
+          qa.add_paragraph("Eight machine-translation drafts. Each language contains the title page, prologue, and 46 chapters. Structural completeness was checked against the English source. Literary editing and final publication approval remain outstanding.")
+          for lang in ["ru","de","fr","it","ja","zh-CN","tr","hi"]:
+              qa.add_paragraph(lang,style="List Bullet")
+          qa.add_paragraph("Do not publish or index these drafts until literary review, terminology, continuity, and final rendered-page checks are complete.")
+          qa.save(out/"Translation_QA_Report.docx")
+          PY
+      - name: Package all ten Word files
+        run: |
+          cd dist
+          zip -q THE_MERIDIAN_OF_ASH_Translations_8_Languages.zip *.docx
+      - name: Upload complete translation package
+        uses: actions/upload-artifact@v4
+        with:
+          name: meridian-translations-8-languages
+          path: dist/THE_MERIDIAN_OF_ASH_Translations_8_Languages.zip
+          if-no-files-found: error
+          retention-days: 30
