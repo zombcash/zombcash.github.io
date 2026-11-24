@@ -10,6 +10,7 @@ on:
       - "robots.txt"
       - "sitemap*.xml"
       - "tests/seo-orphan-page-audit.py"
+      - "tests/sitemap-live-smoke.py"
       - ".github/workflows/seo-orphan-page-audit.yml"
 
 permissions:
@@ -26,6 +27,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Validate SEO audit script syntax
+        run: python -m py_compile tests/seo-orphan-page-audit.py tests/sitemap-live-smoke.py
       - name: Audit sitemap pages and incoming internal links
         run: python tests/seo-orphan-page-audit.py
       - name: Upload full audit report
