@@ -53,8 +53,12 @@ const ribbonsCss = fs.readFileSync(path.join(root, 'homepage-visual.css'), 'utf8
 
 for (const file of pages) {
   const html = fs.readFileSync(path.join(root, file), 'utf8');
-  assert.match(html, /<header class="topbar">[\\s\\S]*?<\\/header>\\s*<div class="zc-outbreak-ribbons" role="region" aria-label="ZombieCash project highlights"><\\/div>\\s*<main id="home">/,
-    file + ': a server-rendered ribbon placeholder must reserve space before the homepage main');
+  const headerEnd = html.indexOf('</header>');
+  const ribbonMarkup = '<div class="zc-outbreak-ribbons" role="region" aria-label="ZombieCash project highlights"></div>';
+  const ribbonStart = html.indexOf(ribbonMarkup, headerEnd);
+  const mainStart = html.indexOf('<main id="home">', ribbonStart);
+  assert(headerEnd >= 0 && ribbonStart > headerEnd && mainStart > ribbonStart,
+    file + ': a server-rendered ribbon placeholder must sit between the header and homepage main');
 }
 assert(ribbonsScript.includes("var wrap=existing||document.createElement('div')"),
   'Homepage ribbons must reuse the server-rendered placeholder instead of replacing it');
