@@ -29,7 +29,7 @@ jobs:
           PART1="translation-tgemma-part-01-23/$LANG"
           PART2="translation-tgemma-part-24-46/$LANG"
           COMBINED="translation-tgemma-combined/$LANG"
-          git fetch origin "$PART1" "$PART2"
+          git fetch origin "+refs/heads/$PART1:refs/remotes/origin/$PART1" "+refs/heads/$PART2:refs/remotes/origin/$PART2"
           git checkout -b "$COMBINED" origin/main
 
           git checkout "origin/$PART1" -- "$LANG/the-meridian-of-ash.html" "$LANG/the-meridian-of-ash-prologue.html"
