@@ -48,9 +48,12 @@ for (const file of pages) {
   console.log('PASS', file, 'styleBlocks=' + styles.length, 'bodyStyleBlocks=0');
 }
 
-const globalCss = fs.readFileSync(path.join(root, 'style.css'), 'utf8');
-for (const className of obsoleteHeroClasses) {
-  assert.doesNotMatch(globalCss, new RegExp('\\.' + className + '(?![\\w-])'), 'style.css: retired hero selector remains: ' + className);
+const globalCssFiles = ['style.css', 'site-polish.css', 'cinematic-theme.css', 'homepage-visual.css', 'editorial-atmosphere.css', 'gallery.css'];
+for (const cssFile of globalCssFiles) {
+  const globalCss = fs.readFileSync(path.join(root, cssFile), 'utf8');
+  for (const className of obsoleteHeroClasses) {
+    assert.doesNotMatch(globalCss, new RegExp('\\\\.' + className + '(?![\\\\w-])'), cssFile + ': retired hero selector remains: ' + className);
+  }
 }
 
 const english = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
