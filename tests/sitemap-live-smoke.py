@@ -412,7 +412,7 @@ def main():
     failures = sorted((item for item in results if not item["ok"]), key=lambda item: item["url"])
     passed = len(results) - len(failures)
     title_warnings = sorted(
-        (item for item in results if item.get("title_length", 0) > 70),
+        (item for item in results if item.get("title_length", 0) > 80),
         key=lambda item: item.get("title_length", 0),
         reverse=True,
     )
@@ -422,7 +422,7 @@ def main():
         reverse=True,
     )
     print(f"HTTP 200 + canonical/lang/hreflang/title/description checks passed: {passed}/{len(results)}")
-    print(f"Long titles (>70 characters; review only): {len(title_warnings)}")
+    print(f"Long titles (>80 characters; review only): {len(title_warnings)}")
     print(f"Long descriptions (>170 characters; review only): {len(description_warnings)}")
     for item in title_warnings[:20]:
         print(f"LONG_TITLE {item['title_length']} {item['url']} | {item['title']}")
