@@ -234,7 +234,7 @@ def main():
     }
     (OUTPUT / "report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     with (OUTPUT / "report.csv").open("w", encoding="utf-8-sig", newline="") as handle:
-        fields = ["url", "title", "title_length", "description", "description_length",
+        fields = ["url", "file", "title", "title_length", "description", "description_length",
                   "og_title", "og_description", "twitter_title", "twitter_description",
                   "h1_count", "h1", "issues"]
         writer = csv.DictWriter(handle, fieldnames=fields)
