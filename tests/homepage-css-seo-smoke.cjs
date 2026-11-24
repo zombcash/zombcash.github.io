@@ -24,11 +24,11 @@ for (const file of pages) {
   assert.ok(html.indexOf('homepage-components-inline') < html.indexOf('homepage-visual.css'), file + ': component CSS order changed');
   assert.ok(html.indexOf('homepage-visual.css') < html.indexOf('homepage-late-overrides'), file + ': final CSS must follow homepage-visual.css');
   assert.doesNotMatch(html, /brand-search-aliases/i, file + ': artificial brand-alias paragraph remains');
-  const heroCss = html.match(/<style id="zombcash-hero-v8-inline">([\s\S]*?)<\/style>/i)?.[1] || '';
+  const heroCss = html.match(/<style id="homepage-pre-polish">([\s\S]*?)<\/style>/i)?.[1] || '';
   assert.ok(heroCss.length > 0, file + ': consolidated hero CSS block missing');
-  assert.doesNotMatch(heroCss, /\\/\\*\\s*V(?:8|9|14|17|18|19|20|21)\\b/i, file + ': superseded hero version history remains');
-  assert.doesNotMatch(heroCss.slice(0, 6000), /\\.outbreak-panel|panelOrbit|signalPulse/, file + ': stale hero panel selectors or animations remain');
-  assert.match(heroCss, /\\.hero:after\\{[^}]*writing-mode:horizontal-tb!important/, file + ': hero pseudo-element was not reset to a horizontal rule');
+  assert.doesNotMatch(heroCss, /\/\*\s*V(?:8|9|14|17|18|19|20|21)\b/i, file + ': superseded hero version history remains');
+  assert.doesNotMatch(heroCss.slice(0, 6000), /\.outbreak-panel|panelOrbit|signalPulse/, file + ': stale hero panel selectors or animations remain');
+  assert.match(heroCss, /\.hero:after\{[^}]*writing-mode:horizontal-tb!important/, file + ': hero pseudo-element was not reset to a horizontal rule');
   assert.doesNotMatch(heroCss, /@(?:media|supports|container|layer)[^{]*\{\s*\}/i, file + ': empty responsive CSS wrapper remains');
   const obsoleteHeroClasses = [
     'hero-mascot', 'mascot-orbit', 'mascot-hand', 'mascot-caption', 'mascot-signal',
