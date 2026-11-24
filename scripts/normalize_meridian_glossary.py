@@ -77,6 +77,58 @@ def translate_protected(model, source_text, target_code):
         output = output.replace(token, original)
     return output, None
 
+def translate_by_segments(model, text, target_code, protected_names):
+    names = sorted(set(protected_names), key=len, reverse=True)
+    alternatives = "|".join(re.escape(name) for name in names)
+    pattern = re.compile(r"(?<![A-Za-z0-9])(" + alternatives + r")(?![A-Za-z0-9])", re.I)
+    matches = list(pattern.finditer(text))
+    if not matches:
+        return None, "segment_fallback_no_protected_name"
+
+    def translate_fragment(fragment, protected_name, side):
+        if not fragment or not fragment.strip():
+            return fragment, None
+        leading = fragment[:len(fragment) - len(fragment.lstrip())]
+        trailing = fragment[len(fragment.rstrip()):]
+        body = fragment.strip()
+        prompt = (
+            f"Translate only this English fragment into {target_code}. "
+            f"It appears immediately {side} the proper name {protected_name!r} in the full sentence {text!r}. "
+            "Keep the translation natural in that context. Do not repeat or translate the proper name. "
+            "Output only the translated fragment.\n\nFRAGMENT:\n" + body
+        )
+        response = model.create_chat_completion(
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.1, top_p=0.95, repeat_penalty=1.0, max_tokens=700, seed=42
+        )
+        translated = response["choices"][0]["message"]["content"] or ""
+        translated = re.sub(r"<think>[\s\S]*?</think>", "", translated).strip()
+        return leading + translated + trailing, None
+
+    parts = []
+    cursor = 0
+    previous_name = matches[0].group(0)
+    for match in matches:
+        before = text[cursor:match.start()]
+        translated, error = translate_fragment(before, match.group(0), "before")
+        if error:
+            return None, error
+        parts.append(translated)
+        parts.append(match.group(0))
+        cursor = match.end()
+        previous_name = match.group(0)
+    after = text[cursor:]
+    translated, error = translate_fragment(after, previous_name, "after")
+    if error:
+        return None, error
+    parts.append(translated)
+    output = "".join(parts)
+    for name in names:
+        if not term_pattern(name).search(output):
+            return None, f"segment_fallback_lost_name:{name}"
+    return output, None
+
+
 def translate_with_explicit_glossary(model, text, target_code, protected_names):
     names = list(dict.fromkeys(protected_names))
     marked_text = text
@@ -95,6 +147,7 @@ def translate_with_explicit_glossary(model, text, target_code, protected_names):
     )
     output = response["choices"][0]["message"]["content"] or ""
     output = re.sub(r"<think>[\s\S]*?</think>", "", output).strip()
+    failed = False
     for name in names:
         bracketed = re.compile("⟦" + re.escape(name) + "⟧", re.I)
         if bracketed.search(output):
@@ -104,7 +157,10 @@ def translate_with_explicit_glossary(model, text, target_code, protected_names):
         if plain.search(output):
             output = plain.sub(lambda match: name, output)
             continue
-        return None, f"bracketed_glossary_missing:{name}"
+        failed = True
+        break
+    if failed:
+        return translate_by_segments(model, text, target_code, names)
     return output, None
 
 def translate_segment(model, text, target_code):
@@ -232,6 +288,30 @@ def process_sample(model, lang, target_code, target_name):
                 f"## Example {count} — {target_name}", BeautifulSoup(translated, "html.parser").get_text(" ", strip=True), ""]
         if count >= 5:
             break
+    # Explicitly test difficult protected terms in a chapter heading and in the Morrow/tomorrow contrast.
+    for sample_file, sample_selector, sample_label in [
+        ("the-meridian-of-ash-chapter-16.html", ".wrap h1", "Auditor chapter heading"),
+        ("the-meridian-of-ash-chapter-38.html", ".wrap p", "Morrow and tomorrow contrast"),
+    ]:
+        sample_soup = BeautifulSoup((ROOT / sample_file).read_text(encoding="utf-8"), "html.parser")
+        sample_block = None
+        for candidate in sample_soup.select(sample_selector):
+            candidate_text = candidate.get_text(" ", strip=True)
+            if sample_label == "Auditor chapter heading" and term_pattern("The Auditor").search(candidate_text):
+                sample_block = candidate
+                break
+            if sample_label == "Morrow and tomorrow contrast" and "A tomorrow built from broken yesterday." in candidate_text:
+                sample_block = candidate
+                break
+        if sample_block:
+            translated, error = translate_protected(model, sample_block, target_code)
+            if error:
+                out += [f"## {sample_label} — SKIPPED: {error}", str(sample_block), ""]
+            else:
+                count += 1
+                out += [f"## {sample_label} — English", str(sample_block), "",
+                        f"## {sample_label} — {target_name}", translated, ""]
+
     # Explicitly test the one source paragraph that contains inline formatting and a protected name.
     import copy
     formatted_page = BeautifulSoup((ROOT / "the-meridian-of-ash-chapter-32.html").read_text(encoding="utf-8"), "html.parser")
