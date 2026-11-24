@@ -69,8 +69,10 @@ const sourcePath = 'survivor-hub.html';
 const source = fs.readFileSync(sourcePath, 'utf8');
 const sourceDictionary = extractDictionary(source, 'English source');
 const languageJs = fs.readFileSync('language.js', 'utf8');
-const expectedRoutes = '"\/survivor-hub.html": ["de","fr","it","ja","zh-CN","ru","tr","hi"]';
-assert.ok(languageJs.includes(expectedRoutes), 'language routing must use dedicated Survivor Hub locale URLs');
+const routeMatch = languageJs.match(/"\/survivor-hub\.html":\s*\[([^\]]+)\]/);
+assert.ok(routeMatch, 'language routing must use dedicated Survivor Hub locale URLs');
+assert.deepEqual([...routeMatch[1].matchAll(/"([^"]+)"/g)].map(match => match[1]), ['de', 'fr', 'it', 'ja', 'zh-CN', 'ru', 'tr', 'hi'],
+  'Survivor Hub route manifest must include all eight localized destinations');
 
 const expectedAlternates = [
   ['en', ROOT + 'survivor-hub.html'],
