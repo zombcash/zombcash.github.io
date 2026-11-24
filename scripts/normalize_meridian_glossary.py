@@ -76,12 +76,15 @@ def translate_protected(model, source_text, target_code):
 
 def translate_with_explicit_glossary(model, text, target_code, protected_names):
     names = list(dict.fromkeys(protected_names))
+    marked_text = text
+    for name in sorted(names, key=len, reverse=True):
+        pattern = re.compile(re.escape(name), re.I)
+        marked_text = pattern.sub(lambda match: "⟦" + match.group(0) + "⟧", marked_text)
     prompt = (
         f"Translate the following English text into {target_code}. "
-        "The listed items are proper names and must be copied exactly as written: "
-        + json.dumps(names, ensure_ascii=False)
-        + ". Do not translate, transliterate, respell, or change their capitalization. "
-        "Output only the translated text.\n\nTEXT:\n" + text
+        "Copy every phrase enclosed in the special brackets ⟦ and ⟧ exactly as written. "
+        "Do not translate, transliterate, respell, or change capitalization inside those brackets. "
+        "Keep the brackets in the output. Output only the translated text.\n\nTEXT:\n" + marked_text
     )
     response = model.create_chat_completion(
         messages=[{"role": "user", "content": prompt}],
@@ -90,10 +93,15 @@ def translate_with_explicit_glossary(model, text, target_code, protected_names):
     output = response["choices"][0]["message"]["content"] or ""
     output = re.sub(r"<think>[\s\S]*?</think>", "", output).strip()
     for name in names:
-        pattern = re.compile(re.escape(name), re.I)
-        if not pattern.search(output):
-            return None, f"explicit_glossary_missing:{name}"
-        output = pattern.sub(lambda match: name, output)
+        bracketed = re.compile("⟦" + re.escape(name) + "⟧", re.I)
+        if bracketed.search(output):
+            output = bracketed.sub(lambda match: name, output)
+            continue
+        plain = re.compile(re.escape(name), re.I)
+        if plain.search(output):
+            output = plain.sub(lambda match: name, output)
+            continue
+        return None, f"bracketed_glossary_missing:{name}"
     return output, None
 
 def translate_segment(model, text, target_code):

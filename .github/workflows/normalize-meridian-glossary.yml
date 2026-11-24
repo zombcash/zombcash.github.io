@@ -53,7 +53,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$MODE" = "sample" ]; then
-            BRANCH="translation-tgemma-glossary-test-v6/$TARGET_LANGUAGE"
+            BRANCH="translation-tgemma-glossary-test-v7/$TARGET_LANGUAGE"
             git checkout -b "$BRANCH" origin/main
           else
             SOURCE_BRANCH="translation-tgemma-combined/$TARGET_LANGUAGE"
