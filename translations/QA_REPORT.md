@@ -7,11 +7,11 @@
 ## Structural completeness
 
 - English source: 48 HTML pages (contents, prologue, 46 chapters).
-- English prose paragraphs: 6,742.
+- English paragraphs in all 48 reader pages: 6,744 (2 title-page paragraphs, 84 prologue paragraphs, and 6,658 chapter paragraphs).
 - Target languages: RU, DE, FR, IT, JA, ZH-CN, TR, HI.
 - Each combined language branch contains all 48 expected pages.
-- All 384 translated pages were fetched and checked against the source.
-- Paragraph-count comparison: zero mismatches across all 384 pages.
+- All 384 translated pages were fetched and checked against the source using the full .wrap p selector, including the title page and prologue.
+- Paragraph-count comparison: zero mismatches across all 384 pages; every language has 6,744 paragraphs.
 - Empty translated prose paragraphs: zero.
 - Sampled page checks: locale `html[lang]`, canonical URL, `noindex,follow`, and visible machine-draft banner all present.
 - No translated page has been merged into `main`; the English live edition and sitemap remain unchanged.
