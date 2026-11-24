@@ -95,7 +95,10 @@ for (const file of pages) {
     const dot = html.match(new RegExp('<i\\b(?=[^>]*\\bid="' + id + '")[^>]*>'))?.[0] || '';
     assert.match(dot, /\baria-hidden="true"/i, file + ': decorative service indicator must be hidden from assistive technology: ' + id);
   }
-  assert.match(html, /aria-label="ZOMBIECASH — back to top"/, file + ': footer brand accessible name must include the visible brand text');
+  assert.match(html, /aria-label="ZOMBIECASH THE UNDEAD INTERNET — back to top"/, file + ': footer brand accessible name must include the visible brand text');
+  assert.match(html, /class="brand-mark" aria-hidden="true"/, file + ': decorative footer biohazard icon must be hidden from assistive technology');
+  const aiEngineCard = html.match(/<a\\b[^>]*class="[^"]*zc-ai-engine-card[^"]*"[^>]*>/i)?.[0] || '';
+  assert.doesNotMatch(aiEngineCard, /\\baria-label=/i, file + ': AI status card name must be derived from its visible dynamic text');
   assert.doesNotMatch(html, /\bCash\s+Zombie\b|\bCashZombie\b/i, file + ': artificial search phrase remains');
   console.log('PASS', file, 'styleBlocks=' + styles.length, 'bodyStyleBlocks=0');
 }
