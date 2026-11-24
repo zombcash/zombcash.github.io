@@ -13,6 +13,7 @@ const lastGeometryRead = updateSource.lastIndexOf('getBoundingClientRect');
 assert.ok(firstClassWrite > lastGeometryRead, 'scroll-control geometry reads must finish before CSS classes change');
 assert.match(sharedNavSource, /let scrollControlsUpdateFrame = 0;/, 'scroll-control updates must be frame-coalesced');
 assert.match(sharedNavSource, /window\.requestAnimationFrame\(\(\) => \{/, 'scroll-control updates must be scheduled in requestAnimationFrame');
+assert.match(sharedNavSource, /scrollControlsUpdateFrame = window\.requestAnimationFrame\(\(\) => \{\s*scrollControlsUpdateFrame = 0;\s*updateScrollControlsVisibility\(\);\s*\}\)/, 'the animation-frame callback must execute the geometry update, not reschedule itself');
 assert.match(sharedNavSource, /window\.addEventListener\('scroll', scheduleScrollControlsVisibilityUpdate/, 'scroll events must use the frame scheduler');
 assert.match(sharedNavSource, /window\.addEventListener\('resize', scheduleScrollControlsVisibilityUpdate/, 'resize events must use the frame scheduler');
 assert.match(sharedNavSource, /new MutationObserver\(scheduleScrollControlsVisibilityUpdate\)/, 'DOM mutations must use the frame scheduler');
