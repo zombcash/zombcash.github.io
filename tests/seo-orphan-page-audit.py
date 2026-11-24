@@ -26,25 +26,38 @@ class PageParser(HTMLParser):
         self.links = []
         self.scripts = []
         self.title = []
+        self.title_count = 0
+        self.descriptions = []
+        self.in_head = False
         self.in_title = False
 
     def handle_starttag(self, tag, attrs):
+        tag = tag.lower()
         attrs = dict(attrs)
-        if tag.lower() == "a" and attrs.get("href"):
+        if tag == "head":
+            self.in_head = True
+        if tag == "a" and attrs.get("href"):
             self.links.append(attrs["href"].strip())
-        elif tag.lower() == "script" and attrs.get("src"):
+        elif tag == "script" and attrs.get("src"):
             self.scripts.append(attrs["src"])
-        elif tag.lower() == "title":
+        if self.in_head and tag == "title":
+            self.title_count += 1
             self.in_title = True
+        if self.in_head and tag == "meta":
+            name = (attrs.get("name") or "").strip().lower()
+            if name == "description":
+                self.descriptions.append((attrs.get("content") or "").strip())
 
     def handle_endtag(self, tag):
-        if tag.lower() == "title":
+        tag = tag.lower()
+        if tag == "title" and self.in_head:
             self.in_title = False
+        elif tag == "head":
+            self.in_head = False
 
     def handle_data(self, data):
-        if self.in_title:
+        if self.in_head and self.in_title:
             self.title.append(data)
-
 
 def site_url(value, base=SITE):
     value = (value or "").strip()
@@ -144,6 +157,8 @@ def main():
     nav_items, localized_pages = shared_navigation_targets()
     shared_nav_pages = 0
     page_titles = {}
+    page_descriptions = {}
+    metadata_issues = []
     for source_url in sorted(urls):
         source_file = local_file(source_url)
         if not source_file.is_file():
@@ -151,7 +166,20 @@ def main():
             continue
         parser = PageParser()
         parser.feed(source_file.read_text(encoding="utf-8-sig", errors="replace"))
-        page_titles[source_url] = " ".join(" ".join(parser.title).split())[:240]
+        title = " ".join(" ".join(parser.title).split())[:240]
+        description = parser.descriptions[0] if parser.descriptions else ""
+        page_titles[source_url] = title
+        page_descriptions[source_url] = description
+        if parser.title_count != 1 or not title:
+            metadata_issues.append({
+                "url": source_url,
+                "issue": f"expected one non-empty title in head, found {parser.title_count}",
+            })
+        if len(parser.descriptions) != 1 or not description:
+            metadata_issues.append({
+                "url": source_url,
+                "issue": f"expected one non-empty meta description in head, found {len(parser.descriptions)}",
+            })
         if any("shared-nav.js" in src for src in parser.scripts):
             shared_nav_pages += 1
             path_parts = urlsplit(source_url).path.strip("/").split("/")
@@ -188,6 +216,9 @@ def main():
         rows.append({
             "url": url,
             "title": page_titles.get(url, ""),
+            "title_length": len(page_titles.get(url, "")),
+            "meta_description": page_descriptions.get(url, ""),
+            "description_length": len(page_descriptions.get(url, "")),
             "inbound_internal_links": count,
             "outbound_internal_links": outbound[url],
             "inbound_sources": sorted(inbound_sources[url]),
@@ -203,6 +234,10 @@ def main():
             "html_pages_audited": len(page_titles),
             "shared_navigation_pages": shared_nav_pages,
             "missing_local_files": missing_files,
+            "metadata_issue_count": len(metadata_issues),
+            "metadata_issues": metadata_issues,
+            "long_title_count": sum(row["title_length"] > 80 for row in rows),
+            "long_description_count": sum(row["description_length"] > 170 for row in rows),
             "orphan_count": sum(row["status"] == "ORPHAN" for row in rows),
             "low_inbound_count": sum(row["status"] == "LOW_INBOUND" for row in rows),
             "pages": rows,
@@ -221,6 +256,15 @@ def main():
     print(f"Local HTML pages read: {len(page_titles)}")
     print(f"Pages with locale-aware shared navigation: {shared_nav_pages}")
     print(f"Missing local files: {len(missing_files)}")
+    metadata_pass_pages = len(page_titles) - len({issue["url"] for issue in metadata_issues})
+    print(f"Pages with one non-empty document-head title and meta description: {metadata_pass_pages}/{len(page_titles)}")
+    print(f"Long titles (>80 characters; review only): {sum(row['title_length'] > 80 for row in rows)}")
+    print(f"Long descriptions (>170 characters; review only): {sum(row['description_length'] > 170 for row in rows)}")
+    for issue in metadata_issues:
+        print(f"METADATA {issue['url']} | {issue['issue']}")
+    for row in rows:
+        if row["title_length"] > 80:
+            print(f"LONG_TITLE {row['title_length']} {row['url']} | {row['title']}")
     print(f"Orphan pages (zero incoming anchor links): {len(orphans)}")
     print(f"Low inbound pages (one or two incoming links): {len(low)}")
     for row in orphans:
@@ -230,6 +274,8 @@ def main():
     print(f"Reports written to {OUTPUT}/report.json and report.csv")
     if missing_files:
         raise SystemExit("FAIL: one or more sitemap pages have no corresponding repository HTML file.")
+    if metadata_issues:
+        raise SystemExit(f"FAIL: {len(metadata_issues)} sitemap page(s) have missing or duplicate document-head title/description metadata.")
     if orphans:
         raise SystemExit(
             f"FAIL: {len(orphans)} sitemap page(s) have no incoming internal anchor links. "
