@@ -1,5 +1,5 @@
 /* ZombieCash homepage visual refresh — additive, homepage-scoped styles only. */
-body:has(#home) .zc-outbreak-ribbons{position:relative;z-index:19;display:grid;gap:5px;padding:7px clamp(10px,2vw,28px);background:#050907;border-bottom:1px solid #25382a}
+body:has(#home) .zc-outbreak-ribbons{box-sizing:border-box;min-height:127px;position:relative;z-index:19;display:grid;gap:5px;padding:7px clamp(10px,2vw,28px);background:#050907;border-bottom:1px solid #25382a}
 body:has(#home) .zc-ribbon{height:34px;display:flex;align-items:center;overflow:hidden;position:relative;border:1px solid var(--ribbon-color);border-radius:9px;background:linear-gradient(90deg,var(--ribbon-tint),#080d0b 52%,#080d0b);box-shadow:0 0 18px color-mix(in srgb,var(--ribbon-color) 16%,transparent),inset 0 0 18px color-mix(in srgb,var(--ribbon-color) 8%,transparent)}
 body:has(#home) .zc-ribbon-label{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:0 14px;height:100%;color:var(--ribbon-color);font:800 10px/1 Orbitron,Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;border-right:1px solid color-mix(in srgb,var(--ribbon-color) 40%,transparent);white-space:nowrap}
 body:has(#home) .zc-ribbon-track{display:flex;align-items:center;min-width:max-content;animation:zcRibbonMove var(--ribbon-speed,34s) linear infinite}
@@ -24,7 +24,7 @@ body:has(#home) .world-panel-head{background:linear-gradient(100deg,#16251bd9,#0
 body:has(#home) .world-panel:nth-child(2) .world-panel-head{background:linear-gradient(100deg,#321722e8,#0a1014e8)}
 body:has(#home) .world-panel-foot{background:#080e0deF}
 @media(max-width:760px){
- body:has(#home) .zc-outbreak-ribbons{gap:4px;padding:6px 8px}
+ body:has(#home) .zc-outbreak-ribbons{min-height:114px;gap:4px;padding:6px 8px}
  body:has(#home) .zc-ribbon{height:31px;border-radius:7px}
  body:has(#home) .zc-ribbon-label{padding:0 9px;font-size:8px;letter-spacing:.55px}
  body:has(#home) .zc-ribbon-copy{font-size:12px;gap:17px;padding-left:17px}
