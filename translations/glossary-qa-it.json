@@ -1,0 +1,65 @@
+{
+  "mode": "incremental_repair",
+  "language": "it",
+  "pages": 48,
+  "candidate_blocks": 222,
+  "already_normalized_blocks": 215,
+  "repaired_blocks": 1,
+  "skipped_blocks": 6,
+  "skipped_items": [
+    {
+      "file": "the-meridian-of-ash-chapter-01.html",
+      "block_index": 134,
+      "source": "The Core's diagnostic began.",
+      "error": "marker_failure:ZXQTERM000QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-01.html",
+      "block_index": 260,
+      "source": "The laboratory sealed the test chamber. The robotic arm moved the sample tray into position. Environmental sensors reported stable pressure, temperature and humidity. Two technicians confirmed the instrument calibration. The Core displayed ",
+      "error": "marker_failure:ZXQTERM000QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-16.html",
+      "block_index": 0,
+      "source": "CHAPTER SIXTEEN — THE AUDITOR'S PROOF",
+      "error": "marker_failure:ZXQTERM000QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-16.html",
+      "block_index": 114,
+      "source": "The Auditor's terminal displayed a final line:",
+      "error": "marker_failure:ZXQTERM000QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-18.html",
+      "block_index": 0,
+      "source": "CHAPTER EIGHTEEN — THE SAINT ORAN'S LEDGER",
+      "error": "marker_failure:ZXQTERM000QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-33.html",
+      "block_index": 0,
+      "source": "CHAPTER THIRTY-THREE — ZOMBIE LAB",
+      "error": "marker_failure:ZXQTERM000QZX"
+    }
+  ],
+  "source_term_hits": {
+    "THE MERIDIAN OF ASH": 1,
+    "The Meridian of Ash": 1,
+    "Meridian of Ash": 1,
+    "ZombieCash": 10,
+    "ZOMBCASH": 5,
+    "Zombie Lab": 13,
+    "The Core": 36,
+    "Morrow": 103,
+    "Saint Oran's": 19,
+    "Bellwether": 9,
+    "Grey Orchard": 3,
+    "The Auditor": 15,
+    "Survivor Field Manual": 0,
+    "Outbreak Transmission": 7,
+    "OUTBREAK RADAR": 6
+  },
+  "status": "draft_only_requires_editorial_review"
+}
