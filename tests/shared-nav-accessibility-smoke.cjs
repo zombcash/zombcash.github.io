@@ -25,6 +25,7 @@ const routes = ['', 'de/', 'fr/', 'it/', 'ja/', 'zh-CN/', 'ru/', 'tr/', 'hi/'];
         assert.equal(fontUrl.searchParams.get('text'), expectedText, route + ' locale font must be subset to the actual hero heading');
         assert.equal(fontUrl.searchParams.get('display'), 'optional', route + ' locale font display policy');
       }
+      assert.ok((await toggle.getAttribute('aria-label') || '').trim(), route + ' menu toggle needs a non-empty accessible name');
       assert.equal(await toggle.getAttribute('aria-controls'), 'zsh-navigation', route + ' aria-controls');
       assert.equal(await toggle.getAttribute('aria-expanded'), 'false', route + ' initial aria-expanded');
       assert.equal(await nav.isVisible(), false, route + ' menu should start closed');
