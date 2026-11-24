@@ -3,6 +3,9 @@ const path = require('node:path');
 const assert = require('node:assert/strict');
 
 const root = path.resolve(__dirname, '..');
+const ribbonScript = fs.readFileSync(path.join(root, 'homepage-ribbons.js'), 'utf8');
+assert.doesNotMatch(ribbonScript, /if\s*\(existing\)\s*existing\.remove\(\)/, 'live ribbons must reuse the reserved wrapper instead of removing/reinserting it');
+assert.match(ribbonScript, /wrap\.removeAttribute\('aria-busy'\)/, 'live ribbon wrapper must clear its busy state after rendering');
 const pages = [
   'index.html', 'de/index.html', 'fr/index.html', 'it/index.html',
   'ja/index.html', 'zh-CN/index.html', 'ru/index.html', 'tr/index.html', 'hi/index.html'
@@ -16,6 +19,11 @@ for (const file of pages) {
   const bodyStyles = styles.filter(match => match.index > headEnd);
   assert.equal(styles.length, 3, file + ': homepage CSS should be consolidated into three cascade-preserving blocks');
   assert.equal(bodyStyles.length, 0, file + ': inline CSS must be loaded before body content');
+  const ribbonIndex = html.indexOf('class="zc-outbreak-ribbons zc-ribbons-pending"');
+  assert.ok(ribbonIndex > headEnd && ribbonIndex < html.indexOf('<main id="home">'), file + ': reserved live-ribbon skeleton must sit between the shared header and homepage main');
+  assert.equal((html.match(/class="zc-outbreak-ribbons/g) || []).length, 1, file + ': exactly one reserved ribbon wrapper must exist');
+  assert.equal((html.match(/class="zc-ribbon zc-ribbon--/g) || []).length, 3, file + ': all three ribbon rows must reserve their final layout before JavaScript');
+
   assert.match(html, /<style id="homepage-pre-polish">/, file + ': consolidated pre-polish CSS bundle missing');
   assert.match(html, /<style id="homepage-components-inline">/, file + ': consolidated component CSS bundle missing');
   assert.match(html, /<style id="homepage-late-overrides">/, file + ': consolidated late CSS bundle missing');

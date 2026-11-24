@@ -19,6 +19,7 @@ on:
       - "tests/shared-nav-accessibility-smoke.cjs"
       - "tests/survivor-auth-modal-accessibility-smoke.cjs"
       - "tests/homepage-css-seo-smoke.cjs"
+      - "tests/homepage-layout-shift-smoke.cjs"
       - "language.js"
       - "homepage-visual.css"
       - "assets/js/zctv-player.js"
@@ -88,6 +89,11 @@ jobs:
           npm install --no-save playwright
           npx playwright install chromium
 
+      - name: Capture live homepage layout-shift sources before local branch checks
+        env:
+          SITE_URL: https://zombcash.github.io/
+        run: node tests/homepage-layout-shift-smoke.cjs
+
       - name: Verify CoinGecko browser CORS from the live ZombieCash origin
         run: node tests/coingecko-origin-cors-smoke.cjs
 
@@ -107,6 +113,12 @@ jobs:
           cat /tmp/zombcash-local-preview.log
           echo "::error::Local branch preview did not start."
           exit 1
+
+      - name: Verify local homepage layout shift budget after reserved ribbon initialization
+        env:
+          SITE_URL: http://127.0.0.1:4173/
+          MAX_CLS: "0.25"
+        run: node tests/homepage-layout-shift-smoke.cjs
 
       - name: Test ZombieCash TV three-column, tablet and mobile layout
         env:
