@@ -14,6 +14,7 @@ for (const file of pages) {
   assert.notEqual(headEnd, -1, file + ': missing closing head');
   const styles = [...html.matchAll(/<style\b[^>]*>/gi)];
   const bodyStyles = styles.filter(match => match.index > headEnd);
+  assert.ok(styles.length <= 18, file + ': too many separate style blocks remain (' + styles.length + ')');
   assert.equal(bodyStyles.length, 0, file + ': inline CSS must be loaded before body content');
   assert.match(html, /<style id="homepage-late-overrides">/, file + ': consolidated late CSS bundle missing');
   assert.doesNotMatch(html, /brand-search-aliases/i, file + ': artificial brand-alias paragraph remains');
