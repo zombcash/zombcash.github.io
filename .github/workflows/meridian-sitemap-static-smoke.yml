@@ -1,0 +1,38 @@
+name: Meridian multilingual sitemap coverage
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - "sitemap-zombie-fiction.xml"
+      - "the-meridian-of-ash*.html"
+      - "**/the-meridian-of-ash*.html"
+      - "tests/meridian-sitemap-coverage-smoke.py"
+      - ".github/workflows/meridian-sitemap-static-smoke.yml"
+  push:
+    branches: [main]
+    paths:
+      - "sitemap-zombie-fiction.xml"
+      - "the-meridian-of-ash*.html"
+      - "**/the-meridian-of-ash*.html"
+      - "tests/meridian-sitemap-coverage-smoke.py"
+      - ".github/workflows/meridian-sitemap-static-smoke.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  coverage:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out site
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate every Meridian page and sitemap alternate
+        run: |
+          python -m py_compile tests/meridian-sitemap-coverage-smoke.py
+          python tests/meridian-sitemap-coverage-smoke.py

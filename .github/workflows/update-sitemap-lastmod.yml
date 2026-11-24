@@ -8,6 +8,7 @@ on:
     paths:
       - "*.html"
       - "**/*.html"
+      - "sitemap-zombie-fiction.xml"
       - "scripts/update_sitemap_lastmod.py"
       - "tests/sitemap-lastmod-smoke.py"
       - ".github/workflows/update-sitemap-lastmod.yml"
@@ -16,6 +17,7 @@ on:
     paths:
       - "*.html"
       - "**/*.html"
+      - "sitemap-zombie-fiction.xml"
       - "scripts/update_sitemap_lastmod.py"
       - "tests/sitemap-lastmod-smoke.py"
       - ".github/workflows/update-sitemap-lastmod.yml"
@@ -53,7 +55,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add sitemap.xml
+          git add sitemap.xml sitemap-zombie-fiction.xml
           if git diff --cached --quiet; then
             echo "Sitemap lastmod values are already current."
             exit 0
@@ -68,7 +70,7 @@ jobs:
           git rebase origin/main
           python scripts/update_sitemap_lastmod.py
           python tests/sitemap-lastmod-smoke.py
-          git add sitemap.xml
+          git add sitemap.xml sitemap-zombie-fiction.xml
           if git diff --cached --quiet; then
             exit 0
           fi
