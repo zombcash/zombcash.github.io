@@ -37,11 +37,13 @@ jobs:
         env:
           TARGET_LANGUAGE: ${{ matrix.language }}
         run: python scripts/build_meridian_docx.py --language "$TARGET_LANGUAGE" --output dist
+      - name: Copy language glossary QA report
+        run: cp translations/glossary-qa-*.json dist/
       - name: Upload language manuscript
         uses: actions/upload-artifact@v4
         with:
           name: meridian-book-${{ matrix.language }}
-          path: dist/*.docx
+          path: dist/*
           if-no-files-found: error
           retention-days: 30
 

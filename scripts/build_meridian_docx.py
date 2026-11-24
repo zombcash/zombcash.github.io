@@ -2,6 +2,8 @@
 """Build a formatted Word manuscript from one complete localized Meridian reader branch."""
 from __future__ import annotations
 import argparse
+import json
+import re
 from pathlib import Path
 from bs4 import BeautifulSoup, NavigableString, Tag, Comment
 from docx import Document
@@ -91,6 +93,15 @@ def set_document_styles(doc):
     add_page_number(footer)
 
 def validate_source_and_draft(lang):
+    qa_path = ROOT / "translations" / f"glossary-qa-{lang}.json"
+    if not qa_path.exists():
+        raise RuntimeError(f"Missing protected-term QA report: {qa_path.name}")
+    qa = json.loads(qa_path.read_text(encoding="utf-8"))
+    accounted = qa.get("already_normalized_blocks", 0) + qa.get("repaired_blocks", 0) + qa.get("skipped_blocks", 0)
+    if qa.get("candidate_blocks") != 222 or accounted != 222 or qa.get("skipped_blocks") != 0:
+        raise RuntimeError(f"Protected-term QA incomplete for {lang}: {qa}")
+    glossary = json.loads((ROOT / "translations" / "glossary.json").read_text(encoding="utf-8"))
+    protected_terms = glossary["protected_terms"]
     for filename in FILES:
         source_path = ROOT / filename
         translated_path = ROOT / lang / filename
@@ -102,6 +113,19 @@ def validate_source_and_draft(lang):
         translated_count = len(translated_soup.select(".wrap p"))
         if source_count != translated_count:
             raise RuntimeError(f"Paragraph count mismatch in {lang}/{filename}: {translated_count} vs {source_count}")
+        selector = ".wrap h1, .wrap h2, .wrap h3, .wrap p, .wrap blockquote"
+        source_blocks = source_soup.select(selector)
+        translated_blocks = translated_soup.select(selector)
+        if len(source_blocks) != len(translated_blocks):
+            raise RuntimeError(f"Content-block count mismatch in {lang}/{filename}")
+        for block_index, (source_block, target_block) in enumerate(zip(source_blocks, translated_blocks)):
+            source_text = source_block.get_text(" ", strip=True)
+            target_text = target_block.get_text(" ", strip=True)
+            for term in protected_terms:
+                exact_matches = [m.group(0) for m in re.finditer(re.escape(term), source_text, re.I)]
+                for exact in set(exact_matches):
+                    if target_text.count(exact) < exact_matches.count(exact):
+                        raise RuntimeError(f"Protected term missing in {lang}/{filename} block {block_index}: {exact}")
         html_tag = translated_soup.find("html")
         if not html_tag or html_tag.get("lang") != lang:
             raise RuntimeError(f"Incorrect html lang in {lang}/{filename}")
