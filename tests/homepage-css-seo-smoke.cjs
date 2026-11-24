@@ -48,6 +48,29 @@ for (const file of pages) {
   console.log('PASS', file, 'styleBlocks=' + styles.length, 'bodyStyleBlocks=0');
 }
 
+const tokenGuidePages = [
+  'buy-zombcash.html',
+  'de/buy-zombcash.html',
+  'fr/buy-zombcash.html',
+  'it/buy-zombcash.html',
+  'ja/buy-zombcash.html',
+  'zh-CN/buy-zombcash.html',
+  'ru/buy-zombcash.html',
+  'tr/buy-zombcash.html',
+  'hi/buy-zombcash.html',
+];
+for (const file of tokenGuidePages) {
+  const html = fs.readFileSync(path.join(root, file), 'utf8');
+  const intro = html.match(/<p\\b(?=[^>]*style=["'][^"']*max-width:900px)[^>]*>([\\s\\S]*?)<\\/p>/i)?.[1] || '';
+  assert.ok(intro, file + ': official token-guide introduction missing');
+  assert.doesNotMatch(intro, /\\bCash\\s+Zombie\\b|\\bCashZombie\\b/i,
+    file + ': artificial search variants must not appear in visible project copy');
+}
+const tokenGuideHead = fs.readFileSync(path.join(root, 'buy-zombcash.html'), 'utf8').match(/<head\\b[^>]*>([\\s\\S]*?)<\\/head>/i)?.[1] || '';
+const tokenGuideKeywords = tokenGuideHead.match(/<meta\\s+name=["']keywords["']\\s+content=["']([^"']*)["']/i)?.[1] || '';
+assert.match(tokenGuideKeywords, /Cash Zombie/);
+assert.match(tokenGuideKeywords, /CashZombie/);
+
 const english = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const keywords = english.match(/<meta\s+name=["']keywords["']\s+content=["']([^"']*)["']/i)?.[1] || '';
 assert.match(keywords, /ZombieCash/);
