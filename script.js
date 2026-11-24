@@ -1501,7 +1501,260 @@ if (zomMarket) {
       nameWrap.className = 'zrai-token-name';
       const tokenSymbol = document.createElement('strong');
       tokenSymbol.id = 'zrai-token-symbol-' + index;
-      tokenSymbol.textContent = '
+      tokenSymbol.textContent = '      tokenName.textContent = name;
+      tokenName.title = name;
+      nameWrap.append(tokenSymbol, tokenName);
+      identity.append(logo, nameWrap);
+      const score = document.createElement('span');
+      score.className = 'zrai-score';
+      score.textContent = Math.round(metrics.score) + ' SIGNAL';
+      heading.append(identity, score);
+
+      const metricsLine = document.createElement('div');
+      metricsLine.className = 'zrai-metrics';
+      metricsLine.append(
+        createMetric('CHANGE', percent(metrics.change), metrics.change > 0 ? 'positive' : metrics.change < 0 ? 'negative' : ''),
+        createMetric('VOLUME', compactMoney(metrics.volume)),
+        createMetric('LIQUIDITY', compactMoney(metrics.liquidity))
+      );
+      const signal = document.createElement('div');
+      signal.className = 'zrai-signal-line';
+      const labels = signalLabels();
+      signal.textContent = metrics.hasTrades
+        ? labels.buy + ' ' + (metrics.buys === null ? '—' : metrics.buys.toLocaleString()) +
+          ' · ' + labels.sell + ' ' + (metrics.sells === null ? '—' : metrics.sells.toLocaleString()) +
+          ' · ' + (metrics.trades ? labels.trades + ' ' + metrics.trades.toLocaleString() : labels.none)
+        : labels.unavailable;
+      const addressLink = document.createElement('a');
+      addressLink.className = 'zrai-address';
+      addressLink.href = 'https://solscan.io/token/' + encodeURIComponent(address);
+      addressLink.target = '_blank';
+      addressLink.rel = 'noopener noreferrer';
+      addressLink.textContent = shortAddress(address) + ' ↗';
+      addressLink.title = address;
+      body.append(heading, metricsLine, signal, addressLink);
+
+      const view = document.createElement('a');
+      view.className = 'zrai-open';
+      view.href = dexUrl;
+      view.target = '_blank';
+      view.rel = 'noopener noreferrer';
+      const viewLabel = document.createElement('span');
+      viewLabel.id = 'zrai-open-label-' + index;
+      viewLabel.textContent = 'VIEW';
+      view.append(viewLabel);
+      view.setAttribute('aria-labelledby', viewLabel.id + ' ' + tokenSymbol.id);
+      card.append(rank, body, view);
+      list.append(card);
+    });
+    if (ranked.length < 5) {
+      const filler = document.createElement('div');
+      filler.className = 'zrai-radar-note';
+      const icon = document.createElement('span');
+      icon.className = 'zrai-radar-note-icon';
+      icon.textContent = '✳';
+      const copy = document.createElement('div');
+      const title = document.createElement('strong');
+      title.textContent = ranked.length + ' VERIFIED PICKS';
+      const detail = document.createElement('span');
+      detail.textContent = 'Radar only shows tokens with real data for this time horizon. Try another interval or refresh to discover more.';
+      copy.append(title, detail);
+      filler.append(icon, copy);
+      list.append(filler);
+    }
+    setState(payload.stale ? 'STALE FEED' : 'RADAR ONLINE', payload.stale ? 'stale' : 'online');
+  }
+  async function load(showLoading) {
+    const currentRequest = ++requestId;
+    refreshButton.disabled = true;
+    refreshButton.classList.add('is-loading');
+    setText(refreshButton, '↻ SCANNING');
+    setState('SCANNING', 'loading');
+    if (!lastPayload || showLoading) setMessage('Fetching the shared Zombie Radar feed…', 'loading');
+    try {
+      const response = await zcApiFetch(apiBase + '/api/radar', {
+        cache: 'no-store',
+        signal: AbortSignal.timeout(18000)
+      });
+      if (!response.ok) throw new Error('Radar API HTTP ' + response.status);
+      const payload = await response.json();
+      if (currentRequest !== requestId) return;
+      if (!Array.isArray(payload.pairs) || payload.error) throw new Error(payload.error || 'Invalid radar response');
+      lastPayload = payload;
+      lastSuccessAt = Date.now();
+      render(payload);
+      const timestamp = number(payload.updatedAt);
+      setText(updated, 'SOURCE UPDATED ' + (timestamp ? new Date(timestamp * 1000).toLocaleTimeString(localeCode,{hour:'2-digit',minute:'2-digit'}) : 'TIME UNKNOWN'));
+      if (payload.stale) setText(updated, 'SOURCE SNAPSHOT IS STALE');
+    } catch (error) {
+      if (currentRequest !== requestId) return;
+      console.warn('Zombie Radar feed request failed:', error);
+      setState(lastPayload ? 'STALE FEED' : 'API ERROR', lastPayload ? 'stale' : 'error');
+      if (!lastPayload) setMessage('Radar feed is unavailable. No recommendations are being shown; retry shortly.', 'error');
+      else setMessage('Refresh failed. Previous radar data is retained and marked stale.', 'error');
+      setText(updated, lastPayload
+        ? 'LAST SUCCESS ' + new Date(lastSuccessAt).toLocaleTimeString(localeCode,{hour:'2-digit',minute:'2-digit'})
+        : 'NO SUCCESSFUL FETCH');
+    } finally {
+      if (currentRequest === requestId) {
+        refreshButton.disabled = false;
+        refreshButton.classList.remove('is-loading');
+        setText(refreshButton, '↻ REFRESH');
+      }
+    }
+  }
+  document.querySelectorAll('[data-radar-period]').forEach(button => {
+    button.addEventListener('click', () => {
+      const period = button.dataset.radarPeriod;
+      if (!periods[period] || period === activePeriod) return;
+      activePeriod = period;
+      document.querySelectorAll('[data-radar-period]').forEach(tab => {
+        const active = tab === button;
+        tab.classList.toggle('is-active', active);
+        tab.setAttribute('aria-pressed', String(active));
+      });
+      setText(periodNote, 'Momentum and activity · ' + periods[period].label);
+      if (lastPayload) {
+        render(lastPayload);
+        if (lastPayload.stale) setState('STALE FEED', 'stale');
+      } else load(true);
+    });
+  });
+  document.addEventListener('zombcash:languagechange', event => {
+    localeCode = event.detail && event.detail.language || document.documentElement.lang || 'en';
+    if (lastPayload) render(lastPayload);
+  });
+  refreshButton.addEventListener('click', () => load(true));
+  load(false);
+  setInterval(() => load(false), 60000);
+})();
+ + symbol.replace(/^\$+/, '');
+      const tokenName = document.createElement('span');
+      tokenName.textContent = name;
+      tokenName.title = name;
+      nameWrap.append(tokenSymbol, tokenName);
+      identity.append(logo, nameWrap);
+      const score = document.createElement('span');
+      score.className = 'zrai-score';
+      score.textContent = Math.round(metrics.score) + ' SIGNAL';
+      heading.append(identity, score);
+
+      const metricsLine = document.createElement('div');
+      metricsLine.className = 'zrai-metrics';
+      metricsLine.append(
+        createMetric('CHANGE', percent(metrics.change), metrics.change > 0 ? 'positive' : metrics.change < 0 ? 'negative' : ''),
+        createMetric('VOLUME', compactMoney(metrics.volume)),
+        createMetric('LIQUIDITY', compactMoney(metrics.liquidity))
+      );
+      const signal = document.createElement('div');
+      signal.className = 'zrai-signal-line';
+      const labels = signalLabels();
+      signal.textContent = metrics.hasTrades
+        ? labels.buy + ' ' + (metrics.buys === null ? '—' : metrics.buys.toLocaleString()) +
+          ' · ' + labels.sell + ' ' + (metrics.sells === null ? '—' : metrics.sells.toLocaleString()) +
+          ' · ' + (metrics.trades ? labels.trades + ' ' + metrics.trades.toLocaleString() : labels.none)
+        : labels.unavailable;
+      const addressLink = document.createElement('a');
+      addressLink.className = 'zrai-address';
+      addressLink.href = 'https://solscan.io/token/' + encodeURIComponent(address);
+      addressLink.target = '_blank';
+      addressLink.rel = 'noopener noreferrer';
+      addressLink.textContent = shortAddress(address) + ' ↗';
+      addressLink.title = address;
+      body.append(heading, metricsLine, signal, addressLink);
+
+      const view = document.createElement('a');
+      view.className = 'zrai-open';
+      view.href = dexUrl;
+      view.target = '_blank';
+      view.rel = 'noopener noreferrer';
+      view.textContent = 'VIEW';
+      view.setAttribute('aria-label', 'View ' + symbol + ' on DexScreener');
+      card.append(rank, body, view);
+      list.append(card);
+    });
+    if (ranked.length < 5) {
+      const filler = document.createElement('div');
+      filler.className = 'zrai-radar-note';
+      const icon = document.createElement('span');
+      icon.className = 'zrai-radar-note-icon';
+      icon.textContent = '✳';
+      const copy = document.createElement('div');
+      const title = document.createElement('strong');
+      title.textContent = ranked.length + ' VERIFIED PICKS';
+      const detail = document.createElement('span');
+      detail.textContent = 'Radar only shows tokens with real data for this time horizon. Try another interval or refresh to discover more.';
+      copy.append(title, detail);
+      filler.append(icon, copy);
+      list.append(filler);
+    }
+    setState(payload.stale ? 'STALE FEED' : 'RADAR ONLINE', payload.stale ? 'stale' : 'online');
+  }
+  async function load(showLoading) {
+    const currentRequest = ++requestId;
+    refreshButton.disabled = true;
+    refreshButton.classList.add('is-loading');
+    setText(refreshButton, '↻ SCANNING');
+    setState('SCANNING', 'loading');
+    if (!lastPayload || showLoading) setMessage('Fetching the shared Zombie Radar feed…', 'loading');
+    try {
+      const response = await zcApiFetch(apiBase + '/api/radar', {
+        cache: 'no-store',
+        signal: AbortSignal.timeout(18000)
+      });
+      if (!response.ok) throw new Error('Radar API HTTP ' + response.status);
+      const payload = await response.json();
+      if (currentRequest !== requestId) return;
+      if (!Array.isArray(payload.pairs) || payload.error) throw new Error(payload.error || 'Invalid radar response');
+      lastPayload = payload;
+      lastSuccessAt = Date.now();
+      render(payload);
+      const timestamp = number(payload.updatedAt);
+      setText(updated, 'SOURCE UPDATED ' + (timestamp ? new Date(timestamp * 1000).toLocaleTimeString(localeCode,{hour:'2-digit',minute:'2-digit'}) : 'TIME UNKNOWN'));
+      if (payload.stale) setText(updated, 'SOURCE SNAPSHOT IS STALE');
+    } catch (error) {
+      if (currentRequest !== requestId) return;
+      console.warn('Zombie Radar feed request failed:', error);
+      setState(lastPayload ? 'STALE FEED' : 'API ERROR', lastPayload ? 'stale' : 'error');
+      if (!lastPayload) setMessage('Radar feed is unavailable. No recommendations are being shown; retry shortly.', 'error');
+      else setMessage('Refresh failed. Previous radar data is retained and marked stale.', 'error');
+      setText(updated, lastPayload
+        ? 'LAST SUCCESS ' + new Date(lastSuccessAt).toLocaleTimeString(localeCode,{hour:'2-digit',minute:'2-digit'})
+        : 'NO SUCCESSFUL FETCH');
+    } finally {
+      if (currentRequest === requestId) {
+        refreshButton.disabled = false;
+        refreshButton.classList.remove('is-loading');
+        setText(refreshButton, '↻ REFRESH');
+      }
+    }
+  }
+  document.querySelectorAll('[data-radar-period]').forEach(button => {
+    button.addEventListener('click', () => {
+      const period = button.dataset.radarPeriod;
+      if (!periods[period] || period === activePeriod) return;
+      activePeriod = period;
+      document.querySelectorAll('[data-radar-period]').forEach(tab => {
+        const active = tab === button;
+        tab.classList.toggle('is-active', active);
+        tab.setAttribute('aria-pressed', String(active));
+      });
+      setText(periodNote, 'Momentum and activity · ' + periods[period].label);
+      if (lastPayload) {
+        render(lastPayload);
+        if (lastPayload.stale) setState('STALE FEED', 'stale');
+      } else load(true);
+    });
+  });
+  document.addEventListener('zombcash:languagechange', event => {
+    localeCode = event.detail && event.detail.language || document.documentElement.lang || 'en';
+    if (lastPayload) render(lastPayload);
+  });
+  refreshButton.addEventListener('click', () => load(true));
+  load(false);
+  setInterval(() => load(false), 60000);
+})();
+ + symbol.replace(/^\$+/, '');
       tokenName.textContent = name;
       tokenName.title = name;
       nameWrap.append(tokenSymbol, tokenName);
