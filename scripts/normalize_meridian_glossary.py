@@ -16,7 +16,7 @@ LANGUAGES = {
     "tr": ("tr", "Turkish"), "hi": ("hi", "Hindi"),
 }
 PROTECTED_TERMS = json.loads((ROOT / "translations/glossary.json").read_text(encoding="utf-8"))["protected_terms"]
-INLINE_TAGS = {"strong", "em", "b", "i"}
+INLINE_TAGS = {"strong", "em", "b", "i", "a", "span"}
 
 def load_model():
     path = hf_hub_download(repo_id=MODEL_REPO, filename=MODEL_FILE)
@@ -32,7 +32,7 @@ def serialize_inline(node, inline_map):
         if node.name in INLINE_TAGS:
             index = len(inline_map) // 2
             op, cl = f"ZXQINLINEOPEN{index:03d}QZX", f"ZXQINLINECLOSE{index:03d}QZX"
-            inline_map[op] = f"<{node.name}>"
+            inline_map[op] = str(node).split(">", 1)[0] + ">"
             inline_map[cl] = f"</{node.name}>"
             return op + "".join(serialize_inline(c, inline_map) for c in node.contents) + cl
         return "".join(serialize_inline(c, inline_map) for c in node.contents)
@@ -84,7 +84,7 @@ def process_sample(model, lang, target_code, target_name):
            "The source proper nouns are wrapped in unique markers during translation and restored exactly after inference.",
            "This sample is not a published chapter.", ""]
     count = 0
-    for p in soup.select(".chapter-copy p"):
+    for p in soup.select(".wrap h1, .wrap h2, .wrap h3, .wrap p, .wrap blockquote"):
         if not any(re.search(re.escape(t), p.get_text(" ", strip=True), re.I) for t in PROTECTED_TERMS):
             continue
         translated, error = translate_protected(model, p, target_code)
@@ -96,6 +96,19 @@ def process_sample(model, lang, target_code, target_name):
                 f"## Example {count} — {target_name}", BeautifulSoup(translated, "html.parser").get_text(" ", strip=True), ""]
         if count >= 5:
             break
+    # Explicitly test the one source paragraph that contains inline emphasis and a protected name.
+    formatted_page = BeautifulSoup((ROOT / "the-meridian-of-ash-chapter-32.html").read_text(encoding="utf-8"), "html.parser")
+    formatted = next((p for p in formatted_page.select(".wrap p")
+                      if p.find(["strong", "em", "b", "i"]) and
+                      any(re.search(re.escape(t), p.get_text(" ", strip=True), re.I) for t in PROTECTED_TERMS)), None)
+    if formatted:
+        translated, error = translate_protected(model, formatted, target_code)
+        if error:
+            out += [f"## FORMATTED INLINE TEST SKIPPED — {error}", formatted.get_text(" ", strip=True), ""]
+        else:
+            count += 1
+            out += ["## Formatted inline test — English", formatted.get_text(" ", strip=True), "",
+                    f"## Formatted inline test — {target_name}", BeautifulSoup(translated, "html.parser").get_text(" ", strip=True), ""]
     dest = ROOT / "translations" / "samples" / f"glossary-protection-{lang}.md"
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text("\n".join(out), encoding="utf-8")
@@ -114,10 +127,12 @@ def process_all(model, lang, target_code):
             raise FileNotFoundError(f"Missing source or translated page: {filename}")
         source_soup = BeautifulSoup(source_path.read_text(encoding="utf-8"), "html.parser")
         target_soup = BeautifulSoup(target_path.read_text(encoding="utf-8"), "html.parser")
-        source_ps = source_soup.select(".chapter-copy p")
-        target_ps = target_soup.select(".chapter-copy p")
+        # Include the title page and prologue, which use .wrap blocks rather than .chapter-copy.
+        selector = ".wrap h1, .wrap h2, .wrap h3, .wrap p, .wrap blockquote"
+        source_ps = source_soup.select(selector)
+        target_ps = target_soup.select(selector)
         if len(source_ps) != len(target_ps):
-            raise RuntimeError(f"Paragraph count mismatch in {filename}: {len(source_ps)} vs {len(target_ps)}")
+            raise RuntimeError(f"Content-block count mismatch in {filename}: {len(source_ps)} vs {len(target_ps)}")
         page_changed = False
         for source_p, target_p in zip(source_ps, target_ps):
             source_text = source_p.get_text(" ", strip=True)

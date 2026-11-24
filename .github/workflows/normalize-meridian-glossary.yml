@@ -59,7 +59,8 @@ jobs:
             SOURCE_BRANCH="translation-tgemma-combined/$TARGET_LANGUAGE"
             BRANCH="translation-tgemma-glossary/$TARGET_LANGUAGE"
             git fetch origin "+refs/heads/$SOURCE_BRANCH:refs/remotes/origin/$SOURCE_BRANCH"
-            git checkout -b "$BRANCH" "origin/$SOURCE_BRANCH"
+            git checkout -B "$BRANCH" "origin/$SOURCE_BRANCH"
+            git checkout origin/main -- scripts/normalize_meridian_glossary.py translations/glossary.json
           fi
           echo "OUTPUT_BRANCH=$BRANCH" >> "$GITHUB_ENV"
       - name: Normalize protected terms
