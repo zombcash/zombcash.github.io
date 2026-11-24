@@ -1,0 +1,8 @@
+{
+  "model": "Qwen/Qwen3-4B-Instruct-2507",
+  "quantized_model": "bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF",
+  "file": "Qwen_Qwen3-4B-Instruct-2507-Q5_K_M.gguf",
+  "license": "Apache-2.0",
+  "runtime": "llama-cpp-python CPU",
+  "draft_only": true
+}

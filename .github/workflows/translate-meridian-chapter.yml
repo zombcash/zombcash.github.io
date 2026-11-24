@@ -1,4 +1,4 @@
-name: Draft Meridian translations (free offline)
+name: Draft Meridian translations (free offline Qwen3)
 
 on:
   workflow_dispatch:
@@ -9,17 +9,16 @@ on:
         type: choice
         options: [ru, de, fr, it, ja, zh-CN, tr, hi]
       chapter:
-        description: all, prologue, or chapter number 01–46
+        description: sample, all, prologue, or chapter number 01–46
         required: true
-        default: all
+        default: sample
         type: string
 
 permissions:
   contents: write
-  pull-requests: write
 
 concurrency:
-  group: meridian-translation-${{ inputs.language }}
+  group: meridian-qwen-translation-${{ inputs.language }}
   cancel-in-progress: false
 
 jobs:
@@ -35,14 +34,18 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: pip
-      - name: Install free offline translation engine
-        run: python -m pip install --disable-pip-version-check argostranslate==1.11.0 beautifulsoup4==4.13.4
+      - name: Restore Qwen model cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface/hub
+          key: qwen3-4b-instruct-2507-q5km-v1
+      - name: Install CPU inference runtime
+        run: python -m pip install --disable-pip-version-check --prefer-binary --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu/llama-cpp-python/ numpy==1.26.4 llama-cpp-python==0.3.38 huggingface_hub==0.34.4 beautifulsoup4==4.13.4
       - name: Prepare language draft branch
         env:
           TARGET_LANGUAGE: ${{ inputs.language }}
         run: |
-          BRANCH="translation-draft/$TARGET_LANGUAGE"
+          BRANCH="translation-qwen-draft/$TARGET_LANGUAGE"
           if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
             git fetch origin "$BRANCH"
             git checkout -B "$BRANCH" "origin/$BRANCH"
@@ -51,28 +54,21 @@ jobs:
             git checkout -b "$BRANCH"
           fi
           echo "TRANSLATION_BRANCH=$BRANCH" >> "$GITHUB_ENV"
-      - name: Translate selected chapter(s)
-        run: python scripts/translate_meridian_argos.py --language "${{ inputs.language }}" --chapter "${{ inputs.chapter }}"
-      - name: Commit draft and open or update draft PR
+      - name: Generate translation draft
         env:
-          GH_TOKEN: ${{ github.token }}
+          HF_HOME: ~/.cache/huggingface
+          TOKENIZERS_PARALLELISM: "false"
+        run: python scripts/translate_meridian_qwen.py --language "${{ inputs.language }}" --chapter "${{ inputs.chapter }}"
+      - name: Push translation draft branch
+        env:
           TARGET_LANGUAGE: ${{ inputs.language }}
-          TARGET_CHAPTER: ${{ inputs.chapter }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "$TARGET_LANGUAGE/"
+          git add -A
           if git diff --cached --quiet; then
             echo "No translated files changed."
             exit 0
           fi
-          git commit -m "Draft $TARGET_LANGUAGE translation of THE MERIDIAN OF ASH"
+          git commit -m "Draft Qwen3 translation of THE MERIDIAN OF ASH ($TARGET_LANGUAGE)"
           git push --set-upstream origin "$TRANSLATION_BRANCH"
-          COUNT=$(gh pr list --head "$TRANSLATION_BRANCH" --base main --state open --json number --jq 'length')
-          if [ "$COUNT" = "0" ]; then
-            gh pr create --draft --base main --head "$TRANSLATION_BRANCH" \
-              --title "Draft $TARGET_LANGUAGE translation — THE MERIDIAN OF ASH" \
-              --body "## Machine translation draft\n\nGenerated chapter-by-chapter with the open-source Argos Translate offline model. No paid API or paid service was used.\n\n**This is not publication-ready.** The pages are marked noindex and visibly labeled as machine drafts. Literary editing, character-name/term consistency, dialogue quality, and continuity QA are required before merging and adding these URLs to the fiction sitemap.\n\nRequested scope: $TARGET_CHAPTER."
-          else
-            echo "Updated existing draft PR for $TARGET_LANGUAGE."
-          fi

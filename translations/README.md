@@ -1,17 +1,27 @@
 # THE MERIDIAN OF ASH — chapter translation workflow
 
-The approved English edition is the source of truth: the book contents page, the opening section, and 46 individual chapter pages.
+The approved English edition is the source of truth. It consists of the book contents page, the opening section, and 46 individual chapter pages.
 
-The GitHub Actions workflow **Draft Meridian translations (free offline)** uses Argos Translate and downloadable offline language models. It does not call DeepL, Gemini, OpenAI, GitHub Models, or any paid inference API.
+## Free offline translation engine
 
-Supported pairs verified in the Argos package index: en→ru, de, fr, it, ja, zh, tr, hi.
+The GitHub Actions workflow **Draft Meridian translations (free offline Qwen3)** uses Qwen3-4B-Instruct-2507 locally through llama.cpp. The selected GGUF quantization is Q5_K_M. The base model is published under Apache 2.0 and supports multilingual instruction following and translation across 100+ languages.
 
-Run the workflow manually, select a language, and set chapter to all, prologue, or a chapter number (01–46). The all option generates the contents page, prologue, and all 46 chapters as separate localized HTML files.
+Model source: bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF  
+Base model: Qwen/Qwen3-4B-Instruct-2507  
+Runtime: llama-cpp-python CPU wheel  
+No DeepL, Gemini, OpenAI, GitHub Models, paid API, or paid inference service is used.
 
-## Editorial rule
+## Run
 
-Argos is an offline neural machine-translation engine. Its output is a **draft**, not a professional literary translation. The workflow creates or updates a translation-draft branch and opens a draft pull request. Generated pages are marked noindex and visibly labeled as machine-translation drafts. The live site and sitemap remain unchanged.
+Dispatch the workflow manually and choose:
 
-A draft must receive literary editing, terminology/continuity review, and QA before promotion to the live locale directory and inclusion in the fiction sitemap.
+- language: ru, de, fr, it, ja, zh-CN, tr, hi
+- chapter: sample, all, prologue, or 01–46
 
-Protected names and project terms are listed in glossary.json.
+The sample mode translates the first three paragraphs of Chapter 01 for quality evaluation. The all mode creates the contents page, prologue, and all 46 chapters as separate localized HTML pages.
+
+## Editorial and publishing rule
+
+Model output is a translation draft, not a professionally proofread final edition. Each run pushes to a separate translation-qwen-draft branch. Draft pages are marked noindex and visibly labeled as machine drafts. The live site and sitemap remain unchanged.
+
+Before publication, each language must receive literary editing, name and terminology consistency checks, chapter continuity review, and final QA. Only then should the draft be merged and its URLs added to the fiction sitemap.
