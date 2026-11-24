@@ -1,0 +1,71 @@
+{
+  "mode": "incremental_repair",
+  "language": "hi",
+  "pages": 48,
+  "candidate_blocks": 222,
+  "already_normalized_blocks": 214,
+  "repaired_blocks": 1,
+  "skipped_blocks": 7,
+  "skipped_items": [
+    {
+      "file": "the-meridian-of-ash-chapter-28.html",
+      "block_index": 101,
+      "source": "Tomorrow, she would step closer to the thing the project had designed her to become.",
+      "error": "marker_failure:ZXQTERM000QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-33.html",
+      "block_index": 0,
+      "source": "CHAPTER THIRTY-THREE — ZOMBIE LAB",
+      "error": "marker_failure:ZXQTERM000QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-38.html",
+      "block_index": 26,
+      "source": "She let the name settle. Morrow. A tomorrow built from broken yesterday.",
+      "error": "marker_failure:ZXQTERM001QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-43.html",
+      "block_index": 95,
+      "source": "Morrow scanned the chamber. “There are no active life-support systems in the pods. The body beneath the sheet is not moving.”",
+      "error": "marker_failure:ZXQTERM000QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-44.html",
+      "block_index": 54,
+      "source": "Morrow spoke only after they were clear.",
+      "error": "marker_failure:ZXQTERM000QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-45.html",
+      "block_index": 80,
+      "source": "Morrow answered before she could. “The transaction was signed with a key that resembles yours. It is not the same key.”",
+      "error": "marker_failure:ZXQTERM000QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-46.html",
+      "block_index": 56,
+      "source": "“First we take the caravan to Bellwether,” she said. “We help repair the water plant, establish a relay and verify the northern reports. Then we decide whether to go to the hospital.”",
+      "error": "marker_failure:ZXQTERM000QZX"
+    }
+  ],
+  "source_term_hits": {
+    "THE MERIDIAN OF ASH": 1,
+    "The Meridian of Ash": 1,
+    "Meridian of Ash": 1,
+    "ZombieCash": 10,
+    "ZOMBCASH": 5,
+    "Zombie Lab": 13,
+    "The Core": 36,
+    "Morrow": 103,
+    "Saint Oran's": 19,
+    "Bellwether": 9,
+    "Grey Orchard": 3,
+    "The Auditor": 15,
+    "Survivor Field Manual": 0,
+    "Outbreak Transmission": 7,
+    "OUTBREAK RADAR": 6
+  },
+  "status": "draft_only_requires_editorial_review"
+}
