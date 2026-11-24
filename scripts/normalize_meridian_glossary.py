@@ -267,8 +267,8 @@ def process_all(model, lang, target_code):
         if page_changed:
             target_path.write_text(str(target_soup), encoding="utf-8")
             print(f"UPDATED {lang}/{filename}", flush=True)
-    report = {"mode":"all","language":lang,"pages":len(files),"candidate_paragraphs":candidates,
-              "updated_paragraphs":updated,"skipped_paragraphs":skipped,"source_term_hits":per_term,
+    report = {"mode":"all","language":lang,"pages":len(files),"candidate_blocks":candidates,
+              "updated_blocks":updated,"skipped_blocks":skipped,"source_term_hits":per_term,
               "status":"draft_only_requires_editorial_review"}
     print(json.dumps(report,ensure_ascii=False),flush=True)
 
