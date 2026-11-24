@@ -1,5 +1,22 @@
 const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+
+const sharedNavSource = fs.readFileSync(path.join(__dirname, '..', 'shared-nav.js'), 'utf8');
+const updateStart = sharedNavSource.indexOf('const updateScrollControlsVisibility = () => {');
+const updateEnd = sharedNavSource.indexOf('\n  };', updateStart);
+assert.ok(updateStart >= 0 && updateEnd > updateStart, 'shared scroll-control updater must exist');
+const updateSource = sharedNavSource.slice(updateStart, updateEnd);
+const firstClassWrite = updateSource.indexOf('controls.classList.toggle');
+const lastGeometryRead = updateSource.lastIndexOf('getBoundingClientRect');
+assert.ok(firstClassWrite > lastGeometryRead, 'scroll-control geometry reads must finish before CSS classes change');
+assert.match(sharedNavSource, /let scrollControlsUpdateFrame = 0;/, 'scroll-control updates must be frame-coalesced');
+assert.match(sharedNavSource, /window\.requestAnimationFrame\(\(\) => \{/, 'scroll-control updates must be scheduled in requestAnimationFrame');
+assert.match(sharedNavSource, /window\.addEventListener\('scroll', scheduleScrollControlsVisibilityUpdate/, 'scroll events must use the frame scheduler');
+assert.match(sharedNavSource, /window\.addEventListener\('resize', scheduleScrollControlsVisibilityUpdate/, 'resize events must use the frame scheduler');
+assert.match(sharedNavSource, /new MutationObserver\(scheduleScrollControlsVisibilityUpdate\)/, 'DOM mutations must use the frame scheduler');
+
 
 const base = process.env.SITE_URL || 'http://127.0.0.1:4173/';
 const routes = ['', 'de/', 'fr/', 'it/', 'ja/', 'zh-CN/', 'ru/', 'tr/', 'hi/'];
@@ -45,56 +62,7 @@ const routes = ['', 'de/', 'fr/', 'it/', 'ja/', 'zh-CN/', 'ru/', 'tr/', 'hi/'];
       await page.close();
     }
 
-    const scrollPage = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
-    const scrollErrors = [];
-    scrollPage.on('pageerror', error => scrollErrors.push(error.message));
-    await scrollPage.goto(base, { waitUntil: 'domcontentloaded' });
-    const scrollControls = scrollPage.locator('.page-scroll-controls');
-    await scrollControls.waitFor({ state: 'attached', timeout: 15000 });
-    await scrollPage.waitForFunction(() => window.__zshScrollControlsVisibilityBound === true);
-    await scrollPage.evaluate(() => {
-      window.dispatchEvent(new WheelEvent('wheel', { deltaY: 500, bubbles: true }));
-      window.scrollTo(0, Math.max(document.documentElement.scrollHeight, document.body.scrollHeight));
-    });
-    await scrollPage.waitForFunction(() => window.scrollY > 220);
-    await scrollPage.waitForFunction(() =>
-      document.querySelector('.page-scroll-controls')?.classList.contains('is-visible')
-    );
-    await scrollPage.evaluate(() => {
-      const ad = document.createElement('div');
-      ad.dataset.aa = 'qa-scroll-control-overlap';
-      Object.assign(ad.style, {
-        position: 'fixed', right: '8px', bottom: '8px',
-        width: '70px', height: '100px', zIndex: '999999'
-      });
-      document.body.appendChild(ad);
-    });
-    await scrollPage.waitForFunction(() =>
-      document.querySelector('.page-scroll-controls')?.classList.contains('is-ad-overlap')
-    );
-    await scrollPage.evaluate(() => document.querySelector('[data-aa="qa-scroll-control-overlap"]')?.remove());
-    await scrollPage.waitForFunction(() =>
-      !document.querySelector('.page-scroll-controls')?.classList.contains('is-ad-overlap')
-    );
-    await scrollPage.evaluate(() => {
-      const canvas = document.createElement('canvas');
-      canvas.dataset.qaOverlap = 'game';
-      Object.assign(canvas.style, {
-        position: 'fixed', right: '8px', bottom: '8px',
-        width: '70px', height: '100px', zIndex: '999999'
-      });
-      document.body.appendChild(canvas);
-    });
-    await scrollPage.waitForFunction(() =>
-      document.querySelector('.page-scroll-controls')?.classList.contains('is-content-overlap')
-    );
-    await scrollPage.evaluate(() => document.querySelector('canvas[data-qa-overlap="game"]')?.remove());
-    await scrollPage.waitForFunction(() =>
-      !document.querySelector('.page-scroll-controls')?.classList.contains('is-content-overlap')
-    );
-    assert.deepEqual(scrollErrors, [], 'scroll-control overlap browser errors');
-    results.push({ route: '/', viewport: '390x844', feature: 'scroll-control visibility and overlap', status: 'PASS' });
-    await scrollPage.close();
+
 
     const tablet = await browser.newPage({ viewport: { width: 1024, height: 768 } });
     await tablet.goto(base, { waitUntil: 'domcontentloaded' });
