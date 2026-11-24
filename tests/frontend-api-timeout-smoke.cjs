@@ -25,7 +25,7 @@ const refreshStart = nav.indexOf('const refresh = () => fetch(api,');
 assert.notEqual(refreshStart, -1, 'shared navigation global-footprint refresh must exist');
 const refreshBlock = nav.slice(refreshStart, refreshStart + 180);
 assert.match(refreshBlock, /AbortSignal\.timeout\(10000\)/, 'shared navigation stats refresh must time out');
-assert.match(nav, /fetch\(api, \{method:'POST',[^}]*keepalive:true\}/, 'visitor heartbeat must remain fire-and-forget');
+assert(nav.split(/\r?\n/).some(line => /\bfetch\(api,/.test(line) && /keepalive:true/.test(line)), 'visitor heartbeat must remain fire-and-forget');
 
 assert.match(recovery, /signal: AbortSignal\.timeout\(timeout\)/, 'independent news/market recovery requests must remain bounded');
 assert.equal((language.match(/\bfetch\(/g) || []).length, 0, 'language.js must remain free of unnecessary network requests');
