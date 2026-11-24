@@ -52,6 +52,9 @@ for (const file of pages) {
   for (const className of obsoleteHeroClasses) {
     assert.doesNotMatch(heroCss, new RegExp('\\.' + className + '(?![\\w-])'), file + ': obsolete hero selector returned: ' + className);
   }
+  assert.equal((html.match(/\.world-community-pair \.world-event\{margin:10px 12px\}/g) || []).length, 1, file + ': duplicate world-event CSS rule remains');
+  assert.equal((html.match(/\.world-community-pair \.world-panel-foot\{margin-top:auto\}/g) || []).length, 1, file + ': duplicate world-panel-foot CSS rule remains');
+  assert.equal((html.match(/section\.section\.community-console \.crew-grid \{ align-items: stretch !important; \}/g) || []).length, 0, file + ': duplicate one-line crew-grid alignment remains');
   assert.doesNotMatch(html, /\bCash\s+Zombie\b|\bCashZombie\b/i, file + ': artificial search phrase remains');
   console.log('PASS', file, 'styleBlocks=' + styles.length, 'bodyStyleBlocks=0');
 }
