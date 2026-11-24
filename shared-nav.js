@@ -1229,6 +1229,8 @@
 
   document.head.querySelector('#zombcash-shared-navigation-style')?.remove();
   document.head.append(style);
+  // Reveal the pre-sized shell only after its final navigation styles are installed.
+  header.removeAttribute('data-zsh-placeholder');
   // Load the unified cinematic graphite visual layer after legacy page styles.
   if (!document.getElementById('zc-cinematic-theme')) {
     const cinematicTheme = document.createElement('link');
