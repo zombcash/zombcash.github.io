@@ -342,36 +342,6 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 <link rel="stylesheet" href="site-polish.css?v=20261109-video-cards1">
 
 <style id="homepage-components-inline">
-
-.zc-hero-art-panel{position:relative!important;display:block!important;min-width:0!important;width:100%!important;height:clamp(390px,38vw,520px)!important;max-height:520px!important;overflow:hidden!important;border:1px solid #456b37!important;border-radius:3px!important;background:#050906!important;box-shadow:inset 0 0 50px #9bff4510,0 0 35px #9bff4508!important;isolation:isolate!important}
-.zc-hero-art-panel .zc-radar-art{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;overflow:hidden!important;background:#050906!important}
-.zc-hero-art-panel .zc-radar-scene{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;filter:saturate(.9) contrast(1.08)!important}
-/* Prevent edge labels from being cropped when the artwork fills the portrait-ish panel */
-.zc-hero-art-panel .zc-radar-scene text{display:none!important}
-.zc-hero-art-panel .zc-art-scanlines{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,#a4ff4308 4px,transparent 5px);mix-blend-mode:screen}
-.zc-hero-art-panel .zc-art-corner{position:absolute;width:26px;height:26px;border-color:#a4ff43;border-style:solid;opacity:.85;pointer-events:none}
-.zc-hero-art-panel .zc-art-corner-tl{top:12px;left:12px;border-width:1px 0 0 1px}.zc-hero-art-panel .zc-art-corner-br{right:12px;bottom:12px;border-width:0 1px 1px 0}
-.zc-hero-art-panel .zc-art-caption{position:absolute;left:20px;right:20px;bottom:18px;display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid #9bff4538;background:#050a08d9;backdrop-filter:blur(8px);font:600 10px Orbitron,monospace;letter-spacing:1.6px;color:#d8edce}
-.zc-hero-art-panel .zc-art-caption b{margin-left:auto;color:#a4ff43;font-size:9px;white-space:nowrap}
-.zc-hero-art-panel .zc-art-live-dot{width:7px;height:7px;border-radius:50%;background:#a4ff43;box-shadow:0 0 12px #a4ff43;flex:0 0 auto}
-@media(max-width:950px){.zc-hero-art-panel{height:clamp(330px,42vw,450px)!important}}
-@media(max-width:680px){.zc-hero-art-panel{height:300px!important;max-height:300px!important;width:100%!important}.zc-hero-art-panel .zc-art-caption{left:12px;right:12px;bottom:12px;padding:10px;font-size:8px;letter-spacing:1px}.zc-hero-art-panel .zc-art-caption b{font-size:8px}}
-
-
-
-.activity-market-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:stretch;margin-top:22px}
-.activity-chart-panel,.recent-trades-panel{display:flex;flex-direction:column;min-width:0;min-height:300px;height:100%;align-self:stretch;margin:0;padding:16px 14px;border:1px solid #263a2a;background:linear-gradient(145deg,#09110b,#070b09)}
-.activity-chart-panel #activity-price-chart{flex:0 0 180px;height:180px}.recent-trades-list{flex:1;min-height:0;align-content:start}
-@media(max-width:900px){.activity-market-panels{grid-template-columns:minmax(0,1fr)}.activity-chart-panel,.recent-trades-panel{min-height:0;height:auto}}
-.activity-subhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
-.activity-subhead h4{margin:5px 0 0;font:700 16px Orbitron,sans-serif;color:#eaf2e4}
-.activity-chart-tabs{display:flex;gap:5px;flex-wrap:wrap}.activity-chart-tab{padding:7px 9px;border:1px solid #31452e;background:#080d09;color:#9aac94;font:700 8px Orbitron,sans-serif;cursor:pointer}.activity-chart-tab.active{color:#9bff45;border-color:#9bff45;background:#101c0f}
-.activity-chart-meta,.activity-chart-axis{display:flex;justify-content:space-between;align-items:center;gap:10px;font:600 8px Orbitron,sans-serif;color:#91a18d}.activity-chart-meta{margin-bottom:8px}.activity-chart-meta strong{color:#9bff45;font-size:11px}
-#activity-price-chart{display:block;width:100%;height:180px;overflow:visible;background:repeating-linear-gradient(0deg,transparent 0 44px,#9bff4509 45px),repeating-linear-gradient(90deg,transparent 0 89px,#9bff4509 90px);border-bottom:1px solid #263a2a}
-.activity-chart-axis{padding-top:8px;font-size:7px}
-.recent-trades-list{display:grid;gap:0}.recent-trade-row{display:grid;grid-template-columns:58px minmax(0,1fr) auto;align-items:center;gap:10px;padding:11px 0;border-top:1px solid #202d22;font:500 11px 'Rajdhani',sans-serif;color:#c4d0bf}.recent-trade-side{font:700 8px Orbitron,sans-serif;letter-spacing:.5px}.recent-trade-side.buy{color:#9bff45}.recent-trade-side.sell{color:#ff777d}.recent-trade-main{min-width:0;display:flex;flex-direction:column;gap:3px}.recent-trade-main a{color:#dce8d5;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.recent-trade-main small{font-size:10px;color:#81917c}.recent-trade-value{text-align:right;color:#eaf2e4;font:700 10px Orbitron,sans-serif;white-space:nowrap}.recent-trade-empty{padding:10px 0;color:#91a18d;font:500 12px 'Rajdhani',sans-serif}
-@media(max-width:700px){.activity-chart-panel,.recent-trades-panel{padding:13px 10px}.activity-subhead h4{font-size:13px}.activity-chart-tab{padding:6px}.recent-trade-row{grid-template-columns:48px minmax(0,1fr) auto;gap:7px}.recent-trade-value{font-size:9px}}
-
 /* Keep translated hero actions separated and readable in every language. */
 .hero .hero-actions{
   display:flex!important;
@@ -486,7 +456,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
   html[lang="hi"] .hero h1,
   html[lang="ja"] .hero h1,
   html[lang="zh-CN"] .hero h1{font-size:clamp(38px,3.25vw,52px)!important;letter-spacing:-.5px!important;line-height:1.12!important}
-  .hero .outbreak-panel,.hero .zc-hero-art-panel{min-width:0!important;max-width:100%!important}
+  .hero .zc-hero-art-panel{min-width:0!important;max-width:100%!important}
 }
 @media(max-width:760px){
   .hero{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;padding-bottom:28px!important}
@@ -572,57 +542,38 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
 <link rel="stylesheet" href="/homepage-visual.css?v=cinematic-redesign-20261124-ai-status-css-2">
 <style id="homepage-late-overrides">
 
-  /* One full-width status rail balances the lower hero across both columns. */
-  body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail {
-    grid-column:1 / -1!important;
-    grid-row:2!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:space-between!important;
-    gap:clamp(22px,4vw,64px)!important;
-    width:100%!important;
-    min-width:0!important;
-    margin:0!important;
-    padding:16px clamp(16px,2vw,28px)!important;
-    box-sizing:border-box!important;
-    border:1px solid #344b36!important;
-    border-left:3px solid #9bff45!important;
-    background:linear-gradient(100deg,#0a120dF2,#0b1010E8 62%,#101018E8)!important;
-    box-shadow:0 12px 34px #0006,inset 0 0 28px #9bff4508!important;
+  /* Current homepage status rail: a named grid row on desktop and stacked mobile layouts. */
+body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{
+  grid-area:status!important;grid-column:auto!important;grid-row:auto!important;
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+  gap:clamp(22px,4vw,64px)!important;width:100%!important;min-width:0!important;
+  margin:0!important;padding:16px clamp(16px,2vw,28px)!important;box-sizing:border-box!important;
+  border:1px solid #344b36!important;border-left:3px solid #9bff45!important;
+  background:linear-gradient(100deg,#0a120dF2,#0b1010E8 62%,#101018E8)!important;
+  box-shadow:0 12px 34px #0006,inset 0 0 28px #9bff4508!important;
+}
+.zc-home-status-rail > .zc-ai-engine-card{
+  display:flex!important;flex:0 1 440px!important;width:min(100%,440px)!important;
+  min-width:0!important;margin:0!important;
+}
+.zc-home-status-rail > .hero-stats{
+  display:flex!important;flex:1 1 auto!important;align-items:center!important;
+  justify-content:flex-end!important;gap:clamp(18px,3vw,48px)!important;
+  min-width:0!important;margin:0!important;
+}
+@media(max-width:1359px){
+  body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{
+    flex-direction:column!important;align-items:stretch!important;gap:16px!important;
   }
-  .zc-home-status-rail > .zc-ai-engine-card {
-    display:flex!important;
-    flex:0 1 440px!important;
-    width:min(100%,440px)!important;
-    min-width:0!important;
-    margin:0!important;
-  }
-  .zc-home-status-rail > .hero-stats {
-    display:flex!important;
-    flex:1 1 auto!important;
-    align-items:center!important;
-    justify-content:flex-end!important;
-    gap:clamp(18px,3vw,48px)!important;
-    min-width:0!important;
-    margin:0!important;
-  }
-  @media(max-width:1359px) {
-    body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail {
-      grid-column:1!important;grid-row:3!important;
-      flex-direction:column!important;align-items:stretch!important;
-      gap:16px!important;
-    }
-    .zc-home-status-rail > .zc-ai-engine-card {flex:0 1 auto!important;width:100%!important;max-width:520px!important}
-    .zc-home-status-rail > .hero-stats {justify-content:flex-start!important}
-  }
-  @media(max-width:560px) {
-    body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail {padding:13px!important}
-    .zc-home-status-rail > .hero-stats {justify-content:space-between!important;gap:10px!important}
-    .zc-home-status-rail > .hero-stats strong {font-size:18px!important}
-    .zc-home-status-rail > .hero-stats span {font-size:8px!important;letter-spacing:.7px!important}
-  }
-
-
+  .zc-home-status-rail > .zc-ai-engine-card{flex:0 1 auto!important;width:100%!important;max-width:520px!important}
+  .zc-home-status-rail > .hero-stats{justify-content:flex-start!important}
+}
+@media(max-width:560px){
+  body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{padding:13px!important}
+  .zc-home-status-rail > .hero-stats{justify-content:space-between!important;gap:10px!important}
+  .zc-home-status-rail > .hero-stats strong{font-size:18px!important}
+  .zc-home-status-rail > .hero-stats span{font-size:8px!important;letter-spacing:.7px!important}
+}
 
 /* Consolidated from zctv-studio-v2; original order preserved. */
 #promo-video{display:none!important}
@@ -1185,235 +1136,8 @@ header.topbar {
     isolation: isolate !important;
   }
 
-/* Consolidated from zc-home-hero-compact-ad-placement; original order preserved. */
-/* Keep the home hero content-led: browser zoom must not turn 100vh into a huge empty panel. */
-body > main#home > section.hero {
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  padding-top: clamp(28px, 3.2vw, 48px) !important;
-  padding-bottom: 30px !important;
-  overflow: hidden !important;
-}
-body > main#home > section.hero > .hero-layout {
-  min-height: 0 !important;
-  align-items: center !important;
-}
-body > main#home > section.hero .zc-hero-art-panel {
-  min-height: 0 !important;
-  height: auto !important;
-  aspect-ratio: 900 / 650;
-}
-body > main#home > section.zc-adsterra-section {
-  margin: 0 !important;
-  padding: 12px 5% 18px !important;
-}
-body > main#home > section.zc-adsterra-section .zc-adsterra-inner {
-  max-width: 1120px !important;
-}
-@media (max-width: 680px) {
-  body > main#home > section.hero { padding: 28px 5% 24px !important; }
-  body > main#home > section.hero > .hero-layout { gap: 18px !important; }
-  body > main#home > section.hero .zc-hero-art-panel { aspect-ratio: 1.35 / 1; }
-  body > main#home > section.zc-adsterra-section { padding: 10px 4% 16px !important; }
-}
 
-/* Consolidated from zc-homepage-final-layout-20261104-priority; original order preserved. */
-/* Final homepage layout: balanced hero, compact sponsor panel, no oversized empty ad frame. */
-body > main#home > section.hero {
-  min-height: 0 !important;
-  height: auto !important;
-  max-height: none !important;
-  padding: clamp(34px, 4vw, 58px) 6.5% clamp(34px, 4vw, 52px) !important;
-}
-body > main#home > section.hero > .hero-layout {
-  align-items: center !important;
-  gap: clamp(22px, 3vw, 42px) !important;
-}
-body > main#home > section.hero .hero-content {
-  min-width: 0 !important;
-  max-width: 680px !important;
-}
-body > main#home > section.hero .zc-hero-art-panel {
-  box-sizing: border-box !important;
-  align-self: center !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  height: auto !important;
-  max-height: none !important;
-  aspect-ratio: auto !important;
-  padding: clamp(14px, 1.6vw, 22px) !important;
-  overflow: hidden !important;
-}
-@media (max-width: 1100px) {
-  body > main#home > section.hero > .hero-layout {
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-areas: "content" "radar" !important;
-    align-items: stretch !important;
-  }
-  body > main#home > section.hero .zc-hero-art-panel {
-    width: min(100%, 760px) !important;
-    justify-self: center !important;
-    min-height: 0 !important;
-  }
-}
-@media (max-width: 760px) {
-  body > main#home > section.hero {
-    padding: 30px 5% 26px !important;
-  }
-  body > main#home > section.hero > .hero-layout {
-    gap: 20px !important;
-  }
-  body > main#home > section.hero .zc-hero-art-panel {
-    width: 100% !important;
-    padding: 12px !important;
-  }
-}
 
-/* Consolidated from zc-touch-hero-single-column-fix-20261104; original order preserved. */
-/* Touch devices using a desktop-width viewport must still stack the hero. */
-@media (max-width: 1100px) and (pointer: coarse) {
-  body > main#home > section.hero > .hero-layout {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-rows: auto auto !important;
-    grid-template-areas: "content" "radar" !important;
-    grid-auto-flow: row !important;
-    align-items: stretch !important;
-  }
-  body > main#home > section.hero > .hero-layout > .hero-content {
-    grid-area: content !important;
-    grid-column: 1 !important;
-    grid-row: 1 !important;
-    position: relative !important;
-    transform: none !important;
-  }
-  body > main#home > section.hero > .hero-layout > .outbreak-panel {
-    grid-area: radar !important;
-    grid-column: 1 !important;
-    grid-row: 2 !important;
-    position: relative !important;
-    transform: none !important;
-  }
-}
-
-/* Consolidated from zc-touch-hero-grid-placement-fix-20261104; original order preserved. */
-/* Force every direct hero child into the same single grid column on touch devices. */
-@media (max-width: 1100px) and (pointer: coarse) {
-  body > main#home > section.hero > .hero-layout {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-rows: auto auto !important;
-    grid-template-areas: "content" "radar" !important;
-    grid-auto-columns: minmax(0, 1fr) !important;
-    grid-auto-flow: row !important;
-    align-items: stretch !important;
-  }
-  body > main#home > section.hero > .hero-layout > * {
-    grid-column: 1 / -1 !important;
-    position: relative !important;
-    inset: auto !important;
-    margin: 0 !important;
-    transform: none !important;
-    justify-self: stretch !important;
-    align-self: stretch !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-  }
-  body > main#home > section.hero > .hero-layout > .hero-content {
-    grid-area: content !important;
-    grid-row: 1 !important;
-  }
-  body > main#home > section.hero > .hero-layout > .outbreak-panel {
-    grid-area: radar !important;
-    grid-row: 2 !important;
-  }
-}
-
-/* Consolidated from zc-hero-layout-final-20261105-v4; original order preserved. */
-/* Definitive hero geometry: text and sponsor card are independent grid columns. */
-body:has(#home) #home > section.hero{
-  box-sizing:border-box!important;display:block!important;
-  height:auto!important;min-height:0!important;max-height:none!important;
-  padding:clamp(28px,3.5vw,52px) clamp(24px,4.5vw,72px) 30px!important;
-  overflow:visible!important;
-}
-body:has(#home) #home > section.hero > .hero-layout{
-  box-sizing:border-box!important;display:grid!important;
-  grid-template-columns:minmax(0,1fr) minmax(560px,640px)!important;
-  grid-template-areas:"content sponsor"!important;
-  grid-template-rows:auto!important;grid-auto-flow:row!important;
-  align-items:start!important;align-content:start!important;
-  gap:clamp(24px,2.5vw,40px)!important;
-  width:min(100%,1440px)!important;max-width:1440px!important;
-  min-width:0!important;height:auto!important;min-height:0!important;
-  margin:0 auto!important;transform:none!important;
-}
-body:has(#home) #home > section.hero > .hero-layout > .hero-content{
-  grid-area:content!important;grid-column:1!important;grid-row:1!important;
-  position:relative!important;inset:auto!important;float:none!important;
-  align-self:start!important;justify-self:stretch!important;
-  box-sizing:border-box!important;width:100%!important;max-width:680px!important;
-  min-width:0!important;margin:0!important;padding:0!important;transform:none!important;
-}
-body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
-  grid-area:sponsor!important;grid-column:2!important;grid-row:1!important;
-  position:relative!important;inset:auto!important;float:none!important;
-  align-self:start!important;justify-self:stretch!important;
-  box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
-  width:100%!important;max-width:640px!important;min-width:0!important;
-  height:auto!important;min-height:0!important;max-height:none!important;
-  margin:0!important;padding:10px!important;transform:none!important;
-  overflow:hidden!important;
-}
-@media(min-width:901px){
-}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot{
-  box-sizing:border-box!important;position:relative!important;display:block!important;
-  flex:0 0 auto!important;width:100%!important;min-width:0!important;
-  height:clamp(260px,22vw,340px)!important;min-height:260px!important;max-height:340px!important;
-  margin:0!important;padding:0!important;overflow:hidden!important;
-  border:1px solid #9bff4560!important;border-radius:5px!important;background:#080d0a!important;
-}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot:before{content:none!important;display:none!important}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
-  position:absolute!important;inset:0!important;display:block!important;
-  width:100%!important;height:100%!important;max-width:none!important;
-  object-fit:cover!important;object-position:center 32%!important;
-  filter:saturate(.96) contrast(1.04)!important;z-index:1!important;
-}
-body:has(#home) #home > section.hero .hero-bottom{
-  position:relative!important;inset:auto!important;display:flex!important;
-  width:min(100%,1440px)!important;margin:20px auto 0!important;
-}
-@media(max-width:1359px){
-  body:has(#home) #home > section.hero > .hero-layout{
-    grid-template-columns:minmax(0,1fr)!important;
-    grid-template-areas:"content" "sponsor"!important;
-    gap:26px!important;
-  }
-  body:has(#home) #home > section.hero > .hero-layout > .hero-content,
-  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
-    grid-column:1!important;grid-row:auto!important;
-    width:min(100%,900px)!important;max-width:900px!important;
-    justify-self:center!important;
-  }
-}
-@media(max-width:900px){
-  body:has(#home) #home > section.hero .zc-sponsor-art-slot{
-    height:clamp(210px,46vw,300px)!important;min-height:210px!important;max-height:300px!important;
-  }
-}
-@media(max-width:760px){
-  body:has(#home) #home > section.hero{padding:26px 5% 24px!important}
-  body:has(#home) #home > section.hero > .hero-layout{gap:20px!important}
-  body:has(#home) #home > section.hero .zc-hero-art-panel{padding:9px!important}
-  body:has(#home) #home > section.hero .hero-stats{flex-wrap:wrap!important;gap:12px!important}
-}
-
-/* Consolidated from zc-final-marquee-art-fix-20261105; original order preserved. */
 /* Equal-width ribbon headers across every translated homepage. */
 body:has(#home) .zc-ribbon-label{
   box-sizing:border-box!important;flex:0 0 clamp(118px,9.6vw,154px)!important;
@@ -1423,43 +1147,14 @@ body:has(#home) .zc-ribbon-label{
   text-overflow:ellipsis!important;font-size:clamp(7px,.66vw,10px)!important;
   letter-spacing:.25px!important;text-align:center!important;
 }
-/* Real 640x360 survivor artwork; override the old placeholder/fallback geometry. */
-body:has(#home) #home > section.hero .zc-sponsor-art-slot{
-  box-sizing:border-box!important;position:relative!important;display:block!important;
-  width:100%!important;height:clamp(240px,22vw,340px)!important;
-  min-height:240px!important;max-height:340px!important;padding:0!important;
-  overflow:hidden!important;border:1px solid #9bff4570!important;
-  border-radius:5px!important;background:#080d0a!important;
-}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot:before,
-body:has(#home) #home > section.hero .zc-sponsor-art-slot:after{content:none!important;display:none!important}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
-  position:absolute!important;inset:0!important;display:block!important;
-  width:100%!important;height:100%!important;max-width:none!important;
-  object-fit:cover!important;object-position:center 30%!important;
-  filter:saturate(1.04) contrast(1.04)!important;opacity:1!important;z-index:1!important;
-}
 @media(max-width:760px){
- body:has(#home) .zc-ribbon-label{flex-basis:118px!important;width:118px!important;min-width:118px!important;max-width:118px!important;font-size:7px!important;letter-spacing:0!important;padding:0 5px!important}
- body:has(#home) #home > section.hero .zc-sponsor-art-slot{height:clamp(210px,62vw,290px)!important;min-height:210px!important;max-height:290px!important}
+  body:has(#home) .zc-ribbon-label{
+    flex-basis:118px!important;width:118px!important;min-width:118px!important;
+    max-width:118px!important;font-size:7px!important;letter-spacing:0!important;padding:0 5px!important;
+  }
 }
 
-/* Consolidated from zc-remove-native-ad-dead-space-20261112; original order preserved. */
-/* Last-in-document override: native creative is ~195px tall; remove the unused 250px reserve. */
-@media (min-width: 901px) {
-  body:has(#home) #home > section.hero #container-4420dadadbd2f0727c322cd6c632be3e {
-    box-sizing: border-box !important;
-    height: 195px !important;
-    min-height: 0 !important;
-    max-height: 195px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-  }
-  body:has(#home) #home > section.hero .zc-sponsor-art-slot {
-    margin-top: 0 !important;
-  }
-}
+
 
 /* Consolidated from homepage-cinematic-refresh-2026; original order preserved. */
 /* ZOMBCASH // Cinematic homepage refresh — visual-only, keep existing components and data hooks */
@@ -1723,12 +1418,86 @@ body:has(#home) #home .tools#radar .tool-card .tool-art{
   body:has(#home) #home .tools#radar .tool-card:hover{transform:none!important}
 }
 
-/* Consolidated from zc-ad-free-hero-layout-20261122; original order preserved. */
-/* Advertising integrations are disabled; let homepage content use the full hero width. */
-body:has(#home) #home > section.hero > .hero-layout{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-areas:none!important;align-items:start!important;gap:24px!important}
-body:has(#home) #home > section.hero > .hero-layout > .hero-content,
-body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{grid-column:1!important;grid-area:auto!important;width:100%!important;max-width:none!important}
 
+
+/* Active homepage hero: explicit two-column desktop layout and a single-column responsive stack. */
+body:has(#home) #home > section.hero{
+  box-sizing:border-box!important;display:block!important;height:auto!important;
+  min-height:0!important;max-height:none!important;
+  padding:clamp(28px,3.5vw,52px) clamp(24px,4.5vw,72px) 30px!important;
+  overflow:hidden!important;
+}
+body:has(#home) #home > section.hero > .hero-layout{
+  box-sizing:border-box!important;display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(360px,min(44vw,640px))!important;
+  grid-template-areas:"content sponsor" "status status"!important;
+  grid-template-rows:auto auto!important;grid-auto-flow:row!important;
+  align-items:start!important;align-content:start!important;
+  gap:clamp(24px,2.5vw,40px)!important;
+  width:min(100%,1440px)!important;max-width:1440px!important;min-width:0!important;
+  height:auto!important;min-height:0!important;margin:0 auto!important;transform:none!important;
+}
+body:has(#home) #home > section.hero > .hero-layout > .hero-content{
+  grid-area:content!important;position:relative!important;inset:auto!important;float:none!important;
+  align-self:start!important;justify-self:stretch!important;box-sizing:border-box!important;
+  width:100%!important;max-width:680px!important;min-width:0!important;
+  margin:0!important;padding:0!important;transform:none!important;
+}
+body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
+  grid-area:sponsor!important;position:relative!important;inset:auto!important;float:none!important;
+  align-self:start!important;justify-self:stretch!important;box-sizing:border-box!important;
+  display:flex!important;flex-direction:column!important;width:100%!important;max-width:640px!important;
+  min-width:0!important;height:auto!important;min-height:0!important;max-height:none!important;
+  margin:0!important;padding:10px!important;transform:none!important;overflow:hidden!important;
+}
+body:has(#home) #home > section.hero .zc-sponsor-art-slot{
+  box-sizing:border-box!important;position:relative!important;display:block!important;
+  width:100%!important;height:clamp(240px,22vw,340px)!important;
+  min-width:0!important;min-height:240px!important;max-height:340px!important;
+  margin:0!important;padding:0!important;overflow:hidden!important;
+  border:1px solid #9bff4570!important;border-radius:15px!important;background:#080d0a!important;
+}
+body:has(#home) #home > section.hero .zc-sponsor-art-slot:before,
+body:has(#home) #home > section.hero .zc-sponsor-art-slot:after{content:none!important;display:none!important}
+body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
+  position:absolute!important;inset:0!important;display:block!important;
+  width:100%!important;height:100%!important;max-width:none!important;
+  object-fit:cover!important;object-position:center 30%!important;
+  filter:saturate(1.04) contrast(1.04)!important;opacity:1!important;z-index:1!important;
+}
+body:has(#home) #home > section.hero .hero-bottom{
+  position:relative!important;inset:auto!important;display:flex!important;
+  width:min(100%,1440px)!important;margin:20px auto 0!important;
+}
+@media(max-width:1359px){
+  body:has(#home) #home > section.hero > .hero-layout{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"content" "sponsor" "status"!important;
+    grid-template-rows:auto auto auto!important;gap:26px!important;
+  }
+  body:has(#home) #home > section.hero > .hero-layout > .hero-content,
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
+    grid-column:1!important;grid-row:auto!important;width:min(100%,900px)!important;
+    max-width:900px!important;justify-self:center!important;
+  }
+}
+@media(max-width:900px){
+  body:has(#home) #home > section.hero .zc-sponsor-art-slot{
+    height:clamp(210px,46vw,300px)!important;min-height:210px!important;max-height:300px!important;
+  }
+}
+@media(max-width:760px){
+  body:has(#home) #home > section.hero{padding:26px 5% 24px!important}
+  body:has(#home) #home > section.hero > .hero-layout{gap:20px!important}
+  body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{padding:9px!important}
+  body:has(#home) #home > section.hero .zc-sponsor-art-slot{
+    height:clamp(210px,62vw,290px)!important;min-height:210px!important;max-height:290px!important;
+  }
+  body:has(#home) #home > section.hero .hero-stats{flex-wrap:wrap!important;gap:12px!important}
+}
+@media(max-width:680px){
+  body:has(#home) #home > section.hero .hero-bottom{display:none!important}
+}
 </style>
 </head>
 <body>
