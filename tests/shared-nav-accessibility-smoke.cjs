@@ -21,7 +21,7 @@ const routes = ['', 'de/', 'fr/', 'it/', 'ja/', 'zh-CN/', 'ru/', 'tr/', 'hi/'];
       if (localeFont) {
         const fontLink = page.locator('link[data-zsh-font-family="' + localeFont + '"]');
         await fontLink.waitFor({ state: 'attached', timeout: 10000 });
-        const expectedText = await page.locator('.hero-content h1').evaluate(node => node.textContent.replace(/\\s+/g, ' ').trim());
+        const expectedText = await page.locator('.hero-content h1').evaluate(node => node.innerText.replace(/\\s+/g, ' ').trim());
         const fontUrl = new URL(await fontLink.getAttribute('href'));
         assert.equal(fontUrl.searchParams.get('text'), expectedText, route + ' locale font must be subset to the actual hero heading');
         assert.equal(fontUrl.searchParams.get('display'), 'optional', route + ' locale font display policy');
