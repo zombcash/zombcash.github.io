@@ -1441,7 +1441,7 @@
     if (scrollControlsUpdateFrame) return;
     scrollControlsUpdateFrame = window.requestAnimationFrame(() => {
       scrollControlsUpdateFrame = 0;
-      scheduleScrollControlsVisibilityUpdate();
+      updateScrollControlsVisibility();
     });
   };
   if (!window.__zshScrollControlsVisibilityBound) {
@@ -1451,7 +1451,7 @@
     window.addEventListener('load', scheduleScrollControlsVisibilityUpdate, {once:true});
     const adObserver = new MutationObserver(scheduleScrollControlsVisibilityUpdate);
     adObserver.observe(document.body, {childList:true,subtree:true,attributes:true,attributeFilter:['style','class']});
-    updateScrollControlsVisibility();
+    scheduleScrollControlsVisibilityUpdate();
   }
 
   // Load the shared site assistant.
