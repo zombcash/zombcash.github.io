@@ -4,6 +4,23 @@ const assert = require('node:assert/strict');
 
 const root = path.resolve(__dirname, '..');
 const ribbonScript = fs.readFileSync(path.join(root, 'homepage-ribbons.js'), 'utf8');
+const homepageVisualCss = fs.readFileSync(path.join(root, 'homepage-visual.css'), 'utf8');
+const aiStatusScript = fs.readFileSync(path.join(root, 'ai-model-status.js'), 'utf8');
+assert.ok(homepageVisualCss.includes('.zc-ai-engine-card{'),
+  'community AI status card styles must live in the cached homepage stylesheet');
+assert.equal(aiStatusScript.includes('createElement("style")'), false,
+  'AI status script must not inject a duplicate runtime stylesheet');
+assert.ok(aiStatusScript.includes('signal: AbortSignal.timeout(10000)'),
+  'AI status endpoint request must have a 10-second timeout');
+assert.ok(aiStatusScript.includes('if (refreshing) return;'),
+  'AI status polling must not overlap requests');
+
+const retiredHomepageSelectors = ["zc-hero-ad-stage","zc-adsterra-grid","zc-adsterra-slot","zc-hero-sponsor","zc-hero-sponsor-promo","zc-hero-ad-unit","zc-adsterra-native-slot","zc-adsterra-mobile-slot","zc-hero-sponsor-label","zc-hero-sponsor-kicker","field-manual-spotlight-inner","world-section","zc-promo-video-inner","hero-title"];
+for (const selector of retiredHomepageSelectors) {
+  assert.equal(homepageVisualCss.includes('.' + selector), false,
+    'homepage stylesheet must not retain selectors for absent legacy markup: ' + selector);
+}
+
 assert.doesNotMatch(ribbonScript, /if\s*\(existing\)\s*existing\.remove\(\)/, 'live ribbons must reuse the reserved wrapper instead of removing/reinserting it');
 assert.match(ribbonScript, /wrap\.removeAttribute\('aria-busy'\)/, 'live ribbon wrapper must clear its busy state after rendering');
 const pages = [
@@ -19,6 +36,14 @@ for (const file of pages) {
   const bodyStyles = styles.filter(match => match.index > headEnd);
   assert.equal(styles.length, 3, file + ': homepage CSS should be consolidated into three cascade-preserving blocks');
   assert.equal(bodyStyles.length, 0, file + ': inline CSS must be loaded before body content');
+  for (const selector of retiredHomepageSelectors) {
+    assert.equal(html.includes('.' + selector), false,
+      file + ': inline CSS must not retain selectors for absent legacy markup: ' + selector);
+  }
+  if (file === 'index.html') {
+    assert.ok(html.includes('src="/ai-model-status.js?v=20261124-timeout-1"'),
+      'English homepage must use the cache-busted AI status script');
+  }
   const ribbonIndex = html.indexOf('class="zc-outbreak-ribbons zc-ribbons-pending"');
   assert.ok(ribbonIndex > headEnd && ribbonIndex < html.indexOf('<main id="home">'), file + ': reserved live-ribbon skeleton must sit between the shared header and homepage main');
   assert.equal((html.match(/class="zc-outbreak-ribbons/g) || []).length, 1, file + ': exactly one reserved ribbon wrapper must exist');
