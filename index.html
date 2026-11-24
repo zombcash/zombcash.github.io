@@ -1783,9 +1783,9 @@ body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{grid-
       <h2 id="zc-promo-title">ENTER THE <span>UNDEAD INTERNET.</span></h2>
       <p>See the ZombieCash world, explore the tools, and join the survivors.</p>
       <div class="zc-promo-video-controls" aria-label="Promo video navigation">
-        <button type="button" id="zc-promo-prev" disabled aria-label="Previous promo video">← PREVIOUS</button>
+        <button type="button" id="zc-promo-prev" disabled>← PREVIOUS</button>
         <span id="zc-promo-count" aria-live="polite">LOADING VIDEO LIBRARY…</span>
-        <button type="button" id="zc-promo-next" disabled aria-label="Next promo video">NEXT →</button>
+        <button type="button" id="zc-promo-next" disabled>NEXT →</button>
       </div>
       <p class="zc-promo-video-note" id="zc-promo-status" role="status">Loading the latest transmission…</p>
       <a class="zc-promo-video-release" id="zc-promo-release" href="https://github.com/zombcash/zombcash.github.io/releases" target="_blank" rel="noopener noreferrer">VIEW ALL VIDEO RELEASES ↗</a>
@@ -1856,7 +1856,7 @@ body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{grid-
           <button type="button" class="zrai-period" data-radar-period="h1" aria-pressed="false">1 HOUR</button>
           <button type="button" class="zrai-period" data-radar-period="h24" aria-pressed="false">24 HOURS</button>
         </div>
-        <button type="button" id="zombie-radar-ai-refresh" class="zrai-refresh" aria-label="Refresh recommendations">↻ REFRESH</button>
+        <button type="button" id="zombie-radar-ai-refresh" class="zrai-refresh">↻ REFRESH</button>
       </div>
       <div class="zrai-period-note" id="zombie-radar-ai-period-note">Momentum and activity · last 5 minutes</div>
       <div id="zombie-radar-ai-list" class="zrai-list" aria-live="polite">
@@ -1885,7 +1885,7 @@ body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{grid-
 <section class="section intro" id="outbreak">
   <div class="section-kicker">[ 01 / THE WORLD AFTER ]</div>
   <div class="intro-row"><h2>CRYPTO IS A<br><span class="green">GHOST TOWN.</span></h2><p>Good thing we brought a shovel. ZombieCash is more than a ticker: it's a growing playground of tools, games, memes, and survivors. No crystal balls. No guaranteed moonshots. Just useful tools and undead humor.</p></div>
-  <div class="outbreak-panel" aria-label="Live ZombieCash system status"><div class="outbreak-icon" aria-hidden="true">☣</div><div class="outbreak-copy"><span class="mini-label">ZOMBIECASH SYSTEM STATUS</span><h3 id="outbreak-status">CHECKING LIVE SYSTEMS</h3><p id="outbreak-message">Connecting to market data and community activity…</p><div class="outbreak-service-list" aria-live="polite"><span><i id="service-market-dot"></i> MARKET <b id="service-market">CHECKING</b></span><span><i id="service-api-dot"></i> API <b id="service-api">CHECKING</b></span><span><i id="service-community-dot"></i> COMMUNITY <b id="service-community">CHECKING</b></span><span class="service-disabled" aria-label="Solana Outbreak Intelligence disabled"><i id="service-soi-dot"></i> SOI <b id="service-soi">DISABLED</b></span></div></div><div class="status-meter"><div class="meter-label"><span>24H MARKET SWING</span><b id="chaos-value">—</b></div><div class="meter" role="progressbar" aria-label="Absolute 24-hour ZombieCash price movement" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="meter-fill"></span></div><small id="status-meter-note">WAITING FOR VERIFIED MARKET DATA</small><div class="outbreak-mini-stats"><span>VISITS TODAY <b id="outbreak-visits-today">—</b></span><span>24H VOLUME <b id="outbreak-volume">—</b></span></div><p class="outbreak-disclaimer">Market swing is the absolute 24h price change, capped at 100%. It is not a risk score or trading signal.</p></div></div></section>
+  <div class="outbreak-panel" aria-label="Live ZombieCash system status"><div class="outbreak-icon" aria-hidden="true">☣</div><div class="outbreak-copy"><span class="mini-label">ZOMBIECASH SYSTEM STATUS</span><h3 id="outbreak-status">CHECKING LIVE SYSTEMS</h3><p id="outbreak-message">Connecting to market data and community activity…</p><div class="outbreak-service-list" aria-live="polite"><span><i id="service-market-dot" aria-hidden="true"></i> MARKET <b id="service-market">CHECKING</b></span><span><i id="service-api-dot" aria-hidden="true"></i> API <b id="service-api">CHECKING</b></span><span><i id="service-community-dot" aria-hidden="true"></i> COMMUNITY <b id="service-community">CHECKING</b></span><span class="service-disabled" aria-label="Solana Outbreak Intelligence disabled"><i id="service-soi-dot"></i> SOI <b id="service-soi">DISABLED</b></span></div></div><div class="status-meter"><div class="meter-label"><span>24H MARKET SWING</span><b id="chaos-value">—</b></div><div class="meter" role="progressbar" aria-label="Absolute 24-hour ZombieCash price movement" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="meter-fill"></span></div><small id="status-meter-note">WAITING FOR VERIFIED MARKET DATA</small><div class="outbreak-mini-stats"><span>VISITS TODAY <b id="outbreak-visits-today">—</b></span><span>24H VOLUME <b id="outbreak-volume">—</b></span></div><p class="outbreak-disclaimer">Market swing is the absolute 24h price change, capped at 100%. It is not a risk score or trading signal.</p></div></div></section>
 <section class="section tools" id="radar">
   <div class="section-kicker">[ 02 / YOUR SURVIVAL KIT ]</div><div class="section-heading"><h2>ZOMBIECASH <span class="green">TOOLS &amp; OPERATIONS</span></h2><p>CORE SYSTEMS FOR SURVIVORS</p></div>
   <div class="tool-grid">
@@ -2047,7 +2047,7 @@ body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{grid-
 <footer id="site-footer" class="site-footer">
   <div class="site-footer-main">
     <div class="site-footer-brand">
-      <a class="brand footer-brand" href="#home" aria-label="ZombieCash — back to top"><span class="brand-mark">☣</span><span>ZOMBIE<span class="green">CASH</span><small>THE UNDEAD INTERNET</small></span></a>
+      <a class="brand footer-brand" href="#home" aria-label="ZOMBIECASH — back to top"><span class="brand-mark">☣</span><span>ZOMBIE<span class="green">CASH</span><small>THE UNDEAD INTERNET</small></span></a>
       <p>Built for the undead. Powered by community.</p>
       <div class="footer-contract"><span>OFFICIAL SOLANA CONTRACT</span><code>6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump</code><button type="button" id="footer-copy-ca" aria-label="Copy official token contract">COPY ↗</button></div><div class="copy-feedback" id="footer-copy-feedback" aria-live="polite"></div>
     </div>
