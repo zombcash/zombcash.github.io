@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+# SEO metadata lengths are review warnings; missing/duplicate head metadata remains a hard failure.
+#!//usr/bin/env python3
 """Audit inbound internal anchor links for every HTML URL in robots.txt sitemaps.
 
 Hreflang <link> elements are deliberately excluded: they are language alternates,
