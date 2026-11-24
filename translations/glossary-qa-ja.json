@@ -2,90 +2,11 @@
   "mode": "incremental_repair",
   "language": "ja",
   "pages": 48,
-  "candidate_blocks": 222,
-  "already_normalized_blocks": 203,
-  "repaired_blocks": 6,
-  "skipped_blocks": 13,
-  "skipped_items": [
-    {
-      "file": "the-meridian-of-ash-chapter-16.html",
-      "block_index": 0,
-      "source": "CHAPTER SIXTEEN — THE AUDITOR'S PROOF",
-      "error": "bracketed_glossary_missing:THE AUDITOR"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-16.html",
-      "block_index": 114,
-      "source": "The Auditor's terminal displayed a final line:",
-      "error": "bracketed_glossary_missing:The Auditor"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-33.html",
-      "block_index": 0,
-      "source": "CHAPTER THIRTY-THREE — ZOMBIE LAB",
-      "error": "bracketed_glossary_missing:ZOMBIE LAB"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-36.html",
-      "block_index": 0,
-      "source": "CHAPTER THIRTY-SIX — THE FIRST ZOMBIECASH",
-      "error": "bracketed_glossary_missing:ZOMBIECASH"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-38.html",
-      "block_index": 86,
-      "source": "Morrow's voice came through her earpiece. “The sensor is not transmitting now.”",
-      "error": "bracketed_glossary_missing:Morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-39.html",
-      "block_index": 97,
-      "source": "Morrow's voice returned.",
-      "error": "bracketed_glossary_missing:Morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-41.html",
-      "block_index": 51,
-      "source": "Morrow's voice lowered. “There is a second message embedded in the transaction.”",
-      "error": "bracketed_glossary_missing:Morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-42.html",
-      "block_index": 39,
-      "source": "Morrow's warning arrived a fraction too late.",
-      "error": "bracketed_glossary_missing:Morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-42.html",
-      "block_index": 65,
-      "source": "Morrow's voice sharpened. “That message is addressed to me.”",
-      "error": "bracketed_glossary_missing:Morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-42.html",
-      "block_index": 136,
-      "source": "Morrow's voice came quietly.",
-      "error": "bracketed_glossary_missing:Morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-43.html",
-      "block_index": 95,
-      "source": "Morrow scanned the chamber. “There are no active life-support systems in the pods. The body beneath the sheet is not moving.”",
-      "error": "bracketed_glossary_missing:Morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-43.html",
-      "block_index": 117,
-      "source": "Morrow's voice became very quiet.",
-      "error": "bracketed_glossary_missing:Morrow"
-    },
-    {
-      "file": "the-meridian-of-ash-chapter-46.html",
-      "block_index": 96,
-      "source": "Morrow spoke.",
-      "error": "bracketed_glossary_missing:Morrow"
-    }
-  ],
+  "candidate_blocks": 213,
+  "already_normalized_blocks": 199,
+  "repaired_blocks": 14,
+  "skipped_blocks": 0,
+  "skipped_items": [],
   "source_term_hits": {
     "THE MERIDIAN OF ASH": 1,
     "The Meridian of Ash": 1,
@@ -94,11 +15,11 @@
     "ZOMBCASH": 5,
     "Zombie Lab": 13,
     "The Core": 36,
-    "Morrow": 103,
+    "Morrow": 95,
     "Saint Oran's": 19,
     "Bellwether": 9,
     "Grey Orchard": 3,
-    "The Auditor": 15,
+    "The Auditor": 14,
     "Survivor Field Manual": 0,
     "Outbreak Transmission": 7,
     "OUTBREAK RADAR": 6
