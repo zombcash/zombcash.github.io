@@ -52,6 +52,7 @@ const widths = [390, 1440];
             ribbonMinHeight: ribbon ? getComputedStyle(ribbon).minHeight : null,
             headerHeight: document.querySelector('body > header.topbar') ? Math.round(document.querySelector('body > header.topbar').getBoundingClientRect().height) : null,
             mainTop: main ? Math.round(main.getBoundingClientRect().top) : null,
+            heroTitleFontSize: document.querySelector('main#home .hero h1') ? Number.parseFloat(getComputedStyle(document.querySelector('main#home .hero h1')).fontSize) : null,
             mainShifts: window.__zcMainLayoutShifts || [],
             observerError: window.__zcMainLayoutShiftObserverError || null
           };
@@ -59,6 +60,7 @@ const widths = [390, 1440];
         assert.equal(result.ribbonCount, 1, route + ' must keep exactly one ribbon container');
         assert.equal(result.bands, 3, route + ' must render all three ribbon bands');
         assert.ok(result.ribbonHeight >= (width <= 760 ? 123 : 127), route + ' ribbon height must be reserved before market values load: ' + JSON.stringify(result));
+        if (width === 390) assert.equal(Math.round(result.heroTitleFontSize), 39, route + ' mobile hero title must use the active responsive font-size rule: ' + JSON.stringify(result));
         assert.deepEqual(result.mainShifts, [], route + ' main content must not shift when live ribbons render: ' + JSON.stringify(result.mainShifts));
         assert.equal(result.observerError, null, route + ' layout-shift observer must initialize');
         results.push({ route: route || '/', width, status: 'PASS', ribbonHeight: result.ribbonHeight, mainTop: result.mainTop });
