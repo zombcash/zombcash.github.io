@@ -50,7 +50,7 @@ for (const file of pages) {
 
 const globalCss = fs.readFileSync(path.join(root, 'style.css'), 'utf8');
 for (const className of obsoleteHeroClasses) {
-  assert.doesNotMatch(globalCss, new RegExp('\\\\.' + className + '(?![\\\\w-])'), 'style.css: retired hero selector remains: ' + className);
+  assert.doesNotMatch(globalCss, new RegExp('\\.' + className + '(?![\\w-])'), 'style.css: retired hero selector remains: ' + className);
 }
 
 const english = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
