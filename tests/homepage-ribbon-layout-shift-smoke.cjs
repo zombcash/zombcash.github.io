@@ -50,6 +50,7 @@ const widths = [390, 1440];
             bands: ribbon?.querySelectorAll('.zc-ribbon').length || 0,
             ribbonHeight: ribbon ? Math.round(ribbon.getBoundingClientRect().height) : 0,
             ribbonMinHeight: ribbon ? getComputedStyle(ribbon).minHeight : null,
+            headerHeight: document.querySelector('body > header.topbar') ? Math.round(document.querySelector('body > header.topbar').getBoundingClientRect().height) : null,
             mainTop: main ? Math.round(main.getBoundingClientRect().top) : null,
             mainShifts: window.__zcMainLayoutShifts || [],
             observerError: window.__zcMainLayoutShiftObserverError || null
