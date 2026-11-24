@@ -19,6 +19,7 @@ on:
       - "tests/shared-nav-accessibility-smoke.cjs"
       - "tests/survivor-auth-modal-accessibility-smoke.cjs"
       - "tests/homepage-css-seo-smoke.cjs"
+      - "tests/homepage-cls-reservation-smoke.cjs"
       - "language.js"
       - "homepage-visual.css"
       - "assets/js/zctv-player.js"
@@ -67,6 +68,7 @@ jobs:
           node --check tests/survivor-auth-modal-accessibility-smoke.cjs
           node --check tests/homepage-css-seo-smoke.cjs
           node tests/homepage-css-seo-smoke.cjs
+          node --check tests/homepage-cls-reservation-smoke.cjs
           node --check language.js
           node --check survivor-auth.js
           node --check tests/mobile-viewport-smoke.cjs
@@ -107,6 +109,11 @@ jobs:
           cat /tmp/zombcash-local-preview.log
           echo "::error::Local branch preview did not start."
           exit 1
+
+      - name: Verify homepage startup layout stability at mobile, tablet and desktop widths
+        env:
+          SITE_URL: http://127.0.0.1:4173/
+        run: node tests/homepage-cls-reservation-smoke.cjs
 
       - name: Test ZombieCash TV three-column, tablet and mobile layout
         env:
