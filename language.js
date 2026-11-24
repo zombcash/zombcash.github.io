@@ -242,7 +242,6 @@ const localizedEditorialPages = {
   "/the-meridian-of-ash-chapter-44.html": ["de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"],
   "/the-meridian-of-ash-chapter-45.html": ["de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"],
   "/the-meridian-of-ash-chapter-46.html": ["de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"],
-,
   "/roulette.html": ["de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"],
   "/zombcash-market-data.html": ["de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"]
 };
