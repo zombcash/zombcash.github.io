@@ -184,43 +184,58 @@ jobs:
                       return {"url": url, "skipped_due_to_stop": True}
                   next_request_at[0] = time.monotonic() + 1.0
 
-              try:
-                  response = get_worker_service().urlInspection().index().inspect(
-                      body={
-                          "inspectionUrl": url,
-                          "siteUrl": site_url,
-                          "languageCode": "en-US",
+              MAX_TRANSIENT_RETRIES = 2
+              TRANSIENT_HTTP_STATUSES = {500, 502, 503, 504}
+              for attempt in range(MAX_TRANSIENT_RETRIES + 1):
+                  try:
+                      response = get_worker_service().urlInspection().index().inspect(
+                          body={
+                              "inspectionUrl": url,
+                              "siteUrl": site_url,
+                              "languageCode": "en-US",
+                          }
+                      ).execute(num_retries=0)
+                      result = response.get("inspectionResult", {})
+                      status = result.get("indexStatusResult", {})
+                      return {
+                          "url": url,
+                          "verdict": status.get("verdict"),
+                          "coverage_state": status.get("coverageState"),
+                          "robots_txt_state": status.get("robotsTxtState"),
+                          "indexing_state": status.get("indexingState"),
+                          "page_fetch_state": status.get("pageFetchState"),
+                          "last_crawl_time": status.get("lastCrawlTime"),
+                          "google_canonical": status.get("googleCanonical"),
+                          "user_canonical": status.get("userCanonical"),
+                          "sitemaps": status.get("sitemap", []),
+                          "referring_urls": status.get("referringUrls", []),
+                          "attempts": attempt + 1,
                       }
-                  ).execute(num_retries=0)
-                  result = response.get("inspectionResult", {})
-                  status = result.get("indexStatusResult", {})
-                  return {
-                      "url": url,
-                      "verdict": status.get("verdict"),
-                      "coverage_state": status.get("coverageState"),
-                      "robots_txt_state": status.get("robotsTxtState"),
-                      "indexing_state": status.get("indexingState"),
-                      "page_fetch_state": status.get("pageFetchState"),
-                      "last_crawl_time": status.get("lastCrawlTime"),
-                      "google_canonical": status.get("googleCanonical"),
-                      "user_canonical": status.get("userCanonical"),
-                      "sitemaps": status.get("sitemap", []),
-                      "referring_urls": status.get("referringUrls", []),
-                  }
-              except HttpError as exc:
-                  body = exc.content.decode("utf-8", errors="replace")[:1500]
-                  if int(exc.resp.status) in (401, 403, 429):
-                      stop_event.set()
-                  return {
-                      "url": url,
-                      "error_http_status": int(exc.resp.status),
-                      "error": body,
-                  }
-              except Exception as exc:
-                  return {
-                      "url": url,
-                      "error": f"{type(exc).__name__}: {exc}",
-                  }
+                  except HttpError as exc:
+                      http_status = int(exc.resp.status)
+                      body = exc.content.decode("utf-8", errors="replace")[:1500]
+                      if http_status in TRANSIENT_HTTP_STATUSES and attempt < MAX_TRANSIENT_RETRIES:
+                          retry_delay = 1.5 * (2 ** attempt)
+                          print(
+                              f"::warning::Transient Search Console HTTP {http_status} for {url}; "
+                              f"retrying in {retry_delay:.1f}s ({attempt + 1}/{MAX_TRANSIENT_RETRIES})."
+                          )
+                          time.sleep(retry_delay)
+                          continue
+                      if http_status in (401, 403, 429):
+                          stop_event.set()
+                      return {
+                          "url": url,
+                          "error_http_status": http_status,
+                          "error": body,
+                          "attempts": attempt + 1,
+                      }
+                  except Exception as exc:
+                      return {
+                          "url": url,
+                          "error": f"{type(exc).__name__}: {exc}",
+                          "attempts": attempt + 1,
+                      }
 
           with ThreadPoolExecutor(max_workers=1) as executor:
               for index, record in enumerate(executor.map(inspect_url, selected_urls), start=1):
