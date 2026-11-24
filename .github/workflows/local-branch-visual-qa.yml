@@ -7,6 +7,11 @@ on:
     types: [opened, synchronize, reopened]
     paths:
       - "index.html"
+      - "sitemap-zombie-fiction.xml"
+      - "the-meridian-of-ash*.html"
+      - "**/the-meridian-of-ash*.html"
+      - "tests/meridian-sitemap-coverage-smoke.py"
+      - ".github/workflows/meridian-sitemap-static-smoke.yml"
       - "de/index.html"
       - "fr/index.html"
       - "it/index.html"
@@ -57,6 +62,11 @@ jobs:
     steps:
       - name: Check out selected branch
         uses: actions/checkout@v4
+
+      - name: Validate complete multilingual Meridian sitemap coverage
+        run: |
+          python3 -m py_compile tests/meridian-sitemap-coverage-smoke.py
+          python3 tests/meridian-sitemap-coverage-smoke.py
 
       - name: Set up Node
         uses: actions/setup-node@v4
