@@ -45,6 +45,52 @@ const routes = ['', 'de/', 'fr/', 'it/', 'ja/', 'zh-CN/', 'ru/', 'tr/', 'hi/'];
       await page.close();
     }
 
+    const scrollPage = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+    const scrollErrors = [];
+    scrollPage.on('pageerror', error => scrollErrors.push(error.message));
+    await scrollPage.goto(base, { waitUntil: 'domcontentloaded' });
+    const scrollControls = scrollPage.locator('.page-scroll-controls');
+    await scrollControls.waitFor({ state: 'attached', timeout: 15000 });
+    await scrollPage.mouse.wheel(0, 500);
+    await scrollPage.waitForFunction(() =>
+      document.querySelector('.page-scroll-controls')?.classList.contains('is-visible')
+    );
+    await scrollPage.evaluate(() => {
+      const ad = document.createElement('div');
+      ad.dataset.aa = 'qa-scroll-control-overlap';
+      Object.assign(ad.style, {
+        position: 'fixed', right: '8px', bottom: '8px',
+        width: '70px', height: '100px', zIndex: '999999'
+      });
+      document.body.appendChild(ad);
+    });
+    await scrollPage.waitForFunction(() =>
+      document.querySelector('.page-scroll-controls')?.classList.contains('is-ad-overlap')
+    );
+    await scrollPage.evaluate(() => document.querySelector('[data-aa="qa-scroll-control-overlap"]')?.remove());
+    await scrollPage.waitForFunction(() =>
+      !document.querySelector('.page-scroll-controls')?.classList.contains('is-ad-overlap')
+    );
+    await scrollPage.evaluate(() => {
+      const canvas = document.createElement('canvas');
+      canvas.dataset.qaOverlap = 'game';
+      Object.assign(canvas.style, {
+        position: 'fixed', right: '8px', bottom: '8px',
+        width: '70px', height: '100px', zIndex: '999999'
+      });
+      document.body.appendChild(canvas);
+    });
+    await scrollPage.waitForFunction(() =>
+      document.querySelector('.page-scroll-controls')?.classList.contains('is-content-overlap')
+    );
+    await scrollPage.evaluate(() => document.querySelector('canvas[data-qa-overlap="game"]')?.remove());
+    await scrollPage.waitForFunction(() =>
+      !document.querySelector('.page-scroll-controls')?.classList.contains('is-content-overlap')
+    );
+    assert.deepEqual(scrollErrors, [], 'scroll-control overlap browser errors');
+    results.push({ route: '/', viewport: '390x844', feature: 'scroll-control visibility and overlap', status: 'PASS' });
+    await scrollPage.close();
+
     const tablet = await browser.newPage({ viewport: { width: 1024, height: 768 } });
     await tablet.goto(base, { waitUntil: 'domcontentloaded' });
     const tabletToggle = tablet.locator('.zsh-menu-toggle');
