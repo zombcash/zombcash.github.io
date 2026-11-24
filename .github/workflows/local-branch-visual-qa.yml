@@ -19,6 +19,7 @@ on:
       - "tests/shared-nav-accessibility-smoke.cjs"
       - "tests/survivor-auth-modal-accessibility-smoke.cjs"
       - "tests/homepage-css-seo-smoke.cjs"
+      - "tests/homepage-layout-shift-smoke.cjs"
       - "language.js"
       - "homepage-visual.css"
       - "assets/js/zctv-player.js"
@@ -87,6 +88,11 @@ jobs:
           npm init -y
           npm install --no-save playwright
           npx playwright install chromium
+
+      - name: Capture live homepage layout-shift sources before local branch checks
+        env:
+          SITE_URL: https://zombcash.github.io/
+        run: node tests/homepage-layout-shift-smoke.cjs
 
       - name: Verify CoinGecko browser CORS from the live ZombieCash origin
         run: node tests/coingecko-origin-cors-smoke.cjs
