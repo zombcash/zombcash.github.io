@@ -1,0 +1,27 @@
+name: Google Search Console quota handling smoke
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/gsc-url-inspection-audit.yml"
+      - "tests/gsc-quota-handling-smoke.py"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/gsc-url-inspection-audit.yml"
+      - "tests/gsc-quota-handling-smoke.py"
+
+permissions:
+  contents: read
+
+jobs:
+  quota-smoke:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate quota-aware URL Inspection behavior
+        run: python tests/gsc-quota-handling-smoke.py
