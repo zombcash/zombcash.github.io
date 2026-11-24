@@ -39,8 +39,12 @@ jobs:
         with:
           path: ~/.cache/huggingface/hub
           key: qwen3-4b-instruct-2507-q5km-v1
-      - name: Install CPU inference runtime
-        run: python -m pip install --disable-pip-version-check --prefer-binary --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu/llama-cpp-python/ numpy==1.26.4 llama-cpp-python==0.3.38 huggingface_hub==0.34.4 beautifulsoup4==4.13.4
+      - name: Install Python dependencies
+        run: python -m pip install --disable-pip-version-check numpy==1.26.4 huggingface_hub==0.34.4 beautifulsoup4==4.13.4 diskcache jinja2 typing-extensions
+      - name: Install prebuilt llama.cpp CPU wheel
+        run: |
+          python -m pip install --disable-pip-version-check --no-deps https://github.com/abetlen/llama-cpp-python/releases/download/v0.3.38/llama_cpp_python-0.3.38-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
+          python -c "from llama_cpp import Llama; print('llama.cpp CPU runtime ready')"
       - name: Prepare language draft branch
         env:
           TARGET_LANGUAGE: ${{ inputs.language }}
