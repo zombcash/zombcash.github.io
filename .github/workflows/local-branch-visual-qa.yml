@@ -36,6 +36,7 @@ on:
       - "tests/live-api-origin-smoke.cjs"
       - "script.js"
       - "living-world-recovery.js"
+      - "survivor-auth.js"
       - "tests/living-world-single-loader-smoke.cjs"
       - ".github/workflows/local-branch-visual-qa.yml"
 
@@ -67,6 +68,7 @@ jobs:
           node --check tests/homepage-css-seo-smoke.cjs
           node tests/homepage-css-seo-smoke.cjs
           node --check language.js
+          node --check survivor-auth.js
           node --check tests/mobile-viewport-smoke.cjs
           node --check tests/zctv-layout-smoke.cjs
           node --check tests/localized-article-visual.cjs
