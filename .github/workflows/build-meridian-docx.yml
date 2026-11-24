@@ -77,7 +77,7 @@ jobs:
           glossary.save(out/"Literary_Glossary.docx")
           qa=Document()
           qa.add_heading("THE MERIDIAN OF ASH — Translation QA",0)
-          qa.add_paragraph("Eight machine-translation editorial drafts. Each language contains 48 reader pages (title page, prologue, and 46 chapters) and 6,744 paragraphs. Structural completeness and all protected-name occurrences were checked against the English source. The strict build gate requires 222/222 protected-term content blocks accounted for and zero unresolved blocks. Literary editing, continuity review, and final publication approval remain outstanding.")
+          qa.add_paragraph("Eight machine-translation editorial drafts. Each language contains 48 reader pages (title page, prologue, and 46 chapters) and 6,744 paragraphs. Structural completeness and all protected-name occurrences were checked against the English source. The strict build gate requires 213/213 protected-term content blocks accounted for and zero unresolved blocks. Literary editing, continuity review, and final publication approval remain outstanding.")
           for lang in ["ru","de","fr","it","ja","zh-CN","tr","hi"]:
               report=json.loads((out/f"glossary-qa-{lang}.json").read_text(encoding="utf-8"))
               qa.add_paragraph(f"{lang}: {report['candidate_blocks']} protected-term blocks; {report['already_normalized_blocks']} already exact; {report['repaired_blocks']} repaired; {report['skipped_blocks']} unresolved.",style="List Bullet")

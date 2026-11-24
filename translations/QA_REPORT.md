@@ -33,7 +33,7 @@
 
 The structural audit does not establish literary quality. Targeted review of aligned source/translation paragraphs found that some glossary names and fictional service names are translated or transliterated inconsistently. Examples include The Core, The Auditor, Zombie Lab, Saint Oran's, and place names such as Bellwether. The current translation script did not enforce the protected-term list even though the glossary file exists.
 
-A targeted protected-term normalization pass passed its Russian sample test. It preserves exact glossary spellings; the formatted Zombie Lab sentence is retranslated as a whole and its bold tag is restored. It must preserve the exact English glossary spellings and inline emphasis, and must not overwrite a paragraph if the model changes or drops a marker. The Russian sample passed. The same pass is now running across the 222 source content blocks containing protected terms in all eight language branches, including title-page headings, prologue text, chapter headings, and the one inline-formatted Zombie Lab paragraph. The Russian sample confirms exact term preservation and full-sentence translation while retaining bold formatting.
+A targeted protected-term normalization pass passed its Russian sample test. It preserves exact glossary spellings; the formatted Zombie Lab sentence is retranslated as a whole and its bold tag is restored. It must preserve the exact English glossary spellings and inline emphasis, and must not overwrite a paragraph if the model changes or drops a marker. The Russian sample passed. The same pass is now running across the 213 source content blocks containing protected terms in all eight language branches, including title-page headings, prologue text, chapter headings, and the one inline-formatted Zombie Lab paragraph. The Russian sample confirms exact term preservation and full-sentence translation while retaining bold formatting.
 
 ## Release gate
 
@@ -44,3 +44,4 @@ Do not merge or index the translations until:
 4. language alternates and the existing fiction sitemap are updated deliberately.
 
 Google Search Console inspection remains pending after the site-level API returned HTTP 429 quota errors. This is separate from the translation branch checks.
+\n\nWord-boundary QA correction: the protected name “Morrow” is matched as a complete name, not as the substring in the ordinary word “tomorrow”. The final QA denominator is 213 content blocks per language.\n

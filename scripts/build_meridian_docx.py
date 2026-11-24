@@ -98,7 +98,7 @@ def validate_source_and_draft(lang):
         raise RuntimeError(f"Missing protected-term QA report: {qa_path.name}")
     qa = json.loads(qa_path.read_text(encoding="utf-8"))
     accounted = qa.get("already_normalized_blocks", 0) + qa.get("repaired_blocks", 0) + qa.get("skipped_blocks", 0)
-    if qa.get("candidate_blocks") != 222 or accounted != 222 or qa.get("skipped_blocks") != 0:
+    if qa.get("candidate_blocks") != 213 or accounted != 213 or qa.get("skipped_blocks") != 0:
         raise RuntimeError(f"Protected-term QA incomplete for {lang}: {qa}")
     glossary = json.loads((ROOT / "translations" / "glossary.json").read_text(encoding="utf-8"))
     protected_terms = glossary["protected_terms"]
@@ -122,7 +122,7 @@ def validate_source_and_draft(lang):
             source_text = source_block.get_text(" ", strip=True)
             target_text = target_block.get_text(" ", strip=True)
             for term in protected_terms:
-                exact_matches = [m.group(0) for m in re.finditer(re.escape(term), source_text, re.I)]
+                exact_matches = [m.group(0) for m in re.finditer(r"(?<![A-Za-z0-9])" + re.escape(term) + r"(?![A-Za-z0-9])", source_text, re.I)]
                 for exact in set(exact_matches):
                     if target_text.count(exact) < exact_matches.count(exact):
                         raise RuntimeError(f"Protected term missing in {lang}/{filename} block {block_index}: {exact}")

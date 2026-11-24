@@ -19,6 +19,9 @@ LANGUAGES = {
 PROTECTED_TERMS = json.loads((ROOT / "translations/glossary.json").read_text(encoding="utf-8"))["protected_terms"]
 INLINE_TAGS = {"strong", "em", "b", "i", "a", "span"}
 
+def term_pattern(term):
+    return re.compile(r"(?<![A-Za-z0-9])" + re.escape(term) + r"(?![A-Za-z0-9])", re.I)
+
 def load_model():
     path = hf_hub_download(repo_id=MODEL_REPO, filename=MODEL_FILE)
     return Llama(model_path=path, n_ctx=2048, n_threads=min(4, max(2, os.cpu_count() or 2)),
@@ -43,7 +46,7 @@ def protect_terms(text):
     protected = {}
     value = text
     for term in sorted(PROTECTED_TERMS, key=len, reverse=True):
-        pattern = re.compile(re.escape(term), re.IGNORECASE)
+        pattern = term_pattern(term)
         def repl(match):
             token = f"ZXQTERM{len(protected):03d}QZX"
             protected[token] = match.group(0)
@@ -78,7 +81,7 @@ def translate_with_explicit_glossary(model, text, target_code, protected_names):
     names = list(dict.fromkeys(protected_names))
     marked_text = text
     for name in sorted(names, key=len, reverse=True):
-        pattern = re.compile(re.escape(name), re.I)
+        pattern = term_pattern(name)
         marked_text = pattern.sub(lambda match: "⟦" + match.group(0) + "⟧", marked_text)
     prompt = (
         f"Translate the following English text into {target_code}. "
@@ -97,7 +100,7 @@ def translate_with_explicit_glossary(model, text, target_code, protected_names):
         if bracketed.search(output):
             output = bracketed.sub(lambda match: name, output)
             continue
-        plain = re.compile(re.escape(name), re.I)
+        plain = term_pattern(name)
         if plain.search(output):
             output = plain.sub(lambda match: name, output)
             continue
@@ -151,7 +154,7 @@ def normalize_inline_terms(model, source_paragraph, target_paragraph, target_cod
     changed = False
     for source_tag, target_tag in zip(source_tags, target_tags):
         source_text = source_tag.get_text(" ", strip=True)
-        hits = [term for term in PROTECTED_TERMS if re.search(re.escape(term), source_text, re.I)]
+        hits = [term for term in PROTECTED_TERMS if term_pattern(term).search(source_text)]
         if not hits:
             continue
         if any(re.fullmatch(re.escape(term), source_text, re.I) for term in hits):
@@ -191,9 +194,9 @@ def translate_full_block_with_inline_terms(model, source_paragraph, target_code)
     # Reapply the original inline tag to the corresponding protected term.
     for source_tag in source_paragraph.find_all(list(INLINE_TAGS)):
         tag_text = source_tag.get_text(" ", strip=True)
-        hits = [term for term in PROTECTED_TERMS if re.search(re.escape(term), tag_text, re.I)]
+        hits = [term for term in PROTECTED_TERMS if term_pattern(term).search(tag_text)]
         for term in hits:
-            match = re.search(re.escape(term), tag_text, re.I)
+            match = term_pattern(term).search(tag_text)
             exact = match.group(0) if match else term
             open_tag = str(source_tag).split(">", 1)[0] + ">"
             close_tag = f"</{source_tag.name}>"
@@ -285,7 +288,7 @@ def process_all(model, lang, target_code):
             source_text = source_p.get_text(" ", strip=True)
             hits = []
             for term in PROTECTED_TERMS:
-                matches = [match.group(0) for match in re.finditer(re.escape(term), source_text, re.I)]
+                matches = [match.group(0) for match in term_pattern(term).finditer(source_text)]
                 if matches:
                     per_term[term] += 1
                     hits.extend(matches)
