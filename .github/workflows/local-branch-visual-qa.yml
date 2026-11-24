@@ -34,6 +34,7 @@ on:
       - "tests/memecoin-platforms-article-smoke.cjs"
       - "tests/language-persistence-smoke.cjs"
       - "tests/coingecko-origin-cors-smoke.cjs"
+      - "tests/homepage-market-provider-smoke.cjs"
       - "tests/live-api-origin-smoke.cjs"
       - "script.js"
       - "living-world-recovery.js"
