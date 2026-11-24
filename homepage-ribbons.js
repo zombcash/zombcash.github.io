@@ -3,7 +3,6 @@
  'use strict';
  var main=document.querySelector('main#home'),header=document.querySelector('header.topbar, header');
  var existing=document.querySelector('.zc-outbreak-ribbons');
- if(existing)existing.remove();
  if(!header && !main)return;
  var parts=location.pathname.split('/').filter(Boolean),known=['de','fr','it','ja','zh-CN','ru','tr','hi'];
  var normalizeLang=function(value){var code=String(value||'').toLowerCase();return code==='zh-cn'?'zh-CN':code;};
@@ -22,7 +21,7 @@
  };
  var themes=['alert','community','market'],icons=['☣','◉','▥'];
  var liveValues={},marketSource='';
- var wrap=document.createElement('div');wrap.className='zc-outbreak-ribbons';wrap.setAttribute('role','region');wrap.setAttribute('aria-label','ZombieCash project highlights');
+ var wrap=existing||document.createElement('div');wrap.className='zc-outbreak-ribbons';wrap.setAttribute('role','region');wrap.setAttribute('aria-label','ZombieCash project highlights');
  function storedRibbonValue(item){
   var keys=Object.keys(liveValues);
   for(var i=0;i<keys.length;i++)if(item.indexOf(keys[i])===0)return liveValues[keys[i]];
@@ -44,7 +43,7 @@
   setMarketSource(marketSource);
  }
  wrap.style.setProperty('display','grid','important');
- wrap.style.setProperty('visibility','visible','important');
+ wrap.style.setProperty('visibility','hidden','important');
  wrap.style.setProperty('opacity','1','important');
  wrap.style.setProperty('position','relative','important');
  wrap.style.setProperty('z-index','999','important');
@@ -120,6 +119,8 @@
  }
  function refresh(){updateCrypto();updateFx();updateZombieCash();}
  renderRibbons();
+ wrap.removeAttribute('data-zc-ribbons-placeholder');
+ wrap.style.setProperty('visibility','visible','important');
  document.addEventListener('zombcash:languagechange',function(event){
   var next=normalizeLang(event.detail&&event.detail.language||document.documentElement.lang);
   if(known.indexOf(next)===-1)next='en';
