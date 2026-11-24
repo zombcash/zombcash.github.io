@@ -15,6 +15,8 @@ on:
       - 'tr/index.html'
       - 'hi/index.html'
       - 'homepage-visual.css'
+      - 'ai-model-status.js'
+      - 'tests/homepage-css-seo-smoke.cjs'
       - 'homepage-ribbons.js'
       - 'assets/zombcash-survivor-realistic-520.avif'
       - 'docs/DESIGN-STYLE-GUIDE.md'
