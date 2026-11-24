@@ -1,0 +1,83 @@
+{
+  "mode": "incremental_repair",
+  "language": "ru",
+  "pages": 48,
+  "candidate_blocks": 222,
+  "already_normalized_blocks": 212,
+  "repaired_blocks": 1,
+  "skipped_blocks": 9,
+  "skipped_items": [
+    {
+      "file": "the-meridian-of-ash-chapter-01.html",
+      "block_index": 260,
+      "source": "The laboratory sealed the test chamber. The robotic arm moved the sample tray into position. Environmental sensors reported stable pressure, temperature and humidity. Two technicians confirmed the instrument calibration. The Core displayed ",
+      "error": "marker_failure:ZXQTERM000QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-03.html",
+      "block_index": 1,
+      "source": "The city had always been loud, but until that evening she had never understood how much of its noise was made by things that expected tomorrow to arrive.",
+      "error": "marker_failure:ZXQTERM000QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-16.html",
+      "block_index": 0,
+      "source": "CHAPTER SIXTEEN — THE AUDITOR'S PROOF",
+      "error": "marker_failure:ZXQTERM000QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-33.html",
+      "block_index": 0,
+      "source": "CHAPTER THIRTY-THREE — ZOMBIE LAB",
+      "error": "marker_failure:ZXQTERM000QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-38.html",
+      "block_index": 26,
+      "source": "She let the name settle. Morrow. A tomorrow built from broken yesterday.",
+      "error": "marker_failure:ZXQTERM001QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-41.html",
+      "block_index": 51,
+      "source": "Morrow's voice lowered. “There is a second message embedded in the transaction.”",
+      "error": "marker_failure:ZXQTERM000QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-42.html",
+      "block_index": 65,
+      "source": "Morrow's voice sharpened. “That message is addressed to me.”",
+      "error": "marker_failure:ZXQTERM000QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-43.html",
+      "block_index": 95,
+      "source": "Morrow scanned the chamber. “There are no active life-support systems in the pods. The body beneath the sheet is not moving.”",
+      "error": "marker_failure:ZXQTERM000QZX"
+    },
+    {
+      "file": "the-meridian-of-ash-chapter-46.html",
+      "block_index": 96,
+      "source": "Morrow spoke.",
+      "error": "marker_failure:ZXQTERM000QZX"
+    }
+  ],
+  "source_term_hits": {
+    "THE MERIDIAN OF ASH": 1,
+    "The Meridian of Ash": 1,
+    "Meridian of Ash": 1,
+    "ZombieCash": 10,
+    "ZOMBCASH": 5,
+    "Zombie Lab": 13,
+    "The Core": 36,
+    "Morrow": 103,
+    "Saint Oran's": 19,
+    "Bellwether": 9,
+    "Grey Orchard": 3,
+    "The Auditor": 15,
+    "Survivor Field Manual": 0,
+    "Outbreak Transmission": 7,
+    "OUTBREAK RADAR": 6
+  },
+  "status": "draft_only_requires_editorial_review"
+}
