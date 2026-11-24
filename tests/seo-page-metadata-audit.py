@@ -26,15 +26,20 @@ class PageParser(HTMLParser):
         self.json_ld_count = 0
         self._in_title = False
         self._in_h1 = False
+        self._in_head = False
+        self._svg_depth = 0
+        self.title_count = 0
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
         tag = tag.lower()
-        if tag == "html":
+        if tag == "head":
+            self._in_head = True
+        elif tag == "svg":
+            self._svg_depth += 1
+        elif tag == "html":
             self.lang = (a.get("lang") or "").strip()
-        elif tag == "title":
+        elif tag == "title" and self._in_head and self._svg_depth == 0:
             self._in_title = True
-            if not hasattr(self, "title_count"):
-                self.title_count = 0
             self.title_count += 1
         elif tag == "h1":
             self._in_h1 = True
@@ -52,10 +57,15 @@ class PageParser(HTMLParser):
         elif tag == "script" and (a.get("type") or "").lower() == "application/ld+json":
             self.json_ld_count += 1
     def handle_endtag(self, tag):
-        if tag.lower() == "title":
+        tag = tag.lower()
+        if tag == "title":
             self._in_title = False
-        elif tag.lower() == "h1":
+        elif tag == "h1":
             self._in_h1 = False
+        elif tag == "head":
+            self._in_head = False
+        elif tag == "svg":
+            self._svg_depth = max(0, self._svg_depth - 1)
     def handle_data(self, data):
         if self._in_title:
             self.title_parts.append(data)
