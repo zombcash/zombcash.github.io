@@ -1,5 +1,6 @@
 /* Reserve the final shared-header height before shared-nav.js replaces the legacy header markup. */
 body:has(#home)>header.topbar{min-height:82px!important;box-sizing:border-box!important}
+@media(min-width:761px) and (max-width:1199px){body:has(#home)>header.topbar{min-height:112px!important}}
 @media(max-width:760px){body:has(#home)>header.topbar{min-height:95px!important}}
 
 /* ZombieCash homepage visual refresh — additive, homepage-scoped styles only. */
