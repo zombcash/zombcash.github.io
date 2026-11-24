@@ -275,12 +275,15 @@ def process_all(model, lang, target_code):
         page_changed = False
         for block_index, (source_p, target_p) in enumerate(zip(source_ps, target_ps)):
             source_text = source_p.get_text(" ", strip=True)
-            hits = [term for term in PROTECTED_TERMS if re.search(re.escape(term), source_text, re.I)]
+            hits = []
+            for term in PROTECTED_TERMS:
+                matches = [match.group(0) for match in re.finditer(re.escape(term), source_text, re.I)]
+                if matches:
+                    per_term[term] += 1
+                    hits.extend(matches)
             if not hits:
                 continue
             candidates += 1
-            for term in hits:
-                per_term[term] += 1
             # The title is a protected publication name, not a translatable phrase.
             is_book_title = filename == "the-meridian-of-ash.html" and source_p.name == "h1" and source_text.strip().upper() == "THE MERIDIAN OF ASH"
             if not is_book_title:
