@@ -30,8 +30,6 @@ def serialize_inline(node, inline_map):
     if isinstance(node, NavigableString):
         return str(node)
     if isinstance(node, Tag):
-        if node.name == "br":
-            return " "
         if node.name in INLINE_TAGS:
             index = len(inline_map) // 2
             op, cl = f"ZXQINLINEOPEN{index:03d}QZX", f"ZXQINLINECLOSE{index:03d}QZX"
@@ -233,7 +231,6 @@ def process_all(model, lang, target_code):
     ]
     updated = candidates = skipped = 0
     per_term = {term: 0 for term in PROTECTED_TERMS}
-    skipped_items = []
     for filename in files:
         source_path = ROOT / filename
         target_path = ROOT / lang / filename
@@ -241,13 +238,14 @@ def process_all(model, lang, target_code):
             raise FileNotFoundError(f"Missing source or translated page: {filename}")
         source_soup = BeautifulSoup(source_path.read_text(encoding="utf-8"), "html.parser")
         target_soup = BeautifulSoup(target_path.read_text(encoding="utf-8"), "html.parser")
+        # Include the title page and prologue, which use .wrap blocks rather than .chapter-copy.
         selector = ".wrap h1, .wrap h2, .wrap h3, .wrap p, .wrap blockquote"
         source_ps = source_soup.select(selector)
         target_ps = target_soup.select(selector)
         if len(source_ps) != len(target_ps):
             raise RuntimeError(f"Content-block count mismatch in {filename}: {len(source_ps)} vs {len(target_ps)}")
         page_changed = False
-        for block_index, (source_p, target_p) in enumerate(zip(source_ps, target_ps)):
+        for source_p, target_p in zip(source_ps, target_ps):
             source_text = source_p.get_text(" ", strip=True)
             hits = [term for term in PROTECTED_TERMS if re.search(re.escape(term), source_text, re.I)]
             if not hits:
@@ -255,16 +253,13 @@ def process_all(model, lang, target_code):
             candidates += 1
             for term in hits:
                 per_term[term] += 1
-            if filename == "the-meridian-of-ash.html" and source_p.name == "h1" and re.sub(r"\s+", " ", source_text).strip().upper() == "THE MERIDIAN OF ASH":
-                translated, error = "THE MERIDIAN<br/>OF ASH", None
-            elif source_p.find(list(INLINE_TAGS)):
+            if source_p.find(list(INLINE_TAGS)):
                 translated, error = translate_full_block_with_inline_terms(model, source_p, target_code)
             else:
                 translated, error = translate_protected(model, source_p, target_code)
             if error:
                 skipped += 1
-                skipped_items.append({"file": filename, "block_index": block_index, "source": source_text[:240], "error": error})
-                print(f"SKIP {filename} block={block_index}: {error}", flush=True)
+                print(f"SKIP {filename}: {error}", flush=True)
                 continue
             set_paragraph_html(target_p, translated)
             updated += 1
@@ -273,11 +268,8 @@ def process_all(model, lang, target_code):
             target_path.write_text(str(target_soup), encoding="utf-8")
             print(f"UPDATED {lang}/{filename}", flush=True)
     report = {"mode":"all","language":lang,"pages":len(files),"candidate_blocks":candidates,
-              "updated_blocks":updated,"skipped_blocks":skipped,"skipped_items":skipped_items,
-              "source_term_hits":per_term,"status":"draft_only_requires_editorial_review"}
-    report_path = ROOT / "translations" / f"glossary-qa-{lang}.json"
-    report_path.parent.mkdir(parents=True, exist_ok=True)
-    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+              "updated_blocks":updated,"skipped_blocks":skipped,"source_term_hits":per_term,
+              "status":"draft_only_requires_editorial_review"}
     print(json.dumps(report,ensure_ascii=False),flush=True)
 
 def main():
