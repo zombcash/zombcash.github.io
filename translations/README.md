@@ -28,9 +28,9 @@ The sample mode translates the first three paragraphs of Chapter 01 for quality 
 
 After the two ranges are assembled, run **Normalize Meridian glossary terms** for each language. Its sample mode checks exact proper-name preservation; its all mode updates only content blocks that contain protected terms. It also covers the title page and prologue and preserves inline formatting. It writes to a separate branch:
 
-- \`translation-tgemma-glossary/<language>\`
+- `translation-tgemma-glossary/<language>`
 
-The shared protected-term list is \`translations/glossary.json\`. The current QA checkpoint is \`translations/QA_REPORT.md\`.
+The shared protected-term list is `translations/glossary.json`. The current QA checkpoint is `translations/QA_REPORT.md`.
 
 ## Word export
 
