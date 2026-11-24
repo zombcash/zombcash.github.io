@@ -82,7 +82,7 @@ const widths = [390, 1440];
         if (width === 390) assert.equal(Math.round(result.heroTitleFontSize), 39, route + ' mobile hero title must use the active responsive font-size rule: ' + JSON.stringify(result));
         assert.ok(result.initialGeometry, route + ' must capture initial header/ribbon geometry before scripts run');
         for (const key of ['headerHeight', 'ribbonHeight', 'mainTop']) {
-          assert.ok(Math.abs(result[key === 'headerHeight' ? 'headerHeight' : key === 'ribbonHeight' ? 'ribbonHeight' : 'mainTop'] - result.initialGeometry[key]) <= 1,
+          assert.ok(Math.abs(result[key] - result.initialGeometry[key]) <= 1,
             route + ' ' + key + ' must remain stable after navigation and market scripts: ' + JSON.stringify(result));
         }
         const residualShiftScore = result.mainShifts.reduce((sum, entry) => sum + entry.value, 0);
