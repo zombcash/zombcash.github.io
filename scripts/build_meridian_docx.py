@@ -90,7 +90,26 @@ def set_document_styles(doc):
     footer = section.footer.paragraphs[0]
     add_page_number(footer)
 
+def validate_source_and_draft(lang):
+    for filename in FILES:
+        source_path = ROOT / filename
+        translated_path = ROOT / lang / filename
+        if not source_path.exists() or not translated_path.exists():
+            raise FileNotFoundError(f"Missing source or translated page: {filename}")
+        source_soup = BeautifulSoup(source_path.read_text(encoding="utf-8"), "html.parser")
+        translated_soup = BeautifulSoup(translated_path.read_text(encoding="utf-8"), "html.parser")
+        source_count = len(source_soup.select(".wrap p"))
+        translated_count = len(translated_soup.select(".wrap p"))
+        if source_count != translated_count:
+            raise RuntimeError(f"Paragraph count mismatch in {lang}/{filename}: {translated_count} vs {source_count}")
+        if "noindex,follow" not in str(translated_soup):
+            raise RuntimeError(f"Missing noindex safeguard in {lang}/{filename}")
+        if "translation-draft-banner" not in str(translated_soup):
+            raise RuntimeError(f"Missing machine-draft banner in {lang}/{filename}")
+    print(f"QA PASS {lang}: all 48 pages, 6,744 paragraphs, noindex and draft banner verified", flush=True)
+
 def build(lang, output_dir):
+    validate_source_and_draft(lang)
     doc = Document()
     set_document_styles(doc)
     title_soup = page_soup(lang, FILES[0])

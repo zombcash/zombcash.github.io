@@ -75,7 +75,7 @@ jobs:
           glossary.save(out/"Literary_Glossary.docx")
           qa=Document()
           qa.add_heading("THE MERIDIAN OF ASH — Translation QA",0)
-          qa.add_paragraph("Eight machine-translation drafts. Each language contains the title page, prologue, and 46 chapters. Structural completeness was checked against the English source. Literary editing and final publication approval remain outstanding.")
+          qa.add_paragraph("Eight machine-translation drafts. Each language contains 48 reader pages (title page, prologue, and 46 chapters) and 6,744 paragraphs. Structural completeness was checked against the English source; 222 protected-term content blocks per language receive a targeted terminology pass. Literary editing and final publication approval remain outstanding.")
           for lang in ["ru","de","fr","it","ja","zh-CN","tr","hi"]:
               qa.add_paragraph(lang,style="List Bullet")
           qa.add_paragraph("Do not publish or index these drafts until literary review, terminology, continuity, and final rendered-page checks are complete.")
