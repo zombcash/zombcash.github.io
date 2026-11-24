@@ -24,6 +24,18 @@ The two batches run independently on separate branches to stay within GitHub Act
 
 The sample mode translates the first three paragraphs of Chapter 01 for quality evaluation. It is not a published chapter.
 
+## Protected-term normalization
+
+After the two ranges are assembled, run **Normalize Meridian glossary terms** for each language. Its sample mode checks exact proper-name preservation; its all mode updates only content blocks that contain protected terms. It also covers the title page and prologue and preserves inline formatting. It writes to a separate branch:
+
+- \`translation-tgemma-glossary/<language>\`
+
+The shared protected-term list is \`translations/glossary.json\`. The current QA checkpoint is \`translations/QA_REPORT.md\`.
+
+## Word export
+
+After all eight glossary branches are ready, run **Build Word manuscripts — THE MERIDIAN OF ASH**. It validates all 48 pages against the English source, verifies 6,744 paragraphs and draft-only safeguards, then creates one DOCX per language plus the shared glossary and QA report. The workflow packages all ten Word files into one ZIP artifact.
+
 ## Editorial and publishing rule
 
 Model output is a translation draft, not a professionally proofread final edition. Draft pages are marked noindex and visibly labeled as machine drafts. The live site and sitemap remain unchanged.
