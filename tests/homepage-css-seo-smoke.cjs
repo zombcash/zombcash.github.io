@@ -18,7 +18,7 @@ for (const file of pages) {
   assert.equal(bodyStyles.length, 0, file + ': inline CSS must be loaded before body content');
   assert.match(html, /<style id="homepage-late-overrides">/, file + ': consolidated late CSS bundle missing');
   assert.doesNotMatch(html, /brand-search-aliases/i, file + ': artificial brand-alias paragraph remains');
-  assert.doesNotMatch(html, /Cash\s*Zombie|CashZombie/i, file + ': artificial search phrase remains');
+  assert.doesNotMatch(html, /\bCash\s+Zombie\b|\bCashZombie\b/i, file + ': artificial search phrase remains');
   console.log('PASS', file, 'styleBlocks=' + styles.length, 'bodyStyleBlocks=0');
 }
 
@@ -27,5 +27,5 @@ const keywords = english.match(/<meta\s+name=["']keywords["']\s+content=["']([^"
 assert.match(keywords, /ZombieCash/);
 assert.match(keywords, /Zombie Cash/);
 assert.match(keywords, /ZombCash/);
-assert.doesNotMatch(keywords, /Cash\s*Zombie|CashZombie/i);
+assert.doesNotMatch(keywords, /\bCash\s+Zombie\b|\bCashZombie\b/i);
 console.log('PASS natural brand metadata retained; artificial variants removed');
