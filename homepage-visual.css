@@ -3510,6 +3510,12 @@ body:has(#home) #home input:focus-visible {
   
   body:has(#home) #home > section.hero .hero-content h1 {
     font-size: clamp(36px, 8vw, 64px) !important;
+    line-height: 1.04 !important;
+  }
+  html[lang="ja"] body:has(#home) #home > section.hero .hero-content h1,
+  html[lang="zh-CN"] body:has(#home) #home > section.hero .hero-content h1,
+  html[lang="hi"] body:has(#home) #home > section.hero .hero-content h1 {
+    line-height: 1.12 !important;
   }
   
   body:has(#home) #home > section.hero .hero-content .hero-copy {
@@ -3544,6 +3550,7 @@ body:has(#home) #home input:focus-visible {
 @media (max-width: 480px) {
   body:has(#home) #home > section.hero .hero-content h1 {
     font-size: clamp(32px, 10vw, 48px) !important;
+    line-height: 1.04 !important;
   }
   
   body:has(#home) #home > section.hero .hero-content .eyebrow {
@@ -3551,15 +3558,7 @@ body:has(#home) #home input:focus-visible {
   }
 }
 
-/* === IMPROVED TYPOGRAPHY SCALE === */
-body:has(#home) #home > section.hero .hero-content h1 {
-  font-size: clamp(48px, 5.5vw, 120px) !important;
-}
-
-body:has(#home) #home > section.hero .hero-content .hero-copy {
-  font-size: clamp(16px, 1.2vw, 20px) !important;
-  line-height: 1.6 !important;
-}
+/* Base hero typography is defined above; mobile breakpoints remain the final overrides. */
 
 /* === IMPROVED TEXT CONTRAST === */
 body:has(#home) #home > section.hero .hero-content p {
