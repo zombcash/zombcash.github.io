@@ -38,6 +38,7 @@ jobs:
       - name: Audit title, description and internal links on every sitemap page
         run: python tests/seo-orphan-page-audit.py
       - name: Validate live HTTP, metadata, canonical and hreflang for every sitemap page
+        if: github.event_name != 'pull_request'
         run: python tests/sitemap-live-smoke.py
       - name: Upload full SEO metadata audit
         if: always()
