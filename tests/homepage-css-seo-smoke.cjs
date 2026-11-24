@@ -87,12 +87,12 @@ for (const file of pages) {
   assert.equal((html.match(/\.world-community-pair \.world-panel-foot\{margin-top:auto\}/g) || []).length, 1, file + ': duplicate world-panel-foot CSS rule remains');
   assert.equal((html.match(/section\.section\.community-console \.crew-grid \{ align-items: stretch !important; \}/g) || []).length, 0, file + ': duplicate one-line crew-grid alignment remains');
   for (const id of ['zc-promo-prev', 'zc-promo-next', 'zombie-radar-ai-refresh']) {
-    const control = html.match(new RegExp('<button\b[^>]*\bid="' + id + '"[^>]*>'))?.[0] || '';
+    const control = html.match(new RegExp('<button\\b[^>]*\\bid="' + id + '"[^>]*>'))?.[0] || '';
     assert.ok(control, file + ': missing visible control ' + id);
     assert.doesNotMatch(control, /\baria-label=/i, file + ': accessible name must follow the localized visible label for ' + id);
   }
   for (const id of ['service-market-dot', 'service-api-dot', 'service-community-dot']) {
-    const dot = html.match(new RegExp('<i\b(?=[^>]*\bid="' + id + '")[^>]*>'))?.[0] || '';
+    const dot = html.match(new RegExp('<i\\b(?=[^>]*\\bid="' + id + '")[^>]*>'))?.[0] || '';
     assert.match(dot, /\baria-hidden="true"/i, file + ': decorative service indicator must be hidden from assistive technology: ' + id);
   }
   assert.match(html, /aria-label="ZOMBIECASH THE UNDEAD INTERNET — back to top"/, file + ': footer brand accessible name must include the visible brand text');
