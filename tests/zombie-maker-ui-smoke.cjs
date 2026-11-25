@@ -75,7 +75,7 @@ const generatedImage = 'data:image/png;base64,' + PNG_BASE64;
     assert.equal(await page.locator('[data-style="toxic"]').getAttribute('class').then(value => value.includes('active')), true);
 
     await create.click();
-    await page.waitForFunction(() => document.querySelector('#status')?.textContent.includes('Transformation complete!'), null, { timeout: 10000 });
+    await page.waitForFunction(() => document.querySelector('#status')?.textContent.includes('Transformation complete.'), null, { timeout: 10000 });
     assert.equal(await page.locator('#resultBox img').count(), 1, 'Generated image should render');
     assert.equal(await page.locator('#downloadBtn').isEnabled(), true);
     assert.equal(await page.locator('#shareBtn').isEnabled(), true);
