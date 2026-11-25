@@ -109,10 +109,16 @@ const generatedImage = 'data:image/png;base64,' + PNG_BASE64;
       });
     });
 
-    const buttonAudit = await page.locator('button:not([hidden])').evaluateAll(buttons =>
-      buttons.filter(button => !button.textContent.trim() && !button.getAttribute('aria-label')).length
+    const unnamedButtons = await page.locator('button').evaluateAll(buttons => buttons
+      .filter(button => button.getClientRects().length > 0 && !button.closest('[hidden]'))
+      .filter(button => {
+        const labelledBy = (button.getAttribute('aria-labelledby') || '').split(/\\s+/).filter(Boolean);
+        const referencedText = labelledBy.map(id => document.getElementById(id)?.textContent || '').join(' ').trim();
+        return !button.textContent.trim() && !button.getAttribute('aria-label') && !referencedText;
+      })
+      .map(button => ({ id: button.id, className: String(button.className || ''), title: button.title || '' }))
     );
-    assert.equal(buttonAudit, 0, 'Every visible button must have an accessible name');
+    assert.deepEqual(unnamedButtons, [], 'Every visible button must have an accessible name');
 
     console.log(JSON.stringify({
       result: 'PASS',
