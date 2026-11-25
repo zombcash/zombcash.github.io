@@ -34,6 +34,16 @@ const routes = ['', 'de/', 'fr/', 'it/', 'ja/', 'zh-CN/', 'ru/', 'tr/', 'hi/'];
       const toggle = page.locator('header.zombcash-shared-header .zsh-menu-toggle');
       const nav = page.locator('#zsh-navigation');
       await toggle.waitFor({ state: 'visible', timeout: 15000 });
+      for (const id of ['service-market-dot', 'service-api-dot', 'service-community-dot']) {
+        const dot = page.locator('#' + id);
+        await dot.waitFor({ state: 'attached', timeout: 5000 });
+        assert.equal(await dot.getAttribute('aria-hidden'), 'true', route + ' ' + id + ' remains decorative');
+        assert.equal(await dot.getAttribute('aria-label'), null, route + ' ' + id + ' must not expose an invalid aria-label');
+      }
+      for (const id of ['zc-promo-prev', 'zc-promo-next']) {
+        const control = page.locator('#' + id);
+        assert.equal(await control.getAttribute('aria-label'), null, route + ' ' + id + ' must use its visible localized label');
+      }
       assert.equal(await toggle.getAttribute('aria-controls'), 'zsh-navigation', route + ' aria-controls');
       assert.equal(await toggle.getAttribute('aria-expanded'), 'false', route + ' initial aria-expanded');
       assert.equal(await nav.isVisible(), false, route + ' menu should start closed');
