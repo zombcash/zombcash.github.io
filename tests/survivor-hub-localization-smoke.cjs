@@ -7,14 +7,14 @@ const ROOT = 'https://zombcash.github.io/';
 const locales = ['en', 'de', 'fr', 'it', 'ja', 'zh-CN', 'ru', 'tr', 'hi'];
 const localeTitles = {
   en: 'Survivor Hub: Referrals &amp; Leaderboard | ZombieCash',
-  de: 'Überlebenden-Hub — ZombieCash',
+  de: 'Überlebenden-Hub | Community &amp; Survival Points',
   fr: 'Espace des survivants — ZombieCash',
   it: 'Hub dei sopravvissuti — ZombieCash',
   ja: 'サバイバー・ハブ | ZombieCash コミュニティランキング',
-  'zh-CN': '幸存者中心 — ZombieCash',
-  ru: 'Центр выживших — ZombieCash',
+  'zh-CN': '幸存者中心 | 生存积分与社区排行榜',
+  ru: 'Центр выживших | Очки и рейтинг сообщества',
   tr: 'Hayatta Kalanlar Merkezi — ZombieCash',
-  hi: 'सर्वाइवर हब — ZombieCash',
+  hi: 'सर्वाइवर हब | पॉइंट्स और लीडरबोर्ड',
 };
 
 function extractMeta(html, expression, label) {
