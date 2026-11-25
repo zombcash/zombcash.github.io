@@ -66,9 +66,9 @@ for (const file of pages) {
   assert.match(html, /<style id="homepage-pre-polish">/, file + ': consolidated pre-polish CSS bundle missing');
   assert.match(html, /<style id="homepage-components-inline">/, file + ': consolidated component CSS bundle missing');
   assert.match(html, /<style id="homepage-late-overrides">/, file + ': consolidated late CSS bundle missing');
-  assert.match(html, /script\\.js\\?v=20261125-homepage-runtime-1/,
+  assert.match(html, /script\.js\?v=20261125-homepage-runtime-1/,
     file + ': homepage runtime cache key must be refreshed so localized pages receive current ARIA fixes');
-  assert.match(html, /zctv-player\\.js\\?v=20261125-tv-lazy-1/,
+  assert.match(html, /zctv-player\.js\?v=20261125-tv-lazy-1/,
     file + ': TV player cache key must be refreshed so lazy archive loading is used');
   assert.ok(html.indexOf('homepage-pre-polish') < html.indexOf('site-polish.css'), file + ': pre-polish CSS order changed');
   assert.ok(html.indexOf('site-polish.css') < html.indexOf('homepage-components-inline'), file + ': component CSS must follow site-polish.css');
