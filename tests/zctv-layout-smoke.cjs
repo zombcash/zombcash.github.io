@@ -6,13 +6,23 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1600, height: 1000 } });
   const failures = [];
+  let episodeRequests = 0;
   const check = (condition, message) => { if (!condition) failures.push(message); };
-  await page.route('https://zombcash-bot.fadehost.app/api/tv/episodes*', route =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ episodes: [] }) })
-  );
+  await page.route('https://zombcash-bot.fadehost.app/api/tv/episodes*', route => {
+    episodeRequests += 1;
+    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ episodes: [] }) });
+  });
 
   await page.goto(process.env.SITE_URL || 'http://127.0.0.1:4173/', { waitUntil: 'domcontentloaded', timeout: 60000 });
+  await page.waitForTimeout(150);
+  check(episodeRequests === 0, 'TV archive API must not be requested before the TV section approaches the viewport');
+  const archiveResponse = page.waitForResponse(response =>
+    response.url().includes('/api/tv/episodes?page=1&per_page=24') && response.request().method() === 'GET'
+  );
   await page.locator('#zctv-channel-hub').scrollIntoViewIfNeeded();
+  await page.locator('#zctv-channel-hub [data-channel]').first().click();
+  await archiveResponse;
+  check(episodeRequests === 1, 'TV archive should issue exactly one request after a visitor selects a channel');
   await page.waitForSelector('#zctv-channel-hub .zctv-player-mount .zc-promo-player-wrap', { state: 'visible', timeout: 15000 });
   await page.waitForFunction(() => {
     const count = document.querySelector('#zctv-channel-hub #zc-promo-count');

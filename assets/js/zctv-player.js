@@ -34,6 +34,7 @@
   const metaStream = document.querySelector('meta[name="zctv-live-stream"]');
   const liveUrl = (root.dataset.liveStream || (metaStream && metaStream.content) || '').trim();
   let episodes = [];
+  let episodesRequestStarted = false;
   let promoVideos = [];
   let promoIndex = 0;
   let active = 'news';
@@ -514,7 +515,7 @@
     const switcher = document.createElement('div'); switcher.className = 'zctv-mode-switch';
     [['live','LIVE'],['archive','ARCHIVE']].forEach(function (item) {
       const button = document.createElement('button'); button.type = 'button'; button.dataset.zctvMode = item[0]; button.textContent = item[1];
-      button.addEventListener('click', function () { setMode(item[0]); }); switcher.append(button);
+      button.addEventListener('click', function () { if (item[0] === 'archive') loadEpisodes(); setMode(item[0]); }); switcher.append(button);
     });
     liveLabel.append(signal, switcher);
   }
@@ -527,26 +528,41 @@
     player.addEventListener('waiting', function () { if (mode === 'live') setSignal(false, 'LIVE · BUFFERING'); });
     player.addEventListener('error', function () { if (mode === 'live') { setSignal(false, 'LIVE SIGNAL ERROR'); text(status, 'LIVE STREAM COULD NOT BE PLAYED'); } });
   }
+  function loadEpisodes() {
+    if (episodesRequestStarted) return;
+    episodesRequestStarted = true;
+    fetch(API + '/episodes?page=1&per_page=24', { cache: 'default', credentials: 'omit' })
+      .then(function (response) {
+        if (!response.ok) throw new Error('Archive request failed (' + response.status + ')');
+        return response.json();
+      })
+      .then(function (payload) {
+        episodes = Array.isArray(payload.episodes) ? payload.episodes : [];
+        if (mode === 'archive') {
+          render();
+          // Load the newest published episode into the main player by default.
+          // Leave playback under the viewer's control; browsers restrict autoplay with sound.
+          if (episodes.length && !currentId) playEpisode(episodes[0], false);
+        }
+      })
+      .catch(function () {
+        showEmpty('SERVER ARCHIVE TEMPORARILY BUSY · PLEASE TRY AGAIN LATER');
+        text(status, 'ARCHIVE CONNECTION UNAVAILABLE');
+        text(version, 'ARCHIVE UNAVAILABLE');
+        setSignal(false, 'ARCHIVE UNAVAILABLE');
+      });
+  }
+
   cards.forEach(function (card) {
     card.addEventListener('click', function () {
       active = card.dataset.channel || 'news';
       cards.forEach(function (item) { item.setAttribute('aria-pressed', String(item === card)); });
+      loadEpisodes();
       setMode('archive');
     });
   });
 
-  fetch(API + '/episodes?page=1&per_page=24', { cache: 'no-store', credentials: 'omit' })
-    .then(function (response) { if (!response.ok) throw new Error('Archive request failed (' + response.status + ')'); return response.json(); })
-    .then(function (payload) {
-      episodes = Array.isArray(payload.episodes) ? payload.episodes : [];
-      if (mode === 'archive') {
-        render();
-        // Load the newest published episode into the main player by default.
-        // Leave playback under the viewer's control; browsers restrict autoplay with sound.
-        if (episodes.length && !currentId) playEpisode(episodes[0], false);
-      }
-    })
-    .catch(function () { showEmpty('SERVER ARCHIVE OFFLINE · PLEASE TRY AGAIN LATER'); text(status, 'SERVER CONNECTION UNAVAILABLE'); text(version, 'OFFLINE'); setSignal(false, 'SIGNAL UNAVAILABLE'); });
+  // Archive requests are user-initiated (channel selection or the Archive mode control).
 
 
   // Authenticated episode publishing. The API remains the authority for admin access.

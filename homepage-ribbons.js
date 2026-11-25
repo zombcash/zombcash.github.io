@@ -77,7 +77,7 @@
  function updateCrypto(){
   var ids={BTC:'bitcoin',ETH:'ethereum',SOL:'solana'};
   // CoinGecko supports browser CORS from the live site origin; use it first to avoid a predictable Binance CORS failure.
-  fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Csolana&vs_currencies=usd&include_24hr_change=true',{cache:'no-store',signal:AbortSignal.timeout(10000)})
+  fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Csolana&vs_currencies=usd&include_24hr_change=true',{cache:'default',signal:AbortSignal.timeout(10000)})
    .then(function(r){if(!r.ok)throw new Error('CoinGecko HTTP '+r.status);return r.json();})
    .then(function(data){
     var available=Object.keys(ids).some(function(symbol){var quote=data[ids[symbol]]||{};return Number(quote.usd)>0;});
@@ -89,22 +89,10 @@
      else setItem(symbol+':',symbol+': temporarily unavailable');
     });
    }).catch(function(){
-    // Binance remains a secondary fallback if CoinGecko is unavailable or rate-limited.
-    var symbols=['BTCUSDT','ETHUSDT','SOLUSDT'];
-    fetch('https://api.binance.com/api/v3/ticker/24hr?symbols='+encodeURIComponent(JSON.stringify(symbols)),{cache:'no-store',signal:AbortSignal.timeout(10000)})
-     .then(function(r){if(!r.ok)throw new Error('Binance HTTP '+r.status);return r.json();})
-     .then(function(rows){
-      if(!Array.isArray(rows)||!symbols.every(function(symbol){return rows.some(function(row){return row&&row.symbol===symbol&&Number(row.lastPrice)>0;});}))throw new Error('Binance incomplete ticker response');
-      setMarketSource('');
-      rows.forEach(function(row){
-       var name=row.symbol.replace('USDT','');
-       var change=Number(row.priceChangePercent);
-       setItem(name+':',name+': '+fmtPrice(Number(row.lastPrice))+' ('+fmtChange(change)+')');
-      });
-     }).catch(function(){
-      setMarketSource('');
-      ['BTC','ETH','SOL'].forEach(function(symbol){setItem(symbol+':',symbol+': temporarily unavailable');});
-     });
+    // Do not call Binance from the browser: its public ticker endpoint does not
+    // provide reliable CORS headers for the ZombieCash site origin.
+    setMarketSource('');
+    ['BTC','ETH','SOL'].forEach(function(symbol){setItem(symbol+':',symbol+': temporarily unavailable');});
    });
  }
  function updateFx(){
