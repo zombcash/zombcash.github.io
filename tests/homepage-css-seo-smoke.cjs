@@ -50,6 +50,17 @@ for (const file of pages) {
   const html = fs.readFileSync(path.join(root, file), 'utf8');
   const headEnd = html.indexOf('</head>');
   assert.notEqual(headEnd, -1, file + ': missing closing head');
+  const inlineCss = [...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)].map(match => match[1]).join('\n');
+  assert.ok(inlineCss.includes('.zc-hero-art-panel'), file + ': current hero artwork panel styles must remain');
+  assert.ok(inlineCss.includes('.zc-sponsor-art-slot'), file + ': current hero artwork slot styles must remain');
+  for (const stale of [
+    '.zc-adsterra-section', '.zc-adsterra-inner', '#container-4420dadadbd2f0727c322cd6c632be3e',
+    '.zc-radar-art', '.zc-radar-scene', '.zc-art-scanlines', '.zc-art-corner',
+    '.zc-art-caption', '.zc-art-live-dot', '.zc-hero-ad-stage',
+    '.zc-adsterra-native-slot', '.zc-adsterra-mobile-slot', '.zc-hero-sponsor-panel'
+  ]) {
+    assert.equal(inlineCss.includes(stale), false, file + ': obsolete homepage selector returned: ' + stale);
+  }
   const styles = [...html.matchAll(/<style\b[^>]*>/gi)];
   const bodyStyles = styles.filter(match => match.index > headEnd);
   assert.equal(styles.length, 3, file + ': homepage CSS should be consolidated into three cascade-preserving blocks');
