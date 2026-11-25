@@ -607,7 +607,7 @@ button,a{ -webkit-tap-highlight-color:transparent }
   @page{size:auto;margin:12mm}
   html,body{background:#fff!important;color:#172019!important;overflow:visible!important;font-size:11pt!important;line-height:1.4!important}
   body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .scanlines,.hero-grid,.moon,.city,.city-front,.hero-mascot,.hero-zombie,.mascot-orbit,.mascot-hand,
+  .scanlines,.hero-grid,.moon,.city,.city-front,
   .menu-toggle,.top-cta,.scroll-top,.scroll-bottom,.back-to-top,.back-to-bottom{display:none!important}
   .topbar{position:static!important;height:auto!important;padding:10px 0!important;background:#fff!important;border-bottom:1px solid #9aa39b!important;backdrop-filter:none!important}
   .topbar nav{display:none!important}
