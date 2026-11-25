@@ -22,6 +22,8 @@ on:
       - "tests/homepage-layout-shift-smoke.cjs"
       - "language.js"
       - "homepage-visual.css"
+      - "style.css"
+      - "tests/homepage-legacy-hero-css-smoke.cjs"
       - "assets/js/zctv-player.js"
       - "tests/zctv-layout-smoke.cjs"
       - "homepage-ribbons.js"
@@ -71,6 +73,8 @@ jobs:
           node --check tests/survivor-auth-modal-accessibility-smoke.cjs
           node --check tests/homepage-css-seo-smoke.cjs
           node tests/homepage-css-seo-smoke.cjs
+          node --check tests/homepage-legacy-hero-css-smoke.cjs
+          node tests/homepage-legacy-hero-css-smoke.cjs
           node --check language.js
           node --check survivor-auth.js
           node --check tests/frontend-api-timeout-smoke.cjs
