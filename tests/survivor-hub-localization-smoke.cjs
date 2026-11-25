@@ -23,6 +23,15 @@ function extractMeta(html, expression, label) {
   return match[1];
 }
 
+function decodeHtmlEntities(value) {
+  return value
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+}
+
 function extractDictionary(html, label) {
   const start = html.indexOf('const copy={');
   const end = html.indexOf('\nlet lang=', start);
@@ -134,7 +143,7 @@ for (const locale of locales) {
   const schemaText = extractMeta(html, /<script type="application\/ld\+json">([\s\S]*?)<\/script>/i, localizedPath + ' JSON-LD');
   const schema = JSON.parse(schemaText);
   assert.equal(schema.inLanguage, locale, localizedPath + ' JSON-LD language must match the page');
-  assert.equal(schema.name, title, localizedPath + ' JSON-LD name must match the page title');
+  assert.equal(schema.name, decodeHtmlEntities(title), localizedPath + ' JSON-LD name must match the decoded page title');
   assert.equal(schema.description, description, localizedPath + ' JSON-LD description must match the localized description');
 }
 
