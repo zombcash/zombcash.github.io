@@ -24,7 +24,7 @@ fs.mkdirSync(output, { recursive: true });
         await page.waitForSelector('main#home .hero-layout', { timeout: 20000 });
         await page.waitForTimeout(250);
         await page.evaluate(async () => {
-          const images = [...document.querySelectorAll('main#home .zctv-host-art img, main#home .zm-promo-character')];
+          const images = [...document.querySelectorAll('main#home > section.hero .zc-sponsor-art-slot img, main#home .zctv-host-art img, main#home .zm-promo-character')];
           images.forEach(image => { image.loading = 'eager'; });
           await Promise.all(images.map(image => image.decode().catch(() => {})));
         });
@@ -37,7 +37,7 @@ fs.mkdirSync(output, { recursive: true });
           const hero = document.querySelector('main#home > .hero');
           const layout = hero?.querySelector('.hero-layout');
           const content = layout?.querySelector('.hero-content');
-          const sponsor = layout?.querySelector('.zc-hero-sponsor-panel');
+          const sponsor = layout?.querySelector('.zc-hero-art-panel');
           const statusRail = layout?.querySelector('.zc-home-status-rail');
           const heroStats = layout?.querySelector('.hero-stats');
           const tvSection = document.querySelector('#zctv-channel-hub');
@@ -60,15 +60,11 @@ fs.mkdirSync(output, { recursive: true });
             width: innerWidth,
             documentWidth: document.documentElement.scrollWidth,
             stylesheet,
-            hero: rect(hero), layout: rect(layout), content: rect(content), sponsor: rect(sponsor), statusRail: rect(statusRail), heroStats: rect(heroStats), hasSponsor: !!sponsor, art: rect(art),
+            hero: rect(hero), layout: rect(layout), content: rect(content), sponsor: rect(sponsor), statusRail: rect(statusRail), heroStats: rect(heroStats), hasSponsor: !!sponsor, art: rect(art), heroGridColumns: layout ? getComputedStyle(layout).gridTemplateColumns : null, heroGridAreas: layout ? getComputedStyle(layout).gridTemplateAreas : null,
             tvSection: rect(tvSection), tvInner: rect(tvInner), tvLayout: rect(tvLayout), tvPlayer: rect(tvPlayer), tvVideo: rect(tvVideo), tvHostArt: rect(tvHostArt), tvArchive: rect(tvArchive), tvChannels: rect(tvChannels),
             tvHostImageLoaded: !!tvHostImage && tvHostImage.complete && tvHostImage.naturalWidth > 0,
             labCharacterImageLoaded: !!labCharacter && labCharacter.complete && labCharacter.naturalWidth > 0,
-            adStage: rect(sponsor?.querySelector('.zc-hero-ad-stage')),
-            nativeSlot: rect(sponsor?.querySelector('.zc-adsterra-native-slot')),
-            mobileSlot: rect(sponsor?.querySelector('.zc-adsterra-mobile-slot')),
-            nativeSlotVisible: (() => { const el = sponsor?.querySelector('.zc-adsterra-native-slot'); if (!el) return false; const r = el.getBoundingClientRect(); return getComputedStyle(el).display !== 'none' && r.width > 0 && r.height > 0; })(),
-            mobileSlotVisible: (() => { const el = sponsor?.querySelector('.zc-adsterra-mobile-slot'); if (!el) return false; const r = el.getBoundingClientRect(); return getComputedStyle(el).display !== 'none' && r.width > 0 && r.height > 0; })(),
+
             imagePresent: !!image,
             imageLoaded: !!image && image.complete && image.naturalWidth > 0,
           };
@@ -91,22 +87,20 @@ fs.mkdirSync(output, { recursive: true });
         if (result.documentWidth > width + 1) issues.push('horizontal overflow: ' + result.documentWidth + 'px');
         if (width >= 7600 && (!result.layout || result.layout.width < width * 0.85)) issues.push('localized hero layout did not expand for 20% browser zoom');
         if (width >= 7600 && (!result.tvInner || result.tvInner.width < width * 0.8)) issues.push('localized ZombieCash TV rail did not expand for 20% browser zoom');
-        if (result.hasSponsor) {
-          if (!result.imagePresent || !result.imageLoaded) issues.push('localized sponsor artwork image is missing or failed to load');
-          if (!result.adStage) issues.push('localized sponsor ad reservation is missing');
-          else if (width < 768) {
-          const expectedHeight = 50 * Math.min(1, result.adStage.width / 320);
-          if (result.adStage.height < expectedHeight * 0.9) issues.push('mobile ad reservation does not preserve the 320×50 ratio');
-          if (!result.mobileSlotVisible) issues.push('mobile sponsor slot is not visible below 768px');
-          if (result.nativeSlotVisible) issues.push('desktop native sponsor slot must be hidden below 768px');
-          } else {
-            if (result.adStage.height < 180) issues.push('desktop sponsor stage must reserve the configured 180px fallback from 768px upward');
-            if (!result.nativeSlotVisible || !result.nativeSlot || result.nativeSlot.height < 180) issues.push('native sponsor slot must be visible and reserve 180px from 768px upward');
-            if (result.mobileSlotVisible) issues.push('mobile sponsor slot must be hidden from 768px upward');
-          }
-          if (width >= 1360 && result.content.right > result.sponsor.left + 2) issues.push('desktop hero columns overlap');
-          if (width < 1360 && result.content.bottom > result.sponsor.top + 2) issues.push('stacked hero sections overlap');
-        } else if ((!result.statusRail || result.statusRail.width <= 0) && (!result.heroStats || result.heroStats.width <= 0)) {
+        if (!result.hasSponsor || !result.sponsor || result.sponsor.width <= 0 || result.sponsor.height <= 0) issues.push('localized hero artwork panel is missing or has no visible size');
+        if (!result.imagePresent || !result.imageLoaded) issues.push('localized hero artwork image is missing or failed to load');
+        if (!result.content || result.content.width <= 0) issues.push('localized homepage hero content is missing or has no visible size');
+        const statusElement = result.statusRail && result.statusRail.width > 0 ? result.statusRail : result.heroStats;
+        if (!statusElement || statusElement.width <= 0) issues.push('localized homepage status rail or hero stats are missing or have no visible size');
+        const overlaps = (a, b) => !!a && !!b && a.left < b.right - 2 && a.right > b.left + 2 && a.top < b.bottom - 2 && a.bottom > b.top + 2;
+        if (overlaps(result.content, result.sponsor)) issues.push('hero copy and artwork panel overlap');
+        if (result.statusRail && overlaps(result.content, result.statusRail)) issues.push('hero copy and status rail overlap');
+        if (result.statusRail && overlaps(result.sponsor, result.statusRail)) issues.push('hero artwork panel and status rail overlap');
+        if (!result.statusRail && overlaps(result.content, result.heroStats)) issues.push('hero copy and translated stats overlap');
+        if (!result.statusRail && overlaps(result.sponsor, result.heroStats)) issues.push('hero artwork panel and translated stats overlap');
+        if (width < 1360 && result.content.bottom > result.sponsor.top + 2) issues.push('mobile/tablet hero artwork must stack below the copy');
+        if (width < 1360 && statusElement && result.sponsor.bottom > statusElement.top + 2) issues.push('mobile/tablet stats must sit below hero artwork');
+        if (width >= 1360 && statusElement && statusElement.top < Math.max(result.content.bottom, result.sponsor.bottom) - 2) issues.push('desktop stats/status rail must sit below both hero columns'); else if ((!result.statusRail || result.statusRail.width <= 0) && (!result.heroStats || result.heroStats.width <= 0)) {
           issues.push('localized homepage hero stats or current homepage status rail are missing');
         }
         if (!result.tvHostImageLoaded) issues.push('ZombieCash TV host artwork is missing or failed to load');
