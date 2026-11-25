@@ -34,6 +34,28 @@ async function requestFromSite(page, path, method = 'GET', body = null) {
   }, { apiOrigin: API_ORIGIN, path, method, body });
 }
 
+async function requestEmptyMultipartFromSite(page, path) {
+  return page.evaluate(async ({ apiOrigin, path }) => {
+    try {
+      const form = new FormData();
+      form.append('style', 'classic');
+      const response = await fetch(apiOrigin + path, {
+        method: 'POST',
+        body: form,
+        cache: 'no-store',
+        credentials: 'omit',
+        signal: AbortSignal.timeout(15000),
+      });
+      const text = await response.text();
+      let data = null;
+      try { data = JSON.parse(text); } catch (_) {}
+      return { resolved: true, status: response.status, type: response.type, ok: response.ok, data, preview: text.slice(0, 180) };
+    } catch (error) {
+      return { resolved: false, error: error.name + ': ' + error.message };
+    }
+  }, { apiOrigin: API_ORIGIN, path });
+}
+
 function record(name, response, expectedStatus, failures, details = {}) {
   if (!response.resolved) {
     failures.push(name + ': browser fetch failed: ' + response.error);
@@ -145,6 +167,29 @@ function record(name, response, expectedStatus, failures, details = {}) {
     const health = await requestFromSite(page, '/health');
     results.push(record('health', health, 200, failures));
     if (health.data?.ok !== true) failures.push('health: response did not contain ok=true');
+
+    const soiReport = await requestFromSite(page, '/api/soi/report');
+    if (soiReport.resolved && soiReport.type === 'cors' && soiReport.status === 200 && Array.isArray(soiReport.data?.launches)) {
+      results.push({ name: 'soi-launch-radar-report', result: 'PASS', status: 200, launches: soiReport.data.launches.length });
+    } else if (soiReport.resolved && soiReport.type === 'cors' && soiReport.status === 503) {
+      degraded.push('SOI launch radar report is not currently published (HTTP 503)');
+      results.push({ name: 'soi-launch-radar-report', result: 'DEGRADED', status: 503 });
+    } else {
+      record('soi-launch-radar-report', soiReport, 200, failures);
+    }
+
+    // Empty multipart reaches the Zombie Lab configuration and request-validation path,
+    // but returns before image processing or daily generation quota reservation.
+    const makerConfig = await requestEmptyMultipartFromSite(page, '/api/zombie-maker');
+    if (makerConfig.resolved && makerConfig.type === 'cors' && makerConfig.status === 400 &&
+        /Choose a photo first/i.test(makerConfig.data?.error || '')) {
+      results.push({ name: 'zombie-lab-api-config', result: 'PASS', status: 400, generationQuotaUsed: false });
+    } else if (makerConfig.resolved && makerConfig.type === 'cors' && makerConfig.status === 503) {
+      degraded.push('Zombie Lab image endpoint is disabled or its provider key is not configured (HTTP 503)');
+      results.push({ name: 'zombie-lab-api-config', result: 'DEGRADED', status: 503 });
+    } else {
+      record('zombie-lab-api-config', makerConfig, 400, failures);
+    }
 
     const assistantStatus = await requestFromSite(page, '/api/assistant/status');
     if (assistantStatus.resolved && assistantStatus.type === 'cors' && assistantStatus.status === 200 && assistantStatus.data) {
@@ -290,6 +335,50 @@ function record(name, response, expectedStatus, failures, details = {}) {
       marketPrice: uiSnapshot.marketPrice,
     });
 
+    const marketPage = await context.newPage();
+    const marketPageErrors = [];
+    let soiPageResponse = null;
+    marketPage.on('pageerror', error => marketPageErrors.push(error.message));
+    marketPage.on('response', response => {
+      try {
+        const url = new URL(response.url());
+        if (url.hostname === new URL(API_ORIGIN).hostname && url.pathname === '/api/soi/report') {
+          soiPageResponse = { status: response.status(), type: response.request().resourceType() };
+        }
+      } catch (_) {}
+    });
+    const marketNavigation = await marketPage.goto(SITE_ORIGIN + '/zombcash-market-data.html', {
+      waitUntil: 'domcontentloaded',
+      timeout: 45000,
+    });
+    if (!marketNavigation || !marketNavigation.ok()) {
+      failures.push('SOI market-data page did not return a successful response');
+    } else {
+      try {
+        await marketPage.waitForFunction(() => {
+          const status = document.getElementById('soi-status');
+          return status && status.dataset.state && status.dataset.state !== 'loading';
+        }, null, { timeout: 20000 });
+      } catch (_) {}
+      const soiSnapshot = await marketPage.evaluate(() => ({
+        state: document.getElementById('soi-status')?.dataset.state || '',
+        status: document.getElementById('soi-status')?.textContent?.trim() || '',
+        launchRows: document.querySelectorAll('#soi-launches tr').length,
+        historyRows: document.querySelectorAll('#soi-history tr').length,
+      }));
+      if (soiSnapshot.state === 'ready' && soiPageResponse?.status === 200) {
+        results.push({ name: 'soi-market-data-page', result: 'PASS', status: 200, launchRows: soiSnapshot.launchRows, historyRows: soiSnapshot.historyRows });
+      } else if (soiSnapshot.state === 'error' && soiPageResponse?.status === 503) {
+        degraded.push('SOI market-data page loaded, but the published daily launch report is unavailable');
+        results.push({ name: 'soi-market-data-page', result: 'DEGRADED', status: 503 });
+      } else {
+        failures.push('SOI market-data page did not settle into a ready or documented unavailable state: ' + JSON.stringify({ soiSnapshot, soiPageResponse }));
+        results.push({ name: 'soi-market-data-page', result: 'FAIL', state: soiSnapshot.state, responseStatus: soiPageResponse?.status || null });
+      }
+      if (marketPageErrors.length) failures.push('SOI market-data page JavaScript errors: ' + marketPageErrors.join('; '));
+    }
+    await marketPage.close();
+
     const layoutShiftDiagnostics = await page.evaluate(() => {
       const entries = window.__zombcashLayoutShifts || [];
       return {
@@ -308,7 +397,7 @@ function record(name, response, expectedStatus, failures, details = {}) {
       mobileLayoutShiftDiagnostics: layoutShiftDiagnostics,
       degraded,
       failures,
-      note: 'Live public endpoints and unauthenticated security guards were checked from the real site origin. Telegram completion and authenticated profile writes were not attempted.',
+      note: 'Live public endpoints and unauthenticated security guards were checked from the real site origin. The Zombie Lab configuration probe sends an empty multipart request and stops before image processing or quota reservation. Telegram completion, authenticated profile writes and paid image generation were not attempted.',
     };
     console.log(JSON.stringify(report, null, 2));
     if (process.env.GITHUB_STEP_SUMMARY) {
