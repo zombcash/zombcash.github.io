@@ -51,8 +51,12 @@ for (const file of pages) {
   const headEnd = html.indexOf('</head>');
   assert.notEqual(headEnd, -1, file + ': missing closing head');
   const inlineCss = [...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)].map(match => match[1]).join('\n');
-  assert.ok(inlineCss.includes('.zc-hero-art-panel'), file + ': current hero artwork panel styles must remain');
-  assert.ok(inlineCss.includes('.zc-sponsor-art-slot'), file + ': current hero artwork slot styles must remain');
+  const homepageCss = file === 'index.html'
+    ? ['homepage-pre-polish.css', 'homepage-components.css', 'homepage-late-overrides.css']
+        .map(asset => fs.readFileSync(path.join(root, asset), 'utf8')).join('\n')
+    : inlineCss;
+  assert.ok(homepageCss.includes('.zc-hero-art-panel'), file + ': current hero artwork panel styles must remain');
+  assert.ok(homepageCss.includes('.zc-sponsor-art-slot'), file + ': current hero artwork slot styles must remain');
   for (const stale of [
     '.zc-adsterra-section', '.zc-adsterra-inner', '#container-4420dadadbd2f0727c322cd6c632be3e',
     '.zc-radar-art', '.zc-radar-scene', '.zc-art-scanlines', '.zc-art-corner',
@@ -63,7 +67,8 @@ for (const file of pages) {
   }
   const styles = [...html.matchAll(/<style\b[^>]*>/gi)];
   const bodyStyles = styles.filter(match => match.index > headEnd);
-  assert.equal(styles.length, 3, file + ': homepage CSS should be consolidated into three cascade-preserving blocks');
+  assert.equal(styles.length, file === 'index.html' ? 0 : 3,
+    file + ': homepage CSS must remain in three ordered blocks or their cascade-preserving external assets');
   assert.equal(bodyStyles.length, 0, file + ': inline CSS must be loaded before body content');
   for (const selector of retiredHomepageSelectors) {
     assert.equal(html.includes('.' + selector), false,
@@ -78,19 +83,36 @@ for (const file of pages) {
   assert.equal((html.match(/class="zc-outbreak-ribbons/g) || []).length, 1, file + ': exactly one reserved ribbon wrapper must exist');
   assert.equal((html.match(/class="zc-ribbon zc-ribbon--/g) || []).length, 3, file + ': all three ribbon rows must reserve their final layout before JavaScript');
 
-  assert.match(html, /<style id="homepage-pre-polish">/, file + ': consolidated pre-polish CSS bundle missing');
-  assert.match(html, /<style id="homepage-components-inline">/, file + ': consolidated component CSS bundle missing');
-  assert.match(html, /<style id="homepage-late-overrides">/, file + ': consolidated late CSS bundle missing');
+  if (file === 'index.html') {
+    for (const asset of ['homepage-pre-polish.css', 'homepage-components.css', 'homepage-late-overrides.css']) {
+      assert.match(html, new RegExp('<link rel="stylesheet" href="/' + asset + '\\?v=20261125-1">'),
+        file + ': cascade-preserving external CSS asset missing: ' + asset);
+    }
+  } else {
+    assert.match(html, /<style id="homepage-pre-polish">/, file + ': consolidated pre-polish CSS bundle missing');
+    assert.match(html, /<style id="homepage-components-inline">/, file + ': consolidated component CSS bundle missing');
+    assert.match(html, /<style id="homepage-late-overrides">/, file + ': consolidated late CSS bundle missing');
+  }
   assert.match(html, /script\.js\?v=20261125-homepage-runtime-1/,
     file + ': homepage runtime cache key must be refreshed so localized pages receive current ARIA fixes');
   assert.match(html, /zctv-player\.js\?v=20261125-tv-lazy-1/,
     file + ': TV player cache key must be refreshed so lazy archive loading is used');
-  assert.ok(html.indexOf('homepage-pre-polish') < html.indexOf('site-polish.css'), file + ': pre-polish CSS order changed');
-  assert.ok(html.indexOf('site-polish.css') < html.indexOf('homepage-components-inline'), file + ': component CSS must follow site-polish.css');
-  assert.ok(html.indexOf('homepage-components-inline') < html.indexOf('homepage-visual.css'), file + ': component CSS order changed');
-  assert.ok(html.indexOf('homepage-visual.css') < html.indexOf('homepage-late-overrides'), file + ': final CSS must follow homepage-visual.css');
+  if (file === 'index.html') {
+    assert.ok(html.indexOf('style.css') < html.indexOf('homepage-pre-polish.css'), file + ': pre-polish CSS order changed');
+    assert.ok(html.indexOf('homepage-pre-polish.css') < html.indexOf('site-polish.css'), file + ': pre-polish CSS must precede site-polish.css');
+    assert.ok(html.indexOf('site-polish.css') < html.indexOf('homepage-components.css'), file + ': component CSS must follow site-polish.css');
+    assert.ok(html.indexOf('homepage-components.css') < html.indexOf('homepage-visual.css'), file + ': component CSS order changed');
+    assert.ok(html.indexOf('homepage-visual.css') < html.indexOf('homepage-late-overrides.css'), file + ': final CSS must follow homepage-visual.css');
+  } else {
+    assert.ok(html.indexOf('homepage-pre-polish') < html.indexOf('site-polish.css'), file + ': pre-polish CSS order changed');
+    assert.ok(html.indexOf('site-polish.css') < html.indexOf('homepage-components-inline'), file + ': component CSS must follow site-polish.css');
+    assert.ok(html.indexOf('homepage-components-inline') < html.indexOf('homepage-visual.css'), file + ': component CSS order changed');
+    assert.ok(html.indexOf('homepage-visual.css') < html.indexOf('homepage-late-overrides'), file + ': final CSS must follow homepage-visual.css');
+  }
   assert.doesNotMatch(html, /brand-search-aliases/i, file + ': artificial brand-alias paragraph remains');
-  const heroCss = html.match(/<style id="homepage-pre-polish">([\s\S]*?)<\/style>/i)?.[1] || '';
+  const heroCss = file === 'index.html'
+    ? fs.readFileSync(path.join(root, 'homepage-pre-polish.css'), 'utf8')
+    : html.match(/<style id="homepage-pre-polish">([\s\S]*?)<\/style>/i)?.[1] || '';
   assert.ok(heroCss.length > 0, file + ': consolidated hero CSS block missing');
   assert.doesNotMatch(heroCss, /\/\*\s*V(?:8|9|14|17|18|19|20|21)\b/i, file + ': superseded hero version history remains');
   assert.doesNotMatch(heroCss.slice(0, 6000), /\.outbreak-panel|panelOrbit|signalPulse/, file + ': stale hero panel selectors or animations remain');
