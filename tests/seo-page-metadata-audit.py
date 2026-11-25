@@ -131,7 +131,7 @@ def verify_display_width_metric():
     assert search_display_units("abc") == 3
     assert search_display_units("中文") == 4
     assert search_display_units("かな") == 4
-    assert search_display_units("e\\u0301") == 1
+    assert search_display_units("e\u0301") == 1
 
 
 def main():
