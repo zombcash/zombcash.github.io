@@ -6,7 +6,7 @@ const assert = require('node:assert/strict');
 const ROOT = 'https://zombcash.github.io/';
 const locales = ['en', 'de', 'fr', 'it', 'ja', 'zh-CN', 'ru', 'tr', 'hi'];
 const localeTitles = {
-  en: 'Survivor Hub — ZombieCash',
+  en: 'Survivor Hub: Referrals &amp; Leaderboard | ZombieCash',
   de: 'Überlebenden-Hub — ZombieCash',
   fr: 'Espace des survivants — ZombieCash',
   it: 'Hub dei sopravvissuti — ZombieCash',
@@ -21,6 +21,15 @@ function extractMeta(html, expression, label) {
   const match = html.match(expression);
   assert.ok(match, 'Missing ' + label);
   return match[1];
+}
+
+function decodeHtmlEntities(value) {
+  return value
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
 }
 
 function extractDictionary(html, label) {
@@ -134,7 +143,7 @@ for (const locale of locales) {
   const schemaText = extractMeta(html, /<script type="application\/ld\+json">([\s\S]*?)<\/script>/i, localizedPath + ' JSON-LD');
   const schema = JSON.parse(schemaText);
   assert.equal(schema.inLanguage, locale, localizedPath + ' JSON-LD language must match the page');
-  assert.equal(schema.name, title, localizedPath + ' JSON-LD name must match the page title');
+  assert.equal(schema.name, decodeHtmlEntities(title), localizedPath + ' JSON-LD name must match the decoded page title');
   assert.equal(schema.description, description, localizedPath + ' JSON-LD description must match the localized description');
 }
 
