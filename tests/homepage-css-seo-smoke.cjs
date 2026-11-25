@@ -120,7 +120,28 @@ for (const file of pages) {
     assert.ok(aiEngineCard, 'English homepage AI engine card must exist');
     assert.doesNotMatch(aiEngineCard, /\baria-label=/i, 'AI engine card accessible name must include its visible status text');
   }
-  assert.doesNotMatch(html, /\bCash\s+Zombie\b|\bCashZombie\b/i, file + ': artificial search phrase remains');
+  const searchAliasPattern = /\bCash\s+Zombie\b|\bCashZombie\b/i;
+  const visibleBody = html.replace(/<head[\s\S]*?<\/head>/i, '').replace(/<script[\s\S]*?<\/script>/gi, '');
+  const metaDescription = html.match(/<meta name="description" content="([^"]*)"/i)?.[1] || '';
+  assert.doesNotMatch(visibleBody, searchAliasPattern, file + ': search variants must not appear as visible keyword-stuffed body text');
+  assert.doesNotMatch(metaDescription, searchAliasPattern, file + ': search variants must not be forced into the search description');
+  const structuredData = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/gi)]
+    .flatMap(match => {
+      const parsed = JSON.parse(match[1]);
+      return parsed['@graph'] || [parsed];
+    });
+  const organization = structuredData.find(item => item['@type'] === 'Organization');
+  assert.ok(organization, file + ': Organization structured data missing');
+  for (const alias of ['Cash Zombie', 'CashZombie']) {
+    assert.ok(organization.alternateName?.includes(alias), file + ': structured data must retain search variant ' + alias);
+  }
+  if (file === 'index.html') {
+    const website = structuredData.find(item => item['@type'] === 'WebSite');
+    assert.ok(website, 'English homepage WebSite structured data missing');
+    for (const alias of ['Cash Zombie', 'CashZombie']) {
+      assert.ok(website.alternateName?.includes(alias), 'WebSite structured data must retain search variant ' + alias);
+    }
+  }
   console.log('PASS', file, 'styleBlocks=' + styles.length, 'bodyStyleBlocks=0');
 }
 
