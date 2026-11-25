@@ -144,6 +144,8 @@ for (const locale of locales) {
   const schema = JSON.parse(schemaText);
   assert.equal(schema.inLanguage, locale, localizedPath + ' JSON-LD language must match the page');
   assert.equal(schema.name, decodeHtmlEntities(title), localizedPath + ' JSON-LD name must match the decoded page title');
+  assert.equal(schema.url, canonical, localizedPath + ' JSON-LD URL must match the self-canonical URL');
+  assert.equal(schema['@id'], canonical + '#webpage', localizedPath + ' JSON-LD @id must identify the localized canonical page');
   assert.equal(schema.description, description, localizedPath + ' JSON-LD description must match the localized description');
 }
 
