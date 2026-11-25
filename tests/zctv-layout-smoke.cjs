@@ -20,8 +20,9 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
     response.url().includes('/api/tv/episodes?page=1&per_page=24') && response.request().method() === 'GET'
   );
   await page.locator('#zctv-channel-hub').scrollIntoViewIfNeeded();
+  await page.locator('#zctv-channel-hub [data-channel]').first().click();
   await archiveResponse;
-  check(episodeRequests === 1, 'TV archive should issue exactly one request after the section enters the viewport');
+  check(episodeRequests === 1, 'TV archive should issue exactly one request after a visitor selects a channel');
   await page.waitForSelector('#zctv-channel-hub .zctv-player-mount .zc-promo-player-wrap', { state: 'visible', timeout: 15000 });
   await page.waitForFunction(() => {
     const count = document.querySelector('#zctv-channel-hub #zc-promo-count');
