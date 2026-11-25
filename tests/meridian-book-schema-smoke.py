@@ -14,8 +14,10 @@ class PageParser(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.schemas = []
         self.headings = []
+        self.titles = []
         self._schema = None
         self._heading = None
+        self._title = None
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
@@ -23,12 +25,16 @@ class PageParser(HTMLParser):
             self._schema = []
         elif tag.lower() == "h1":
             self._heading = []
+        elif tag.lower() == "title":
+            self._title = []
 
     def handle_data(self, data):
         if self._schema is not None:
             self._schema.append(data)
         if self._heading is not None:
             self._heading.append(data)
+        if self._title is not None:
+            self._title.append(data)
 
     def handle_endtag(self, tag):
         if tag.lower() == "script" and self._schema is not None:
@@ -37,6 +43,9 @@ class PageParser(HTMLParser):
         elif tag.lower() == "h1" and self._heading is not None:
             self.headings.append(" ".join("".join(self._heading).split()))
             self._heading = None
+        elif tag.lower() == "title" and self._title is not None:
+            self.titles.append(" ".join("".join(self._title).split()))
+            self._title = None
 
 
 def read_page(path):
@@ -46,12 +55,12 @@ def read_page(path):
     for raw in parser.schemas:
         value = json.loads(raw)
         objects.extend(value if isinstance(value, list) else [value])
-    return objects, parser.headings
+    return objects, parser.headings, parser.titles
 
 
 def main():
     book_path = ROOT / "the-meridian-of-ash.html"
-    book_objects, _ = read_page(book_path)
+    book_objects, _, book_titles = read_page(book_path)
     books = [item for item in book_objects if item.get("@type") == "Book"]
     assert len(books) == 1, "Book landing page must contain exactly one Book schema"
     book = books[0]
@@ -61,16 +70,19 @@ def main():
     assert book.get("inLanguage") == "en"
     assert book.get("url") == BOOK_URL
     assert book.get("description"), "Book schema must include its existing factual synopsis"
+    assert len(book_titles) == 1 and len(book_titles[0]) <= 65
 
     chapter_paths = [ROOT / "the-meridian-of-ash-prologue.html"] + [
         ROOT / f"the-meridian-of-ash-chapter-{number:02d}.html"
         for number in range(1, 47)
     ]
     for path in chapter_paths:
-        objects, headings = read_page(path)
+        objects, headings, titles = read_page(path)
         chapters = [item for item in objects if item.get("@type") == "Chapter"]
         assert len(chapters) == 1, f"{path.name}: expected exactly one Chapter schema"
         assert len(headings) == 1, f"{path.name}: expected exactly one visible H1"
+        assert len(titles) == 1 and len(titles[0]) <= 65, f"{path.name}: search title exceeds 65 characters"
+        assert "Meridian of Ash" in titles[0], f"{path.name}: search title omits book identity"
         chapter = chapters[0]
         expected_position = 0 if path.name.endswith("prologue.html") else int(
             path.name.split("chapter-")[1].split(".")[0]
