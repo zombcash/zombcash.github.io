@@ -42,7 +42,7 @@
       "@type": "Organization",
       "@id": "https://zombcash.github.io/#organization",
       "name": "ZombieCash",
-      "alternateName": ["ZombieCash", "ZOMBCASH", "$ZOMBCASH"],
+      "alternateName": ["ZombieCash", "ZOMBCASH", "$ZOMBCASH", "Cash Zombie", "CashZombie"],
       "url": "https://zombcash.github.io/",
       "logo": "https://zombcash.github.io/zombcash-hand-logo.svg",
       "sameAs": [
@@ -269,18 +269,8 @@ section.section.mini-game#snake-game .leaderboard-open{white-space:normal;max-wi
 <style id="homepage-components-inline">
 
 .zc-hero-art-panel{position:relative!important;display:block!important;min-width:0!important;width:100%!important;height:clamp(390px,38vw,520px)!important;max-height:520px!important;overflow:hidden!important;border:1px solid #456b37!important;border-radius:3px!important;background:#050906!important;box-shadow:inset 0 0 50px #9bff4510,0 0 35px #9bff4508!important;isolation:isolate!important}
-.zc-hero-art-panel .zc-radar-art{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;overflow:hidden!important;background:#050906!important}
-.zc-hero-art-panel .zc-radar-scene{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;filter:saturate(.9) contrast(1.08)!important}
-/* Prevent edge labels from being cropped when the artwork fills the portrait-ish panel */
-.zc-hero-art-panel .zc-radar-scene text{display:none!important}
-.zc-hero-art-panel .zc-art-scanlines{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,#a4ff4308 4px,transparent 5px);mix-blend-mode:screen}
-.zc-hero-art-panel .zc-art-corner{position:absolute;width:26px;height:26px;border-color:#a4ff43;border-style:solid;opacity:.85;pointer-events:none}
-.zc-hero-art-panel .zc-art-corner-tl{top:12px;left:12px;border-width:1px 0 0 1px}.zc-hero-art-panel .zc-art-corner-br{right:12px;bottom:12px;border-width:0 1px 1px 0}
-.zc-hero-art-panel .zc-art-caption{position:absolute;left:20px;right:20px;bottom:18px;display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid #9bff4538;background:#050a08d9;backdrop-filter:blur(8px);font:600 10px Orbitron,monospace;letter-spacing:1.6px;color:#d8edce}
-.zc-hero-art-panel .zc-art-caption b{margin-left:auto;color:#a4ff43;font-size:9px;white-space:nowrap}
-.zc-hero-art-panel .zc-art-live-dot{width:7px;height:7px;border-radius:50%;background:#a4ff43;box-shadow:0 0 12px #a4ff43;flex:0 0 auto}
 @media(max-width:950px){.zc-hero-art-panel{height:clamp(330px,42vw,450px)!important}}
-@media(max-width:680px){.zc-hero-art-panel{height:300px!important;max-height:300px!important;width:100%!important}.zc-hero-art-panel .zc-art-caption{left:12px;right:12px;bottom:12px;padding:10px;font-size:8px;letter-spacing:1px}.zc-hero-art-panel .zc-art-caption b{font-size:8px}}
+@media(max-width:680px){.zc-hero-art-panel{height:300px!important;max-height:300px!important;width:100%!important}}
 
 
 
@@ -411,7 +401,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
   html[lang="hi"] .hero h1,
   html[lang="ja"] .hero h1,
   html[lang="zh-CN"] .hero h1{font-size:clamp(38px,3.25vw,52px)!important;letter-spacing:-.5px!important;line-height:1.12!important}
-  .hero .outbreak-panel,.hero .zc-hero-art-panel{min-width:0!important;max-width:100%!important}
+  .hero .zc-hero-art-panel{min-width:0!important;max-width:100%!important}
 }
 @media(max-width:760px){
   .hero{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;padding-bottom:28px!important}
@@ -432,7 +422,7 @@ html.arcade-snake-embed.arcade-snake-fullscreen #zombie-canvas{position:absolute
   .hero { height:auto!important; min-height:0!important; max-height:none!important; overflow:visible!important; padding:32px 5% 30px!important; align-items:stretch!important; }
   .hero-layout { width:100%!important; min-width:0!important; grid-template-columns:minmax(0,1fr)!important; grid-template-areas:"content" "radar"!important; gap:26px!important; align-items:start!important; }
   .hero-content { grid-area:content!important; width:100%!important; max-width:100%!important; min-width:0!important; }
-  .hero-layout > .outbreak-panel, .hero-layout > .zc-hero-art-panel { grid-area:radar!important; width:100%!important; min-width:0!important; max-width:100%!important; height:300px!important; max-height:300px!important; }
+  .hero-layout > .zc-hero-art-panel{ grid-area:radar!important; width:100%!important; min-width:0!important; max-width:100%!important; height:300px!important; max-height:300px!important; }
   .hero h1 { width:100%!important; max-width:100%!important; font-size:clamp(38px,8vw,64px)!important; line-height:1.02!important; letter-spacing:-1px!important; overflow-wrap:normal!important; }
   .hero-copy { max-width:100%!important; font-size:16px!important; }
   .field-manual-spotlight { width:100%!important; max-width:100%!important; box-sizing:border-box!important; }
@@ -511,18 +501,10 @@ body > main#home > section.hero .zc-hero-art-panel {
   height: auto !important;
   aspect-ratio: 900 / 650;
 }
-body > main#home > section.zc-adsterra-section {
-  margin: 0 !important;
-  padding: 12px 5% 18px !important;
-}
-body > main#home > section.zc-adsterra-section .zc-adsterra-inner {
-  max-width: 1120px !important;
-}
 @media (max-width: 680px) {
   body > main#home > section.hero { padding: 28px 5% 24px !important; }
   body > main#home > section.hero > .hero-layout { gap: 18px !important; }
   body > main#home > section.hero .zc-hero-art-panel { aspect-ratio: 1.35 / 1; }
-  body > main#home > section.zc-adsterra-section { padding: 10px 4% 16px !important; }
 }
 
 
@@ -583,15 +565,6 @@ body > main#home > section.hero .zc-hero-art-panel {
 
 /* Last-in-document override: native creative is ~195px tall; remove the unused 250px reserve. */
 @media (min-width: 901px) {
-  body:has(#home) #home > section.hero #container-4420dadadbd2f0727c322cd6c632be3e {
-    box-sizing: border-box !important;
-    height: 195px !important;
-    min-height: 0 !important;
-    max-height: 195px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-  }
   body:has(#home) #home > section.hero .zc-sponsor-art-slot {
     margin-top: 0 !important;
   }
@@ -1447,13 +1420,6 @@ html[lang="hi"] .hero-content h1{line-height:1.45;letter-spacing:0;font-family:"
     position: relative !important;
     transform: none !important;
   }
-  body > main#home > section.hero > .hero-layout > .outbreak-panel {
-    grid-area: radar !important;
-    grid-column: 1 !important;
-    grid-row: 2 !important;
-    position: relative !important;
-    transform: none !important;
-  }
 }
 
 /* Consolidated from zc-touch-hero-grid-placement-fix-20261104; original order preserved. */
@@ -1483,10 +1449,6 @@ html[lang="hi"] .hero-content h1{line-height:1.45;letter-spacing:0;font-family:"
   body > main#home > section.hero > .hero-layout > .hero-content {
     grid-area: content !important;
     grid-row: 1 !important;
-  }
-  body > main#home > section.hero > .hero-layout > .outbreak-panel {
-    grid-area: radar !important;
-    grid-row: 2 !important;
   }
 }
 
