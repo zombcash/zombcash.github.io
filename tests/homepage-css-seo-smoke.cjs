@@ -9,6 +9,17 @@ const aiStatusScript = fs.readFileSync(path.join(root, 'ai-model-status.js'), 'u
 const tvPlayerScript = fs.readFileSync(path.join(root, 'assets/js/zctv-player.js'), 'utf8');
 assert.doesNotMatch(homepageVisualCss, /@(?:media|supports|container|layer)\\b[^{}]*\\{\\s*\\}/i,
   'homepage visual stylesheet must not retain empty responsive or conditional wrappers');
+const translatedLateCss = fs.readFileSync(path.join(root, 'homepage-translated-late-overrides.css'), 'utf8');
+assert.equal((translatedLateCss.match(/body:has\(#home\) #home > section\.hero > \.hero-layout\{/g) || []).length, 1,
+  'translated hero layout must have one authoritative base rule');
+assert.equal((translatedLateCss.match(/body:has\(#home\) #home > section\.hero \.zc-sponsor-art-slot\{/g) || []).length, 3,
+  'translated sponsor slot must have one base rule plus its two responsive overrides');
+assert.equal((translatedLateCss.match(/body:has\(#home\) #home > section\.hero \.zc-sponsor-art-slot img\{/g) || []).length, 1,
+  'translated sponsor image must have one authoritative base rule');
+assert.doesNotMatch(translatedLateCss, /Keep the home hero content-led|Final homepage layout: balanced hero|Last-in-document override|zc-hero-layout-final-20261105-v4/,
+  'superseded hero override history must not remain in the shared translated stylesheet');
+assert.doesNotMatch(translatedLateCss, /@media\(min-width:901px\)\s*\{\s*\}/,
+  'empty historical hero media query must not remain');
 const sharedScript = fs.readFileSync(path.join(root, 'script.js'), 'utf8');
 assert.doesNotMatch(sharedScript, /dot\.setAttribute\('aria-label'/,
   'decorative system-status dots must not receive prohibited aria-label attributes');
