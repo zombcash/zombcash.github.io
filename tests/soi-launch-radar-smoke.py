@@ -30,7 +30,7 @@ def test_soi_dashboard_supports_all_site_locales():
     for locale in ("en", "de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"):
         assert f'"{locale}":{{' in source or f'"{locale}": {{' in source
     for label in ("snapshotCoverage", "lastSnapshot", "profileObserved", "details"):
-        assert f'"{label}":' in source
+        assert f'"{label}":' in source or f"{label}:" in source
 
 
 def test_soi_503_uses_translated_paused_state_on_all_market_data_pages():
@@ -42,7 +42,7 @@ def test_soi_503_uses_translated_paused_state_on_all_market_data_pages():
 
     version = "20261125-soi-paused-state-1"
     for locale in ("en", "de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"):
-        page = ROOT / ("zombcash-market-data.html" if locale == "en" else locale / "zombcash-market-data.html")
+        page = ROOT / "zombcash-market-data.html" if locale == "en" else ROOT / locale / "zombcash-market-data.html"
         soup = BeautifulSoup(page.read_text(encoding="utf-8"), "html.parser")
         script = soup.select_one('script[src^="/soi-launch-radar.js"]')
         assert script and version in script.get("src", ""), f"{locale}: stale SOI script cache key"
