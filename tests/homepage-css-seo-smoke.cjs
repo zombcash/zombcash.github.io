@@ -19,8 +19,12 @@ assert.equal(ribbonScript.includes('api.binance.com'), false,
   'homepage market tickers must not call Binance directly from the browser because its public endpoint fails CORS from this origin');
 assert.ok(ribbonScript.includes('api.coingecko.com/api/v3/simple/price'),
   'CoinGecko remains the verified CORS-compatible browser ticker source');
-assert.ok(tvPlayerScript.includes('archiveObserver.observe(root)'),
-  'TV archive API loading must be deferred until the TV section approaches the viewport');
+assert.ok(tvPlayerScript.includes('episodesRequestStarted = true'),
+  'TV archive requests must be gated to one user-initiated load per page view');
+assert.ok(tvPlayerScript.includes("if (item[0] === 'archive') loadEpisodes();"),
+  'Switching to archive mode must load episodes on demand');
+assert.ok(!tvPlayerScript.includes('archiveObserver'),
+  'TV archive must not spend API requests for visitors who never choose a channel or archive mode');
 
 assert.equal(aiStatusScript.includes('createElement("style")'), false,
   'AI status script must not inject a duplicate runtime stylesheet');
