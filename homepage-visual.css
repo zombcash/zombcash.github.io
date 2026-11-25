@@ -33,10 +33,6 @@ body:has(#home) .world-panel-foot{background:#080e0deF}
 }
 @media(prefers-reduced-motion:reduce){body:has(#home) .zc-ribbon-track{animation:none!important;transform:none!important}body:has(#home) .zc-ribbon-copy:nth-child(n+2){display:none}}
 
-/* Keep the real reserved ad formats visible; legacy 90px rules must not clip 300x250 desktop slots. */
-@media (min-width:901px){
-}
-
 /* Use existing ZombieCash survivor art instead of the empty tactical-image placeholder. */
 body > main#home > section.hero .zc-sponsor-art-slot{position:relative!important;isolation:isolate!important;overflow:hidden!important;border:1px solid #9bff4545!important;border-radius:4px!important;background:#080d0a!important}
 body > main#home > section.hero .zc-sponsor-art-slot:before{content:none!important;display:none!important}
@@ -130,10 +126,6 @@ body:has(#home) #home > section.hero .hero-bottom{
     height:clamp(190px,62vw,260px)!important;min-height:190px!important;max-height:260px!important;
   }
   body:has(#home) #home > section.hero .hero-stats{margin-top:22px!important}
-}
-
-/* Narrow-phone banner safety: scale the fixed 320x50 ad into the actual 260px content width. */
-@media(max-width:340px){
 }
 
 /* Responsive tool cards: preserve readable columns instead of squeezing three cards
@@ -464,11 +456,6 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:hover{
   html body section.section.tools#radar > .tool-grid > article.tool-card > ul{grid-template-columns:1fr!important;gap:0!important}
   html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li{font-size:9px!important;padding:7px 4px!important}
 }
-
-/* DISTINCT CINEMATIC ARTWORK: one original scene per ZombieCash tool panel. */
-html body section.section.tools#radar > .tool-grid > article.tool-card{
-
-}
 html body section.section.tools#radar > .tool-grid > article.tool-card > .card-top{
   letter-spacing:1.2px!important;
 }
@@ -481,11 +468,6 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > ul > li
   opacity:.72!important;
   background-position:center!important;
  }
-}
-
-/* Keep the bespoke artwork atmospheric and behind readable copy. */
-html body section.section.tools#radar > .tool-grid > article.tool-card:before{
-
 }
 
 /* FINAL STRUCTURE PASS — equal-width, equal-rhythm mission rows with responsive media. */
@@ -643,18 +625,6 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:hover{
  html body section.section.tools#radar > .tool-grid > article.tool-card > .card-link{width:100%!important}
 }
 
-/* Cinematic art visibility tune: distinct color signatures, controlled contrast behind text. */
-html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-
-}
-@media(max-width:640px){
-}
-
-/* TOOL CARD ARTWORK — palette-matched backgrounds, balanced crop and readable copy */
-html body section.section.tools#radar > .tool-grid > article.radar-card:before{
-
-}
-
 /* FINAL READABILITY FIX: keep the artwork visible, but stop it competing with copy. */
 html body section.section.tools#radar > .tool-grid > article.tool-card{
   --art-shade:rgba(4,8,8,.56);
@@ -699,8 +669,6 @@ html body section.section.tools#radar > .tool-grid > article.tool-card > .card-l
 }
 html body section.section.tools#radar > .tool-grid > article.tool-card > ul{
   background:linear-gradient(90deg,rgba(0,0,0,.20),rgba(0,0,0,.10))!important;
-}
-@media(max-width:640px){
 }
 
 /* Artwork alignment: preserve the original image proportions and anchor each scene to the card's right edge. */
@@ -766,8 +734,6 @@ html body section.section.tools#radar > .tool-grid > article.tool-card:after{
   rotate:0deg!important;
   scale:1!important;
   translate:0 0!important;
-}
-@media(max-width:640px){
 }
 
 /* ZOMBCASH TOOL CARD PHOTO BACKGROUNDS — FINAL OVERRIDE 2026-11-10
@@ -1118,9 +1084,6 @@ body:has(#home) #home .zctv-player-column {
     margin-inline: auto !important;
     overflow: visible !important;
   }
-}
-
-@media (min-width: 768px) {
 }
 
 /* ZOMBCASH TV — single authoritative responsive layout (2026-11-10). */
@@ -1507,14 +1470,6 @@ body:has(#home) #zctv-channel-hub #zc-promo-player{
     height:clamp(240px,65vw,390px)!important;min-height:240px!important;
   }
 }
-
-/* 2026-11-11 — final TV alignment correction.
-   Explicitly map each direct grid child to its named area. Earlier theme rules
-   assigned intro/host/player areas in a different order, so changing only the
-   grid-template-areas left the panels split across rows. */
-html body:has(main#home) #zctv-channel-hub .zctv-layout{
-
-}
 html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-player-column{
   
   grid-column:auto!important;grid-row:auto!important;
@@ -1546,8 +1501,6 @@ html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art img{
   }
   html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-intro{grid-area:intro!important;height:auto!important}
   html body:has(main#home) #zctv-channel-hub .zctv-layout > .zctv-host-art{grid-area:host!important;height:100%!important;min-height:260px!important}
-}
-@media(max-width:760px){
 }
 
 /* 2026-11-11 — unified homepage geometry at every browser zoom.
