@@ -6,6 +6,7 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 import json
 import re
+import unicodedata
 import xml.etree.ElementTree as ET
 
 SITE = "https://zombcash.github.io/"
@@ -116,6 +117,16 @@ def local_path(url):
 def clean(value):
     return re.sub(r"\s+", " ", value).strip()
 
+def search_display_units(value):
+    """Approximate search-snippet width without penalizing CJK titles for fewer characters."""
+    units = 0
+    for char in value:
+        if unicodedata.combining(char):
+            continue
+        units += 2 if unicodedata.east_asian_width(char) in {"W", "F"} else 1
+    return units
+
+
 def main():
     urls = sitemap_pages()
     rows = []
@@ -153,14 +164,16 @@ def main():
             warnings.append("missing_h1")
         elif parser.h1_count > 1:
             warnings.append(f"multiple_h1={parser.h1_count}")
-        if title and len(title) < 30:
-            warnings.append(f"short_title={len(title)}")
-        elif title and len(title) > 65:
-            warnings.append(f"long_title={len(title)}")
-        if description and len(description) < 50:
-            warnings.append(f"short_description={len(description)}")
-        elif description and len(description) > 160:
-            warnings.append(f"long_description={len(description)}")
+        title_units = search_display_units(title)
+        description_units = search_display_units(description)
+        if title and title_units < 30:
+            warnings.append(f"short_title_units={title_units}")
+        elif title and title_units > 65:
+            warnings.append(f"long_title_units={title_units}")
+        if description and description_units < 50:
+            warnings.append(f"short_description_units={description_units}")
+        elif description and description_units > 160:
+            warnings.append(f"long_description_units={description_units}")
         if parser.json_ld_count == 0:
             warnings.append("no_json_ld")
         if title:
@@ -174,8 +187,10 @@ def main():
             "file": path.as_posix(),
             "title": title,
             "title_length": len(title),
+            "title_search_display_units": title_units,
             "description": description,
             "description_length": len(description),
+            "description_search_display_units": description_units,
             "html_lang": parser.lang,
             "canonical": canonical,
             "robots": robots,
