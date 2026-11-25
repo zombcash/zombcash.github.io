@@ -1664,9 +1664,10 @@
   // The English originals remain untouched; chapter 46 intentionally has no image
   // because no matching chapter-46 artwork is currently published.
   try {
-    const localeMatch = location.pathname.match(/^\\/(ru|de|fr|it|ja|zh-CN|tr|hi)\\//);
-    if (localeMatch && /the-meridian-of-ash/.test(location.pathname)) {
-      const locale = localeMatch[1];
+    const pathParts = location.pathname.split('/').filter(Boolean);
+    const locale = pathParts[0];
+    const supportedBookLocales = ['ru','de','fr','it','ja','zh-CN','tr','hi'];
+    if (supportedBookLocales.includes(locale) && pathParts[1] && pathParts[1].startsWith('the-meridian-of-ash')) {
       const file = location.pathname.split('/').pop();
       const altLead = {
         ru: 'Иллюстрация к',
@@ -1698,7 +1699,7 @@
           (heading || hero.lastElementChild || hero).insertAdjacentElement(heading ? 'afterend' : 'beforeend', img);
         }
       } else {
-        const match = file.match(/^the-meridian-of-ash-chapter-(\\d{2})\\.html$/);
+        const match = file.match(/^the-meridian-of-ash-chapter-([0-9]{2})[.]html$/);
         const isPrologue = file === 'the-meridian-of-ash-prologue.html';
         const asset = isPrologue ? 'prologue.webp' : match && Number(match[1]) <= 45 ? 'chapter-' + match[1] + '.webp' : '';
         const article = document.querySelector('article.copy, .copy');
