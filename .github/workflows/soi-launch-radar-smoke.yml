@@ -1,0 +1,37 @@
+name: SOI Launch Radar status smoke
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - "zombcash-market-data.html"
+      - "*/zombcash-market-data.html"
+      - "soi-launch-radar.js"
+      - "tests/soi-launch-radar-smoke.py"
+      - ".github/workflows/soi-launch-radar-smoke.yml"
+  push:
+    branches: [main]
+    paths:
+      - "zombcash-market-data.html"
+      - "*/zombcash-market-data.html"
+      - "soi-launch-radar.js"
+      - "tests/soi-launch-radar-smoke.py"
+      - ".github/workflows/soi-launch-radar-smoke.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  soi-status-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependencies
+        run: python -m pip install --disable-pip-version-check beautifulsoup4 pytest
+      - name: Verify paused-state handling across all nine locales
+        run: python -m pytest -q tests/soi-launch-radar-smoke.py
