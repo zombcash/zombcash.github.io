@@ -10,6 +10,7 @@ on:
       - "robots.txt"
       - "sitemap*.xml"
       - "tests/seo-page-metadata-audit.py"
+      - "tests/meridian-book-schema-smoke.py"
       - ".github/workflows/seo-orphan-page-audit.yml"
   push:
     branches: [main]
@@ -45,6 +46,8 @@ jobs:
         run: python tests/seo-meta-duplicate-smoke.py
       - name: Audit title, description, canonical and indexability for every sitemap page
         run: python tests/seo-page-metadata-audit.py
+      - name: Validate Meridian Book and Chapter structured data
+        run: python tests/meridian-book-schema-smoke.py
       - name: Upload full audit report
         if: always()
         uses: actions/upload-artifact@v4
