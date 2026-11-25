@@ -667,6 +667,7 @@ if (zomMarket) {
   const zomRefresh = document.getElementById('zombcash-market-refresh');
   let zomBusy = false;
   const zomMoney = value => {
+    if (value == null || (typeof value === 'string' && value.trim() === '')) return '—';
     const n = Number(value);
     if (!Number.isFinite(n) || n < 0) return '—';
     if (n >= 1e9) return '$' + (n / 1e9).toFixed(2) + 'B';
@@ -699,7 +700,7 @@ if (zomMarket) {
       zomChange.className = Number.isFinite(change) && change > 0 ? 'change-up' : Number.isFinite(change) && change < 0 ? 'change-down' : '';
       zomVolume.textContent = data.volume?.h24 == null ? '—' : zomMoney(data.volume.h24);
       zomLiquidity.textContent = zomMoney(data.liquidity?.usd);
-      zomCap.textContent = zomMoney(data.marketCap || data.fdv);
+      zomCap.textContent = zomMoney(data.marketCap ?? data.fdv);
       const sourceTime = Number(data.updatedAt || 0) * 1000;
       const hasPrice = data.priceUsd != null && data.priceUsd !== '' && Number.isFinite(Number(data.priceUsd)) && Number(data.priceUsd) > 0;
       if (zomStatus) zomStatus.textContent = !hasPrice ? 'MARKET DATA UNAVAILABLE' : (data.stale ? 'LAST KNOWN DATA' : (data.activityAvailable === false ? 'PRICE AVAILABLE · ACTIVITY UNAVAILABLE' : 'TOKEN FEED ONLINE'));
