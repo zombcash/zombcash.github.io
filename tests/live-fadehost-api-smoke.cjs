@@ -82,6 +82,15 @@ function record(name, response, expectedStatus, failures, details = {}) {
   const failures = [];
   const degraded = [];
   const results = [];
+  const tvEpisodeResponses = [];
+  page.on('response', response => {
+    try {
+      const url = new URL(response.url());
+      if (url.hostname === new URL(API_ORIGIN).hostname && url.pathname === '/api/tv/episodes') {
+        tvEpisodeResponses.push(response);
+      }
+    } catch (_) {}
+  });
 
   try {
     const navigation = await page.goto(SITE_ORIGIN + '/', { waitUntil: 'domcontentloaded', timeout: 45000 });
@@ -108,6 +117,30 @@ function record(name, response, expectedStatus, failures, details = {}) {
       marketStatus: document.getElementById('zombcash-market-status')?.textContent?.trim() || '',
       marketPrice: document.getElementById('zombcash-price')?.textContent?.trim() || '',
     }));
+
+    const tvResponse = tvEpisodeResponses[0];
+    if (tvResponse) {
+      const tvStatus = tvResponse.status();
+      const tvHeaders = await tvResponse.allHeaders();
+      let tvPayload = null;
+      try { tvPayload = await tvResponse.json(); } catch (_) {}
+      if (tvStatus === 200 && Array.isArray(tvPayload?.episodes) &&
+          tvHeaders['access-control-allow-origin'] === SITE_ORIGIN) {
+        results.push({ name: 'tv-episode-archive', result: 'PASS', status: 200, episodes: tvPayload.episodes.length });
+      } else if (tvStatus === 429) {
+        degraded.push('tv-episode-archive: rate limited (HTTP 429); the player will show its offline fallback');
+        results.push({ name: 'tv-episode-archive', result: 'DEGRADED', status: 429 });
+      } else if ([502, 503, 504].includes(tvStatus)) {
+        degraded.push('tv-episode-archive: temporary upstream failure (HTTP ' + tvStatus + ')');
+        results.push({ name: 'tv-episode-archive', result: 'DEGRADED', status: tvStatus });
+      } else {
+        failures.push('tv-episode-archive: expected HTTP 200 JSON with CORS, received HTTP ' + tvStatus);
+        results.push({ name: 'tv-episode-archive', result: 'FAIL', status: tvStatus });
+      }
+    } else {
+      degraded.push('tv-episode-archive: initial episode-list request was not observed on the live homepage');
+      results.push({ name: 'tv-episode-archive', result: 'UNVERIFIED' });
+    }
 
     const health = await requestFromSite(page, '/health');
     results.push(record('health', health, 200, failures));

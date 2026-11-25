@@ -17,12 +17,35 @@ const path = require('path');
   await page.locator('#zw-demo-reset').click();
   await page.selectOption('#zw-game-mode', 'human-ai');
   await page.locator('#zw-demo-start').click();
-  await page.locator('#zw-unit-roster .zw-unit').nth(6).click();
-  const selectedTile = Number(await page.locator('#zw-outbreak-map .zw-cell.zw-selected').getAttribute('data-tile'));
-  const targetTile = await page.evaluate((from) => { const w=18,x=from%w,y=Math.floor(from/w); for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]) { const nx=x+dx,ny=y+dy,p=ny*w+nx;if(nx>=0&&nx<w&&ny>=0&&ny<14){const c=document.querySelector('[data-tile="'+p+'"]');if(c&&!c.classList.contains('zw-wall')&&!c.classList.contains('zw-crate')&&!c.classList.contains('zw-human')&&!c.classList.contains('zw-zombie')&&!c.classList.contains('zw-heli'))return p;}} return -1; }, selectedTile);
-  if (targetTile < 0) throw new Error('Could not find a legal adjacent tile for the human-controlled unit');
-  await page.locator('[data-tile="'+targetTile+'"]').click();
-  if (!(await page.locator('#zw-unit-roster .zw-unit').nth(6).getAttribute('class')).includes('is-acted')) throw new Error('Human-controlled unit did not consume its action');
+  const moveCandidate = await page.evaluate(() => {
+    const cells = [...document.querySelectorAll('#zw-outbreak-map .zw-cell[data-unit-id^="H"]')];
+    const roster = [...document.querySelectorAll('#zw-unit-roster .zw-unit')];
+    for (const cell of cells) {
+      const from = Number(cell.dataset.tile);
+      const x = from % 18;
+      const y = Math.floor(from / 18);
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const nx = x + dx;
+        const ny = y + dy;
+        if (nx < 0 || nx >= 18 || ny < 0 || ny >= 14) continue;
+        const target = ny * 18 + nx;
+        const destination = document.querySelector('#zw-outbreak-map .zw-cell[data-tile="' + target + '"]');
+        const blocked = ['zw-wall', 'zw-crate', 'zw-human', 'zw-zombie', 'zw-heli'];
+        if (!destination || blocked.some(className => destination.classList.contains(className))) continue;
+        const index = roster.findIndex(button => button.querySelector('small')?.textContent.trim() === cell.dataset.unitId);
+        if (index >= 0) return { index, from, target, unitId: cell.dataset.unitId };
+      }
+    }
+    return null;
+  });
+  if (!moveCandidate) throw new Error('No human-controlled unit has a legal adjacent tile');
+  await page.locator('#zw-unit-roster .zw-unit').nth(moveCandidate.index).click();
+  const selectedCell = page.locator('#zw-outbreak-map .zw-cell.zw-selected');
+  const selectedTile = Number(await selectedCell.getAttribute('data-tile'));
+  const selectedUnitId = await selectedCell.getAttribute('data-unit-id');
+  if (selectedTile !== moveCandidate.from || selectedUnitId !== moveCandidate.unitId) throw new Error('The selected survivor does not match the available move candidate');
+  await page.locator('#zw-outbreak-map .zw-cell[data-tile="' + moveCandidate.target + '"]').click();
+  if (!(await page.locator('#zw-unit-roster .zw-unit').nth(moveCandidate.index).getAttribute('class')).includes('is-acted')) throw new Error('Human-controlled unit did not consume its action');
   await page.locator('#zw-next').click();
   await page.waitForFunction(() => document.querySelector('#zw-world-turn').textContent.includes('TURN 1'));
   await page.locator('#zw-auto').click();
