@@ -1,92 +1,3 @@
-/* Keep the home hero content-led: browser zoom must not turn 100vh into a huge empty panel. */
-body > main#home > section.hero {
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  padding-top: clamp(28px, 3.2vw, 48px) !important;
-  padding-bottom: 30px !important;
-  overflow: hidden !important;
-}
-body > main#home > section.hero > .hero-layout {
-  min-height: 0 !important;
-  align-items: center !important;
-}
-body > main#home > section.hero .zc-hero-art-panel {
-  min-height: 0 !important;
-  height: auto !important;
-  aspect-ratio: 900 / 650;
-}
-@media (max-width: 680px) {
-  body > main#home > section.hero { padding: 28px 5% 24px !important; }
-  body > main#home > section.hero > .hero-layout { gap: 18px !important; }
-  body > main#home > section.hero .zc-hero-art-panel { aspect-ratio: 1.35 / 1; }
-}
-
-
-
-/* Final homepage layout: balanced hero, compact sponsor panel, no oversized empty ad frame. */
-body > main#home > section.hero {
-  min-height: 0 !important;
-  height: auto !important;
-  max-height: none !important;
-  padding: clamp(34px, 4vw, 58px) 6.5% clamp(34px, 4vw, 52px) !important;
-}
-body > main#home > section.hero > .hero-layout {
-  align-items: center !important;
-  gap: clamp(22px, 3vw, 42px) !important;
-}
-body > main#home > section.hero .hero-content {
-  min-width: 0 !important;
-  max-width: 680px !important;
-}
-body > main#home > section.hero .zc-hero-art-panel {
-  box-sizing: border-box !important;
-  align-self: center !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  height: auto !important;
-  max-height: none !important;
-  aspect-ratio: auto !important;
-  padding: clamp(14px, 1.6vw, 22px) !important;
-  overflow: hidden !important;
-}
-@media (max-width: 1100px) {
-  body > main#home > section.hero > .hero-layout {
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-areas: "content" "radar" !important;
-    align-items: stretch !important;
-  }
-  body > main#home > section.hero .zc-hero-art-panel {
-    width: min(100%, 760px) !important;
-    justify-self: center !important;
-    min-height: 0 !important;
-  }
-}
-@media (max-width: 760px) {
-  body > main#home > section.hero {
-    padding: 30px 5% 26px !important;
-  }
-  body > main#home > section.hero > .hero-layout {
-    gap: 20px !important;
-  }
-  body > main#home > section.hero .zc-hero-art-panel {
-    width: 100% !important;
-    padding: 12px !important;
-  }
-}
-
-
-
-/* Last-in-document override: native creative is ~195px tall; remove the unused 250px reserve. */
-@media (min-width: 901px) {
-  body:has(#home) #home > section.hero .zc-sponsor-art-slot {
-    margin-top: 0 !important;
-  }
-}
-
-
-
 /* ZOMBCASH // Cinematic homepage refresh — visual-only, keep existing components and data hooks */
 :root{
   --zc-acid:#9bff45;
@@ -967,24 +878,13 @@ html[lang="hi"] .hero-content h1{line-height:1.45;letter-spacing:0;font-family:"
   }
 }
 
-/* Consolidated from zc-hero-layout-final-20261105-v4; original order preserved. */
+/* Authoritative translated hero grid and sponsor-art geometry. */
 /* Definitive hero geometry: text and sponsor card are independent grid columns. */
 body:has(#home) #home > section.hero{
   box-sizing:border-box!important;display:block!important;
   height:auto!important;min-height:0!important;max-height:none!important;
   padding:clamp(28px,3.5vw,52px) clamp(24px,4.5vw,72px) 30px!important;
   overflow:visible!important;
-}
-body:has(#home) #home > section.hero > .hero-layout{
-  box-sizing:border-box!important;display:grid!important;
-  grid-template-columns:minmax(0,1fr) minmax(560px,640px)!important;
-  grid-template-areas:"content sponsor"!important;
-  grid-template-rows:auto!important;grid-auto-flow:row!important;
-  align-items:start!important;align-content:start!important;
-  gap:clamp(24px,2.5vw,40px)!important;
-  width:min(100%,1440px)!important;max-width:1440px!important;
-  min-width:0!important;height:auto!important;min-height:0!important;
-  margin:0 auto!important;transform:none!important;
 }
 body:has(#home) #home > section.hero > .hero-layout > .hero-content{
   grid-area:content!important;grid-column:1!important;grid-row:1!important;
@@ -1003,32 +903,11 @@ body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
   margin:0!important;padding:10px!important;transform:none!important;
   overflow:hidden!important;
 }
-@media(min-width:901px){
-}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot{
-  box-sizing:border-box!important;position:relative!important;display:block!important;
-  flex:0 0 auto!important;width:100%!important;min-width:0!important;
-  height:clamp(260px,22vw,340px)!important;min-height:260px!important;max-height:340px!important;
-  margin:0!important;padding:0!important;overflow:hidden!important;
-  border:1px solid #9bff4560!important;border-radius:5px!important;background:#080d0a!important;
-}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot:before{content:none!important;display:none!important}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
-  position:absolute!important;inset:0!important;display:block!important;
-  width:100%!important;height:100%!important;max-width:none!important;
-  object-fit:cover!important;object-position:center 32%!important;
-  filter:saturate(.96) contrast(1.04)!important;z-index:1!important;
-}
 body:has(#home) #home > section.hero .hero-bottom{
   position:relative!important;inset:auto!important;display:flex!important;
   width:min(100%,1440px)!important;margin:20px auto 0!important;
 }
 @media(max-width:1359px){
-  body:has(#home) #home > section.hero > .hero-layout{
-    grid-template-columns:minmax(0,1fr)!important;
-    grid-template-areas:"content" "sponsor"!important;
-    gap:26px!important;
-  }
   body:has(#home) #home > section.hero > .hero-layout > .hero-content,
   body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
     grid-column:1!important;grid-row:auto!important;
@@ -1043,7 +922,6 @@ body:has(#home) #home > section.hero .hero-bottom{
 }
 @media(max-width:760px){
   body:has(#home) #home > section.hero{padding:26px 5% 24px!important}
-  body:has(#home) #home > section.hero > .hero-layout{gap:20px!important}
   body:has(#home) #home > section.hero .zc-hero-art-panel{padding:9px!important}
   body:has(#home) #home > section.hero .hero-stats{flex-wrap:wrap!important;gap:12px!important}
 }
@@ -1061,7 +939,8 @@ body:has(#home) .zc-ribbon-label{
 /* Real 640x360 survivor artwork; override the old placeholder/fallback geometry. */
 body:has(#home) #home > section.hero .zc-sponsor-art-slot{
   box-sizing:border-box!important;position:relative!important;display:block!important;
-  width:100%!important;height:clamp(240px,22vw,340px)!important;
+  flex:0 0 auto!important;width:100%!important;min-width:0!important;margin:0!important;
+  height:clamp(240px,22vw,340px)!important;
   min-height:240px!important;max-height:340px!important;padding:0!important;
   overflow:hidden!important;border:1px solid #9bff4570!important;
   border-radius:5px!important;background:#080d0a!important;
@@ -1081,6 +960,13 @@ body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
 
 /* Consolidated from zc-ad-free-hero-layout-20261122; original order preserved. */
 /* Advertising integrations are disabled; let homepage content use the full hero width. */
-body:has(#home) #home > section.hero > .hero-layout{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-areas:none!important;align-items:start!important;gap:24px!important}
+body:has(#home) #home > section.hero > .hero-layout{
+  box-sizing:border-box!important;display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;grid-template-areas:none!important;
+  grid-template-rows:auto!important;grid-auto-flow:row!important;
+  align-items:start!important;align-content:start!important;gap:24px!important;
+  width:min(100%,1440px)!important;max-width:1440px!important;min-width:0!important;
+  height:auto!important;min-height:0!important;margin:0 auto!important;transform:none!important;
+}
 body:has(#home) #home > section.hero > .hero-layout > .hero-content,
 body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{grid-column:1!important;grid-area:auto!important;width:100%!important;max-width:none!important}
