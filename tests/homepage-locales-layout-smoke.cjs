@@ -90,19 +90,14 @@ fs.mkdirSync(output, { recursive: true });
         if (!result.hasSponsor || !result.sponsor || result.sponsor.width <= 0 || result.sponsor.height <= 0) issues.push('localized hero artwork panel is missing or has no visible size');
         if (!result.imagePresent || !result.imageLoaded) issues.push('localized hero artwork image is missing or failed to load');
         if (!result.content || result.content.width <= 0) issues.push('localized homepage hero content is missing or has no visible size');
-        const statusElement = result.statusRail && result.statusRail.width > 0 ? result.statusRail : result.heroStats;
-        if (!statusElement || statusElement.width <= 0) issues.push('localized homepage status rail or hero stats are missing or have no visible size');
+        const hasSeparateStatusRail = !!result.statusRail && result.statusRail.width > 0;
+        if (!hasSeparateStatusRail && (!result.heroStats || result.heroStats.width <= 0)) issues.push('localized homepage hero stats or current homepage status rail are missing or have no visible size');
         const overlaps = (a, b) => !!a && !!b && a.left < b.right - 2 && a.right > b.left + 2 && a.top < b.bottom - 2 && a.bottom > b.top + 2;
         if (overlaps(result.content, result.sponsor)) issues.push('hero copy and artwork panel overlap');
-        if (result.statusRail && overlaps(result.content, result.statusRail)) issues.push('hero copy and status rail overlap');
-        if (result.statusRail && overlaps(result.sponsor, result.statusRail)) issues.push('hero artwork panel and status rail overlap');
-        if (!result.statusRail && overlaps(result.content, result.heroStats)) issues.push('hero copy and translated stats overlap');
-        if (!result.statusRail && overlaps(result.sponsor, result.heroStats)) issues.push('hero artwork panel and translated stats overlap');
+        if (hasSeparateStatusRail && overlaps(result.content, result.statusRail)) issues.push('hero copy and status rail overlap');
+        if (hasSeparateStatusRail && overlaps(result.sponsor, result.statusRail)) issues.push('hero artwork panel and status rail overlap');
         if (width < 1360 && result.content.bottom > result.sponsor.top + 2) issues.push('mobile/tablet hero artwork must stack below the copy');
-        if (width < 1360 && statusElement && result.sponsor.bottom > statusElement.top + 2) issues.push('mobile/tablet stats must sit below hero artwork');
-        if (width >= 1360 && statusElement && statusElement.top < Math.max(result.content.bottom, result.sponsor.bottom) - 2) issues.push('desktop stats/status rail must sit below both hero columns'); else if ((!result.statusRail || result.statusRail.width <= 0) && (!result.heroStats || result.heroStats.width <= 0)) {
-          issues.push('localized homepage hero stats or current homepage status rail are missing');
-        }
+        if (hasSeparateStatusRail && result.statusRail.top < Math.max(result.content.bottom, result.sponsor.bottom) - 2) issues.push('status rail must sit below both hero columns');
         if (!result.tvHostImageLoaded) issues.push('ZombieCash TV host artwork is missing or failed to load');
         if (errors.length) issues.push('JavaScript errors: ' + errors.join(' | '));
         const item = { locale, width, url, result, issues };
