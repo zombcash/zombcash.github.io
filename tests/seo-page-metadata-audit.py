@@ -166,6 +166,8 @@ def main():
             issues.append("missing_html_lang")
         if len(parser.canonical) != 1 or not canonical:
             issues.append(f"canonical_count={len(parser.canonical)}")
+        elif canonical.rstrip("/") != url.rstrip("/"):
+            issues.append(f"canonical_mismatch={canonical}")
         if "noindex" in robots:
             issues.append("noindex_on_sitemap_page")
         if parser.h1_count == 0:
