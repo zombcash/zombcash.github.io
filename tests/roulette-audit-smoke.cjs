@@ -24,7 +24,7 @@ const seoTitles = {
   "fr": "Faites tourner l’épidémie — ZombieCash",
   "it": "Gira la ruota dell’epidemia — ZombieCash",
   "ja": "アウトブレイクを回せ — ZombieCash",
-  "zh-CN": "旋转疫情转盘 — ZombieCash",
+  "zh-CN": "ZombieCash幸存者转盘 | 每日免费演示抽奖",
   "ru": "Крути колесо вспышки — ZombieCash",
   "tr": "Salgın Çarkını Çevir — ZombieCash",
   "hi": "प्रकोप का पहिया घुमाएँ — ZombieCash"
