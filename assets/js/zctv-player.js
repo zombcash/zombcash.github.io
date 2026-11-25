@@ -562,17 +562,7 @@
     });
   });
 
-  // The public archive is fetched only when ZombieCash TV approaches the viewport.
-  // This avoids spending the API's per-IP request budget on visitors who never open TV.
-  if ('IntersectionObserver' in window) {
-    const archiveObserver = new IntersectionObserver(function (entries) {
-      if (entries.some(function (entry) { return entry.isIntersecting; })) {
-        archiveObserver.disconnect();
-        loadEpisodes();
-      }
-    }, { rootMargin: '300px 0px' });
-    archiveObserver.observe(root);
-  }
+  // Archive requests are user-initiated (channel selection or the Archive mode control).
 
 
   // Authenticated episode publishing. The API remains the authority for admin access.
