@@ -7,6 +7,8 @@ const ribbonScript = fs.readFileSync(path.join(root, 'homepage-ribbons.js'), 'ut
 const homepageVisualCss = fs.readFileSync(path.join(root, 'homepage-visual.css'), 'utf8');
 const aiStatusScript = fs.readFileSync(path.join(root, 'ai-model-status.js'), 'utf8');
 const tvPlayerScript = fs.readFileSync(path.join(root, 'assets/js/zctv-player.js'), 'utf8');
+assert.doesNotMatch(homepageVisualCss, /@(?:media|supports|container|layer)\\b[^{}]*\\{\\s*\\}/i,
+  'homepage visual stylesheet must not retain empty responsive or conditional wrappers');
 const sharedScript = fs.readFileSync(path.join(root, 'script.js'), 'utf8');
 assert.doesNotMatch(sharedScript, /dot\.setAttribute\('aria-label'/,
   'decorative system-status dots must not receive prohibited aria-label attributes');
