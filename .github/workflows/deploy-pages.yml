@@ -79,31 +79,35 @@ jobs:
               core.warning('Stale Pages deployment cancellation returned: ' + error.message);
             }
 
-      - name: Wait for GitHub Pages artifact metadata
-        uses: actions/github-script@v7
-        with:
-          script: |
+      - name: Wait for GitHub Pages artifact service metadata
+        env:
+          NODE_PATH: ${{ runner.temp }}/pages-artifact-check/node_modules
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pages-artifact-check" --no-save --no-audit --no-fund @actions/artifact@4
+          node <<'NODE'
+          const { DefaultArtifactClient } = require('@actions/artifact');
+
+          (async () => {
+            const client = new DefaultArtifactClient();
             const attempts = 12;
             for (let attempt = 1; attempt <= attempts; attempt += 1) {
-              const { data } = await github.rest.actions.listWorkflowRunArtifacts({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                run_id: context.runId,
-                per_page: 100
-              });
-              const artifact = data.artifacts.find(item =>
-                item.name === 'github-pages' && item.expired !== true
-              );
+              const { artifacts = [] } = await client.listArtifacts();
+              const artifact = artifacts.find(item => item.name === 'github-pages');
               if (artifact) {
-                core.info('GitHub Pages artifact is visible: id=' + artifact.id +
-                  ', size=' + artifact.size_in_bytes + ' bytes.');
+                console.log('GitHub Pages artifact is visible to the Pages deployment service: id=' +
+                  artifact.id + ', size=' + artifact.size + ' bytes.');
                 return;
               }
-              core.info('GitHub Pages artifact metadata is not visible yet (' +
+              console.log('Pages artifact service metadata is not visible yet (' +
                 attempt + '/' + attempts + '); waiting 2.5 seconds.');
               await new Promise(resolve => setTimeout(resolve, 2500));
             }
-            core.setFailed('GitHub Pages artifact upload completed, but the Actions API did not expose the github-pages artifact after 30 seconds.');
+            throw new Error('GitHub Pages artifact was not visible to the Pages artifact service after 30 seconds.');
+          })().catch(error => {
+            console.error(error);
+            process.exit(1);
+          });
+          NODE
 
       - name: Deploy to GitHub Pages
         id: deployment
