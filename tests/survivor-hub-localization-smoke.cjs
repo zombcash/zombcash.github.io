@@ -6,7 +6,7 @@ const assert = require('node:assert/strict');
 const ROOT = 'https://zombcash.github.io/';
 const locales = ['en', 'de', 'fr', 'it', 'ja', 'zh-CN', 'ru', 'tr', 'hi'];
 const localeTitles = {
-  en: 'Survivor Hub — ZombieCash',
+  en: 'Survivor Hub &amp; Leaderboard | ZombieCash',
   de: 'Überlebenden-Hub — ZombieCash',
   fr: 'Espace des survivants — ZombieCash',
   it: 'Hub dei sopravvissuti — ZombieCash',
@@ -134,7 +134,7 @@ for (const locale of locales) {
   const schemaText = extractMeta(html, /<script type="application\/ld\+json">([\s\S]*?)<\/script>/i, localizedPath + ' JSON-LD');
   const schema = JSON.parse(schemaText);
   assert.equal(schema.inLanguage, locale, localizedPath + ' JSON-LD language must match the page');
-  assert.equal(schema.name, title, localizedPath + ' JSON-LD name must match the page title');
+  assert.equal(schema.name, title.replace(/&amp;/g, '&'), localizedPath + ' JSON-LD name must match the page title');
   assert.equal(schema.description, description, localizedPath + ' JSON-LD description must match the localized description');
 }
 
