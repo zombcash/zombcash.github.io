@@ -1,0 +1,35 @@
+name: Meridian fiction SEO smoke
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "the-meridian-of-ash*.html"
+      - "**/the-meridian-of-ash*.html"
+      - "sitemap-zombie-fiction.xml"
+      - "tests/meridian-fiction-seo-smoke.py"
+      - ".github/workflows/meridian-fiction-seo-smoke.yml"
+  push:
+    branches: [main]
+    paths:
+      - "the-meridian-of-ash*.html"
+      - "**/the-meridian-of-ash*.html"
+      - "sitemap-zombie-fiction.xml"
+      - "tests/meridian-fiction-seo-smoke.py"
+      - ".github/workflows/meridian-fiction-seo-smoke.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out site
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate published book schema and noindex translation drafts
+        run: python tests/meridian-fiction-seo-smoke.py
