@@ -71,9 +71,13 @@ const localeFontPages = [
 for (const [path, familyName, family] of localeFontPages) {
   const page = read(path);
   const head = page.slice(0, page.indexOf("</head>"));
-  assert(head.includes(`data-zsh-font-family="${familyName}"`) &&
-         head.includes(`family=${family}:wght@400;500;700&display=optional`),
+  const fontLink = head.match(new RegExp(`<link[^>]+data-zsh-font-family="${familyName}"[^>]*>`))?.[0] || "";
+  assert(fontLink.includes(`family=${family}:wght@400;500;700`) &&
+         fontLink.includes("display=optional"),
     path + " must request its locale font from <head> to prevent late font layout shifts");
+  if (["ja/index.html", "zh-CN/index.html", "hi/index.html"].includes(path)) {
+    assert.match(fontLink, /&text=[^&]+/, path + " homepage locale font must be glyph-subsetted");
+  }
 }
 assert(shared.includes("document.addEventListener('zombcash:languagechange', ensureZshFonts)"),
   "Shared navigation must re-evaluate font requirements after a language switch");
