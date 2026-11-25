@@ -8,8 +8,14 @@ required = [
     'sys.exit(0)',
     "Quota paused:",
     "report.get('quota_paused', False)",
+    "MAX_TRANSIENT_RETRIES = 2",
+    "TRANSIENT_HTTP_STATUSES = {500, 502, 503, 504}",
+    "for attempt in range(MAX_TRANSIENT_RETRIES + 1):",
+    "if http_status in TRANSIENT_HTTP_STATUSES and attempt < MAX_TRANSIENT_RETRIES:",
+    "time.sleep(retry_delay)",
+    '"attempts": attempt + 1',
 ]
 missing = [item for item in required if item not in workflow]
 if missing:
     raise SystemExit("FAIL: missing quota-pause handling: " + "; ".join(missing))
-print("PASS: HTTP 429 quota exhaustion is recorded, partial reports are retained, and remaining inspections are deferred without retries.")
+print("PASS: HTTP 429 quota exhaustion is recorded and deferred; transient 5xx errors receive bounded exponential-backoff retries.")
