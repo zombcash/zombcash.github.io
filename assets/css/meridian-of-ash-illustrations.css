@@ -1,0 +1,6 @@
+/* Shared responsive artwork styling for THE MERIDIAN OF ASH — BOOK I */
+.chapter-illustration{width:min(100%,820px);margin:0 auto 34px;padding:0;overflow:hidden;border:1px solid #46534f;border-radius:12px;background:#0c1216;box-shadow:0 18px 48px #0008}
+.chapter-illustration img{display:block;width:100%;height:auto;max-height:620px;object-fit:contain;object-position:center;background:#0a0f13;filter:saturate(.78) contrast(1.04)}
+.chapter-illustration figcaption{margin:0;padding:10px 14px;color:#9daab2;text-align:center;font:11px/1.6 system-ui,-apple-system,Segoe UI,sans-serif;letter-spacing:.09em;text-transform:uppercase}
+@media(max-width:640px){.chapter-illustration{margin-bottom:26px;border-radius:9px}.chapter-illustration img{max-height:60vh}.chapter-illustration figcaption{padding:9px 10px;font-size:10px;letter-spacing:.06em}}
+@media(prefers-reduced-motion:reduce){.chapter-illustration img{scroll-behavior:auto}}

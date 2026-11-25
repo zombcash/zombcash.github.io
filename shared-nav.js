@@ -218,11 +218,12 @@
       link.href.includes('fonts.googleapis.com/css2') && link.href.includes('Orbitron') && link.href.includes('Rajdhani')
     );
     const loaded = new Set(Array.from(document.querySelectorAll('link[data-zsh-font-family]')).map(link => link.dataset.zshFontFamily));
-    const addFont = (family, familyName) => {
+    const addFont = (family, familyName, subsetText = '') => {
       if (loaded.has(familyName)) return;
       const link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = 'https://fonts.googleapis.com/css2?family=' + family + '&display=optional';
+      const textParam = subsetText ? '&text=' + encodeURIComponent(subsetText) : '';
+      link.href = 'https://fonts.googleapis.com/css2?family=' + family + textParam + '&display=optional';
       link.dataset.zshFontFamily = familyName;
       document.head.append(link);
       loaded.add(familyName);
@@ -251,7 +252,9 @@
     );
     if (!fontNeeded) return;
 
-    addFont(localeFont.family, localeFont.familyName);
+    // The locale font is only used for the homepage hero heading. Request only those glyphs.
+    const subsetText = document.querySelector('.hero-content h1')?.innerText?.replace(/\s+/g, ' ').trim() || '';
+    addFont(localeFont.family, localeFont.familyName, subsetText);
   };
   ensureZshFonts();
   document.addEventListener('zombcash:languagechange', ensureZshFonts);
@@ -1660,6 +1663,67 @@
       });
     }, { passive: true });
   }
+  // Localized THE MERIDIAN OF ASH editions reuse the canonical chapter artwork.
+  // The English originals remain untouched; chapter 46 intentionally has no image
+  // because no matching chapter-46 artwork is currently published.
+  try {
+    const pathParts = location.pathname.split('/').filter(Boolean);
+    const locale = pathParts[0];
+    const supportedBookLocales = ['ru','de','fr','it','ja','zh-CN','tr','hi'];
+    if (supportedBookLocales.includes(locale) && pathParts[1] && pathParts[1].startsWith('the-meridian-of-ash')) {
+      const file = location.pathname.split('/').pop();
+      const altLead = {
+        ru: 'Иллюстрация к',
+        de: 'Illustration zu',
+        fr: 'Illustration du',
+        it: 'Illustrazione del',
+        ja: '挿絵：',
+        'zh-CN': '章节插图：',
+        tr: 'Bölüm illüstrasyonu:',
+        hi: 'अध्याय का चित्र:'
+      }[locale] || 'Illustration:';
+      const styleId = 'meridian-localized-art-style';
+      if (!document.getElementById(styleId)) {
+        const style = document.createElement('style');
+        style.id = styleId;
+        style.textContent = '.meridian-localized-art{margin:22px 0 30px;padding:10px;border:1px solid #2a343d;border-radius:14px;background:#0b1116}.meridian-localized-art img{display:block;width:100%;max-height:560px;object-fit:contain;border-radius:8px;filter:saturate(.78) contrast(1.04)}.meridian-localized-cover{display:block;width:min(100%,520px);max-height:560px;object-fit:contain;margin:22px auto 8px;border:1px solid #2a343d;border-radius:12px;filter:saturate(.78) contrast(1.04)}@media(max-width:640px){.meridian-localized-art{margin:16px 0 22px;padding:6px}.meridian-localized-art img{max-height:420px}.meridian-localized-cover{max-height:430px}}';
+        document.head.appendChild(style);
+      }
+      if (file === 'the-meridian-of-ash.html') {
+        const hero = document.querySelector('.hero');
+        if (hero && !hero.querySelector('.meridian-localized-cover')) {
+          const img = document.createElement('img');
+          img.className = 'meridian-localized-cover';
+          img.src = '/assets/images/meridian-of-ash-cover.png';
+          img.alt = 'THE MERIDIAN OF ASH — Book I';
+          img.loading = 'eager';
+          img.decoding = 'async';
+          const heading = hero.querySelector('h1');
+          (heading || hero.lastElementChild || hero).insertAdjacentElement(heading ? 'afterend' : 'beforeend', img);
+        }
+      } else {
+        const match = file.match(/^the-meridian-of-ash-chapter-([0-9]{2})[.]html$/);
+        const isPrologue = file === 'the-meridian-of-ash-prologue.html';
+        const asset = isPrologue ? 'prologue.webp' : match && Number(match[1]) <= 45 ? 'chapter-' + match[1] + '.webp' : '';
+        const article = document.querySelector('article.copy, .copy');
+        if (asset && article && !article.parentElement.querySelector('.meridian-localized-art')) {
+          const heading = document.querySelector('.reader h1, main h1');
+          const figure = document.createElement('figure');
+          figure.className = 'meridian-localized-art';
+          const img = document.createElement('img');
+          img.src = '/assets/images/meridian-of-ash/' + asset;
+          img.alt = altLead + ' ' + ((heading && heading.textContent.trim()) || 'THE MERIDIAN OF ASH');
+          img.loading = 'lazy';
+          img.decoding = 'async';
+          figure.appendChild(img);
+          article.parentElement.insertBefore(figure, article);
+        }
+      }
+    }
+  } catch (error) {
+    console.warn('[ZombieCash] Localized book illustration skipped:', error);
+  }
+
   // Load the shared Phantom donation flow on every public page.
   if (!window.__zcWalletScriptRequested) {
     window.__zcWalletScriptRequested = true;

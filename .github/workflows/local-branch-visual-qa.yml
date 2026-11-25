@@ -17,7 +17,11 @@ on:
       - "hi/index.html"
       - "shared-nav.js"
       - "tests/shared-nav-accessibility-smoke.cjs"
+      - "tests/language-switcher-accessibility-smoke.cjs"
       - "tests/survivor-auth-modal-accessibility-smoke.cjs"
+      - "homepage-pre-polish.css"
+      - "homepage-components.css"
+      - "homepage-late-overrides.css"
       - "tests/homepage-css-seo-smoke.cjs"
       - "tests/homepage-layout-shift-smoke.cjs"
       - "language.js"
@@ -154,6 +158,11 @@ jobs:
         env:
           SITE_URL: http://127.0.0.1:4173/
         run: node tests/shared-nav-accessibility-smoke.cjs
+
+      - name: Test language switcher keyboard access and ARIA state in all locales
+        env:
+          SITE_URL: http://127.0.0.1:4173/
+        run: node tests/language-switcher-accessibility-smoke.cjs
 
       - name: Test Survivor registration modal, login retry, profile save and logout
         env:

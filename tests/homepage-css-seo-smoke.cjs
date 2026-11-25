@@ -7,6 +7,19 @@ const ribbonScript = fs.readFileSync(path.join(root, 'homepage-ribbons.js'), 'ut
 const homepageVisualCss = fs.readFileSync(path.join(root, 'homepage-visual.css'), 'utf8');
 const aiStatusScript = fs.readFileSync(path.join(root, 'ai-model-status.js'), 'utf8');
 const tvPlayerScript = fs.readFileSync(path.join(root, 'assets/js/zctv-player.js'), 'utf8');
+assert.doesNotMatch(homepageVisualCss, /@(?:media|supports|container|layer)\\b[^{}]*\\{\\s*\\}/i,
+  'homepage visual stylesheet must not retain empty responsive or conditional wrappers');
+const translatedLateCss = fs.readFileSync(path.join(root, 'homepage-translated-late-overrides.css'), 'utf8');
+assert.equal((translatedLateCss.match(/body:has\(#home\) #home > section\.hero > \.hero-layout\{/g) || []).length, 1,
+  'translated hero layout must have one authoritative base rule');
+assert.equal((translatedLateCss.match(/body:has\(#home\) #home > section\.hero \.zc-sponsor-art-slot\{/g) || []).length, 3,
+  'translated sponsor slot must have one base rule plus its two responsive overrides');
+assert.equal((translatedLateCss.match(/body:has\(#home\) #home > section\.hero \.zc-sponsor-art-slot img\{/g) || []).length, 1,
+  'translated sponsor image must have one authoritative base rule');
+assert.doesNotMatch(translatedLateCss, /Keep the home hero content-led|Final homepage layout: balanced hero|Last-in-document override|zc-hero-layout-final-20261105-v4/,
+  'superseded hero override history must not remain in the shared translated stylesheet');
+assert.doesNotMatch(translatedLateCss, /@media\(min-width:901px\)\s*\{\s*\}/,
+  'empty historical hero media query must not remain');
 const sharedScript = fs.readFileSync(path.join(root, 'script.js'), 'utf8');
 assert.doesNotMatch(sharedScript, /dot\.setAttribute\('aria-label'/,
   'decorative system-status dots must not receive prohibited aria-label attributes');
@@ -50,9 +63,25 @@ for (const file of pages) {
   const html = fs.readFileSync(path.join(root, file), 'utf8');
   const headEnd = html.indexOf('</head>');
   assert.notEqual(headEnd, -1, file + ': missing closing head');
+  const inlineCss = [...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)].map(match => match[1]).join('\n');
+  const homepageCss = file === 'index.html'
+    ? ['homepage-pre-polish.css', 'homepage-components.css', 'homepage-late-overrides.css']
+        .map(asset => fs.readFileSync(path.join(root, asset), 'utf8')).join('\n')
+    : inlineCss + '\n' + fs.readFileSync(path.join(root, 'homepage-translated-late-overrides.css'), 'utf8');
+  assert.ok(homepageCss.includes('.zc-hero-art-panel'), file + ': current hero artwork panel styles must remain');
+  assert.ok(homepageCss.includes('.zc-sponsor-art-slot'), file + ': current hero artwork slot styles must remain');
+  for (const stale of [
+    '.zc-adsterra-section', '.zc-adsterra-inner', '#container-4420dadadbd2f0727c322cd6c632be3e',
+    '.zc-radar-art', '.zc-radar-scene', '.zc-art-scanlines', '.zc-art-corner',
+    '.zc-art-caption', '.zc-art-live-dot', '.zc-hero-ad-stage',
+    '.zc-adsterra-native-slot', '.zc-adsterra-mobile-slot', '.zc-hero-sponsor-panel'
+  ]) {
+    assert.equal(inlineCss.includes(stale), false, file + ': obsolete homepage selector returned: ' + stale);
+  }
   const styles = [...html.matchAll(/<style\b[^>]*>/gi)];
   const bodyStyles = styles.filter(match => match.index > headEnd);
-  assert.equal(styles.length, 3, file + ': homepage CSS should be consolidated into three cascade-preserving blocks');
+  assert.equal(styles.length, file === 'index.html' ? 0 : 2,
+    file + ': translated homepage CSS must keep only the two locale-specific inline bundles; shared final overrides are cached externally');
   assert.equal(bodyStyles.length, 0, file + ': inline CSS must be loaded before body content');
   for (const selector of retiredHomepageSelectors) {
     assert.equal(html.includes('.' + selector), false,
@@ -67,19 +96,37 @@ for (const file of pages) {
   assert.equal((html.match(/class="zc-outbreak-ribbons/g) || []).length, 1, file + ': exactly one reserved ribbon wrapper must exist');
   assert.equal((html.match(/class="zc-ribbon zc-ribbon--/g) || []).length, 3, file + ': all three ribbon rows must reserve their final layout before JavaScript');
 
-  assert.match(html, /<style id="homepage-pre-polish">/, file + ': consolidated pre-polish CSS bundle missing');
-  assert.match(html, /<style id="homepage-components-inline">/, file + ': consolidated component CSS bundle missing');
-  assert.match(html, /<style id="homepage-late-overrides">/, file + ': consolidated late CSS bundle missing');
+  if (file === 'index.html') {
+    for (const asset of ['homepage-pre-polish.css', 'homepage-components.css', 'homepage-late-overrides.css']) {
+      assert.match(html, new RegExp('<link rel="stylesheet" href="/' + asset + '\\?v=20261125-1">'),
+        file + ': cascade-preserving external CSS asset missing: ' + asset);
+    }
+  } else {
+    assert.match(html, /<style id="homepage-pre-polish">/, file + ': consolidated pre-polish CSS bundle missing');
+    assert.match(html, /<style id="homepage-components-inline">/, file + ': consolidated component CSS bundle missing');
+    assert.match(html, /<link rel="stylesheet" href="\/homepage-translated-late-overrides\.css\?v=20261125-1">/, file + ': shared translated late-overrides stylesheet missing');
+    assert.doesNotMatch(html, /<style id="homepage-late-overrides">/, file + ': duplicated translated late-overrides inline block must be removed');
+  }
   assert.match(html, /script\.js\?v=20261125-homepage-runtime-1/,
     file + ': homepage runtime cache key must be refreshed so localized pages receive current ARIA fixes');
   assert.match(html, /zctv-player\.js\?v=20261125-tv-lazy-1/,
     file + ': TV player cache key must be refreshed so lazy archive loading is used');
-  assert.ok(html.indexOf('homepage-pre-polish') < html.indexOf('site-polish.css'), file + ': pre-polish CSS order changed');
-  assert.ok(html.indexOf('site-polish.css') < html.indexOf('homepage-components-inline'), file + ': component CSS must follow site-polish.css');
-  assert.ok(html.indexOf('homepage-components-inline') < html.indexOf('homepage-visual.css'), file + ': component CSS order changed');
-  assert.ok(html.indexOf('homepage-visual.css') < html.indexOf('homepage-late-overrides'), file + ': final CSS must follow homepage-visual.css');
+  if (file === 'index.html') {
+    assert.ok(html.indexOf('style.css') < html.indexOf('homepage-pre-polish.css'), file + ': pre-polish CSS order changed');
+    assert.ok(html.indexOf('homepage-pre-polish.css') < html.indexOf('site-polish.css'), file + ': pre-polish CSS must precede site-polish.css');
+    assert.ok(html.indexOf('site-polish.css') < html.indexOf('homepage-components.css'), file + ': component CSS must follow site-polish.css');
+    assert.ok(html.indexOf('homepage-components.css') < html.indexOf('homepage-visual.css'), file + ': component CSS order changed');
+    assert.ok(html.indexOf('homepage-visual.css') < html.indexOf('homepage-late-overrides.css'), file + ': final CSS must follow homepage-visual.css');
+  } else {
+    assert.ok(html.indexOf('homepage-pre-polish') < html.indexOf('site-polish.css'), file + ': pre-polish CSS order changed');
+    assert.ok(html.indexOf('site-polish.css') < html.indexOf('homepage-components-inline'), file + ': component CSS must follow site-polish.css');
+    assert.ok(html.indexOf('homepage-components-inline') < html.indexOf('homepage-visual.css'), file + ': component CSS order changed');
+    assert.ok(html.indexOf('homepage-visual.css') < html.indexOf('homepage-translated-late-overrides.css'), file + ': shared final CSS must follow homepage-visual.css');
+  }
   assert.doesNotMatch(html, /brand-search-aliases/i, file + ': artificial brand-alias paragraph remains');
-  const heroCss = html.match(/<style id="homepage-pre-polish">([\s\S]*?)<\/style>/i)?.[1] || '';
+  const heroCss = file === 'index.html'
+    ? fs.readFileSync(path.join(root, 'homepage-pre-polish.css'), 'utf8')
+    : html.match(/<style id="homepage-pre-polish">([\s\S]*?)<\/style>/i)?.[1] || '';
   assert.ok(heroCss.length > 0, file + ': consolidated hero CSS block missing');
   assert.doesNotMatch(heroCss, /\/\*\s*V(?:8|9|14|17|18|19|20|21)\b/i, file + ': superseded hero version history remains');
   assert.doesNotMatch(heroCss.slice(0, 6000), /\.outbreak-panel|panelOrbit|signalPulse/, file + ': stale hero panel selectors or animations remain');
@@ -99,9 +146,9 @@ for (const file of pages) {
   for (const className of obsoleteHeroClasses) {
     assert.doesNotMatch(heroCss, new RegExp('\\.' + className + '(?![\\w-])'), file + ': obsolete hero selector returned: ' + className);
   }
-  assert.equal((html.match(/\.world-community-pair \.world-event\{margin:10px 12px\}/g) || []).length, 1, file + ': duplicate world-event CSS rule remains');
-  assert.equal((html.match(/\.world-community-pair \.world-panel-foot\{margin-top:auto\}/g) || []).length, 1, file + ': duplicate world-panel-foot CSS rule remains');
-  assert.equal((html.match(/section\.section\.community-console \.crew-grid \{ align-items: stretch !important; \}/g) || []).length, 0, file + ': duplicate one-line crew-grid alignment remains');
+  assert.equal((homepageCss.match(/\.world-community-pair \.world-event\{margin:10px 12px\}/g) || []).length, 1, file + ': duplicate world-event CSS rule remains');
+  assert.equal((homepageCss.match(/\.world-community-pair \.world-panel-foot\{margin-top:auto\}/g) || []).length, 1, file + ': duplicate world-panel-foot CSS rule remains');
+  assert.equal((homepageCss.match(/section\.section\.community-console \.crew-grid \{ align-items: stretch !important; \}/g) || []).length, 0, file + ': duplicate one-line crew-grid alignment remains');
   for (const id of ['zc-promo-prev', 'zc-promo-next', 'zombie-radar-ai-refresh']) {
     const control = html.match(new RegExp('<button\\b[^>]*\\bid="' + id + '"[^>]*>'))?.[0] || '';
     assert.ok(control, file + ': missing visible control ' + id);
@@ -120,7 +167,28 @@ for (const file of pages) {
     assert.ok(aiEngineCard, 'English homepage AI engine card must exist');
     assert.doesNotMatch(aiEngineCard, /\baria-label=/i, 'AI engine card accessible name must include its visible status text');
   }
-  assert.doesNotMatch(html, /\bCash\s+Zombie\b|\bCashZombie\b/i, file + ': artificial search phrase remains');
+  const searchAliasPattern = /\bCash\s+Zombie\b|\bCashZombie\b/i;
+  const visibleBody = html.replace(/<head[\s\S]*?<\/head>/i, '').replace(/<script[\s\S]*?<\/script>/gi, '').replace(/<[^>]+>/g, ' ');
+  const metaDescription = html.match(/<meta name="description" content="([^"]*)"/i)?.[1] || '';
+  assert.doesNotMatch(visibleBody, searchAliasPattern, file + ': search variants must not appear as visible keyword-stuffed body text');
+  assert.doesNotMatch(metaDescription, searchAliasPattern, file + ': search variants must not be forced into the search description');
+  const structuredData = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/gi)]
+    .flatMap(match => {
+      const parsed = JSON.parse(match[1]);
+      return parsed['@graph'] || [parsed];
+    });
+  const organization = structuredData.find(item => item['@type'] === 'Organization');
+  assert.ok(organization, file + ': Organization structured data missing');
+  for (const alias of ['Cash Zombie', 'CashZombie']) {
+    assert.ok(!organization.alternateName?.includes(alias), file + ': artificial brand variant must not be included in Organization structured data: ' + alias);
+  }
+  if (file === 'index.html') {
+    const website = structuredData.find(item => item['@type'] === 'WebSite');
+    assert.ok(website, 'English homepage WebSite structured data missing');
+    for (const alias of ['Cash Zombie', 'CashZombie']) {
+      assert.ok(!website.alternateName?.includes(alias), 'WebSite structured data must not include artificial brand variant ' + alias);
+    }
+  }
   console.log('PASS', file, 'styleBlocks=' + styles.length, 'bodyStyleBlocks=0');
 }
 
