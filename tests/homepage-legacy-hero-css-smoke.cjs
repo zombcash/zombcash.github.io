@@ -9,7 +9,7 @@ const legacyClasses = [
   'hero-zombie-sigil', 'hero-emblem', 'sigil-orbit', 'sigil-crosshair',
   'sigil-claw', 'sigil-label'
 ];
-const tokenPattern = new RegExp('\\\\b(?:' + legacyClasses.join('|') + ')\\\\b', 'i');
+const tokenPattern = new RegExp('\\b(?:' + legacyClasses.join('|') + ')\\b', 'i');
 const scannedExtensions = new Set(['.html', '.js', '.mjs', '.cjs', '.ts', '.tsx', '.jsx']);
 const skippedDirectories = new Set(['.git', '.github', 'node_modules', 'tests', 'docs', 'dist', 'build']);
 const references = [];
@@ -33,7 +33,7 @@ assert.deepEqual(references, [],
 
 const globalCss = fs.readFileSync(path.join(root, 'style.css'), 'utf8');
 for (const className of legacyClasses) {
-  const selector = new RegExp('\\\\.' + className + '(?![\\\\w-])', 'i');
+  const selector = new RegExp('\\.' + className + '(?![\\w-])', 'i');
   assert.equal(selector.test(globalCss), false,
     'unused legacy hero selector remains in style.css: .' + className);
 }
