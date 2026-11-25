@@ -34,6 +34,16 @@ const routes = ['', 'de/', 'fr/', 'it/', 'ja/', 'zh-CN/', 'ru/', 'tr/', 'hi/'];
       const toggle = page.locator('header.zombcash-shared-header .zsh-menu-toggle');
       const nav = page.locator('#zsh-navigation');
       await toggle.waitFor({ state: 'visible', timeout: 15000 });
+      assert.ok((await toggle.getAttribute('aria-label') || '').trim(), route + ' menu toggle needs a non-empty accessible name');
+      const localeFont = route === 'ja/' ? 'ja' : route === 'zh-CN/' ? 'zh' : route === 'hi/' ? 'hi' : null;
+      if (localeFont) {
+        const fontLink = page.locator('link[data-zsh-font-family="' + localeFont + '"]');
+        await fontLink.waitFor({ state: 'attached', timeout: 10000 });
+        const expectedText = await page.locator('.hero-content h1').evaluate(node => node.innerText.replace(/\s+/g, ' ').trim());
+        const fontUrl = new URL(await fontLink.getAttribute('href'));
+        assert.equal(fontUrl.searchParams.get('text'), expectedText, route + ' locale font must be subset to the actual hero heading');
+        assert.equal(fontUrl.searchParams.get('display'), 'optional', route + ' locale font display policy');
+      }
       for (const id of ['service-market-dot', 'service-api-dot', 'service-community-dot']) {
         const dot = page.locator('#' + id);
         await dot.waitFor({ state: 'attached', timeout: 5000 });
