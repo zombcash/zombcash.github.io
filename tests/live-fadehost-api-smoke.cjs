@@ -338,6 +338,14 @@ function record(name, response, expectedStatus, failures, details = {}) {
     });
 
     const marketPage = await context.newPage();
+    const fs = require('node:fs');
+    // Keep the browser on the real production origin for CORS, but serve this
+    // branch's market-data HTML and SOI script so the new paused-state behavior
+    // is tested before deployment.
+    await marketPage.route('https://zombcash.github.io/zombcash-market-data.html', route =>
+      route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: fs.readFileSync('zombcash-market-data.html', 'utf8') }));
+    await marketPage.route('**/soi-launch-radar.js*', route =>
+      route.fulfill({ status: 200, contentType: 'application/javascript; charset=utf-8', body: fs.readFileSync('soi-launch-radar.js', 'utf8') }));
     const marketPageErrors = [];
     let soiPageResponse = null;
     marketPage.on('pageerror', error => marketPageErrors.push(error.message));
