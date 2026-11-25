@@ -30,7 +30,18 @@ const gallerySearchCorpus = galleryData.items.map(item =>
 const nonHorrorSearchItem = firstPageItems.find(item => !(item.category_ids || []).includes("nightmare-horror")) || galleryData.items[0];
 const searchCandidates = String(nonHorrorSearchItem?.title || "") + " " + String(nonHorrorSearchItem?.caption || "");
 const gallerySearchWords = searchCandidates.toLowerCase().match(/[a-z0-9]{6,}/g) || [];
-const gallerySearchTerm = gallerySearchWords.find(word => gallerySearchCorpus.filter(text => text.includes(word)).length === 1) || gallerySearchWords[0] || "zombie";
+const horrorSearchCorpus = galleryData.items
+  .filter(item => (item.category_ids || []).includes("nightmare-horror"))
+  .map(item => [item.title || "", item.description || "", item.caption || "", item.series || "", ...(item.category_ids || []), ...(item.tags || [])].join(" ").toLowerCase());
+// Choose a real term from a non-horror card that is guaranteed not to match any horror card.
+// Falling back to a common word such as "undead" made this assertion nondeterministic.
+const gallerySearchTerm = gallerySearchWords.find(word =>
+  gallerySearchCorpus.some(text => text.includes(word)) &&
+  !horrorSearchCorpus.some(text => text.includes(word))
+);
+if (!gallerySearchTerm) {
+  throw new Error("Could not find a non-horror gallery search term that is absent from the Nightmare & Horror category.");
+}
 const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gallerySearchTerm)).length;
 
 (async () => {
