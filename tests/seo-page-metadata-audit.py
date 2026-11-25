@@ -127,7 +127,15 @@ def search_display_units(value):
     return units
 
 
+def verify_display_width_metric():
+    assert search_display_units("abc") == 3
+    assert search_display_units("中文") == 4
+    assert search_display_units("かな") == 4
+    assert search_display_units("e\\u0301") == 1
+
+
 def main():
+    verify_display_width_metric()
     urls = sitemap_pages()
     rows = []
     critical = []
@@ -215,6 +223,7 @@ def main():
     }
     (OUT / "page-metadata-report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
 
+    print("Metadata length thresholds use approximate search display units (CJK wide/fullwidth characters count as 2).")
     print(f"Sitemap HTML URLs: {len(urls)}")
     print(f"Pages parsed: {len(rows)}")
     print(f"Critical metadata/indexability issues: {len(critical)}")
