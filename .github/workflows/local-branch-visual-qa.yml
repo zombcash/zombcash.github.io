@@ -43,6 +43,9 @@ on:
       - "survivor-auth.js"
       - "living-world-recovery.js"
       - "tests/frontend-api-timeout-smoke.cjs"
+      - "zombie-maker.html"
+      - "tests/zombie-maker-api-timeout-smoke.cjs"
+      - "tests/zombie-maker-ui-smoke.cjs"
       - "tests/living-world-single-loader-smoke.cjs"
       - ".github/workflows/local-branch-visual-qa.yml"
 
@@ -79,6 +82,9 @@ jobs:
           node --check survivor-auth.js
           node --check tests/frontend-api-timeout-smoke.cjs
           node tests/frontend-api-timeout-smoke.cjs
+          node --check tests/zombie-maker-api-timeout-smoke.cjs
+          node tests/zombie-maker-api-timeout-smoke.cjs
+          node --check tests/zombie-maker-ui-smoke.cjs
           node --check tests/mobile-viewport-smoke.cjs
           node --check tests/zctv-layout-smoke.cjs
           node --check tests/localized-article-visual.cjs
@@ -138,6 +144,11 @@ jobs:
         env:
           SITE_URL: http://127.0.0.1:4173/
         run: node tests/mobile-viewport-smoke.cjs
+
+      - name: Test Zombie Lab upload, image generation, caption, sharing and timeout recovery
+        env:
+          SITE_URL: http://127.0.0.1:4173/
+        run: node tests/zombie-maker-ui-smoke.cjs
 
       - name: Test shared navigation keyboard access and ARIA state in all locales
         env:

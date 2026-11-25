@@ -80,8 +80,8 @@
         <img id="sourcePreview" alt="Your uploaded photo preview" hidden>
         <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp">
       </label>
-      <span class="field-label">SELECT YOUR MUTATION</span>
-      <div class="styles">
+      <span class="field-label" id="mutation-label">SELECT YOUR MUTATION</span>
+      <div class="styles" role="group" aria-labelledby="mutation-label">
         <button class="style active" data-style="classic" type="button">☣ CLASSIC UNDEAD<small>Green skin · glowing eyes</small></button>
         <button class="style" data-style="toxic" type="button">☢ TOXIC MUTANT<small>Neon cracks · bio-glow</small></button>
         <button class="style" data-style="cyber" type="button">⌘ CYBER ZOMBIE<small>Tech · neon circuitry</small></button>
@@ -136,6 +136,10 @@
 <script>
 (() => {
   const API = 'https://zombcash-bot.fadehost.app';
+  const makerApiFetch = (url, options = {}, timeoutMs = 15000) => fetch(url, {
+    ...options,
+    signal: options.signal || AbortSignal.timeout(timeoutMs)
+  });
   const input = document.getElementById('photoInput');
   const zone = document.getElementById('dropZone');
   const preview = document.getElementById('sourcePreview');
@@ -216,7 +220,7 @@
     clearResult(); setStatus('Sending your photo for AI transformation. This may take up to a minute.');
     try {
       const token = survivorToken();
-      const response = await fetch(API + '/api/zombie-maker', {method:'POST', body, cache:'no-store', headers: token ? {Authorization:'Bearer ' + token} : {}});
+      const response = await makerApiFetch(API + '/api/zombie-maker', {method:'POST', body, cache:'no-store', headers: token ? {Authorization:'Bearer ' + token} : {}}, 90000);
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || 'The image service is temporarily unavailable.');
       if (!data.image || !data.image.startsWith('data:image/')) throw new Error('The service returned an invalid image.');
@@ -228,7 +232,7 @@
       updateResultControls(); saveHistory(); trackCreatorEvent('zombie_created', style + (referralId ? '_ref_' + referralId : 'direct'));
       setStatus('Transformation complete. Your undead legend is ready!', 'success');
     } catch (err) {
-      setStatus(err.message || 'Something went wrong. Please try again later.', 'error');
+      setStatus(err.name === 'TimeoutError' || err.name === 'AbortError' ? 'The AI transformation timed out. Please try again with a smaller image.' : (err.message || 'Something went wrong. Please try again later.'), 'error');
     } finally {
       createBtn.disabled = !selectedFile; createBtn.textContent = '☣ CREATE MY ZOMBIE';
     }
@@ -257,10 +261,10 @@
     const original = shareBtn.textContent;
     shareBtn.textContent = 'SENDING TO TELEGRAM…';
     try {
-      const response = await fetch(API + '/api/zombie-share', {
+      const response = await makerApiFetch(API + '/api/zombie-share', {
         method: 'POST', headers: {'Content-Type':'application/json'},
         body: JSON.stringify({image: generatedDataUrl, caption: captionInput.value.trim()})
-      });
+      }, 30000);
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || 'Could not send the photo to Telegram.');
       setStatus('PHOTO WITH CAPTION SUCCESSFULLY SENT TO THE ZOMBIECASH GROUP ✓', 'success');
@@ -277,7 +281,7 @@
       captionNote.style.cssText = 'margin-top:5px;overflow-wrap:anywhere';
       status.appendChild(captionNote);
     } catch (err) {
-      setStatus(err.message || 'Photo could not be sent. You can still download it.', 'error');
+      setStatus(err.name === 'TimeoutError' || err.name === 'AbortError' ? 'Telegram delivery timed out. You can still download the portrait and try again later.' : (err.message || 'Photo could not be sent. You can still download it.'), 'error');
     } finally {
       shareBtn.disabled = false;
       shareBtn.textContent = original;
@@ -290,13 +294,13 @@
     captionAiBtn.textContent = '✦ WRITING YOUR CAPTION…';
     setStatus('ZombieCash AI is writing a short caption. One moment…');
     try {
-      const response = await fetch(API + '/api/zombie-caption', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({style, caption:captionInput.value.trim()})});
+      const response = await makerApiFetch(API + '/api/zombie-caption', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({style, caption:captionInput.value.trim()})}, 45000);
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || 'AI captions are temporarily unavailable.');
       if (typeof data.caption !== 'string' || !data.caption.trim()) throw new Error('AI returned an empty caption. Please try again.');
       captionInput.value = data.caption.trim().slice(0,500); updateCaptionCount();
       setStatus('Caption ready. You can edit it before sharing.', 'success');
-    } catch(err) { setStatus(err.message || 'Could not create a caption. Please try again.', 'error'); }
+    } catch(err) { setStatus(err.name === 'TimeoutError' || err.name === 'AbortError' ? 'AI caption request timed out. Please try again.' : (err.message || 'Could not create a caption. Please try again.'), 'error'); }
     finally { captionAiBtn.disabled = false; captionAiBtn.textContent = original; }
   });
   document.getElementById('toggleCompareBtn').addEventListener('click',()=>{compareSwapped=!compareSwapped;if(!generatedDataUrl||!selectedFile)return;if(compareSwapped){compareBefore.src=generatedDataUrl;compareAfter.src=URL.createObjectURL(selectedFile)}else{compareBefore.src=URL.createObjectURL(selectedFile);compareAfter.src=generatedDataUrl}});
