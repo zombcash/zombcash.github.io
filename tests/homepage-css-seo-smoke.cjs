@@ -97,12 +97,12 @@ for (const file of pages) {
   }
   const footerBrand = html.match(/<a class="brand footer-brand" href="#home"[^>]*>/)?.[0] || '';
   assert.ok(footerBrand, file + ': footer brand link must exist');
-    assert.doesNotMatch(footerBrand, /\baria-label=/i, file + ': footer brand accessible name must retain its full visible text');
-    assert.match(html, /<span class="brand-mark" aria-hidden="true">☣<\/span>/, file + ': decorative footer symbol must be hidden from assistive technology');
+  assert.doesNotMatch(footerBrand, /\baria-label=/i, file + ': footer brand accessible name must retain its full visible text');
+  assert.match(html, /<span class="brand-mark" aria-hidden="true">☣<\/span>/, file + ': decorative footer symbol must be hidden from assistive technology');
   if (file === 'index.html') {
     const aiEngineCard = html.match(/<a class="zc-ai-engine-card" href="#community"[^>]*>/)?.[0] || '';
     assert.ok(aiEngineCard, 'English homepage AI engine card must exist');
-        assert.doesNotMatch(aiEngineCard, /\baria-label=/i, 'AI engine card accessible name must include its visible status text');
+    assert.doesNotMatch(aiEngineCard, /\baria-label=/i, 'AI engine card accessible name must include its visible status text');
   }
   assert.doesNotMatch(html, /\bCash\s+Zombie\b|\bCashZombie\b/i, file + ': artificial search phrase remains');
   console.log('PASS', file, 'styleBlocks=' + styles.length, 'bodyStyleBlocks=0');
