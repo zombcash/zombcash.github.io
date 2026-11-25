@@ -297,6 +297,8 @@ function record(name, response, expectedStatus, failures, details = {}) {
       record('telegram-login-start', authStart, 200, failures);
     }
 
+    const panelFailuresStart = failures.length;
+    const panelDegradedStart = degraded.length;
     const externalNewsCount = Array.isArray(news.data?.articles)
       ? news.data.articles.filter(article => article && article.enriched !== true).length
       : 0;
@@ -325,7 +327,7 @@ function record(name, response, expectedStatus, failures, details = {}) {
     }
     results.push({
       name: 'homepage-dynamic-panels',
-      result: failures.length ? 'FAIL' : degraded.length ? 'DEGRADED' : 'PASS',
+      result: failures.length > panelFailuresStart ? 'FAIL' : degraded.length > panelDegradedStart ? 'DEGRADED' : 'PASS',
       settled: uiSettled,
       newsStatus: uiSnapshot.newsStatus,
       newsItems: uiSnapshot.newsItems,
@@ -368,9 +370,9 @@ function record(name, response, expectedStatus, failures, details = {}) {
       }));
       if (soiSnapshot.state === 'ready' && soiPageResponse?.status === 200) {
         results.push({ name: 'soi-market-data-page', result: 'PASS', status: 200, launchRows: soiSnapshot.launchRows, historyRows: soiSnapshot.historyRows });
-      } else if (soiSnapshot.state === 'error' && soiPageResponse?.status === 503) {
-        degraded.push('SOI market-data page loaded, but the published daily launch report is unavailable');
-        results.push({ name: 'soi-market-data-page', result: 'DEGRADED', status: 503 });
+      } else if (soiSnapshot.state === 'paused' && soiPageResponse?.status === 503 && /SOI collection is paused/i.test(soiSnapshot.status)) {
+        degraded.push('SOI daily collection is intentionally paused during its redesign; the page displays the localized paused state');
+        results.push({ name: 'soi-market-data-page', result: 'DEGRADED', status: 503, state: 'paused' });
       } else {
         failures.push('SOI market-data page did not settle into a ready or documented unavailable state: ' + JSON.stringify({ soiSnapshot, soiPageResponse }));
         results.push({ name: 'soi-market-data-page', result: 'FAIL', state: soiSnapshot.state, responseStatus: soiPageResponse?.status || null });
