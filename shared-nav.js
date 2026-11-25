@@ -218,11 +218,12 @@
       link.href.includes('fonts.googleapis.com/css2') && link.href.includes('Orbitron') && link.href.includes('Rajdhani')
     );
     const loaded = new Set(Array.from(document.querySelectorAll('link[data-zsh-font-family]')).map(link => link.dataset.zshFontFamily));
-    const addFont = (family, familyName) => {
+    const addFont = (family, familyName, subsetText = '') => {
       if (loaded.has(familyName)) return;
       const link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = 'https://fonts.googleapis.com/css2?family=' + family + '&display=optional';
+      const textParam = subsetText ? '&text=' + encodeURIComponent(subsetText) : '';
+      link.href = 'https://fonts.googleapis.com/css2?family=' + family + textParam + '&display=optional';
       link.dataset.zshFontFamily = familyName;
       document.head.append(link);
       loaded.add(familyName);
@@ -251,7 +252,9 @@
     );
     if (!fontNeeded) return;
 
-    addFont(localeFont.family, localeFont.familyName);
+    // The locale font is only used for the homepage hero heading. Request only those glyphs.
+    const subsetText = document.querySelector('.hero-content h1')?.innerText?.replace(/\s+/g, ' ').trim() || '';
+    addFont(localeFont.family, localeFont.familyName, subsetText);
   };
   ensureZshFonts();
   document.addEventListener('zombcash:languagechange', ensureZshFonts);
