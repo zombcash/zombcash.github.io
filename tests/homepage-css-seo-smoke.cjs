@@ -120,12 +120,12 @@ for (const file of pages) {
     assert.ok(aiEngineCard, 'English homepage AI engine card must exist');
     assert.doesNotMatch(aiEngineCard, /\baria-label=/i, 'AI engine card accessible name must include its visible status text');
   }
-  const searchAliasPattern = /\\bCash\\s+Zombie\\b|\\bCashZombie\\b/i;
-  const visibleBody = html.replace(/<head[\\s\\S]*?<\\/head>/i, '').replace(/<script[\\s\\S]*?<\\/script>/gi, '');
+  const searchAliasPattern = /\bCash\s+Zombie\b|\bCashZombie\b/i;
+  const visibleBody = html.replace(/<head[\s\S]*?<\/head>/i, '').replace(/<script[\s\S]*?<\/script>/gi, '');
   const metaDescription = html.match(/<meta name="description" content="([^"]*)"/i)?.[1] || '';
   assert.doesNotMatch(visibleBody, searchAliasPattern, file + ': search variants must not appear as visible keyword-stuffed body text');
   assert.doesNotMatch(metaDescription, searchAliasPattern, file + ': search variants must not be forced into the search description');
-  const structuredData = [...html.matchAll(/<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/gi)]
+  const structuredData = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/gi)]
     .flatMap(match => {
       const parsed = JSON.parse(match[1]);
       return parsed['@graph'] || [parsed];
