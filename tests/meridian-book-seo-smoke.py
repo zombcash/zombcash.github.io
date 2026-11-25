@@ -40,7 +40,7 @@ def main() -> None:
             re.IGNORECASE | re.DOTALL,
         )
 
-        if len(title) > 70:
+        if len(title) > 65:
             failures.append(f"{filename}: title too long ({len(title)} chars)")
         if title != og_title or title != twitter_title:
             failures.append(f"{filename}: title, Open Graph and Twitter titles differ")
