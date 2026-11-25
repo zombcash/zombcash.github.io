@@ -168,13 +168,13 @@ for (const file of pages) {
   const organization = structuredData.find(item => item['@type'] === 'Organization');
   assert.ok(organization, file + ': Organization structured data missing');
   for (const alias of ['Cash Zombie', 'CashZombie']) {
-    assert.ok(organization.alternateName?.includes(alias), file + ': structured data must retain search variant ' + alias);
+    assert.ok(!organization.alternateName?.includes(alias), file + ': artificial brand variant must not be included in Organization structured data: ' + alias);
   }
   if (file === 'index.html') {
     const website = structuredData.find(item => item['@type'] === 'WebSite');
     assert.ok(website, 'English homepage WebSite structured data missing');
     for (const alias of ['Cash Zombie', 'CashZombie']) {
-      assert.ok(website.alternateName?.includes(alias), 'WebSite structured data must retain search variant ' + alias);
+      assert.ok(!website.alternateName?.includes(alias), 'WebSite structured data must not include artificial brand variant ' + alias);
     }
   }
   console.log('PASS', file, 'styleBlocks=' + styles.length, 'bodyStyleBlocks=0');
