@@ -164,6 +164,35 @@ function record(name, response, expectedStatus, failures, details = {}) {
       record('assistant-status', assistantStatus, 200, failures);
     }
 
+    const assistantChat = await requestFromSite(page, '/api/assistant/chat', 'POST', {
+      message: 'Reply with exactly the single word OK.',
+      history: [],
+    });
+    if (assistantChat.resolved && assistantChat.type === 'cors' && assistantChat.status === 200 &&
+        typeof assistantChat.data?.reply === 'string' && assistantChat.data.reply.trim().length > 0) {
+      results.push({
+        name: 'assistant-chat-provider',
+        result: 'PASS',
+        status: 200,
+        provider: assistantChat.data.provider || 'reported by API',
+        model: assistantChat.data.model || 'reported by API',
+        replyReceived: true,
+      });
+      const refreshedAssistantStatus = await requestFromSite(page, '/api/assistant/status');
+      if (refreshedAssistantStatus.resolved && refreshedAssistantStatus.type === 'cors' &&
+          refreshedAssistantStatus.status === 200 && Number(refreshedAssistantStatus.data?.updated_at) > 0) {
+        results.push({ name: 'assistant-provider-last-success', result: 'PASS', status: 200 });
+      } else {
+        degraded.push('assistant provider responded, but status did not record a successful response');
+        results.push({ name: 'assistant-provider-last-success', result: 'UNVERIFIED' });
+      }
+    } else if (assistantChat.resolved && assistantChat.type === 'cors' && [429, 502, 503, 504].includes(assistantChat.status)) {
+      degraded.push('assistant chat provider did not return a response (HTTP ' + assistantChat.status + ')');
+      results.push({ name: 'assistant-chat-provider', result: 'DEGRADED', status: assistantChat.status });
+    } else {
+      record('assistant-chat-provider', assistantChat, 200, failures);
+    }
+
     const radar = await requestFromSite(page, '/api/radar');
     if (radar.resolved && radar.type === 'cors' && radar.status === 200 && Array.isArray(radar.data?.pairs) && radar.data.pairs.length > 0) {
       results.push({ name: 'radar', result: 'PASS', status: 200, pairs: radar.data.pairs.length, stale: Boolean(radar.data.stale) });
