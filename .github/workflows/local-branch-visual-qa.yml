@@ -44,6 +44,10 @@ on:
       - "living-world-recovery.js"
       - "tests/frontend-api-timeout-smoke.cjs"
       - "zombie-maker.html"
+      - "zombcash-market-data.html"
+      - "*/zombcash-market-data.html"
+      - "soi-launch-radar.js"
+      - "tests/soi-launch-radar-smoke.py"
       - "tests/zombie-maker-api-timeout-smoke.cjs"
       - "tests/zombie-maker-ui-smoke.cjs"
       - "tests/living-world-single-loader-smoke.cjs"
@@ -93,6 +97,17 @@ jobs:
           node --check tests/language-persistence-smoke.cjs
           node --check tests/live-api-origin-smoke.cjs
           node --check tests/living-world-single-loader-smoke.cjs
+
+      - name: Set up Python for localized SOI regression checks
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install SOI smoke dependencies
+        run: python -m pip install --disable-pip-version-check beautifulsoup4 pytest
+
+      - name: Verify SOI paused-state handling across all locales
+        run: python -m pytest -q tests/soi-launch-radar-smoke.py
 
       - name: Verify single-loader recovery contract
         run: node tests/living-world-single-loader-smoke.cjs
