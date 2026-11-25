@@ -45,7 +45,7 @@ const path = require('path');
   const selectedUnitId = await selectedCell.getAttribute('data-unit-id');
   if (selectedTile !== moveCandidate.from || selectedUnitId !== moveCandidate.unitId) throw new Error('The selected survivor does not match the available move candidate');
   await page.locator('#zw-outbreak-map .zw-cell[data-tile="' + moveCandidate.target + '"]').click();
-  if (!(await page.locator('#zw-unit-roster .zw-unit').nth(6).getAttribute('class')).includes('is-acted')) throw new Error('Human-controlled unit did not consume its action');
+  if (!(await page.locator('#zw-unit-roster .zw-unit').nth(moveCandidate.index).getAttribute('class')).includes('is-acted')) throw new Error('Human-controlled unit did not consume its action');
   await page.locator('#zw-next').click();
   await page.waitForFunction(() => document.querySelector('#zw-world-turn').textContent.includes('TURN 1'));
   await page.locator('#zw-auto').click();
