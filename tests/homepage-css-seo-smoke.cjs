@@ -6,6 +6,7 @@ const root = path.resolve(__dirname, '..');
 const ribbonScript = fs.readFileSync(path.join(root, 'homepage-ribbons.js'), 'utf8');
 const homepageVisualCss = fs.readFileSync(path.join(root, 'homepage-visual.css'), 'utf8');
 const aiStatusScript = fs.readFileSync(path.join(root, 'ai-model-status.js'), 'utf8');
+const tvPlayerScript = fs.readFileSync(path.join(root, 'assets/js/zctv-player.js'), 'utf8');
 const sharedScript = fs.readFileSync(path.join(root, 'script.js'), 'utf8');
 assert.doesNotMatch(sharedScript, /dot\.setAttribute\('aria-label'/,
   'decorative system-status dots must not receive prohibited aria-label attributes');
@@ -14,6 +15,13 @@ assert.match(sharedScript, /view\.setAttribute\('aria-labelledby', viewLabel\.id
 
 assert.ok(homepageVisualCss.includes('.zc-ai-engine-card{'),
   'community AI status card styles must live in the cached homepage stylesheet');
+assert.equal(ribbonScript.includes('api.binance.com'), false,
+  'homepage market tickers must not call Binance directly from the browser because its public endpoint fails CORS from this origin');
+assert.ok(ribbonScript.includes('api.coingecko.com/api/v3/simple/price'),
+  'CoinGecko remains the verified CORS-compatible browser ticker source');
+assert.ok(tvPlayerScript.includes('archiveObserver.observe(root)'),
+  'TV archive API loading must be deferred until the TV section approaches the viewport');
+
 assert.equal(aiStatusScript.includes('createElement("style")'), false,
   'AI status script must not inject a duplicate runtime stylesheet');
 assert.ok(aiStatusScript.includes('signal: AbortSignal.timeout(10000)'),
@@ -58,6 +66,10 @@ for (const file of pages) {
   assert.match(html, /<style id="homepage-pre-polish">/, file + ': consolidated pre-polish CSS bundle missing');
   assert.match(html, /<style id="homepage-components-inline">/, file + ': consolidated component CSS bundle missing');
   assert.match(html, /<style id="homepage-late-overrides">/, file + ': consolidated late CSS bundle missing');
+  assert.match(html, /script\\.js\\?v=20261125-homepage-runtime-1/,
+    file + ': homepage runtime cache key must be refreshed so localized pages receive current ARIA fixes');
+  assert.match(html, /zctv-player\\.js\\?v=20261125-tv-lazy-1/,
+    file + ': TV player cache key must be refreshed so lazy archive loading is used');
   assert.ok(html.indexOf('homepage-pre-polish') < html.indexOf('site-polish.css'), file + ': pre-polish CSS order changed');
   assert.ok(html.indexOf('site-polish.css') < html.indexOf('homepage-components-inline'), file + ': component CSS must follow site-polish.css');
   assert.ok(html.indexOf('homepage-components-inline') < html.indexOf('homepage-visual.css'), file + ': component CSS order changed');
