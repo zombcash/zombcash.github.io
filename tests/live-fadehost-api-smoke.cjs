@@ -258,29 +258,37 @@ function record(name, response, expectedStatus, failures, details = {}) {
     const marketPriceAvailable = market.resolved && market.status === 200 &&
       Number.isFinite(Number(market.data?.priceUsd)) && Number(market.data.priceUsd) > 0;
     const radarPairCount = Array.isArray(radar.data?.pairs) ? radar.data.pairs.length : 0;
-    if (!uiSettled) failures.push('homepage panels: news, radar and market statuses did not leave their loading states within 25 seconds');
+    // Keep the homepage panel verdict independent from unrelated API checks
+    // such as assistant-provider freshness or authenticated-route guards.
+    const panelFailures = [];
+    const panelDegraded = [];
+    const failPanel = message => { panelFailures.push(message); failures.push(message); };
+    const degradePanel = message => { panelDegraded.push(message); degraded.push(message); };
+    if (!uiSettled) failPanel('homepage panels: news, radar and market statuses did not leave their loading states within 25 seconds');
     if (/FEED ERROR|API ERROR/i.test(uiSnapshot.newsStatus) && externalNewsCount > 0) {
-      failures.push('homepage news panel: API returned external articles but the panel reports an error');
+      failPanel('homepage news panel: API returned external articles but the panel reports an error');
     }
     if (externalNewsCount > 0 && uiSnapshot.newsItems === 0) {
-      failures.push('homepage news panel: external RSS articles were returned but no article cards rendered');
+      failPanel('homepage news panel: external RSS articles were returned but no article cards rendered');
     } else if (externalNewsCount === 0) {
-      degraded.push('homepage news panel: no external RSS articles available after excluding enriched/generated items');
+      degradePanel('homepage news panel: no external RSS articles available after excluding enriched/generated items');
     }
     if (marketPriceAvailable && (!uiSnapshot.marketPrice || uiSnapshot.marketPrice === '—')) {
-      failures.push('homepage market panel: API returned a positive price but the price card did not render it');
+      failPanel('homepage market panel: API returned a positive price but the price card did not render it');
     }
     if (radarPairCount > 0 && uiSnapshot.radarRows === 0) {
-      failures.push('homepage radar panel: API returned token pairs but no radar rows rendered');
+      failPanel('homepage radar panel: API returned token pairs but no radar rows rendered');
     } else if (radarPairCount === 0) {
-      degraded.push('homepage radar panel: API returned no token pairs');
+      degradePanel('homepage radar panel: API returned no token pairs');
     }
     if (/API ERROR/i.test(uiSnapshot.radarStatus) && radarPairCount > 0) {
-      failures.push('homepage radar panel: API returned pairs but the panel reports an error');
+      failPanel('homepage radar panel: API returned pairs but the panel reports an error');
     }
     results.push({
       name: 'homepage-dynamic-panels',
-      result: failures.length ? 'FAIL' : degraded.length ? 'DEGRADED' : 'PASS',
+      result: panelFailures.length ? 'FAIL' : panelDegraded.length ? 'DEGRADED' : 'PASS',
+      panelFailures,
+      panelDegraded,
       settled: uiSettled,
       newsStatus: uiSnapshot.newsStatus,
       newsItems: uiSnapshot.newsItems,
