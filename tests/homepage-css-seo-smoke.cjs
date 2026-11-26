@@ -64,10 +64,16 @@ for (const file of pages) {
   const headEnd = html.indexOf('</head>');
   assert.notEqual(headEnd, -1, file + ': missing closing head');
   const inlineCss = [...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)].map(match => match[1]).join('\n');
+  const translatedAssets = [
+    'homepage-translated-pre-polish.css',
+    'homepage-translated-components.css',
+    ...(file === 'de/index.html' ? ['homepage-translated-components-de.css'] : []),
+    'homepage-translated-late-overrides.css'
+  ];
   const homepageCss = file === 'index.html'
     ? ['homepage-pre-polish.css', 'homepage-components.css', 'homepage-late-overrides.css']
         .map(asset => fs.readFileSync(path.join(root, asset), 'utf8')).join('\n')
-    : inlineCss + '\n' + fs.readFileSync(path.join(root, 'homepage-translated-late-overrides.css'), 'utf8');
+    : translatedAssets.map(asset => fs.readFileSync(path.join(root, asset), 'utf8')).join('\n');
   assert.ok(homepageCss.includes('.zc-hero-art-panel'), file + ': current hero artwork panel styles must remain');
   assert.ok(homepageCss.includes('.zc-sponsor-art-slot'), file + ': current hero artwork slot styles must remain');
   for (const stale of [
@@ -80,8 +86,8 @@ for (const file of pages) {
   }
   const styles = [...html.matchAll(/<style\b[^>]*>/gi)];
   const bodyStyles = styles.filter(match => match.index > headEnd);
-  assert.equal(styles.length, file === 'index.html' ? 0 : 2,
-    file + ': translated homepage CSS must keep only the two locale-specific inline bundles; shared final overrides are cached externally');
+  assert.equal(styles.length, 0,
+    file + ': homepage CSS must be externalized for every locale; no inline style blocks are allowed');
   assert.equal(bodyStyles.length, 0, file + ': inline CSS must be loaded before body content');
   for (const selector of retiredHomepageSelectors) {
     assert.equal(html.includes('.' + selector), false,
@@ -102,10 +108,21 @@ for (const file of pages) {
         file + ': cascade-preserving external CSS asset missing: ' + asset);
     }
   } else {
-    assert.match(html, /<style id="homepage-pre-polish">/, file + ': consolidated pre-polish CSS bundle missing');
-    assert.match(html, /<style id="homepage-components-inline">/, file + ': consolidated component CSS bundle missing');
-    assert.match(html, /<link rel="stylesheet" href="\/homepage-translated-late-overrides\.css\?v=20261125-1">/, file + ': shared translated late-overrides stylesheet missing');
-    assert.doesNotMatch(html, /<style id="homepage-late-overrides">/, file + ': duplicated translated late-overrides inline block must be removed');
+    assert.match(html, new RegExp('<link rel="stylesheet" href="/homepage-translated-pre-polish\\.css\\?v=20261126-1">'),
+      file + ': shared translated pre-polish stylesheet missing');
+    assert.match(html, new RegExp('<link rel="stylesheet" href="/homepage-translated-components\\.css\\?v=20261126-1">'),
+      file + ': shared translated component stylesheet missing');
+    assert.match(html, /<link rel="stylesheet" href="\/homepage-translated-late-overrides\.css\?v=20261125-1">/,
+      file + ': shared translated late-overrides stylesheet missing');
+    if (file === 'de/index.html') {
+      assert.match(html, /<link rel="stylesheet" href="\/homepage-translated-components-de\.css\?v=20261126-1">/,
+        'German homepage must retain its locale-specific field-manual wrapping rules');
+    } else {
+      assert.doesNotMatch(html, /homepage-translated-components-de\.css/,
+        file + ': German-only responsive overrides must not load on other locales');
+    }
+    assert.doesNotMatch(html, /<style id="homepage-late-overrides">/,
+      file + ': duplicated translated late-overrides inline block must be removed');
   }
   assert.match(html, /script\.js\?v=20261125-homepage-runtime-1/,
     file + ': homepage runtime cache key must be refreshed so localized pages receive current ARIA fixes');
@@ -118,15 +135,20 @@ for (const file of pages) {
     assert.ok(html.indexOf('homepage-components.css') < html.indexOf('homepage-visual.css'), file + ': component CSS order changed');
     assert.ok(html.indexOf('homepage-visual.css') < html.indexOf('homepage-late-overrides.css'), file + ': final CSS must follow homepage-visual.css');
   } else {
-    assert.ok(html.indexOf('homepage-pre-polish') < html.indexOf('site-polish.css'), file + ': pre-polish CSS order changed');
-    assert.ok(html.indexOf('site-polish.css') < html.indexOf('homepage-components-inline'), file + ': component CSS must follow site-polish.css');
-    assert.ok(html.indexOf('homepage-components-inline') < html.indexOf('homepage-visual.css'), file + ': component CSS order changed');
+    assert.ok(html.indexOf('style.css') < html.indexOf('homepage-translated-pre-polish.css'), file + ': translated pre-polish CSS must follow style.css');
+    assert.ok(html.indexOf('homepage-translated-pre-polish.css') < html.indexOf('site-polish.css'), file + ': translated pre-polish CSS must precede site-polish.css');
+    assert.ok(html.indexOf('site-polish.css') < html.indexOf('homepage-translated-components.css'), file + ': translated component CSS must follow site-polish.css');
+    if (file === 'de/index.html') {
+      assert.ok(html.indexOf('homepage-translated-components.css') < html.indexOf('homepage-translated-components-de.css'), 'German-specific CSS must follow shared component CSS');
+      assert.ok(html.indexOf('homepage-translated-components-de.css') < html.indexOf('homepage-visual.css'), 'German-specific CSS must precede homepage-visual.css');
+    }
+    assert.ok(html.indexOf('homepage-translated-components.css') < html.indexOf('homepage-visual.css'), file + ': translated component CSS order changed');
     assert.ok(html.indexOf('homepage-visual.css') < html.indexOf('homepage-translated-late-overrides.css'), file + ': shared final CSS must follow homepage-visual.css');
   }
   assert.doesNotMatch(html, /brand-search-aliases/i, file + ': artificial brand-alias paragraph remains');
   const heroCss = file === 'index.html'
     ? fs.readFileSync(path.join(root, 'homepage-pre-polish.css'), 'utf8')
-    : html.match(/<style id="homepage-pre-polish">([\s\S]*?)<\/style>/i)?.[1] || '';
+    : fs.readFileSync(path.join(root, 'homepage-translated-pre-polish.css'), 'utf8');
   assert.ok(heroCss.length > 0, file + ': consolidated hero CSS block missing');
   assert.doesNotMatch(heroCss, /\/\*\s*V(?:8|9|14|17|18|19|20|21)\b/i, file + ': superseded hero version history remains');
   assert.doesNotMatch(heroCss.slice(0, 6000), /\.outbreak-panel|panelOrbit|signalPulse/, file + ': stale hero panel selectors or animations remain');
