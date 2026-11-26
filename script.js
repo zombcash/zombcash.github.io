@@ -1717,7 +1717,7 @@ function renderAlarms(market, error) {
       setText(periodNote, ui().periodNote + ' · ' + periods[period].label);
       if (lastPayload) {
         render(lastPayload);
-        if (lastPayload.stale) setState('STALE FEED', 'stale');
+        if (lastPayload.stale) setState(ui().stale, 'stale');
       } else load(true);
     });
   });
