@@ -1730,6 +1730,40 @@
     const locale = pathParts.length && locales.includes(pathParts[0]) ? pathParts[0] : 'en';
     const prefix = locale === 'en' ? '/' : '/' + locale + '/';
     const currentFile = (pathParts.length && locales.includes(pathParts[0]) ? pathParts[1] : pathParts[0]) || 'index.html';
+    // Show saved reading progress on localized book landing pages too.
+    if (locale !== 'en' && currentFile === 'the-meridian-of-ash.html') {
+      try {
+        const saved = JSON.parse(localStorage.getItem('meridian-reading-progress-v1') || 'null');
+        if (saved && Number.isInteger(saved.chapter) && (saved.isPrologue || (saved.chapter >= 1 && saved.chapter <= 46))) {
+          const hero = document.querySelector('main .hero');
+          if (hero && !document.querySelector('.meridian-resume')) {
+            const resumeLabels = {
+              en:{title:'Continue reading',prologue:'Resume Prologue →',chapter:n=>'Resume Chapter '+n+' →'},
+              de:{title:'Weiterlesen',prologue:'Prolog fortsetzen →',chapter:n=>'Kapitel '+n+' fortsetzen →'},
+              fr:{title:'Reprendre la lecture',prologue:'Reprendre le prologue →',chapter:n=>'Reprendre le chapitre '+n+' →'},
+              it:{title:'Continua la lettura',prologue:'Riprendi il prologo →',chapter:n=>'Riprendi il capitolo '+n+' →'},
+              ja:{title:'読書を続ける',prologue:'序章を再開 →',chapter:n=>'第'+n+'章を再開 →'},
+              'zh-CN':{title:'继续阅读',prologue:'继续序章 →',chapter:n=>'继续第'+n+'章 →'},
+              ru:{title:'Продолжить чтение',prologue:'Продолжить пролог →',chapter:n=>'Продолжить главу '+n+' →'},
+              tr:{title:'Okumaya devam et',prologue:'Önsöze devam et →',chapter:n=>n+'. bölüme devam et →'},
+              hi:{title:'पढ़ना जारी रखें',prologue:'प्रस्तावना जारी रखें →',chapter:n=>'अध्याय '+n+' जारी रखें →'}
+            };
+            const labels=resumeLabels[locale]||resumeLabels.en;
+            const card=document.createElement('section');card.className='meridian-resume';
+            const copy=document.createElement('div');
+            const heading=document.createElement('strong');heading.textContent=labels.title;
+            const detail=document.createElement('small');detail.textContent=(saved.title|| (saved.isPrologue?'Prologue':'Chapter '+saved.chapter))+' · '+Math.max(0,Math.min(100,saved.percent||0))+'%';
+            const track=document.createElement('div');track.className='meridian-resume-track';
+            const fill=document.createElement('span');fill.style.width=Math.max(0,Math.min(100,saved.percent||0))+'%';track.append(fill);copy.append(heading,detail,track);
+            const link=document.createElement('a');
+            const savedPath=typeof saved.url==='string'&&/^\\/(?:[a-z]{2}(?:-[A-Z]{2})?\\/)?the-meridian-of-ash-(?:prologue|chapter-\\d{2})\\.html$/.test(saved.url)&&(!saved.isPrologue?saved.url.endsWith('chapter-'+String(saved.chapter).padStart(2,'0')+'.html'):saved.url.endsWith('prologue.html'))?saved.url:null;
+            link.href=savedPath||(saved.isPrologue?prefix+'the-meridian-of-ash-prologue.html':prefix+'the-meridian-of-ash-chapter-'+String(saved.chapter).padStart(2,'0')+'.html');
+            link.textContent=saved.isPrologue?labels.prologue:labels.chapter(saved.chapter);card.append(copy,link);hero.insertAdjacentElement('afterend',card);
+            const style=document.createElement('style');style.textContent='.meridian-resume{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:18px 0;padding:14px 16px;border:1px solid #52645a;border-radius:10px;background:#111a16;color:#e0e8e2}.meridian-resume>div{min-width:0;flex:1}.meridian-resume strong,.meridian-resume small{display:block}.meridian-resume small{color:#aab8b0;margin-top:4px}.meridian-resume-track{height:3px;background:#29352e;margin-top:9px;overflow:hidden}.meridian-resume-track span{display:block;height:100%;background:#a6bcae}.meridian-resume a{display:inline-block;color:#dce8df;text-decoration:none;border:1px solid #52645a;border-radius:7px;padding:9px 12px;white-space:nowrap}@media(max-width:540px){.meridian-resume{align-items:flex-start;flex-direction:column}.meridian-resume a{white-space:normal}}';document.head.appendChild(style);
+          }
+        }
+      } catch (_) {}
+    }
     const chapterMatch = currentFile.match(/^the-meridian-of-ash-chapter-([0-9]{2})\.html$/);
     const isPrologue = currentFile === 'the-meridian-of-ash-prologue.html';
     // Localized novel pages were missing reading-progress persistence. Track only
