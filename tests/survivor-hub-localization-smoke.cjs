@@ -7,14 +7,14 @@ const ROOT = 'https://zombcash.github.io/';
 const locales = ['en', 'de', 'fr', 'it', 'ja', 'zh-CN', 'ru', 'tr', 'hi'];
 const localeTitles = {
   en: 'Survivor Hub: Referrals &amp; Leaderboard | ZombieCash',
-  de: 'Überlebenden-Hub — ZombieCash',
+  de: 'Überlebenden-Hub | Community &amp; Survival Points',
   fr: 'Espace des survivants — ZombieCash',
   it: 'Hub dei sopravvissuti — ZombieCash',
   ja: 'サバイバー・ハブ | ZombieCash コミュニティランキング',
-  'zh-CN': '幸存者中心 — ZombieCash',
-  ru: 'Центр выживших — ZombieCash',
+  'zh-CN': '幸存者中心 | 生存积分与社区排行榜',
+  ru: 'Центр выживших | Очки и рейтинг сообщества',
   tr: 'Hayatta Kalanlar Merkezi — ZombieCash',
-  hi: 'सर्वाइवर हब — ZombieCash',
+  hi: 'सर्वाइवर हब | पॉइंट्स और लीडरबोर्ड',
 };
 
 function extractMeta(html, expression, label) {
@@ -144,6 +144,8 @@ for (const locale of locales) {
   const schema = JSON.parse(schemaText);
   assert.equal(schema.inLanguage, locale, localizedPath + ' JSON-LD language must match the page');
   assert.equal(schema.name, decodeHtmlEntities(title), localizedPath + ' JSON-LD name must match the decoded page title');
+  assert.equal(schema.url, canonical, localizedPath + ' JSON-LD URL must match the self-canonical URL');
+  assert.equal(schema['@id'], canonical + '#webpage', localizedPath + ' JSON-LD @id must identify the localized canonical page');
   assert.equal(schema.description, description, localizedPath + ' JSON-LD description must match the localized description');
 }
 

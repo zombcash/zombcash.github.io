@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import json
 import re
-from html import escape as html_escape
+from html import escape as html_escape, unescape as html_unescape
 import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from pathlib import Path
@@ -117,8 +117,24 @@ sitemap = ET.parse("sitemap-gallery-images.xml").getroot()
 images = [node.text for node in sitemap.findall(".//im:loc", NS)]
 assert len(images) == len(set(images)) == len({item["image"] for item in items})
 
+expected_localized_metadata = {
+    "de": ("ZombieCash-Galerie: Zombie-Kunst & Horror-Memes", "Entdecke ZombieCash-Zombie-Kunst, Horror-Memes und Community-Kreationen. Sieh dir Bilder an und öffne die Originalbeiträge auf Telegram."),
+    "fr": ("Galerie ZombieCash : art zombie et mèmes d’horreur", "Explorez la galerie ZombieCash : art zombie, mèmes d’horreur et créations de la communauté. Parcourez les images et ouvrez les publications Telegram originales."),
+    "hi": ("ZombieCash गैलरी: ज़ॉम्बी कला और हॉरर मीम्स", "ZombieCash की ज़ॉम्बी कला, हॉरर मीम और समुदाय की रचनाएँ देखें। चित्रों को ब्राउज़ करें और मूल Telegram पोस्ट खोलें।"),
+    "it": ("Galleria ZombieCash: arte zombie e meme horror", "Esplora la galleria ZombieCash con arte zombie, meme horror e creazioni della community. Sfoglia le immagini e apri i post originali su Telegram."),
+    "ja": ("ZombieCashギャラリー｜ゾンビアートとホラーミーム", "ZombieCashのゾンビアート、ホラーミーム、コミュニティ作品を紹介します。画像を閲覧し、元のTelegram投稿を開けます。"),
+    "zh-CN": ("ZombieCash 僵尸画廊｜僵尸艺术与恐怖梗图", "探索 ZombieCash 僵尸艺术、恐怖梗图和社区创作。浏览图片并打开原始 Telegram 帖子。"),
+    "ru": ("Галерея ZombieCash: зомби-арт и хоррор-мемы", "Исследуй галерею ZombieCash: зомби-арт, хоррор-мемы и тематические работы сообщества. Просматривай изображения и открывай оригинальные публикации в Telegram."),
+    "tr": ("ZombieCash Galerisi: Zombi Sanatı ve Korku Memleri", "ZombieCash zombi sanatını, korku memlerini ve topluluk eserlerini keşfet. Görselleri incele ve özgün Telegram gönderilerini aç."),
+}
+
 for locale in ("de", "fr", "it", "ja", "zh-CN", "ru", "tr", "hi"):
     page = Path(locale, "gallery.html").read_text(encoding="utf-8")
+    title_match = re.search(r"<title>(.*?)</title>", page, re.S)
+    description_match = re.search(r'<meta name="description" content="([^"]*)"', page)
+    expected_title, expected_description = expected_localized_metadata[locale]
+    assert title_match and html_unescape(title_match.group(1)) == expected_title, f"{locale} gallery title is not the approved localized title"
+    assert description_match and html_unescape(description_match.group(1)) == expected_description, f"{locale} gallery description is not the approved localized description"
     locale_parser = Cards()
     locale_parser.feed(page)
     locale_cards = {card["id"]: card for card in locale_parser.cards}

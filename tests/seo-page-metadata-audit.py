@@ -166,6 +166,8 @@ def main():
             issues.append("missing_html_lang")
         if len(parser.canonical) != 1 or not canonical:
             issues.append(f"canonical_count={len(parser.canonical)}")
+        elif canonical.rstrip("/") != url.rstrip("/"):
+            issues.append(f"canonical_mismatch={canonical}")
         if "noindex" in robots:
             issues.append("noindex_on_sitemap_page")
         if parser.h1_count == 0:
@@ -237,7 +239,11 @@ def main():
             print(f"WARNING {row['url']}: {', '.join(row['warnings'])}")
     if critical:
         raise SystemExit("FAIL: sitemap page metadata audit found critical issues.")
-    print("PASS: every sitemap page has one title, one meta description, language and canonical, with no noindex directive.")
+    if duplicate_titles or duplicate_descriptions:
+        raise SystemExit("FAIL: sitemap pages contain duplicate titles or meta descriptions.")
+    if report["pages_with_warnings"]:
+        raise SystemExit("FAIL: sitemap pages contain title/description length or semantic metadata warnings.")
+    print("PASS: all sitemap pages have unique, appropriately sized titles and descriptions, one canonical, a language tag, and no noindex directive.")
 
 if __name__ == "__main__":
     main()
