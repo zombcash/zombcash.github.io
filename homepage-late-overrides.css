@@ -252,7 +252,7 @@ section.section.community-console .crew-grid {
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   grid-template-areas: "market jupiter" "chart feed" !important;
-  grid-auto-flow: row !important;;
+  grid-auto-flow: row !important;
 }
 section.section.community-console .crew-grid > article:first-of-type { grid-area: market !important; align-self:stretch !important; height:100% !important; }
 section.section.community-console .crew-grid > .jupiter-swap-card { grid-area: jupiter !important; align-self:stretch !important; height:100% !important; }
@@ -447,10 +447,10 @@ section.section.community-console .crew-grid > .recent-trades-panel .recent-trad
 section.section.community-console .jupiter-swap-card #jupiter-zombcash-terminal {
   display: flex !important;
   justify-content: center !important;
-  align-items: stretch !important;;
+  align-items: stretch !important;
   min-width: 0 !important;
   min-height: 390px !important;
-  height: 390px !important;;
+  height: 390px !important;
 }
 @media (max-width: 850px) {
   section.section.community-console .jupiter-swap-card #jupiter-zombcash-terminal {
@@ -612,15 +612,15 @@ header.topbar {
 
 /* Consolidated from zc-home-hero-compact-ad-placement; original order preserved. */
 /* Keep the home hero content-led: browser zoom must not turn 100vh into a huge empty panel. */
-body > main#home > section.hero {;;;
+body > main#home > section.hero {
   padding-top: clamp(28px, 3.2vw, 48px) !important;
   padding-bottom: 30px !important;
   overflow: hidden !important;
 }
 body > main#home > section.hero > .hero-layout {
-  min-height: 0 !important;;
+  min-height: 0 !important;
 }
-body > main#home > section.hero .zc-hero-art-panel {;;
+body > main#home > section.hero .zc-hero-art-panel {
   aspect-ratio: 900 / 650;
 }
 @media (max-width: 680px) {
@@ -685,10 +685,8 @@ body > main#home > section.hero .zc-hero-art-panel {
 /* Consolidated from zc-touch-hero-single-column-fix-20261104; original order preserved. */
 /* Touch devices using a desktop-width viewport must still stack the hero. */
 @media (max-width: 1100px) and (pointer: coarse) {
-  body > main#home > section.hero > .hero-layout {;;;;;;
-  }
-  body > main#home > section.hero > .hero-layout > .hero-content {;
-    grid-column: 1 !important;;
+  body > main#home > section.hero > .hero-layout > .hero-content {
+    grid-column: 1 !important;
     position: relative !important;
     transform: none !important;
   }
@@ -733,10 +731,10 @@ body:has(#home) #home > section.hero{
   overflow:visible!important;
 }
 body:has(#home) #home > section.hero > .hero-layout{
-  box-sizing:border-box!important;;
+  box-sizing:border-box!important;
   grid-template-columns:minmax(0,1fr) minmax(560px,640px)!important;
   grid-template-areas:"content sponsor"!important;
-  grid-template-rows:auto!important;grid-auto-flow:row!important;;align-content:start!important;
+  grid-template-rows:auto!important;grid-auto-flow:row!important;align-content:start!important;
   gap:clamp(24px,2.5vw,40px)!important;
   width:min(100%,1440px)!important;max-width:1440px!important;
   min-width:0!important;height:auto!important;min-height:0!important;
@@ -759,17 +757,15 @@ body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
   margin:0!important;padding:10px!important;transform:none!important;
   overflow:hidden!important;
 }
-@media(min-width:901px){
-}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot{;;;
-  flex:0 0 auto!important;;min-width:0!important;
-  height:clamp(260px,22vw,340px)!important;min-height:260px!important;;
-  margin:0!important;;;
-  border:1px solid #9bff4560!important;;;
+body:has(#home) #home > section.hero .zc-sponsor-art-slot{
+  flex:0 0 auto!important;min-width:0!important;
+  height:clamp(260px,22vw,340px)!important;min-height:260px!important;
+  margin:0!important;
+  border:1px solid #9bff4560!important;
 }
 body:has(#home) #home > section.hero .zc-sponsor-art-slot:before{content:none!important;display:none!important}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot img{;;;;;;;object-position:center 32%!important;
-  filter:saturate(.96) contrast(1.04)!important;;
+body:has(#home) #home > section.hero .zc-sponsor-art-slot img{object-position:center 32%!important;
+  filter:saturate(.96) contrast(1.04)!important;
 }
 body:has(#home) #home > section.hero .hero-bottom{
   position:relative!important;inset:auto!important;display:flex!important;
