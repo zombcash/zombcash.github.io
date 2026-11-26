@@ -777,22 +777,6 @@ body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{
   margin:0!important;padding:10px!important;transform:none!important;
   overflow:hidden!important;
 }
-@media(min-width:901px){
-}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot{
-  box-sizing:border-box!important;position:relative!important;display:block!important;
-  flex:0 0 auto!important;width:100%!important;min-width:0!important;
-  height:clamp(260px,22vw,340px)!important;min-height:260px!important;max-height:340px!important;
-  margin:0!important;padding:0!important;overflow:hidden!important;
-  border:1px solid #9bff4560!important;border-radius:5px!important;background:#080d0a!important;
-}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot:before{content:none!important;display:none!important}
-body:has(#home) #home > section.hero .zc-sponsor-art-slot img{
-  position:absolute!important;inset:0!important;display:block!important;
-  width:100%!important;height:100%!important;max-width:none!important;
-  object-fit:cover!important;object-position:center 32%!important;
-  filter:saturate(.96) contrast(1.04)!important;z-index:1!important;
-}
 body:has(#home) #home > section.hero .hero-bottom{
   position:relative!important;inset:auto!important;display:flex!important;
   width:min(100%,1440px)!important;margin:20px auto 0!important;
@@ -808,11 +792,6 @@ body:has(#home) #home > section.hero .hero-bottom{
     grid-column:1!important;grid-row:auto!important;
     width:min(100%,900px)!important;max-width:900px!important;
     justify-self:center!important;
-  }
-}
-@media(max-width:900px){
-  body:has(#home) #home > section.hero .zc-sponsor-art-slot{
-    height:clamp(210px,46vw,300px)!important;min-height:210px!important;max-height:300px!important;
   }
 }
 @media(max-width:760px){
