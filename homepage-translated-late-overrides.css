@@ -970,3 +970,6 @@ body:has(#home) #home>section.hero>.zc-home-hero-bg-image{position:absolute!impo
 body:has(#home) #home>section.hero>.hero-layout{position:relative!important;z-index:3!important}
 body:has(#home) #home>section.hero:after{z-index:2!important;pointer-events:none!important;background:linear-gradient(90deg,#050807f5 0%,#050807d9 34%,#05080770 61%,#05080720 100%),linear-gradient(0deg,#050807e8 0%,transparent 28%)!important}
 @media(max-width:760px){body:has(#home) #home>section.hero>.zc-home-hero-bg-image{object-position:62% center!important;opacity:.3!important}body:has(#home) #home>section.hero:after{background:linear-gradient(180deg,#050807e8 0%,#050807b8 44%,#050807ee 100%)!important}}
+
+/* Remove the legacy decorative moon/circle overlay from the hero background image. */
+body:has(#home) #home>section.hero>.moon{display:none!important;visibility:hidden!important;opacity:0!important;width:0!important;height:0!important}
