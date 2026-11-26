@@ -791,7 +791,7 @@ if (zomMarket) {
       const response = await zcApiFetch(apiBase + '/api/news', {cache:'no-store'});
       if (!response.ok) throw new Error('HTTP ' + response.status);
       const data = await response.json();
-      const articles = Array.isArray(data.articles) ? data.articles.filter(article => article && article.enriched !== true) : [];
+      const articles = Array.isArray(data.articles) ? data.articles.filter(article => article && (article.enriched !== true || article.kind === 'news')) : [];
       if (!articles.length) {
         newsList.replaceChildren(makeNode('p', 'world-empty', newsText.empty));
         if (newsStatus) newsStatus.textContent = newsText.quiet;
@@ -800,7 +800,7 @@ if (zomMarket) {
       }
       newsList.replaceChildren();
       const seenArticleLinks = new Set();
-      const seenArticleTitles = new Set();
+      const seenArticleTitles = new Map();
       let renderedArticles = 0;
       for (const article of articles) {
         if (renderedArticles >= 7) break;
@@ -817,9 +817,20 @@ if (zomMarket) {
           } catch (_) {}
         }
         const identityTitle = String(article.title || '').normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
-        if ((identityLink && seenArticleLinks.has(identityLink)) || (identityTitle && seenArticleTitles.has(identityTitle))) continue;
+        const duplicateByLink = identityLink && seenArticleLinks.has(identityLink);
+        const duplicateByTitle = identityTitle && seenArticleTitles.has(identityTitle);
+        if (duplicateByLink || duplicateByTitle) {
+          const existingCard = duplicateByTitle ? seenArticleTitles.get(identityTitle) : null;
+          // If a Telegram worker enriched an RSS story with Zombie Commentary, merge the commentary into the existing card rather than losing it to deduplication.
+          if (existingCard && article.commentary && !existingCard.querySelector('.world-news-commentary')) {
+            const commentary = makeNode('div', 'world-news-commentary');
+            commentary.append(makeNode('b', '', newsText.comment), makeNode('span', '', article.commentary));
+            existingCard.append(commentary);
+            existingCard.classList.add('is-enriched');
+          }
+          continue;
+        }
         if (identityLink) seenArticleLinks.add(identityLink);
-        if (identityTitle) seenArticleTitles.add(identityTitle);
         const link = document.createElement('a');
         link.className = 'world-news-item' + (article.enriched ? ' is-enriched' : '');
         link.href = /^https?:\/\//i.test(article.link || '') ? article.link : '#living-world';
@@ -848,10 +859,13 @@ if (zomMarket) {
           link.append(commentary);
         }
         newsList.append(link);
+        if (identityTitle) seenArticleTitles.set(identityTitle, link);
         renderedArticles += 1;
       }
-      if (newsStatus) newsStatus.textContent = data.stale ? newsText.last : newsText.online;
-      if (newsUpdated) newsUpdated.textContent = newsText.updated + ' ' + new Date(Number(data.updatedAt || Date.now()/1000)*1000).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+      const updatedAtMs = Number(data.updatedAt || 0) * 1000;
+      const apiSnapshotStale = !Number.isFinite(updatedAtMs) || updatedAtMs <= 0 || (Date.now() - updatedAtMs) > 45 * 60 * 1000;
+      if (newsStatus) newsStatus.textContent = (data.stale === true || apiSnapshotStale) ? newsText.last : newsText.online;
+      if (newsUpdated) newsUpdated.textContent = newsText.updated + ' ' + (updatedAtMs > 0 ? new Date(updatedAtMs).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) : newsText.waiting);
     } catch (error) {
       console.warn('Living World RSS unavailable:', error);
       if (newsStatus) newsStatus.textContent = newsText.interrupted;
