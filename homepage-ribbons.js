@@ -19,8 +19,10 @@
  tr:[['CANLI KRİPTO','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['DÖVİZ KURLARI','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['PİYASA NABZI','Canlı kripto fiyatları','24 saatlik değişim','Döviz kurları','Otomatik güncelleme']],
  hi:[['लाइव क्रिप्टो','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['विनिमय दरें','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['मार्केट पल्स','लाइव क्रिप्टो कीमतें','24 घंटे का बदलाव','विनिमय दरें','स्वचालित अपडेट']]
  };
- var themes=['alert','community','market'],icons=['☣','◉','▥'];
+ var themes=['alert','market','community'],icons=['☣','◉','▥'];
  var liveValues={},marketSource='';
+ var statusWords={en:{loading:'loading…',unavailable:'temporarily unavailable'},de:{loading:'wird geladen…',unavailable:'vorübergehend nicht verfügbar'},fr:{loading:'chargement…',unavailable:'temporairement indisponible'},it:{loading:'caricamento…',unavailable:'temporaneamente non disponibile'},ja:{loading:'読み込み中…',unavailable:'一時的に利用できません'},'zh-CN':{loading:'加载中…',unavailable:'暂时不可用'},ru:{loading:'загрузка…',unavailable:'временно недоступно'},tr:{loading:'yükleniyor…',unavailable:'geçici olarak kullanılamıyor'},hi:{loading:'लोड हो रहा है…',unavailable:'अस्थायी रूप से अनुपलब्ध'}};
+ function localizeStatus(value){var words=statusWords[lang]||statusWords.en;return String(value).replace(/loading…/g,words.loading).replace(/temporarily unavailable/g,words.unavailable);}
  var wrap=existing||document.createElement('div');wrap.className='zc-outbreak-ribbons';wrap.setAttribute('role','region');wrap.setAttribute('aria-label','ZombieCash project highlights');wrap.setAttribute('aria-busy','true');
  function storedRibbonValue(item){
   var keys=Object.keys(liveValues);
@@ -35,7 +37,7 @@
    var track=document.createElement('div');track.className='zc-ribbon-track';
    for(var repeat=0;repeat<2;repeat++){
     var line=document.createElement('span');line.className='zc-ribbon-copy';if(repeat===1)line.setAttribute('aria-hidden','true');
-    row.slice(1).forEach(function(item){var text=document.createElement('span');text.textContent=storedRibbonValue(item);line.appendChild(text);var sep=document.createElement('b');sep.textContent='•';line.appendChild(sep);});
+    row.slice(1).forEach(function(item){var text=document.createElement('span');text.textContent=localizeStatus(storedRibbonValue(item));line.appendChild(text);var sep=document.createElement('b');sep.textContent='•';line.appendChild(sep);});
     track.appendChild(line);
    }
    band.appendChild(label);band.appendChild(track);wrap.appendChild(band);
@@ -56,10 +58,10 @@
  }
  function setMarketSource(source){
   marketSource=source||'';
-  var label=wrap.querySelector('.zc-ribbon--market .zc-ribbon-label');
-  var marketRows=(copy[lang]||copy.en)[0]||[];
-  var hasLiveTicker=marketRows.some(function(item){return item.indexOf('BTC:')===0;});
-  if(label)label.textContent=icons[2]+' '+(copy[lang]||copy.en)[2][0]+(marketSource&&hasLiveTicker?' · DATA: '+marketSource:'');
+  var label=wrap.querySelector('.zc-ribbon--alert .zc-ribbon-label');
+  var cryptoRows=(copy[lang]||copy.en)[0]||[];
+  var hasLiveTicker=cryptoRows.some(function(item){return item.indexOf('BTC:')===0;});
+  if(label)label.textContent=icons[0]+' '+cryptoRows[0]+(marketSource&&hasLiveTicker?' · DATA: '+marketSource:'');
  }
  function setItem(label,value){
   liveValues[label]=value;
@@ -86,7 +88,7 @@
     Object.keys(ids).forEach(function(symbol){
      var quote=data[ids[symbol]]||{},price=Number(quote.usd),rawChange=quote.usd_24h_change,change=rawChange===null||rawChange===undefined?NaN:Number(rawChange);
      if(Number.isFinite(price)&&price>0)setItem(symbol+':',symbol+': '+fmtPrice(price)+(Number.isFinite(change)?' ('+fmtChange(change)+')':''));
-     else setItem(symbol+':',symbol+': temporarily unavailable');
+     else setItem(symbol+':',symbol+': '+(statusWords[lang]||statusWords.en).unavailable);
     });
    }).catch(function(){
     // Do not call Binance from the browser: its public ticker endpoint does not
@@ -104,11 +106,11 @@
     setItem('USD / UAH:','USD / UAH: '+(uah?uah.toFixed(2):'—'));
     setItem('EUR / USD:','EUR / USD: '+(eur?(1/eur).toFixed(4):'—'));
     setItem('USD / EUR:','USD / EUR: '+(eur?eur.toFixed(4):'—'));
-   }).catch(function(){['USD / UAH:','EUR / USD:','USD / EUR:'].forEach(function(s){setItem(s,s+' temporarily unavailable');});});
+   }).catch(function(){['USD / UAH:','EUR / USD:','USD / EUR:'].forEach(function(s){setItem(s,s+' '+(statusWords[lang]||statusWords.en).unavailable);});});
  }
  function updateZombieCash(){
   var dexUrl='https://api.dexscreener.com/latest/dex/tokens/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump';
-  function unavailable(){setItem('$ZOMBCASH:','$ZOMBCASH: temporarily unavailable');}
+  function unavailable(){setItem('$ZOMBCASH:','$ZOMBCASH: '+(statusWords[lang]||statusWords.en).unavailable);}
   function geckoFallback(){
    return fetch('https://zombcash-bot.fadehost.app/api/zombcash',{cache:'no-store'})
     .then(function(r){if(!r.ok)throw new Error('ZombieCash API HTTP '+r.status);return r.json();})
