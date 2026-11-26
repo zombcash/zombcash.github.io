@@ -49,34 +49,45 @@ async function settle() {
   assert.match(gecko.items['ETH:'], /3200/);
   assert.match(gecko.items['SOL:'], /145/);
 
-  const fallback = createUpdater(async url => {
-    if (url.includes('coingecko.com')) return { ok: false, status: 429, json: async () => ({}) };
-    return {
-      ok: true,
-      json: async () => [
-        { symbol: 'BTCUSDT', lastPrice: '65000', priceChangePercent: '1.25' },
-        { symbol: 'ETHUSDT', lastPrice: '3200', priceChangePercent: '-0.50' },
-        { symbol: 'SOLUSDT', lastPrice: '145', priceChangePercent: '2.10' }
-      ]
-    };
+  const rateLimited = createUpdater(async url => {
+    assert.ok(url.includes('coingecko.com'), 'the browser must use the verified CORS-compatible CoinGecko endpoint');
+    return { ok: false, status: 429, json: async () => ({}) };
   });
-  fallback.updater();
+  rateLimited.updater();
   await settle();
-  assert.equal(fallback.calls.length, 2, 'Binance must be requested only after CoinGecko fails');
-  assert.ok(fallback.calls[0].includes('coingecko'));
-  assert.ok(fallback.calls[1].includes('binance'));
-  assert.deepEqual(fallback.sources, ['']);
-  assert.match(fallback.items['BTC:'], /65000/);
+  assert.equal(rateLimited.calls.length, 1, 'CoinGecko rate limits must not trigger a browser-side Binance request');
+  assert.deepEqual(rateLimited.sources, ['']);
+  for (const symbol of ['BTC', 'ETH', 'SOL']) {
+    assert.equal(rateLimited.items[symbol + ':'], symbol + ': temporarily unavailable');
+  }
 
-  const unavailable = createUpdater(async () => ({ ok: false, status: 503, json: async () => ({}) }));
+  const unavailable = createUpdater(async url => {
+    assert.ok(url.includes('coingecko.com'), 'CoinGecko remains the sole browser market provider');
+    return { ok: false, status: 503, json: async () => ({}) };
+  });
   unavailable.updater();
   await settle();
+  assert.equal(unavailable.calls.length, 1, 'provider failure must not call a CORS-blocked fallback');
   assert.deepEqual(unavailable.sources, ['']);
   for (const symbol of ['BTC', 'ETH', 'SOL']) {
     assert.equal(unavailable.items[symbol + ':'], symbol + ': temporarily unavailable');
   }
 
-  console.log('PASS: CoinGecko is primary; Binance is a bounded fallback; failed providers never display fake prices.');
+  const missingChange = createUpdater(async () => ({
+    ok: true,
+    json: async () => ({
+      bitcoin: { usd: 65000, usd_24h_change: null },
+      ethereum: { usd: 3200 },
+      solana: { usd: 145, usd_24h_change: 2.1 }
+    })
+  }));
+  missingChange.updater();
+  await settle();
+  assert.equal(missingChange.calls.length, 1);
+  assert.doesNotMatch(missingChange.items['BTC:'], /0\.00%/, 'missing 24h change must not be fabricated as zero');
+  assert.doesNotMatch(missingChange.items['ETH:'], /0\.00%/, 'missing 24h change must not be fabricated as zero');
+
+  console.log('PASS: CoinGecko is the sole browser market source; rate limits and provider failures show an explicit unavailable state; no fake prices or zero changes are displayed.');
 })().catch(error => {
   console.error(error);
   process.exitCode = 1;
