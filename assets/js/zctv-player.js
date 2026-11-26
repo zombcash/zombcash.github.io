@@ -322,11 +322,11 @@
     if (!value) return '';
     try {
       const url = new URL(value);
-      const host = url.hostname.replace(/^www\\./, '').toLowerCase();
+      const host = url.hostname.replace(/^www\./, '').toLowerCase();
       let id = '';
       if (host === 'youtu.be') id = url.pathname.split('/').filter(Boolean)[0] || '';
       else if (host === 'youtube.com' || host === 'm.youtube.com' || host === 'youtube-nocookie.com') {
-        id = url.searchParams.get('v') || (url.pathname.match(/^\\/(?:embed|live|shorts)\\/([^/?]+)/) || [])[1] || '';
+        id = url.searchParams.get('v') || (url.pathname.match(/^\/(?:embed|live|shorts)\/([^/?]+)/) || [])[1] || '';
       }
       if (!id) return '';
       return 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?autoplay=1&mute=1&playsinline=1&rel=0&controls=1';
@@ -487,7 +487,7 @@
     }
     setSignal(false, 'ARCHIVE PLAYBACK');
     text(version, 'SERVER ARCHIVE');
-    text(status, 'ARCHIVE · ' + new Date((episode.created_at || 0) * 1000).toLocaleDateString());
+    text(status, 'ARCHIVE · ' + (episode.title || 'ZombieCash transmission') + ' · ' + new Date((episode.created_at || 0) * 1000).toLocaleDateString());
     if (download) { download.href = src; download.textContent = 'OPEN / DOWNLOAD ↗'; }
     updateModeButtons();
     if (autoplay) player.play().catch(function () {});
