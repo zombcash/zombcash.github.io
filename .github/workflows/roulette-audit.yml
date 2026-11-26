@@ -11,6 +11,8 @@ on:
       - 'language.js'
       - 'sitemap.xml'
       - 'tests/roulette-audit-smoke.cjs'
+      - 'tests/roulette-css-smoke.py'
+      - 'roulette-page.css'
       - '.github/workflows/roulette-audit.yml'
   push:
     branches: [main]
@@ -47,6 +49,9 @@ jobs:
         run: |
           node --check roulette.js
           node --check tests/roulette-audit-smoke.cjs
+
+      - name: Verify externalized Roulette CSS
+        run: python tests/roulette-css-smoke.py
       - name: Install Playwright and Chromium
         run: |
           npm init -y
