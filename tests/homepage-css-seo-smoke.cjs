@@ -132,7 +132,7 @@ for (const file of pages) {
   assert.equal((html.match(/class="zc-outbreak-ribbons/g) || []).length, 1, file + ': exactly one ribbon wrapper must exist');
   assert.equal((html.match(/class="zc-ribbon zc-ribbon--/g) || []).length, 3, file + ': all three ribbon rows must reserve their final layout before JavaScript');
   assert.match(html, /homepage-ribbons\.js\?v=20261127-ribbon-labels-2/, file + ': localized ribbon repair cache key missing');
-  assert.match(html, /zctv-player\.js\?v=20261127-tv-raven-live-2/, file + ': latest TV player cache key missing');
+  assert.match(html, /zctv-player\.js\?v=20261127-tv-raven-live-3/, file + ': latest TV player cache key missing');
   assert.match(html, /script\.js\?v=20261127-news-commentary-2/, file + ': news commentary cache key missing');
   if (file === 'index.html') {
     assert.ok(html.includes('src="/ai-model-status.js?v=20261124-timeout-1"'), 'English homepage must use the cache-busted AI status script');
@@ -153,7 +153,7 @@ for (const file of pages) {
   assert.doesNotMatch(marketUiBlock[0], /\bmz\(\)/, 'market UI initialization must not call mz before its declaration');
   assert.match(html, /script\.js\?v=[^\"]+/,
     file + ': homepage runtime cache key must be refreshed so localized pages receive current ARIA fixes');
-  assert.match(html, /zctv-player\.js\?v=20261127-tv-raven-live-2/, file + ': TV player cache key must be refreshed for latest Raven and YouTube Live support');
+  assert.match(html, /zctv-player\.js\?v=20261127-tv-raven-live-3/, file + ': TV player cache key must be refreshed for latest Raven and YouTube Live support');
   if (file === 'index.html') {
     assert.ok(html.indexOf('style.css') < html.indexOf('homepage-pre-polish.css'), file + ': pre-polish CSS order changed');
     assert.ok(html.indexOf('homepage-pre-polish.css') < html.indexOf('site-polish.css'), file + ': pre-polish CSS must precede site-polish.css');
