@@ -9,11 +9,22 @@ class StyleCounter(HTMLParser):
         self.blocks = 0
         self.block_bytes = 0
         self.inline_attrs = 0
+        self.current_style = False
+        self.block_sizes = []
     def handle_starttag(self, tag, attrs):
-        self.blocks += int(tag.lower() == "style")
+        if tag.lower() == "style":
+            self.blocks += 1
+            self.current_style = True
+            self.block_sizes.append(0)
         self.inline_attrs += sum(1 for key, value in attrs if key.lower() == "style" and value is not None)
+    def handle_data(self, data):
+        if self.current_style and self.block_sizes:
+            size = len(data.encode("utf-8"))
+            self.block_sizes[-1] += size
+            self.block_bytes += size
     def handle_endtag(self, tag):
-        pass
+        if tag.lower() == "style":
+            self.current_style = False
 
 results = []
 for path in sorted(Path(".").rglob("*.html")):
@@ -23,8 +34,7 @@ for path in sorted(Path(".").rglob("*.html")):
     parser = StyleCounter()
     parser.feed(text)
     if parser.blocks or parser.inline_attrs:
-        blocks = list(__import__("re").finditer(r"<style\\b[^>]*>([\\s\\S]*?)</style>", text, __import__("re").I))
-        results.append((parser.blocks, parser.inline_attrs, sum(len(m.group(1)) for m in blocks), path.as_posix(), [len(m.group(1)) for m in blocks]))
+        results.append((parser.blocks, parser.inline_attrs, parser.block_bytes, path.as_posix(), parser.block_sizes))
 
 print(f"HTML files scanned: {len(list(Path('.').rglob('*.html')))}")
 print(f"Pages with inline style tags or attributes: {len(results)}")
