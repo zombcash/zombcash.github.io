@@ -15,7 +15,8 @@ function makeNode() {
 function run(period, points) {
   const chartEl=makeNode(), chartStatus={textContent:''}, chartCurrent={textContent:''}, chartStart={textContent:''}, chartEnd={textContent:''};
   const context={chartEl,chartStatus,chartCurrent,chartStart,chartEnd,chartPeriod:period,activityJapaneseUI:false,
-    money:value=>'
+    money:value=>String(value),
+    document:{createElementNS:()=>makeNode()},
     chartMessage:message=>{chartEl.replaceChildren();const n=makeNode();n.textContent=message;chartEl.append(n);}};
   const render=vm.runInNewContext('('+rendererSource+')',context);
   render({source:'GeckoTerminal',points});
