@@ -118,6 +118,21 @@ function record(name, response, expectedStatus, failures, details = {}) {
       marketPrice: document.getElementById('zombcash-price')?.textContent?.trim() || '',
     }));
 
+    // The TV archive is intentionally lazy-loaded only after the visitor
+    // selects ARCHIVE. Trigger that real interaction before classifying the
+    // episode endpoint; absence of an initial request on page load is expected.
+    const archiveModeButton = page.locator('#zctv-channel-hub [data-zctv-mode="archive"]');
+    await archiveModeButton.waitFor({ state: 'visible', timeout: 15000 });
+    const archiveResponsePromise = page.waitForResponse(response => {
+      const url = new URL(response.url());
+      return url.hostname === new URL(API_ORIGIN).hostname && url.pathname === '/api/tv/episodes';
+    }, { timeout: 15000 }).catch(() => null);
+    await archiveModeButton.click();
+    await archiveResponsePromise;
+    if (await archiveModeButton.getAttribute('aria-pressed') !== 'true') {
+      failures.push('tv-episode-archive: selecting ARCHIVE did not update aria-pressed');
+    }
+
     const tvResponse = tvEpisodeResponses[0];
     if (tvResponse) {
       const tvStatus = tvResponse.status();
@@ -138,7 +153,7 @@ function record(name, response, expectedStatus, failures, details = {}) {
         results.push({ name: 'tv-episode-archive', result: 'FAIL', status: tvStatus });
       }
     } else {
-      degraded.push('tv-episode-archive: initial episode-list request was not observed on the live homepage');
+      degraded.push('tv-episode-archive: no episode-list response was observed after selecting ARCHIVE');
       results.push({ name: 'tv-episode-archive', result: 'UNVERIFIED' });
     }
 
