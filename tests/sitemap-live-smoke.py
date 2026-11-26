@@ -336,17 +336,12 @@ def main():
             owners.setdefault(url, []).append(sitemap_url)
     duplicates = {url: sorted(sources) for url, sources in owners.items() if len(sources) > 1}
     duplicate_entries = sum(len(sources) - 1 for sources in duplicates.values())
-    # These overlaps are intentional: gallery.html is the page context for
-    # the image sitemap, and the Japanese zombie-fiction edition belongs in
-    # both the general site sitemap and the dedicated fiction sitemap.
+    # The only intentional overlap is gallery.html: it is the page
+    # context for the image sitemap and also appears in the gallery-pages sitemap.
     expected_overlaps = {
         "https://zombcash.github.io/gallery.html": {
             "https://zombcash.github.io/sitemap-gallery-images.xml",
             "https://zombcash.github.io/sitemap-gallery-pages.xml",
-        },
-        "https://zombcash.github.io/ja/transmission-zombie-fiction-rpg-guide.html": {
-            "https://zombcash.github.io/sitemap.xml",
-            "https://zombcash.github.io/sitemap-zombie-fiction.xml",
         },
     }
     expected_duplicates = {
@@ -360,7 +355,7 @@ def main():
         }, ensure_ascii=False, indent=2))
     print(f"Sitemaps: {len(local_sitemaps)}")
     print(f"Unique HTML page URLs: {len(all_urls)}")
-    print(f"Cross-sitemap duplicate entries: {duplicate_entries} (two intentional gallery and fiction sitemap contexts)")
+    print(f"Cross-sitemap duplicate entries: {duplicate_entries} (one intentional gallery image/page context)")
 
     results = []
     with ThreadPoolExecutor(max_workers=12) as pool:
