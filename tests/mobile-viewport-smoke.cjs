@@ -431,7 +431,8 @@ fs.mkdirSync(outDir, { recursive: true });
       return tab?.getAttribute('aria-selected') === 'true' &&
         frame && getComputedStyle(frame).display !== 'none' &&
         controls && getComputedStyle(controls).display !== 'none' &&
-        frame.contentDocument?.readyState === 'complete';
+        frame.contentDocument?.readyState === 'complete' &&
+        frame.dataset.ready === '1';
     }, null, { timeout: 20000 });
     await arcadeMobile.evaluate(() => {
       const frame = document.querySelector('#snake-frame');
