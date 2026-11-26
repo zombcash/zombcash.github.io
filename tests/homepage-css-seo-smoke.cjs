@@ -134,7 +134,7 @@ for (const file of pages) {
     assert.match(html, /<link rel="stylesheet" href="\/homepage-translated-late-overrides\.css\?v=20261125-1">/, file + ': shared translated late-overrides stylesheet missing');
     assert.doesNotMatch(html, /<style id="homepage-late-overrides">/, file + ': duplicated translated late-overrides inline block must be removed');
   }
-  assert.match(html, /script\.js\?v=20261125-homepage-runtime-1/,
+  assert.match(html, /script\.js\?v=20261126-price-history-stale-window-1/,
     file + ': homepage runtime cache key must be refreshed so localized pages receive current ARIA fixes');
   assert.match(html, /zctv-player\.js\?v=20261125-tv-lazy-1/,
     file + ': TV player cache key must be refreshed so lazy archive loading is used');

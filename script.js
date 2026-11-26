@@ -1126,27 +1126,36 @@ if (zomMarket) {
   }
   function renderPriceChart(data) {
     if (!chartEl) return;
-    const points = Array.isArray(data && data.points) ? data.points.filter(p => Number(p.time)>0 && Number(p.price)>0) : [];
+    const points = (Array.isArray(data && data.points) ? data.points.filter(p => Number(p.time)>0 && Number(p.price)>0) : [])
+      .sort((a,b)=>Number(a.time)-Number(b.time));
+    const periodSeconds = ({'24h':86400,'7d':604800,'30d':2592000})[chartPeriod] || 86400;
+    const cutoff = Date.now()/1000 - periodSeconds;
+    const inPeriodPoints = points.filter(p=>Number(p.time)>=cutoff);
+    const stale = inPeriodPoints.length < 2;
+    const chartPoints = stale ? points : inPeriodPoints;
     chartEl.replaceChildren();
-    if (points.length < 2) {
+    chartEl.setAttribute('aria-label', stale ? 'Stale price history; no candles in selected period, showing last available history' : 'Price history for selected period');
+    if (chartPoints.length < 2) {
       if (chartStatus) chartStatus.textContent = activityJapaneseUI ? '価格履歴を利用できません' : 'PRICE HISTORY UNAVAILABLE';
       chartMessage(activityJapaneseUI ? '価格履歴は一時的に利用できません' : 'Price history is temporarily unavailable'); return;
     }
-    const W=720,H=190,pad=12, vals=points.map(p=>Number(p.price));
+    const W=720,H=190,pad=12, vals=chartPoints.map(p=>Number(p.price));
     const min=Math.min(...vals), max=Math.max(...vals), span=(max-min)||Math.max(max*.02,1e-12);
-    const pts=points.map((p,i)=>({x:pad+i*(W-pad*2)/(points.length-1),y:H-pad-((Number(p.price)-min)/span)*(H-pad*2)}));
+    const pts=chartPoints.map((p,i)=>({x:pad+i*(W-pad*2)/(chartPoints.length-1),y:H-pad-((Number(p.price)-min)/span)*(H-pad*2)}));
     for(let k=1;k<=3;k++){const g=document.createElementNS('http://www.w3.org/2000/svg','line');g.setAttribute('x1','0');g.setAttribute('x2',String(W));g.setAttribute('y1',String(k*H/4));g.setAttribute('y2',String(k*H/4));g.setAttribute('stroke','#9bff45');g.setAttribute('stroke-opacity','.12');chartEl.append(g);}
     const area=document.createElementNS('http://www.w3.org/2000/svg','path');
     area.setAttribute('d','M '+pts[0].x+' '+H+' L '+pts.map(p=>p.x+' '+p.y).join(' L ')+' L '+pts[pts.length-1].x+' '+H+' Z');
     area.setAttribute('fill','#9bff45');area.setAttribute('fill-opacity','.09');chartEl.append(area);
     const line=document.createElementNS('http://www.w3.org/2000/svg','path');
     line.setAttribute('d',pts.map((p,i)=>(i?'L':'M')+' '+p.x+' '+p.y).join(' '));line.setAttribute('fill','none');line.setAttribute('stroke','#9bff45');line.setAttribute('stroke-width','2.5');line.setAttribute('stroke-linejoin','round');chartEl.append(line);
+    if(stale){const warning=document.createElementNS('http://www.w3.org/2000/svg','text');warning.setAttribute('x','12');warning.setAttribute('y','16');warning.setAttribute('fill','#f0bd72');warning.setAttribute('font-size','10');warning.textContent=activityJapaneseUI?'選択期間内のデータなし — 最新の履歴を表示':'No candles in selected period — last available history shown';chartEl.append(warning);}
     const last=pts[pts.length-1],dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
     dot.setAttribute('cx',String(last.x));dot.setAttribute('cy',String(last.y));dot.setAttribute('r','4');dot.setAttribute('fill','#d9ffb0');dot.setAttribute('stroke','#9bff45');dot.setAttribute('stroke-width','2');chartEl.append(dot);
-    if(chartStatus)chartStatus.textContent=(data.source||(activityJapaneseUI?'価格データ':'PRICE FEED'))+(data.stale?(activityJapaneseUI?' · キャッシュ':' · CACHED'):'')+' · '+points.length+(activityJapaneseUI?'ポイント':' POINTS');
+    if(chartStatus)chartStatus.textContent=(data.source||(activityJapaneseUI?'価格データ':'PRICE FEED'))+(data.stale?(activityJapaneseUI?' · キャッシュ':' · CACHED'):'')+(stale?(activityJapaneseUI?' · 古い履歴':' · STALE'):'')+' · '+chartPoints.length+(activityJapaneseUI?'ポイント':' POINTS');
+
     if(chartCurrent)chartCurrent.textContent=money(points[points.length-1].price);
     const fmt=t=>new Date(Number(t)*1000).toLocaleDateString(activityJapaneseUI?'ja-JP':'en-US',{month:'short',day:'numeric',hour:chartPeriod==='24h'?'2-digit':undefined,minute:chartPeriod==='24h'?'2-digit':undefined});
-    if(chartStart)chartStart.textContent=fmt(points[0].time);if(chartEnd)chartEnd.textContent=fmt(points[points.length-1].time);
+    if(chartStart)chartStart.textContent=fmt(chartPoints[0].time);if(chartEnd)chartEnd.textContent=fmt(chartPoints[chartPoints.length-1].time);
   }
   async function loadPriceChart() {
     if(!chartEl)return;if(chartStatus)chartStatus.textContent=activityJapaneseUI?'価格履歴を読み込み中…':'LOADING PRICE HISTORY…';
