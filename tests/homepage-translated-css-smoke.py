@@ -52,11 +52,11 @@ for page, locale in PAGES.items():
     assert links.count(component_link) == 1, f"{page}: component CSS missing/duplicated"
     assert links.index(hero_link) < links.index("/site-polish.css?v=20261109-video-cards1"), f"{page}: hero cascade position changed"
     assert links.index("/site-polish.css?v=20261109-video-cards1") < links.index(component_link), f"{page}: component cascade position changed"
-    assert links.index(component_link) < links.index("/homepage-visual.css?v=css-cascade-dedupe-20261124-1"), f"{page}: visual CSS cascade position changed"
+    assert links.index(component_link) < links.index("/homepage-visual.css?v=mobile-artwork-20261126-1"), f"{page}: visual CSS cascade position changed"
     if locale == "de":
         de_link = "/homepage-de-field-manual.css?v=20261126-1"
         assert links.count(de_link) == 1, "German spotlight stylesheet missing/duplicated"
-        assert links.index(component_link) < links.index(de_link) < links.index("/homepage-visual.css?v=css-cascade-dedupe-20261124-1"), "German-only CSS cascade position changed"
+        assert links.index(component_link) < links.index(de_link) < links.index("/homepage-visual.css?v=mobile-artwork-20261126-1"), "German-only CSS cascade position changed"
     else:
         assert any("homepage-de-field-manual.css" in link for link in links) is False, f"{page}: German-only CSS loaded"
     assert f'<html lang="{locale}">' in html, f"{page}: locale marker changed"
