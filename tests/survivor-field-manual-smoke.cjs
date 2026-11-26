@@ -21,7 +21,7 @@ for (const locale of locales) {
   const html = fs.readFileSync(path.join(root, locale.path), 'utf8');
   const cards = [...html.matchAll(/<article class="article-card"[\s\S]*?<\/article>/gi)]
     .map(match => match[0]);
-  const cardUrls = cards.map(card => card.match(/<h2>\s*<a href=["']([^"']+)["']/i)?.[1]).filter(Boolean);
+  const cardUrls = cards.map(card => card.match(/class=["']article-link["']\s+href=["']([^"']+)["']/i)?.[1]).filter(Boolean);
   const schemaScript = [...html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)]
     .find(match => match[1].includes('CollectionPage'));
   if (!schemaScript) throw new Error(locale.path + ': CollectionPage JSON-LD missing');
