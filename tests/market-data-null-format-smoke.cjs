@@ -32,7 +32,7 @@ for (const missing of [null, undefined, '']) {
 }
 assert.equal(live.hasNumericValue(0), true);
 assert.equal(live.hasNumericValue('0'), true);
-assert.equal(live.pct(0), '0.00%', 'numeric zero must not be mistaken for missing data');
+assert.equal(live.pct(0), '0%', 'numeric zero must not be mistaken for missing data');
 assert.equal(live.pct(-1.25), '-1.25%');
 assert.equal(live.totalTxns({buys: null, sells: null}), null);
 assert.equal(live.totalTxns({buys: 0, sells: 0}), 0);
