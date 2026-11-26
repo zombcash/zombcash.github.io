@@ -33,7 +33,8 @@
   }
   const labels = { all: 'ALL EPISODES', news: 'OUTBREAK NEWS', meme: 'MEME SHOW', lab: 'ZOMBIE LAB' };
   const metaStream = document.querySelector('meta[name="zctv-live-stream"]');
-  const liveUrl = (root.dataset.liveStream || (metaStream && metaStream.content) || '').trim();
+  function configuredLiveUrl() { return (root.dataset.liveStream || (metaStream && metaStream.content) || '').trim(); }
+  let liveUrl = configuredLiveUrl();
   let episodes = [];
   let episodesRequestStarted = false;
   let episodesLoaded = false;
@@ -525,6 +526,7 @@
     });
   }
   function setMode(nextMode) {
+    if (nextMode === 'live') liveUrl = configuredLiveUrl();
     if (nextMode === 'live' && !liveUrl) {
       mode = 'live'; root.dataset.zctvMode = mode;
       clearPlayer();
