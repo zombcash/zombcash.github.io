@@ -5,6 +5,11 @@ const assert = require('node:assert/strict');
 
 const root = path.resolve(__dirname, '..');
 const source = fs.readFileSync(path.join(root, 'homepage-ribbons.js'), 'utf8');
+const marketScript = fs.readFileSync(path.join(root, 'script.js'), 'utf8');
+const recoveryScript = fs.readFileSync(path.join(root, 'living-world-recovery.js'), 'utf8');
+const unavailableVolumeGuard = "data.activityAvailable === false || data.volume?.h24 == null || !Number.isFinite(Number(data.volume.h24)) || Number(data.volume.h24) <= 0";
+assert.ok(marketScript.includes(unavailableVolumeGuard), 'main market card must not present zero/invalid volume as confirmed activity');
+assert.ok(recoveryScript.includes("data.activityAvailable === false || !data.volume || data.volume.h24 == null || !Number.isFinite(Number(data.volume.h24)) || Number(data.volume.h24) <= 0"), 'recovery market card must hide zero/invalid volume too');
 const start = source.indexOf('function updateCrypto(){');
 const end = source.indexOf('function updateFx()', start);
 assert.ok(start >= 0 && end > start, 'homepage crypto updater must exist');
