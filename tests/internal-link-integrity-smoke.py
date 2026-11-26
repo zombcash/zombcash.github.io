@@ -2,6 +2,7 @@
 """Check every same-origin HTML link resolves to a file in the repository."""
 from collections import Counter
 from pathlib import Path
+import re
 from urllib.parse import unquote, urljoin, urlsplit
 from bs4 import BeautifulSoup
 
@@ -33,11 +34,14 @@ def main():
     )
     known_pages = {path.as_posix() for path in pages}
     missing = Counter()
+    malformed_attributes = Counter()
     checked_links = 0
     external = 0
 
     for source in pages:
         html = source.read_text(encoding="utf-8-sig", errors="replace")
+        for match in re.finditer(r'\s[\w:-]+=«[^»]*»', html):
+            malformed_attributes[source.as_posix()] += 1
         soup = BeautifulSoup(html, "html.parser")
         source_url = urljoin(BASE, source.as_posix())
         for element in soup.find_all(href=True):
@@ -60,11 +64,17 @@ def main():
     print(f"Same-origin links checked: {checked_links}")
     print(f"External/non-site links skipped: {external}")
     print(f"Broken same-origin links: {sum(missing.values())}")
+    print(f"Malformed guillemet-quoted HTML attributes: {sum(malformed_attributes.values())}")
     for (source, href, target), count in sorted(missing.items())[:150]:
         print(f"BROKEN {source}: {href!r} -> {target} (occurrences: {count})")
-    if missing:
-        raise SystemExit(f"FAIL: {sum(missing.values())} broken same-origin links across {len(missing)} distinct targets.")
-    print("PASS: every same-origin HTML link resolves to a repository file.")
+    for source, count in sorted(malformed_attributes.items()):
+        print(f"MALFORMED_ATTRIBUTES {source}: {count} attribute(s) use typographic guillemets instead of HTML quotes")
+    if missing or malformed_attributes:
+        raise SystemExit(
+            f"FAIL: {sum(missing.values())} broken same-origin links across {len(missing)} targets; "
+            f"{sum(malformed_attributes.values())} malformed HTML attributes across {len(malformed_attributes)} files."
+        )
+    print("PASS: all same-origin HTML links resolve and all scanned HTML attributes use valid quoting.")
 
 if __name__ == "__main__":
     main()
