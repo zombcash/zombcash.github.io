@@ -107,13 +107,28 @@
    }).catch(function(){['USD / UAH:','EUR / USD:','USD / EUR:'].forEach(function(s){setItem(s,s+' temporarily unavailable');});});
  }
  function updateZombieCash(){
-  fetch('https://api.dexscreener.com/latest/dex/tokens/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump',{cache:'no-store'})
+  var dexUrl='https://api.dexscreener.com/latest/dex/tokens/6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump';
+  function unavailable(){setItem('$ZOMBCASH:','$ZOMBCASH: temporarily unavailable');}
+  function geckoFallback(){
+   return fetch('https://zombcash-bot.fadehost.app/api/zombcash',{cache:'no-store'})
+    .then(function(r){if(!r.ok)throw new Error('ZombieCash API HTTP '+r.status);return r.json();})
+    .then(function(data){
+     var price=Number(data.priceUsd);
+     if(!Number.isFinite(price)||price<=0||data.marketDataAvailable===false)throw new Error('Fallback market price unavailable');
+     var rawChange=data.priceChange&&data.priceChange.h24;
+     var change=rawChange===null||rawChange===undefined?NaN:Number(rawChange);
+     var changeText=Number.isFinite(change)?' ('+fmtChange(change)+')':'';
+     var sourceSuffix=data.stale?' · CACHED':' · GECKOTERMINAL';
+     setItem('$ZOMBCASH:','$ZOMBCASH: '+fmtPrice(price)+changeText+sourceSuffix);
+    }).catch(unavailable);
+  }
+  fetch(dexUrl,{cache:'no-store'})
    .then(function(r){if(!r.ok)throw new Error('DexScreener HTTP '+r.status);return r.json();})
    .then(function(data){
     var pair=(data.pairs||[]).filter(function(p){return p.chainId==='solana';}).sort(function(a,b){return Number(b.liquidity&&b.liquidity.usd||0)-Number(a.liquidity&&a.liquidity.usd||0);})[0];
     if(pair&&pair.priceUsd)setItem('$ZOMBCASH:','$ZOMBCASH: '+fmtPrice(Number(pair.priceUsd))+' ('+fmtChange(Number(pair.priceChange&&pair.priceChange.h24))+')');
-    else setItem('$ZOMBCASH:','$ZOMBCASH: no live pair data');
-   }).catch(function(){setItem('$ZOMBCASH:','$ZOMBCASH: temporarily unavailable');});
+    else return geckoFallback();
+   }).catch(geckoFallback);
  }
  function refresh(){updateCrypto();updateFx();updateZombieCash();}
  renderRibbons();

@@ -92,3 +92,48 @@ async function settle() {
   console.error(error);
   process.exitCode = 1;
 });
+
+
+// The ZOMBCASH ribbon must fall back to the site's cached GeckoTerminal-backed API
+// when DexScreener returns no Solana pair or is temporarily unavailable.
+const zombieStart = source.indexOf('function updateZombieCash(){');
+const zombieEnd = source.indexOf('function refresh()', zombieStart);
+assert.ok(zombieStart >= 0 && zombieEnd > zombieStart, 'ZombieCash ribbon updater must exist');
+const zombieUpdaterSource = source.slice(zombieStart, zombieEnd);
+function createZombieCashUpdater(fetchImpl) {
+  const calls=[];
+  const items={};
+  const updater=vm.runInNewContext('('+zombieUpdaterSource+')',{
+    fetch:(...args)=>{calls.push(args[0]);return fetchImpl(...args);},
+    setItem:(key,value)=>{items[key]=value;},
+    fmtPrice:value=>'USD '+Number(value).toFixed(8),
+    fmtChange:value=>(value>=0?'+':'')+Number(value).toFixed(2)+'%'
+  });
+  return {updater,calls,items};
+}
+async function settleZombie() { await new Promise(resolve=>setTimeout(resolve,0)); await new Promise(resolve=>setTimeout(resolve,0)); await new Promise(resolve=>setTimeout(resolve,0)); }
+(async()=>{
+  const fallback=createZombieCashUpdater(async url=>{
+    if(url.includes('dexscreener.com'))return {ok:true,json:async()=>({pairs:[]})};
+    assert.ok(url.includes('/api/zombcash'),'fallback must use the project API');
+    return {ok:true,json:async()=>({priceUsd:0.000002037,priceChange:{h24:0},marketDataAvailable:true,source:'GeckoTerminal'})};
+  });
+  fallback.updater();await settleZombie();
+  assert.equal(fallback.calls.length,2,'empty DexScreener result must trigger one backend fallback');
+  assert.match(fallback.items['$ZOMBCASH:'],/USD 0\.00000204/);
+  assert.match(fallback.items['$ZOMBCASH:'],/GECKOTERMINAL/);
+
+  const direct=createZombieCashUpdater(async url=>{
+    assert.ok(url.includes('dexscreener.com'));
+    return {ok:true,json:async()=>({pairs:[{chainId:'solana',priceUsd:'0.000003',priceChange:{h24:4.2},liquidity:{usd:100}}]})};
+  });
+  direct.updater();await settleZombie();
+  assert.equal(direct.calls.length,1,'valid DexScreener pair must not invoke fallback');
+  assert.match(direct.items['$ZOMBCASH:'],/\+4\.20%/);
+
+  const unavailable=createZombieCashUpdater(async()=>({ok:false,status:503,json:async()=>({})}));
+  unavailable.updater();await settleZombie();
+  assert.equal(unavailable.calls.length,2,'DexScreener failure must attempt the backend fallback');
+  assert.match(unavailable.items['$ZOMBCASH:'],/temporarily unavailable/);
+  console.log('PASS: ZOMBCASH ticker uses GeckoTerminal-backed API fallback when DexScreener has no pair or errors.');
+})().catch(error=>{console.error(error);process.exitCode=1;});
