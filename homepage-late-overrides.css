@@ -1102,9 +1102,22 @@ body:has(#home) #home .tools#radar .tool-card .tool-art{
   body:has(#home) #home .tools#radar .tool-card:hover{transform:none!important}
 }
 
-/* Consolidated from zc-ad-free-hero-layout-20261122; original order preserved. */
-/* Advertising integrations are disabled; let homepage content use the full hero width. */
-body:has(#home) #home > section.hero > .hero-layout{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-areas:none!important;align-items:start!important;gap:24px!important}
-body:has(#home) #home > section.hero > .hero-layout > .hero-content,
-body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{grid-column:1!important;grid-area:auto!important;width:100%!important;max-width:none!important}
+/* Rebalanced ad-free hero: copy and novel artwork side-by-side, status rail below. */
+body:has(#home) #home > section.hero > .hero-layout{display:grid!important;grid-template-columns:minmax(0,1.08fr) minmax(300px,.72fr)!important;grid-template-areas:"content novel" "status status"!important;align-items:start!important;gap:clamp(20px,3vw,38px)!important}
+body:has(#home) #home > section.hero > .hero-layout > .hero-content{grid-area:content!important;min-width:0!important;width:100%!important;max-width:760px!important}
+body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{grid-area:novel!important;align-self:stretch!important;width:100%!important;min-width:0!important;max-width:520px!important;margin:0!important;padding:0!important;aspect-ratio:4/5!important;min-height:0!important;height:auto!important;max-height:none!important}
+body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{grid-area:status!important;grid-column:1/-1!important;width:100%!important;max-width:none!important}
+@media(max-width:1050px){body:has(#home) #home > section.hero > .hero-layout{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"content" "novel" "status"!important}body:has(#home) #home > section.hero > .hero-layout > .zc-hero-art-panel{width:min(100%,640px)!important;justify-self:center!important;aspect-ratio:16/9!important}}
+/* Novel art panel replaces the deleted sponsor/ad frame. */
+body:has(#home) #home .zc-novel-panel{position:relative!important;display:block!important;overflow:hidden!important;border:1px solid #597848!important;border-radius:8px!important;background:#080c09!important;box-shadow:0 24px 65px #0009,0 0 34px #9bff4512!important;text-decoration:none!important;isolation:isolate!important}
+body:has(#home) #home .zc-novel-cover{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;display:block!important;filter:saturate(.76) contrast(1.05)!important;transition:transform .45s ease!important}
+body:has(#home) #home .zc-novel-panel:hover .zc-novel-cover{transform:scale(1.035)!important}
+body:has(#home) #home .zc-novel-panel-overlay{position:absolute!important;inset:0!important;z-index:2!important;display:flex!important;flex-direction:column!important;justify-content:flex-end!important;gap:10px!important;padding:clamp(18px,2.3vw,30px)!important;background:linear-gradient(180deg,#06090700 8%,#06090722 40%,#060907ed 100%)!important}
+body:has(#home) #home .zc-novel-kicker{font:700 9px Orbitron,sans-serif!important;letter-spacing:1.7px!important;color:#b8e2a0!important}
+body:has(#home) #home .zc-novel-panel-overlay strong{font:800 clamp(22px,2.5vw,38px)/1.08 Orbitron,sans-serif!important;letter-spacing:-.04em!important;color:#eef3e9!important;text-shadow:0 3px 20px #000!important}
+body:has(#home) #home .zc-novel-subtitle{font:700 10px Orbitron,sans-serif!important;letter-spacing:1.2px!important;color:#a7ff58!important}
+body:has(#home) #home .zc-novel-cta{display:inline-flex!important;align-self:flex-start!important;margin-top:8px!important;padding:10px 14px!important;border-radius:4px!important;background:#9bff45!important;color:#071006!important;font:800 10px Orbitron,sans-serif!important;letter-spacing:1px!important}
+body:has(#home) #home .field-manual-spotlight{background:linear-gradient(110deg,#0b1710f5,#080d0bf0)!important;border:1px solid #48683b!important;box-shadow:0 14px 38px #0008!important}
+body:has(#home) #home .field-manual-secondary{display:inline-flex!important;margin-top:12px!important;color:#a9c39c!important;font:700 10px Orbitron,sans-serif!important;letter-spacing:.8px!important;text-decoration:none!important}
+@media(max-width:680px){body:has(#home) #home .zc-novel-panel-overlay strong{font-size:clamp(20px,6vw,28px)!important}body:has(#home) #home .zc-novel-panel-overlay{padding:15px!important;gap:7px!important}}
 
