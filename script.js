@@ -978,18 +978,41 @@ if (zomMarket) {
   }
 
   const prettyCount = (n) => Number(n || 0).toLocaleString('en-US');
+  const activityCopy = {
+    en:{unavailable:'No confirmed trade activity is available in the latest provider snapshot.',noTrades:'The provider reports no transactions in this selected period.',missing:'Trade counts are unavailable for this selected period.',status:'ACTIVITY UNAVAILABLE',offline:'Live trade counts are temporarily unavailable. They will retry automatically.'},
+    de:{unavailable:'Im aktuellen Datenabruf ist keine bestätigte Handelsaktivität verfügbar.',noTrades:'Der Anbieter meldet für diesen Zeitraum keine Transaktionen.',missing:'Transaktionszahlen sind für diesen Zeitraum nicht verfügbar.',status:'AKTIVITÄT NICHT VERFÜGBAR',offline:'Live-Handelsdaten sind vorübergehend nicht verfügbar. Es wird erneut versucht.'},
+    fr:{unavailable:'Aucune activité de trading confirmée dans les dernières données du fournisseur.',noTrades:'Le fournisseur ne signale aucune transaction pour cette période.',missing:'Les nombres de transactions ne sont pas disponibles pour cette période.',status:'ACTIVITÉ INDISPONIBLE',offline:'Les données de trading en direct sont temporairement indisponibles. Nouvelle tentative automatique.'},
+    it:{unavailable:'Nessuna attività di trading confermata nell’ultimo snapshot del provider.',noTrades:'Il provider non segnala transazioni in questo periodo.',missing:'I conteggi delle transazioni non sono disponibili per questo periodo.',status:'ATTIVITÀ NON DISPONIBILE',offline:'I dati di trading live sono temporaneamente indisponibili. Riproveremo automaticamente.'},
+    ja:{unavailable:'最新のデータ提供元スナップショットでは、取引活動を確認できません。',noTrades:'選択した期間の取引は報告されていません。',missing:'選択した期間の取引数を取得できません。',status:'取引活動を利用できません',offline:'ライブ取引データは一時的に利用できません。自動で再試行します。'},
+    'zh-CN':{unavailable:'最新数据源快照中没有可确认的交易活动。',noTrades:'数据源报告所选时段没有交易。',missing:'所选时段的交易数量不可用。',status:'交易活动不可用',offline:'实时交易数据暂时不可用，将自动重试。'},
+    ru:{unavailable:'В последнем снимке источника нет подтверждённой торговой активности.',noTrades:'Источник не сообщает о сделках за выбранный период.',missing:'Количество сделок за выбранный период недоступно.',status:'АКТИВНОСТЬ НЕДОСТУПНА',offline:'Данные о сделках временно недоступны. Повторим запрос автоматически.'},
+    tr:{unavailable:'Son sağlayıcı verisinde doğrulanmış işlem aktivitesi bulunmuyor.',noTrades:'Sağlayıcı bu dönem için işlem bildirmiyor.',missing:'Bu dönem için işlem sayıları mevcut değil.',status:'İŞLEM AKTİVİTESİ YOK',offline:'Canlı işlem verileri geçici olarak kullanılamıyor. Otomatik yeniden denenecek.'},
+    hi:{unavailable:'नवीनतम स्रोत डेटा में पुष्टि की गई ट्रेड गतिविधि उपलब्ध नहीं है।',noTrades:'स्रोत इस अवधि में कोई ट्रेड रिपोर्ट नहीं करता।',missing:'इस अवधि के ट्रेड काउंट उपलब्ध नहीं हैं।',status:'गतिविधि उपलब्ध नहीं',offline:'लाइव ट्रेड डेटा अस्थायी रूप से उपलब्ध नहीं है। स्वतः पुनः प्रयास होगा।'}
+  };
+  const activityLanguage = (document.documentElement.lang || 'en').toLowerCase();
+  const activityMessages = activityCopy[activityLanguage] || activityCopy.en;
   function renderActivity() {
     if (!activityData) return;
-    const buys = Number(activityData.buys?.[activityPeriod] || 0);
-    const sells = Number(activityData.sells?.[activityPeriod] || 0);
-    const total = buys + sells;
-    if (activityBuys) activityBuys.textContent = prettyCount(buys);
-    if (activitySells) activitySells.textContent = prettyCount(sells);
-    if (activityRatio) activityRatio.textContent = sells ? (buys / sells).toFixed(2) + '×' : (buys ? '∞' : '—');
-    if (activityBar) activityBar.style.width = (total ? Math.round(buys / total * 100) : 0) + '%';
-    if (activityNote) activityNote.textContent = total
-      ? 'DexScreener reports ' + prettyCount(total) + ' transactions in this period. Counts are transactions, not unique buyers or wallets.'
-      : 'No transactions reported for this period in the latest DexScreener snapshot.';
+    const hasPositive = (obj) => obj && Object.values(obj).some(value => Number.isFinite(Number(value)) && Number(value) > 0);
+    const hasPositiveActivity = hasPositive(activityData.buys) || hasPositive(activityData.sells) || hasPositive(activityData.volume);
+    const activityAvailable = activityData.activityAvailable === true || (activityData.activityAvailable !== false && hasPositiveActivity);
+    const buysRaw = activityData.buys?.[activityPeriod];
+    const sellsRaw = activityData.sells?.[activityPeriod];
+    const buys = activityAvailable && buysRaw != null && Number.isFinite(Number(buysRaw)) ? Number(buysRaw) : null;
+    const sells = activityAvailable && sellsRaw != null && Number.isFinite(Number(sellsRaw)) ? Number(sellsRaw) : null;
+    const total = (buys || 0) + (sells || 0);
+    if (activityBuys) activityBuys.textContent = buys === null ? '—' : prettyCount(buys);
+    if (activitySells) activitySells.textContent = sells === null ? '—' : prettyCount(sells);
+    if (activityRatio) activityRatio.textContent = buys === null || sells === null ? '—' : (sells ? (buys / sells).toFixed(2) + '×' : (buys ? '∞' : '—'));
+    if (activityBar) activityBar.style.width = buys === null || sells === null || !total ? 0 : Math.round(buys / total * 100) + '%';
+    if (activityNote) activityNote.textContent = !activityAvailable
+      ? activityMessages.unavailable
+      : buys === null || sells === null
+        ? activityMessages.missing
+        : total
+          ? 'DexScreener reports ' + prettyCount(total) + ' transactions in this period. Counts are transactions, not unique buyers or wallets.'
+          : activityMessages.noTrades;
+    if (activityStatus) activityStatus.textContent = activityAvailable ? 'DEXSCREENER LIVE' : activityMessages.status;
   }
   async function loadActivity() {
     try {
@@ -997,10 +1020,9 @@ if (zomMarket) {
       if (!response.ok) throw new Error('HTTP ' + response.status);
       activityData = await response.json();
       renderActivity();
-      if (activityStatus) activityStatus.textContent = 'DEXSCREENER LIVE';
     } catch (error) {
       if (activityStatus) activityStatus.textContent = 'SIGNAL OFFLINE';
-      if (activityNote) activityNote.textContent = 'Live trade counts are temporarily unavailable. They will retry automatically.';
+      if (activityNote) activityNote.textContent = activityMessages.offline;
     }
   }
   document.querySelectorAll('.activity-tab').forEach(button => button.addEventListener('click', () => {
