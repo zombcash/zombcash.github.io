@@ -251,6 +251,21 @@ jobs:
                           "error_http_status": http_status,
                           "error": body,
                       }
+                  except (OSError, httplib2.HttpLib2Error) as exc:
+                      if attempt < MAX_TRANSIENT_RETRIES:
+                          retry_delay = 1.5 * (2 ** attempt)
+                          print(
+                              f"::warning::Transient Search Console transport failure for {url}: "
+                              f"{type(exc).__name__}; retrying in {retry_delay:.1f}s "
+                              f"({attempt + 1}/{MAX_TRANSIENT_RETRIES})."
+                          )
+                          time.sleep(retry_delay)
+                          continue
+                      return {
+                          "url": url,
+                          "attempts": attempt + 1,
+                          "error": f"{type(exc).__name__}: {exc}",
+                      }
                   except Exception as exc:
                       return {
                           "url": url,
