@@ -37,6 +37,11 @@ on:
       - "tests/mobile-viewport-smoke.cjs"
       - "tests/localized-article-visual.cjs"
       - "tests/survivor-field-manual-smoke.cjs"
+      - "tests/buy-zombcash-css-smoke.cjs"
+      - "buy-zombcash.html"
+      - "*/buy-zombcash.html"
+      - "buy-zombcash-main.css"
+      - "buy-zombcash-sniper.css"
       - "tests/field-manual-css-smoke.py"
       - "survivor-field-manual-inline.css"
       - "survivor-field-manual-english.css"
@@ -97,6 +102,7 @@ jobs:
           node --check tests/zctv-layout-smoke.cjs
           node --check tests/localized-article-visual.cjs
           node --check tests/survivor-field-manual-smoke.cjs
+          node --check tests/buy-zombcash-css-smoke.cjs
           node --check tests/memecoin-platforms-article-smoke.cjs
           node --check tests/language-persistence-smoke.cjs
           node --check tests/live-api-origin-smoke.cjs
