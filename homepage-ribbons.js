@@ -1,11 +1,11 @@
-/* Homepage-only outbreak ribbons. Localized copy is selected fr:[['CRYPTO EN DIRECT','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['TAUX DE CHANGE','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['PULS DU MARCHÉ','Cours crypto en direct','Variation sur 24 h','Taux de change','Mise à jour automatique']],
+/* Homepage-only outbreak ribbons. Localized copy is selected from the page locale. */
 (function(){
- 'use str:[['CANLI KRİPTO','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['DÖVİZ KURLARI','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['PİYASA NABZI','Canlı kripto fiyatları','24 saatlik değişim','Döviz kurları','Otomatik güncelleme']],
- var main=document.querySelector('main#home'),heade:[['LIVE-KRYPTO','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['WECHSELKURSE','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['MARKTPULS','Live-Kryptokurse','24-Stunden-Veränderung','Wechselkurse','Automatische Aktualisierung']],
+ 'use strict';
+ var main=document.querySelector('main#home'),header=document.querySelector('header.topbar, header');
  var existing=document.querySelector('.zc-outbreak-ribbons');
  if(!header && !main)return;
- var parts=location.pathname.split:[['CRIPTO LIVE','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['TASSI DI CAMBIO','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['PULSE DEL MERCATO','Prezzi crypto in tempo reale','Variazione 24 ore','Tassi di cambio','Aggiornamento automatico']],
- var normalizeLang=function(value){var code=String(value||'').toLowerCase();return code==='zh-cn'?'zh-CN':[['加密货币实时行情','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['汇率','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['市场脉搏','实时加密货币价格','24小时涨跌','外汇汇率','自动更新']],
+ var parts=location.pathname.split('/').filter(Boolean),known=['de','fr','it','ja','zh-CN','ru','tr','hi'];
+ var normalizeLang=function(value){var code=String(value||'').toLowerCase();return code==='zh-cn'?'zh-CN':code;};
  var pageLang=normalizeLang(document.documentElement.lang),pathLang=normalizeLang(parts[0]);
  var lang=known.indexOf(pageLang)!==-1?pageLang:(parts.length&&known.indexOf(pathLang)!==-1?pathLang:'en');
  var copy={
