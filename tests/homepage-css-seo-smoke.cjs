@@ -153,7 +153,7 @@ for (const file of pages) {
   assert.doesNotMatch(marketUiBlock[0], /\bmz\(\)/, 'market UI initialization must not call mz before its declaration');
   assert.match(html, /script\.js\?v=[^\"]+/,
     file + ': homepage runtime cache key must be refreshed so localized pages receive current ARIA fixes');
-  assert.match(html, /zctv-player\.js\?v=20261125-tv-lazy-1/,
+  assert.match(html, /zctv-player\.js\?v=20261127-tv-raven-live-2/, file + ': TV player cache key must be refreshed for latest Raven and YouTube Live support');
     file + ': TV player cache key must be refreshed so lazy archive loading is used');
   if (file === 'index.html') {
     assert.ok(html.indexOf('style.css') < html.indexOf('homepage-pre-polish.css'), file + ': pre-polish CSS order changed');
