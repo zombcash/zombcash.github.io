@@ -5,6 +5,20 @@ const assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '..');
 const ribbonScript = fs.readFileSync(path.join(root, 'homepage-ribbons.js'), 'utf8');
 const homepageVisualCss = fs.readFileSync(path.join(root, 'homepage-visual.css'), 'utf8');
+const mobileArtworkOverride = homepageVisualCss.match(/\/\* Mobile performance: keep the radar cards cinematic without loading large desktop artwork\. \*\/([\s\S]*)/);
+assert.ok(mobileArtworkOverride, 'mobile artwork override must be present to avoid downloading large decorative images');
+for (const selector of [
+  'article.radar-card:before',
+  'article.lab-card:before',
+  'article.network-card:before'
+]) {
+  assert.ok(mobileArtworkOverride[1].includes(selector), 'mobile override must cover ' + selector);
+}
+assert.doesNotMatch(mobileArtworkOverride[1], /meme-radar\.jpg|zombie-lab\.jpg|survivor-network\.jpg/,
+  'mobile override must not request the large card artwork files');
+assert.match(mobileArtworkOverride[1], /background-image:\s*linear-gradient[\s\S]*?\!important/,
+  'mobile cards must retain a cinematic gradient when artwork is skipped');
+
 const aiStatusScript = fs.readFileSync(path.join(root, 'ai-model-status.js'), 'utf8');
 const tvPlayerScript = fs.readFileSync(path.join(root, 'assets/js/zctv-player.js'), 'utf8');
 assert.doesNotMatch(homepageVisualCss, /@(?:media|supports|container|layer)\\b[^{}]*\\{\\s*\\}/i,
