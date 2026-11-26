@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import subprocess
 import re
 from html import escape as html_escape, unescape as html_unescape
 import xml.etree.ElementTree as ET
@@ -109,6 +110,8 @@ for card in parser.cards:
     else:
         assert image.get("width") == str(item["image_width"]), f"Static card width mismatch: {card['id']}"
         assert image.get("height") == str(item["image_height"]), f"Static card height mismatch: {card['id']}"
+syntax_check = subprocess.run(["node", "--check", "script.js"], capture_output=True, text=True)
+assert syntax_check.returncode == 0, "script.js must parse: " + syntax_check.stderr
 gallery_css = Path("gallery.css").read_text(encoding="utf-8")
 assert ".gallery-card img{" in gallery_css and "aspect-ratio:1 / 1" in gallery_css, "Gallery images must reserve a square layout before loading"
 
