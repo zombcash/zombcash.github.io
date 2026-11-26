@@ -7,34 +7,45 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
   const page = await browser.newPage({ viewport: { width: 1600, height: 1000 } });
   const failures = [];
   let episodeRequests = 0;
+  const ravenEpisode = { episode_id: '2db68d18-9737-4308-b81b-e792da06d202', title: 'Raven — ZombieCash TV Introduction', created_at: 1794431724, duration_seconds: 4, channel: 'news' };
   const check = (condition, message) => { if (!condition) failures.push(message); };
   await page.route('https://zombcash-bot.fadehost.app/api/tv/episodes*', route => {
     episodeRequests += 1;
-    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ episodes: [] }) });
+    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ episodes: [ravenEpisode] }) });
   });
 
-  await page.goto(process.env.SITE_URL || 'http://127.0.0.1:4173/', { waitUntil: 'domcontentloaded', timeout: 60000 });
-  await page.waitForTimeout(150);
-  check(episodeRequests === 0, 'TV archive API must not be requested before the TV section approaches the viewport');
   const archiveResponse = page.waitForResponse(response =>
     response.url().includes('/api/tv/episodes?page=1&per_page=24') && response.request().method() === 'GET'
   );
+  await page.goto(process.env.SITE_URL || 'http://127.0.0.1:4173/', { waitUntil: 'domcontentloaded', timeout: 60000 });
+  await archiveResponse;
+  await page.waitForFunction(() => {
+    const video = document.querySelector('#zctv-channel-hub #zc-promo-player');
+    return video && video.src.includes('/episodes/2db68d18-9737-4308-b81b-e792da06d202/video');
+  }, null, { timeout: 15000 });
+  check(episodeRequests === 1, 'TV archive must load once on startup without requiring a channel click');
   await page.locator('#zctv-channel-hub').scrollIntoViewIfNeeded();
   await page.locator('#zctv-channel-hub [data-channel]').first().click();
-  await archiveResponse;
-  check(episodeRequests === 1, 'TV archive should issue exactly one request after a visitor selects a channel');
+  await page.waitForTimeout(150);
+  check(episodeRequests === 1, 'Selecting a channel must reuse the already-loaded episode archive');
+  await page.evaluate(() => { document.querySelector('#zctv-channel-hub').dataset.liveStream = 'https://youtu.be/AbCdEfGhI12'; });
+  await page.locator('#zctv-channel-hub [data-zctv-mode="live"]').click();
+  await page.waitForFunction(() => { const frame=document.querySelector('#zctv-channel-hub iframe.zctv-live-iframe'); return frame && frame.src.includes('/embed/AbCdEfGhI12'); }, null, { timeout: 10000 });
+  check(await page.locator('#zctv-channel-hub #zc-promo-player').evaluate(video => getComputedStyle(video).display === 'none'), 'YouTube Live iframe must replace the hidden HTML video surface');
+  check(episodeRequests === 1, 'Switching to YouTube Live must not trigger a duplicate archive request');
+  await page.locator('#zctv-channel-hub [data-zctv-mode="archive"]').click();
+  await page.waitForFunction(() => { const video=document.querySelector('#zctv-channel-hub #zc-promo-player'); return video && video.src.includes('/episodes/2db68d18-9737-4308-b81b-e792da06d202/video'); }, null, { timeout: 10000 });
   await page.waitForSelector('#zctv-channel-hub .zctv-player-mount .zc-promo-player-wrap', { state: 'visible', timeout: 15000 });
   await page.waitForFunction(() => {
     const count = document.querySelector('#zctv-channel-hub #zc-promo-count');
     return count && count.textContent.trim() !== 'LOADING VIDEO LIBRARY…';
   }, null, { timeout: 15000 }).catch(() => {});
 
-  // The player now loads its source only when the video itself approaches
-  // the viewport, not merely when the top of the TV section becomes visible.
+  // The latest episode is loaded on startup and remains selected after channel/live-mode switching.
   await page.locator('#zctv-channel-hub #zc-promo-player').scrollIntoViewIfNeeded();
   await page.waitForFunction(() => {
     const video = document.querySelector('#zctv-channel-hub #zc-promo-player');
-    return !!video && (video.currentSrc || video.src || '').includes('zombiecash_final_real_screens.mp4');
+    return !!video && (video.currentSrc || video.src || '').includes('/episodes/2db68d18-9737-4308-b81b-e792da06d202/video');
   }, null, { timeout: 15000 });
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForTimeout(150);
@@ -77,10 +88,10 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
   check(m.player && m.player.width >= 360, 'Desktop video/player column is too narrow');
   check(m.player.right < m.intro.x && m.intro.right < m.host.x, 'Desktop columns must be ordered player, intro, host from left to right');
   check(m.video && m.video.width > 0 && Math.abs(m.video.width / m.video.height - 16/9) < .08, 'Desktop video frame is not 16:9');
-  check(m.videoSource.includes('zombiecash_final_real_screens.mp4'), 'Empty archive must fall back to the published promo video');
+  check(m.videoSource.includes('/episodes/2db68d18-9737-4308-b81b-e792da06d202/video'), 'Latest Raven episode must be the default player source instead of the October promo');
   check(m.promoControls && m.promoControls.width > 0 && m.promoControls.height > 0, 'Promo library controls must be visible inside the TV player column');
   check(m.promoCount && m.promoCount !== 'LOADING VIDEO LIBRARY…', 'Promo library counter must initialize');
-  check(m.promoStatus.includes('ZombieCash Promo Video') && !m.promoStatus.toLowerCase().includes('unavailable'), 'Featured promo status must remain initialized without a competing legacy error handler');
+  check(m.promoStatus.includes('Raven') && !m.promoStatus.toLowerCase().includes('unavailable'), 'Latest Raven episode status must initialize without legacy promo fallback');
   check(m.archive && Math.abs(m.archive.width - m.player.width) < 4, 'Episode archive must match the player width');
   check(m.channels === 3, 'Desktop channel cards must use three columns');
   check(m.promoSectionDisplay === 'none', 'The source promo section must stay hidden after its player is moved into ZombieCash TV');
