@@ -54,6 +54,25 @@ function record(name, response, expectedStatus, failures, details = {}) {
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, serviceWorkers: 'block' });
   const page = await context.newPage();
+  const cdp = await context.newCDPSession(page);
+  await cdp.send('Network.enable');
+  const wikimediaImageRequests = [];
+  cdp.on('Network.requestWillBeSent', event => {
+    if (!event.request?.url?.includes('upload.wikimedia.org/wikipedia/commons/b/b2/Post-apocalyptic_scenery.jpg')) return;
+    const initiator = event.initiator || {};
+    wikimediaImageRequests.push({
+      url: event.request.url,
+      documentURL: event.documentURL || '',
+      initiatorType: initiator.type || '',
+      initiatorUrl: initiator.url || '',
+      lineNumber: initiator.lineNumber ?? null,
+      stack: (initiator.stack?.callFrames || []).slice(0, 5).map(frame => ({
+        url: frame.url || '',
+        functionName: frame.functionName || '',
+        lineNumber: frame.lineNumber ?? null
+      }))
+    });
+  });
   await page.addInitScript(() => {
     window.__zombcashLayoutShifts = [];
     try {
@@ -117,6 +136,30 @@ function record(name, response, expectedStatus, failures, details = {}) {
       marketStatus: document.getElementById('zombcash-market-status')?.textContent?.trim() || '',
       marketPrice: document.getElementById('zombcash-price')?.textContent?.trim() || '',
     }));
+
+    const wikimediaDomMatches = await page.evaluate(() => {
+      const target = 'upload.wikimedia.org/wikipedia/commons/b/b2/Post-apocalyptic_scenery.jpg';
+      const matches = [];
+      for (const element of document.querySelectorAll('*')) {
+        const label = {
+          tag: element.tagName,
+          id: element.id || '',
+          className: typeof element.className === 'string' ? element.className.slice(0, 160) : '',
+          outerHTML: element.outerHTML?.slice(0, 500) || ''
+        };
+        if (element instanceof HTMLImageElement && (element.currentSrc.includes(target) || element.src.includes(target))) {
+          matches.push({ ...label, source: 'img' });
+        }
+        if (element instanceof HTMLVideoElement && element.poster.includes(target)) {
+          matches.push({ ...label, source: 'video-poster' });
+        }
+        for (const pseudo of ['', '::before', '::after']) {
+          const background = getComputedStyle(element, pseudo).backgroundImage || '';
+          if (background.includes(target)) matches.push({ ...label, source: 'background' + pseudo, background });
+        }
+      }
+      return matches.slice(0, 20);
+    });
 
     // The TV archive is intentionally lazy-loaded only after the visitor
     // selects ARCHIVE. Trigger that real interaction before classifying the
@@ -366,6 +409,11 @@ function record(name, response, expectedStatus, failures, details = {}) {
       results,
       homepage: uiSnapshot,
       mobileLayoutShiftDiagnostics: layoutShiftDiagnostics,
+      wikimediaImageDiagnostics: {
+        requestCount: wikimediaImageRequests.length,
+        requests: wikimediaImageRequests,
+        domMatches: wikimediaDomMatches
+      },
       degraded,
       failures,
       note: 'Live public endpoints and unauthenticated security guards were checked from the real site origin. Telegram completion and authenticated profile writes were not attempted.',
