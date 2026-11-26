@@ -17,6 +17,7 @@ on:
       - 'homepage-visual.css'
       - 'ai-model-status.js'
       - 'tests/homepage-css-seo-smoke.cjs'
+      - 'tests/homepage-market-provider-smoke.cjs'
       - 'tests/homepage-translated-css-smoke.py'
       - 'tests/inline-style-audit.py'
       - 'homepage-translated-hero.css'
@@ -40,6 +41,8 @@ jobs:
           fetch-depth: 0
       - name: Check ticker script syntax
         run: node --check homepage-ribbons.js
+      - name: Test CoinGecko primary provider, Binance fallback and unavailable state
+        run: node tests/homepage-market-provider-smoke.cjs
       - name: Verify all localized homepages
         run: |
           python - <<'PY'
