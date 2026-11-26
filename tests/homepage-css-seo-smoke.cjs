@@ -154,7 +154,6 @@ for (const file of pages) {
   assert.match(html, /script\.js\?v=[^\"]+/,
     file + ': homepage runtime cache key must be refreshed so localized pages receive current ARIA fixes');
   assert.match(html, /zctv-player\.js\?v=20261127-tv-raven-live-2/, file + ': TV player cache key must be refreshed for latest Raven and YouTube Live support');
-    file + ': TV player cache key must be refreshed so lazy archive loading is used');
   if (file === 'index.html') {
     assert.ok(html.indexOf('style.css') < html.indexOf('homepage-pre-polish.css'), file + ': pre-polish CSS order changed');
     assert.ok(html.indexOf('homepage-pre-polish.css') < html.indexOf('site-polish.css'), file + ': pre-polish CSS must precede site-polish.css');
