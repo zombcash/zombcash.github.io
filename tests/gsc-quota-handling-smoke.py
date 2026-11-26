@@ -12,10 +12,12 @@ required = [
     "TRANSIENT_HTTP_STATUSES = {500, 502, 503, 504}",
     "for attempt in range(MAX_TRANSIENT_RETRIES + 1):",
     "if http_status in TRANSIENT_HTTP_STATUSES and attempt < MAX_TRANSIENT_RETRIES:",
+    "except (OSError, httplib2.HttpLib2Error) as exc:",
+    "Transient Search Console transport failure for",
     "time.sleep(retry_delay)",
     '"attempts": attempt + 1',
 ]
 missing = [item for item in required if item not in workflow]
 if missing:
     raise SystemExit("FAIL: missing quota-pause handling: " + "; ".join(missing))
-print("PASS: HTTP 429 quota exhaustion is recorded and deferred; transient 5xx errors receive bounded exponential-backoff retries.")
+print("PASS: HTTP 429 quota exhaustion is recorded and deferred; transient 5xx responses and transport timeouts receive bounded exponential-backoff retries.")
