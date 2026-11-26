@@ -28,6 +28,12 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
   await page.locator('#zctv-channel-hub [data-channel]').first().click();
   await page.waitForTimeout(150);
   check(episodeRequests === 1, 'Selecting a channel must reuse the already-loaded episode archive');
+  await page.evaluate(() => { document.querySelector('#zctv-channel-hub').dataset.liveStream = 'https://youtu.be/AbCdEfGhI12'; });
+  await page.locator('#zctv-channel-hub [data-zctv-mode="live"]').click();
+  await page.waitForFunction(() => { const frame=document.querySelector('#zctv-channel-hub iframe.zctv-live-iframe'); return frame && frame.src.includes('/embed/AbCdEfGhI12'); }, null, { timeout: 10000 });
+  check(episodeRequests === 1, 'Switching to YouTube Live must not trigger a duplicate archive request');
+  await page.locator('#zctv-channel-hub [data-zctv-mode="archive"]').click();
+  await page.waitForFunction(() => { const video=document.querySelector('#zctv-channel-hub #zc-promo-player'); return video && video.src.includes('/episodes/2db68d18-9737-4308-b81b-e792da06d202/video'); }, null, { timeout: 10000 });
   await page.waitForSelector('#zctv-channel-hub .zctv-player-mount .zc-promo-player-wrap', { state: 'visible', timeout: 15000 });
   await page.waitForFunction(() => {
     const count = document.querySelector('#zctv-channel-hub #zc-promo-count');
