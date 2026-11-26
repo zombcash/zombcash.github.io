@@ -124,6 +124,7 @@ for (const file of pages) {
     assert.ok(html.indexOf('homepage-visual.css') < html.indexOf('homepage-translated-late-overrides.css'), file + ': shared final CSS must follow homepage-visual.css');
   }
   assert.doesNotMatch(html, /brand-search-aliases/i, file + ': artificial brand-alias paragraph remains');
+  assert.doesNotMatch(html, /Cash Zombie|CashZombie/i, file + ': artificial keyword variants remain in homepage content or structured data');
   const heroCss = file === 'index.html'
     ? fs.readFileSync(path.join(root, 'homepage-pre-polish.css'), 'utf8')
     : html.match(/<style id="homepage-pre-polish">([\s\S]*?)<\/style>/i)?.[1] || '';
