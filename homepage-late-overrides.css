@@ -1160,3 +1160,6 @@ body:has(#home) #home>section.hero>.hero-layout>.zc-hero-art-panel,body:has(#hom
 body:has(#home) #home>section.hero>.hero-layout{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"content" "status"!important}
 body:has(#home) #home>section.hero>.hero-layout>.hero-content{width:100%!important;max-width:850px!important}
 body:has(#home) #home .field-manual-spotlight{max-width:760px!important}
+
+/* Remove the legacy decorative moon/circle overlay from the hero background image. */
+body:has(#home) #home>section.hero>.moon{display:none!important;visibility:hidden!important;opacity:0!important;width:0!important;height:0!important}
