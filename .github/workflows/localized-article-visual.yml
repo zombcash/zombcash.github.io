@@ -7,6 +7,10 @@ on:
     paths:
       - '.github/workflows/localized-article-visual.yml'
       - 'tests/localized-article-visual.cjs'
+      - 'tests/corporate-espionage-css-smoke.py'
+      - 'corporate-espionage-honey-trap.css'
+      - 'corporate-espionage-honey-trap.html'
+      - '*/corporate-espionage-honey-trap.html'
       - 'tests/sniper-help-i18n.cjs'
       - 'tests/sniper-compact-layout.cjs'
       - 'sniper-demo.js'
@@ -122,6 +126,9 @@ jobs:
           exit 1
       - name: Test localized article pages and all nine Field Manual landing pages
         run: node tests/localized-article-visual.cjs
+
+      - name: Verify Honey-Trap article CSS extraction
+        run: python tests/corporate-espionage-css-smoke.py
       - name: Test Zombie Sniper Help in all nine languages and responsive layouts
         run: node tests/sniper-help-i18n.cjs
       - name: Test compact Zombie Sniper dashboard across desktop and mobile viewports
