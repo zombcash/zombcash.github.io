@@ -972,7 +972,7 @@ function renderAlarms(market, error) {
 (() => {
   const communityLocale = (document.documentElement.lang || 'en').toLowerCase();
   const communityUi = {
-    en:{poll:['More ZombieCash memes','Community raid mission','New survival game challenge'],activityLive:communityText.activityLive,activityOffline:communityText.activityOffline,activityUnavailable:communityText.activityUnavailable,activityCount:(n)=>'DexScreener reports '+n+' transactions in this period. Counts are transactions, not unique buyers or wallets.',activityEmpty:communityText.activityEmpty,vote:'VOTE',votes:'VOTES',recorded:'VOTE RECORDED',open:'OPEN POLL',offline:communityText.offline,pollUnavailable:communityText.pollUnavailable,sending:communityText.sending,already:communityText.already,failed:communityText.failed,voteFailed:(e)=>'Could not save your vote: '+e,emptyBoard:communityText.emptyBoard,record:'RECORD',communityRecord:'COMMUNITY RECORD',top:communityText.top,boardOffline:communityText.boardOffline,scoreMin:communityText.scoreMin,submitting:communityText.submitting,saved:communityText.saved},
+    en:{poll:['More ZombieCash memes','Community raid mission','New survival game challenge'],activityLive:'DEXSCREENER LIVE',activityOffline:'SIGNAL OFFLINE',activityUnavailable:'Live trade counts are temporarily unavailable. They will retry automatically.',activityCount:(n)=>'DexScreener reports '+n+' transactions in this period. Counts are transactions, not unique buyers or wallets.',activityEmpty:'No transactions reported for this period in the latest DexScreener snapshot.',vote:'VOTE',votes:'VOTES',recorded:'VOTE RECORDED',open:'OPEN POLL',offline:'POLL OFFLINE',pollUnavailable:'The community poll is temporarily unavailable. Please try again shortly.',sending:'SENDING VOTE…',already:'ALREADY VOTED',failed:'VOTE FAILED',voteFailed:(e)=>'Could not save your vote: '+e,emptyBoard:'No records yet. Defend the base and claim the first spot.',record:'RECORD',communityRecord:'COMMUNITY RECORD',top:'TOP 10',boardOffline:'Leaderboard is temporarily unavailable.',scoreMin:'Score at least 10 points before saving.',submitting:'Submitting your record…',saved:'Record saved! Survival leaderboard updated.'}
     ru:{poll:['Больше мемов ZombieCash','Миссия рейда сообщества','Новый челлендж на выживание'],activityLive:'DEXSCREENER: В ЭФИРЕ',activityOffline:'СИГНАЛ НЕДОСТУПЕН',activityUnavailable:'Данные о сделках временно недоступны. Автоматически повторяем запрос.',activityCount:(n)=>'DexScreener показывает '+n+' сделок за период. Это число сделок, а не уникальных покупателей или кошельков.',activityEmpty:'В последнем снимке DexScreener за этот период сделок нет.',vote:'ГОЛОС',votes:'ГОЛОСОВ',recorded:'ГОЛОС ЗАПИСАН',open:'ОПРОС ОТКРЫТ',offline:'ОПРОС НЕДОСТУПЕН',pollUnavailable:'Опрос сообщества временно недоступен. Попробуйте позже.',sending:'ОТПРАВКА…',already:'УЖЕ ГОЛОСОВАЛИ',failed:'ОШИБКА ГОЛОСА',voteFailed:(e)=>'Не удалось сохранить голос: '+e,emptyBoard:'Записей пока нет. Защитите базу и займите первое место.',record:'РЕКОРД',communityRecord:'РЕКОРД СООБЩЕСТВА',top:'ТОП 10',boardOffline:'Таблица лидеров временно недоступна.',scoreMin:'Наберите минимум 10 очков, прежде чем сохранять.',submitting:'Сохраняем рекорд…',saved:'Рекорд сохранён! Таблица обновлена.'},
     de:{poll:['Mehr ZombieCash-Memes','Community-Raid-Mission','Neue Survival-Challenge'],activityLive:'DEXSCREENER LIVE',activityOffline:'SIGNAL OFFLINE',activityUnavailable:'Live-Handelsdaten sind vorübergehend nicht verfügbar. Neuer Versuch folgt automatisch.',activityCount:(n)=>'DexScreener meldet '+n+' Transaktionen in diesem Zeitraum. Transaktionen, keine einzigartigen Käufer oder Wallets.',activityEmpty:'Im aktuellen DexScreener-Snapshot wurden für diesen Zeitraum keine Transaktionen gemeldet.',vote:'STIMME',votes:'STIMMEN',recorded:'STIMME ERFASST',open:'UMFRAGE OFFEN',offline:'UMFRAGE OFFLINE',pollUnavailable:'Die Community-Umfrage ist vorübergehend nicht verfügbar. Bitte später erneut versuchen.',sending:'STIMME WIRD GESENDET…',already:'BEREITS ABGESTIMMT',failed:'ABSTIMMUNG FEHLGESCHLAGEN',voteFailed:(e)=>'Stimme konnte nicht gespeichert werden: '+e,emptyBoard:'Noch keine Rekorde. Verteidige die Basis und sichere den ersten Platz.',record:'REKORD',communityRecord:'COMMUNITY-REKORD',top:'TOP 10',boardOffline:'Rangliste ist vorübergehend nicht verfügbar.',scoreMin:'Erreiche mindestens 10 Punkte, bevor du speicherst.',submitting:'Rekord wird gesendet…',saved:'Rekord gespeichert! Rangliste aktualisiert.'},
     fr:{poll:['Plus de memes ZombieCash','Mission raid communautaire','Nouveau défi de survie'],activityLive:'DEXSCREENER EN DIRECT',activityOffline:'SIGNAL HORS LIGNE',activityUnavailable:'Les transactions en direct sont temporairement indisponibles. Nouvelle tentative automatique.',activityCount:(n)=>'DexScreener indique '+n+' transactions sur cette période. Il s’agit de transactions, pas d’acheteurs ou de portefeuilles uniques.',activityEmpty:'Aucune transaction signalée pour cette période dans le dernier instantané DexScreener.',vote:'VOTE',votes:'VOTES',recorded:'VOTE ENREGISTRÉ',open:'SONDAGE OUVERT',offline:'SONDAGE HORS LIGNE',pollUnavailable:'Le sondage communautaire est temporairement indisponible. Réessayez bientôt.',sending:'ENVOI DU VOTE…',already:'VOTE DÉJÀ EFFECTUÉ',failed:'ÉCHEC DU VOTE',voteFailed:(e)=>'Impossible d’enregistrer votre vote : '+e,emptyBoard:'Aucun record. Défendez la base et prenez la première place.',record:'RECORD',communityRecord:'RECORD COMMUNAUTAIRE',top:'TOP 10',boardOffline:'Le classement est temporairement indisponible.',scoreMin:'Obtenez au moins 10 points avant de sauvegarder.',submitting:'Enregistrement en cours…',saved:'Record enregistré ! Classement mis à jour.'},
@@ -1037,10 +1037,10 @@ function renderAlarms(market, error) {
       if (!response.ok) throw new Error('HTTP ' + response.status);
       activityData = await response.json();
       renderActivity();
-      if (activityStatus) activityStatus.textContent = 'DEXSCREENER LIVE';
+      if (activityStatus) activityStatus.textContent = communityText.activityLive;
     } catch (error) {
-      if (activityStatus) activityStatus.textContent = 'SIGNAL OFFLINE';
-      if (activityNote) activityNote.textContent = 'Live trade counts are temporarily unavailable. They will retry automatically.';
+      if (activityStatus) activityStatus.textContent = communityText.activityOffline;
+      if (activityNote) activityNote.textContent = communityText.activityUnavailable;
     }
   }
   document.querySelectorAll('.activity-tab').forEach(button => button.addEventListener('click', () => {
@@ -1095,15 +1095,15 @@ function renderAlarms(market, error) {
       try { alreadyVoted = localStorage.getItem('zombcash-voted-' + data.date) === 'yes'; } catch (_) {}
       renderVote(data, alreadyVoted);
     } catch (error) {
-      if (voteStatus) voteStatus.textContent = 'POLL OFFLINE';
-      if (voteOptionsEl) voteOptionsEl.innerHTML = '<p class="crew-note">The community poll is temporarily unavailable. Please try again shortly.</p>';
+      if (voteStatus) voteStatus.textContent = communityText.offline;
+      if (voteOptionsEl) voteOptionsEl.innerHTML = '<p class="crew-note">'+communityText.pollUnavailable+'</p>';
     }
   }
   async function castVote(option) {
     if (voteBusy) return;
     voteBusy = true;
     chosenVote = option;
-    if (voteStatus) voteStatus.textContent = 'SENDING VOTE…';
+    if (voteStatus) voteStatus.textContent = communityText.sending;
     try {
       const response = await zcApiFetch(apiBase + '/api/vote', {
         method:'POST', headers:{'Content-Type':'application/json'},
@@ -1115,9 +1115,9 @@ function renderAlarms(market, error) {
         try { localStorage.setItem('zombcash-voted-' + data.date, 'yes'); } catch (_) {}
       }
       renderVote(data, true);
-      if (voteStatus && response.status === 409) voteStatus.textContent = 'ALREADY VOTED';
+      if (voteStatus && response.status === 409) voteStatus.textContent = communityText.already;
     } catch (error) {
-      if (voteStatus) voteStatus.textContent = 'VOTE FAILED';
+      if (voteStatus) voteStatus.textContent = communityText.failed;
       if (voteOptionsEl) {
         const notice = document.createElement('p');
         notice.className = 'crew-note';
