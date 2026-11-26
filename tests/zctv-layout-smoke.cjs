@@ -40,8 +40,7 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
     return count && count.textContent.trim() !== 'LOADING VIDEO LIBRARY…';
   }, null, { timeout: 15000 }).catch(() => {});
 
-  // The player now loads its source only when the video itself approaches
-  // the viewport, not merely when the top of the TV section becomes visible.
+  // The latest episode is loaded on startup and remains selected after channel/live-mode switching.
   await page.locator('#zctv-channel-hub #zc-promo-player').scrollIntoViewIfNeeded();
   await page.waitForFunction(() => {
     const video = document.querySelector('#zctv-channel-hub #zc-promo-player');
