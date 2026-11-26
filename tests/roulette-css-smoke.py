@@ -25,7 +25,7 @@ class Parser(HTMLParser):
 css = Path("roulette-page.css").read_text(encoding="utf-8")
 no_comments = re.sub(r"/\*[\s\S]*?\*/", "", css)
 assert no_comments.count("{") == no_comments.count("}"), "roulette-page.css has unbalanced braces"
-for selector in [".roulette-wheel", ".roulette-panel", ".roulette-result", ".roulette-spin-button"]:
+for selector in [".wheel-shell", ".panel", ".btn", ".prize-item"]:
     assert selector in css, f"roulette stylesheet missing required selector: {selector}"
 
 for page in PAGES:
