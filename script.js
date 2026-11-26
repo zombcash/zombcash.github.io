@@ -91,9 +91,35 @@ const zcApiFetch = (url, options = {}, timeoutMs = 15000) => fetch(url, {
 })();
 
 const menu = document.querySelector('.menu-toggle');
-const nav = document.querySelector('.topbar nav');
-menu?.addEventListener('click', () => nav.classList.toggle('open'));
-nav?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
+const nav = document.querySelector('#site-navigation');
+if (menu && nav) {
+  const menuLabels = {
+    en: ['Open navigation', 'Close navigation', 'Primary navigation'],
+    de: ['Navigation öffnen', 'Navigation schließen', 'Hauptnavigation'],
+    fr: ['Ouvrir la navigation', 'Fermer la navigation', 'Navigation principale'],
+    it: ['Apri la navigazione', 'Chiudi la navigazione', 'Navigazione principale'],
+    ja: ['ナビゲーションを開く', 'ナビゲーションを閉じる', 'メインナビゲーション'],
+    'zh-cn': ['打开导航', '关闭导航', '主导航'],
+    ru: ['Открыть навигацию', 'Закрыть навигацию', 'Основная навигация'],
+    tr: ['Gezinmeyi aç', 'Gezinmeyi kapat', 'Ana gezinme'],
+    hi: ['नेविगेशन खोलें', 'नेविगेशन बंद करें', 'मुख्य नेविगेशन']
+  };
+  const labels = menuLabels[(document.documentElement.lang || 'en').toLowerCase()] || menuLabels.en;
+  nav.setAttribute('aria-label', labels[2]);
+  const setMenuOpen = open => {
+    nav.classList.toggle('open', open);
+    menu.setAttribute('aria-expanded', String(open));
+    menu.setAttribute('aria-label', labels[open ? 1 : 0]);
+  };
+  menu.addEventListener('click', () => setMenuOpen(!nav.classList.contains('open')));
+  nav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenuOpen(false)));
+  document.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || !nav.classList.contains('open')) return;
+    event.preventDefault();
+    setMenuOpen(false);
+    menu.focus();
+  });
+}
 
 // Demo-only outbreak indicator. Clearly labelled as simulated, not live market data.
 const chaos = 68;

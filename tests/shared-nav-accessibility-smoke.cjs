@@ -98,6 +98,32 @@ const routes = ['', 'de/', 'fr/', 'it/', 'ja/', 'zh-CN/', 'ru/', 'tr/', 'hi/'];
     results.push({ route: '/', viewport: '1024x768', status: 'PASS' });
     await tablet.close();
 
+    // The homepage keeps a no-shared-nav fallback. Verify its own disclosure
+    // control remains keyboard-operable if the shared navigation script fails.
+    const fallback = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+    await fallback.route('**/shared-nav.js*', route => route.abort());
+    await fallback.goto(base, { waitUntil: 'domcontentloaded' });
+    const fallbackToggle = fallback.locator('header.topbar .menu-toggle');
+    const fallbackNav = fallback.locator('#site-navigation');
+    await fallbackToggle.waitFor({ state: 'visible', timeout: 15000 });
+    assert.equal(await fallbackToggle.getAttribute('aria-controls'), 'site-navigation', 'fallback menu aria-controls');
+    assert.equal(await fallbackToggle.getAttribute('aria-expanded'), 'false', 'fallback menu initial state');
+    assert.equal(await fallbackNav.isVisible(), false, 'fallback menu starts closed');
+    await fallbackToggle.focus();
+    await fallback.keyboard.press('Enter');
+    assert.equal(await fallbackToggle.getAttribute('aria-expanded'), 'true', 'fallback Enter opens menu');
+    assert.equal(await fallbackNav.isVisible(), true, 'fallback menu visible after Enter');
+    await fallback.keyboard.press('Escape');
+    assert.equal(await fallbackToggle.getAttribute('aria-expanded'), 'false', 'fallback Escape closes menu');
+    assert.equal(await fallbackNav.isVisible(), false, 'fallback menu hidden after Escape');
+    assert.equal(await fallback.evaluate(() => document.activeElement === document.querySelector('.menu-toggle')), true, 'fallback Escape restores focus');
+    await fallbackToggle.click();
+    assert.equal(await fallbackToggle.getAttribute('aria-expanded'), 'true', 'fallback pointer opens menu');
+    await fallbackNav.locator('a').first().click();
+    assert.equal(await fallbackToggle.getAttribute('aria-expanded'), 'false', 'fallback navigation link closes menu');
+    results.push({ route: '/', viewport: '390x844', mode: 'shared-nav unavailable', status: 'PASS' });
+    await fallback.close();
+
     console.log(JSON.stringify({ testedLocales: routes.length, results }, null, 2));
   } finally {
     await browser.close();
