@@ -36,6 +36,7 @@
   const liveUrl = (root.dataset.liveStream || (metaStream && metaStream.content) || '').trim();
   let episodes = [];
   let episodesRequestStarted = false;
+  let episodesLoaded = false;
   let promoVideos = [];
   let promoIndex = 0;
   let active = 'news';
@@ -503,7 +504,7 @@
     if (!shown.length) {
       showEmpty(active === 'news' ? 'No Outbreak News episodes have been published yet.' : 'No episodes in this channel yet. New transmissions will appear here.');
       if (mode === 'archive' && !currentId) {
-        text(status, episodesRequestStarted ? 'ARCHIVE READY · NO EPISODES PUBLISHED' : 'CONNECTING TO SERVER ARCHIVE…');
+        text(status, episodesLoaded ? 'ARCHIVE READY · NO EPISODES PUBLISHED' : 'CONNECTING TO SERVER ARCHIVE…');
         text(version, 'SERVER ARCHIVE');
       }
       return;
@@ -549,7 +550,7 @@
       clearPlayer();
       text(version, 'SERVER ARCHIVE'); text(status, 'ARCHIVE MODE · SELECT AN EPISODE');
       if (download) { download.removeAttribute('href'); download.textContent = 'SELECT AN EPISODE'; }
-      render(); if (!currentId && promoVideos.length) showFeaturedPromo(); setSignal(false, currentId === 'featured-promo' ? 'FEATURED TRANSMISSION' : 'ARCHIVE MODE');
+      render(); setSignal(false, currentId === 'featured-promo' ? 'FEATURED TRANSMISSION' : 'ARCHIVE MODE');
     }
     updateModeButtons();
   }
@@ -584,6 +585,7 @@
       })
       .then(function (payload) {
         episodes = Array.isArray(payload.episodes) ? payload.episodes : [];
+        episodesLoaded = true;
         if (mode === 'archive') {
           render();
           // The newest published episode is the default transmission; never replace it with an old promo.
@@ -593,6 +595,7 @@
         }
       })
       .catch(function () {
+        episodesLoaded = true;
         episodes = [RAVEN_INTRO];
         render();
         // Retry the known latest Raven episode endpoint even if the archive listing is temporarily unavailable.
@@ -686,5 +689,6 @@
   if (defaultCard) defaultCard.setAttribute('aria-pressed', 'true');
   root.dataset.zctvMode = mode;
   setMode(mode);
+  showEmpty('CONNECTING TO SERVER ARCHIVE…');
   loadEpisodes();
 })();
