@@ -64,7 +64,7 @@ assert.ok(tvPlayerScript.includes('episodesRequestStarted = true'),
   'TV archive requests must be gated to one load per page view');
 assert.ok(tvPlayerScript.includes('loadEpisodes();'),
   'TV must request the latest server episode on initialization instead of waiting for a channel click');
-assert.ok(tvPlayerScript.includes('RAVEN_INTRO.episode_id'),
+assert.ok(tvPlayerScript.includes("const RAVEN_INTRO = { episode_id: '2db68d18-9737-4308-b81b-e792da06d202'") && tvPlayerScript.includes('episodes = [RAVEN_INTRO]'),
   'TV must use the verified latest Raven episode as the fallback rather than the October promo');
 assert.ok(tvPlayerScript.includes('youtubeEmbedUrl(') && tvPlayerScript.includes('youtube-nocookie.com/embed/'),
   'TV Live must support YouTube iframe embeds as well as direct video sources');
