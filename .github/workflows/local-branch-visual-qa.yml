@@ -27,6 +27,10 @@ on:
       - "language.js"
       - "homepage-visual.css"
       - "style.css"
+      - "site-polish.css"
+      - "homepage-translated-components.css"
+      - "homepage-translated-late-overrides.css"
+      - "tests/css-cascade-dedupe-smoke.cjs"
       - "tests/homepage-legacy-hero-css-smoke.cjs"
       - "assets/js/zctv-player.js"
       - "tests/zctv-layout-smoke.cjs"
@@ -84,6 +88,9 @@ jobs:
           node --check tests/survivor-auth-modal-accessibility-smoke.cjs
           node --check tests/homepage-css-seo-smoke.cjs
           node tests/homepage-css-seo-smoke.cjs
+          node --check tests/css-cascade-dedupe-smoke.cjs
+          node tests/css-cascade-dedupe-smoke.cjs
+          node tests/homepage-market-provider-smoke.cjs
           node --check tests/homepage-legacy-hero-css-smoke.cjs
           node tests/homepage-legacy-hero-css-smoke.cjs
           node --check language.js
