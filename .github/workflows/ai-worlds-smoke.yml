@@ -30,6 +30,9 @@ jobs:
         run: |
           node --check ai-arena.js
           node --check zombie-world.js
+      - name: Test price-history selected-window and stale-data warning
+        run: node tests/price-history-stale-window-smoke.cjs
+
       - name: Install browser test dependency
         run: |
           npm install --no-save playwright
