@@ -40,7 +40,7 @@ def main():
 
     for source in pages:
         html = source.read_text(encoding="utf-8-sig", errors="replace")
-        for match in re.finditer(r'\\s[\\w:-]+=«[^»]*»', html):
+        for match in re.finditer(r'\s[\w:-]+=«[^»]*»', html):
             malformed_attributes[source.as_posix()] += 1
         soup = BeautifulSoup(html, "html.parser")
         source_url = urljoin(BASE, source.as_posix())
