@@ -83,6 +83,8 @@ jobs:
           node --check tests/homepage-legacy-hero-css-smoke.cjs
           node tests/homepage-legacy-hero-css-smoke.cjs
           node --check language.js
+          node --check script.js
+          node --check living-world-recovery.js
           node --check survivor-auth.js
           node --check tests/frontend-api-timeout-smoke.cjs
           node tests/frontend-api-timeout-smoke.cjs
