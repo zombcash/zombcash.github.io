@@ -50,7 +50,7 @@ fs.mkdirSync(output, { recursive: true });
           const labCharacter = document.querySelector('main#home .zm-promo-character');
           const tvArchive = tvPlayer?.querySelector('.zctv-archive');
           const tvChannels = tvInner?.querySelector('.zctv-channels');
-          const art = sponsor?.querySelector('.zc-novel-cover, .zc-sponsor-art-slot img');
+          const art = sponsor;
           const image = art?.querySelector('img');
           const visualStylesheetLink = [...document.querySelectorAll('link[rel="stylesheet"]')]
             .find(link => new URL(link.href).pathname.endsWith('/homepage-visual.css'));
