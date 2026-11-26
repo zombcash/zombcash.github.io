@@ -188,6 +188,11 @@ def page_url(locale):
     return f"{BASE_URL}/gallery.html" if locale == "en" else f"{BASE_URL}/{locale}/gallery.html"
 
 
+def hreflang_code(locale):
+    # The zh-CN URL serves Simplified Chinese; use one site-wide hreflang code.
+    return "zh-Hans" if locale == "zh-CN" else locale
+
+
 def replace_tag(source, pattern, replacement):
     updated, count = re.subn(pattern, replacement, source, count=1, flags=re.I | re.S)
     if count != 1:
@@ -237,7 +242,7 @@ def build_page(base, locale):
     alternates = []
     for alternate_locale in LOCALES:
         alternates.append(
-            f'<link rel="alternate" hreflang="{escape(alternate_locale)}" href="{page_url(alternate_locale)}">'
+            f'<link rel="alternate" hreflang="{escape(hreflang_code(alternate_locale))}" href="{page_url(alternate_locale)}">'
         )
     alternates.append(f'<link rel="alternate" hreflang="x-default" href="{page_url("en")}">')
     canonical_block = (
@@ -316,7 +321,7 @@ def build_sitemap():
         for alternate_locale in LOCALES:
             ET.SubElement(url, f"{{{XHTML}}}link", {
                 "rel": "alternate",
-                "hreflang": alternate_locale,
+                "hreflang": hreflang_code(alternate_locale),
                 "href": page_url(alternate_locale),
             })
         ET.SubElement(url, f"{{{XHTML}}}link", {
