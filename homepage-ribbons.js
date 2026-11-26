@@ -64,9 +64,11 @@
   if(label)label.textContent=icons[0]+' '+cryptoRows[0]+(marketSource&&hasLiveTicker?' · DATA: '+marketSource:'');
  }
  function setItem(label,value){
+  // Store canonical status text so a language switch can re-localize cached fallbacks.
   liveValues[label]=value;
+  var displayValue=localizeStatus(value);
   var nodes=Array.prototype.slice.call(wrap.querySelectorAll('.zc-ribbon-copy span'));
-  nodes.forEach(function(node){if(node.textContent.indexOf(label)===0)node.textContent=value;});
+  nodes.forEach(function(node){if(node.textContent.indexOf(label)===0)node.textContent=displayValue;});
  }
  function fmtPrice(v){
   if(!Number.isFinite(v))return '—';
