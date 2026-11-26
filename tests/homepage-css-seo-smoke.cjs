@@ -124,7 +124,7 @@ for (const file of pages) {
 
   if (file === 'index.html') {
     for (const asset of ['homepage-pre-polish.css', 'homepage-components.css', 'homepage-late-overrides.css']) {
-      assert.match(html, new RegExp('<link rel="stylesheet" href="/' + asset + '\\?v=20261125-1">'),
+      assert.match(html, new RegExp('<link rel="stylesheet" href="/' + asset + '\\?v=' + (asset === 'homepage-late-overrides.css' ? '20261126-css-dedupe-1' : '20261125-1') + '">'),
         file + ': cascade-preserving external CSS asset missing: ' + asset);
     }
   } else {
