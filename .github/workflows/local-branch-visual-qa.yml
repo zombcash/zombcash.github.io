@@ -22,6 +22,10 @@ on:
       - "homepage-pre-polish.css"
       - "homepage-components.css"
       - "homepage-late-overrides.css"
+      - "site-polish.css"
+      - "homepage-translated-components.css"
+      - "homepage-translated-late-overrides.css"
+      - "tests/css-cascade-dedupe-smoke.cjs"
       - "tests/homepage-css-seo-smoke.cjs"
       - "tests/homepage-layout-shift-smoke.cjs"
       - "language.js"
@@ -84,6 +88,7 @@ jobs:
           node --check tests/survivor-auth-modal-accessibility-smoke.cjs
           node --check tests/homepage-css-seo-smoke.cjs
           node tests/homepage-css-seo-smoke.cjs
+          node tests/css-cascade-dedupe-smoke.cjs
           node --check tests/homepage-legacy-hero-css-smoke.cjs
           node tests/homepage-legacy-hero-css-smoke.cjs
           node --check language.js
