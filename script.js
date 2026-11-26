@@ -121,27 +121,11 @@ if (menu && nav) {
   });
 }
 
-// Demo-only outbreak indicator. Clearly labelled as simulated, not live market data.
-const chaos = 68;
+// Outbreak dashboard is populated only by the live API status module below.
 const chaosValue = document.getElementById('chaos-value');
 const meterFill = document.getElementById('meter-fill');
-if (chaosValue) chaosValue.textContent = `${chaos}%`;
-if (meterFill) meterFill.style.width = `${chaos}%`;
-const phases = [
-  ['THE DEAD ARE WALKING', 'The city is quiet. Your next move doesn’t have to be.'],
-  ['SIGNAL IN THE STATIC', 'A new transmission is somewhere out there. Stay curious.'],
-  ['OUTBREAK LEVEL: UNDEAD', 'The apocalypse is a mood. Keep your head on straight.']
-];
-let phase = 0;
-const outbreakStatus = document.getElementById('outbreak-status');
-const outbreakMessage = document.getElementById('outbreak-message');
-if (outbreakStatus && outbreakMessage) {
-  setInterval(() => {
-    phase = (phase + 1) % phases.length;
-    outbreakStatus.textContent = phases[phase][0];
-    outbreakMessage.textContent = phases[phase][1];
-  }, 6500);
-}
+if (chaosValue) chaosValue.textContent = '—';
+if (meterFill) meterFill.style.width = '0%';
 
 const ca = '6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump';
 async function copyContractAddress(button, feedback) {
