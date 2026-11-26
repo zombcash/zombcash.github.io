@@ -41,6 +41,9 @@ jobs:
           fetch-depth: 0
       - name: Check ticker script syntax
         run: node --check homepage-ribbons.js
+      - name: Test ZOMBCASH ticker GeckoTerminal fallback
+        run: node tests/homepage-market-provider-smoke.cjs
+
       - name: Test CoinGecko-only browser provider, rate-limit handling and unavailable state
         run: node tests/homepage-market-provider-smoke.cjs
       - name: Verify all localized homepages
