@@ -18,6 +18,7 @@ on:
       - 'ai-model-status.js'
       - 'tests/homepage-css-seo-smoke.cjs'
       - 'tests/homepage-translated-css-smoke.py'
+      - 'tests/inline-style-audit.py'
       - 'homepage-translated-hero.css'
       - 'homepage-translated-components.css'
       - 'homepage-de-field-manual.css'
@@ -78,8 +79,10 @@ jobs:
               print(f"OK {filename} ({lang})")
           PY
 
-      - name: Verify translated homepage CSS consolidation
-        run: python tests/homepage-translated-css-smoke.py
+      - name: Verify translated homepage CSS consolidation and site-wide inline CSS inventory
+        run: |
+          python tests/homepage-translated-css-smoke.py
+          python tests/inline-style-audit.py
 
       - name: Verify project-owned artwork and accessibility hooks
         run: |
