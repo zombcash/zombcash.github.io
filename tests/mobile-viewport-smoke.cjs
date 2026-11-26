@@ -97,7 +97,7 @@ fs.mkdirSync(outDir, { recursive: true });
           homeStatusRail: (() => { const el = document.querySelector('main#home .zc-home-status-rail'); return !!el && getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().width > 0; })(),
           heroLayout: !!document.querySelector('main#home .hero-layout'),
           adSectionCount: document.querySelectorAll('.zc-hero-sponsor-panel').length,
-          artPanelPresent: !!document.querySelector('.zc-hero-art-panel .zc-sponsor-art-slot'),
+          artPanelPresent: (() => { const panel=document.querySelector('.zc-hero-art-panel.zc-novel-panel'); const cover=panel?.querySelector('img.zc-novel-cover'); return !!panel && !!cover && !!cover.getAttribute('src'); })(),
           sponsorPromoVisible: (() => { const el = document.querySelector('.zc-hero-sponsor-promo'); return !!el && getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().height > 0; })(),
           adScriptTags: Array.from(document.scripts).filter(script => script.src.includes('bauval.org')).map(script => script.src),
           atOptions: window.atOptions || null,
@@ -140,7 +140,7 @@ fs.mkdirSync(outDir, { recursive: true });
       if (!result.menuExpected && !result.navVisible) issues.push('desktop navigation is not visible');
       if (!result.languageButton.exists) issues.push('language selector button is missing');
       if (!result.heroLayout) issues.push('homepage hero layout is missing');
-      if (!result.artPanelPresent) issues.push('project-owned survivor artwork panel is missing');
+      if (!result.artPanelPresent) issues.push('project-owned novel cover panel is missing');
       if (result.adSectionCount > 0) {
         if (result.adSectionCount !== 1) issues.push(`expected exactly one hero sponsor panel, found ${result.adSectionCount}`);
         if (!result.sponsorPromoVisible) issues.push('Sponsor Zone fallback is not visible');
