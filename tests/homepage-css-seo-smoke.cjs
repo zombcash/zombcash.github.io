@@ -47,8 +47,9 @@ assert.doesNotMatch(sharedScript, /dot\.setAttribute\('aria-label'/,
 assert.match(sharedScript, /view\.setAttribute\('aria-labelledby', viewLabel\.id \+ ' ' \+ tokenSymbol\.id\)/,
   'dynamic radar links must derive their accessible names from localized visible labels and token symbols');
 const newsBlock = sharedScript.slice(sharedScript.indexOf('async function loadWorldNews()'), sharedScript.indexOf('const alarmLocale'));
-assert.ok(newsBlock.includes("article.enriched !== true || article.kind === 'news'"),
+assert.ok(newsBlock.includes("if (article.enriched === true) return article.kind === 'news'"),
   'Outbreak News must retain Telegram-enriched news items with Zombie Commentary while filtering community memes');
+assert.match(newsBlock, /const newsTopics = \\/\\b\\(crypto\\|cryptocurrency\\|bitcoin/, 'Outbreak News must filter unrelated general-news items');
 assert.match(newsBlock, /article\.commentary/,
   'Outbreak News must render Zombie Commentary on enriched news items');
 assert.match(newsBlock, /45 \* 60 \* 1000/,
@@ -132,7 +133,7 @@ for (const file of pages) {
   assert.equal((html.match(/class="zc-ribbon zc-ribbon--/g) || []).length, 3, file + ': all three ribbon rows must reserve their final layout before JavaScript');
   assert.match(html, /homepage-ribbons\.js\?v=20261127-ribbon-labels-1/, file + ': localized ribbon repair cache key missing');
   assert.match(html, /zctv-player\.js\?v=20261127-tv-raven-live-2/, file + ': latest TV player cache key missing');
-  assert.match(html, /script\.js\?v=20261127-news-commentary-1/, file + ': news commentary cache key missing');
+  assert.match(html, /script\.js\?v=20261127-news-commentary-2/, file + ': news commentary cache key missing');
   if (file === 'index.html') {
     assert.ok(html.includes('src="/ai-model-status.js?v=20261124-timeout-1"'), 'English homepage must use the cache-busted AI status script');
     for (const asset of ['homepage-pre-polish.css', 'homepage-components.css', 'homepage-late-overrides.css']) {
