@@ -1050,9 +1050,9 @@ function renderAlarms(market, error) {
   }));
 
   const pollLabels = {
-    meme: 'More ZombieCash memes',
-    raid: 'Community raid mission',
-    game: 'New survival game challenge'
+    meme: communityText.poll[0],
+    raid: communityText.poll[1],
+    game: communityText.poll[2]
   };
   function renderVote(data, alreadyVoted = false) {
     voteData = data;
@@ -1256,7 +1256,7 @@ function renderAlarms(market, error) {
    const response=await zcApiFetch(url,{cache:'no-store'});if(!response.ok)throw new Error('HTTP '+response.status);
    const data=await response.json();const scores=Array.isArray(data.scores)?data.scores:[];list.replaceChildren();
    if(!scores.length){list.textContent='No records yet. Play '+labels[game]+' and claim the first spot.';return;}
-   scores.slice(0,10).forEach((item,i)=>{const row=document.createElement('div');row.className='survivor-row';const rank=document.createElement('span');rank.className='survivor-rank';rank.textContent='#'+(i+1);const name=document.createElement('span');name.className='survivor-name';name.textContent=item.name||'Survivor';const date=document.createElement('small');date.className='survivor-date';date.textContent=item.date?'RECORD · '+item.date:'COMMUNITY RECORD';name.append(date);const points=document.createElement('strong');points.className='survivor-points';points.textContent=Number(item.points||0).toLocaleString('en-US')+' PTS';row.append(rank,name,points);list.append(row);});
+   scores.slice(0,10).forEach((item,i)=>{const row=document.createElement('div');row.className='survivor-row';const rank=document.createElement('span');rank.className='survivor-rank';rank.textContent='#'+(i+1);const name=document.createElement('span');name.className='survivor-name';name.textContent=item.name||'Survivor';const date=document.createElement('small');date.className='survivor-date';date.textContent=item.date?communityText.record+' · '+item.date:communityText.communityRecord;name.append(date);const points=document.createElement('strong');points.className='survivor-points';points.textContent=Number(item.points||0).toLocaleString('en-US')+' PTS';row.append(rank,name,points);list.append(row);});
   }catch(e){list.textContent='Records are temporarily unavailable. Please try again shortly.';}
  }
  open.addEventListener('click',()=>{if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');load('snake');});
