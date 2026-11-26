@@ -17,6 +17,11 @@ on:
       - 'homepage-visual.css'
       - 'ai-model-status.js'
       - 'tests/homepage-css-seo-smoke.cjs'
+      - 'tests/homepage-translated-css-smoke.py'
+      - 'tests/inline-style-audit.py'
+      - 'homepage-translated-hero.css'
+      - 'homepage-translated-components.css'
+      - 'homepage-de-field-manual.css'
       - 'homepage-ribbons.js'
       - 'assets/js/zctv-player.js'
       - 'assets/zombcash-survivor-realistic-520.avif'
@@ -73,6 +78,11 @@ jobs:
               assert 'IMAGE SLOT' not in html and 'МЕСТО ДЛЯ ИЗОБРАЖЕНИЯ' not in html and 'Bildfeld' not in html, f"{filename}: unfinished hero artwork placeholder remains"
               print(f"OK {filename} ({lang})")
           PY
+
+      - name: Verify translated homepage CSS consolidation and site-wide inline CSS inventory
+        run: |
+          python tests/homepage-translated-css-smoke.py
+          python tests/inline-style-audit.py
 
       - name: Verify project-owned artwork and accessibility hooks
         run: |
