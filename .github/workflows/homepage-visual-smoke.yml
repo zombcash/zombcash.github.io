@@ -64,7 +64,7 @@ jobs:
           html = Path("index.html").read_text(encoding="utf-8")
           assert 'id="zombcash-promo-video-library-script"' not in html, "legacy inline promo loader must not compete with the TV player"
           assert "fetch('promo-videos.json?v=20261105-i18n1'" not in html, "duplicate inline promo manifest request remains"
-          assert 'src="/assets/js/zctv-player.js?v=20261127-tv-raven-live-2"' in html, "authoritative ZombieCash TV player script missing"
+          assert 'src="/assets/js/zctv-player.js?v=20261127-tv-raven-live-3"' in html, "authoritative ZombieCash TV player script missing"
           tv_script = Path("assets/js/zctv-player.js").read_text(encoding="utf-8")
           assert "fetch('/promo-videos.json?v=20261110-tv-library'" in tv_script, "TV player must own promo manifest loading"
           assert "function showFeaturedPromo()" in tv_script, "TV player must own featured promo rendering"
