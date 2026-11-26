@@ -37,8 +37,8 @@ components = read_css("homepage-translated-components.css")
 german = read_css("homepage-de-field-manual.css")
 assert ".hero-layout" in hero and ".hero-content" in hero and "@media(max-width:680px)" in hero
 assert ".zc-promo-video-shell" in components and ".zc-promo-player-wrap" in components
-assert ".field-manual-spotlight" not in components, "German-only selector leaked into shared component CSS"
-assert ".field-manual-spotlight" in german and ".field-manual-status" in german
+assert "text-wrap:balance" not in components, "German-only text balancing rule leaked into shared component CSS"
+assert "text-wrap:balance" in german and "hyphens:auto" in german, "German typography refinements were not preserved"
 
 for page, locale in PAGES.items():
     parser = PageParser()
