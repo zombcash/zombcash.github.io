@@ -93,7 +93,7 @@
   // Do not mistake a semantic article header inside <main class="wrap"> for the
   // global site header. Market Data and other content pages use this exact layout.
   let header = document.querySelector(
-    'body > header:not(.hero), body > .wrap:not(main) > header:not(.hero), body > .container:not(main) > header:not(.hero), body > .page-wrap:not(main) > header:not(.hero)'
+    'body > header:not(.hero):not(.site-crumb), body > .wrap:not(main) > header:not(.hero):not(.site-crumb), body > .container:not(main) > header:not(.hero):not(.site-crumb), body > .page-wrap:not(main) > header:not(.hero):not(.site-crumb)'
   );
   if (!header) {
     header = document.createElement('header');
