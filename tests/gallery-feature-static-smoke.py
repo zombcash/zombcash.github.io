@@ -172,6 +172,40 @@ for locale in supported_locales:
             escaped_caption = html_escape(translated_caption, quote=True)
             assert 'data-original-caption="' + escaped_caption + '"' in localized_page, f"{locale} static card caption is not localized: {item['id']}"
 
+# Gallery hreflang must use one consistent Simplified-Chinese code across
+# generated HTML and sitemap, while the URL and html lang remain zh-CN.
+gallery_hreflang = {"en": "en", "de": "de", "fr": "fr", "it": "it", "ja": "ja", "zh-CN": "zh-Hans", "ru": "ru", "tr": "tr", "hi": "hi"}
+gallery_urls = {locale: "https://zombcash.github.io/gallery.html" if locale == "en" else f"https://zombcash.github.io/{locale}/gallery.html" for locale in gallery_hreflang}
+gallery_alternates = {}
+for locale, url in gallery_urls.items():
+    page_path = Path("gallery.html") if locale == "en" else Path(locale, "gallery.html")
+    page = page_path.read_text(encoding="utf-8")
+    expected = {(gallery_hreflang[alt], gallery_urls[alt]) for alt in gallery_hreflang}
+    expected.add(("x-default", gallery_urls["en"]))
+    page_refs = set(re.findall(r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"', page))
+    assert page_refs == expected, f"{locale} gallery hreflang is inconsistent: {page_refs ^ expected}"
+    assert 'hreflang="zh-CN"' not in page, f"{locale} gallery still uses the non-standardized Chinese hreflang"
+    assert f'<html lang="{locale}">' in page or f'<html lang="{locale}"' in page
+    gallery_alternates[url] = page_refs
+
+gallery_sitemap = ET.parse("sitemap-gallery-pages.xml").getroot()
+gallery_sitemap_urls = {}
+for node in gallery_sitemap.findall(".//sm:url", NS):
+    loc_node = node.find("sm:loc", NS)
+    loc = loc_node.text.strip() if loc_node is not None and loc_node.text else ""
+    refs = set()
+    for link in node.findall("{http://www.w3.org/1999/xhtml}link"):
+        if link.attrib.get("rel") == "alternate":
+            refs.add((link.attrib.get("hreflang"), link.attrib.get("href")))
+    gallery_sitemap_urls[loc] = refs
+assert set(gallery_sitemap_urls) == set(gallery_urls.values()), "Gallery sitemap URL set must contain all 9 localized pages"
+for url, refs in gallery_sitemap_urls.items():
+    assert refs == gallery_alternates[url], f"Sitemap/HTML hreflang mismatch: {url}"
+    locale = next(locale for locale, page_url in gallery_urls.items() if page_url == url)
+    for language, target in refs:
+        if language != "x-default":
+            assert (gallery_hreflang[locale], url) in gallery_sitemap_urls[target], f"Missing reciprocal gallery hreflang: {url} -> {target}"
+
 js = Path("gallery.js").read_text(encoding="utf-8")
 for marker in ("gallery-toolbar", "gallery-lightbox-share", "/api/gallery/likes", "/api/gallery/like"):
     assert marker in js, marker
