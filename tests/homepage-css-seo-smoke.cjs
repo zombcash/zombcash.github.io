@@ -75,6 +75,10 @@ for (const selector of retiredHomepageSelectors) {
 
 assert.doesNotMatch(ribbonScript, /if\s*\(existing\)\s*existing\.remove\(\)/, 'live ribbons must reuse the reserved wrapper instead of removing/reinserting it');
 assert.match(ribbonScript, /wrap\.removeAttribute\('aria-busy'\)/, 'live ribbon wrapper must clear its busy state after rendering');
+assert.match(ribbonScript, /var themes=\['alert','market','community'\]/, 'ribbon visual themes must match the displayed order: crypto, FX, market pulse');
+assert.match(ribbonScript, /zc-ribbon--alert \.zc-ribbon-label/, 'live market data source label must be attached to the crypto ticker, not another ribbon');
+assert.match(ribbonScript, /function localizeStatus\(/, 'loading and unavailable fallback states must be localized');
+for (const locale of ['en','de','fr','it','ja','zh-CN','ru','tr','hi']) assert.ok(ribbonScript.includes(locale+':{loading:'), 'localized ticker fallback copy missing for '+locale);
 const pages = [
   'index.html', 'de/index.html', 'fr/index.html', 'it/index.html',
   'ja/index.html', 'zh-CN/index.html', 'ru/index.html', 'tr/index.html', 'hi/index.html'
@@ -113,7 +117,13 @@ for (const file of pages) {
     assert.equal(html.includes('.' + selector), false,
       file + ': inline CSS must not retain selectors for absent legacy markup: ' + selector);
   }
+  const ribbonIndex = html.indexOf('class="zc-outbreak-ribbons zc-ribbons-pending"');
+  assert.ok(ribbonIndex > headEnd && ribbonIndex < html.indexOf('<main id="home">'), file + ': reserved live-ribbon skeleton must sit between shared header and homepage main');
+  assert.equal((html.match(/class="zc-outbreak-ribbons/g) || []).length, 1, file + ': exactly one ribbon wrapper must exist');
+  assert.equal((html.match(/class="zc-ribbon zc-ribbon--/g) || []).length, 3, file + ': all three ribbon rows must reserve their final layout before JavaScript');
+  assert.match(html, /homepage-ribbons\.js\?v=20261127-ribbon-labels-1/, file + ': localized ribbon repair cache key missing');
   if (file === 'index.html') {
+    assert.ok(html.includes('src="/ai-model-status.js?v=20261124-timeout-1"'), 'English homepage must use the cache-busted AI status script');
     for (const asset of ['homepage-pre-polish.css', 'homepage-components.css', 'homepage-late-overrides.css']) {
       assert.match(html, new RegExp('<link rel="stylesheet" href="/' + asset + '\\?v=[^\"]+">'),
         file + ': cascade-preserving external CSS asset missing or cache version absent: ' + asset);
