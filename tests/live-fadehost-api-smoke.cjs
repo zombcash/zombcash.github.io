@@ -54,6 +54,25 @@ function record(name, response, expectedStatus, failures, details = {}) {
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, serviceWorkers: 'block' });
   const page = await context.newPage();
+  const cdp = await context.newCDPSession(page);
+  await cdp.send('Network.enable');
+  const wikimediaImageRequests = [];
+  cdp.on('Network.requestWillBeSent', event => {
+    if (!event.request?.url?.includes('upload.wikimedia.org/wikipedia/commons/b/b2/Post-apocalyptic_scenery.jpg')) return;
+    const initiator = event.initiator || {};
+    wikimediaImageRequests.push({
+      url: event.request.url,
+      documentURL: event.documentURL || '',
+      initiatorType: initiator.type || '',
+      initiatorUrl: initiator.url || '',
+      lineNumber: initiator.lineNumber ?? null,
+      stack: (initiator.stack?.callFrames || []).slice(0, 5).map(frame => ({
+        url: frame.url || '',
+        functionName: frame.functionName || '',
+        lineNumber: frame.lineNumber ?? null
+      }))
+    });
+  });
   await page.addInitScript(() => {
     window.__zombcashLayoutShifts = [];
     try {
@@ -118,6 +137,30 @@ function record(name, response, expectedStatus, failures, details = {}) {
       marketPrice: document.getElementById('zombcash-price')?.textContent?.trim() || '',
     }));
 
+    const wikimediaDomMatches = await page.evaluate(() => {
+      const target = 'upload.wikimedia.org/wikipedia/commons/b/b2/Post-apocalyptic_scenery.jpg';
+      const matches = [];
+      for (const element of document.querySelectorAll('*')) {
+        const label = {
+          tag: element.tagName,
+          id: element.id || '',
+          className: typeof element.className === 'string' ? element.className.slice(0, 160) : '',
+          outerHTML: element.outerHTML?.slice(0, 500) || ''
+        };
+        if (element instanceof HTMLImageElement && (element.currentSrc.includes(target) || element.src.includes(target))) {
+          matches.push({ ...label, source: 'img' });
+        }
+        if (element instanceof HTMLVideoElement && element.poster.includes(target)) {
+          matches.push({ ...label, source: 'video-poster' });
+        }
+        for (const pseudo of ['', '::before', '::after']) {
+          const background = getComputedStyle(element, pseudo).backgroundImage || '';
+          if (background.includes(target)) matches.push({ ...label, source: 'background' + pseudo, background });
+        }
+      }
+      return matches.slice(0, 20);
+    });
+
     // The TV archive is intentionally lazy-loaded only after the visitor
     // selects ARCHIVE. Trigger that real interaction before classifying the
     // episode endpoint; absence of an initial request on page load is expected.
@@ -132,6 +175,43 @@ function record(name, response, expectedStatus, failures, details = {}) {
     if (await archiveModeButton.getAttribute('aria-pressed') !== 'true') {
       failures.push('tv-episode-archive: selecting ARCHIVE did not update aria-pressed');
     }
+
+    // Exercise the homepage Meme Radar refresh control and its time-period tabs.
+    const aiRadarRefreshButton = page.locator('#zombie-radar-ai-refresh');
+    await aiRadarRefreshButton.waitFor({ state: 'visible', timeout: 15000 });
+    const radarRefreshResponsePromise = page.waitForResponse(response => {
+      const url = new URL(response.url());
+      return url.hostname === new URL(API_ORIGIN).hostname && url.pathname === '/api/radar';
+    }, { timeout: 15000 });
+    await aiRadarRefreshButton.click();
+    const radarRefreshResponse = await radarRefreshResponsePromise;
+    let radarRefreshPayload = null;
+    try { radarRefreshPayload = await radarRefreshResponse.json(); } catch (_) {}
+    if (!radarRefreshResponse.ok() || !Array.isArray(radarRefreshPayload?.pairs) || !radarRefreshPayload.pairs.length) {
+      failures.push('homepage Meme Radar refresh: expected a successful non-empty /api/radar response');
+    }
+    await page.waitForFunction(() => {
+      const state = document.getElementById('zombie-radar-ai-state')?.textContent?.trim() || '';
+      return /RADAR ONLINE|STALE FEED|NO PICKS/.test(state);
+    }, null, { timeout: 15000 });
+    const aiRadarSnapshot = await page.evaluate(() => ({
+      state: document.getElementById('zombie-radar-ai-state')?.textContent?.trim() || '',
+      picks: document.querySelectorAll('#zombie-radar-ai-list .zrai-pick').length
+    }));
+    if (!aiRadarSnapshot.picks) failures.push('homepage Meme Radar refresh: no ranked token cards rendered');
+    const oneHourPeriod = page.locator('[data-radar-period="h1"]');
+    await oneHourPeriod.click();
+    if (await oneHourPeriod.getAttribute('aria-pressed') !== 'true') {
+      failures.push('homepage Meme Radar: selecting 1 HOUR did not update aria-pressed');
+    }
+    results.push({
+      name: 'homepage-meme-radar-refresh',
+      result: 'PASS',
+      status: radarRefreshResponse.status,
+      pairs: radarRefreshPayload.pairs.length,
+      renderedPicks: aiRadarSnapshot.picks,
+      oneHourControl: await oneHourPeriod.getAttribute('aria-pressed')
+    });
 
     const tvResponse = tvEpisodeResponses[0];
     if (tvResponse) {
@@ -329,6 +409,11 @@ function record(name, response, expectedStatus, failures, details = {}) {
       results,
       homepage: uiSnapshot,
       mobileLayoutShiftDiagnostics: layoutShiftDiagnostics,
+      wikimediaImageDiagnostics: {
+        requestCount: wikimediaImageRequests.length,
+        requests: wikimediaImageRequests,
+        domMatches: wikimediaDomMatches
+      },
       degraded,
       failures,
       note: 'Live public endpoints and unauthenticated security guards were checked from the real site origin. Telegram completion and authenticated profile writes were not attempted.',
