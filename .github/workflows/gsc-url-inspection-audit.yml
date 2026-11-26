@@ -9,9 +9,9 @@ on:
         default: "0"
         type: string
       limit:
-        description: "Maximum URLs to inspect in this batch; 0 means all remaining URLs"
+        description: "URLs per batch (recommended 50; maximum 100)"
         required: false
-        default: "0"
+        default: "50"
         type: string
   push:
     branches: [main]
@@ -21,7 +21,7 @@ on:
       - "sitemap.xml"
       - "sitemap-*.xml"
   schedule:
-    - cron: "43 6 * * 0"
+    - cron: "43 6 * * *"
 
 permissions:
   contents: read
@@ -42,7 +42,7 @@ jobs:
         env:
           GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
           START_INDEX: ${{ inputs.start_index || '0' }}
-          URL_LIMIT: ${{ inputs.limit || '0' }}
+          URL_LIMIT: ${{ inputs.limit || '50' }}
         run: |
           python - <<'PY'
           import datetime
@@ -128,9 +128,27 @@ jobs:
           if not urls:
               raise SystemExit("ERROR: No valid page URLs found in the published sitemaps.")
 
-          start_index = max(0, int(os.environ.get("START_INDEX", "0") or "0"))
-          url_limit = max(0, int(os.environ.get("URL_LIMIT", "0") or "0"))
-          selected_urls = urls[start_index:] if url_limit == 0 else urls[start_index:start_index + url_limit]
+          event_name = os.environ.get("GITHUB_EVENT_NAME", "")
+          requested_start = max(0, int(os.environ.get("START_INDEX", "0") or "0"))
+          requested_limit = max(0, int(os.environ.get("URL_LIMIT", "50") or "50"))
+          if requested_limit == 0:
+              requested_limit = 50
+          if requested_limit > 100:
+              raise SystemExit("ERROR: URL Inspection batches are capped at 100 URLs to avoid workflow timeouts.")
+
+          scheduled_batch_index = None
+          scheduled_batch_count = None
+          if event_name == "schedule":
+              batch_size = 50
+              scheduled_batch_count = (len(urls) + batch_size - 1) // batch_size
+              scheduled_batch_index = datetime.datetime.now(datetime.timezone.utc).date().toordinal() % scheduled_batch_count
+              start_index = scheduled_batch_index * batch_size
+              url_limit = batch_size
+          else:
+              start_index = requested_start
+              url_limit = requested_limit
+
+          selected_urls = urls[start_index:start_index + url_limit]
           if not selected_urls:
               raise SystemExit(f"ERROR: No URLs selected; start_index={start_index}, limit={url_limit}, total={len(urls)}.")
 
@@ -142,6 +160,8 @@ jobs:
               "unique_sitemap_urls": len(urls),
               "selected_start_index": start_index,
               "selected_url_count": len(selected_urls),
+              "scheduled_batch_index": scheduled_batch_index,
+              "scheduled_batch_count": scheduled_batch_count,
               "inspected_count": 0,
               "error_count": 0,
               "stopped_early": False,
@@ -150,7 +170,8 @@ jobs:
 
           print(f"Search Console property: {site_url}")
           print(f"Unique sitemap URLs: {len(urls)}")
-          print(f"Selected URL batch: {len(selected_urls)} starting at index {start_index}; limit={url_limit or 'all remaining'}.")
+          batch_label = f"scheduled batch {scheduled_batch_index + 1}/{scheduled_batch_count}" if scheduled_batch_index is not None else "manual batch"
+          print(f"Selected URL batch: {len(selected_urls)} starting at index {start_index}; {batch_label}; limit={url_limit}.")
           print("Inspection cadence: 1.0 seconds between requests (60 requests/minute, with headroom below API quotas).")
 
           # Each worker owns its Google API client; the shared start-time gate
