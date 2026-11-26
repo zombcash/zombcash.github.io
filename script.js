@@ -855,7 +855,7 @@ if (zomMarket) {
           image.referrerPolicy = 'no-referrer';
           link.append(image);
         }
-        if (article.enriched) link.append(makeNode('span', 'world-news-kind', newsText.original));
+        if (article.enriched) link.append(makeNode('span', 'world-news-kind', article.kind === 'news' ? newsText.comment : newsText.original));
         const meta = makeNode('span', 'world-news-meta');
         meta.append(makeNode('span', '', article.enriched ? newsText.znews : (article.source || newsText.rss)));
         meta.append(makeNode('time', '', safeDate(article.published)));
