@@ -8,6 +8,8 @@ on:
       - "shared-nav.js"
       - "assets/js/zctv-player.js"
       - "script.js"
+      - "market-data-live.js"
+      - "tests/market-data-null-format-smoke.cjs"
       - "living-world-recovery.js"
       - "tests/cwv-static-smoke.cjs"
       - ".github/workflows/cwv-static-smoke.yml"
@@ -36,3 +38,7 @@ jobs:
           node-version: 22
       - name: Check performance loading safeguards
         run: node tests/cwv-static-smoke.cjs
+      - name: Check market data script syntax
+        run: node --check market-data-live.js
+      - name: Check missing market values stay distinct from numeric zero
+        run: node tests/market-data-null-format-smoke.cjs
