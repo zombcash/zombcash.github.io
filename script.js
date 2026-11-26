@@ -866,33 +866,36 @@ if (zomMarket) {
     }
   }
 
-  function renderAlarms(market, error) {
-    if (!alertList) return;
-    const alerts = [];
-    if (error || !market) {
-      alerts.push({level:'warn', icon:'⚠', title:'MARKET CONNECTION', message:'Could not confirm the latest $ZOMBCASH snapshot. The API will retry.', badge:'RETRYING'});
-    } else {
-      const change = Number(market.priceChange?.h24);
-      const volume = Number(market.volume?.h24);
-      if (market.stale) alerts.push({level:'warn', icon:'⚠', title:'STALE MARKET SNAPSHOT', message:'The source could not refresh; showing the last known data.', badge:'STALE'});
-      if (Number.isFinite(change) && change >= 10) alerts.push({level:'warn', icon:'↗', title:'PRICE SURGE WATCH', message:'$ZOMBCASH is up ' + change.toFixed(2) + '% over 24h. Check liquidity and volatility before acting.', badge:'VOLATILE'});
-      else if (Number.isFinite(change) && change <= -10) alerts.push({level:'danger', icon:'↘', title:'DOWNSIDE ALERT', message:'$ZOMBCASH is down ' + Math.abs(change).toFixed(2) + '% over 24h. Review market conditions carefully.', badge:'HIGH VOLATILITY'});
-      if (Number.isFinite(volume) && volume >= 10000) alerts.push({level:'', icon:'◉', title:'VOLUME ACTIVITY', message:'24h trading volume has reached ' + '$' + volume.toLocaleString('en-US',{maximumFractionDigits:0}) + '.', badge:'OBSERVE'});
-      if (!alerts.length) alerts.push({level:'', icon:'◉', title:'NO CRITICAL PRICE ALERTS', message:'No ±10% 24h move detected in the latest snapshot. Stay curious, not careless.', badge:'MONITORING'});
-      alerts.push({level:'', icon:'⌁', title:'SOLANA RADAR', message:'Use the live radar to inspect other boosted tokens and compare liquidity.', badge:'LIVE'});
-    }
-    alertList.replaceChildren();
-    alerts.forEach(alert => {
-      const row = makeNode('div', 'world-alert' + (alert.level ? ' alert-' + alert.level : ''));
-      row.append(makeNode('span', 'alert-icon', alert.icon));
-      const body = makeNode('div', '');
-      body.append(makeNode('strong', '', alert.title), makeNode('p', '', alert.message));
-      row.append(body, makeNode('span', 'alert-level', alert.badge));
-      alertList.append(row);
-    });
-    if (alertStatus) alertStatus.textContent = error ? 'CONNECTION ISSUE' : (market?.stale ? 'STALE DATA' : 'MONITORING');
-  }
-
+  const alarmLocale = (document.documentElement.lang || 'en').toLowerCase();
+const alarmUi = {
+en:['MARKET CONNECTION','Could not confirm the latest $ZOMBCASH snapshot. The API will retry.','RETRYING','STALE MARKET SNAPSHOT','The source could not refresh; showing the last known data.','PRICE SURGE WATCH','$ZOMBCASH is up {n}% over 24h. Check liquidity and volatility before acting.','VOLATILE','DOWNSIDE ALERT','$ZOMBCASH is down {n}% over 24h. Review market conditions carefully.','HIGH VOLATILITY','VOLUME ACTIVITY','24h trading volume has reached $','OBSERVE','NO CRITICAL PRICE ALERTS','No ±10% 24h move detected in the latest snapshot. Stay curious, not careless.','MONITORING','SOLANA RADAR','Use the live radar to inspect other boosted tokens and compare liquidity.','LIVE','CONNECTION ISSUE','STALE DATA','MONITORING'],
+ru:['СВЯЗЬ С РЫНКОМ','Не удалось подтвердить последний снимок $ZOMBCASH. API повторит запрос.','ПОВТОР','УСТАРЕВШИЕ ДАННЫЕ РЫНКА','Источник не обновился; показаны последние известные данные.','СЛЕДИМ ЗА РОСТОМ','$ZOMBCASH вырос на {n}% за 24 часа. Проверяйте ликвидность и волатильность.','ВОЛАТИЛЬНОСТЬ','СИГНАЛ ПАДЕНИЯ','$ZOMBCASH снизился на {n}% за 24 часа. Оцените рыночную ситуацию.','ВЫСОКАЯ ВОЛАТИЛЬНОСТЬ','АКТИВНОСТЬ ОБЪЁМА','Объём торгов за 24 часа достиг $','НАБЛЮДАТЬ','КРИТИЧЕСКИХ СИГНАЛОВ НЕТ','За последние 24 часа не зафиксировано изменение ±10%. Будьте внимательны.','НАБЛЮДЕНИЕ','РАДАР SOLANA','Изучайте другие токены через радар и сравнивайте ликвидность.','АКТИВЕН','ПРОБЛЕМА С СОЕДИНЕНИЕМ','УСТАРЕВШИЕ ДАННЫЕ','НАБЛЮДЕНИЕ'],
+de:['MARKTVERBINDUNG','Der aktuelle $ZOMBCASH-Datenstand konnte nicht bestätigt werden. Die API versucht es erneut.','NEUER VERSUCH','VERALTETER MARKTSTAND','Die Quelle konnte nicht aktualisiert werden; der letzte bekannte Stand wird angezeigt.','KURSANSTIEG BEOBACHTEN','$ZOMBCASH liegt 24 Stunden um {n}% im Plus. Prüfe Liquidität und Volatilität.','VOLATIL','ABWÄRTSALARM','$ZOMBCASH liegt 24 Stunden um {n}% im Minus. Prüfe die Marktlage.','HOHE VOLATILITÄT','HANDELSVOLUMEN','Das 24-Stunden-Handelsvolumen beträgt $','BEOBACHTEN','KEINE KRITISCHEN PREISSIGNALE','Keine Veränderung von ±10 % in 24 Stunden erkannt. Bleib aufmerksam.','ÜBERWACHUNG','SOLANA-RADAR','Nutze das Live-Radar, um andere Token und ihre Liquidität zu vergleichen.','LIVE','VERBINDUNGSPROBLEM','VERALTETE DATEN','ÜBERWACHUNG'],
+fr:['CONNEXION AU MARCHÉ','Impossible de confirmer le dernier instantané $ZOMBCASH. L’API réessaiera.','NOUVEL ESSAI','DONNÉES MARCHÉ OBSOLÈTES','La source n’a pas pu actualiser les données ; affichage du dernier état connu.','SURVEILLANCE DE LA HAUSSE','$ZOMBCASH est en hausse de {n}% sur 24 h. Vérifiez liquidité et volatilité.','VOLATIL','ALERTE À LA BAISSE','$ZOMBCASH baisse de {n}% sur 24 h. Examinez les conditions du marché.','FORTE VOLATILITÉ','ACTIVITÉ DU VOLUME','Le volume de trading sur 24 h atteint $','OBSERVER','AUCUNE ALERTE DE PRIX CRITIQUE','Aucun mouvement de ±10 % sur 24 h détecté. Restez vigilant.','SURVEILLANCE','RADAR SOLANA','Utilisez le radar pour examiner d’autres tokens et comparer leur liquidité.','EN DIRECT','PROBLÈME DE CONNEXION','DONNÉES OBSOLÈTES','SURVEILLANCE'],
+it:['CONNESSIONE AL MERCATO','Impossibile confermare l’ultimo snapshot $ZOMBCASH. L’API riproverà.','NUOVO TENTATIVO','DATI DI MERCATO OBSOLETI','La fonte non si è aggiornata; vengono mostrati gli ultimi dati disponibili.','MONITORAGGIO RIALZO','$ZOMBCASH è in aumento del {n}% in 24 ore. Controlla liquidità e volatilità.','VOLATILE','ALLERTA RIBASSO','$ZOMBCASH è in calo del {n}% in 24 ore. Valuta le condizioni di mercato.','ALTA VOLATILITÀ','ATTIVITÀ VOLUMI','Il volume di trading nelle 24 ore ha raggiunto $','OSSERVA','NESSUN ALLARME PREZZO CRITICO','Nessuna variazione di ±10% nelle ultime 24 ore. Mantieni l’attenzione.','MONITORAGGIO','RADAR SOLANA','Usa il radar live per esaminare altri token e confrontare la liquidità.','LIVE','PROBLEMA DI CONNESSIONE','DATI OBSOLETI','MONITORAGGIO'],
+ja:['市場接続','最新の$ZOMBCASHデータを確認できません。APIは再試行します。','再試行中','市場データが古い','データソースを更新できません。前回のデータを表示しています。','価格上昇を監視','$ZOMBCASHは24時間で{n}%上昇。流動性と変動に注意してください。','変動中','下落アラート','$ZOMBCASHは24時間で{n}%下落。市場状況を確認してください。','高い変動性','取引量の動き','24時間の取引量は$','監視','重大な価格アラートなし','直近24時間で±10%の変動は確認されていません。慎重に行動しましょう。','監視中','SOLANAレーダー','ライブレーダーで他のトークンを確認し、流動性を比較してください。','ライブ','接続の問題','古いデータ','監視中'],
+'zh-cn':['市场连接','无法确认最新的$ZOMBCASH数据。API将重试。','正在重试','市场数据已过期','数据源未能刷新，显示最近已知数据。','关注价格上涨','$ZOMBCASH 24小时上涨{n}%。请关注流动性和波动。','波动','下跌警报','$ZOMBCASH 24小时下跌{n}%。请评估市场状况。','高波动','交易量活动','24小时交易量达到$','观察','暂无重大价格警报','最近24小时未发现±10%的变动。保持谨慎。','监测中','SOLANA雷达','使用实时雷达查看其他代币并比较流动性。','实时','连接异常','数据过期','监测中'],
+tr:['PİYASA BAĞLANTISI','En son $ZOMBCASH verisi doğrulanamadı. API yeniden deneyecek.','YENİDEN DENENİYOR','ESKİ PİYASA VERİSİ','Kaynak yenilenemedi; son bilinen veriler gösteriliyor.','YÜKSELİŞ TAKİBİ','$ZOMBCASH 24 saatte {n}% yükseldi. Likidite ve oynaklığı kontrol edin.','VOLATİL','DÜŞÜŞ UYARISI','$ZOMBCASH 24 saatte {n}% düştü. Piyasa koşullarını inceleyin.','YÜKSEK OYNAKLIK','İŞLEM HACMİ','24 saatlik işlem hacmi $','İZLE','KRİTİK FİYAT UYARISI YOK','Son 24 saatte ±10% hareket görülmedi. Dikkatli olun.','İZLENİYOR','SOLANA RADARI','Canlı radarda diğer tokenları inceleyip likiditeyi karşılaştırın.','CANLI','BAĞLANTI SORUNU','ESKİ VERİ','İZLENİYOR'],
+hi:['मार्केट कनेक्शन','$ZOMBCASH का नवीनतम डेटा सत्यापित नहीं हो सका। API पुनः प्रयास करेगी।','पुनः प्रयास','पुराना मार्केट डेटा','स्रोत अपडेट नहीं हुआ; पिछला ज्ञात डेटा दिखाया जा रहा है।','मूल्य वृद्धि पर नज़र','$ZOMBCASH 24 घंटे में {n}% बढ़ा। लिक्विडिटी और अस्थिरता जाँचें।','अस्थिर','गिरावट चेतावनी','$ZOMBCASH 24 घंटे में {n}% गिरा। बाज़ार स्थिति की समीक्षा करें।','उच्च अस्थिरता','वॉल्यूम गतिविधि','24 घंटे का ट्रेडिंग वॉल्यूम $','नज़र रखें','कोई गंभीर मूल्य अलर्ट नहीं','पिछले 24 घंटे में ±10% बदलाव नहीं मिला। सावधानी रखें।','निगरानी','SOLANA रडार','लाइव रडार पर अन्य टोकन देखें और लिक्विडिटी तुलना करें।','लाइव','कनेक्शन समस्या','पुराना डेटा','निगरानी']
+};
+const alarmText = alarmUi[alarmLocale] || alarmUi.en;
+function renderAlarms(market, error) {
+ if (!alertList) return;
+ const t=alarmText, alerts=[];
+ if(error||!market) alerts.push({level:'warn',icon:'⚠',title:t[0],message:t[1],badge:t[2]});
+ else {
+  const change=Number(market.priceChange?.h24),volume=Number(market.volume?.h24);
+  if(market.stale) alerts.push({level:'warn',icon:'⚠',title:t[3],message:t[4],badge:t[21]});
+  if(Number.isFinite(change)&&change>=10) alerts.push({level:'warn',icon:'↗',title:t[5],message:t[6].replace('{n}',change.toFixed(2)),badge:t[7]});
+  else if(Number.isFinite(change)&&change<=-10) alerts.push({level:'danger',icon:'↘',title:t[8],message:t[9].replace('{n}',Math.abs(change).toFixed(2)),badge:t[10]});
+  if(Number.isFinite(volume)&&volume>=10000) alerts.push({level:'',icon:'◉',title:t[11],message:t[12]+volume.toLocaleString('en-US',{maximumFractionDigits:0})+'.',badge:t[13]});
+  if(!alerts.length) alerts.push({level:'',icon:'◉',title:t[14],message:t[15],badge:t[16]});
+  alerts.push({level:'',icon:'⌁',title:t[17],message:t[18],badge:t[19]});
+ }
+ alertList.replaceChildren();
+ alerts.forEach(alert=>{const row=makeNode('div','world-alert'+(alert.level?' alert-'+alert.level:''));row.append(makeNode('span','alert-icon',alert.icon));const body=makeNode('div','');body.append(makeNode('strong','',alert.title),makeNode('p','',alert.message));row.append(body,makeNode('span','alert-level',alert.badge));alertList.append(row);});
+ if(alertStatus) alertStatus.textContent=error?t[20]:(market?.stale?t[21]:t[22]);
+}
   async function loadMarketAlarms() {
     try {
       const response = await zcApiFetch(apiBase + '/api/zombcash', {cache:'no-store'});
