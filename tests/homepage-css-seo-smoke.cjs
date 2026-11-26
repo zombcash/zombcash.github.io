@@ -78,7 +78,7 @@ assert.match(ribbonScript, /wrap\.removeAttribute\('aria-busy'\)/, 'live ribbon 
 assert.match(ribbonScript, /var themes=\['alert','market','community'\]/, 'ribbon visual themes must match the displayed order: crypto, FX, market pulse');
 assert.match(ribbonScript, /zc-ribbon--alert \.zc-ribbon-label/, 'live market data source label must be attached to the crypto ticker, not another ribbon');
 assert.match(ribbonScript, /function localizeStatus\(/, 'loading and unavailable fallback states must be localized');
-for (const locale of ['en','de','fr','it','ja','zh-CN','ru','tr','hi']) assert.ok(ribbonScript.includes(locale+':{loading:'), 'localized ticker fallback copy missing for '+locale);
+for (const locale of ['en','de','fr','it','ja','zh-CN','ru','tr','hi']) assert.ok(ribbonScript.includes(locale+':{loading:') || ribbonScript.includes('\''+locale+'\':{loading:'), 'localized ticker fallback copy missing for '+locale);
 const pages = [
   'index.html', 'de/index.html', 'fr/index.html', 'it/index.html',
   'ja/index.html', 'zh-CN/index.html', 'ru/index.html', 'tr/index.html', 'hi/index.html'
