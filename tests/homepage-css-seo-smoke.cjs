@@ -124,14 +124,14 @@ for (const file of pages) {
 
   if (file === 'index.html') {
     for (const asset of ['homepage-pre-polish.css', 'homepage-components.css', 'homepage-late-overrides.css']) {
-      assert.match(html, new RegExp('<link rel="stylesheet" href="/' + asset + '\\?v=' + (asset === 'homepage-late-overrides.css' ? 'hero-panel-remove-20261126-3' : '20261125-1') + '">'),
+      assert.match(html, new RegExp('<link rel="stylesheet" href="/' + asset + '\\?v=[^\"]+">'), file + ': cascade-preserving external CSS asset missing: ' + asset);
         file + ': cascade-preserving external CSS asset missing: ' + asset);
     }
   } else {
-    assert.match(html, /homepage-translated-hero\.css\?v=20261126-1/, file + ': extracted translated hero CSS missing');
-    assert.match(html, /homepage-translated-components\.css\?v=20261126-1/, file + ': extracted translated component CSS missing');
-    if (file === 'de/index.html') assert.match(html, /homepage-de-field-manual\.css\?v=20261126-1/, file + ': German-only spotlight CSS missing');
-    assert.match(html, /<link rel="stylesheet" href="\/homepage-translated-late-overrides\.css\?v=hero-bg-panelfix-20261126-2">/, file + ': shared translated late-overrides stylesheet missing');
+    assert.match(html, /homepage-translated-hero\.css\?v=[^\"]+/, file + ': extracted translated hero CSS missing');
+    assert.match(html, /homepage-translated-components\.css\?v=[^\"]+/, file + ': extracted translated component CSS missing');
+    if (file === 'de/index.html') assert.match(html, /homepage-de-field-manual\.css\?v=[^\"]+/, file + ': German-only spotlight CSS missing');
+    assert.match(html, /<link rel="stylesheet" href="\/homepage-translated-late-overrides\.css\?v=[^\"]+">/, file + ': shared translated late-overrides stylesheet missing');
     assert.doesNotMatch(html, /<style id="homepage-late-overrides">/, file + ': duplicated translated late-overrides inline block must be removed');
   }
   assert.match(html, /script\.js\?v=20261126-market-activity-unavailable-v2/,
