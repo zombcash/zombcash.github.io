@@ -1,0 +1,26 @@
+name: CSS cascade dedupe smoke
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "style.css"
+      - "site-polish.css"
+      - "homepage-components.css"
+      - "homepage-translated-late-overrides.css"
+      - "tests/css-cascade-dedupe-smoke.cjs"
+      - ".github/workflows/css-cascade-dedupe-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  css-dedupe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node tests/css-cascade-dedupe-smoke.cjs
