@@ -37,7 +37,7 @@ def css(path):
 base = css("survivor-field-manual-inline.css")
 english = css("survivor-field-manual-english.css")
 translated = css("survivor-field-manual-translated.css")
-assert ".field-manual-grid" in base and ".field-manual-card" in base and ".field-manual-search" in base
+assert ".grid" in base and ".card" in base and ".checklist" in base and ".article-card" in base
 assert ".book-cover-placeholder" in english and ".book-cover-placeholder" not in translated
 assert ".outbreak-ad-unit" in translated and ".outbreak-ad-unit" not in english
 
@@ -51,8 +51,10 @@ for page in PAGES:
     else:
         expected = ["../survivor-field-manual-inline.css?v=20261126-1", "../survivor-field-manual-translated.css?v=20261126-1"]
     assert all(parser.links.count(href) == 1 for href in expected), f"{page}: missing/duplicate extracted CSS links"
-    assert parser.links.index(expected[0]) < parser.links.index("editorial-atmosphere.css?v=20261103-noir1"), f"{page}: cascade order changed"
-    assert parser.links.index(expected[1]) < parser.links.index("editorial-atmosphere.css?v=20261103-noir1"), f"{page}: supplemental stylesheet order changed"
+    editorial_index = next((i for i, href in enumerate(parser.links) if href.endswith("editorial-atmosphere.css?v=20261103-noir1")), -1)
+    assert editorial_index >= 0, f"{page}: editorial atmosphere stylesheet missing"
+    assert parser.links.index(expected[0]) < editorial_index, f"{page}: cascade order changed"
+    assert parser.links.index(expected[1]) < editorial_index, f"{page}: supplemental stylesheet order changed"
     assert f'<html lang="{("en" if page == "survivor-field-manual.html" else page.split("/")[0])}">' in html
     print(f"PASS {page}: 0 inline style blocks; shared + locale-specific CSS in preserved order")
 print("PASS field manual CSS extraction, English cover rule, and translated ad rules.")
