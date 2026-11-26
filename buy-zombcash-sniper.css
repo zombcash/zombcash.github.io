@@ -1,0 +1,23 @@
+.sniper-demo{border:1px solid rgba(177,198,154,.35);padding:clamp(16px,3vw,26px);background:linear-gradient(145deg,rgba(22,31,27,.94),rgba(8,13,14,.96))}
+.sniper-demo .sniper-kicker{color:#b1c69a;font:700 10px/1.5 Orbitron,system-ui,sans-serif;letter-spacing:.18em}
+.sniper-demo h2{margin:8px 0 10px;font-size:clamp(22px,3vw,30px)}
+.sniper-demo .sniper-demo-tag{display:inline-block;padding:5px 9px;border:1px solid #b1c69a66;color:#c7d9b5;font:700 10px/1.4 Orbitron,system-ui,sans-serif;letter-spacing:.12em}
+.sniper-demo .sniper-muted{color:#aab5ad;font-size:13px;line-height:1.6}
+.sniper-demo .sniper-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0}
+.sniper-demo .sniper-field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.sniper-demo .sniper-field label{color:#aebbb0;font-size:10px;font-weight:700;letter-spacing:.07em}
+.sniper-demo input{width:100%;min-width:0;min-height:40px;padding:9px 10px;border:1px solid #536257;border-radius:2px;background:#080e0d;color:#edf5eb;font:600 14px system-ui}
+.sniper-demo .sniper-section-title{margin:24px 0 10px;padding-top:14px;border-top:1px solid rgba(184,198,190,.17);font:700 13px/1.5 Orbitron,system-ui,sans-serif;letter-spacing:.08em;color:#dbe4dc}
+.sniper-demo .sniper-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:12px 0}
+.sniper-demo .sniper-candidate,.sniper-demo .sniper-position{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto auto;align-items:center;gap:12px;padding:13px 0;border-top:1px solid rgba(184,198,190,.13)}
+.sniper-demo .sniper-candidate-main{min-width:0;display:grid;gap:4px}.sniper-demo .sniper-token-name{overflow-wrap:anywhere;color:#e4eadf}
+.sniper-demo .sniper-candidate-stats{display:grid;gap:4px;color:#c3cec4;font-size:12px;font-variant-numeric:tabular-nums}
+.sniper-demo .sniper-link{font-size:10px;white-space:nowrap}
+.sniper-demo .sniper-action{min-height:36px;padding:8px 11px;border:1px solid #a9bf91;background:#a9bf91;color:#101610;border-radius:0;font:800 10px/1.3 Orbitron,system-ui,sans-serif;cursor:pointer}
+.sniper-demo .sniper-close{background:transparent;color:#c6d3c6;border-color:#66776a}
+.sniper-demo .sniper-position{grid-template-columns:1fr auto;gap:8px}
+.sniper-demo .sniper-position-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+.sniper-demo .sniper-position-detail{grid-column:1/-1;color:#aab5ad;font-size:12px}
+.sniper-demo .sniper-positive{color:#b7d89d}.sniper-demo .sniper-negative{color:#e1a6a6}
+.sniper-demo .sniper-notice{margin:14px 0;padding:12px 14px;border-left:2px solid #9c9b83;background:#121817;color:#c3cec4;font-size:12px;line-height:1.6}
+@media(max-width:760px){.sniper-demo .sniper-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.sniper-demo .sniper-candidate{grid-template-columns:1fr auto}.sniper-demo .sniper-candidate-stats{grid-column:1/-1;grid-row:2}.sniper-demo .sniper-link{grid-column:1;grid-row:3}.sniper-demo .sniper-action{grid-column:2;grid-row:3}}
