@@ -664,7 +664,7 @@ if (zomMarket) {
   const zomRefresh = document.getElementById('zombcash-market-refresh');
   let zomBusy = false;
   const marketUi = {
-    en:{scan:mz().scan,unavailable:mz().unavailable,last:mz().last,activity:mz().activity,online:mz().online,lastUpdate:'LAST SOURCE UPDATE',updated:'SOURCE UPDATED',unknown:mz().unknown,error:mz().error,retry:mz().retry},
+    en:{scan:'SCANNING TOKEN…',unavailable:'MARKET DATA UNAVAILABLE',last:'LAST KNOWN DATA',activity:'PRICE AVAILABLE · ACTIVITY UNAVAILABLE',online:'TOKEN FEED ONLINE',lastUpdate:'LAST SOURCE UPDATE',updated:'SOURCE UPDATED',unknown:'UNKNOWN',error:'SIGNAL UNAVAILABLE',retry:'TRY REFRESHING LATER'},
     ru:{scan:'СКАНИРОВАНИЕ ТОКЕНА…',unavailable:'РЫНОЧНЫЕ ДАННЫЕ НЕДОСТУПНЫ',last:'ПОСЛЕДНИЕ ИЗВЕСТНЫЕ ДАННЫЕ',activity:'ЦЕНА ДОСТУПНА · АКТИВНОСТЬ НЕДОСТУПНА',online:'ПОТОК ТОКЕНА АКТИВЕН',lastUpdate:'ПОСЛЕДНЕЕ ОБНОВЛЕНИЕ ИСТОЧНИКА',updated:'ИСТОЧНИК ОБНОВЛЁН',unknown:'НЕИЗВЕСТНО',error:'СИГНАЛ НЕДОСТУПЕН',retry:'ПОПРОБУЙТЕ ОБНОВИТЬ ПОЗЖЕ'},
     de:{scan:'TOKEN WIRD GESCANNT…',unavailable:'MARKTDATEN NICHT VERFÜGBAR',last:'LETZTE BEKANNTE DATEN',activity:'PREIS VERFÜGBAR · AKTIVITÄT NICHT VERFÜGBAR',online:'TOKEN-FEED ONLINE',lastUpdate:'LETZTE QUELLENAKTUALISIERUNG',updated:'QUELLE AKTUALISIERT',unknown:'UNBEKANNT',error:'SIGNAL NICHT VERFÜGBAR',retry:'BITTE BALD ERNEUT AKTUALISIEREN'},
     fr:{scan:'ANALYSE DU TOKEN…',unavailable:'DONNÉES DE MARCHÉ INDISPONIBLES',last:'DERNIÈRES DONNÉES CONNUES',activity:'PRIX DISPONIBLE · ACTIVITÉ INDISPONIBLE',online:'FLUX DU TOKEN EN LIGNE',lastUpdate:'DERNIÈRE MISE À JOUR DE LA SOURCE',updated:'SOURCE ACTUALISÉE',unknown:'INCONNU',error:'SIGNAL INDISPONIBLE',retry:'RÉESSAYEZ D’ACTUALISER BIENTÔT'},
