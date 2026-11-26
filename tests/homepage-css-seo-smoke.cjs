@@ -124,10 +124,16 @@ for (const file of pages) {
     assert.ok(html.indexOf('homepage-visual.css') < html.indexOf('homepage-translated-late-overrides.css'), file + ': shared final CSS must follow homepage-visual.css');
   }
   assert.doesNotMatch(html, /brand-search-aliases/i, file + ': artificial brand-alias paragraph remains');
+  const visibleCopy = html.replace(/<script\b[\s\S]*?<\/script>/gi, '').replace(/<style\b[\s\S]*?<\/style>/gi, '');
+  assert.doesNotMatch(visibleCopy, /\bCash\s+Zombie\b|\bCashZombie\b/i, file + ': artificial keyword variants must not appear in visible homepage copy');
   const heroCss = file === 'index.html'
     ? fs.readFileSync(path.join(root, 'homepage-pre-polish.css'), 'utf8')
     : html.match(/<style id="homepage-pre-polish">([\s\S]*?)<\/style>/i)?.[1] || '';
   assert.ok(heroCss.length > 0, file + ': consolidated hero CSS block missing');
+  const heroBaseCss = heroCss.slice(0, heroCss.indexOf('@media') >= 0 ? heroCss.indexOf('@media') : heroCss.length);
+  for (const selector of ['.hero-grid{', '.hero:before{', '.hero-content{', '.eyebrow{', '.hero-actions{', '.hero-copy{', '.hero-bottom{']) {
+    assert.equal(heroBaseCss.split(selector).length - 1, 1, file + ': active hero base selector should be consolidated: ' + selector);
+  }
   assert.doesNotMatch(heroCss, /\/\*\s*V(?:8|9|14|17|18|19|20|21)\b/i, file + ': superseded hero version history remains');
   assert.doesNotMatch(heroCss.slice(0, 6000), /\.outbreak-panel|panelOrbit|signalPulse/, file + ': stale hero panel selectors or animations remain');
   assert.match(heroCss, /\.hero:after\{[^}]*writing-mode:horizontal-tb!important/, file + ': hero pseudo-element was not reset to a horizontal rule');
