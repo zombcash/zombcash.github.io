@@ -791,7 +791,16 @@ if (zomMarket) {
       const response = await zcApiFetch(apiBase + '/api/news', {cache:'no-store'});
       if (!response.ok) throw new Error('HTTP ' + response.status);
       const data = await response.json();
-      const articles = Array.isArray(data.articles) ? data.articles.filter(article => article && (article.enriched !== true || article.kind === 'news')) : [];
+      const newsTopics = /\\b(crypto|cryptocurrency|bitcoin|btc|ethereum|eth|solana|blockchain|defi|web3|token|wallet|exchange|digital asset|stablecoin|nft|fintech|artificial intelligence|\\bai\\b|machine learning|chip|semiconductor|cybersecurity|software|privacy|technology|tech)\\b/i;
+      const coreCryptoPublishers = /\\b(coindesk|cointelegraph|the block)\\b/i;
+      const articles = Array.isArray(data.articles) ? data.articles.filter(article => {
+        if (!article) return false;
+        if (article.enriched === true) return article.kind === 'news';
+        const source = String(article.source || '');
+        const text = String(article.title || '') + ' ' + String(article.summary || '');
+        // Keep ordinary external RSS, but remove unrelated general-news stories from this crypto/technology panel.
+        return coreCryptoPublishers.test(source) || newsTopics.test(text);
+      }) : [];
       if (!articles.length) {
         newsList.replaceChildren(makeNode('p', 'world-empty', newsText.empty));
         if (newsStatus) newsStatus.textContent = newsText.quiet;
