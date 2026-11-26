@@ -5,6 +5,14 @@ const assert = require('node:assert/strict');
 
 const root = path.resolve(__dirname, '..');
 const source = fs.readFileSync(path.join(root, 'homepage-ribbons.js'), 'utf8');
+const marketScript = fs.readFileSync(path.join(root, 'script.js'), 'utf8');
+const recoveryScript = fs.readFileSync(path.join(root, 'living-world-recovery.js'), 'utf8');
+assert.ok(marketScript.includes("zomVolume.textContent = data.activityAvailable === false || data.volume?.h24 == null || !Number.isFinite(Number(data.volume.h24)) || Number(data.volume.h24) <= 0 ? '—' : zomMoney(data.volume.h24);"), 'main market card must hide unavailable/zero/invalid activity volume');
+assert.ok(recoveryScript.includes("if (byId('zombcash-volume')) byId('zombcash-volume').textContent = data.activityAvailable === false || !data.volume || data.volume.h24 == null || !Number.isFinite(Number(data.volume.h24)) || Number(data.volume.h24) <= 0 ? '—' : money(data.volume.h24);"), 'recovery market card must hide unavailable/zero/invalid activity volume');
+assert.ok(marketScript.includes("const activityAvailable = activityData.activityAvailable === true || (activityData.activityAvailable !== false && hasPositiveActivity);"), 'activity panel must distinguish no confirmed activity from confirmed counters');
+assert.ok(marketScript.includes("activityBuys.textContent = buys === null ? '—' : prettyCount(buys);"), 'unavailable buys must display a dash');
+assert.ok(marketScript.includes("activitySells.textContent = sells === null ? '—' : prettyCount(sells);"), 'unavailable sells must display a dash');
+assert.ok(marketScript.includes("activityMessages.unavailable"), 'activity panel must show an explicit unavailable message');
 const start = source.indexOf('function updateCrypto(){');
 const end = source.indexOf('function updateFx()', start);
 assert.ok(start >= 0 && end > start, 'homepage crypto updater must exist');
