@@ -12,6 +12,14 @@ on:
       - 'tests/language-transition-smoke.cjs'
       - 'tests/shared-nav-accessibility-smoke.cjs'
       - 'tests/homepage-css-seo-smoke.cjs'
+      - 'tests/css-cascade-dedupe-smoke.cjs'
+      - 'style.css'
+      - 'site-polish.css'
+      - 'homepage-components.css'
+      - 'homepage-late-overrides.css'
+      - 'homepage-translated-hero.css'
+      - 'homepage-translated-components.css'
+      - 'homepage-translated-late-overrides.css'
       - 'tests/homepage-locales-layout-smoke.cjs'
       - 'tests/homepage-zoom-layout-smoke.cjs'
       - 'de/index.html'
@@ -134,6 +142,7 @@ jobs:
           node --check tests/shared-nav-accessibility-smoke.cjs
           node --check tests/homepage-css-seo-smoke.cjs
           node tests/homepage-css-seo-smoke.cjs
+          node tests/css-cascade-dedupe-smoke.cjs
           node --check tests/survivor-hub-localization-smoke.cjs
           node --check tests/survivor-hub-visual-smoke.cjs
           node --check tests/survivor-auth-modal-accessibility-smoke.cjs
