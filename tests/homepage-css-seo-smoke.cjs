@@ -131,7 +131,7 @@ for (const file of pages) {
     assert.match(html, /homepage-translated-hero\.css\?v=20261126-1/, file + ': extracted translated hero CSS missing');
     assert.match(html, /homepage-translated-components\.css\?v=20261126-1/, file + ': extracted translated component CSS missing');
     if (file === 'de/index.html') assert.match(html, /homepage-de-field-manual\.css\?v=20261126-1/, file + ': German-only spotlight CSS missing');
-    assert.match(html, /<link rel="stylesheet" href="\/homepage-translated-late-overrides\.css\?v=20261125-1">/, file + ': shared translated late-overrides stylesheet missing');
+    assert.match(html, /<link rel="stylesheet" href="\/homepage-translated-late-overrides\.css\?v=hero-bg-panelfix-20261126-2">/, file + ': shared translated late-overrides stylesheet missing');
     assert.doesNotMatch(html, /<style id="homepage-late-overrides">/, file + ': duplicated translated late-overrides inline block must be removed');
   }
   assert.match(html, /script\.js\?v=20261126-market-activity-unavailable-v2/,
