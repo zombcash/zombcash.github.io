@@ -130,10 +130,7 @@ for (const file of pages) {
   assert.ok(heroCss.length > 0, file + ': consolidated hero CSS block missing');
   const heroBaseCss = heroCss.slice(0, heroCss.indexOf('@media') >= 0 ? heroCss.indexOf('@media') : heroCss.length);
   for (const selector of ['.hero-grid{', '.hero:before{', '.hero-content{', '.eyebrow{', '.hero-actions{', '.hero-copy{', '.hero-bottom{']) {
-    assert.equal(heroBaseCss.split(selector).length - 1, 1,
-      file + ': active hero base selector should be consolidated: ' + selector);');
-    assert.equal((heroBaseCss.match(new RegExp(escapedSelector, 'g')) || []).length, 1,
-      file + ': active hero base selector should be consolidated: ' + selector);
+    assert.equal(heroBaseCss.split(selector).length - 1, 1, file + ': active hero base selector should be consolidated: ' + selector);
   }
   assert.doesNotMatch(heroCss, /\/\*\s*V(?:8|9|14|17|18|19|20|21)\b/i, file + ': superseded hero version history remains');
   assert.doesNotMatch(heroCss.slice(0, 6000), /\.outbreak-panel|panelOrbit|signalPulse/, file + ': stale hero panel selectors or animations remain');
