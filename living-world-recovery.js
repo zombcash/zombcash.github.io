@@ -193,7 +193,7 @@
         byId('zombcash-change').textContent = Number.isFinite(change) ? ((change > 0 ? '+' : '') + change.toFixed(2) + '%') : '—';
         byId('zombcash-change').className = change > 0 ? 'change-up' : change < 0 ? 'change-down' : '';
       }
-      if (byId('zombcash-volume')) byId('zombcash-volume').textContent = money(data.volume && data.volume.h24);
+      if (byId('zombcash-volume')) byId('zombcash-volume').textContent = data.activityAvailable === false || !data.volume || data.volume.h24 == null || !Number.isFinite(Number(data.volume.h24)) || Number(data.volume.h24) <= 0 ? '—' : money(data.volume.h24);
       if (byId('zombcash-liquidity')) byId('zombcash-liquidity').textContent = money(data.liquidity && data.liquidity.usd);
       if (byId('zombcash-cap')) byId('zombcash-cap').textContent = money(data.marketCap || data.fdv);
       if (status) {
