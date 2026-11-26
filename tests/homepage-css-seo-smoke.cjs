@@ -67,7 +67,12 @@ for (const file of pages) {
   const homepageCss = file === 'index.html'
     ? ['homepage-pre-polish.css', 'homepage-components.css', 'homepage-late-overrides.css']
         .map(asset => fs.readFileSync(path.join(root, asset), 'utf8')).join('\n')
-    : inlineCss + '\n' + fs.readFileSync(path.join(root, 'homepage-translated-late-overrides.css'), 'utf8');
+    : [
+        'homepage-translated-hero.css',
+        'homepage-translated-components.css',
+        ...(file === 'de/index.html' ? ['homepage-de-field-manual.css'] : []),
+        'homepage-translated-late-overrides.css'
+      ].map(asset => fs.readFileSync(path.join(root, asset), 'utf8')).join('\n');
   assert.ok(homepageCss.includes('.zc-hero-art-panel'), file + ': current hero artwork panel styles must remain');
   assert.ok(homepageCss.includes('.zc-sponsor-art-slot'), file + ': current hero artwork slot styles must remain');
   for (const stale of [
@@ -80,8 +85,8 @@ for (const file of pages) {
   }
   const styles = [...html.matchAll(/<style\b[^>]*>/gi)];
   const bodyStyles = styles.filter(match => match.index > headEnd);
-  assert.equal(styles.length, file === 'index.html' ? 0 : 2,
-    file + ': translated homepage CSS must keep only the two locale-specific inline bundles; shared final overrides are cached externally');
+  assert.equal(styles.length, 0,
+    file + ': homepage CSS must be externally loaded; inline style blocks were consolidated');
   assert.equal(bodyStyles.length, 0, file + ': inline CSS must be loaded before body content');
   for (const selector of retiredHomepageSelectors) {
     assert.equal(html.includes('.' + selector), false,
