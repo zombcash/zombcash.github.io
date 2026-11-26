@@ -125,6 +125,10 @@ for (const file of pages) {
     assert.match(html, /homepage-translated-late-overrides\.css\?v=[^\"]+/, file + ': shared translated late-overrides stylesheet missing or cache version absent');
     assert.doesNotMatch(html, /<style id="homepage-late-overrides">/, file + ': duplicated translated late-overrides inline block must be removed');
   }
+  const homepageRuntime = fs.readFileSync(path.join(root, 'script.js'), 'utf8');
+  const marketUiBlock = homepageRuntime.match(/const marketUi = \{[\s\S]*?\n  \};/);
+  assert.ok(marketUiBlock, 'market UI localization block must exist');
+  assert.doesNotMatch(marketUiBlock[0], /\bmz\(\)/, 'market UI initialization must not call mz before its declaration');
   assert.match(html, /script\.js\?v=[^\"]+/,
     file + ': homepage runtime cache key must be refreshed so localized pages receive current ARIA fixes');
   assert.match(html, /zctv-player\.js\?v=20261125-tv-lazy-1/,
