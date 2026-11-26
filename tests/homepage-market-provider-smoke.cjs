@@ -107,7 +107,9 @@ function createZombieCashUpdater(fetchImpl) {
     fetch:(...args)=>{calls.push(args[0]);return fetchImpl(...args);},
     setItem:(key,value)=>{items[key]=value;},
     fmtPrice:value=>'USD '+Number(value).toFixed(8),
-    fmtChange:value=>(value>=0?'+':'')+Number(value).toFixed(2)+'%'
+    fmtChange:value=>(value>=0?'+':'')+Number(value).toFixed(2)+'%',
+    statusWords:{en:{unavailable:'temporarily unavailable'},ru:{unavailable:'временно недоступно'}},
+    lang:'en'
   });
   return {updater,calls,items};
 }
