@@ -37,7 +37,7 @@ const zcApiFetch = (url, options = {}, timeoutMs = 15000) => fetch(url, {
       byId('campaign-conversions').textContent = fmt(sum(['ca_copy','game_start','game_share','maker_share','cta_click','token_info_open']));
       renderList(byId('campaign-sources'), data.sources, 'No campaign traffic recorded yet.');
       renderList(byId('campaign-days'), data.daily, 'No daily events recorded yet.');
-      byId('campaign-updated').textContent = 'UPDATED ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) + ' · ' + (data.retentionDays || 60) + ' DAY RETENTION';
+      byId('campaign-updated').textContent = newsText.updated + ' ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) + ' · ' + (data.retentionDays || 60) + ' DAY RETENTION';
     } catch (_) {
       byId('campaign-updated').textContent = 'ANALYTICS TEMPORARILY UNAVAILABLE · CHECK API DEPLOYMENT';
       byId('campaign-sources').innerHTML = '<span>Analytics API is not responding yet.</span>';
@@ -634,7 +634,7 @@ async function loadRadar(force = false) {
   } catch (error) {
     console.warn('ZombieCash Radar update failed:', error);
     if (!radarTokens.length && radarRows) radarRows.innerHTML = '<tr><td colspan="6" class="radar-message">' + (radarJapaneseUI ? 'レーダー信号を利用できません。接続を確認するか、しばらくして更新してください。<br><small>データはDexScreenerから提供されます。一時的なAPI制限やブラウザーの制限で停止することがあります。</small>' : 'RADAR SIGNAL UNAVAILABLE. Check your connection or refresh shortly. <br><small>Data is supplied by DexScreener; temporary API limits or browser restrictions can interrupt the feed.</small>') + '</td></tr>';
-    if (radarStatus) radarStatus.textContent = radarTokens.length ? (radarJapaneseUI ? '前回のシグナルを表示中' : 'SHOWING LAST SIGNAL') : (radarJapaneseUI ? 'シグナルが中断されました' : 'SIGNAL INTERRUPTED');
+    if (radarStatus) radarStatus.textContent = radarTokens.length ? (radarJapaneseUI ? '前回のシグナルを表示中' : 'SHOWING LAST SIGNAL') : (radarJapaneseUI ? 'シグナルが中断されました' : newsText.interrupted);
     if (radarUpdated && !lastRadarSuccess) radarUpdated.textContent = radarJapaneseUI ? '再試行できます' : 'RETRY AVAILABLE';
   } finally {
     radarBusy = false;
@@ -721,7 +721,20 @@ if (zomMarket) {
 
 // Living World: shared RSS news, live token alarms, daily missions and community events.
 (() => {
-  const missionJapaneseUI = document.documentElement.lang === 'ja';
+  const uiLocale = (document.documentElement.lang || 'en').toLowerCase();
+  const missionJapaneseUI = uiLocale === 'ja';
+  const newsUi = {
+    en:{sync:newsText.sync,quiet:newsText.quiet,waiting:newsText.waiting,online:newsText.online,last:newsText.last,updated:'UPDATED',interrupted:newsText.interrupted,retry:newsText.retry,empty:newsText.empty,quietError:newsText.quietError,original:newsText.original,znews:newsText.znews,rss:newsText.rss,comment:newsText.comment},
+    ru:{sync:'СИНХРОНИЗАЦИЯ RSS',quiet:'RSS ЛЕНТА ПУСТА',waiting:'ОЖИДАНИЕ ВНЕШНИХ НОВОСТЕЙ',online:'RSS ЛЕНТА АКТИВНА',last:'ПОСЛЕДНИЙ RSS СНИМОК',updated:'ОБНОВЛЕНО',interrupted:'СИГНАЛ ПРЕРВАН',retry:'АВТОМАТИЧЕСКИЙ ПОВТОР',empty:'Сейчас нет внешних RSS-передач. Лента попробует обновиться автоматически.',quietError:'RSS-частоты сейчас тихи. Лента попробует обновиться автоматически.',original:'☣ ОРИГИНАЛ ZOMBIECASH',znews:'НОВОСТИ ZOMBIECASH',rss:'RSS-ПЕРЕДАЧА',comment:'🧟 КОММЕНТАРИЙ ЗОМБИ'},
+    de:{sync:'RSS-SYNCHRONISIERUNG',quiet:'RSS-FEED LEER',waiting:'WARTEN AUF EXTERNE NACHRICHTEN',online:'RSS-FEED ONLINE',last:'LETZTER RSS-STAND',updated:'AKTUALISIERT',interrupted:'SIGNAL UNTERBROCHEN',retry:'AUTOMATISCHER NEUVERSUCH',empty:'Derzeit sind keine externen RSS-Meldungen verfügbar. Der Feed versucht es erneut.',quietError:'Die RSS-Frequenzen sind derzeit ruhig. Der Feed versucht es erneut.',original:newsText.original,znews:'ZOMBIECASH-NACHRICHTEN',rss:'RSS-MELDUNG',comment:'🧟 ZOMBIE-KOMMENTAR'},
+    fr:{sync:'SYNCHRONISATION RSS',quiet:'FLUX RSS CALME',waiting:'EN ATTENTE DE NOUVELLES EXTERNES',online:'FLUX RSS EN LIGNE',last:'DERNIER ÉTAT RSS',updated:'MIS À JOUR',interrupted:'SIGNAL INTERROMPU',retry:'NOUVEL ESSAI AUTOMATIQUE',empty:'Aucune transmission RSS externe pour le moment. Le flux réessaiera automatiquement.',quietError:'Les fréquences RSS sont calmes. Le flux réessaiera automatiquement.',original:'☣ ORIGINAL ZOMBIECASH',znews:'ACTUALITÉS ZOMBIECASH',rss:'TRANSMISSION RSS',comment:'🧟 COMMENTAIRE ZOMBIE'},
+    it:{sync:'SINCRONIZZAZIONE RSS',quiet:'FEED RSS QUIETO',waiting:'IN ATTESA DI NOTIZIE ESTERNE',online:'FEED RSS ONLINE',last:'ULTIMO STATO RSS',updated:'AGGIORNATO',interrupted:'SEGNALE INTERROTTO',retry:'NUOVO TENTATIVO AUTOMATICO',empty:'Al momento non sono disponibili trasmissioni RSS esterne. Il feed riproverà automaticamente.',quietError:'Le frequenze RSS sono silenziose. Il feed riproverà automaticamente.',original:'☣ ORIGINALE ZOMBIECASH',znews:'NOTIZIE ZOMBIECASH',rss:'TRASMISSIONE RSS',comment:'🧟 COMMENTO ZOMBIE'},
+    ja:{sync:'RSS同期中',quiet:'RSS配信なし',waiting:'外部ニュースを待機中',online:'RSSオンライン',last:'最新RSS状態',updated:'更新',interrupted:'シグナル中断',retry:'自動再試行中',empty:'現在、外部RSSニュースはありません。自動で再試行します。',quietError:'RSSの受信が静かな状態です。自動で再試行します。',original:'☣ ZOMBIECASHオリジナル',znews:'ZOMBIECASHニュース',rss:'RSS配信',comment:'🧟 ゾンビ解説'},
+    'zh-cn':{sync:'RSS同步中',quiet:'RSS暂无内容',waiting:'等待外部新闻',online:'RSS在线',last:'最近RSS状态',updated:'更新于',interrupted:'信号中断',retry:'自动重试中',empty:'目前没有外部RSS资讯，系统将自动重试。',quietError:'RSS频道暂时安静，系统将自动重试。',original:'☣ ZOMBIECASH原创',znews:'ZOMBIECASH新闻',rss:'RSS传讯',comment:'🧟 僵尸点评'},
+    tr:{sync:'RSS SENKRONİZE EDİLİYOR',quiet:'RSS AKIŞI SESSİZ',waiting:'HARİCİ HABERLER BEKLENİYOR',online:'RSS AKTİF',last:'SON RSS DURUMU',updated:'GÜNCELLENDİ',interrupted:'SİNYAL KESİLDİ',retry:'OTOMATİK YENİDEN DENENİYOR',empty:'Şu anda harici RSS yayını yok. Akış otomatik olarak yeniden denenecek.',quietError:'RSS frekansları şu an sessiz. Akış yeniden denenecek.',original:'☣ ZOMBIECASH ORİJİNAL',znews:'ZOMBIECASH HABERLERİ',rss:'RSS İLETİSİ',comment:'🧟 ZOMBİ YORUMU'},
+    hi:{sync:'RSS सिंक हो रहा है',quiet:'RSS फ़ीड शांत है',waiting:'बाहरी समाचार की प्रतीक्षा',online:'RSS फ़ीड ऑनलाइन',last:'अंतिम RSS स्थिति',updated:'अपडेट',interrupted:'सिग्नल बाधित',retry:'स्वचालित पुनः प्रयास',empty:'अभी कोई बाहरी RSS समाचार उपलब्ध नहीं है। फ़ीड स्वतः पुनः प्रयास करेगी।',quietError:'RSS फ़्रीक्वेंसी अभी शांत हैं। फ़ीड स्वतः पुनः प्रयास करेगी।',original:'☣ ZOMBIECASH ओरिजिनल',znews:'ZOMBIECASH समाचार',rss:'RSS प्रसारण',comment:'🧟 ज़ॉम्बी टिप्पणी'}
+  };
+  const newsText = newsUi[uiLocale] || newsUi.en;
   const apiBase = 'https://zombcash-bot.fadehost.app';
   const newsList = document.getElementById('world-news-list');
   const newsStatus = document.getElementById('world-news-status');
@@ -764,16 +777,16 @@ if (zomMarket) {
 
   async function loadWorldNews() {
     window.__zombcashWorldNewsStarted = true;
-    if (newsStatus) newsStatus.textContent = 'SYNCING RSS';
+    if (newsStatus) newsStatus.textContent = newsText.sync;
     try {
       const response = await zcApiFetch(apiBase + '/api/news', {cache:'no-store'});
       if (!response.ok) throw new Error('HTTP ' + response.status);
       const data = await response.json();
       const articles = Array.isArray(data.articles) ? data.articles.filter(article => article && article.enriched !== true) : [];
       if (!articles.length) {
-        newsList.replaceChildren(makeNode('p', 'world-empty', 'No external RSS transmissions are available right now. The feed will retry automatically.'));
-        if (newsStatus) newsStatus.textContent = 'RSS FEED QUIET';
-        if (newsUpdated) newsUpdated.textContent = 'WAITING FOR EXTERNAL NEWS';
+        newsList.replaceChildren(makeNode('p', 'world-empty', newsText.empty));
+        if (newsStatus) newsStatus.textContent = newsText.quiet;
+        if (newsUpdated) newsUpdated.textContent = newsText.waiting;
         return;
       }
       newsList.replaceChildren();
@@ -813,30 +826,30 @@ if (zomMarket) {
           image.referrerPolicy = 'no-referrer';
           link.append(image);
         }
-        if (article.enriched) link.append(makeNode('span', 'world-news-kind', '☣ ZOMBIECASH ORIGINAL'));
+        if (article.enriched) link.append(makeNode('span', 'world-news-kind', newsText.original));
         const meta = makeNode('span', 'world-news-meta');
-        meta.append(makeNode('span', '', article.enriched ? 'ZOMBIECASH NEWS' : (article.source || 'RSS TRANSMISSION')));
+        meta.append(makeNode('span', '', article.enriched ? newsText.znews : (article.source || newsText.rss)));
         meta.append(makeNode('time', '', safeDate(article.published)));
         link.append(meta, makeNode('strong', 'world-news-title', article.title || 'Untitled transmission'));
         if (article.summary) link.append(makeNode('p', 'world-news-summary', article.summary));
         if (article.commentary) {
           const commentary = makeNode('div', 'world-news-commentary');
-          commentary.append(makeNode('b', '', '🧟 ZOMBIE COMMENTARY'));
+          commentary.append(makeNode('b', '', newsText.comment));
           commentary.append(makeNode('span', '', article.commentary));
           link.append(commentary);
         }
         newsList.append(link);
         renderedArticles += 1;
       }
-      if (newsStatus) newsStatus.textContent = data.stale ? 'LAST KNOWN RSS' : 'RSS FEED ONLINE';
-      if (newsUpdated) newsUpdated.textContent = 'UPDATED ' + new Date(Number(data.updatedAt || Date.now()/1000)*1000).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+      if (newsStatus) newsStatus.textContent = data.stale ? newsText.last : newsText.online;
+      if (newsUpdated) newsUpdated.textContent = newsText.updated + ' ' + new Date(Number(data.updatedAt || Date.now()/1000)*1000).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
     } catch (error) {
       console.warn('Living World RSS unavailable:', error);
-      if (newsStatus) newsStatus.textContent = 'SIGNAL INTERRUPTED';
+      if (newsStatus) newsStatus.textContent = newsText.interrupted;
       if (!newsList.querySelector('.world-news-item')) {
-        newsList.replaceChildren(makeNode('p', 'world-empty', 'The RSS frequencies are quiet right now. The feed will retry automatically.'));
+        newsList.replaceChildren(makeNode('p', 'world-empty', newsText.quietError));
       }
-      if (newsUpdated) newsUpdated.textContent = 'RETRYING AUTOMATICALLY';
+      if (newsUpdated) newsUpdated.textContent = newsText.retry;
     }
   }
 
@@ -1359,7 +1372,7 @@ if (zomMarket) {
       setText('outbreak-status', 'PARTIAL SIGNAL');
       setText('outbreak-message', 'The API is reachable, but market data is temporarily unavailable.');
     } else {
-      setText('outbreak-status', 'SIGNAL INTERRUPTED');
+      setText('outbreak-status', newsText.interrupted);
       setText('outbreak-message', 'Live status could not be verified. The page will retry automatically.');
     }
   }
