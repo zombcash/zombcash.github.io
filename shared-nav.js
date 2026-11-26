@@ -1704,7 +1704,7 @@
       } else {
         const match = file.match(/^the-meridian-of-ash-chapter-([0-9]{2})[.]html$/);
         const isPrologue = file === 'the-meridian-of-ash-prologue.html';
-        const asset = isPrologue ? 'prologue.webp' : match && Number(match[1]) <= 45 ? 'chapter-' + match[1] + '.webp' : '';
+        const asset = isPrologue ? 'prologue.webp' : match && Number(match[1]) <= 46 ? 'chapter-' + match[1] + '.webp' : '';
         const article = document.querySelector('article.copy, .copy');
         if (asset && article && !article.parentElement.querySelector('.meridian-localized-art')) {
           const heading = document.querySelector('.reader h1, main h1');
