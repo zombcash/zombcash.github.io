@@ -1148,10 +1148,11 @@ if (zomMarket) {
     area.setAttribute('fill','#9bff45');area.setAttribute('fill-opacity','.09');chartEl.append(area);
     const line=document.createElementNS('http://www.w3.org/2000/svg','path');
     line.setAttribute('d',pts.map((p,i)=>(i?'L':'M')+' '+p.x+' '+p.y).join(' '));line.setAttribute('fill','none');line.setAttribute('stroke','#9bff45');line.setAttribute('stroke-width','2.5');line.setAttribute('stroke-linejoin','round');chartEl.append(line);
+    if(stale){const warning=document.createElementNS('http://www.w3.org/2000/svg','text');warning.setAttribute('x','12');warning.setAttribute('y','16');warning.setAttribute('fill','#f0bd72');warning.setAttribute('font-size','10');warning.textContent=activityJapaneseUI?'選択期間内のデータなし — 最新の履歴を表示':'No candles in selected period — last available history shown';chartEl.append(warning);}
     const last=pts[pts.length-1],dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
     dot.setAttribute('cx',String(last.x));dot.setAttribute('cy',String(last.y));dot.setAttribute('r','4');dot.setAttribute('fill','#d9ffb0');dot.setAttribute('stroke','#9bff45');dot.setAttribute('stroke-width','2');chartEl.append(dot);
     if(chartStatus)chartStatus.textContent=(data.source||(activityJapaneseUI?'価格データ':'PRICE FEED'))+(data.stale?(activityJapaneseUI?' · キャッシュ':' · CACHED'):'')+(stale?(activityJapaneseUI?' · 古い履歴':' · STALE'):'')+' · '+chartPoints.length+(activityJapaneseUI?'ポイント':' POINTS');
-    if(stale){const warning=document.createElementNS('http://www.w3.org/2000/svg','text');warning.setAttribute('x','12');warning.setAttribute('y','16');warning.setAttribute('fill','#f0bd72');warning.setAttribute('font-size','10');warning.textContent=activityJapaneseUI?'選択期間内のデータなし — 最新の履歴を表示':'No candles in selected period — last available history shown';chartEl.append(warning);}
+
     if(chartCurrent)chartCurrent.textContent=money(points[points.length-1].price);
     const fmt=t=>new Date(Number(t)*1000).toLocaleDateString(activityJapaneseUI?'ja-JP':'en-US',{month:'short',day:'numeric',hour:chartPeriod==='24h'?'2-digit':undefined,minute:chartPeriod==='24h'?'2-digit':undefined});
     if(chartStart)chartStart.textContent=fmt(chartPoints[0].time);if(chartEnd)chartEnd.textContent=fmt(chartPoints[chartPoints.length-1].time);
