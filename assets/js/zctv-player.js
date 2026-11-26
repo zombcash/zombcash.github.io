@@ -550,7 +550,9 @@
       clearPlayer();
       text(version, 'SERVER ARCHIVE'); text(status, 'ARCHIVE MODE · SELECT AN EPISODE');
       if (download) { download.removeAttribute('href'); download.textContent = 'SELECT AN EPISODE'; }
-      render(); setSignal(false, currentId === 'featured-promo' ? 'FEATURED TRANSMISSION' : 'ARCHIVE MODE');
+      render();
+      if (episodes.length && !currentId) playEpisode(episodes[0], false);
+      setSignal(false, currentId === 'featured-promo' ? 'FEATURED TRANSMISSION' : (currentId ? 'ARCHIVE PLAYBACK' : 'ARCHIVE MODE'));
     }
     updateModeButtons();
   }
