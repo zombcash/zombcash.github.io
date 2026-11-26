@@ -46,6 +46,13 @@ assert.doesNotMatch(sharedScript, /dot\.setAttribute\('aria-label'/,
   'decorative system-status dots must not receive prohibited aria-label attributes');
 assert.match(sharedScript, /view\.setAttribute\('aria-labelledby', viewLabel\.id \+ ' ' \+ tokenSymbol\.id\)/,
   'dynamic radar links must derive their accessible names from localized visible labels and token symbols');
+const newsBlock = sharedScript.slice(sharedScript.indexOf('async function loadWorldNews()'), sharedScript.indexOf('const alarmLocale'));
+assert.match(newsBlock, /article\.enriched !== true \\|\\| article\.kind === 'news'/,
+  'Outbreak News must retain Telegram-enriched news items with Zombie Commentary while filtering community memes');
+assert.match(newsBlock, /article\.commentary/,
+  'Outbreak News must render Zombie Commentary on enriched news items');
+assert.match(newsBlock, /45 \* 60 \* 1000/,
+  'News status must show the last-known state when its cached API snapshot is older than 45 minutes');
 
 assert.ok(homepageVisualCss.includes('.zc-ai-engine-card{'),
   'community AI status card styles must live in the cached homepage stylesheet');
@@ -54,11 +61,13 @@ assert.equal(ribbonScript.includes('api.binance.com'), false,
 assert.ok(ribbonScript.includes('api.coingecko.com/api/v3/simple/price'),
   'CoinGecko remains the verified CORS-compatible browser ticker source');
 assert.ok(tvPlayerScript.includes('episodesRequestStarted = true'),
-  'TV archive requests must be gated to one user-initiated load per page view');
-assert.ok(tvPlayerScript.includes("if (item[0] === 'archive') loadEpisodes();"),
-  'Switching to archive mode must load episodes on demand');
-assert.ok(!tvPlayerScript.includes('archiveObserver'),
-  'TV archive must not spend API requests for visitors who never choose a channel or archive mode');
+  'TV archive requests must be gated to one load per page view');
+assert.ok(tvPlayerScript.includes('loadEpisodes();\\n})();'),
+  'TV must request the latest server episode on initialization instead of waiting for a channel click');
+assert.ok(tvPlayerScript.includes('RAVEN_INTRO.episode_id'),
+  'TV must use the verified latest Raven episode as the fallback rather than the October promo');
+assert.ok(tvPlayerScript.includes('youtubeEmbedUrl(') && tvPlayerScript.includes('youtube-nocookie.com/embed/'),
+  'TV Live must support YouTube iframe embeds as well as direct video sources');
 
 assert.equal(aiStatusScript.includes('createElement("style")'), false,
   'AI status script must not inject a duplicate runtime stylesheet');
@@ -122,6 +131,8 @@ for (const file of pages) {
   assert.equal((html.match(/class="zc-outbreak-ribbons/g) || []).length, 1, file + ': exactly one ribbon wrapper must exist');
   assert.equal((html.match(/class="zc-ribbon zc-ribbon--/g) || []).length, 3, file + ': all three ribbon rows must reserve their final layout before JavaScript');
   assert.match(html, /homepage-ribbons\.js\?v=20261127-ribbon-labels-1/, file + ': localized ribbon repair cache key missing');
+  assert.match(html, /zctv-player\.js\?v=20261127-tv-raven-live-2/, file + ': latest TV player cache key missing');
+  assert.match(html, /script\.js\?v=20261127-news-commentary-1/, file + ': news commentary cache key missing');
   if (file === 'index.html') {
     assert.ok(html.includes('src="/ai-model-status.js?v=20261124-timeout-1"'), 'English homepage must use the cache-busted AI status script');
     for (const asset of ['homepage-pre-polish.css', 'homepage-components.css', 'homepage-late-overrides.css']) {
