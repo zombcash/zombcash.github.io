@@ -10,7 +10,7 @@
  var lang=known.indexOf(pageLang)!==-1?pageLang:(parts.length&&known.indexOf(pathLang)!==-1?pathLang:'en');
  var copy={
  en:[['CRYPTO LIVE','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['FX RATES','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['MARKET PULSE','Live crypto prices','24-hour market changes','Currency exchange rates','Updated automatically']],
- de:[['LIVE-KRYPTO','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['WECHSELKURSE','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['MARKTPULS','Live-Kryptokurse','24-Stunden-Veränderung','Wechselkurse','Automatische Aktualisierung']],
+ de:[['KRYPTOKURSE LIVE','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['WECHSELKURSE','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['MARKTPULS','Live-Kryptokurse','24-Stunden-Veränderung','Wechselkurse','Automatische Aktualisierung']],
  fr:[['CRYPTO EN DIRECT','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['TAUX DE CHANGE','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['PULS DU MARCHÉ','Cours crypto en direct','Variation sur 24 h','Taux de change','Mise à jour automatique']],
  it:[['CRIPTO LIVE','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['TASSI DI CAMBIO','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['PULSE DEL MERCATO','Prezzi crypto in tempo reale','Variazione 24 ore','Tassi di cambio','Aggiornamento automatico']],
  ja:[['暗号資産ライブ','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['為替レート','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['マーケット速報','暗号資産のリアルタイム価格','24時間変動','為替レート','自動更新']],
