@@ -24,6 +24,13 @@ const tvPlayerScript = fs.readFileSync(path.join(root, 'assets/js/zctv-player.js
 assert.doesNotMatch(homepageVisualCss, /@(?:media|supports|container|layer)\\b[^{}]*\\{\\s*\\}/i,
   'homepage visual stylesheet must not retain empty responsive or conditional wrappers');
 const translatedLateCss = fs.readFileSync(path.join(root, 'homepage-translated-late-overrides.css'), 'utf8');
+const englishLateCss = fs.readFileSync(path.join(root, 'homepage-late-overrides.css'), 'utf8');
+assert.equal((englishLateCss.match(/body:has\(#home\) #home > section\.hero \.zc-sponsor-art-slot\{\s*box-sizing:border-box/g) || []).length, 1,
+  'English homepage artwork slot must have one authoritative base geometry rule');
+assert.equal((englishLateCss.match(/body:has\(#home\) #home > section\.hero \.zc-sponsor-art-slot img\{/g) || []).length, 1,
+  'English homepage artwork image must have one authoritative base rule');
+assert.doesNotMatch(englishLateCss, /@(?:media|supports|container|layer)[^{]*\{\s*\}/i,
+  'English homepage late overrides must not retain empty conditional wrappers');
 assert.equal((translatedLateCss.match(/body:has\(#home\) #home > section\.hero > \.hero-layout\{/g) || []).length, 1,
   'translated hero layout must have one authoritative base rule');
 assert.equal((translatedLateCss.match(/body:has\(#home\) #home > section\.hero \.zc-sponsor-art-slot\{/g) || []).length, 3,
@@ -117,7 +124,7 @@ for (const file of pages) {
 
   if (file === 'index.html') {
     for (const asset of ['homepage-pre-polish.css', 'homepage-components.css', 'homepage-late-overrides.css']) {
-      assert.match(html, new RegExp('<link rel="stylesheet" href="/' + asset + '\\?v=20261125-1">'),
+      assert.match(html, new RegExp('<link rel="stylesheet" href="/' + asset + '\\?v=' + (asset === 'homepage-late-overrides.css' ? '20261126-css-dedupe-1' : '20261125-1') + '">'),
         file + ': cascade-preserving external CSS asset missing: ' + asset);
     }
   } else {
