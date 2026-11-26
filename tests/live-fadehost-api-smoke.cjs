@@ -161,6 +161,14 @@ function record(name, response, expectedStatus, failures, details = {}) {
     if (await oneHourPeriod.getAttribute('aria-pressed') !== 'true') {
       failures.push('homepage Meme Radar: selecting 1 HOUR did not update aria-pressed');
     }
+    results.push({
+      name: 'homepage-meme-radar-refresh',
+      result: 'PASS',
+      status: radarRefreshResponse.status,
+      pairs: radarRefreshPayload.pairs.length,
+      renderedPicks: aiRadarSnapshot.picks,
+      oneHourControl: await oneHourPeriod.getAttribute('aria-pressed')
+    });
 
     const tvResponse = tvEpisodeResponses[0];
     if (tvResponse) {
