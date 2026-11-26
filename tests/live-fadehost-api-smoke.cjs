@@ -133,6 +133,43 @@ function record(name, response, expectedStatus, failures, details = {}) {
       failures.push('tv-episode-archive: selecting ARCHIVE did not update aria-pressed');
     }
 
+    // Exercise the homepage Meme Radar refresh control and its time-period tabs.
+    const aiRadarRefreshButton = page.locator('#zombie-radar-ai-refresh');
+    await aiRadarRefreshButton.waitFor({ state: 'visible', timeout: 15000 });
+    const radarRefreshResponsePromise = page.waitForResponse(response => {
+      const url = new URL(response.url());
+      return url.hostname === new URL(API_ORIGIN).hostname && url.pathname === '/api/radar';
+    }, { timeout: 15000 });
+    await aiRadarRefreshButton.click();
+    const radarRefreshResponse = await radarRefreshResponsePromise;
+    let radarRefreshPayload = null;
+    try { radarRefreshPayload = await radarRefreshResponse.json(); } catch (_) {}
+    if (!radarRefreshResponse.ok() || !Array.isArray(radarRefreshPayload?.pairs) || !radarRefreshPayload.pairs.length) {
+      failures.push('homepage Meme Radar refresh: expected a successful non-empty /api/radar response');
+    }
+    await page.waitForFunction(() => {
+      const state = document.getElementById('zombie-radar-ai-state')?.textContent?.trim() || '';
+      return /RADAR ONLINE|STALE FEED|NO PICKS/.test(state);
+    }, null, { timeout: 15000 });
+    const aiRadarSnapshot = await page.evaluate(() => ({
+      state: document.getElementById('zombie-radar-ai-state')?.textContent?.trim() || '',
+      picks: document.querySelectorAll('#zombie-radar-ai-list .zrai-pick').length
+    }));
+    if (!aiRadarSnapshot.picks) failures.push('homepage Meme Radar refresh: no ranked token cards rendered');
+    const oneHourPeriod = page.locator('[data-radar-period="h1"]');
+    await oneHourPeriod.click();
+    if (await oneHourPeriod.getAttribute('aria-pressed') !== 'true') {
+      failures.push('homepage Meme Radar: selecting 1 HOUR did not update aria-pressed');
+    }
+    results.push({
+      name: 'homepage-meme-radar-refresh',
+      result: 'PASS',
+      status: radarRefreshResponse.status,
+      pairs: radarRefreshPayload.pairs.length,
+      renderedPicks: aiRadarSnapshot.picks,
+      oneHourControl: await oneHourPeriod.getAttribute('aria-pressed')
+    });
+
     const tvResponse = tvEpisodeResponses[0];
     if (tvResponse) {
       const tvStatus = tvResponse.status();
