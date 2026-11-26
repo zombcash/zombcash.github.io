@@ -47,7 +47,7 @@ assert.doesNotMatch(sharedScript, /dot\.setAttribute\('aria-label'/,
 assert.match(sharedScript, /view\.setAttribute\('aria-labelledby', viewLabel\.id \+ ' ' \+ tokenSymbol\.id\)/,
   'dynamic radar links must derive their accessible names from localized visible labels and token symbols');
 const newsBlock = sharedScript.slice(sharedScript.indexOf('async function loadWorldNews()'), sharedScript.indexOf('const alarmLocale'));
-assert.match(newsBlock, /article\.enriched !== true \\|\\| article\.kind === 'news'/,
+assert.ok(newsBlock.includes("article.enriched !== true || article.kind === 'news'"),
   'Outbreak News must retain Telegram-enriched news items with Zombie Commentary while filtering community memes');
 assert.match(newsBlock, /article\.commentary/,
   'Outbreak News must render Zombie Commentary on enriched news items');
