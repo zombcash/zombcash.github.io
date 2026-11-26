@@ -37,7 +37,7 @@ const zcApiFetch = (url, options = {}, timeoutMs = 15000) => fetch(url, {
       byId('campaign-conversions').textContent = fmt(sum(['ca_copy','game_start','game_share','maker_share','cta_click','token_info_open']));
       renderList(byId('campaign-sources'), data.sources, 'No campaign traffic recorded yet.');
       renderList(byId('campaign-days'), data.daily, 'No daily events recorded yet.');
-      byId('campaign-updated').textContent = newsText.updated + ' ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) + ' · ' + (data.retentionDays || 60) + ' DAY RETENTION';
+      byId('campaign-updated').textContent = 'UPDATED ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) + ' · ' + (data.retentionDays || 60) + ' DAY RETENTION';
     } catch (_) {
       byId('campaign-updated').textContent = 'ANALYTICS TEMPORARILY UNAVAILABLE · CHECK API DEPLOYMENT';
       byId('campaign-sources').innerHTML = '<span>Analytics API is not responding yet.</span>';
@@ -634,7 +634,7 @@ async function loadRadar(force = false) {
   } catch (error) {
     console.warn('ZombieCash Radar update failed:', error);
     if (!radarTokens.length && radarRows) radarRows.innerHTML = '<tr><td colspan="6" class="radar-message">' + (radarJapaneseUI ? 'レーダー信号を利用できません。接続を確認するか、しばらくして更新してください。<br><small>データはDexScreenerから提供されます。一時的なAPI制限やブラウザーの制限で停止することがあります。</small>' : 'RADAR SIGNAL UNAVAILABLE. Check your connection or refresh shortly. <br><small>Data is supplied by DexScreener; temporary API limits or browser restrictions can interrupt the feed.</small>') + '</td></tr>';
-    if (radarStatus) radarStatus.textContent = radarTokens.length ? (radarJapaneseUI ? '前回のシグナルを表示中' : 'SHOWING LAST SIGNAL') : (radarJapaneseUI ? 'シグナルが中断されました' : newsText.interrupted);
+    if (radarStatus) radarStatus.textContent = radarTokens.length ? (radarJapaneseUI ? '前回のシグナルを表示中' : 'SHOWING LAST SIGNAL') : (radarJapaneseUI ? 'シグナルが中断されました' : 'SIGNAL INTERRUPTED');
     if (radarUpdated && !lastRadarSuccess) radarUpdated.textContent = radarJapaneseUI ? '再試行できます' : 'RETRY AVAILABLE';
   } finally {
     radarBusy = false;
@@ -1372,7 +1372,7 @@ if (zomMarket) {
       setText('outbreak-status', 'PARTIAL SIGNAL');
       setText('outbreak-message', 'The API is reachable, but market data is temporarily unavailable.');
     } else {
-      setText('outbreak-status', newsText.interrupted);
+      setText('outbreak-status', 'SIGNAL INTERRUPTED');
       setText('outbreak-message', 'Live status could not be verified. The page will retry automatically.');
     }
   }
