@@ -15,6 +15,14 @@ on:
       - 'tr/index.html'
       - 'hi/index.html'
       - 'homepage-visual.css'
+      - 'style.css'
+      - 'site-polish.css'
+      - 'homepage-components.css'
+      - 'homepage-late-overrides.css'
+      - 'homepage-translated-hero.css'
+      - 'homepage-translated-components.css'
+      - 'homepage-translated-late-overrides.css'
+      - 'tests/css-cascade-dedupe-smoke.cjs'
       - 'ai-model-status.js'
       - 'tests/homepage-css-seo-smoke.cjs'
       - 'tests/homepage-translated-css-smoke.py'
@@ -83,6 +91,7 @@ jobs:
         run: |
           python tests/homepage-translated-css-smoke.py
           python tests/inline-style-audit.py
+          node tests/css-cascade-dedupe-smoke.cjs
 
       - name: Verify project-owned artwork and accessibility hooks
         run: |
