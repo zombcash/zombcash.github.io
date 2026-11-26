@@ -7,7 +7,7 @@
   --zc-content:1320px;--zc-gutter:clamp(18px,5.2vw,76px);
 }
 html{scroll-behavior:smooth;scroll-padding-top:96px}
-body{;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 img,video,canvas,svg{max-width:100%}
 img{height:auto}
 a,button,input,textarea,select{touch-action:manipulation}
@@ -232,8 +232,6 @@ body:has(.zc-hero-sponsor-panel) .hero-content{
   flex-direction:column;
   justify-content:center;
   min-width:0;
-}
-body:has(.zc-hero-sponsor-panel) .field-manual-spotlight{;
 }
 body:has(.zc-hero-sponsor-panel) .zc-hero-sponsor-panel{
   align-self:stretch;
