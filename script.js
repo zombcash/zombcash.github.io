@@ -534,7 +534,7 @@ document.addEventListener('fullscreenchange', () => {
 const radarLocale = (document.documentElement.lang || 'en').toLowerCase();
 const radarJapaneseUI = radarLocale === 'ja';
 const radarUi = {
- en:{scan:'SCANNING SOLANA',scanning:'↻ SCANNING',stale:'STALE DATA — RETRYING',online:'RADAR ONLINE',last:'SHOWING LAST SIGNAL',interrupted:'SIGNAL INTERRUPTED',updated:'SOURCE UPDATED ',lastUpdated:'LAST SOURCE UPDATE ',unknown:'UNKNOWN',retry:'RETRY AVAILABLE',refresh:'↻ REFRESH',unavailable:'RADAR SIGNAL UNAVAILABLE. Check your connection or refresh shortly.',detail:'Data is supplied by DexScreener; temporary API limits or browser restrictions can interrupt the feed.'},
+ en:{scan:'SCANNING SOLANA',scanning:'↻ SCANNING',stale:'STALE DATA — RETRYING',online:'RADAR ONLINE',last:'SHOWING LAST SIGNAL',interrupted:'SIGNAL INTERRUPTED',updated:mz().updated + ' ',lastUpdated:mz().lastUpdate + ' ',unknown:mz().unknown,retry:'RETRY AVAILABLE',refresh:'↻ REFRESH',unavailable:'RADAR SIGNAL UNAVAILABLE. Check your connection or refresh shortly.',detail:'Data is supplied by DexScreener; temporary API limits or browser restrictions can interrupt the feed.'},
  ru:{scan:'СКАНИРОВАНИЕ SOLANA',scanning:'↻ СКАНИРОВАНИЕ',stale:'УСТАРЕВШИЕ ДАННЫЕ — ПОВТОР',online:'РАДАР АКТИВЕН',last:'ПОКАЗАН ПОСЛЕДНИЙ СИГНАЛ',interrupted:'СИГНАЛ ПРЕРВАН',updated:'ОБНОВЛЕНИЕ ИСТОЧНИКА ',lastUpdated:'ПОСЛЕДНЕЕ ОБНОВЛЕНИЕ ',unknown:'НЕИЗВЕСТНО',retry:'ПОВТОР ДОСТУПЕН',refresh:'↻ ОБНОВИТЬ',unavailable:'СИГНАЛ РАДАРА НЕДОСТУПЕН. Проверьте соединение или обновите страницу позже.',detail:'Данные предоставляются DexScreener; временные ограничения API или браузера могут прерывать поток.'},
  de:{scan:'SOLANA WIRD GESCANNT',scanning:'↻ SCAN LÄUFT',stale:'VERALTETE DATEN — ERNEUTER VERSUCH',online:'RADAR ONLINE',last:'LETZTES SIGNAL WIRD ANGEZEIGT',interrupted:'SIGNAL UNTERBROCHEN',updated:'QUELLE AKTUALISIERT ',lastUpdated:'LETZTE QUELLENAKTUALISIERUNG ',unknown:'UNBEKANNT',retry:'ERNEUTER VERSUCH MÖGLICH',refresh:'↻ AKTUALISIEREN',unavailable:'RADARSIGNAL NICHT VERFÜGBAR. Prüfe die Verbindung oder aktualisiere später.',detail:'Daten von DexScreener; vorübergehende API- oder Browserbeschränkungen können den Feed unterbrechen.'},
  fr:{scan:'SCAN DE SOLANA',scanning:'↻ SCAN EN COURS',stale:'DONNÉES OBSOLÈTES — NOUVEL ESSAI',online:'RADAR EN LIGNE',last:'DERNIER SIGNAL AFFICHÉ',interrupted:'SIGNAL INTERROMPU',updated:'SOURCE MISE À JOUR ',lastUpdated:'DERNIÈRE MISE À JOUR SOURCE ',unknown:'INCONNU',retry:'NOUVEL ESSAI POSSIBLE',refresh:'↻ ACTUALISER',unavailable:'SIGNAL RADAR INDISPONIBLE. Vérifiez la connexion ou réessayez plus tard.',detail:'Données fournies par DexScreener ; des limites API ou navigateur temporaires peuvent interrompre le flux.'},
@@ -663,6 +663,18 @@ if (zomMarket) {
   const zomUpdated = document.getElementById('zombcash-market-updated');
   const zomRefresh = document.getElementById('zombcash-market-refresh');
   let zomBusy = false;
+  const marketUi = {
+    en:{scan:mz().scan,unavailable:mz().unavailable,last:mz().last,activity:mz().activity,online:mz().online,lastUpdate:'LAST SOURCE UPDATE',updated:'SOURCE UPDATED',unknown:mz().unknown,error:mz().error,retry:mz().retry},
+    ru:{scan:'СКАНИРОВАНИЕ ТОКЕНА…',unavailable:'РЫНОЧНЫЕ ДАННЫЕ НЕДОСТУПНЫ',last:'ПОСЛЕДНИЕ ИЗВЕСТНЫЕ ДАННЫЕ',activity:'ЦЕНА ДОСТУПНА · АКТИВНОСТЬ НЕДОСТУПНА',online:'ПОТОК ТОКЕНА АКТИВЕН',lastUpdate:'ПОСЛЕДНЕЕ ОБНОВЛЕНИЕ ИСТОЧНИКА',updated:'ИСТОЧНИК ОБНОВЛЁН',unknown:'НЕИЗВЕСТНО',error:'СИГНАЛ НЕДОСТУПЕН',retry:'ПОПРОБУЙТЕ ОБНОВИТЬ ПОЗЖЕ'},
+    de:{scan:'TOKEN WIRD GESCANNT…',unavailable:'MARKTDATEN NICHT VERFÜGBAR',last:'LETZTE BEKANNTE DATEN',activity:'PREIS VERFÜGBAR · AKTIVITÄT NICHT VERFÜGBAR',online:'TOKEN-FEED ONLINE',lastUpdate:'LETZTE QUELLENAKTUALISIERUNG',updated:'QUELLE AKTUALISIERT',unknown:'UNBEKANNT',error:'SIGNAL NICHT VERFÜGBAR',retry:'BITTE BALD ERNEUT AKTUALISIEREN'},
+    fr:{scan:'ANALYSE DU TOKEN…',unavailable:'DONNÉES DE MARCHÉ INDISPONIBLES',last:'DERNIÈRES DONNÉES CONNUES',activity:'PRIX DISPONIBLE · ACTIVITÉ INDISPONIBLE',online:'FLUX DU TOKEN EN LIGNE',lastUpdate:'DERNIÈRE MISE À JOUR DE LA SOURCE',updated:'SOURCE ACTUALISÉE',unknown:'INCONNU',error:'SIGNAL INDISPONIBLE',retry:'RÉESSAYEZ D’ACTUALISER BIENTÔT'},
+    it:{scan:'SCANSIONE TOKEN…',unavailable:'DATI DI MERCATO NON DISPONIBILI',last:'ULTIMI DATI NOTI',activity:'PREZZO DISPONIBILE · ATTIVITÀ NON DISPONIBILE',online:'FEED TOKEN ONLINE',lastUpdate:'ULTIMO AGGIORNAMENTO FONTE',updated:'FONTE AGGIORNATA',unknown:'SCONOSCIUTO',error:'SEGNALE NON DISPONIBILE',retry:'RIPROVA AD AGGIORNARE TRA POCO'},
+    ja:{scan:'トークンをスキャン中…',unavailable:'市場データを利用できません',last:'最後に確認されたデータ',activity:'価格取得可能・取引活動は取得不可',online:'トークンフィード稼働中',lastUpdate:'ソース最終更新',updated:'ソース更新',unknown:'不明',error:'シグナル利用不可',retry:'しばらくして更新を試してください'},
+    'zh-cn':{scan:'正在扫描代币…',unavailable:'市场数据不可用',last:'最近已知数据',activity:'价格可用 · 活跃度不可用',online:'代币数据流在线',lastUpdate:'来源上次更新',updated:'来源已更新',unknown:'未知',error:'信号不可用',retry:'请稍后尝试刷新'},
+    tr:{scan:'TOKEN TARANIYOR…',unavailable:'PİYASA VERİSİ KULLANILAMIYOR',last:'SON BİLİNEN VERİ',activity:'FİYAT VAR · ETKİNLİK VERİSİ YOK',online:'TOKEN AKIŞI ÇEVRİMİÇİ',lastUpdate:'SON KAYNAK GÜNCELLEMESİ',updated:'KAYNAK GÜNCELLENDİ',unknown:'BİLİNMİYOR',error:'SİNYAL KULLANILAMIYOR',retry:'KISA SÜRE SONRA YENİDEN DENEYİN'},
+    hi:{scan:'टोकन स्कैन हो रहा है…',unavailable:'बाज़ार डेटा उपलब्ध नहीं',last:'अंतिम ज्ञात डेटा',activity:'कीमत उपलब्ध · गतिविधि उपलब्ध नहीं',online:'टोकन फ़ीड ऑनलाइन',lastUpdate:'स्रोत का अंतिम अपडेट',updated:'स्रोत अपडेट',unknown:'अज्ञात',error:'संकेत उपलब्ध नहीं',retry:'कुछ देर बाद रीफ़्रेश करें'}
+  };
+  const mz = () => marketUi[(document.documentElement.lang||'en').toLowerCase()] || marketUi.en;
   const zomMoney = value => {
     const n = Number(value);
     if (!Number.isFinite(n) || n < 0) return '—';
@@ -683,7 +695,7 @@ if (zomMarket) {
     if (zomBusy) return;
     window.__zombcashMarketCardStarted = true;
     zomBusy = true;
-    if (zomStatus) zomStatus.textContent = 'SCANNING TOKEN…';
+    if (zomStatus) zomStatus.textContent = mz().scan;
     if (zomRefresh) zomRefresh.disabled = true;
     try {
       const response = await zcApiFetch('https://zombcash-bot.fadehost.app/api/zombcash', {cache:'no-store'});
@@ -699,12 +711,12 @@ if (zomMarket) {
       zomCap.textContent = zomMoney(data.marketCap || data.fdv);
       const sourceTime = Number(data.updatedAt || 0) * 1000;
       const hasPrice = data.priceUsd != null && data.priceUsd !== '' && Number.isFinite(Number(data.priceUsd)) && Number(data.priceUsd) > 0;
-      if (zomStatus) zomStatus.textContent = !hasPrice ? 'MARKET DATA UNAVAILABLE' : (data.stale ? 'LAST KNOWN DATA' : (data.activityAvailable === false ? 'PRICE AVAILABLE · ACTIVITY UNAVAILABLE' : 'TOKEN FEED ONLINE'));
-      if (zomUpdated) zomUpdated.textContent = (data.stale ? 'LAST SOURCE UPDATE ' : 'SOURCE UPDATED ') + (sourceTime ? new Date(sourceTime).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) : 'UNKNOWN');
+      if (zomStatus) zomStatus.textContent = !hasPrice ? mz().unavailable : (data.stale ? mz().last : (data.activityAvailable === false ? mz().activity : mz().online));
+      if (zomUpdated) zomUpdated.textContent = (data.stale ? mz().lastUpdate + ' ' : mz().updated + ' ') + (sourceTime ? new Date(sourceTime).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) : mz().unknown);
     } catch (error) {
       console.warn('ZombieCash token market update failed:', error);
-      if (zomStatus) zomStatus.textContent = 'SIGNAL UNAVAILABLE';
-      if (zomUpdated) zomUpdated.textContent = 'TRY REFRESHING SHORTLY';
+      if (zomStatus) zomStatus.textContent = mz().error;
+      if (zomUpdated) zomUpdated.textContent = mz().retry;
     } finally {
       zomBusy = false;
       if (zomRefresh) zomRefresh.disabled = false;
