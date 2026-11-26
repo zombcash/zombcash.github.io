@@ -1732,6 +1732,26 @@
     const currentFile = (pathParts.length && locales.includes(pathParts[0]) ? pathParts[1] : pathParts[0]) || 'index.html';
     const chapterMatch = currentFile.match(/^the-meridian-of-ash-chapter-([0-9]{2})\.html$/);
     const isPrologue = currentFile === 'the-meridian-of-ash-prologue.html';
+    // Localized novel pages were missing reading-progress persistence. Track only
+    // localized Meridian pages here; English pages keep their existing page scripts.
+    if (locale !== 'en' && (chapterMatch || isPrologue)) {
+      const progressKey = 'meridian-reading-progress-v1';
+      const chapterNumber = chapterMatch ? Number(chapterMatch[1]) : 1;
+      const progressTitle = document.querySelector('h1')?.textContent?.trim() || (isPrologue ? 'Prologue' : 'Chapter ' + chapterNumber);
+      const progressBar = document.querySelector('.mrt-progress span');
+      let progressTicking = false;
+      const saveProgress = () => {
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const percent = maxScroll > 0 ? Math.min(100, Math.max(0, Math.round(window.scrollY / maxScroll * 100))) : 100;
+        if (progressBar) progressBar.style.width = (isPrologue ? 0 : Math.round(chapterNumber / 46 * 100)) + '%';
+        try { localStorage.setItem(progressKey, JSON.stringify({chapter:chapterNumber,title:progressTitle,percent,url:location.pathname,updatedAt:Date.now(),isPrologue})); } catch (_) {}
+        progressTicking = false;
+      };
+      window.addEventListener('scroll', () => { if (!progressTicking) { requestAnimationFrame(saveProgress); progressTicking = true; } }, {passive:true});
+      window.addEventListener('resize', saveProgress);
+      window.addEventListener('pageshow', saveProgress);
+      saveProgress();
+    }
     if (chapterMatch || isPrologue) {
       const chapter = chapterMatch ? Number(chapterMatch[1]) : 0;
       const copy = {
