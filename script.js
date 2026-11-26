@@ -547,7 +547,20 @@ document.addEventListener('fullscreenchange', () => {
 });
 
 // Live Solana Radar: public DexScreener API, no API key required.
-const radarJapaneseUI = document.documentElement.lang === 'ja';
+const radarLocale = (document.documentElement.lang || 'en').toLowerCase();
+const radarJapaneseUI = radarLocale === 'ja';
+const radarUi = {
+ en:{scan:'SCANNING SOLANA',scanning:'↻ SCANNING',stale:'STALE DATA — RETRYING',online:'RADAR ONLINE',last:'SHOWING LAST SIGNAL',interrupted:'SIGNAL INTERRUPTED',updated:'SOURCE UPDATED ',lastUpdated:'LAST SOURCE UPDATE ',unknown:'UNKNOWN',retry:'RETRY AVAILABLE',refresh:'↻ REFRESH',unavailable:'RADAR SIGNAL UNAVAILABLE. Check your connection or refresh shortly.',detail:'Data is supplied by DexScreener; temporary API limits or browser restrictions can interrupt the feed.'},
+ ru:{scan:'СКАНИРОВАНИЕ SOLANA',scanning:'↻ СКАНИРОВАНИЕ',stale:'УСТАРЕВШИЕ ДАННЫЕ — ПОВТОР',online:'РАДАР АКТИВЕН',last:'ПОКАЗАН ПОСЛЕДНИЙ СИГНАЛ',interrupted:'СИГНАЛ ПРЕРВАН',updated:'ОБНОВЛЕНИЕ ИСТОЧНИКА ',lastUpdated:'ПОСЛЕДНЕЕ ОБНОВЛЕНИЕ ',unknown:'НЕИЗВЕСТНО',retry:'ПОВТОР ДОСТУПЕН',refresh:'↻ ОБНОВИТЬ',unavailable:'СИГНАЛ РАДАРА НЕДОСТУПЕН. Проверьте соединение или обновите страницу позже.',detail:'Данные предоставляются DexScreener; временные ограничения API или браузера могут прерывать поток.'},
+ de:{scan:'SOLANA WIRD GESCANNT',scanning:'↻ SCAN LÄUFT',stale:'VERALTETE DATEN — ERNEUTER VERSUCH',online:'RADAR ONLINE',last:'LETZTES SIGNAL WIRD ANGEZEIGT',interrupted:'SIGNAL UNTERBROCHEN',updated:'QUELLE AKTUALISIERT ',lastUpdated:'LETZTE QUELLENAKTUALISIERUNG ',unknown:'UNBEKANNT',retry:'ERNEUTER VERSUCH MÖGLICH',refresh:'↻ AKTUALISIEREN',unavailable:'RADARSIGNAL NICHT VERFÜGBAR. Prüfe die Verbindung oder aktualisiere später.',detail:'Daten von DexScreener; vorübergehende API- oder Browserbeschränkungen können den Feed unterbrechen.'},
+ fr:{scan:'SCAN DE SOLANA',scanning:'↻ SCAN EN COURS',stale:'DONNÉES OBSOLÈTES — NOUVEL ESSAI',online:'RADAR EN LIGNE',last:'DERNIER SIGNAL AFFICHÉ',interrupted:'SIGNAL INTERROMPU',updated:'SOURCE MISE À JOUR ',lastUpdated:'DERNIÈRE MISE À JOUR SOURCE ',unknown:'INCONNU',retry:'NOUVEL ESSAI POSSIBLE',refresh:'↻ ACTUALISER',unavailable:'SIGNAL RADAR INDISPONIBLE. Vérifiez la connexion ou réessayez plus tard.',detail:'Données fournies par DexScreener ; des limites API ou navigateur temporaires peuvent interrompre le flux.'},
+ it:{scan:'SCANSIONE SOLANA',scanning:'↻ SCANSIONE IN CORSO',stale:'DATI OBSOLETI — NUOVO TENTATIVO',online:'RADAR ONLINE',last:'ULTIMO SEGNALE VISUALIZZATO',interrupted:'SEGNALE INTERROTTO',updated:'FONTE AGGIORNATA ',lastUpdated:'ULTIMO AGGIORNAMENTO FONTE ',unknown:'SCONOSCIUTO',retry:'NUOVO TENTATIVO DISPONIBILE',refresh:'↻ AGGIORNA',unavailable:'SEGNALE RADAR NON DISPONIBILE. Controlla la connessione o riprova più tardi.',detail:'Dati forniti da DexScreener; limiti temporanei API o browser possono interrompere il flusso.'},
+ ja:{scan:'Solanaをスキャン中',scanning:'↻ スキャン中',stale:'古いデータ — 再試行中',online:'レーダー稼働中',last:'前回のシグナルを表示中',interrupted:'シグナルが中断されました',updated:'ソース更新 ',lastUpdated:'最終ソース更新 ',unknown:'不明',retry:'再試行できます',refresh:'↻ 更新',unavailable:'レーダー信号を利用できません。接続を確認するか、しばらくして更新してください。',detail:'データはDexScreener提供。一時的なAPI制限やブラウザー制限で停止することがあります。'},
+ 'zh-cn':{scan:'正在扫描 Solana',scanning:'↻ 扫描中',stale:'数据过期 — 正在重试',online:'雷达在线',last:'显示上次信号',interrupted:'信号中断',updated:'数据源更新 ',lastUpdated:'数据源上次更新 ',unknown:'未知',retry:'可重试',refresh:'↻ 刷新',unavailable:'雷达信号不可用。请检查连接或稍后刷新。',detail:'数据由 DexScreener 提供；临时 API 或浏览器限制可能中断数据流。'},
+ tr:{scan:'SOLANA TARANIYOR',scanning:'↻ TARANIYOR',stale:'ESKİ VERİ — YENİDEN DENENİYOR',online:'RADAR AKTİF',last:'SON SİNYAL GÖSTERİLİYOR',interrupted:'SİNYAL KESİLDİ',updated:'KAYNAK GÜNCELLENDİ ',lastUpdated:'SON KAYNAK GÜNCELLEMESİ ',unknown:'BİLİNMİYOR',retry:'YENİDEN DENENEBİLİR',refresh:'↻ YENİLE',unavailable:'RADAR SİNYALİ KULLANILAMIYOR. Bağlantıyı kontrol edin veya sonra yenileyin.',detail:'Veriler DexScreener tarafından sağlanır; geçici API veya tarayıcı kısıtlamaları akışı kesebilir.'},
+ hi:{scan:'SOLANA स्कैन हो रहा है',scanning:'↻ स्कैन हो रहा है',stale:'पुराना डेटा — पुनः प्रयास',online:'रडार ऑनलाइन',last:'पिछला सिग्नल दिखाया जा रहा है',interrupted:'सिग्नल बाधित',updated:'स्रोत अपडेट ',lastUpdated:'स्रोत का अंतिम अपडेट ',unknown:'अज्ञात',retry:'पुनः प्रयास उपलब्ध',refresh:'↻ रीफ़्रेश',unavailable:'रडार सिग्नल उपलब्ध नहीं। कनेक्शन जाँचें या कुछ देर बाद रीफ़्रेश करें।',detail:'डेटा DexScreener से है; अस्थायी API या ब्राउज़र सीमाएँ फ़ीड रोक सकती हैं।'}
+};
+const radarText = radarUi[radarLocale] || radarUi.en;
 const radarRows = document.getElementById('radar-rows');
 const radarStatus = document.getElementById('radar-status');
 const radarUpdated = document.getElementById('radar-updated');
@@ -611,8 +624,8 @@ async function loadRadar(force = false) {
   if (radarBusy) return;
   if (!force && lastRadarSuccess && Date.now() - lastRadarSuccess < 55000) return;
   radarBusy = true;
-  if (radarStatus) radarStatus.textContent = radarJapaneseUI ? 'Solanaをスキャン中' : 'SCANNING SOLANA';
-  if (radarRefresh) { radarRefresh.disabled = true; radarRefresh.textContent = radarJapaneseUI ? '↻ スキャン中' : '↻ SCANNING'; }
+  if (radarStatus) radarStatus.textContent = radarText.scan;
+  if (radarRefresh) { radarRefresh.disabled = true; radarRefresh.textContent = radarText.scanning; }
   try {
     const response = await zcApiFetch('https://zombcash-bot.fadehost.app/api/radar', {cache:'no-store'});
     if (!response.ok) throw new Error('Radar API returned HTTP ' + response.status);
@@ -623,22 +636,22 @@ async function loadRadar(force = false) {
     lastRadarSuccess = Date.now();
     renderRadar();
     const sourceUpdatedAt = Number(payload.updatedAt || 0) * 1000;
-    const sourceTime = sourceUpdatedAt ? new Date(sourceUpdatedAt).toLocaleTimeString(radarJapaneseUI ? 'ja-JP' : 'en-US', {hour:'2-digit',minute:'2-digit'}) : (radarJapaneseUI ? '不明' : 'UNKNOWN');
+    const sourceTime = sourceUpdatedAt ? new Date(sourceUpdatedAt).toLocaleTimeString(radarJapaneseUI ? 'ja-JP' : 'en-US', {hour:'2-digit',minute:'2-digit'}) : (radarText.unknown);
     if (payload.stale) {
-      if (radarStatus) radarStatus.textContent = radarJapaneseUI ? '古いデータ — 再試行中' : 'STALE DATA — RETRYING';
-      if (radarUpdated) radarUpdated.textContent = (radarJapaneseUI ? '最終ソース更新 ' : 'LAST SOURCE UPDATE ') + sourceTime;
+      if (radarStatus) radarStatus.textContent = radarText.stale;
+      if (radarUpdated) radarUpdated.textContent = (radarText.lastUpdated) + sourceTime;
     } else {
-      if (radarStatus) radarStatus.textContent = radarJapaneseUI ? 'レーダー稼働中' : 'RADAR ONLINE';
-      if (radarUpdated) radarUpdated.textContent = (radarJapaneseUI ? 'ソース更新 ' : 'SOURCE UPDATED ') + sourceTime;
+      if (radarStatus) radarStatus.textContent = radarText.online;
+      if (radarUpdated) radarUpdated.textContent = (radarText.updated) + sourceTime;
     }
   } catch (error) {
     console.warn('ZombieCash Radar update failed:', error);
-    if (!radarTokens.length && radarRows) radarRows.innerHTML = '<tr><td colspan="6" class="radar-message">' + (radarJapaneseUI ? 'レーダー信号を利用できません。接続を確認するか、しばらくして更新してください。<br><small>データはDexScreenerから提供されます。一時的なAPI制限やブラウザーの制限で停止することがあります。</small>' : 'RADAR SIGNAL UNAVAILABLE. Check your connection or refresh shortly. <br><small>Data is supplied by DexScreener; temporary API limits or browser restrictions can interrupt the feed.</small>') + '</td></tr>';
-    if (radarStatus) radarStatus.textContent = radarTokens.length ? (radarJapaneseUI ? '前回のシグナルを表示中' : 'SHOWING LAST SIGNAL') : (radarJapaneseUI ? 'シグナルが中断されました' : 'SIGNAL INTERRUPTED');
-    if (radarUpdated && !lastRadarSuccess) radarUpdated.textContent = radarJapaneseUI ? '再試行できます' : 'RETRY AVAILABLE';
+    if (!radarTokens.length && radarRows) radarRows.innerHTML = '<tr><td colspan="6" class="radar-message">' + radarText.unavailable + '<br><small>' + radarText.detail + '</small>' + '</td></tr>';
+    if (radarStatus) radarStatus.textContent = radarTokens.length ? (radarText.last) : (radarText.interrupted);
+    if (radarUpdated && !lastRadarSuccess) radarUpdated.textContent = radarText.retry;
   } finally {
     radarBusy = false;
-    if (radarRefresh) { radarRefresh.disabled = false; radarRefresh.textContent = radarJapaneseUI ? '↻ 更新' : '↻ REFRESH'; }
+    if (radarRefresh) { radarRefresh.disabled = false; radarRefresh.textContent = radarText.refresh; }
   }
 }
 radarFilters.forEach(button => button.addEventListener('click', () => {
