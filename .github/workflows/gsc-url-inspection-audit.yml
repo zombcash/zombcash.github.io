@@ -6,12 +6,12 @@ on:
       start_index:
         description: "Zero-based URL index to resume from"
         required: false
-        default: "50"
+        default: "0"
         type: string
       limit:
         description: "URLs per batch (recommended 50; maximum 100)"
         required: false
-        default: "0"
+        default: "50"
         type: string
   push:
     branches: [main]
