@@ -31,6 +31,7 @@ fs.mkdirSync('zctv-layout-results', { recursive: true });
   await page.evaluate(() => { document.querySelector('#zctv-channel-hub').dataset.liveStream = 'https://youtu.be/AbCdEfGhI12'; });
   await page.locator('#zctv-channel-hub [data-zctv-mode="live"]').click();
   await page.waitForFunction(() => { const frame=document.querySelector('#zctv-channel-hub iframe.zctv-live-iframe'); return frame && frame.src.includes('/embed/AbCdEfGhI12'); }, null, { timeout: 10000 });
+  check(await page.locator('#zctv-channel-hub #zc-promo-player').evaluate(video => getComputedStyle(video).display === 'none'), 'YouTube Live iframe must replace the hidden HTML video surface');
   check(episodeRequests === 1, 'Switching to YouTube Live must not trigger a duplicate archive request');
   await page.locator('#zctv-channel-hub [data-zctv-mode="archive"]').click();
   await page.waitForFunction(() => { const video=document.querySelector('#zctv-channel-hub #zc-promo-player'); return video && video.src.includes('/episodes/2db68d18-9737-4308-b81b-e792da06d202/video'); }, null, { timeout: 10000 });
