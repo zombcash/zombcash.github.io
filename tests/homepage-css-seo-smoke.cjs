@@ -186,8 +186,10 @@ for (const file of pages) {
     const website = structuredData.find(item => item['@type'] === 'WebSite');
     assert.ok(website, 'English homepage WebSite structured data missing');
     for (const alias of ['Cash Zombie', 'CashZombie']) {
-      assert.ok(!website.alternateName?.includes(alias), 'WebSite structured data must not include artificial brand variant ' + alias);
+      assert.ok(!website.alternateName?.includes(alias), 'Search spellings must not be misrepresented as formal alternate brand names: ' + alias);
     }
+    assert.match(website.keywords || '', /Cash Zombie/, 'WebSite keywords must retain the spaced search spelling');
+    assert.match(website.keywords || '', /CashZombie/, 'WebSite keywords must retain the concatenated search spelling');
   }
   console.log('PASS', file, 'styleBlocks=' + styles.length, 'bodyStyleBlocks=0');
 }
@@ -198,4 +200,12 @@ assert.match(keywords, /ZombieCash/);
 assert.match(keywords, /Zombie Cash/);
 assert.match(keywords, /ZombCash/);
 assert.doesNotMatch(keywords, /\bCash\s+Zombie\b|\bCashZombie\b/i);
-console.log('PASS natural brand metadata retained; artificial variants removed');
+const referencePages = ['about.html', 'de/about.html', 'fr/about.html', 'it/about.html', 'ja/about.html', 'zh-CN/about.html', 'ru/about.html', 'tr/about.html', 'hi/about.html'];
+for (const file of referencePages) {
+  const reference = fs.readFileSync(path.join(root, file), 'utf8');
+  assert.match(reference, /<section class="about-section" aria-labelledby="brand-search-reference">[\s\S]*?<\/section>\s*<section class="about-section">\s*<h2>/,
+    file + ': naming reference must be a standalone section, not nested inside editorial content');
+  assert.match(reference, /Cash Zombie/, file + ': spaced search spelling must appear in the naming reference');
+  assert.match(reference, /CashZombie/, file + ': concatenated search spelling must appear in the naming reference');
+}
+console.log('PASS: search spellings are confined to WebSite keywords and the localized About reference; homepage copy and meta descriptions stay natural');
