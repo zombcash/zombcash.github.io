@@ -140,6 +140,12 @@ def read_hreflang_map(sitemap_urls, live=False):
     return alternates_by_url
 
 
+def expected_hreflang(url):
+    locale = expected_language(url)
+    # /zh-CN/ serves Simplified Chinese; normalize hreflang to the language-script code.
+    return "zh-Hans" if locale == "zh-CN" else locale
+
+
 def validate_hreflang_map(alternates_by_url, all_urls):
     """Check self references, valid targets, reciprocal links and x-default."""
     issues = []
@@ -163,6 +169,9 @@ def validate_hreflang_map(alternates_by_url, all_urls):
             })
             continue
         self_language = self_languages[0]
+        expected_self_language = expected_hreflang(url)
+        if self_language != expected_self_language:
+            issues.append({"url": url, "issue": f"hreflang self code={self_language}, expected {expected_self_language}"})
 
         english = [href for lang, href in alternates if lang == "en"]
         x_defaults = [href for lang, href in alternates if lang == "x-default"]
@@ -189,6 +198,9 @@ def validate_hreflang_map(alternates_by_url, all_urls):
                 continue
             if language == "x-default":
                 continue
+            expected_target_language = expected_hreflang(target_url)
+            if language != expected_target_language:
+                issues.append({"url": url, "issue": f"alternate language code={language}, expected {expected_target_language}", "target": target_url})
             target_alternates = set(alternates_by_url.get(target_url, []))
             if (self_language, url) not in target_alternates:
                 issues.append({
