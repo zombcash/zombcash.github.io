@@ -120,7 +120,7 @@ function pagePath(locale, slug) {
             if (result.lang !== locale) issues.push('html lang mismatch: ' + result.lang);
             if (!result.title || result.mainTextLength < 500) issues.push('missing title or main article content');
             if (result.canonical !== expected) issues.push('canonical mismatch: ' + result.canonical);
-            const expectedLocales = (item.availableLocales || locales).map(code => code === 'zh-CN' ? 'zh-Hans' : code);
+            const expectedLocales = (item.availableLocales || locales);
             const missingAlternates = expectedLocales.filter(code => !result.alternates.includes(code));
             if (missingAlternates.length || !result.alternates.includes('x-default')) {
               issues.push('incomplete hreflang cluster; missing: ' + missingAlternates.join(', '));
