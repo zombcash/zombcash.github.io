@@ -143,6 +143,9 @@ jobs:
           node --check tests/arcade-snake-iframe-smoke.cjs
           node --check tests/arcade-snake-session-save-smoke.cjs
           node --check tests/arcade-ai-worlds-visual-smoke.cjs
+      - name: Test price-history selected-window and stale-data warning
+        run: node tests/price-history-stale-window-smoke.cjs
+
       - name: Install Playwright
         run: |
           npm init -y
