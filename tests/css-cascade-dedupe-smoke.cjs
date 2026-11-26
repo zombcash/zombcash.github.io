@@ -56,7 +56,9 @@ function findMatchingBrace(source, openIndex) {
   return -1;
 }
 
-function collectDeclarations(source, context = [], output = []) {
+let emptyDeclarationCount = 0;
+
+function collectDeclarations(source, context = [], output = [], emptyBlocks = []) {
   let index = 0;
   let segmentStart = 0;
   let quote = '';
@@ -105,10 +107,11 @@ function collectDeclarations(source, context = [], output = []) {
       const closeIndex = findMatchingBrace(source, index);
       assert.notEqual(closeIndex, -1, 'CSS contains an unbalanced block');
       const body = source.slice(index + 1, closeIndex);
+      if (!stripComments(body).replace(/;/g, '').trim()) emptyBlocks.push({ header, context: context.join(' ') });
 
       if (header.startsWith('@')) {
         if (/^@(media|supports|container|layer|document|scope|keyframes|-webkit-keyframes)\b/i.test(header)) {
-          collectDeclarations(body, [...context, header], output);
+          collectDeclarations(body, [...context, header], output, emptyBlocks);
         }
       } else {
         collectRuleDeclarations(body, header, context, output);
@@ -157,6 +160,7 @@ function collectRuleDeclarations(body, selector, context, output) {
           important: /!\s*important\s*$/i.test(value)
         });
       }
+      if (atSeparator && cleaned.length === 0) emptyDeclarationCount += 1;
       declarationStart = index + 1;
     }
 
@@ -217,8 +221,12 @@ function findShadowedExactDuplicates(declarations) {
 let totalDeclarations = 0;
 for (const file of cssFiles) {
   const source = fs.readFileSync(path.join(root, file), 'utf8');
-  const declarations = collectDeclarations(source);
+  emptyDeclarationCount = 0;
+  const emptyBlocks = [];
+  const declarations = collectDeclarations(source, [], [], emptyBlocks);
   assert.ok(declarations.length > 100, file + ': CSS parser did not inspect enough declarations');
+  assert.deepEqual(emptyBlocks, [], file + ': empty CSS rules or conditional wrappers remain');
+  assert.equal(emptyDeclarationCount, 0, file + ': empty declaration separators remain');
   const duplicates = findShadowedExactDuplicates(declarations);
   assert.deepEqual(
     duplicates.map(item => ({ selector: item.selector, context: item.context, property: item.property })),
