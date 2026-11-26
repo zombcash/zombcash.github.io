@@ -1319,11 +1319,23 @@ function renderAlarms(market, error) {
 (() => {
   if (new URLSearchParams(window.location.search).get('arcadeSnake') === '1') return;
   const apiBase = 'https://zombcash-bot.fadehost.app';
+  const statusCopy = {
+    en:{online:'ONLINE',offline:'OFFLINE',stale:'LAST KNOWN MARKET DATA',live:'LIVE DEXSCREENER MARKET DATA',unavailable:'MARKET DATA TEMPORARILY UNAVAILABLE',operational:'SYSTEMS OPERATIONAL',partial:'PARTIAL SIGNAL',interrupted:'SIGNAL INTERRUPTED',operationalMsg:'Market data is responding. Community services are checked independently below.',partialMsg:'The API is reachable, but market data is temporarily unavailable.',interruptedMsg:'Live status could not be verified. The page will retry automatically.'},
+    ru:{online:'В СЕТИ',offline:'ОФЛАЙН',stale:'ПОСЛЕДНИЕ ИЗВЕСТНЫЕ ДАННЫЕ',live:'АКТУАЛЬНЫЕ ДАННЫЕ DEXSCREENER',unavailable:'РЫНОЧНЫЕ ДАННЫЕ ВРЕМЕННО НЕДОСТУПНЫ',operational:'СИСТЕМЫ РАБОТАЮТ',partial:'ЧАСТИЧНЫЙ СИГНАЛ',interrupted:'СИГНАЛ ПРЕРВАН',operationalMsg:'Рыночные данные доступны. Сервисы сообщества проверяются отдельно ниже.',partialMsg:'API доступен, но рыночные данные временно недоступны.',interruptedMsg:'Не удалось проверить статус в реальном времени. Страница повторит проверку автоматически.'},
+    de:{online:'ONLINE',offline:'OFFLINE',stale:'LETZTE BEKANNTE MARKTDATEN',live:'LIVE-DEXSCREENER-DATEN',unavailable:'MARKTDATEN VORÜBERGEHEND NICHT VERFÜGBAR',operational:'SYSTEME AKTIV',partial:'TEILWEISES SIGNAL',interrupted:'SIGNAL UNTERBROCHEN',operationalMsg:'Marktdaten reagieren. Community-Dienste werden unten separat geprüft.',partialMsg:'Die API ist erreichbar, aber Marktdaten sind vorübergehend nicht verfügbar.',interruptedMsg:'Der Live-Status konnte nicht bestätigt werden. Die Seite versucht es automatisch erneut.'},
+    fr:{online:'EN LIGNE',offline:'HORS LIGNE',stale:'DERNIÈRES DONNÉES CONNUES',live:'DONNÉES DEXSCREENER EN DIRECT',unavailable:'DONNÉES DE MARCHÉ TEMPORAIREMENT INDISPONIBLES',operational:'SYSTÈMES OPÉRATIONNELS',partial:'SIGNAL PARTIEL',interrupted:'SIGNAL INTERROMPU',operationalMsg:'Les données du marché répondent. Les services communautaires sont vérifiés séparément ci-dessous.',partialMsg:'L’API est accessible, mais les données du marché sont temporairement indisponibles.',interruptedMsg:'Le statut en direct n’a pas pu être vérifié. La page réessaiera automatiquement.'},
+    it:{online:'ONLINE',offline:'OFFLINE',stale:'ULTIMI DATI NOTI',live:'DATI DEXSCREENER LIVE',unavailable:'DATI DI MERCATO TEMPORANEAMENTE NON DISPONIBILI',operational:'SISTEMI OPERATIVI',partial:'SEGNALE PARZIALE',interrupted:'SEGNALE INTERROTTO',operationalMsg:'I dati di mercato rispondono. I servizi della community vengono verificati separatamente qui sotto.',partialMsg:'L’API è raggiungibile, ma i dati di mercato sono temporaneamente indisponibili.',interruptedMsg:'Lo stato live non è verificabile. La pagina riproverà automaticamente.'},
+    ja:{online:'オンライン',offline:'オフライン',stale:'最新確認済み市場データ',live:'DEXSCREENERライブデータ',unavailable:'市場データは一時的に利用できません',operational:'システム稼働中',partial:'部分的なシグナル',interrupted:'シグナル中断',operationalMsg:'市場データは応答しています。コミュニティサービスは下で個別に確認されます。',partialMsg:'APIには接続できますが、市場データは一時的に利用できません。',interruptedMsg:'ライブ状態を確認できませんでした。自動で再試行します。'},
+    'zh-cn':{online:'在线',offline:'离线',stale:'最近已知市场数据',live:'DEXSCREENER 实时数据',unavailable:'市场数据暂时不可用',operational:'系统运行正常',partial:'信号部分正常',interrupted:'信号中断',operationalMsg:'市场数据正常响应。社区服务将在下方单独检查。',partialMsg:'API可访问，但市场数据暂时不可用。',interruptedMsg:'无法验证实时状态，页面将自动重试。'},
+    tr:{online:'ÇEVRİMİÇİ',offline:'ÇEVRİMDIŞI',stale:'SON BİLİNEN PİYASA VERİSİ',live:'CANLI DEXSCREENER VERİSİ',unavailable:'PİYASA VERİSİ GEÇİCİ OLARAK KULLANILAMIYOR',operational:'SİSTEMLER ÇALIŞIYOR',partial:'KISMİ SİNYAL',interrupted:'SİNYAL KESİLDİ',operationalMsg:'Piyasa verileri yanıt veriyor. Topluluk hizmetleri aşağıda ayrıca kontrol ediliyor.',partialMsg:'API erişilebilir ancak piyasa verileri geçici olarak kullanılamıyor.',interruptedMsg:'Canlı durum doğrulanamadı. Sayfa otomatik olarak yeniden deneyecek.'},
+    hi:{online:'ऑनलाइन',offline:'ऑफ़लाइन',stale:'अंतिम ज्ञात बाज़ार डेटा',live:'DEXSCREENER लाइव डेटा',unavailable:'बाज़ार डेटा अस्थायी रूप से उपलब्ध नहीं',operational:'सिस्टम चालू',partial:'आंशिक संकेत',interrupted:'सिग्नल बाधित',operationalMsg:'बाज़ार डेटा प्रतिक्रिया दे रहा है। समुदाय सेवाओं की नीचे अलग से जाँच होती है।',partialMsg:'API उपलब्ध है, लेकिन बाज़ार डेटा अस्थायी रूप से उपलब्ध नहीं है।',interruptedMsg:'लाइव स्थिति सत्यापित नहीं हो सकी। पृष्ठ स्वचालित रूप से फिर प्रयास करेगा।'}
+  };
+  const sc = statusCopy[(document.documentElement.lang||'en').toLowerCase()] || statusCopy.en;
   const byId = id => document.getElementById(id);
   const setService = (name, state) => {
     const label = byId('service-' + name);
     const dot = byId('service-' + name + '-dot');
-    if (label) label.textContent = state;
+    if (label) label.textContent = state === 'ONLINE' ? sc.online : state === 'OFFLINE' ? sc.offline : state;
     if (dot) {
       dot.className = state === 'ONLINE' ? 'is-online' : state === 'OFFLINE' ? 'is-offline' : 'is-unknown';
       dot.setAttribute('aria-hidden', 'true');
@@ -1378,11 +1390,11 @@ function renderAlarms(market, error) {
       const meter = fill?.closest('.meter');
       if (meter) meter.setAttribute('aria-valuenow', String(swing === null ? 0 : Math.round(swing)));
       setText('outbreak-volume', compact(data.volume?.h24));
-      setText('status-meter-note', data.stale ? 'LAST KNOWN MARKET DATA' : 'LIVE DEXSCREENER MARKET DATA');
+      setText('status-meter-note', data.stale ? sc.stale : sc.live);
     } else {
       setText('chaos-value', '—');
       setText('outbreak-volume', '—');
-      setText('status-meter-note', 'MARKET DATA TEMPORARILY UNAVAILABLE');
+      setText('status-meter-note', sc.unavailable);
       const fill = byId('meter-fill');
       if (fill) fill.style.width = '0%';
     }
@@ -1393,13 +1405,13 @@ function renderAlarms(market, error) {
     } else setText('outbreak-visits-today', '—');
 
     if (apiOk && marketOk) {
-      setText('outbreak-status', 'SYSTEMS OPERATIONAL');
-      setText('outbreak-message', 'Market data is responding. Community services are checked independently below.');
+      setText('outbreak-status', sc.operational);
+      setText('outbreak-message', sc.operationalMsg);
     } else if (apiOk) {
-      setText('outbreak-status', 'PARTIAL SIGNAL');
-      setText('outbreak-message', 'The API is reachable, but market data is temporarily unavailable.');
+      setText('outbreak-status', sc.partial);
+      setText('outbreak-message', sc.partialMsg);
     } else {
-      setText('outbreak-status', 'SIGNAL INTERRUPTED');
+      setText('outbreak-status', sc.interrupted);
       setText('outbreak-message', 'Live status could not be verified. The page will retry automatically.');
     }
   }
