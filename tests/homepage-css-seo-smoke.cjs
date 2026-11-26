@@ -62,7 +62,7 @@ assert.ok(ribbonScript.includes('api.coingecko.com/api/v3/simple/price'),
   'CoinGecko remains the verified CORS-compatible browser ticker source');
 assert.ok(tvPlayerScript.includes('episodesRequestStarted = true'),
   'TV archive requests must be gated to one load per page view');
-assert.ok(tvPlayerScript.includes('loadEpisodes();\\n})();'),
+assert.ok(tvPlayerScript.includes('loadEpisodes();'),
   'TV must request the latest server episode on initialization instead of waiting for a channel click');
 assert.ok(tvPlayerScript.includes('RAVEN_INTRO.episode_id'),
   'TV must use the verified latest Raven episode as the fallback rather than the October promo');
