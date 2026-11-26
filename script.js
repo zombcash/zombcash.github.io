@@ -801,6 +801,14 @@ if (zomMarket) {
         // Keep ordinary external RSS, but remove unrelated general-news stories from this crypto/technology panel.
         return coreCryptoPublishers.test(source) || newsTopics.test(text);
       }) : [];
+      // Put stories with Zombie Commentary first so the seven-card panel actually shows the editorial layer, not only raw RSS headlines.
+      articles.sort(function (a, b) {
+        const commentaryRank = Number(!!b.commentary) - Number(!!a.commentary);
+        if (commentaryRank) return commentaryRank;
+        const publishedA = Date.parse(a.published || '') || 0;
+        const publishedB = Date.parse(b.published || '') || 0;
+        return publishedB - publishedA;
+      });
       if (!articles.length) {
         newsList.replaceChildren(makeNode('p', 'world-empty', newsText.empty));
         if (newsStatus) newsStatus.textContent = newsText.quiet;
