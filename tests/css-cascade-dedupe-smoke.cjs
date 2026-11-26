@@ -16,7 +16,7 @@ const cssFiles = [
 ];
 
 function stripComments(value) {
-  return value.replace(/\\/\\*[\\s\\S]*?\\*\\//g, '');
+  return value.replace(/\/\*[\s\S]*?\*\//g, '');
 }
 
 function findMatchingBrace(source, openIndex) {
@@ -38,7 +38,7 @@ function findMatchingBrace(source, openIndex) {
     }
     if (quote) {
       if (escaped) escaped = false;
-      else if (current === '\\\\') escaped = true;
+      else if (current === '\\') escaped = true;
       else if (current === quote) quote = '';
       continue;
     }
@@ -80,7 +80,7 @@ function collectDeclarations(source, context = [], output = []) {
     }
     if (quote) {
       if (escaped) escaped = false;
-      else if (current === '\\\\') escaped = true;
+      else if (current === '\\') escaped = true;
       else if (current === quote) quote = '';
       index += 1;
       continue;
@@ -101,13 +101,13 @@ function collectDeclarations(source, context = [], output = []) {
     else if (current === ']') brackets = Math.max(0, brackets - 1);
 
     if (current === '{' && parentheses === 0 && brackets === 0) {
-      const header = stripComments(source.slice(segmentStart, index)).trim().replace(/\\s+/g, ' ');
+      const header = stripComments(source.slice(segmentStart, index)).trim().replace(/\s+/g, ' ');
       const closeIndex = findMatchingBrace(source, index);
       assert.notEqual(closeIndex, -1, 'CSS contains an unbalanced block');
       const body = source.slice(index + 1, closeIndex);
 
       if (header.startsWith('@')) {
-        if (/^@(media|supports|container|layer|document|scope|keyframes|-webkit-keyframes)\\b/i.test(header)) {
+        if (/^@(media|supports|container|layer|document|scope|keyframes|-webkit-keyframes)\b/i.test(header)) {
           collectDeclarations(body, [...context, header], output);
         }
       } else {
@@ -144,17 +144,17 @@ function collectRuleDeclarations(body, selector, context, output) {
     if (atEnd || atSeparator) {
       const raw = body.slice(declarationStart, index);
       const cleaned = stripComments(raw).trim();
-      const match = cleaned.match(/^([ -\\w]+)\\s*:\\s*([\\s\\S]*)$/);
+      const match = cleaned.match(/^([-\w]+)\s*:\s*([\s\S]*)$/);
       // Leave declarations containing comments untouched: they may carry
       // fallback values or explanatory notes that should not be rewritten.
       if (match && !raw.includes('/*')) {
-        const value = match[2].trim().replace(/\\s+/g, ' ');
+        const value = match[2].trim().replace(/\s+/g, ' ');
         output.push({
           selector,
           context: context.join(' '),
           property: match[1].trim().toLowerCase(),
-          value: value.replace(/!\\s*important\\s*$/i, '').trim(),
-          important: /!\\s*important\\s*$/i.test(value)
+          value: value.replace(/!\s*important\s*$/i, '').trim(),
+          important: /!\s*important\s*$/i.test(value)
         });
       }
       declarationStart = index + 1;
@@ -171,7 +171,7 @@ function collectRuleDeclarations(body, selector, context, output) {
     }
     if (quote) {
       if (escaped) escaped = false;
-      else if (current === '\\\\') escaped = true;
+      else if (current === '\\') escaped = true;
       else if (current === quote) quote = '';
       index += 1;
       continue;
@@ -193,7 +193,7 @@ function collectRuleDeclarations(body, selector, context, output) {
 function findShadowedExactDuplicates(declarations) {
   const groups = new Map();
   for (const declaration of declarations) {
-    const key = [declaration.context, declaration.selector, declaration.property].join('\\u0000');
+    const key = [declaration.context, declaration.selector, declaration.property].join('\u0000');
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(declaration);
   }
