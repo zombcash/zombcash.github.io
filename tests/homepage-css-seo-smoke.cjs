@@ -131,7 +131,7 @@ for (const file of pages) {
   assert.ok(ribbonIndex > headEnd && ribbonIndex < html.indexOf('<main id="home">'), file + ': reserved live-ribbon skeleton must sit between shared header and homepage main');
   assert.equal((html.match(/class="zc-outbreak-ribbons/g) || []).length, 1, file + ': exactly one ribbon wrapper must exist');
   assert.equal((html.match(/class="zc-ribbon zc-ribbon--/g) || []).length, 3, file + ': all three ribbon rows must reserve their final layout before JavaScript');
-  assert.match(html, /homepage-ribbons\.js\?v=20261127-ribbon-labels-1/, file + ': localized ribbon repair cache key missing');
+  assert.match(html, /homepage-ribbons\.js\?v=20261127-ribbon-labels-2/, file + ': localized ribbon repair cache key missing');
   assert.match(html, /zctv-player\.js\?v=20261127-tv-raven-live-2/, file + ': latest TV player cache key missing');
   assert.match(html, /script\.js\?v=20261127-news-commentary-2/, file + ': news commentary cache key missing');
   if (file === 'index.html') {
