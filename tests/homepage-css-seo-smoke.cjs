@@ -31,7 +31,7 @@ assert.equal((englishLateCss.match(/body:has\(#home\) #home > section\.hero \.zc
   'English homepage artwork image must have one authoritative base rule');
 assert.doesNotMatch(englishLateCss, /@(?:media|supports|container|layer)[^{]*\{\s*\}/i,
   'English homepage late overrides must not retain empty conditional wrappers');
-assert.equal((translatedLateCss.match(/body:has\(#home\) #home > section\.hero > \.hero-layout\{/g) || []).length, 1,
+assert.equal((translatedLateCss.match(/^body:has\(#home\) #home > section\.hero > \.hero-layout\{/gm) || []).length, 1,
   'translated hero layout must have one authoritative base rule');
 assert.equal((translatedLateCss.match(/body:has\(#home\) #home > section\.hero \.zc-sponsor-art-slot\{/g) || []).length, 3,
   'translated sponsor slot must have one base rule plus its two responsive overrides');
