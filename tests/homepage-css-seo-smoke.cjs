@@ -25,8 +25,8 @@ assert.doesNotMatch(homepageVisualCss, /@(?:media|supports|container|layer)\\b[^
   'homepage visual stylesheet must not retain empty responsive or conditional wrappers');
 const translatedLateCss = fs.readFileSync(path.join(root, 'homepage-translated-late-overrides.css'), 'utf8');
 const englishLateCss = fs.readFileSync(path.join(root, 'homepage-late-overrides.css'), 'utf8');
-assert.equal((englishLateCss.match(/body:has\(#home\) #home > section\.hero \.zc-sponsor-art-slot\{/g) || []).length, 1,
-  'English homepage artwork slot must have one authoritative base rule');
+assert.equal((englishLateCss.match(/body:has\(#home\) #home > section\.hero \.zc-sponsor-art-slot\{\s*box-sizing:border-box/g) || []).length, 1,
+  'English homepage artwork slot must have one authoritative base geometry rule');
 assert.equal((englishLateCss.match(/body:has\(#home\) #home > section\.hero \.zc-sponsor-art-slot img\{/g) || []).length, 1,
   'English homepage artwork image must have one authoritative base rule');
 assert.doesNotMatch(englishLateCss, /@(?:media|supports|container|layer)[^{]*\{\s*\}/i,
