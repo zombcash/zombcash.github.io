@@ -49,7 +49,7 @@ assert.match(sharedScript, /view\.setAttribute\('aria-labelledby', viewLabel\.id
 const newsBlock = sharedScript.slice(sharedScript.indexOf('async function loadWorldNews()'), sharedScript.indexOf('const alarmLocale'));
 assert.ok(newsBlock.includes("if (article.enriched === true) return article.kind === 'news'"),
   'Outbreak News must retain Telegram-enriched news items with Zombie Commentary while filtering community memes');
-assert.ok(newsBlock.includes('const newsTopics = /\\\\b(crypto|cryptocurrency|bitcoin'), 'Outbreak News must filter unrelated general-news items');
+assert.ok(newsBlock.includes('const newsTopics =') && newsBlock.includes('crypto|cryptocurrency|bitcoin|btc'), 'Outbreak News must filter unrelated general-news items');
 assert.match(newsBlock, /article\.commentary/,
   'Outbreak News must render Zombie Commentary on enriched news items');
 assert.match(newsBlock, /45 \* 60 \* 1000/,
