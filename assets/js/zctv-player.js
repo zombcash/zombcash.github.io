@@ -335,7 +335,7 @@
   }
   function clearLiveFrame() {
     if (liveFrame) { liveFrame.src = 'about:blank'; liveFrame.remove(); liveFrame = null; }
-    if (player) player.hidden = false;
+    if (player) { player.hidden = false; player.style.removeProperty('display'); }
   }
   function loadLiveSource() {
     if (!player || !liveUrl) return false;
@@ -343,7 +343,7 @@
     if (embed) {
       const wrapper = player.closest('.zc-promo-player-wrap');
       if (!wrapper) return false;
-      player.pause(); player.removeAttribute('src'); player.load(); player.hidden = true;
+      player.pause(); player.removeAttribute('src'); player.load(); player.hidden = true; player.style.setProperty('display', 'none', 'important');
       liveFrame = document.createElement('iframe');
       liveFrame.className = 'zctv-live-iframe';
       liveFrame.title = 'ZombieCash TV YouTube Live';
