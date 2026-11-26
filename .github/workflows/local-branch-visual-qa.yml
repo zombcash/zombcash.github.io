@@ -37,6 +37,10 @@ on:
       - "tests/mobile-viewport-smoke.cjs"
       - "tests/localized-article-visual.cjs"
       - "tests/survivor-field-manual-smoke.cjs"
+      - "tests/field-manual-css-smoke.py"
+      - "survivor-field-manual-inline.css"
+      - "survivor-field-manual-english.css"
+      - "survivor-field-manual-translated.css"
       - "tests/memecoin-platforms-article-smoke.cjs"
       - "tests/language-persistence-smoke.cjs"
       - "tests/coingecko-origin-cors-smoke.cjs"
@@ -178,6 +182,9 @@ jobs:
         env:
           SITE_URL: http://127.0.0.1:4173/
         run: node tests/survivor-field-manual-smoke.cjs
+
+      - name: Verify field manual CSS extraction
+        run: python tests/field-manual-css-smoke.py
 
       - name: Test multilingual comparison article across locales and viewports
         env:
