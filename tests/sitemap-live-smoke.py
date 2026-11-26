@@ -20,26 +20,52 @@ HEADERS = {"User-Agent": "ZombieCash-Sitemap-Live-Audit/1.0"}
 class HeadParser(HTMLParser):
     def __init__(self):
         super().__init__()
+        self.in_head = False
+        self.in_title = False
         self.lang = None
+        self.titles = []
+        self.descriptions = []
         self.canonicals = []
         self.alternates = []
         self.robots_directives = []
 
     def handle_starttag(self, tag, attrs):
+        tag = tag.lower()
         attrs = dict(attrs)
-        if tag.lower() == "html":
+        if tag == "html":
             self.lang = attrs.get("lang")
-        if tag.lower() == "meta":
+        if tag == "head":
+            self.in_head = True
+            return
+        if not self.in_head:
+            return
+        if tag == "title":
+            self.titles.append("")
+            self.in_title = True
+        if tag == "meta":
             name = (attrs.get("name") or "").strip().lower()
             content = (attrs.get("content") or "").strip()
+            if name == "description":
+                self.descriptions.append(content)
             if name in {"robots", "googlebot", "bingbot"} and content:
                 self.robots_directives.append((name, content))
-        if tag.lower() == "link":
+        if tag == "link":
             rel = (attrs.get("rel") or "").lower().split()
             if "canonical" in rel and attrs.get("href"):
                 self.canonicals.append(attrs["href"])
             if "alternate" in rel and attrs.get("hreflang") and attrs.get("href"):
                 self.alternates.append((attrs["hreflang"], attrs["href"]))
+
+    def handle_endtag(self, tag):
+        tag = tag.lower()
+        if tag == "title" and self.in_head:
+            self.in_title = False
+        elif tag == "head":
+            self.in_head = False
+
+    def handle_data(self, data):
+        if self.in_head and self.in_title and self.titles:
+            self.titles[-1] += data
 
 
 def sitemap_list_from_robots(text):
@@ -234,6 +260,16 @@ def check_page(url, expected_alternates=None):
         issues.append(f"unexpected Content-Type: {content_type or '(missing)'}")
     if response.url.rstrip("/") != url.rstrip("/"):
         issues.append(f"redirected to {response.url}")
+    if len(parser.titles) != 1:
+        issues.append(f"expected one document title in head, found {len(parser.titles)}")
+    title = parser.titles[0].strip() if parser.titles else ""
+    if not title:
+        issues.append("missing or empty document title in head")
+    if len(parser.descriptions) != 1:
+        issues.append(f"expected one meta description in head, found {len(parser.descriptions)}")
+    description = parser.descriptions[0].strip() if parser.descriptions else ""
+    if not description:
+        issues.append("missing or empty meta description in head")
     if not parser.lang:
         issues.append("missing html lang")
     elif parser.lang != expected_language(url):
@@ -277,6 +313,10 @@ def check_page(url, expected_alternates=None):
         "ok": not issues,
         "status": response.status_code,
         "lang": parser.lang,
+        "title": title,
+        "title_length": len(title),
+        "description": description,
+        "description_length": len(description),
         "canonical": parser.canonicals[0] if parser.canonicals else None,
         "robots_directives": parser.robots_directives,
         "x_robots_tag": x_robots_tag or None,
@@ -369,12 +409,28 @@ def main():
             results.append(future.result())
 
     failures = sorted((item for item in results if not item["ok"]), key=lambda item: item["url"])
-    print(f"HTTP 200 + canonical/lang/hreflang checks passed: {len(results) - len(failures)}/{len(results)}")
+    title_warnings = sorted(
+        (item for item in results if item.get("title_length", 0) > 80),
+        key=lambda item: item.get("title_length", 0),
+        reverse=True,
+    )
+    description_warnings = sorted(
+        (item for item in results if item.get("description_length", 0) > 170),
+        key=lambda item: item.get("description_length", 0),
+        reverse=True,
+    )
+    print(f"HTTP 200 + canonical/lang/hreflang/title/description checks passed: {len(results) - len(failures)}/{len(results)}")
+    print(f"Long titles (>80 characters; review only): {len(title_warnings)}")
+    print(f"Long descriptions (>170 characters; review only): {len(description_warnings)}")
+    for item in title_warnings[:20]:
+        print(f"LONG_TITLE {item['title_length']} {item['url']} | {item['title']}")
+    for item in description_warnings[:20]:
+        print(f"LONG_DESCRIPTION {item['description_length']} {item['url']} | {item['description']}")
     print(f"Failures: {len(failures)}")
     if failures:
         print(json.dumps(failures, ensure_ascii=False, indent=2))
         raise SystemExit(1)
-    print("PASS: all pages from every robots.txt sitemap are reachable and have matching canonical, html lang and reciprocal hreflang.")
+    print("PASS: all pages from every robots.txt sitemap are reachable and have matching canonical, html lang, reciprocal hreflang, one title and one meta description in the document head.")
 
 
 if __name__ == "__main__":
