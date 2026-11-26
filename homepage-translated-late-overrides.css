@@ -992,3 +992,28 @@ body:has(#home) #home > section.hero h1{
   max-width:100%!important;
   overflow-wrap:anywhere!important;
 }
+
+/* 2026-11-26 FIX: hide duplicate novel overlay and prevent Russian headline orphan-wrap. */
+body:has(main#home) main#home section.hero .zc-hero-art-panel,
+main#home section.hero .zc-hero-art-panel{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+html[lang="ru"] body:has(main#home) main#home section.hero .hero-content h1{
+  font-size:clamp(32px,3.25vw,50px)!important;
+  line-height:1.04!important;
+  width:100%!important;
+  max-width:820px!important;
+  letter-spacing:-.035em!important;
+  text-wrap:pretty!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+  hyphens:none!important;
+}
+html[lang="ru"] body:has(main#home) main#home section.hero .hero-content h1 .alive{
+  display:inline!important;
+  max-width:100%!important;
+  white-space:normal!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+@media(max-width:900px){
+ html[lang="ru"] body:has(main#home) main#home section.hero .hero-content h1{font-size:clamp(28px,5.2vw,44px)!important}
+}
