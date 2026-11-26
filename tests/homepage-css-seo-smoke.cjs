@@ -124,7 +124,7 @@ for (const file of pages) {
 
   if (file === 'index.html') {
     for (const asset of ['homepage-pre-polish.css', 'homepage-components.css', 'homepage-late-overrides.css']) {
-      assert.match(html, new RegExp('<link rel="stylesheet" href="/' + asset + '\\?v=' + (asset === 'homepage-late-overrides.css' ? '20261126-css-dedupe-1' : '20261125-1') + '">'),
+      assert.match(html, new RegExp('<link rel="stylesheet" href="/' + asset + '\\?v=' + (asset === 'homepage-late-overrides.css' ? 'hero-panel-remove-20261126-3' : '20261125-1') + '">'),
         file + ': cascade-preserving external CSS asset missing: ' + asset);
     }
   } else {
@@ -134,7 +134,7 @@ for (const file of pages) {
     assert.match(html, /<link rel="stylesheet" href="\/homepage-translated-late-overrides\.css\?v=20261125-1">/, file + ': shared translated late-overrides stylesheet missing');
     assert.doesNotMatch(html, /<style id="homepage-late-overrides">/, file + ': duplicated translated late-overrides inline block must be removed');
   }
-  assert.match(html, /script\.js\?v=20261126-price-history-stale-window-1/,
+  assert.match(html, /script\.js\?v=20261126-market-activity-unavailable-v2/,
     file + ': homepage runtime cache key must be refreshed so localized pages receive current ARIA fixes');
   assert.match(html, /zctv-player\.js\?v=20261125-tv-lazy-1/,
     file + ': TV player cache key must be refreshed so lazy archive loading is used');
