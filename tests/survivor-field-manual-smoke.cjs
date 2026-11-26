@@ -15,6 +15,28 @@ const locales = [
   { code: 'hi', path: 'hi/survivor-field-manual.html' },
 ];
 const viewports = [1440, 768, 390, 320];
+
+const root = path.resolve(__dirname, '..');
+for (const locale of locales) {
+  const html = fs.readFileSync(path.join(root, locale.path), 'utf8');
+  const cards = [...html.matchAll(/<article class="article-card"[\s\S]*?<\/article>/gi)]
+    .map(match => match[0]);
+  const cardUrls = cards.map(card => card.match(/<h2>\s*<a href=["']([^"']+)["']/i)?.[1]).filter(Boolean);
+  const schemaScript = [...html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)]
+    .find(match => match[1].includes('CollectionPage'));
+  if (!schemaScript) throw new Error(locale.path + ': CollectionPage JSON-LD missing');
+  const schemaData = JSON.parse(schemaScript[1]);
+  const collection = schemaData['@graph']?.find(item => item['@type'] === 'CollectionPage') || schemaData;
+  const items = collection.mainEntity?.itemListElement || [];
+  const schemaUrls = items.map(item => item.url);
+  const normalize = href => href.startsWith('http') ? href : 'https://zombcash.github.io' + (href.startsWith('/') ? href : '/' + locale.path.split('/')[0] + '/' + href);
+  const expectedUrls = cardUrls.map(normalize);
+  assert.equal(cards.length, 14, locale.path + ': expected 14 visible guide cards');
+  assert.equal(collection.mainEntity.numberOfItems, cards.length, locale.path + ': schema numberOfItems must match card count');
+  assert.equal(items.length, cards.length, locale.path + ': schema ItemList must match card count');
+  assert.deepEqual(schemaUrls, expectedUrls, locale.path + ': schema URLs and visible cards must match in order');
+}
+
 const outDir = path.join(process.cwd(), 'survivor-field-manual-results');
 fs.mkdirSync(outDir, { recursive: true });
 
