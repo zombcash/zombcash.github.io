@@ -19,6 +19,7 @@ const pages = [
   { slug: 'whitepaper.html', kind: 'whitepaper' },
   { slug: 'transmission-zombie-fiction-rpg-guide.html', kind: 'fiction' },
   { slug: 'transmission-last-backup-ai-apocalypse.html', kind: 'backup' },
+  { slug: 'corporate-espionage-honey-trap.html', kind: 'guide' },
 ];
 const viewports = [
   { name: 'small-mobile', width: 320, height: 740, mobile: true },
