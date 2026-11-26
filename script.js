@@ -791,8 +791,8 @@ if (zomMarket) {
       const response = await zcApiFetch(apiBase + '/api/news', {cache:'no-store'});
       if (!response.ok) throw new Error('HTTP ' + response.status);
       const data = await response.json();
-      const newsTopics = /\\b(crypto|cryptocurrency|bitcoin|btc|ethereum|eth|solana|blockchain|defi|web3|token|wallet|exchange|digital asset|stablecoin|nft|fintech|artificial intelligence|\\bai\\b|machine learning|chip|semiconductor|cybersecurity|software|privacy|technology|tech)\\b/i;
-      const coreCryptoPublishers = /\\b(coindesk|cointelegraph|the block)\\b/i;
+      const newsTopics = /\b(crypto|cryptocurrency|bitcoin|btc|ethereum|eth|solana|blockchain|defi|web3|token|wallet|exchange|digital asset|stablecoin|nft|fintech|artificial intelligence|\bai\b|machine learning|chip|semiconductor|cybersecurity|software|privacy|technology|tech)\b/i;
+      const coreCryptoPublishers = /\b(coindesk|cointelegraph|the block)\b/i;
       const articles = Array.isArray(data.articles) ? data.articles.filter(article => {
         if (!article) return false;
         if (article.enriched === true) return article.kind === 'news';
