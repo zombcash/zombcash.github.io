@@ -957,3 +957,9 @@ body:has(#home) #home > section.hero > .hero-layout{
 }
 body:has(#home) #home > section.hero > .hero-layout > .hero-content,
 body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{grid-column:1!important;grid-area:auto!important;width:100%!important;max-width:none!important}
+
+/* Hero artwork was duplicated as a right-hand panel; remove it on all translated homepages. */
+body:has(#home) #home>section.hero .zc-hero-art-panel{display:none!important}
+body:has(#home) #home>section.hero>.hero-layout{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:none!important;grid-auto-flow:row!important}
+body:has(#home) #home>section.hero>.hero-layout>.hero-content,body:has(#home) #home>section.hero>.hero-layout>.zc-home-status-rail{grid-column:1!important;width:100%!important;max-width:850px!important}
+body:has(#home) #home .field-manual-spotlight{max-width:760px!important}
