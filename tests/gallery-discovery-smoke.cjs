@@ -261,7 +261,7 @@ const expectedSearchCount = gallerySearchCorpus.filter(text => text.includes(gal
       .replace(/\s+/g, " ")
       .split(/━━━━━━━━|🧟\s*\$ZOMBCASH|MARKET DIED\.|📋\s*CA:|🌐\s*Website:|𝕏\s*X Community|💬\s*Telegram/i)[0]
       .trim();
-    const headingPattern = /^(?:🌙\s*UNDEAD\s+AFTER\s+DARK|😂\s*ZOMBIECASH\s+MEMES?|🩸\s*NIGHTMARE\s*(?:&|AND)\s*HORROR|🛰️\s*ZOMBIECASH\s+SITE\s+TRANSMISSION|NIGHTMARE\s+DROP|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|ZOMBIECASH\s+MEMES?)/i;
+    const headingPattern = /^(?:📓\s*HEROINE[’']?S\s+SURVIVAL\s+DIARY|HEROINE[’']?S\s+SURVIVAL\s+DIARY|🌙\s*UNDEAD\s+AFTER\s+DARK|😂\s*ZOMBIECASH\s+MEMES?|🩸\s*NIGHTMARE\s*(?:&|AND)\s*HORROR|🛰️\s*ZOMBIECASH\s+SITE\s+TRANSMISSION|NIGHTMARE\s+DROP|ZOMBIE\s+MEME(?:\s+OF\s+THE\s+HOUR)?|ZOMBIECASH\s+MEMES?)/i;
     const expectedHeading = expectedTelegramCaption.match(headingPattern)?.[0].trim() || "";
     const expectedHashtags = [...expectedTelegramCaption.matchAll(/#[\p{L}\p{N}_]+/gu)].map(match => match[0]);
     const expectedCaptionBody = expectedTelegramCaption
