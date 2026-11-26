@@ -125,7 +125,6 @@ for (const file of pages) {
   if (file === 'index.html') {
     for (const asset of ['homepage-pre-polish.css', 'homepage-components.css', 'homepage-late-overrides.css']) {
       assert.match(html, new RegExp('<link rel="stylesheet" href="/' + asset + '\\?v=[^\"]+">'), file + ': cascade-preserving external CSS asset missing: ' + asset);
-        file + ': cascade-preserving external CSS asset missing: ' + asset);
     }
   } else {
     assert.match(html, /homepage-translated-hero\.css\?v=[^\"]+/, file + ': extracted translated hero CSS missing');
