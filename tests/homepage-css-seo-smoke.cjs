@@ -203,7 +203,7 @@ assert.doesNotMatch(keywords, /\bCash\s+Zombie\b|\bCashZombie\b/i);
 const referencePages = ['about.html', 'de/about.html', 'fr/about.html', 'it/about.html', 'ja/about.html', 'zh-CN/about.html', 'ru/about.html', 'tr/about.html', 'hi/about.html'];
 for (const file of referencePages) {
   const reference = fs.readFileSync(path.join(root, file), 'utf8');
-  assert.match(reference, /<section class="about-section" aria-labelledby="brand-search-reference">[\\s\\S]*?<\\/section>\\s*<section class="about-section">\\s*<h2>/,
+  assert.match(reference, /<section class="about-section" aria-labelledby="brand-search-reference">[\s\S]*?<\/section>\s*<section class="about-section">\s*<h2>/,
     file + ': naming reference must be a standalone section, not nested inside editorial content');
   assert.match(reference, /Cash Zombie/, file + ': spaced search spelling must appear in the naming reference');
   assert.match(reference, /CashZombie/, file + ': concatenated search spelling must appear in the naming reference');
