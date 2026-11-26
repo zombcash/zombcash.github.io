@@ -130,7 +130,8 @@ for (const file of pages) {
   assert.ok(heroCss.length > 0, file + ': consolidated hero CSS block missing');
   const heroBaseCss = heroCss.slice(0, heroCss.indexOf('@media') >= 0 ? heroCss.indexOf('@media') : heroCss.length);
   for (const selector of ['.hero-grid{', '.hero:before{', '.hero-content{', '.eyebrow{', '.hero-actions{', '.hero-copy{', '.hero-bottom{']) {
-    const escapedSelector = selector.replace(/[.*+?^${}()|[\\]\\]/g, '\\\\  assert.ok(heroCss.length > 0, file + ': consolidated hero CSS block missing');');
+    assert.equal(heroBaseCss.split(selector).length - 1, 1,
+      file + ': active hero base selector should be consolidated: ' + selector);');
     assert.equal((heroBaseCss.match(new RegExp(escapedSelector, 'g')) || []).length, 1,
       file + ': active hero base selector should be consolidated: ' + selector);
   }
