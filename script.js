@@ -697,7 +697,7 @@ if (zomMarket) {
       const change = changeValue == null ? NaN : Number(changeValue);
       zomChange.textContent = Number.isFinite(change) ? (change > 0 ? '+' : '') + change.toFixed(2) + '%' : '—';
       zomChange.className = Number.isFinite(change) && change > 0 ? 'change-up' : Number.isFinite(change) && change < 0 ? 'change-down' : '';
-      zomVolume.textContent = data.activityAvailable === false || data.volume?.h24 == null ? '—' : zomMoney(data.volume.h24);
+      zomVolume.textContent = data.activityAvailable === false || data.volume?.h24 == null || !Number.isFinite(Number(data.volume.h24)) || Number(data.volume.h24) <= 0 ? '—' : zomMoney(data.volume.h24);
       zomLiquidity.textContent = zomMoney(data.liquidity?.usd);
       zomCap.textContent = zomMoney(data.marketCap || data.fdv);
       const sourceTime = Number(data.updatedAt || 0) * 1000;
