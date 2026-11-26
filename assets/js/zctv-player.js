@@ -7,6 +7,7 @@
   const API = 'https://zombcash-bot.fadehost.app/api/tv';
   const FEATURED_VIDEO = 'https://github.com/zombcash/zombcash.github.io/releases/download/zombiecash-promo-2026-10/zombiecash_final_real_screens.mp4-1080p-.ANONMP4.TO.mp4';
   const FEATURED_POSTER = '/assets/images/zombcash-tv-raven.png';
+  const RAVEN_INTRO = { episode_id: '2db68d18-9737-4308-b81b-e792da06d202', title: 'Raven — ZombieCash TV Introduction', description: 'Meet Raven, the host of ZombieCash TV. Welcome to the Outbreak News studio.', created_at: 1794431724, duration_seconds: 4, channel: 'news' };
   const mount = root.querySelector('[data-zctv-player-mount]');
   const oldWrap = document.querySelector('#promo-video .zc-promo-player-wrap');
   if (mount && oldWrap) mount.appendChild(oldWrap);
@@ -41,6 +42,7 @@
   let mode = liveUrl ? 'live' : 'archive';
   let currentId = '';
   let livePlaying = false;
+  let liveFrame = null;
 
   const style = document.createElement('style');
   style.id = 'zctv-broadcast-console-v3';
@@ -315,6 +317,48 @@
 
   function text(node, value) { if (node) node.textContent = value; }
   function videoUrl(id) { return API + '/episodes/' + encodeURIComponent(id) + '/video'; }
+  function youtubeEmbedUrl(value) {
+    if (!value) return '';
+    try {
+      const url = new URL(value);
+      const host = url.hostname.replace(/^www\\./, '').toLowerCase();
+      let id = '';
+      if (host === 'youtu.be') id = url.pathname.split('/').filter(Boolean)[0] || '';
+      else if (host === 'youtube.com' || host === 'm.youtube.com' || host === 'youtube-nocookie.com') {
+        id = url.searchParams.get('v') || (url.pathname.match(/^\\/(?:embed|live|shorts)\\/([^/?]+)/) || [])[1] || '';
+      }
+      if (!id) return '';
+      return 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?autoplay=1&mute=1&playsinline=1&rel=0&controls=1';
+    } catch (_) { return ''; }
+  }
+  function clearLiveFrame() {
+    if (liveFrame) { liveFrame.src = 'about:blank'; liveFrame.remove(); liveFrame = null; }
+    if (player) player.hidden = false;
+  }
+  function loadLiveSource() {
+    if (!player || !liveUrl) return false;
+    const embed = youtubeEmbedUrl(liveUrl);
+    if (embed) {
+      const wrapper = player.closest('.zc-promo-player-wrap');
+      if (!wrapper) return false;
+      player.pause(); player.removeAttribute('src'); player.load(); player.hidden = true;
+      liveFrame = document.createElement('iframe');
+      liveFrame.className = 'zctv-live-iframe';
+      liveFrame.title = 'ZombieCash TV YouTube Live';
+      liveFrame.src = embed;
+      liveFrame.allow = 'autoplay; encrypted-media; picture-in-picture; web-share';
+      liveFrame.allowFullscreen = true;
+      liveFrame.referrerPolicy = 'strict-origin-when-cross-origin';
+      liveFrame.style.cssText = 'display:block;width:100%;aspect-ratio:16/9;border:0;background:#000';
+      wrapper.insertBefore(liveFrame, player.nextSibling);
+      text(status, 'YOUTUBE LIVE PLAYER LOADED · STREAM STATUS NOT VERIFIED');
+      setSignal(false, 'YOUTUBE LIVE PLAYER');
+      return true;
+    }
+    clearLiveFrame();
+    loadPlayerMedia(liveUrl);
+    return false;
+  }
   function updatePromoControls() {
     const total = promoVideos.length;
     if (promoCount) promoCount.textContent = total ? String(promoIndex + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0') : 'VIDEO LIBRARY UNAVAILABLE';
@@ -336,6 +380,7 @@
 
   function loadPlayerMedia(src) {
     if (!player || !src) return;
+    clearLiveFrame();
     cancelDeferredFeaturedMedia();
     featuredMediaLoaded = true;
     player.poster = FEATURED_POSTER;
@@ -397,7 +442,7 @@
       }) : [];
       if (!promoVideos.length) throw new Error('No valid promo videos');
       updatePromoControls();
-      if (currentId === 'featured-promo' || (!currentId && mode === 'archive')) showFeaturedPromo();
+      if (currentId === 'featured-promo') showFeaturedPromo();
     })
     .catch(function () {
       promoVideos = [{ title: 'ZombieCash Promo Video', tag: 'FEATURED PROMO', date: '2026-10-24', src: FEATURED_VIDEO, releaseUrl: 'https://github.com/zombcash/zombcash.github.io/releases/tag/zombiecash-promo-2026-10' }];
@@ -413,6 +458,7 @@
   }
   function clearPlayer() {
     if (!player) return;
+    clearLiveFrame();
     cancelDeferredFeaturedMedia();
     player.pause();
     player.removeAttribute('src');
@@ -457,8 +503,8 @@
     if (!shown.length) {
       showEmpty(active === 'news' ? 'No Outbreak News episodes have been published yet.' : 'No episodes in this channel yet. New transmissions will appear here.');
       if (mode === 'archive' && !currentId) {
-        if (episodes.length === 0) showFeaturedPromo();
-        else { text(status, 'ARCHIVE READY · AWAITING FIRST EPISODE'); text(version, 'SERVER ARCHIVE'); }
+        text(status, episodesRequestStarted ? 'ARCHIVE READY · NO EPISODES PUBLISHED' : 'CONNECTING TO SERVER ARCHIVE…');
+        text(version, 'SERVER ARCHIVE');
       }
       return;
     }
@@ -493,11 +539,11 @@
     if (mode === 'live') {
       if (archive) archive.hidden = true;
       clearPlayer();
-      loadPlayerMedia(liveUrl);
       text(version, 'LIVE TRANSMISSION'); text(status, 'CONNECTING TO LIVE SIGNAL…');
       if (download) { download.removeAttribute('href'); download.textContent = 'LIVE TRANSMISSION'; }
       setSignal(false, 'CONNECTING TO LIVE');
-      player.play().catch(function () { text(status, 'LIVE SIGNAL READY · PRESS PLAY'); });
+      const isYoutube = loadLiveSource();
+      if (!isYoutube) player.play().catch(function () { text(status, 'LIVE SIGNAL READY · PRESS PLAY'); });
     } else {
       if (archive) archive.hidden = false;
       clearPlayer();
@@ -540,16 +586,20 @@
         episodes = Array.isArray(payload.episodes) ? payload.episodes : [];
         if (mode === 'archive') {
           render();
-          // Load the newest published episode into the main player by default.
-          // Leave playback under the viewer's control; browsers restrict autoplay with sound.
+          // The newest published episode is the default transmission; never replace it with an old promo.
+          // Leave playback under the viewer's control because browsers block autoplay with sound.
           if (episodes.length && !currentId) playEpisode(episodes[0], false);
+          else if (!episodes.length && !currentId) { text(status, 'ARCHIVE READY · NO EPISODES PUBLISHED'); text(version, 'SERVER ARCHIVE'); }
         }
       })
       .catch(function () {
-        showEmpty('SERVER ARCHIVE TEMPORARILY BUSY · PLEASE TRY AGAIN LATER');
-        text(status, 'ARCHIVE CONNECTION UNAVAILABLE');
-        text(version, 'ARCHIVE UNAVAILABLE');
-        setSignal(false, 'ARCHIVE UNAVAILABLE');
+        episodes = [RAVEN_INTRO];
+        render();
+        // Retry the known latest Raven episode endpoint even if the archive listing is temporarily unavailable.
+        playEpisode(RAVEN_INTRO, false);
+        text(status, 'RAVEN INTRO · ARCHIVE LIST UNAVAILABLE · PRESS PLAY');
+        text(version, 'LATEST RAVEN EPISODE');
+        setSignal(false, 'RAVEN INTRO FALLBACK');
       });
   }
 
@@ -562,7 +612,7 @@
     });
   });
 
-  // Archive requests are user-initiated (channel selection or the Archive mode control).
+  // Load the server archive on page initialization so the latest Raven episode is ready without requiring a channel click.
 
 
   // Authenticated episode publishing. The API remains the authority for admin access.
@@ -636,4 +686,5 @@
   if (defaultCard) defaultCard.setAttribute('aria-pressed', 'true');
   root.dataset.zctvMode = mode;
   setMode(mode);
+  loadEpisodes();
 })();
