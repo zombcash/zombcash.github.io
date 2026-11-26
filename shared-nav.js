@@ -1663,9 +1663,8 @@
       });
     }, { passive: true });
   }
-  // Localized THE MERIDIAN OF ASH editions reuse the canonical chapter artwork.
-  // The English originals remain untouched; chapter 46 intentionally has no image
-  // because no matching chapter-46 artwork is currently published.
+  // Localized THE MERIDIAN OF ASH editions reuse canonical artwork for the prologue and chapters 1–46.
+  // English chapter pages remain untouched.
   try {
     const pathParts = location.pathname.split('/').filter(Boolean);
     const locale = pathParts[0];
