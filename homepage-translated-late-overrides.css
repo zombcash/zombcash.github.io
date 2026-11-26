@@ -973,3 +973,7 @@ body:has(#home) #home>section.hero:after{z-index:2!important;pointer-events:none
 
 /* Remove the legacy decorative moon/circle overlay from the hero background image. */
 body:has(#home) #home>section.hero>.moon{display:none!important;visibility:hidden!important;opacity:0!important;width:0!important;height:0!important}
+
+/* Russian headline is longer than English; reduce desktop size and avoid awkward word breaks. */
+html[lang="ru"] .hero-content h1{font-size:clamp(30px,3.55vw,54px)!important;line-height:1.04!important;max-width:720px!important;word-break:normal!important;hyphens:none!important;text-wrap:balance!important}
+@media(max-width:760px){html[lang="ru"] .hero-content h1{font-size:clamp(28px,6.5vw,40px)!important;line-height:1.12!important}}
