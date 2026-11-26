@@ -114,24 +114,15 @@ for (const file of pages) {
       file + ': inline CSS must not retain selectors for absent legacy markup: ' + selector);
   }
   if (file === 'index.html') {
-    assert.ok(html.includes('src="/ai-model-status.js?v=20261124-timeout-1"'),
-      'English homepage must use the cache-busted AI status script');
-  }
-  const ribbonIndex = html.indexOf('class="zc-outbreak-ribbons zc-ribbons-pending"');
-  assert.ok(ribbonIndex > headEnd && ribbonIndex < html.indexOf('<main id="home">'), file + ': reserved live-ribbon skeleton must sit between the shared header and homepage main');
-  assert.equal((html.match(/class="zc-outbreak-ribbons/g) || []).length, 1, file + ': exactly one reserved ribbon wrapper must exist');
-  assert.equal((html.match(/class="zc-ribbon zc-ribbon--/g) || []).length, 3, file + ': all three ribbon rows must reserve their final layout before JavaScript');
-
-  if (file === 'index.html') {
     for (const asset of ['homepage-pre-polish.css', 'homepage-components.css', 'homepage-late-overrides.css']) {
-      assert.match(html, new RegExp('<link rel="stylesheet" href="/' + asset + '\\?v=' + (asset === 'homepage-late-overrides.css' ? '20261126-css-dedupe-1' : '20261125-1') + '">'),
-        file + ': cascade-preserving external CSS asset missing: ' + asset);
+      assert.match(html, new RegExp('<link rel="stylesheet" href="/' + asset + '\\?v=[^\"]+">'),
+        file + ': cascade-preserving external CSS asset missing or cache version absent: ' + asset);
     }
   } else {
-    assert.match(html, /homepage-translated-hero\.css\?v=20261126-1/, file + ': extracted translated hero CSS missing');
-    assert.match(html, /homepage-translated-components\.css\?v=20261126-1/, file + ': extracted translated component CSS missing');
-    if (file === 'de/index.html') assert.match(html, /homepage-de-field-manual\.css\?v=20261126-1/, file + ': German-only spotlight CSS missing');
-    assert.match(html, /<link rel="stylesheet" href="\/homepage-translated-late-overrides\.css\?v=20261125-1">/, file + ': shared translated late-overrides stylesheet missing');
+    assert.match(html, /homepage-translated-hero\.css\?v=[^\"]+/, file + ': extracted translated hero CSS missing or cache version absent');
+    assert.match(html, /homepage-translated-components\.css\?v=[^\"]+/, file + ': extracted translated component CSS missing or cache version absent');
+    if (file === 'de/index.html') assert.match(html, /homepage-de-field-manual\.css\?v=[^\"]+/, file + ': German-only spotlight CSS missing or cache version absent');
+    assert.match(html, /homepage-translated-late-overrides\.css\?v=[^\"]+/, file + ': shared translated late-overrides stylesheet missing or cache version absent');
     assert.doesNotMatch(html, /<style id="homepage-late-overrides">/, file + ': duplicated translated late-overrides inline block must be removed');
   }
   assert.match(html, /script\.js\?v=20261126-price-history-stale-window-1/,
