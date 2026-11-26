@@ -98,13 +98,13 @@ for (const file of pages) {
 
   if (file === 'index.html') {
     for (const asset of ['homepage-pre-polish.css', 'homepage-components.css', 'homepage-late-overrides.css']) {
-      assert.match(html, new RegExp('<link rel="stylesheet" href="/' + asset + '\\?v=20261125-1">'),
+      assert.match(html, new RegExp('<link rel="stylesheet" href="/' + asset + '\\?v=20261126-1">'),
         file + ': cascade-preserving external CSS asset missing: ' + asset);
     }
   } else {
     assert.match(html, /<style id="homepage-pre-polish">/, file + ': consolidated pre-polish CSS bundle missing');
     assert.match(html, /<style id="homepage-components-inline">/, file + ': consolidated component CSS bundle missing');
-    assert.match(html, /<link rel="stylesheet" href="\/homepage-translated-late-overrides\.css\?v=20261125-1">/, file + ': shared translated late-overrides stylesheet missing');
+    assert.match(html, /<link rel="stylesheet" href="\/homepage-translated-late-overrides\.css\?v=20261126-1">/, file + ': shared translated late-overrides stylesheet missing');
     assert.doesNotMatch(html, /<style id="homepage-late-overrides">/, file + ': duplicated translated late-overrides inline block must be removed');
   }
   assert.match(html, /script\.js\?v=20261125-homepage-runtime-1/,
