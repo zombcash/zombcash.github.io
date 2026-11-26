@@ -953,6 +953,8 @@ function renderAlarms(market, error) {
     });
     if (missionCount) missionCount.textContent = Math.min(done.length, missions.length) + ' / ' + missions.length + ' ' + missionText.done;
     if (missionDate) missionDate.textContent = missionText.reset + ' · ' + dayKey;
+    const resetButton = document.getElementById('world-reset-missions');
+    if (resetButton) resetButton.textContent = missionText.resetButton + ' ↻';
   }
   document.getElementById('world-reset-missions')?.addEventListener('click', () => {
     done = [];
