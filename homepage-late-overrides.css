@@ -1121,3 +1121,12 @@ body:has(#home) #home .field-manual-spotlight{background:linear-gradient(110deg,
 body:has(#home) #home .field-manual-secondary{display:inline-flex!important;margin-top:12px!important;color:#a9c39c!important;font:700 10px Orbitron,sans-serif!important;letter-spacing:.8px!important;text-decoration:none!important}
 @media(max-width:680px){body:has(#home) #home .zc-novel-panel-overlay strong{font-size:clamp(20px,6vw,28px)!important}body:has(#home) #home .zc-novel-panel-overlay{padding:15px!important;gap:7px!important}}
 
+
+
+/* Full-width cinematic hero background (asset transfer pending final binary commit). */
+body:has(#home) #home>section.hero{position:relative!important;isolation:isolate!important;overflow:hidden!important;background:#050807!important}
+body:has(#home) #home>section.hero:before{content:""!important;position:absolute!important;inset:0!important;z-index:-1!important;background-image:linear-gradient(90deg,#050807f5 0%,#050807d9 32%,#05080770 54%,#05080720 100%),linear-gradient(0deg,#050807e8 0%,transparent 28%),url('/assets/images/zombcash-home-hero.webp')!important;background-size:cover!important;background-position:center 38%!important;background-repeat:no-repeat!important}
+body:has(#home) #home>section.hero .hero-layout{background:transparent!important}
+body:has(#home) #home>section.hero .hero-content{background:transparent!important;text-shadow:0 2px 12px #000!important}
+body:has(#home) #home .field-manual-spotlight{background:#050a08e8!important;backdrop-filter:blur(10px)!important;border:1px solid #78965b!important;box-shadow:0 16px 44px #0009!important}
+@media(max-width:760px){body:has(#home) #home>section.hero:before{background-image:linear-gradient(180deg,#050807e8 0%,#050807b8 44%,#050807ee 100%),url('/assets/images/zombcash-home-hero.webp')!important;background-position:62% center!important}}
