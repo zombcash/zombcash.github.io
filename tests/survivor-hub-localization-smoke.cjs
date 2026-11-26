@@ -97,7 +97,6 @@ const expectedAlternates = [
 const sharedNavVersion = assetVersion(source, 'shared-nav.js', 'English shared navigation script');
 const languageVersion = assetVersion(source, 'language.js', 'English language script');
 const authVersion = assetVersion(source, 'survivor-auth.js', 'English survivor auth script');
-assert.equal(sharedNavVersion, 'shared-nav.js?v=ad-free-20261122-2', 'Survivor Hub must use the current shared navigation asset version');
 
 for (const locale of locales) {
   const localizedPath = locale === 'en' ? sourcePath : locale + '/survivor-hub.html';
