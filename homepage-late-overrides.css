@@ -1181,3 +1181,6 @@ body:has(#home) .zc-ribbon-label{
   font-size:clamp(8px,.72vw,9px)!important;
   letter-spacing:0!important;
 }
+
+/* Prevent the old static fallback ribbons from flashing before localized JS renders. */
+body:has(#home) .zc-outbreak-ribbons.zc-ribbons-pending{visibility:hidden!important;opacity:0!important;}
