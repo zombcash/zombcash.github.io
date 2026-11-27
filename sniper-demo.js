@@ -100,7 +100,16 @@
   }
   async function setServerPaperEnabled(enabled){
     const token=authToken();
-    if(!token)return true; // Guest demo remains local-only.
+    if(!token){
+      try{
+        const response=await fetch(AUTH_API+'/api/sniper/demo-feed',{
+          method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({enabled:!!enabled}),cache:'no-store'
+        });
+        if(!response.ok)return false;
+        return true;
+      }catch(_){window.alert(uiText('serverEngineError'));return false;}
+    }
     try{
       const response=await fetch(AUTH_API+'/api/sniper/settings',{
         method:'POST',
