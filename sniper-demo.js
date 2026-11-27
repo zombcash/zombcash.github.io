@@ -525,22 +525,15 @@
     if(state.busy)return;
     state.busy=true;renderCandidates();
     try{
-      const [candidateResponse,launchResponse]=await Promise.all([
-        fetch(AUTH_API+'/api/sniper/candidates?source='+encodeURIComponent(state.source)+'&limit=40',{cache:'no-store'}),
-        fetch(AUTH_API+'/api/sniper/launches?limit=40',{cache:'no-store'})
-      ]);
+      const candidateResponse=await fetch(AUTH_API+'/api/sniper/candidates?source='+encodeURIComponent(state.source)+'&limit=40',{cache:'no-store'});
       if(!candidateResponse.ok)throw new Error('candidate source '+candidateResponse.status);
       const candidateData=await candidateResponse.json();
-      const liveData=launchResponse.ok?await launchResponse.json():{};
-      const feed=liveData.feed||{};
+      const feed=candidateData.feed||{};
       state.feed={...state.feed,...feed};
-      const launchMap=new Map((Array.isArray(liveData.launches)?liveData.launches:[]).map(x=>[String(x.mint||''),x]));
-      const now=Date.now();
       state.candidates=(Array.isArray(candidateData.candidates)?candidateData.candidates:[]).map(item=>{
         const address=String(item.mint||'');
-        const live=launchMap.get(address)||{};
-        const firstMinute=item.firstMinute||live.firstMinute||{};
-        const eventAt=Number(item.eventAt)||Number(live.eventAt)||0;
+        const firstMinute=item.firstMinute||{};
+        const eventAt=Number(item.eventAt)||0;
         const curvePrice=Number(firstMinute.lastPriceSol)>0?Number(firstMinute.lastPriceSol):Number(item.priceSol)||0;
         const source=item.source||'community';
         return {...item,address,name:item.name||'Unknown',symbol:item.symbol||'TOKEN',
@@ -551,7 +544,7 @@
       const tradeReady=!!feed.pumpdevConnected;
       const visibleSources=[...new Set(state.candidates.flatMap(x=>x.sources||[x.source]))];
       $('sniper-feed-status').textContent=uiText('sources')+(visibleSources.join(' · ')||'—')+
-        (tradeReady?' · PUMPDEV TRADE STREAM READY':' · PAPER FEED '+String(feed.pumpdevStatus||'waiting').toUpperCase().replace(/_/g,' '));
+        (tradeReady?' · PUMPDEV TRADE STREAM READY':' · PAPER FEED — LIVE TRADE STREAM NOT CONNECTED');
       renderDashboardState();
     }catch(error){
       state.candidates=[];
@@ -1387,7 +1380,7 @@
 
   function init(){
     readStore();activeStorageKey=storageKey();detectLang();buildDashboard();translate();
-    $('sniper-refresh').addEventListener('click',refreshFeed);
+    $('sniper-refresh').addEventListener('click',()=>refreshFeed(true));
     $('sniper-clear').addEventListener('click',async()=>{
       const button=$('sniper-clear');
       if(button)button.disabled=true;
@@ -1412,7 +1405,7 @@
     });
     ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
     ['sniper-capital','sniper-size','sniper-target','sniper-stop','sniper-min-move','sniper-idle-timeout','sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-min-buys','sniper-max-daily-loss','sniper-max-open'].forEach(id=>$(id)?.addEventListener('change',()=>{if(terminal.auto&&authToken())setServerPaperEnabled(true);}));
-    if(terminal.auto)refreshFeed();if(authToken())syncFromServer();else{updateSyncStatus('loginToSync');updatePositions();}
+    refreshFeed(true);if(authToken())syncFromServer();else{updateSyncStatus('loginToSync');updatePositions();}
     if(terminal.auto&&!Number(terminal.startedAt)){terminal.startedAt=Date.now();saveTerminal();}const updateRuntimeIndicator=()=>{const node=$('zs-runtime-indicator');if(!node)return;const running=!!terminal.auto;const elapsed=running?Math.max(0,Math.floor((Date.now()-(Number(terminal.startedAt)||Date.now()))/1000)):0;const hh=String(Math.floor(elapsed/3600)).padStart(2,'0');const mm=String(Math.floor((elapsed%3600)/60)).padStart(2,'0');const ss=String(elapsed%60).padStart(2,'0');node.classList.toggle('is-running',running);node.classList.toggle('is-offline',!running);node.textContent=(running?uiText('runtimeRunning'):uiText('runtimeStopped'))+'  '+hh+':'+mm+':'+ss;};
     updateRuntimeIndicator();window.setInterval(updateRuntimeIndicator,1000);
     state.timer=window.setInterval(()=>{checkAccountChange();if(terminal.auto&&!document.hidden)refreshFeed();},15000);
