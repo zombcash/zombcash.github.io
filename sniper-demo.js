@@ -902,7 +902,7 @@
     if(!terminal.auto)return; // Paper demo may hold multiple positions; virtual capital remains the only sizing limit.
     const now=Date.now();
     const item=state.candidates.find(c=>{
-      if(c.source!=='pumpportal'||(state.source!=='all'&&state.source!=='pumpportal')||!state.feed.pumpdevConnected||!(c.priceNative>0)||terminal.seen.includes(c.address))return false;
+      if(!['pumpdev','pumpportal'].includes(c.source)||(state.source!=='all'&&!['pumpdev','pumpportal'].includes(state.source))||!state.feed.pumpdevConnected||!(c.priceNative>0)||terminal.seen.includes(c.address))return false;
       if(state.requireSocials&&c.hasSocials!==true)return false;
       const q=String(state.nameQuery||'').trim().toLowerCase();
       if(q&&!(String(c.name||'')+' '+String(c.symbol||'')).toLowerCase().includes(q))return false;
