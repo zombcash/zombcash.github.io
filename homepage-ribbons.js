@@ -45,10 +45,10 @@
   setMarketSource(marketSource);
   wrap.classList.remove('zc-ribbons-pending');
   wrap.removeAttribute('aria-busy');
+  wrap.style.setProperty('visibility','visible','important');
+  wrap.style.setProperty('opacity','1','important');
  }
  wrap.style.setProperty('display','grid','important');
- wrap.style.setProperty('visibility','visible','important');
- wrap.style.setProperty('opacity','1','important');
  wrap.style.setProperty('position','relative','important');
  wrap.style.setProperty('z-index','999','important');
  wrap.style.setProperty('width','100%','important');
