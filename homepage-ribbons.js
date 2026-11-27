@@ -20,7 +20,13 @@
  hi:[['क्रिप्टो लाइव','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['मुद्रा दरें','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['बाज़ार संकेत','क्रिप्टो कीमतें','24 घंटे का बदलाव','मुद्रा','स्वचालित अपडेट']]
  };
  var themes=['alert','market','community'],icons=['☣','◉','▥'];
- var liveValues={},marketSource='';
+ var liveValues={},marketSource='',ribbonsRevealScheduled=false;
+ function revealRibbonsWhenReady(){
+  if(ribbonsRevealScheduled)return;
+  ribbonsRevealScheduled=true;
+  function reveal(){window.setTimeout(function(){wrap.classList.remove('zc-ribbons-pending');wrap.removeAttribute('aria-busy');wrap.style.setProperty('visibility','visible','important');wrap.style.setProperty('opacity','1','important');},120);}
+  if(document.readyState==='complete')reveal();else window.addEventListener('load',reveal,{once:true});
+ }
  var statusWords={en:{loading:'loading…',unavailable:'temporarily unavailable'},de:{loading:'wird geladen…',unavailable:'vorübergehend nicht verfügbar'},fr:{loading:'chargement…',unavailable:'temporairement indisponible'},it:{loading:'caricamento…',unavailable:'temporaneamente non disponibile'},ja:{loading:'読み込み中…',unavailable:'一時的に利用できません'},'zh-CN':{loading:'加载中…',unavailable:'暂时不可用'},ru:{loading:'загрузка…',unavailable:'временно недоступно'},tr:{loading:'yükleniyor…',unavailable:'geçici olarak kullanılamıyor'},hi:{loading:'लोड हो रहा है…',unavailable:'अस्थायी रूप से अनुपलब्ध'}};
  function localizeStatus(value){var words=statusWords[lang]||statusWords.en;return String(value).replace(/loading…/g,words.loading).replace(/temporarily unavailable/g,words.unavailable);}
  var wrap=existing||document.createElement('div');wrap.className='zc-outbreak-ribbons zc-ribbons-pending';wrap.setAttribute('role','region');wrap.setAttribute('aria-label','ZombieCash project highlights');wrap.setAttribute('aria-busy','true');wrap.style.setProperty('visibility','hidden','important');wrap.style.setProperty('opacity','0','important');
@@ -43,10 +49,7 @@
    band.appendChild(label);band.appendChild(track);wrap.appendChild(band);
   });
   setMarketSource(marketSource);
-  wrap.classList.remove('zc-ribbons-pending');
-  wrap.removeAttribute('aria-busy');
-  wrap.style.setProperty('visibility','visible','important');
-  wrap.style.setProperty('opacity','1','important');
+  revealRibbonsWhenReady();
  }
  wrap.style.setProperty('display','grid','important');
  wrap.style.setProperty('position','relative','important');
