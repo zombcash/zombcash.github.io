@@ -1163,3 +1163,21 @@ body:has(#home) #home .field-manual-spotlight{max-width:760px!important}
 
 /* Remove the legacy decorative moon/circle overlay from the hero background image. */
 body:has(#home) #home>section.hero>.moon{display:none!important;visibility:hidden!important;opacity:0!important;width:0!important;height:0!important}
+
+
+/* Homepage ticker label sizing: compact, left-aligned, and contained in every locale. */
+body:has(#home) .zc-ribbon-label{
+  box-sizing:border-box!important;
+  flex:0 0 clamp(92px,8vw,112px)!important;
+  width:clamp(92px,8vw,112px)!important;
+  min-width:clamp(92px,8vw,112px)!important;
+  max-width:clamp(92px,8vw,112px)!important;
+  justify-content:flex-start!important;
+  text-align:left!important;
+  padding:0 8px!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  font-size:clamp(8px,.72vw,9px)!important;
+  letter-spacing:0!important;
+}
