@@ -1066,3 +1066,21 @@ html[lang]:not([lang="en"]) body:has(#home) #home > section.hero > .hero-layout 
   overflow-wrap:normal!important;
   word-break:normal!important;
 }
+
+
+/* Homepage ticker label sizing: compact, left-aligned, and contained in every locale. */
+body:has(#home) .zc-ribbon-label{
+  box-sizing:border-box!important;
+  flex:0 0 clamp(92px,8vw,112px)!important;
+  width:clamp(92px,8vw,112px)!important;
+  min-width:clamp(92px,8vw,112px)!important;
+  max-width:clamp(92px,8vw,112px)!important;
+  justify-content:flex-start!important;
+  text-align:left!important;
+  padding:0 8px!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  font-size:clamp(8px,.72vw,9px)!important;
+  letter-spacing:0!important;
+}
