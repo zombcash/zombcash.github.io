@@ -868,7 +868,7 @@
     terminal.logs.slice(0,12).forEach(e=>{const row=dashNode('div','zs-logrow');row.append(dashNode('time','',new Date(e.at).toLocaleTimeString()),dashNode('b','zs-logkind',e.kind),dashNode('strong','',e.symbol),dashNode('span','',e.detailKey?eventText(e.detailKey,e.detailArgs):localizeLegacyLog(e.detail)));host.append(row);});
   }
   function renderDashboardState(){
-    const feedReady=!!(state.feed&&state.feed.pumpdevConnected);const btn=$('zs-auto-toggle');if(btn){btn.classList.toggle('is-on',!!terminal.auto&&feedReady);btn.textContent=terminal.auto&&feedReady?dcopy().armed:dcopy().paused;if(terminal.auto&&!feedReady)btn.title=uiText('waitingPumpDev');else btn.removeAttribute('title');}
+    const feedReady=!!(state.feed&&state.feed.pumpdevConnected);const btn=$('zs-auto-toggle');if(btn){btn.classList.toggle('is-on',!!terminal.auto&&feedReady);btn.textContent=terminal.auto&&!feedReady?uiText('waitingPumpDev'):(terminal.auto&&feedReady?dcopy().armed:dcopy().paused);if(terminal.auto&&!feedReady)btn.title=uiText('waitingPumpDevLong');else btn.removeAttribute('title');}
     const nav=document.querySelectorAll('[data-zs-nav]');nav.forEach(b=>{const i=Number(b.dataset.zsNav);if(dcopy().nav[i])b.textContent=dcopy().nav[i];else if(i===5)b.textContent=walletText('nav');});
     const root=$('zombie-sniper-demo');
     const activeTab=root&&root.dataset.activeTab;
@@ -915,7 +915,6 @@
 
   async function showLaunchConfirm(){
     await refreshFeed(true);
-    if(!state.feed.pumpdevConnected){window.alert(uiText('waitingPumpDevLong'));return;}
     const n=id=>Number($(id)&&$(id).value);
     const errors=[];
     if(!(n('sniper-size')>0))errors.push('Размер сделки должен быть больше нуля.');
@@ -926,6 +925,7 @@
     if(errors.length){window.alert('Нельзя запустить:\n'+errors.join('\n'));return;}
     const c=START_CONFIRM_COPY[state.lang]||START_CONFIRM_COPY.en;
     const rows=[{text:c[1]+': '+n('sniper-capital')+' SOL'},{text:c[2]+': '+n('sniper-size')+' SOL'},{text:c[3]+': +'+n('sniper-target')+'%'},{text:c[4]+': -'+n('sniper-stop')+'%'},{text:c[5]+': '+n('sniper-dex')+'%'},{text:c[6]+': '+n('sniper-slip')+'%'},{text:c[7]+': '+n('sniper-network')+' / '+n('sniper-priority')+' SOL'}];
+    if(!state.feed.pumpdevConnected)rows.push({text:uiText('waitingPumpDevLong'),warn:true});
     if(n('sniper-slip')>5)rows.push({text:'⚠ '+c[8],warn:true});
     if(n('sniper-dex')>2)rows.push({text:'⚠ '+c[9],warn:true});
     if(n('sniper-size')>0.05)rows.push({text:'⚠ '+c[10],warn:true});
