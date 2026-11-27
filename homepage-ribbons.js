@@ -23,7 +23,7 @@
  var liveValues={},marketSource='';
  var statusWords={en:{loading:'loading…',unavailable:'temporarily unavailable'},de:{loading:'wird geladen…',unavailable:'vorübergehend nicht verfügbar'},fr:{loading:'chargement…',unavailable:'temporairement indisponible'},it:{loading:'caricamento…',unavailable:'temporaneamente non disponibile'},ja:{loading:'読み込み中…',unavailable:'一時的に利用できません'},'zh-CN':{loading:'加载中…',unavailable:'暂时不可用'},ru:{loading:'загрузка…',unavailable:'временно недоступно'},tr:{loading:'yükleniyor…',unavailable:'geçici olarak kullanılamıyor'},hi:{loading:'लोड हो रहा है…',unavailable:'अस्थायी रूप से अनुपलब्ध'}};
  function localizeStatus(value){var words=statusWords[lang]||statusWords.en;return String(value).replace(/loading…/g,words.loading).replace(/temporarily unavailable/g,words.unavailable);}
- var wrap=existing||document.createElement('div');wrap.className='zc-outbreak-ribbons';wrap.setAttribute('role','region');wrap.setAttribute('aria-label','ZombieCash project highlights');wrap.setAttribute('aria-busy','true');
+ var wrap=existing||document.createElement('div');wrap.className='zc-outbreak-ribbons zc-ribbons-pending';wrap.setAttribute('role','region');wrap.setAttribute('aria-label','ZombieCash project highlights');wrap.setAttribute('aria-busy','true');wrap.style.setProperty('visibility','hidden','important');wrap.style.setProperty('opacity','0','important');
  function storedRibbonValue(item){
   var keys=Object.keys(liveValues);
   for(var i=0;i<keys.length;i++)if(item.indexOf(keys[i])===0)return liveValues[keys[i]];
