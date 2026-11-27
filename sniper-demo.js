@@ -1414,7 +1414,8 @@
     });
     ['sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-target','sniper-stop'].forEach(id=>$(id).addEventListener('change',updatePositions));
     ['sniper-capital','sniper-size','sniper-target','sniper-stop','sniper-min-move','sniper-idle-timeout','sniper-network','sniper-priority','sniper-dex','sniper-slip','sniper-min-buys','sniper-max-daily-loss','sniper-max-open'].forEach(id=>$(id)?.addEventListener('change',()=>{if(terminal.auto&&authToken())setServerPaperEnabled(true);}));
-    refreshFeed(true);if(authToken())syncFromServer();else{updateSyncStatus('loginToSync');updatePositions();}
+    refreshFeed(true);if(authToken())syncFromServer();else{updateSyncStatus('loginToSync');updatePositions();if(terminal.auto)setServerPaperEnabled(true);}
+    window.addEventListener('pagehide',()=>{if(terminal.auto&&!authToken()){try{fetch(AUTH_API+'/api/sniper/demo-feed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({enabled:false}),keepalive:true});}catch(_){}}});
     if(terminal.auto&&!Number(terminal.startedAt)){terminal.startedAt=Date.now();saveTerminal();}const updateRuntimeIndicator=()=>{const node=$('zs-runtime-indicator');if(!node)return;const running=!!terminal.auto;const elapsed=running?Math.max(0,Math.floor((Date.now()-(Number(terminal.startedAt)||Date.now()))/1000)):0;const hh=String(Math.floor(elapsed/3600)).padStart(2,'0');const mm=String(Math.floor((elapsed%3600)/60)).padStart(2,'0');const ss=String(elapsed%60).padStart(2,'0');node.classList.toggle('is-running',running);node.classList.toggle('is-offline',!running);node.textContent=(running?uiText('runtimeRunning'):uiText('runtimeStopped'))+'  '+hh+':'+mm+':'+ss;};
     updateRuntimeIndicator();window.setInterval(updateRuntimeIndicator,1000);
     state.timer=window.setInterval(()=>{checkAccountChange();if(terminal.auto&&!document.hidden)refreshFeed();},15000);
