@@ -9,15 +9,15 @@
  var pageLang=normalizeLang(document.documentElement.lang),pathLang=normalizeLang(parts[0]);
  var lang=known.indexOf(pageLang)!==-1?pageLang:(parts.length&&known.indexOf(pathLang)!==-1?pathLang:'en');
  var copy={
- en:[['CRYPTO','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['FX','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['MARKET','Live crypto prices','24-hour market changes','Currency exchange rates','Updated automatically']],
- de:[['KRYPTO','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['FX','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['MARKT','Live-Kryptokurse','24-Stunden-Veränderung','Wechselkurse','Automatische Aktualisierung']],
+ en:[['CRYPTO LIVE','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['FX RATES','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['MARKET PULSE','Live crypto prices','24-hour market changes','Currency exchange rates','Updated automatically']],
+ de:[['KRYPTO LIVE','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['FX RATES','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['MARKTPULS LIVE','Live-Kryptokurse','24-Stunden-Veränderung','Wechselkurse','Automatische Aktualisierung']],
  fr:[['CRYPTO','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['FX','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['MARCHÉ','Cours crypto en direct','Variation sur 24 h','Taux de change','Mise à jour automatique']],
  it:[['CRIPTO','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['FX','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['MERCATO','Prezzi crypto in tempo reale','Variazione 24 ore','Tassi di cambio','Aggiornamento automatico']],
- ja:[['暗号','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['為替','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['市場','暗号資産のリアルタイム価格','24時間変動','為替','自動更新']],
- 'zh-CN':[['加密','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['汇率','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['市场','实时加密货币价格','24小时涨跌','外汇汇率','自动更新']],
- ru:[['КРИПТО','BTC: загрузка…','ETH: загрузка…','SOL: загрузка…','$ZOMBCASH: загрузка…'],['ВАЛЮТЫ','USD / UAH: загрузка…','EUR / USD: загрузка…','USD / EUR: загрузка…'],['РЫНОК','Криптовалюты в реальном времени','Изменение за 24 часа','Курсы обмена валют','Автоматическое обновление']],
- tr:[['KRİPTO','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['DÖVİZ','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['PİYASA','Canlı kripto fiyatları','24 saatlik değişim','Döviz kurları','Otomatik güncelleme']],
- hi:[['क्रिप्टो','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['मुद्रा','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['बाज़ार','क्रिप्टो कीमतें','24 घंटे का बदलाव','मुद्रा','स्वचालित अपडेट']]
+ ja:[['暗号 LIVE','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['為替 レート','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['市場 PULSE','暗号資産のリアルタイム価格','24時間変動','為替','自動更新']],
+ 'zh-CN':[['加密 行情','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['外汇 汇率','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['市场 动态','实时加密货币价格','24小时涨跌','外汇汇率','自动更新']],
+ ru:[['КРИПТО LIVE','BTC: загрузка…','ETH: загрузка…','SOL: загрузка…','$ZOMBCASH: загрузка…'],['КУРСЫ FX','USD / UAH: загрузка…','EUR / USD: загрузка…','USD / EUR: загрузка…'],['ПУЛЬС РЫНКА','Криптовалюты в реальном времени','Изменение за 24 часа','Курсы обмена валют','Автоматическое обновление']],
+ tr:[['KRİPTO CANLI','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['DÖVİZ KURU','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['PİYASA NABZI','Canlı kripto fiyatları','24 saatlik değişim','Döviz kurları','Otomatik güncelleme']],
+ hi:[['क्रिप्टो लाइव','BTC: loading…','ETH: loading…','SOL: loading…','$ZOMBCASH: loading…'],['मुद्रा दरें','USD / UAH: loading…','EUR / USD: loading…','USD / EUR: loading…'],['बाज़ार संकेत','क्रिप्टो कीमतें','24 घंटे का बदलाव','मुद्रा','स्वचालित अपडेट']]
  };
  var themes=['alert','market','community'],icons=['☣','◉','▥'];
  var liveValues={},marketSource='';
@@ -60,8 +60,7 @@
   marketSource=source||'';
   var label=wrap.querySelector('.zc-ribbon--alert .zc-ribbon-label');
   var cryptoRows=(copy[lang]||copy.en)[0]||[];
-  var hasLiveTicker=cryptoRows.some(function(item){return item.indexOf('BTC:')===0;});
-  if(label)label.textContent=icons[0]+' '+cryptoRows[0]+(marketSource&&hasLiveTicker?' · DATA: '+marketSource:'');
+  if(label)label.textContent=icons[0]+' '+cryptoRows[0];
  }
  function setItem(label,value){
   // Store canonical status text so a language switch can re-localize cached fallbacks.
