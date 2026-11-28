@@ -120,10 +120,14 @@ for (const file of pages) {
   ]) {
     assert.equal(homepageCss.includes(stale), false, file + ': obsolete homepage selector returned: ' + stale);
   }
-  const styles = [...html.matchAll(/<style\b[^>]*>/gi)];
+  // A tiny <noscript> fallback is intentionally retained so the reserved
+  // ribbon skeleton is visible when JavaScript is disabled. It is not part
+  // of the homepage CSS cascade and must not fail the external-CSS audit.
+  const htmlWithoutNoScript = html.replace(/<noscript\\b[^>]*>[\\s\\S]*?<\\/noscript>/gi, '');
+  const styles = [...htmlWithoutNoScript.matchAll(/<style\\b[^>]*>/gi)];
   const bodyStyles = styles.filter(match => match.index > headEnd);
   assert.equal(styles.length, 0,
-    file + ': homepage CSS must be externally loaded; inline style blocks were consolidated');
+    file + ': homepage CSS must be externally loaded; inline style blocks outside noscript fallback were consolidated');
   assert.equal(bodyStyles.length, 0, file + ': inline CSS must be loaded before body content');
   for (const selector of retiredHomepageSelectors) {
     assert.equal(html.includes('.' + selector), false,
