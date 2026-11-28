@@ -668,6 +668,8 @@ button,a{ -webkit-tap-highlight-color:transparent }
 .zrai-signal-line{margin-top:8px;color:#758779;font:600 8px Orbitron,sans-serif;letter-spacing:.15px;line-height:1.6;overflow-wrap:anywhere;}
 .zrai-address{display:inline-block;margin-top:6px;color:#8eaa91;font:600 8px Rajdhani,sans-serif;letter-spacing:.45px;text-decoration:none;}
 .zrai-address:hover{color:#baff8b;text-decoration:underline;}
+.zrai-address-copy{display:inline-block;margin-top:6px;padding:0;border:0;background:transparent;color:#8eaa91;font:600 8px Rajdhani,sans-serif;letter-spacing:.45px;cursor:pointer;text-align:left;}
+.zrai-address-copy:hover,.zrai-address-copy.is-copied{color:#baff8b;text-decoration:underline;}
 .zrai-open{align-self:start;margin-top:1px;padding:7px 8px;border:1px solid #344e38;color:#9bff45;font:700 8px Orbitron,sans-serif;letter-spacing:.35px;text-decoration:none;}
 .zrai-open:hover{background:#9bff4515;border-color:#9bff45;}
 .zrai-message{display:flex;align-items:center;justify-content:center;gap:10px;min-height:145px;padding:24px 15px;text-align:center;color:#8da08e;font:600 10px Orbitron,sans-serif;line-height:1.8;}
