@@ -284,11 +284,77 @@ function pagePath(locale, slug) {
       reports.push({ localizedNavigation: locale + ' Gallery, Whitepaper and Market Data header/footer routes checked' });
     }
 
+    // Verify the homepage Project Overview block in all nine languages and
+    // both desktop/mobile layouts, including its localized routes and shared CSS.
+    const homepageOverviewViewports = [
+      { name: 'desktop', width: 1440, height: 1000 },
+      { name: 'mobile', width: 390, height: 844 },
+    ];
+    const homepageOverviewCases = [];
+    for (const locale of locales) {
+      for (const viewport of homepageOverviewViewports) {
+        const page = pagesByContext[viewport.name];
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        await page.goto(new URL(pagePath(locale, 'index.html'), BASE).href, {
+          waitUntil: 'domcontentloaded',
+          timeout: 30000,
+        });
+        await page.waitForSelector('.zc-seo-intro', { timeout: 10000 });
+        const result = await page.locator('.zc-seo-intro').evaluate(section => {
+          const style = getComputedStyle(section);
+          const links = [...section.querySelectorAll('.zc-seo-intro-links a')].map(a => ({
+            href: new URL(a.href).pathname,
+            text: a.innerText.trim(),
+          }));
+          return {
+            count: document.querySelectorAll('.zc-seo-intro').length,
+            heading: section.querySelector('h2')?.innerText.trim() || '',
+            paragraphs: section.querySelectorAll('p').length,
+            mintPresent: section.innerText.includes('6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump'),
+            disclaimerPresent: !!section.querySelector('small')?.innerText.trim(),
+            borderLeftWidth: style.borderLeftWidth,
+            borderLeftColor: style.borderLeftColor,
+            backgroundImage: style.backgroundImage,
+            width: section.getBoundingClientRect().width,
+            documentWidth: document.documentElement.scrollWidth,
+            viewportWidth: innerWidth,
+            links,
+          };
+        });
+        const prefix = locale === 'en' ? '/' : '/' + locale + '/';
+        const expectedLinks = [
+          prefix + 'whitepaper.html',
+          prefix + 'buy-zombcash.html',
+          prefix + 'survivor-field-manual.html',
+        ];
+        const issues = [];
+        if (result.count !== 1) issues.push('expected exactly one Project Overview block, found ' + result.count);
+        if (!result.heading) issues.push('missing localized heading');
+        if (result.paragraphs !== 2) issues.push('expected two overview paragraphs, found ' + result.paragraphs);
+        if (!result.mintPresent) issues.push('official mint address missing');
+        if (!result.disclaimerPresent) issues.push('risk disclaimer missing');
+        if (result.borderLeftWidth !== '3px') issues.push('overview CSS not applied: left accent width is ' + result.borderLeftWidth);
+        if (!result.backgroundImage || result.backgroundImage === 'none') issues.push('overview background styling missing');
+        if (result.links.map(link => link.href).join('|') !== expectedLinks.join('|')) issues.push('localized CTA destinations mismatch');
+        if (result.documentWidth > viewport.width + 1) issues.push('homepage horizontal overflow: ' + result.documentWidth + 'px');
+        const report = { page: pagePath(locale, 'index.html'), viewport: viewport.name, result, issues };
+        homepageOverviewCases.push(report);
+        reports.push({ homepageOverview: report });
+        if (issues.length) {
+          failures.push(report);
+          await page.screenshot({ path: path.join(output, 'failure-homepage-overview-' + locale + '-' + viewport.name + '.png'), fullPage: true }).catch(() => {});
+        } else {
+          await page.locator('.zc-seo-intro').screenshot({ path: path.join(output, 'homepage-overview-' + locale + '-' + viewport.name + '.png') }).catch(() => {});
+        }
+      }
+    }
+
     const summary = {
       visualCases: pages.reduce((total, item) => total + (item.availableLocales || locales).length * (item.kind === 'guide' ? 3 : viewports.length), 0),
       fieldManualCases: locales.length * manualViewports.length,
       routeSwitches: routeSwitchTests.length,
       localizedHomepagesChecked: 8,
+      homepageOverviewCases: homepageOverviewCases.length,
       failures,
       reportCount: reports.length,
     };
