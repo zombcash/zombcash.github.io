@@ -29,7 +29,7 @@ hi:{all:"सभी",day:"दिन",week:"सप्ताह",month:"मही�
 };
 const H=HISTORY_UI[locale]||HISTORY_UI.en;
 const state={rows:[],filter:"all",from:"",to:""};
-function historyDateKey(item){const raw=String(item.date||"").slice(0,10);return /^\\d{4}-\\d{2}-\\d{2}$/.test(raw)?raw:"";}
+function historyDateKey(item){const raw=String(item.date||"").slice(0,10);return /^\d{4}-\d{2}-\d{2}$/.test(raw)?raw:"";}
 function setHistoryRange(range){
 state.filter=range;
 const dates=$("soi-history-dates");
