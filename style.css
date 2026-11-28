@@ -1425,7 +1425,7 @@ button,a{ -webkit-tap-highlight-color:transparent }
 
 
 /* 2026-11-28: copyable contract addresses in both live radar panels */
-.zrai-copy-address,.radar-copy-address{display:inline-flex;align-items:center;justify-content:center;margin:5px 0 0 7px;padding:4px 8px;border:1px solid rgba(155,255,69,.35);border-radius:5px;background:rgba(155,255,69,.07);color:#b7ff73;font:600 10px/1.2 inherit;letter-spacing:.04em;cursor:pointer}
+.zrai-copy-address,.radar-copy-address{display:inline-flex;align-items:center;justify-content:center;margin:5px 0 0 7px;padding:4px 8px;border:1px solid rgba(155,255,69,.35);border-radius:5px;background:rgba(155,255,69,.07);color:#b7ff73;font-family:inherit;font-size:10px;font-weight:600;line-height:1.2;letter-spacing:.04em;cursor:pointer}
 .zrai-copy-address:hover,.radar-copy-address:hover,.zrai-copy-address.is-copied,.radar-copy-address.is-copied{border-color:rgba(155,255,69,.7);background:rgba(155,255,69,.15)}
 .token-contract{display:block;margin-top:4px;font-size:10px;opacity:.8;overflow-wrap:anywhere}
 .token-contract a{color:#a8d88d;text-decoration:none}
