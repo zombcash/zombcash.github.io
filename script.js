@@ -1697,7 +1697,10 @@ function renderAlarms(market, error) {
           }
           copyAddress.textContent = ui().copied;
           copyAddress.classList.add('is-copied');
-        } catch (_) { copyAddress.textContent = 'COPY FAILED'; }
+        } catch (_) {
+          const copyFailed = {en:'COPY FAILED',ru:'НЕ УДАЛОСЬ СКОПИРОВАТЬ',de:'KOPIEREN FEHLGESCHLAGEN',fr:'ÉCHEC DE LA COPIE',it:'COPIA NON RIUSCITA',ja:'コピーに失敗しました','zh-CN':'复制失败',tr:'KOPYALAMA BAŞARISIZ',hi:'कॉपी नहीं हो सका'};
+          copyAddress.textContent = copyFailed[localeCode] || copyFailed.en;
+        }
       });
       body.append(heading, metricsLine, signal, addressLink, copyAddress);
 
