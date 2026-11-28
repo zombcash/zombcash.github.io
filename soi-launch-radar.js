@@ -47,6 +47,7 @@ renderHistory(state.rows);
 }
 function initHistoryFilters(){
 const toolbar=$("soi-history-toolbar");if(!toolbar)return;
+toolbar.setAttribute("aria-label",H.custom);
 const labels={ "soi-history-from-label":H.from,"soi-history-to-label":H.to,"soi-history-apply":H.apply };
 Object.entries(labels).forEach(([id,value])=>{const node=$(id);if(node)node.textContent=value;});
 toolbar.querySelectorAll("[data-history-range]").forEach(button=>{
@@ -57,7 +58,9 @@ button.addEventListener("click",()=>setHistoryRange(key));
 const apply=$("soi-history-apply");
 if(apply)apply.addEventListener("click",()=>{
 const from=$("soi-history-from")?.value||"",to=$("soi-history-to")?.value||"";
-if(!from||!to||from>to){window.alert(H.invalid);return;}
+const error=$("soi-history-error");
+if(!from||!to||from>to){if(error)error.textContent=H.invalid;return;}
+if(error)error.textContent="";
 state.from=from;state.to=to;state.filter="custom";
 toolbar.querySelectorAll("[data-history-range]").forEach(button=>button.classList.toggle("is-active",button.dataset.historyRange==="custom"));
 renderHistory(state.rows);
