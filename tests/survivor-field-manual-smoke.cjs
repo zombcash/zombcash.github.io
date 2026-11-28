@@ -32,7 +32,7 @@ for (const locale of locales) {
   const schemaUrls = items.map(item => item.url);
   const normalize = href => href.startsWith('http') ? href : 'https://zombcash.github.io' + (href.startsWith('/') ? href : '/' + locale.path.split('/')[0] + '/' + href);
   const expectedUrls = cardUrls.map(normalize);
-  assert.equal(cards.length, 14, locale.path + ': expected 14 visible guide cards');
+  assert.equal(cards.length, 15, locale.path + ': expected 15 visible guide cards');
   assert.equal(collection.mainEntity.numberOfItems, cards.length, locale.path + ': schema numberOfItems must match card count');
   assert.equal(items.length, cards.length, locale.path + ': schema ItemList must match card count');
   assert.deepEqual(schemaUrls, expectedUrls, locale.path + ': schema URLs and visible cards must match in order');
