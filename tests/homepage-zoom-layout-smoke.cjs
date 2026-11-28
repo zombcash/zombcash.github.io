@@ -21,15 +21,18 @@ require('node:fs').mkdirSync(outDir, { recursive: true });
         return count && count.textContent.trim() !== 'LOADING VIDEO LIBRARY…';
       }, null, { timeout: 15000 }).catch(() => {});
 
-      // The TV player and its poster must stay unloaded while they are far below
-      // the initial viewport. Scroll it into the observer margin only after this check.
+      // A source URL may be assigned during library initialization. With preload=none,
+      // the browser must not fetch video data or begin playback before the visitor reaches it.
       const promoPlayer = page.locator('#zctv-channel-hub .zctv-player-mount #zc-promo-player');
       const initialMedia = await promoPlayer.evaluate(video => ({
         src: video.getAttribute('src'),
-        poster: video.getAttribute('poster')
+        poster: video.getAttribute('poster'),
+        preload: video.preload,
+        readyState: video.readyState,
+        paused: video.paused
       }));
-      if (initialMedia.src || initialMedia.poster) {
-        throw new Error('TV media loaded before the player approached the viewport: ' + JSON.stringify(initialMedia));
+      if (initialMedia.preload !== 'none' || initialMedia.readyState > 0 || !initialMedia.paused) {
+        throw new Error('TV video data loaded or playback started before the player approached the viewport: ' + JSON.stringify(initialMedia));
       }
       await promoPlayer.scrollIntoViewIfNeeded();
       await page.waitForFunction(() => {
