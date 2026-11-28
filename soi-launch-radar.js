@@ -16,7 +16,55 @@ const EXTRA={
 "hi":{details:"साक्ष्य विवरण",profile:"टोकन प्रोफ़ाइल",profileObserved:"प्रोफ़ाइल देखी गई",socials:"सोशल लिंक",snapshotCoverage:"पहले घंटे के स्नैपशॉट कवरेज",snapshots:"स्नैपशॉट",peakMarketCap:"देखा गया अधिकतम मार्केट कैप",lastSnapshot:"अंतिम मार्केट स्नैपशॉट",sourceHealth:"कलेक्टर स्थिति",statusOk:"ठीक",statusError:"समस्या",statusPartial:"आंशिक",sweepIncomplete:"ऐतिहासिक स्कैन अधूरा",requested:"अनुरोधित",saved:"सहेजे गए",errors:"त्रुटियाँ",scanned:"स्कैन",observations:"अवलोकन",failedSignatures:"विफल हस्ताक्षर",opaqueSuffix:"अस्पष्ट अंतिम बाइट्स"}
 };
 const T={...(L[locale]||L.en),...(EXTRA[locale]||EXTRA.en)};
-const state={rows:[],filter:"all"};
+const HISTORY_UI={
+en:{all:"All",day:"Day",week:"Week",month:"Month",custom:"Custom period",from:"From",to:"To",apply:"Apply",count:"{n} days",invalid:"Choose a valid date range."},
+de:{all:"Alle",day:"Tag",week:"Woche",month:"Monat",custom:"Zeitraum",from:"Von",to:"Bis",apply:"Anwenden",count:"{n} Tage",invalid:"Bitte einen gültigen Zeitraum wählen."},
+fr:{all:"Tout",day:"Jour",week:"Semaine",month:"Mois",custom:"Période",from:"Du",to:"Au",apply:"Appliquer",count:"{n} jours",invalid:"Choisissez une période valide."},
+it:{all:"Tutto",day:"Giorno",week:"Settimana",month:"Mese",custom:"Periodo",from:"Da",to:"A",apply:"Applica",count:"{n} giorni",invalid:"Seleziona un intervallo valido."},
+ja:{all:"すべて",day:"今日",week:"1週間",month:"1か月",custom:"期間指定",from:"開始日",to:"終了日",apply:"適用",count:"{n}日分",invalid:"有効な期間を選択してください。"},
+"zh-CN":{all:"全部",day:"当天",week:"一周",month:"一个月",custom:"自定义期间",from:"开始日期",to:"结束日期",apply:"应用",count:"{n} 天",invalid:"请选择有效的日期范围。"},
+ru:{all:"Всё",day:"День",week:"Неделя",month:"Месяц",custom:"Период",from:"С",to:"По",apply:"Применить",count:"дней: {n}",invalid:"Выберите корректный диапазон дат."},
+tr:{all:"Tümü",day:"Gün",week:"Hafta",month:"Ay",custom:"Özel dönem",from:"Başlangıç",to:"Bitiş",apply:"Uygula",count:"{n} gün",invalid:"Geçerli bir tarih aralığı seçin."},
+hi:{all:"सभी",day:"दिन",week:"सप्ताह",month:"महीना",custom:"कस्टम अवधि",from:"से",to:"तक",apply:"लागू करें",count:"{n} दिन",invalid:"कृपया सही तारीख़ सीमा चुनें।"}
+};
+const H=HISTORY_UI[locale]||HISTORY_UI.en;
+const state={rows:[],filter:"all",from:"",to:""};
+function historyDateKey(item){const raw=String(item.date||"").slice(0,10);return /^\\d{4}-\\d{2}-\\d{2}$/.test(raw)?raw:"";}
+function setHistoryRange(range){
+state.filter=range;
+const dates=$("soi-history-dates");
+if(dates)dates.hidden=range!=="custom";
+document.querySelectorAll("[data-history-range]").forEach(button=>button.classList.toggle("is-active",button.dataset.historyRange===range));
+if(range==="custom"){renderHistory(state.rows);return;}
+const today=new Date().toISOString().slice(0,10);
+const end=new Date(today+"T00:00:00Z");
+let from="";
+if(range==="day")from=today;
+else if(range==="week"){end.setUTCDate(end.getUTCDate()-6);from=end.toISOString().slice(0,10);}
+else if(range==="month"){end.setUTCDate(end.getUTCDate()-29);from=end.toISOString().slice(0,10);}
+state.from=from;state.to=range==="all"?"":today;
+renderHistory(state.rows);
+}
+function initHistoryFilters(){
+const toolbar=$("soi-history-toolbar");if(!toolbar)return;
+const labels={ "soi-history-from-label":H.from,"soi-history-to-label":H.to,"soi-history-apply":H.apply };
+Object.entries(labels).forEach(([id,value])=>{const node=$(id);if(node)node.textContent=value;});
+toolbar.querySelectorAll("[data-history-range]").forEach(button=>{
+const key=button.dataset.historyRange;
+button.textContent=H[key]||button.textContent;
+button.addEventListener("click",()=>setHistoryRange(key));
+});
+const apply=$("soi-history-apply");
+if(apply)apply.addEventListener("click",()=>{
+const from=$("soi-history-from")?.value||"",to=$("soi-history-to")?.value||"";
+if(!from||!to||from>to){window.alert(H.invalid);return;}
+state.from=from;state.to=to;state.filter="custom";
+toolbar.querySelectorAll("[data-history-range]").forEach(button=>button.classList.toggle("is-active",button.dataset.historyRange==="custom"));
+renderHistory(state.rows);
+});
+setHistoryRange("all");
+}
+
 const number=v=>Number.isFinite(Number(v))?new Intl.NumberFormat(locale,{maximumFractionDigits:2}).format(Number(v)):T.noData;
 const money=v=>Number.isFinite(Number(v))?"$"+number(v):T.noData;
 const date=v=>{if(!v)return"—";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString(locale);};
@@ -71,7 +119,20 @@ if(h.coverage_note){const note=document.createElement("p");note.textContent=h.co
 details.appendChild(content);sig.appendChild(details);tr.appendChild(sig);body.appendChild(tr);
 });
 }
-function renderHistory(rows){const body=$("soi-history");if(!body)return;body.replaceChildren();const data=rows.slice().reverse();if(!data.length){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=7;td.textContent=T.historyEmpty;tr.appendChild(td);body.appendChild(tr);return;}data.forEach(item=>{const tr=document.createElement("tr");[item.date,number(item.launches_detected),number(item.pools_created),number(item.buys),number(item.sells),number(item.unique_mints),number(item.observations)].forEach(value=>{const td=document.createElement("td");td.textContent=value;tr.appendChild(td);});body.appendChild(tr);});}
+function renderHistory(rows){
+const body=$("soi-history");if(!body)return;
+state.rows=Array.isArray(rows)?rows.slice():[];
+body.replaceChildren();
+const data=state.rows.filter(item=>{
+const key=historyDateKey(item);if(!key)return state.filter==="all";
+if(state.filter==="all")return true;
+if(!state.from&&!state.to)return true;
+return (!state.from||key>=state.from)&&(!state.to||key<=state.to);
+}).sort((a,b)=>historyDateKey(b).localeCompare(historyDateKey(a)));
+const count=$("soi-history-count");if(count)count.textContent=H.count.replace("{n}",String(data.length));
+if(!data.length){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=7;td.textContent=T.historyEmpty;tr.appendChild(td);body.appendChild(tr);return;}
+data.forEach(item=>{const tr=document.createElement("tr");[item.date,number(item.launches_detected),number(item.pools_created),number(item.buys),number(item.sells),number(item.unique_mints),number(item.observations)].forEach(value=>{const td=document.createElement("td");td.textContent=value;tr.appendChild(td);});body.appendChild(tr);});
+}
 function renderSourceHealth(report){
 const root=$("soi-source-health");if(!root)return;
 const stages=report.collection?.stages||report.coverage?.collector_stages||{};
@@ -92,6 +153,7 @@ const line=document.createElement("div");line.className="soi-source-metrics";lin
 });
 }
 function render(report){const rolling=report.rolling_24h||{};const s=rolling.summary||report.summary||{};state.rows=rows(rolling.launches||report.launches||report.tokens);set("soi-count",number(s.launches_detected??state.rows.length));set("soi-no-socials",number(state.rows.filter(noSocials).length));set("soi-promoted",number(state.rows.filter(promoted).length));set("soi-million",number(state.rows.filter(million).length));set("soi-buys",number(s.buys??0));set("soi-sells",number(s.sells??0));set("soi-pools",number(s.pools_created??0));set("soi-observations",number(s.observations??0));set("soi-title",T.rollingTitle);set("soi-count-label",T.rollingLaunches);set("soi-buys-label",T.rollingBuys);set("soi-sells-label",T.rollingSells);set("soi-pools-label",T.rollingPools);set("soi-observations-label",T.rollingObservations);set("soi-history-title",T.historyTitle);set("soi-history-note",T.historyNote);const historyHeaders=[T.historyDate,T.historyLaunches,T.historyPools,T.historyBuys,T.historySells,T.historyMints,T.historyObservations];document.querySelectorAll("#soi-history-head th").forEach((th,i)=>{if(historyHeaders[i])th.textContent=historyHeaders[i];});const start=rolling.window_start,end=rolling.window_end;set("soi-report-date",T.reportDate+" "+(start&&end?date(start)+" — "+date(end):"—"));set("soi-report-updated",T.updated+" "+date(report.generated_at));const c=report.coverage||{};const sources=Array.isArray(s.sources_observed)?s.sources_observed:(Array.isArray(c.sources_observed)?c.sources_observed:[]);const sourceLabels={boost_monitor:"Boost Monitor",dexscreener:"DexScreener",pumpfun_rpc:"Pump.fun RPC",pumpswap_rpc:"PumpSwap RPC"};const sourceText=sources.map(x=>sourceLabels[x]||x).join(", ");set("soi-coverage",T.coverage+" "+(c.description||c.status||(sourceText?T.sourcesObserved+" "+sourceText:T.coveragePending)));if(report.methodology)set("soi-method",report.methodology);const status=$("soi-status");status.dataset.state="ready";set("soi-status",report.status==="partial"?T.partialReport:T.reportLoaded);renderRows();renderHistory(rows(report.daily_history));renderSourceHealth(report);}
+initHistoryFilters();
 function localizeStatic(){const headers=T.table||[];const body=$("soi-launches");if(body){const table=body.closest("table");const cells=table?table.querySelectorAll("thead th"):[];cells.forEach((cell,index)=>{if(headers[index])cell.textContent=headers[index];});const placeholder=body.querySelector("tr td[colspan=\"6\"]");if(placeholder)placeholder.textContent=T.waiting;}set("soi-empty",T.empty);}
 let loading=false;
 async function load(){
