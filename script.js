@@ -1673,36 +1673,34 @@ function renderAlarms(market, error) {
           ' · ' + labels.sell + ' ' + (metrics.sells === null ? '—' : metrics.sells.toLocaleString()) +
           ' · ' + (metrics.trades ? labels.trades + ' ' + metrics.trades.toLocaleString() : labels.none)
         : labels.unavailable;
-      const addressLink = document.createElement('a');
-      addressLink.className = 'zrai-address';
-      addressLink.href = dexUrl;
-      addressLink.target = '_blank';
-      addressLink.rel = 'noopener noreferrer';
-      addressLink.textContent = shortAddress(address) + ' ↗';
-      addressLink.title = address;
-      const copyAddress = document.createElement('button');
-      copyAddress.type = 'button';
-      copyAddress.className = 'zrai-copy-address';
-      copyAddress.textContent = ui().copy;
-      copyAddress.setAttribute('aria-label', ui().copy + ' ' + address);
-      copyAddress.addEventListener('click', async () => {
+      const addressCopy = document.createElement('button');
+      addressCopy.type = 'button';
+      addressCopy.className = 'zrai-address-copy';
+      addressCopy.textContent = shortAddress(address) + ' ⧉';
+      addressCopy.title = ui().copy + ': ' + address;
+      addressCopy.setAttribute('aria-label', ui().copy + ' ' + address);
+      addressCopy.addEventListener('click', async () => {
         try {
           if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(address);
           else {
             const field = document.createElement('textarea');
-            field.value = address; field.style.position = 'fixed'; field.style.opacity = '0';
-            document.body.append(field); field.select();
-            const copied = document.execCommand('copy'); field.remove();
+            field.value = address;
+            field.style.position = 'fixed';
+            field.style.opacity = '0';
+            document.body.append(field);
+            field.select();
+            const copied = document.execCommand('copy');
+            field.remove();
             if (!copied) throw new Error('Clipboard unavailable');
           }
-          copyAddress.textContent = ui().copied;
-          copyAddress.classList.add('is-copied');
+          addressCopy.textContent = ui().copied;
+          addressCopy.classList.add('is-copied');
         } catch (_) {
           const copyFailed = {en:'COPY FAILED',ru:'НЕ УДАЛОСЬ СКОПИРОВАТЬ',de:'KOPIEREN FEHLGESCHLAGEN',fr:'ÉCHEC DE LA COPIE',it:'COPIA NON RIUSCITA',ja:'コピーに失敗しました','zh-CN':'复制失败',tr:'KOPYALAMA BAŞARISIZ',hi:'कॉपी नहीं हो सका'};
-          copyAddress.textContent = copyFailed[localeCode] || copyFailed.en;
+          addressCopy.textContent = copyFailed[localeCode] || copyFailed.en;
         }
       });
-      body.append(heading, metricsLine, signal, addressLink, copyAddress);
+      body.append(heading, metricsLine, signal, addressCopy);
 
       const view = document.createElement('a');
       view.className = 'zrai-open';
