@@ -46,6 +46,7 @@ const urlFor = relative => new URL(relative, BASE).href;
           await page.waitForSelector('header.zombcash-shared-header', { timeout: 20000 });
           await page.waitForSelector('.language-switcher .language-trigger', { state: 'visible', timeout: 20000 });
           await page.waitForSelector('.zc-whitepaper-intro', { state: 'visible', timeout: 20000 });
+          await page.evaluate(() => document.fonts.ready);
 
           const state = await page.evaluate(() => {
             const intro = document.querySelector('.zc-whitepaper-intro');
@@ -59,6 +60,7 @@ const urlFor = relative => new URL(relative, BASE).href;
             };
             return {
               lang: document.documentElement.lang,
+              bodyFontFamily: getComputedStyle(document.body).fontFamily,
               title: document.title,
               h1: document.querySelector('main h1')?.textContent?.trim() || '',
               introText: intro?.innerText?.trim() || '',
@@ -80,6 +82,8 @@ const urlFor = relative => new URL(relative, BASE).href;
           });
 
           if (state.lang !== locale.htmlLang) issues.push(`html lang is ${state.lang}, expected ${locale.htmlLang}`);
+          const expectedScriptFont = locale.code === 'ja' ? 'Noto Sans JP' : locale.code === 'zh-CN' ? 'Noto Sans SC' : locale.code === 'hi' ? 'Noto Sans Devanagari' : null;
+          if (expectedScriptFont && !state.bodyFontFamily.includes(expectedScriptFont)) issues.push('script-specific font is not applied: ' + expectedScriptFont);
           if (!state.h1) issues.push('main heading is missing');
           if (!state.hasWhitepaperIntroHeading || state.introText.length < 120) issues.push('localized introduction is missing or unexpectedly short');
           if (state.documentWidth > viewport.width + 1) issues.push(`horizontal overflow: ${state.documentWidth}px > ${viewport.width}px`);
