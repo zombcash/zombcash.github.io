@@ -122,7 +122,22 @@
 @media(max-width:700px){.soi-radar{padding:18px 13px}.soi-toolbar{align-items:flex-start}.soi-actions{width:100%}.soi-controls{width:100%}.soi-controls button{flex:1}.soi-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.soi-report-meta{display:grid;gap:6px}}
 @media(max-width:700px){.market-live .metrics,.soi-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.market-live .market-table{font-size:11px}.market-live .market-table th,.market-live .market-table td{padding:8px 5px}.market-live .chart{height:360px}}
 </style>
-</head>
+<style>
+.soi-history-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:12px 0 8px}
+.soi-history-presets{display:flex;gap:6px;flex-wrap:wrap}
+.soi-history-presets button,.soi-history-dates button{border:1px solid #53614b;background:#101810;color:#cbd8c4;padding:7px 11px;font:600 11px system-ui,sans-serif;cursor:pointer}
+.soi-history-presets button.is-active,.soi-history-dates button:hover{background:#c4d0ad;color:#10150f;border-color:#c4d0ad}
+.soi-history-dates{display:flex;align-items:end;gap:8px;flex-wrap:wrap}
+.soi-history-dates[hidden]{display:none}
+.soi-history-dates label{display:grid;gap:4px;color:var(--muted,#aaa99f);font:10px system-ui,sans-serif}
+.soi-history-dates input{background:#0b110d;color:#e7eee2;border:1px solid #46513f;padding:6px;font:12px system-ui,sans-serif;color-scheme:dark}
+.soi-history-count{color:var(--muted,#aaa99f);font:11px system-ui,sans-serif}
+.soi-history-scroll{max-height:330px;overflow:auto;border:1px solid var(--line,#41473e);scrollbar-color:#657957 #101610;overscroll-behavior:contain}
+.soi-history-scroll .soi-table-wrap{overflow:visible;border-top:0}
+.soi-history-scroll .soi-table thead{position:sticky;top:0;z-index:2;background:#111a13}
+.soi-history-scroll .soi-table th,.soi-history-scroll .soi-table td{padding:8px 9px}
+@media(max-width:640px){.soi-history-scroll{max-height:280px}.soi-history-toolbar{align-items:flex-start}.soi-history-presets button{padding:7px 9px}}
+</style></head>
 <body><main class="wrap">
 <p class="crumb"><a href="/">ZombieCash Home</a> / Market Data</p>
 <header>
@@ -158,7 +173,22 @@
 <div class="soi-table-wrap"><table class="soi-table"><thead><tr><th>Token / mint</th><th>Launch</th><th>Market Cap</th><th>Liquidity</th><th>First 60 min</th><th>Signals &amp; evidence</th></tr></thead><tbody id="soi-launches"><tr><td colspan="6">Waiting for a verified rolling report…</td></tr></tbody></table></div>
 <p class="soi-empty" id="soi-empty" hidden>No records match this filter. This does not mean no launches occurred; only events detected within the stated source coverage are included.</p>
 <h3 id="soi-history-title">Daily activity history (UTC)</h3><p class="soi-method" id="soi-history-note">The history accumulates from stored observations. Missing historical coverage is not reconstructed or guessed.</p>
-<div class="soi-table-wrap"><table class="soi-table"><thead><tr id="soi-history-head"><th>Date</th><th>Launches</th><th>Pools</th><th>Buys</th><th>Sells</th><th>Unique mints</th><th>Observations</th></tr></thead><tbody id="soi-history"><tr><td colspan="7">Waiting for daily history…</td></tr></tbody></table></div>
+<div class="soi-history-toolbar" id="soi-history-toolbar">
+  <div class="soi-history-presets" role="group" aria-label="History date filter">
+    <button type="button" data-history-range="all" class="is-active">All</button>
+    <button type="button" data-history-range="day">Day</button>
+    <button type="button" data-history-range="week">Week</button>
+    <button type="button" data-history-range="month">Month</button>
+    <button type="button" data-history-range="custom">Custom period</button>
+  </div>
+  <div class="soi-history-dates" id="soi-history-dates" hidden>
+    <label><span id="soi-history-from-label">From</span><input type="date" id="soi-history-from"></label>
+    <label><span id="soi-history-to-label">To</span><input type="date" id="soi-history-to"></label>
+    <button type="button" id="soi-history-apply">Apply</button>
+  </div>
+  <span class="soi-history-count" id="soi-history-count" aria-live="polite"></span>
+</div>
+<div class="soi-history-scroll"><div class="soi-table-wrap"><table class="soi-table"><thead><tr id="soi-history-head"><th>Date</th><th>Launches</th><th>Pools</th><th>Buys</th><th>Sells</th><th>Unique mints</th><th>Observations</th></tr></thead><tbody id="soi-history"><tr><td colspan="7">Waiting for daily history…</td></tr></tbody></table></div></div>
 <p class="soi-method" id="soi-method">Data source: independent SOI collector. Only observed events are displayed; historical coverage depends on scanner backfill and RPC availability.</p>
 <p class="soi-links"><a href="https://github.com/vovik777-beep/solana-outbreak-intelligence" target="_blank" rel="noopener noreferrer">SOI repository ↗</a> · <a href="https://github.com/pollinations/pollinations/issues/19174" target="_blank" rel="noopener noreferrer">MCP Quest #19174 ↗</a></p></section>
 <section>
