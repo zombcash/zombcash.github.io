@@ -123,7 +123,7 @@ for (const file of pages) {
   // A tiny <noscript> fallback is intentionally retained so the reserved
   // ribbon skeleton is visible when JavaScript is disabled. It is not part
   // of the homepage CSS cascade and must not fail the external-CSS audit.
-  const htmlWithoutNoScript = html.replace(/<noscript\\b[^>]*>[\\s\\S]*?<\\/noscript>/gi, '');
+  const htmlWithoutNoScript = html.replace(/<noscript[^>]*>[\s\S]*?<\/noscript>/gi, '');
   const styles = [...htmlWithoutNoScript.matchAll(/<style\\b[^>]*>/gi)];
   const bodyStyles = styles.filter(match => match.index > headEnd);
   assert.equal(styles.length, 0,
