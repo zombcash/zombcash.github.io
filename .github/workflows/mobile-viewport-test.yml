@@ -10,6 +10,9 @@ on:
       - 'shared-nav.js'
       - 'cinematic-theme.css'
       - 'tests/language-transition-smoke.cjs'
+      - 'tests/whitepaper-localization-visual-smoke.cjs'
+      - 'whitepaper.html'
+      - '**/whitepaper.html'
       - 'tests/shared-nav-accessibility-smoke.cjs'
       - 'tests/homepage-css-seo-smoke.cjs'
       - 'tests/homepage-locales-layout-smoke.cjs'
@@ -76,6 +79,9 @@ on:
       - 'tests/arcade-ai-worlds-visual-smoke.cjs'
       - '.github/workflows/mobile-viewport-test.yml'
       - 'tests/mobile-viewport-smoke.cjs'
+      - 'tests/whitepaper-localization-visual-smoke.cjs'
+      - 'whitepaper.html'
+      - '**/whitepaper.html'
       - 'tests/survivor-field-manual-smoke.cjs'
       - 'survivor-hub.html'
       - '**/survivor-hub.html'
@@ -164,6 +170,16 @@ jobs:
         run: node tests/mobile-viewport-smoke.cjs
       - name: Test language switching after page transitions
         run: node tests/language-transition-smoke.cjs
+      - name: Browser-check all Whitepaper locales on desktop and mobile; test 16 language transitions
+        run: node tests/whitepaper-localization-visual-smoke.cjs
+      - name: Upload Whitepaper browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: whitepaper-localization-browser-evidence
+          path: whitepaper-localization-results/
+          if-no-files-found: ignore
+          retention-days: 14
       - name: Test shared navigation keyboard access and ARIA state in all locales
         run: node tests/shared-nav-accessibility-smoke.cjs
       - name: Test Telegram login modal focus, retry and profile-save behavior
