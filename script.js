@@ -1700,7 +1700,8 @@ function renderAlarms(market, error) {
           addressCopy.textContent = copyFailed[localeCode] || copyFailed.en;
         }
       });
-      body.append(heading, metricsLine, signal, addressCopy);
+      heading.insertBefore(addressCopy, score);
+      body.append(heading, metricsLine, signal);
 
       const view = document.createElement('a');
       view.className = 'zrai-open';
