@@ -132,6 +132,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm install --no-save playwright
+          npx playwright install chromium
       - name: Validate homepage, Hub and Arcade smoke-test JavaScript syntax
         run: |
           node --check assets/js/zctv-player.js
@@ -152,11 +157,6 @@ jobs:
       - name: Test price-history selected-window and stale-data warning
         run: node tests/price-history-stale-window-smoke.cjs
 
-      - name: Install Playwright
-        run: |
-          npm init -y
-          npm install --no-save playwright
-          npx playwright install chromium
       - name: Serve checked-out site for deterministic browser QA
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/zombcash-preview.log 2>&1 &
