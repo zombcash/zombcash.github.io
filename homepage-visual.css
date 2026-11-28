@@ -2839,3 +2839,58 @@ body:has(#home) #home > section.hero .hero-content p {
     background-size:100% 100%!important;
   }
 }
+
+/* 2026-11-28: localized homepages now feature the novel cover panel.
+   Keep its geometry explicit so all locale pages share the same responsive hero grid. */
+body:has(main#home) main#home > section.hero > .hero-layout{
+  grid-template-areas:"content sponsor" "status status"!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,640px)!important;
+  align-items:stretch!important;
+}
+body:has(main#home) main#home > section.hero > .hero-layout > .hero-content{grid-area:content!important}
+body:has(main#home) main#home > section.hero > .hero-layout > .zc-hero-art-panel.zc-novel-panel{
+  grid-area:sponsor!important;position:relative!important;display:block!important;box-sizing:border-box!important;
+  width:100%!important;max-width:640px!important;min-width:0!important;min-height:420px!important;height:100%!important;
+  margin:0!important;padding:0!important;overflow:hidden!important;border:1px solid #527342!important;
+  background:#080d0a!important;text-decoration:none!important;
+}
+body:has(main#home) main#home > section.hero .zc-novel-panel .zc-novel-cover{
+  position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;
+  min-height:420px!important;object-fit:cover!important;object-position:center 25%!important;
+}
+body:has(main#home) main#home > section.hero .zc-novel-panel .zc-novel-panel-overlay{
+  position:absolute!important;inset:0!important;z-index:2!important;display:flex!important;flex-direction:column!important;
+  justify-content:flex-end!important;align-items:flex-start!important;gap:12px!important;box-sizing:border-box!important;
+  padding:clamp(20px,3vw,38px)!important;background:linear-gradient(180deg,transparent 18%,#03060522 42%,#030605ed 100%)!important;
+}
+body:has(main#home) main#home > section.hero .zc-novel-panel .zc-novel-kicker,
+body:has(main#home) main#home > section.hero .zc-novel-panel .zc-novel-subtitle,
+body:has(main#home) main#home > section.hero .zc-novel-panel .zc-novel-cta{
+  position:relative!important;z-index:3!important;color:#c7e9b7!important;letter-spacing:.12em!important;
+}
+body:has(main#home) main#home > section.hero .zc-novel-panel .zc-novel-panel-overlay strong{
+  position:relative!important;z-index:3!important;color:#f1f5e9!important;
+  font:800 clamp(28px,3vw,46px)/.98 Orbitron,Arial,sans-serif!important;letter-spacing:.02em!important;
+}
+body:has(main#home) main#home > section.hero > .hero-layout > .zc-home-status-rail{
+  grid-area:status!important;position:relative!important;display:flex!important;flex-direction:column!important;
+  width:100%!important;min-width:0!important;margin:clamp(18px,2vw,28px) 0 0!important;padding:0!important;
+}
+@media(max-width:1359px){
+  body:has(main#home) main#home > section.hero > .hero-layout{
+    grid-template-areas:"content" "sponsor" "status"!important;grid-template-columns:minmax(0,1fr)!important;
+  }
+  body:has(main#home) main#home > section.hero > .hero-layout > .zc-hero-art-panel.zc-novel-panel{
+    width:min(100%,900px)!important;max-width:900px!important;min-height:clamp(240px,55vw,420px)!important;
+    height:clamp(240px,55vw,420px)!important;justify-self:center!important;
+  }
+  body:has(main#home) main#home > section.hero .zc-novel-panel .zc-novel-cover{min-height:0!important}
+  body:has(main#home) main#home > section.hero > .hero-layout > .zc-home-status-rail{
+    width:min(100%,900px)!important;justify-self:center!important;
+  }
+}
+@media(max-width:760px){
+  body:has(main#home) main#home > section.hero > .hero-layout > .zc-hero-art-panel.zc-novel-panel{
+    min-height:clamp(220px,72vw,340px)!important;height:clamp(220px,72vw,340px)!important;
+  }
+}
