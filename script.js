@@ -578,6 +578,22 @@ const pct = (value) => {
   const cls = n > 0 ? 'change-up' : n < 0 ? 'change-down' : '';
   return '<span class="' + cls + '">' + (n > 0 ? '+' : '') + n.toFixed(2) + '%</span>';
 };
+if (radarRows) radarRows.addEventListener('click', async event => {
+  const button = event.target.closest('.radar-copy-address');
+  if (!button) return;
+  const address = button.getAttribute('data-copy-address') || '';
+  if (!address) return;
+  try {
+    if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(address);
+    else {
+      const field = document.createElement('textarea'); field.value = address;
+      field.style.position = 'fixed'; field.style.opacity = '0'; document.body.append(field);
+      field.select(); const copied = document.execCommand('copy'); field.remove();
+      if (!copied) throw new Error('Clipboard unavailable');
+    }
+    button.textContent = 'COPIED'; button.classList.add('is-copied');
+  } catch (_) { button.textContent = 'FAILED'; }
+});
 function renderRadar() {
   const query = (radarSearch?.value || '').trim().toLowerCase();
   let list = radarTokens.filter(t => {
@@ -588,7 +604,7 @@ function renderRadar() {
   });
   if (radarMode === 'volume') list.sort((a,b) => Number(b.volume?.h24 || 0) - Number(a.volume?.h24 || 0));
   else if (radarMode === 'gainers') list.sort((a,b) => Number(b.priceChange?.h1 || 0) - Number(a.priceChange?.h1 || 0));
-  else list.sort((a,b) => (Number(b.boosts?.active || 0) * 1e12 + Number(b.volume?.h24 || 0) + Number(b.liquidity?.usd || 0)) - (Number(a.boosts?.active || 0) * 1e12 + Number(a.volume?.h24 || 0) + Number(a.liquidity?.usd || 0)));
+  else list.sort((a,b) => (Number(b.boosts?.active || 0) * 1e12 + Number(b.volume?.h24 || 0) + Number(b.marketCap || b.fdv || 0)) - (Number(a.boosts?.active || 0) * 1e12 + Number(a.volume?.h24 || 0) + Number(a.marketCap || a.fdv || 0)));
   if (!list.length) {
     radarRows.innerHTML = '<tr><td colspan="6" class="radar-message">' + (radarTokens.length ? 'No tokens match that search.' : 'No live token data available right now. Try refreshing in a moment.') + '</td></tr>';
     return;
@@ -598,10 +614,13 @@ function renderRadar() {
     const name = t.baseToken?.name || 'Unknown token';
     const symbol = t.baseToken?.symbol || '—';
     const tokenAddress = t.baseToken?.address || '';
+    const marketCap = Number(t.marketCap ?? t.fdv);
     const safeIcon = /^https:\/\//i.test(icon) ? icon : '';
     const fallback = '☣';
     const img = safeIcon ? '<span class="token-icon token-fallback" style="display:none">' + fallback + '</span><img class="token-icon" loading="lazy" src="' + safeIcon.replace(/"/g, '&quot;') + '" alt="" onerror="this.style.display=\'none\';if(this.previousElementSibling)this.previousElementSibling.style.display=\'inline-flex\'">' : '<span class="token-icon token-fallback">' + fallback + '</span>';
-    return '<tr><td><div class="token-cell">' + img + '<div><span class="token-name" title="' + name.replace(/"/g,'&quot;') + '">' + name.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</span><span class="token-symbol">' + symbol.replace(/</g,'&lt;').replace(/>/g,'&gt;') + (t.boosts?.isBoosted ? ' · ⚡ ' + (radarJapaneseUI ? 'ブースト済み' : 'BOOSTED') : '') + '</span></div></div></td><td class="token-price">' + price(t.priceUsd) + '</td><td>' + pct(t.priceChange?.h1) + '</td><td>' + money(t.volume?.h24) + '</td><td>' + money(t.liquidity?.usd) + '</td><td><a class="pair-link" href="' + (t.url || 'https://dexscreener.com/solana') + '" target="_blank" rel="noopener noreferrer">' + (radarJapaneseUI ? '表示 ↗' : 'VIEW ↗') + '</a></td></tr>';
+    const safeAddress = String(tokenAddress).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const dexLink = /^https:\/\//i.test(t.url || '') ? t.url : 'https://dexscreener.com/solana/' + encodeURIComponent(tokenAddress);
+    return '<tr><td><div class="token-cell">' + img + '<div><span class="token-name" title="' + name.replace(/"/g,'&quot;') + '">' + name.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</span><span class="token-symbol">' + symbol.replace(/</g,'&lt;').replace(/>/g,'&gt;') + (t.boosts?.isBoosted ? ' · ⚡ ' + (radarJapaneseUI ? 'ブースト済み' : 'BOOSTED') : '') + '</span><span class="token-contract">' + (safeAddress ? '<a href="' + dexLink + '" target="_blank" rel="noopener noreferrer" title="' + safeAddress + '">' + safeAddress.slice(0,5) + '…' + safeAddress.slice(-5) + '</a> <button type="button" class="radar-copy-address" data-copy-address="' + safeAddress + '" aria-label="Copy contract address">COPY</button>' : '—') + '</span></div></div></td><td class="token-price">' + price(t.priceUsd) + '</td><td>' + pct(t.priceChange?.h1) + '</td><td>' + money(t.volume?.h24) + '</td><td>' + money(Number.isFinite(marketCap) ? marketCap : null) + '</td><td><a class="pair-link" href="' + dexLink + '" target="_blank" rel="noopener noreferrer">' + (radarJapaneseUI ? '表示 ↗' : 'VIEW ↗') + '</a></td></tr>';
   }).join('');
 }
 async function loadRadar(force = false) {
@@ -1465,15 +1484,15 @@ function renderAlarms(market, error) {
   };
   const signalLabels = () => signalCopy[localeCode] || signalCopy.en;
   const radarUi = {
-    en:{scan:'SCANNING',refresh:'↻ REFRESH',loading:'Fetching the shared Zombie Radar feed…',empty:'No tokens with enough market data for this period. Refresh or try another horizon.',noPicks:'NO PICKS',change:'CHANGE',volume:'VOLUME',liquidity:'LIQUIDITY',signal:'SIGNAL',view:'VIEW',verified:'VERIFIED PICKS',note:'Radar only shows tokens with real data for this time horizon. Try another interval or refresh to discover more.',online:'RADAR ONLINE',stale:'STALE FEED',updated:'SOURCE UPDATED',unknown:'TIME UNKNOWN',staleSource:'SOURCE SNAPSHOT IS STALE',error:'API ERROR',unavailable:'Radar feed is unavailable. No recommendations are being shown; retry shortly.',failed:'Refresh failed. Previous radar data is retained and marked stale.',lastSuccess:'LAST SUCCESS',noSuccess:'NO SUCCESSFUL FETCH',periodNote:'Momentum and activity',last5:'last 5 minutes',hour:'last hour',day:'last 24 hours'},
-    ru:{scan:'СКАНИРОВАНИЕ',refresh:'↻ ОБНОВИТЬ',loading:'Загрузка общего потока Zombie Radar…',empty:'Недостаточно рыночных данных за этот период. Обновите или выберите другой интервал.',noPicks:'НЕТ СИГНАЛОВ',change:'ИЗМЕНЕНИЕ',volume:'ОБЪЁМ',liquidity:'ЛИКВИДНОСТЬ',signal:'СИГНАЛ',view:'ОТКРЫТЬ',verified:'ПОДТВЕРЖДЁННЫХ СИГНАЛОВ',note:'Radar показывает только токены с реальными данными за выбранный период. Выберите другой интервал или обновите.',online:'RADAR АКТИВЕН',stale:'УСТАРЕВШИЙ ПОТОК',updated:'ИСТОЧНИК ОБНОВЛЁН',unknown:'ВРЕМЯ НЕИЗВЕСТНО',staleSource:'СНИМОК ДАННЫХ УСТАРЕЛ',error:'ОШИБКА API',unavailable:'Поток Radar недоступен. Рекомендации не показываются. Попробуйте позже.',failed:'Обновление не удалось. Предыдущие данные сохранены и отмечены как устаревшие.',lastSuccess:'ПОСЛЕДНИЙ УСПЕХ',noSuccess:'УСПЕШНЫХ ЗАПРОСОВ НЕТ',periodNote:'Динамика и активность',last5:'последние 5 минут',hour:'последний час',day:'последние 24 часа'},
-    de:{scan:'SCANNT',refresh:'↻ AKTUALISIEREN',loading:'Gemeinsamer Zombie-Radar-Feed wird geladen…',empty:'Nicht genügend Marktdaten für diesen Zeitraum. Aktualisieren oder Zeitraum wechseln.',noPicks:'KEINE SIGNALE',change:'ÄNDERUNG',volume:'VOLUMEN',liquidity:'LIQUIDITÄT',signal:'SIGNAL',view:'ANSEHEN',verified:'VERIFIZIERTE SIGNALE',note:'Radar zeigt nur Token mit echten Daten für diesen Zeitraum. Zeitraum wechseln oder aktualisieren.',online:'RADAR ONLINE',stale:'VERALTETER FEED',updated:'QUELLE AKTUALISIERT',unknown:'ZEIT UNBEKANNT',staleSource:'DATENSTAND IST VERALTET',error:'API-FEHLER',unavailable:'Radar-Feed nicht verfügbar. Es werden keine Empfehlungen angezeigt. Bitte später erneut versuchen.',failed:'Aktualisierung fehlgeschlagen. Vorherige Daten bleiben als veraltet markiert.',lastSuccess:'LETZTER ERFOLG',noSuccess:'KEIN ERFOLGREICHER ABRUF',periodNote:'Momentum und Aktivität',last5:'letzte 5 Minuten',hour:'letzte Stunde',day:'letzte 24 Stunden'},
-    fr:{scan:'ANALYSE',refresh:'↻ ACTUALISER',loading:'Chargement du flux Zombie Radar partagé…',empty:'Données de marché insuffisantes pour cette période. Actualisez ou changez d’intervalle.',noPicks:'AUCUN SIGNAL',change:'VARIATION',volume:'VOLUME',liquidity:'LIQUIDITÉ',signal:'SIGNAL',view:'VOIR',verified:'SIGNAUX VÉRIFIÉS',note:'Radar affiche uniquement les jetons disposant de données réelles pour cette période. Changez d’intervalle ou actualisez.',online:'RADAR EN LIGNE',stale:'FLUX OBSOLÈTE',updated:'SOURCE ACTUALISÉE',unknown:'HEURE INCONNUE',staleSource:'L’APERÇU DES DONNÉES EST OBSOLÈTE',error:'ERREUR API',unavailable:'Flux Radar indisponible. Aucune recommandation affichée. Réessayez plus tard.',failed:'Échec de l’actualisation. Les données précédentes sont conservées et marquées comme obsolètes.',lastSuccess:'DERNIÈRE RÉUSSITE',noSuccess:'AUCUNE RÉUSSITE DE RÉCUPÉRATION',periodNote:'Momentum et activité',last5:'5 dernières minutes',hour:'dernière heure',day:'24 dernières heures'},
-    it:{scan:'SCANSIONE',refresh:'↻ AGGIORNA',loading:'Caricamento del feed Zombie Radar condiviso…',empty:'Dati di mercato insufficienti per questo periodo. Aggiorna o cambia intervallo.',noPicks:'NESSUN SEGNALE',change:'VARIAZIONE',volume:'VOLUME',liquidity:'LIQUIDITÀ',signal:'SEGNALE',view:'VEDI',verified:'SEGNALI VERIFICATI',note:'Radar mostra solo token con dati reali per questo intervallo. Cambia periodo o aggiorna.',online:'RADAR ONLINE',stale:'FEED OBSOLETO',updated:'FONTE AGGIORNATA',unknown:'ORARIO SCONOSCIUTO',staleSource:'DATI NON AGGIORNATI',error:'ERRORE API',unavailable:'Feed Radar non disponibile. Nessuna raccomandazione mostrata. Riprova più tardi.',failed:'Aggiornamento fallito. I dati precedenti sono conservati e contrassegnati come obsoleti.',lastSuccess:'ULTIMO SUCCESSO',noSuccess:'NESSUN RECUPERO RIUSCITO',periodNote:'Momentum e attività',last5:'ultimi 5 minuti',hour:'ultima ora',day:'ultime 24 ore'},
-    ja:{scan:'スキャン中',refresh:'↻ 更新',loading:'共有Zombie Radarフィードを取得中…',empty:'この期間の市場データが不足しています。更新するか期間を変更してください。',noPicks:'候補なし',change:'変動',volume:'取引量',liquidity:'流動性',signal:'シグナル',view:'表示',verified:'確認済み候補',note:'Radarは選択期間の実データがあるトークンのみ表示します。期間変更または更新してください。',online:'RADAR稼働中',stale:'古いデータ',updated:'ソース更新',unknown:'時刻不明',staleSource:'データスナップショットが古い',error:'APIエラー',unavailable:'Radarフィードを利用できません。推奨は表示されません。しばらくして再試行してください。',failed:'更新失敗。前のデータは保持され、古いデータとして表示されます。',lastSuccess:'最終成功',noSuccess:'取得成功なし',periodNote:'勢いと取引活動',last5:'直近5分',hour:'直近1時間',day:'直近24時間'},
-    'zh-cn':{scan:'扫描中',refresh:'↻ 刷新',loading:'正在获取共享 Zombie Radar 数据…',empty:'该时间段市场数据不足。请刷新或切换时间范围。',noPicks:'暂无信号',change:'涨跌',volume:'成交量',liquidity:'流动性',signal:'信号',view:'查看',verified:'已验证信号',note:'Radar仅展示该时间段有真实数据的代币。请切换区间或刷新。',online:'RADAR 在线',stale:'数据流过期',updated:'来源已更新',unknown:'时间未知',staleSource:'数据快照已过期',error:'API错误',unavailable:'Radar数据流暂不可用，当前不显示推荐。请稍后重试。',failed:'刷新失败。已保留旧数据并标记为过期。',lastSuccess:'上次成功',noSuccess:'尚无成功获取',periodNote:'动量与活跃度',last5:'最近5分钟',hour:'最近1小时',day:'最近24小时'},
-    tr:{scan:'TARANIYOR',refresh:'↻ YENİLE',loading:'Paylaşılan Zombie Radar akışı yükleniyor…',empty:'Bu dönem için yeterli piyasa verisi yok. Yenileyin veya aralığı değiştirin.',noPicks:'SİNYAL YOK',change:'DEĞİŞİM',volume:'HACİM',liquidity:'LİKİDİTE',signal:'SİNYAL',view:'GÖR',verified:'DOĞRULANMIŞ SİNYAL',note:'Radar yalnızca bu dönem için gerçek verisi bulunan tokenları gösterir. Aralığı değiştirin veya yenileyin.',online:'RADAR ÇEVRİMİÇİ',stale:'ESKİ AKIŞ',updated:'KAYNAK GÜNCELLENDİ',unknown:'ZAMAN BİLİNMİYOR',staleSource:'VERİ ÖZETİ ESKİ',error:'API HATASI',unavailable:'Radar akışı kullanılamıyor. Öneriler gösterilmiyor; daha sonra tekrar deneyin.',failed:'Yenileme başarısız. Önceki veriler saklandı ve eski olarak işaretlendi.',lastSuccess:'SON BAŞARILI',noSuccess:'BAŞARILI ALIM YOK',periodNote:'Momentum ve etkinlik',last5:'son 5 dakika',hour:'son saat',day:'son 24 saat'},
-    hi:{scan:'स्कैन हो रहा है',refresh:'↻ रीफ़्रेश',loading:'साझा Zombie Radar फ़ीड प्राप्त हो रही है…',empty:'इस अवधि के लिए पर्याप्त बाज़ार डेटा नहीं है। रीफ़्रेश करें या अवधि बदलें।',noPicks:'कोई संकेत नहीं',change:'बदलाव',volume:'वॉल्यूम',liquidity:'लिक्विडिटी',signal:'संकेत',view:'देखें',verified:'सत्यापित संकेत',note:'Radar केवल इस अवधि के वास्तविक डेटा वाले टोकन दिखाता है। अवधि बदलें या रीफ़्रेश करें।',online:'RADAR ऑनलाइन',stale:'पुरानी फ़ीड',updated:'स्रोत अपडेट',unknown:'समय अज्ञात',staleSource:'डेटा स्नैपशॉट पुराना है',error:'API त्रुटि',unavailable:'Radar फ़ीड उपलब्ध नहीं है। कोई सुझाव नहीं दिखाया जा रहा; बाद में पुनः प्रयास करें।',failed:'रीफ़्रेश विफल। पुराना डेटा सुरक्षित है और पुराना चिह्नित किया गया है।',lastSuccess:'अंतिम सफलता',noSuccess:'कोई सफल फ़ेच नहीं',periodNote:'गति और गतिविधि',last5:'पिछले 5 मिनट',hour:'पिछला घंटा',day:'पिछले 24 घंटे'}
+    en:{scan:'SCANNING',refresh:'↻ REFRESH',loading:'Fetching the shared Zombie Radar feed…',empty:'No tokens with enough market data for this period. Refresh or try another horizon.',noPicks:'NO PICKS',change:'CHANGE',volume:'VOLUME',liquidity:'LIQUIDITY',marketCap:'MARKET CAP',copy:'COPY CA',copied:'COPIED',signal:'SIGNAL',view:'VIEW',verified:'VERIFIED PICKS',note:'Radar only shows tokens with real data for this time horizon. Try another interval or refresh to discover more.',online:'RADAR ONLINE',stale:'STALE FEED',updated:'SOURCE UPDATED',unknown:'TIME UNKNOWN',staleSource:'SOURCE SNAPSHOT IS STALE',error:'API ERROR',unavailable:'Radar feed is unavailable. No recommendations are being shown; retry shortly.',failed:'Refresh failed. Previous radar data is retained and marked stale.',lastSuccess:'LAST SUCCESS',noSuccess:'NO SUCCESSFUL FETCH',periodNote:'Momentum and activity',last5:'last 5 minutes',hour:'last hour',day:'last 24 hours'},
+    ru:{scan:'СКАНИРОВАНИЕ',refresh:'↻ ОБНОВИТЬ',loading:'Загрузка общего потока Zombie Radar…',empty:'Недостаточно рыночных данных за этот период. Обновите или выберите другой интервал.',noPicks:'НЕТ СИГНАЛОВ',change:'ИЗМЕНЕНИЕ',volume:'ОБЪЁМ',liquidity:'ЛИКВИДНОСТЬ',marketCap:'КАПИТАЛИЗАЦИЯ',copy:'КОПИРОВАТЬ CA',copied:'СКОПИРОВАНО',signal:'СИГНАЛ',view:'ОТКРЫТЬ',verified:'ПОДТВЕРЖДЁННЫХ СИГНАЛОВ',note:'Radar показывает только токены с реальными данными за выбранный период. Выберите другой интервал или обновите.',online:'RADAR АКТИВЕН',stale:'УСТАРЕВШИЙ ПОТОК',updated:'ИСТОЧНИК ОБНОВЛЁН',unknown:'ВРЕМЯ НЕИЗВЕСТНО',staleSource:'СНИМОК ДАННЫХ УСТАРЕЛ',error:'ОШИБКА API',unavailable:'Поток Radar недоступен. Рекомендации не показываются. Попробуйте позже.',failed:'Обновление не удалось. Предыдущие данные сохранены и отмечены как устаревшие.',lastSuccess:'ПОСЛЕДНИЙ УСПЕХ',noSuccess:'УСПЕШНЫХ ЗАПРОСОВ НЕТ',periodNote:'Динамика и активность',last5:'последние 5 минут',hour:'последний час',day:'последние 24 часа'},
+    de:{scan:'SCANNT',refresh:'↻ AKTUALISIEREN',loading:'Gemeinsamer Zombie-Radar-Feed wird geladen…',empty:'Nicht genügend Marktdaten für diesen Zeitraum. Aktualisieren oder Zeitraum wechseln.',noPicks:'KEINE SIGNALE',change:'ÄNDERUNG',volume:'VOLUMEN',liquidity:'LIQUIDITÄT',marketCap:'MARKTKAPITALISIERUNG',copy:'CA KOPIEREN',copied:'KOPIERT',signal:'SIGNAL',view:'ANSEHEN',verified:'VERIFIZIERTE SIGNALE',note:'Radar zeigt nur Token mit echten Daten für diesen Zeitraum. Zeitraum wechseln oder aktualisieren.',online:'RADAR ONLINE',stale:'VERALTETER FEED',updated:'QUELLE AKTUALISIERT',unknown:'ZEIT UNBEKANNT',staleSource:'DATENSTAND IST VERALTET',error:'API-FEHLER',unavailable:'Radar-Feed nicht verfügbar. Es werden keine Empfehlungen angezeigt. Bitte später erneut versuchen.',failed:'Aktualisierung fehlgeschlagen. Vorherige Daten bleiben als veraltet markiert.',lastSuccess:'LETZTER ERFOLG',noSuccess:'KEIN ERFOLGREICHER ABRUF',periodNote:'Momentum und Aktivität',last5:'letzte 5 Minuten',hour:'letzte Stunde',day:'letzte 24 Stunden'},
+    fr:{scan:'ANALYSE',refresh:'↻ ACTUALISER',loading:'Chargement du flux Zombie Radar partagé…',empty:'Données de marché insuffisantes pour cette période. Actualisez ou changez d’intervalle.',noPicks:'AUCUN SIGNAL',change:'VARIATION',volume:'VOLUME',liquidity:'LIQUIDITÉ',marketCap:'CAPITALISATION',copy:'COPIER CA',copied:'COPIÉ',signal:'SIGNAL',view:'VOIR',verified:'SIGNAUX VÉRIFIÉS',note:'Radar affiche uniquement les jetons disposant de données réelles pour cette période. Changez d’intervalle ou actualisez.',online:'RADAR EN LIGNE',stale:'FLUX OBSOLÈTE',updated:'SOURCE ACTUALISÉE',unknown:'HEURE INCONNUE',staleSource:'L’APERÇU DES DONNÉES EST OBSOLÈTE',error:'ERREUR API',unavailable:'Flux Radar indisponible. Aucune recommandation affichée. Réessayez plus tard.',failed:'Échec de l’actualisation. Les données précédentes sont conservées et marquées comme obsolètes.',lastSuccess:'DERNIÈRE RÉUSSITE',noSuccess:'AUCUNE RÉUSSITE DE RÉCUPÉRATION',periodNote:'Momentum et activité',last5:'5 dernières minutes',hour:'dernière heure',day:'24 dernières heures'},
+    it:{scan:'SCANSIONE',refresh:'↻ AGGIORNA',loading:'Caricamento del feed Zombie Radar condiviso…',empty:'Dati di mercato insufficienti per questo periodo. Aggiorna o cambia intervallo.',noPicks:'NESSUN SEGNALE',change:'VARIAZIONE',volume:'VOLUME',liquidity:'LIQUIDITÀ',marketCap:'CAPITALIZZAZIONE',copy:'COPIA CA',copied:'COPIATO',signal:'SEGNALE',view:'VEDI',verified:'SEGNALI VERIFICATI',note:'Radar mostra solo token con dati reali per questo intervallo. Cambia periodo o aggiorna.',online:'RADAR ONLINE',stale:'FEED OBSOLETO',updated:'FONTE AGGIORNATA',unknown:'ORARIO SCONOSCIUTO',staleSource:'DATI NON AGGIORNATI',error:'ERRORE API',unavailable:'Feed Radar non disponibile. Nessuna raccomandazione mostrata. Riprova più tardi.',failed:'Aggiornamento fallito. I dati precedenti sono conservati e contrassegnati come obsoleti.',lastSuccess:'ULTIMO SUCCESSO',noSuccess:'NESSUN RECUPERO RIUSCITO',periodNote:'Momentum e attività',last5:'ultimi 5 minuti',hour:'ultima ora',day:'ultime 24 ore'},
+    ja:{scan:'スキャン中',refresh:'↻ 更新',loading:'共有Zombie Radarフィードを取得中…',empty:'この期間の市場データが不足しています。更新するか期間を変更してください。',noPicks:'候補なし',change:'変動',volume:'取引量',liquidity:'流動性',marketCap:'時価総額',copy:'CAをコピー',copied:'コピー済み',signal:'シグナル',view:'表示',verified:'確認済み候補',note:'Radarは選択期間の実データがあるトークンのみ表示します。期間変更または更新してください。',online:'RADAR稼働中',stale:'古いデータ',updated:'ソース更新',unknown:'時刻不明',staleSource:'データスナップショットが古い',error:'APIエラー',unavailable:'Radarフィードを利用できません。推奨は表示されません。しばらくして再試行してください。',failed:'更新失敗。前のデータは保持され、古いデータとして表示されます。',lastSuccess:'最終成功',noSuccess:'取得成功なし',periodNote:'勢いと取引活動',last5:'直近5分',hour:'直近1時間',day:'直近24時間'},
+    'zh-cn':{scan:'扫描中',refresh:'↻ 刷新',loading:'正在获取共享 Zombie Radar 数据…',empty:'该时间段市场数据不足。请刷新或切换时间范围。',noPicks:'暂无信号',change:'涨跌',volume:'成交量',liquidity:'流动性',marketCap:'市值',copy:'复制 CA',copied:'已复制',signal:'信号',view:'查看',verified:'已验证信号',note:'Radar仅展示该时间段有真实数据的代币。请切换区间或刷新。',online:'RADAR 在线',stale:'数据流过期',updated:'来源已更新',unknown:'时间未知',staleSource:'数据快照已过期',error:'API错误',unavailable:'Radar数据流暂不可用，当前不显示推荐。请稍后重试。',failed:'刷新失败。已保留旧数据并标记为过期。',lastSuccess:'上次成功',noSuccess:'尚无成功获取',periodNote:'动量与活跃度',last5:'最近5分钟',hour:'最近1小时',day:'最近24小时'},
+    tr:{scan:'TARANIYOR',refresh:'↻ YENİLE',loading:'Paylaşılan Zombie Radar akışı yükleniyor…',empty:'Bu dönem için yeterli piyasa verisi yok. Yenileyin veya aralığı değiştirin.',noPicks:'SİNYAL YOK',change:'DEĞİŞİM',volume:'HACİM',liquidity:'LİKİDİTE',marketCap:'PİYASA DEĞERİ',copy:'CA KOPYALA',copied:'KOPYALANDI',signal:'SİNYAL',view:'GÖR',verified:'DOĞRULANMIŞ SİNYAL',note:'Radar yalnızca bu dönem için gerçek verisi bulunan tokenları gösterir. Aralığı değiştirin veya yenileyin.',online:'RADAR ÇEVRİMİÇİ',stale:'ESKİ AKIŞ',updated:'KAYNAK GÜNCELLENDİ',unknown:'ZAMAN BİLİNMİYOR',staleSource:'VERİ ÖZETİ ESKİ',error:'API HATASI',unavailable:'Radar akışı kullanılamıyor. Öneriler gösterilmiyor; daha sonra tekrar deneyin.',failed:'Yenileme başarısız. Önceki veriler saklandı ve eski olarak işaretlendi.',lastSuccess:'SON BAŞARILI',noSuccess:'BAŞARILI ALIM YOK',periodNote:'Momentum ve etkinlik',last5:'son 5 dakika',hour:'son saat',day:'son 24 saat'},
+    hi:{scan:'स्कैन हो रहा है',refresh:'↻ रीफ़्रेश',loading:'साझा Zombie Radar फ़ीड प्राप्त हो रही है…',empty:'इस अवधि के लिए पर्याप्त बाज़ार डेटा नहीं है। रीफ़्रेश करें या अवधि बदलें।',noPicks:'कोई संकेत नहीं',change:'बदलाव',volume:'वॉल्यूम',liquidity:'लिक्विडिटी',marketCap:'मार्केट कैप',copy:'CA कॉपी करें',copied:'कॉपी हुआ',signal:'संकेत',view:'देखें',verified:'सत्यापित संकेत',note:'Radar केवल इस अवधि के वास्तविक डेटा वाले टोकन दिखाता है। अवधि बदलें या रीफ़्रेश करें।',online:'RADAR ऑनलाइन',stale:'पुरानी फ़ीड',updated:'स्रोत अपडेट',unknown:'समय अज्ञात',staleSource:'डेटा स्नैपशॉट पुराना है',error:'API त्रुटि',unavailable:'Radar फ़ीड उपलब्ध नहीं है। कोई सुझाव नहीं दिखाया जा रहा; बाद में पुनः प्रयास करें।',failed:'रीफ़्रेश विफल। पुराना डेटा सुरक्षित है और पुराना चिह्नित किया गया है।',lastSuccess:'अंतिम सफलता',noSuccess:'कोई सफल फ़ेच नहीं',periodNote:'गति और गतिविधि',last5:'पिछले 5 मिनट',hour:'पिछला घंटा',day:'पिछले 24 घंटे'}
   };
   const ui = () => radarUi[localeCode.toLowerCase()] || radarUi.en;
   const apiBase = 'https://zombcash-bot.fadehost.app';
@@ -1548,6 +1567,7 @@ function renderAlarms(market, error) {
     const sells = number(flow.sells);
     const trades = (buys === null ? 0 : buys) + (sells === null ? 0 : sells);
     const liquidity = number(pair.liquidity && pair.liquidity.usd);
+    const marketCap = number(pair.marketCap ?? pair.fdv);
     const hasTrades = buys !== null || sells !== null;
     const buyRatio = trades ? (buys || 0) / trades : 0.5;
     const momentum = change === null ? 0 : (Math.max(-50, Math.min(change, 100)) + 50) / 150;
@@ -1557,7 +1577,7 @@ function renderAlarms(market, error) {
       28 * Math.min(1, Math.log10(Math.max(liquidity || 0, 1)) / 6) +
       20 * momentum + 10 * buyRatio
     ));
-    return {change, volume, buys, sells, trades, liquidity, hasTrades, score};
+    return {change, volume, buys, sells, trades, liquidity, marketCap, hasTrades, score};
   }
   function rankPairs(payload) {
     const bestByAddress = new Map();
@@ -1643,7 +1663,7 @@ function renderAlarms(market, error) {
       metricsLine.append(
         createMetric(ui().change, percent(metrics.change), metrics.change > 0 ? 'positive' : metrics.change < 0 ? 'negative' : ''),
         createMetric(ui().volume, compactMoney(metrics.volume)),
-        createMetric(ui().liquidity, compactMoney(metrics.liquidity))
+        createMetric(ui().marketCap, compactMoney(metrics.marketCap))
       );
       const signal = document.createElement('div');
       signal.className = 'zrai-signal-line';
@@ -1655,12 +1675,31 @@ function renderAlarms(market, error) {
         : labels.unavailable;
       const addressLink = document.createElement('a');
       addressLink.className = 'zrai-address';
-      addressLink.href = 'https://solscan.io/token/' + encodeURIComponent(address);
+      addressLink.href = dexUrl;
       addressLink.target = '_blank';
       addressLink.rel = 'noopener noreferrer';
       addressLink.textContent = shortAddress(address) + ' ↗';
       addressLink.title = address;
-      body.append(heading, metricsLine, signal, addressLink);
+      const copyAddress = document.createElement('button');
+      copyAddress.type = 'button';
+      copyAddress.className = 'zrai-copy-address';
+      copyAddress.textContent = ui().copy;
+      copyAddress.setAttribute('aria-label', ui().copy + ' ' + address);
+      copyAddress.addEventListener('click', async () => {
+        try {
+          if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(address);
+          else {
+            const field = document.createElement('textarea');
+            field.value = address; field.style.position = 'fixed'; field.style.opacity = '0';
+            document.body.append(field); field.select();
+            const copied = document.execCommand('copy'); field.remove();
+            if (!copied) throw new Error('Clipboard unavailable');
+          }
+          copyAddress.textContent = ui().copied;
+          copyAddress.classList.add('is-copied');
+        } catch (_) { copyAddress.textContent = 'COPY FAILED'; }
+      });
+      body.append(heading, metricsLine, signal, addressLink, copyAddress);
 
       const view = document.createElement('a');
       view.className = 'zrai-open';
