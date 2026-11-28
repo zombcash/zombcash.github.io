@@ -1087,3 +1087,136 @@ body:has(#home) .zc-ribbon-label{
 
 /* Prevent the old static fallback ribbons from flashing before localized JS renders. */
 body:has(#home) .zc-outbreak-ribbons.zc-ribbons-pending{visibility:hidden!important;opacity:0!important;}
+
+
+/* 2026-11-28 visual correction: remove the rejected legacy photo from the novel spotlight
+   and align the lower status console to the same 760px content rail. */
+body:has(#home) #home .field-manual-spotlight{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 180px!important;
+  align-items:center!important;
+  gap:clamp(18px,2.2vw,28px)!important;
+  width:min(100%,760px)!important;
+  max-width:760px!important;
+  min-width:0!important;
+  margin:24px 0 0!important;
+  padding:clamp(20px,2.2vw,30px)!important;
+  box-sizing:border-box!important;
+  background:linear-gradient(135deg,rgba(11,17,16,.97),rgba(7,12,11,.97))!important;
+  background-image:none!important;
+  border:1px solid rgba(153,184,139,.28)!important;
+  border-left:3px solid #9bff45!important;
+  border-radius:14px!important;
+  box-shadow:0 16px 42px rgba(0,0,0,.34),inset 0 1px 0 rgba(235,255,226,.035)!important;
+  backdrop-filter:blur(12px)!important;
+}
+body:has(#home) #home .field-manual-copy{min-width:0!important}
+body:has(#home) #home .field-manual-status{
+  width:100%!important;
+  min-width:0!important;
+  min-height:126px!important;
+  box-sizing:border-box!important;
+  justify-content:center!important;
+  align-self:center!important;
+  border:1px solid rgba(153,184,139,.22)!important;
+  border-radius:10px!important;
+  background:linear-gradient(145deg,rgba(14,22,17,.98),rgba(7,12,10,.98))!important;
+  padding:16px!important;
+}
+body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{
+  display:grid!important;
+  grid-template-columns:minmax(0,260px) minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:clamp(16px,2vw,24px)!important;
+  width:min(100%,760px)!important;
+  max-width:760px!important;
+  min-width:0!important;
+  margin:22px 0 0!important;
+  padding:16px!important;
+  box-sizing:border-box!important;
+  border:1px solid rgba(153,184,139,.25)!important;
+  border-left:3px solid #9bff45!important;
+  border-radius:14px!important;
+  background:linear-gradient(135deg,rgba(9,15,12,.96),rgba(8,12,14,.96))!important;
+  box-shadow:0 16px 42px rgba(0,0,0,.32),inset 0 1px 0 rgba(235,255,226,.035)!important;
+  backdrop-filter:blur(12px)!important;
+}
+body:has(#home) #home .zc-home-status-rail > .zc-ai-engine-card{
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  min-height:126px!important;
+  margin:0!important;
+  padding:16px!important;
+  box-sizing:border-box!important;
+  border:1px solid rgba(153,184,139,.22)!important;
+  border-radius:10px!important;
+  background:linear-gradient(145deg,rgba(14,22,17,.98),rgba(7,12,10,.98))!important;
+  box-shadow:none!important;
+}
+body:has(#home) #home .zc-home-status-rail > .hero-stats{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 1px minmax(0,1fr) 1px minmax(0,1fr)!important;
+  align-items:center!important;
+  justify-content:stretch!important;
+  gap:0!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:126px!important;
+  margin:0!important;
+  padding:14px 12px!important;
+  box-sizing:border-box!important;
+  border:1px solid rgba(153,184,139,.18)!important;
+  border-radius:10px!important;
+  background:rgba(4,9,7,.62)!important;
+}
+body:has(#home) #home .zc-home-status-rail > .hero-stats > i{
+  display:block!important;
+  width:1px!important;
+  height:42px!important;
+  background:rgba(153,184,139,.24)!important;
+}
+body:has(#home) #home .zc-home-status-rail > .hero-stats > div{
+  min-width:0!important;
+  padding:0 8px!important;
+}
+body:has(#home) #home .zc-home-status-rail > .hero-stats strong{
+  display:block!important;
+  margin:0 0 6px!important;
+  color:#a8f36c!important;
+  font:800 clamp(19px,1.6vw,25px)/1 Orbitron,Arial,sans-serif!important;
+}
+body:has(#home) #home .zc-home-status-rail > .hero-stats span{
+  display:block!important;
+  color:#aeb9aa!important;
+  font:600 9px/1.35 Rajdhani,Arial,sans-serif!important;
+  letter-spacing:.09em!important;
+  overflow-wrap:anywhere!important;
+}
+@media(max-width:760px){
+  body:has(#home) #home .field-manual-spotlight{
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:16px!important;
+    width:100%!important;
+    max-width:100%!important;
+  }
+  body:has(#home) #home .field-manual-status{
+    width:100%!important;
+    min-height:0!important;
+  }
+  body:has(#home) #home > section.hero > .hero-layout > .zc-home-status-rail{
+    grid-template-columns:minmax(0,1fr)!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin-top:16px!important;
+  }
+  body:has(#home) #home .zc-home-status-rail > .zc-ai-engine-card,
+  body:has(#home) #home .zc-home-status-rail > .hero-stats{
+    min-height:0!important;
+  }
+}
+@media(max-width:420px){
+  body:has(#home) #home .zc-home-status-rail > .hero-stats{padding:12px 6px!important}
+  body:has(#home) #home .zc-home-status-rail > .hero-stats > div{padding:0 4px!important}
+  body:has(#home) #home .zc-home-status-rail > .hero-stats span{font-size:8px!important}
+}
