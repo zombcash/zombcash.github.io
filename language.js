@@ -596,6 +596,9 @@ Object.entries(sharedFooterSupport).forEach(([source,translations])=>Object.entr
 
 
 const sharedAccessibleLabels={
+"Recommendation time horizon":{de:"Empfohlener Zeitraum",fr:"Période de recommandation",it:"Intervallo di raccomandazione",ja:"推奨期間","zh-CN":"推荐时间范围",ru:"Период рекомендаций",tr:"Öneri zaman aralığı",hi:"सुझाव की समयावधि"},
+"AI RADAR PICKS":{de:"KI-RADAR-EMPFEHLUNGEN",fr:"SÉLECTIONS DU RADAR IA",it:"SELEZIONI DEL RADAR IA",ja:"AIレーダーのおすすめ","zh-CN":"AI 雷达精选",ru:"ВЫБОР ИИ-РАДАРА",tr:"YAPAY ZEKÂ RADAR SEÇİMLERİ",hi:"AI रडार चयन"},
+
 "Search token name or ticker...":{de:"Tokenname oder Ticker suchen...",fr:"Rechercher un nom de token ou un ticker...",it:"Cerca il nome o il ticker del token...",ja:"トークン名またはティッカーを検索...","zh-CN":"搜索代币名称或代码...",ru:"Поиск по названию токена или тикеру...",tr:"Token adı veya sembolünü ara...",hi:"टोकन का नाम या टिकर खोजें..."},
 "Filter tokens":{de:"Token filtern",fr:"Filtrer les tokens",it:"Filtra i token",ja:"トークンを絞り込む","zh-CN":"筛选代币",ru:"Фильтровать токены",tr:"Tokenleri filtrele",hi:"टोकन फ़िल्टर करें"},
 "Choose game leaderboard":{de:"Spiel-Rangliste auswählen",fr:"Choisir le classement du jeu",it:"Scegli la classifica del gioco",ja:"ゲームランキングを選択","zh-CN":"选择游戏排行榜",ru:"Выбрать таблицу рекордов игры",tr:"Oyun liderlik tablosunu seç",hi:"गेम लीडरबोर्ड चुनें"},
