@@ -85,7 +85,8 @@ const urlFor = relative => new URL(relative, BASE).href;
           if (state.documentWidth > viewport.width + 1) issues.push(`horizontal overflow: ${state.documentWidth}px > ${viewport.width}px`);
           if (!state.languageInsideHeader) issues.push('language switcher is not mounted inside the shared header');
           if (state.languageOptions.length !== 9) issues.push(`expected 9 language choices, found ${state.languageOptions.length}`);
-          if (state.canonicalCount !== 1 || state.canonical !== url) issues.push('canonical URL is missing, duplicated, or incorrect');
+          const expectedCanonical = 'https://zombcash.github.io/' + locale.path;
+          if (state.canonicalCount !== 1 || state.canonical !== expectedCanonical) issues.push('canonical URL is missing, duplicated, or incorrect');
           if (state.alternateCount !== 10 || !state.hasEnglishAlternate || !state.hasXDefault) issues.push('expected 10 hreflang alternates including en and x-default');
           if (state.links.length < 2 || state.links.some(href => !href || !href.endsWith('.html'))) issues.push('intro navigation links are missing or malformed');
 
