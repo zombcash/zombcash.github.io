@@ -349,12 +349,102 @@ function pagePath(locale, slug) {
       }
     }
 
+    // Verify the complete localized Whitepaper on all nine routes at desktop and mobile sizes.
+    const whitepaperViewports = [
+      { name: 'desktop', width: 1440, height: 1000 },
+      { name: 'mobile', width: 390, height: 844 },
+    ];
+    const whitepaperLocalizationCases = [];
+    for (const locale of locales) {
+      for (const viewport of whitepaperViewports) {
+        const page = pagesByContext[viewport.name];
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        await page.goto(new URL(pagePath(locale, 'whitepaper.html'), BASE).href, {
+          waitUntil: 'domcontentloaded',
+          timeout: 30000,
+        });
+        await page.waitForSelector('#whitepaper-summary', { timeout: 10000 });
+        const result = await page.locator('main').evaluate(main => {
+          const canonical = document.querySelector('link[rel="canonical"]')?.href || '';
+          const alternates = [...document.querySelectorAll('link[rel="alternate"][hreflang]')].map(link => ({
+            lang: link.hreflang,
+            href: link.href,
+          }));
+          const summary = document.querySelector('#whitepaper-summary');
+          const links = [...(summary?.querySelectorAll('a') || [])].map(a => new URL(a.href).pathname);
+          const navWhitepaper = [...document.querySelectorAll('header.zombcash-shared-header nav a')]
+            .find(a => /whitepaper/i.test(a.textContent || ''));
+          return {
+            title: document.title,
+            htmlLang: document.documentElement.lang,
+            h1Count: main.querySelectorAll('h1').length,
+            h2Count: main.querySelectorAll('h2').length,
+            summaryCount: main.querySelectorAll('#whitepaper-summary').length,
+            summaryText: summary?.innerText || '',
+            sectionIds: ['overview','token','ecosystem','principles','roadmap','risks'].filter(id => !!main.querySelector('#' + id)),
+            summaryLinks: links,
+            navWhitepaperHref: navWhitepaper ? new URL(navWhitepaper.href).pathname : null,
+            canonical,
+            alternates,
+            description: document.querySelector('meta[name="description"]')?.content || '',
+            documentWidth: document.documentElement.scrollWidth,
+            viewportWidth: innerWidth,
+          };
+        });
+        const prefix = locale === 'en' ? '/' : '/' + locale + '/';
+        const expectedPath = prefix + 'whitepaper.html';
+        const expectedSummaryLinks = [prefix + 'buy-zombcash.html', prefix + 'survivor-field-manual.html'];
+        const expectedHreflangs = ['en','de','fr','it','ja','zh-Hans','ru','tr','hi','x-default'];
+        const issues = [];
+        if (result.htmlLang !== locale) issues.push('html lang is ' + result.htmlLang + ', expected ' + locale);
+        if (result.h1Count !== 1) issues.push('expected one H1, found ' + result.h1Count);
+        if (result.summaryCount !== 1) issues.push('missing or duplicate translated summary section');
+        if (!result.summaryText.includes('6cCBF9gtyp3c6VmyxUWzETk3yFmxhjvPm15cxicfpump')) issues.push('official mint missing from summary');
+        if (result.summaryLinks.join('|') !== expectedSummaryLinks.join('|')) issues.push('localized summary CTA links mismatch: ' + result.summaryLinks.join(', '));
+        if (result.sectionIds.length !== 6) issues.push('missing core whitepaper section IDs: ' + result.sectionIds.join(', '));
+        if (result.canonical !== new URL(expectedPath, BASE).href) issues.push('canonical URL mismatch: ' + result.canonical);
+        if (result.alternates.length !== 10 || expectedHreflangs.some(code => !result.alternates.some(item => item.lang === code))) issues.push('hreflang set is incomplete or duplicated');
+        if (!result.description || result.description.length < 45 || result.description.length > 170) issues.push('meta description length/content needs review (' + result.description.length + ' chars)');
+        if (result.navWhitepaperHref !== expectedPath) issues.push('shared navigation Whitepaper route mismatch: ' + result.navWhitepaperHref);
+        if (result.documentWidth > viewport.width + 1) issues.push('horizontal overflow: ' + result.documentWidth + 'px');
+        const report = { page: pagePath(locale, 'whitepaper.html'), viewport: viewport.name, result, issues };
+        whitepaperLocalizationCases.push(report);
+        reports.push({ whitepaperLocalization: report });
+        if (issues.length) {
+          failures.push(report);
+          await page.screenshot({ path: path.join(output, 'failure-whitepaper-' + locale + '-' + viewport.name + '.png'), fullPage: true }).catch(() => {});
+        } else {
+          await page.screenshot({ path: path.join(output, 'whitepaper-' + locale + '-' + viewport.name + '.png'), fullPage: true }).catch(() => {});
+        }
+      }
+    }
+
+    // Exercise the language selector from English to every translation and back.
+    const whitepaperLanguageSwitches = [];
+    const whitepaperSwitchPage = pagesByContext.mobile;
+    for (const locale of locales.filter(code => code !== 'en')) {
+      for (const test of [
+        { from: 'whitepaper.html', lang: locale, to: '/' + locale + '/whitepaper.html' },
+        { from: locale + '/whitepaper.html', lang: 'en', to: '/whitepaper.html' },
+      ]) {
+        await whitepaperSwitchPage.goto(new URL(test.from, BASE).href, { waitUntil: 'domcontentloaded', timeout: 30000 });
+        await whitepaperSwitchPage.waitForSelector('header.zombcash-shared-header .language-trigger', { timeout: 10000 });
+        await whitepaperSwitchPage.locator('header.zombcash-shared-header .language-trigger').click();
+        await whitepaperSwitchPage.locator('.language-option[data-lang="' + test.lang + '"]').click();
+        await whitepaperSwitchPage.waitForURL(url => url.pathname === test.to, { timeout: 10000 });
+        await whitepaperSwitchPage.waitForFunction(expected => document.documentElement.lang === expected, test.lang, { timeout: 10000 });
+        whitepaperLanguageSwitches.push(test.from + ' -> ' + test.to + ' passed');
+      }
+    }
+
     const summary = {
       visualCases: pages.reduce((total, item) => total + (item.availableLocales || locales).length * (item.kind === 'guide' ? 3 : viewports.length), 0),
       fieldManualCases: locales.length * manualViewports.length,
       routeSwitches: routeSwitchTests.length,
       localizedHomepagesChecked: 8,
       homepageOverviewCases: homepageOverviewCases.length,
+      whitepaperLocalizationCases: whitepaperLocalizationCases.length,
+      whitepaperLanguageSwitches: whitepaperLanguageSwitches.length,
       failures,
       reportCount: reports.length,
     };
