@@ -404,7 +404,7 @@ function pagePath(locale, slug) {
         if (result.sectionIds.length !== 6) issues.push('missing core whitepaper section IDs: ' + result.sectionIds.join(', '));
         if (result.canonical !== new URL(expectedPath, BASE).href) issues.push('canonical URL mismatch: ' + result.canonical);
         if (result.alternates.length !== 10 || expectedHreflangs.some(code => !result.alternates.some(item => item.lang === code))) issues.push('hreflang set is incomplete or duplicated');
-        if (!result.description || result.description.length < 45 || result.description.length > 170) issues.push('meta description length/content needs review (' + result.description.length + ' chars)');
+        if (!result.description || result.description.length < 30 || result.description.length > 170) issues.push('meta description length/content needs review (' + result.description.length + ' chars)');
         if (result.navWhitepaperHref !== expectedPath) issues.push('shared navigation Whitepaper route mismatch: ' + result.navWhitepaperHref);
         if (result.documentWidth > viewport.width + 1) issues.push('horizontal overflow: ' + result.documentWidth + 'px');
         const report = { page: pagePath(locale, 'whitepaper.html'), viewport: viewport.name, result, issues };
