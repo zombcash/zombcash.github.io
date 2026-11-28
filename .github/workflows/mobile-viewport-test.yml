@@ -61,6 +61,7 @@ on:
       - 'cinematic-theme.css'
       - 'language.js'
       - 'tests/language-transition-smoke.cjs'
+      - 'tests/homepage-css-seo-smoke.cjs'
       - 'index.html'
       - 'homepage-visual.css'
       - 'tests/homepage-locales-layout-smoke.cjs'
